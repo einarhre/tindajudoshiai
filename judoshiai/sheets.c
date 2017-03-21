@@ -102,6 +102,14 @@ static GtkWidget *sheet_label = NULL;
 static gdouble ROW_HEIGHT;
 static double global_text_h = 10.0;
 
+const gchar *get_font_props(gint *weight, gint *slant)
+{
+    if (weight) *weight = font_weight;
+    if (slant) *slant = font_slant;
+
+    return font_face[0] ? font_face : MY_FONT;
+}
+
 struct table {
     double position_x, position_y;
     int num_rows, num_cols;
@@ -1816,7 +1824,8 @@ static void paint_french(struct paint_data *pd, gint category, struct judoka *ct
              table == TABLE_SWE_DIREKT_AATERKVAL ||
              table == TABLE_MODIFIED_DOUBLE_ELIMINATION ||
              table == TABLE_GBR_KNOCK_OUT ||
-             table == TABLE_EST_D_KLASS_ONE_BRONZE) &&
+             table == TABLE_EST_D_KLASS_ONE_BRONZE ||
+	     table == TABLE_GER_REPECHAGE) &&
 	    pagenum == 2)
 	    space = NAME_S*0.25;
 	else
@@ -2557,7 +2566,7 @@ void paint_next_matches(struct paint_data *pd)
     gdouble rowheight = 1.0/(gdouble)number_of_tatamis/*NUM_TATAMIS*//8.0;
 
     cairo_set_source_rgb(pd->c, 0.0, 0.0, 0.0);
-    cairo_select_font_face(pd->c, MY_FONT,
+    cairo_select_font_face(pd->c, get_font_props(NULL, NULL),
                            CAIRO_FONT_SLANT_NORMAL,
                            CAIRO_FONT_WEIGHT_BOLD);
 
@@ -3252,7 +3261,6 @@ void parse_font_text(gchar *font, gchar *face, gint *slant, gint *weight, gdoubl
 void set_font(gchar *font)
 {
     parse_font_text(font, font_face, &font_slant, &font_weight, &font_size);
-    g_key_file_set_string(keyfile, "preferences", "sheetfont", font);
 }
 
 gchar *get_font_face()
