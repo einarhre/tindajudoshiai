@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -66,14 +66,14 @@ static int block(void);
 static FILE *f;
 
 
-typedef enum { 
-    dummy, rr, ko, b3, match, dot, colon, prev, ident, number, 
+typedef enum {
+    dummy, rr, ko, b3, match, dot, colon, prev, ident, number,
     competitor, eol, eof, pos, dash, lparen, rparen, order,
     page, svg, info, err, id, group
 } Symbol;
 
 static char *labels[] = {
-    "", "rr", "ko", "b3", "match", "p", "colon", "prev", "ident", "number", 
+    "", "rr", "ko", "b3", "match", "p", "colon", "prev", "ident", "number",
     "competitor", "eol", "eof", "pos", "dash", "lparen", "rparen", "order",
     "page", "svg", "info", "error", "id", "group"
 };
@@ -118,7 +118,7 @@ typedef struct position {
     int    real_contest_pos;
 } position_t;
 
-static position_t positions[NUM_CUST_POS]; 
+static position_t positions[NUM_CUST_POS];
 
 typedef struct round_robin {
     sym_t *name;
@@ -149,7 +149,7 @@ static int num_groups = 0;
 static int groups_type = 0;
 static int group_set = 0;
 
-#define NUM_SYMBOLS 1024 
+#define NUM_SYMBOLS 1024
 static struct symbol symbols[NUM_SYMBOLS];
 static int num_symbols = 0;
 
@@ -204,7 +204,7 @@ static match_t *get_match_or_create(char *name) {
         }
     }
     if (num_matches < NUM_CUSTOM_MATCHES) {
-        matches[num_matches].name = get_sym(name); 
+        matches[num_matches].name = get_sym(name);
         return &matches[num_matches++];
     }
     return NULL;
@@ -299,7 +299,7 @@ static void getsym(void)
         n = 0;
         line[n++] = c;
         c = fgetc(f);
-        while (n < sizeof(line)-1 && 
+        while (n < sizeof(line)-1 &&
                ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_')) {
             line[n++] = c;
             c = fgetc(f);
@@ -404,11 +404,11 @@ static int accept(Symbol s) {
 }
 
 static char message[128];
- 
+
 static int expect1(Symbol s) {
     if (accept(s))
         return 1;
-    snprintf(message, sizeof(message), "%s line %d:\n  Unexpected symbol \"%s\" (expected \"%s\")", 
+    snprintf(message, sizeof(message), "%s line %d:\n  Unexpected symbol \"%s\" (expected \"%s\")",
             readname, linenum, labels[sym], labels[s]);
     stop = 1;
     return 0;
@@ -438,7 +438,8 @@ static int player(void) {
     return 0;
 }
 
-#define checkval(exp, errstr...) do { if (!exp) { stop = 1; snprintf(message, sizeof(message), errstr); return 0; }} while(0) 
+#define checkval(_exp, _errstr...) do { if (!(_exp)) { stop = 1; \
+	    snprintf(message, sizeof(message), _errstr); return 0; }} while(0)
 
 static int block(void)
 {
@@ -490,7 +491,7 @@ static int block(void)
         char buf[64];
         match_t *m[3];
         int i;
-        checkval((num_best_of_three_pairs < NUM_BEST_OF_3_PAIRS), 
+        checkval((num_best_of_three_pairs < NUM_BEST_OF_3_PAIRS),
                  "Too many best of three pools, max = %d", NUM_BEST_OF_3_PAIRS);
         expect(ident);
         best_of_three_pairs[num_best_of_three_pairs].name = get_sym(strvalue);
@@ -517,7 +518,7 @@ static int block(void)
         competitor_t c[20];
         int num_players = 0, i, j;
         char buf[64];
-        checkval((num_round_robin_pools < NUM_ROUND_ROBIN_POOLS), 
+        checkval((num_round_robin_pools < NUM_ROUND_ROBIN_POOLS),
                  "Too many round robin pools, max = %d", NUM_ROUND_ROBIN_POOLS);
         expect(ident);
         pool->name = get_sym(strvalue);
@@ -536,7 +537,7 @@ static int block(void)
         // Create round robin matches
         for (i = 0; i < num_players-1; i++) {
             for (j = i+1; j < num_players; j++) {
-                checkval((pool->num_rr_matches < NUM_RR_MATCHES), 
+                checkval((pool->num_rr_matches < NUM_RR_MATCHES),
                          "Too many round robin matches, max = %d", NUM_RR_MATCHES);
 
                 sprintf(buf, "%s_%d_%d", round_robin_pools[num_round_robin_pools].name->name, i, j);
@@ -562,7 +563,7 @@ static int block(void)
         expect(colon);
         int i = 1, n, lev = 1;
         while (player()) {
-            checkval((num_matches < NUM_CUSTOM_MATCHES), 
+            checkval((num_matches < NUM_CUSTOM_MATCHES),
                      "Too many matches, max = %d", NUM_CUSTOM_MATCHES);
 
             sprintf(buf, "%s_%d_%d", name->name, lev, i);
@@ -609,26 +610,26 @@ static int block(void)
                 m->c2.match = get_sym(buf);
                 m->c2.pos = 1;
 
-                checkval((num_matches < NUM_CUSTOM_MATCHES-1), 
+                checkval((num_matches < NUM_CUSTOM_MATCHES-1),
                          "Too many matches, max = %d", NUM_CUSTOM_MATCHES);
                 m1 = get_match_or_create(m->c1.match->name);
                 m2 = get_match_or_create(m->c2.match->name);
                 if (m1 && m2) {
                     m->reference = reference;
-                    //m->x = x_shift*(lev-1); 
+                    //m->x = x_shift*(lev-1);
                     m->y = (m1->y + m2->y)/2;
                     m->y1 = m1->y - m->y;
                     m->y2 = m2->y - m->y;
                 }
             }
-        } 
+        }
         expect(eol);
         return 1;
     }
 
     if (accept(order)) {
         while (player()) {
-            checkval((num_ord < NUM_CUSTOM_MATCHES), 
+            checkval((num_ord < NUM_CUSTOM_MATCHES),
                      "Too many matches in order, max = %d", NUM_CUSTOM_MATCHES);
             match_order[num_ord].first = compvalue;
             expect(dash);
@@ -636,14 +637,14 @@ static int block(void)
                 match_order[num_ord++].second = compvalue;
             }
         }
-         
+
         expect(eol);
         return 1;
     }
 
     if (accept(pos)) {
         int posval = numvalue-1;
-        checkval((posval >= 0 && posval < NUM_CUST_POS), 
+        checkval((posval >= 0 && posval < NUM_CUST_POS),
                  "Wrong position number, values 1-%d are valid", NUM_CUST_POS);
 
         expect(ident);
@@ -670,7 +671,7 @@ static int block(void)
         while (player()) {
             if (compvalue.comp)
                 groups[grpval].competitors[groups[grpval].num_competitors++] = compvalue.comp;
-        }        
+        }
         if (grpval+1 > num_groups) num_groups = grpval+1;
         group_set = 1;
         expect(eol);
@@ -683,7 +684,7 @@ static int block(void)
 
 static void solve(sym_t *mname, int level, int pos) {
     match_t *m;
-    
+
     if (!mname)
         return;
 
@@ -719,7 +720,7 @@ static void solve(sym_t *mname, int level, int pos) {
 static void sort_matches(void) {
     int i, j, i1, j1;
 
-    // find explicite match numbers 
+    // find explicite match numbers
     for (i = 0; i < num_matches; i++) {
         for (j = 0; j < num_ord; j++) {
             if (!memcmp(&matches[i].c1, &match_order[j].first.comp, sizeof(competitor_t)) &&
@@ -734,11 +735,11 @@ static void sort_matches(void) {
         for (j1 = i1+1; j1 < num_matches; j1++) {
             i = match_list[i1];
             j = match_list[j1];
-            int order = matches[i].ordernum > matches[j].ordernum && 
+            int order = matches[i].ordernum > matches[j].ordernum &&
                 matches[i].ordernum && matches[j].ordernum;
             int level = matches[i].level < matches[j].level &&
                 matches[i].level && matches[j].level;
-            int number = matches[i].level == matches[j].level && 
+            int number = matches[i].level == matches[j].level &&
                 matches[i].number > matches[j].number;
             if (order || level || number) {
                 /*printf("sort: %d:%d order=%d level=%d number=%d type=%d\n", i, j,
@@ -888,7 +889,7 @@ char *read_custom_category(char *name, struct custom_data *data)
     for (i = 1; i < NUM_CUST_POS ; i++) {
         if (!positions[i].match)
             continue;
-        
+
         solve(positions[i].match, 1, i);
     }
 
@@ -902,14 +903,14 @@ char *read_custom_category(char *name, struct custom_data *data)
     for (i = 0; i < num_round_robin_pools; i++) {
         int j;
         for (j = 0; j < round_robin_pools[i].num_rr_matches; j++) {
-            data->round_robin_pools[i].rr_matches[j] = 
+            data->round_robin_pools[i].rr_matches[j] =
                 get_match_num(round_robin_pools[i].rr_matches[j]->name);
-            checkval2((data->round_robin_pools[i].rr_matches[j]), "Pool %s: match %s doesn't exist", 
+            checkval2((data->round_robin_pools[i].rr_matches[j]), "Pool %s: match %s doesn't exist",
                      round_robin_pools[i].name->name,
                      round_robin_pools[i].rr_matches[j]->name);
         } // for
         for (j = 0; j < round_robin_pools[i].num_competitors; j++) {
-            data->round_robin_pools[i].competitors[j] = 
+            data->round_robin_pools[i].competitors[j] =
                 get_palyer_bare(&round_robin_pools[i].competitors[j]);
         }
 
@@ -923,9 +924,9 @@ char *read_custom_category(char *name, struct custom_data *data)
     for (i = 0; i < num_best_of_three_pairs; i++) {
         int j;
         for (j = 0; j < 3; j++) {
-            data->best_of_three_pairs[i].matches[j] = 
+            data->best_of_three_pairs[i].matches[j] =
                 get_match_num(best_of_three_pairs[i].matches[j]->name);
-            checkval2((data->best_of_three_pairs[i].matches[j]), "Best of three %s: match %s doesn't exist", 
+            checkval2((data->best_of_three_pairs[i].matches[j]), "Best of three %s: match %s doesn't exist",
                      best_of_three_pairs[i].name->name,
                      best_of_three_pairs[i].matches[j]->name);
         }
@@ -953,7 +954,7 @@ char *read_custom_category(char *name, struct custom_data *data)
             data->positions[i].type = COMP_TYPE_MATCH;
             data->positions[i].match = get_match_num(positions[i].match->name);
         }
-        checkval2((data->positions[i].match > 0), "Wrong match name \"%s\" in pos%d", 
+        checkval2((data->positions[i].match > 0), "Wrong match name \"%s\" in pos%d",
                   positions[i].match->name, positions[i].pos);
         data->positions[i].pos = positions[i].pos;
         data->positions[i].real_contest_pos = positions[i].real_contest_pos;
@@ -963,7 +964,7 @@ char *read_custom_category(char *name, struct custom_data *data)
     // groups
     if (num_groups == 0) {
         // create default groups
-            
+
         // find best of 3
         for (i = 0; i < data->num_best_of_three_pairs && num_groups < NUM_GROUPS; i++) {
             int n = data->best_of_three_pairs[i].matches[0];
