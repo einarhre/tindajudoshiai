@@ -106,6 +106,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
     if (!anchor)
         anchor = get_image("anchor.png");
 
+    cairo_select_font_face(c, get_font_props(NULL, NULL), 0, 0);
     cairo_set_font_size(c, 12);
     cairo_text_extents(c, "Hj:000", &extents);
 
