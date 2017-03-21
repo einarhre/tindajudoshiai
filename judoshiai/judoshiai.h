@@ -105,6 +105,7 @@ enum tables {
     TABLE_GBR_KNOCK_OUT,
     TABLE_DEN_DOUBLE_ELIMINATION,
     TABLE_EST_D_KLASS_ONE_BRONZE,
+    TABLE_GER_REPECHAGE,
     NUM_TABLES
 };
 #define TABLE_IJF_DOUBLE_REPECHAGE TABLE_ESP_REPESCA_DOBLE
@@ -134,6 +135,7 @@ enum cat_systems {
     CAT_SYSTEM_EST_D_KLASS_ONE_BRONZE,
     CAT_SYSTEM_DPOOL3,
     CAT_SYSTEM_CUSTOM,
+    CAT_SYSTEM_GER_REPECHAGE,
     NUM_SYSTEMS
 };
 #define CAT_IJF_DOUBLE_REPECHAGE CAT_ESP_REPESCA_DOBLE
@@ -1119,6 +1121,7 @@ extern void write_sheet_to_stream(gint cat, cairo_write_func_t write_func, void 
 extern gboolean change_current_page(GtkWidget *sheet_page,
                                     GdkEventButton *event,
                                     gpointer userdata);
+extern const gchar *get_font_props(gint *weight, gint *slant);
 
 /* names */
 #define IS_MALE   1
