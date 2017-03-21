@@ -880,7 +880,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
             case 4: case 8: x = 3; break;
             }
             found = mdata->mpositions*(x)/4 +
-                mdata->mcomp[comp].seeded > 4 ? mdata->mpositions/8 + 1 : 1;
+                ((mdata->mcomp[comp].seeded > 4) ? mdata->mpositions/8 + 1 : 1);
 
             if (mdata->mpos[found].judoka)
                 found = 0;
@@ -1687,6 +1687,11 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
         mdata->mpositions = 128;
         mdata->mfrench_sys = FRENCH_128;
         break;
+    default:
+	g_print("UNKNOWN SYSTEM %d\n", mdata->sys.system);
+        g_free(catname);
+        g_free(mdata);
+	return NULL;
     }
 
     struct category_data *catdata = avl_get_category(mdata->mcategory_ix);
