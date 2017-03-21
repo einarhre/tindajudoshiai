@@ -94,8 +94,8 @@ gboolean use_2017_rules = FALSE;
 gint use_ger_u12_rules = 0;
 
 #define MY_FONT "Arial"
-static gchar font_face[32];
-static gint  font_slant = CAIRO_FONT_SLANT_NORMAL, font_weight = CAIRO_FONT_WEIGHT_NORMAL;
+gchar font_face[32];
+gint  font_slant = CAIRO_FONT_SLANT_NORMAL, font_weight = CAIRO_FONT_WEIGHT_NORMAL;
 static gdouble font_size = 1.0;
 
 gboolean update_tvlogo = FALSE;

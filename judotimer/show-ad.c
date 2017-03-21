@@ -1685,7 +1685,14 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
         if (ok_button)
             gtk_widget_show(ok_button);
 
-        // black rect on top
+	if (font_face[0])
+	    cairo_select_font_face(c, font_face, font_slant, font_weight);
+	else
+	    cairo_select_font_face(c, "Arial",
+				   CAIRO_FONT_SLANT_NORMAL,
+				   CAIRO_FONT_WEIGHT_BOLD);
+
+	// black rect on top
         cairo_set_source_rgb(c, 0.0, 0.0, 0.0);
         cairo_rectangle(c, 0.0, 0.0, width, FIRST_BLOCK_HEIGHT);
         cairo_fill(c);

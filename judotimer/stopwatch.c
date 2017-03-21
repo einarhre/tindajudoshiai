@@ -724,6 +724,13 @@ static gboolean expose_ask(GtkWidget *widget, GdkEventExpose *event, gpointer us
     cairo_t *c = gdk_cairo_create(widget->window);
 #endif
 
+    if (font_face[0])
+        cairo_select_font_face(c, font_face, font_slant, font_weight);
+    else
+        cairo_select_font_face(c, "Arial",
+                               CAIRO_FONT_SLANT_NORMAL,
+                               CAIRO_FONT_WEIGHT_BOLD);
+
     cairo_set_source_rgb(c, 0.0, 0.0, 0.0);
     cairo_rectangle(c, 0.0, 0.0, width, FIRST_BLOCK_HEIGHT);
     cairo_fill(c);

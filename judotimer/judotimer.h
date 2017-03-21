@@ -133,6 +133,9 @@ extern gboolean vlc_connection_ok;
 extern gchar *custom_layout_file;
 extern gint   custom_layout_file_num;
 
+extern gchar font_face[32];
+extern gint  font_slant, font_weight;
+
 extern gboolean this_is_shiai(void);
 extern void copy_packet(struct message *msg); // not used
 
