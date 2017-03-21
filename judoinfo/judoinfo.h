@@ -104,6 +104,7 @@ extern gint bracket_len;
 extern guchar *bracket_start;
 extern gint bracket_x, bracket_y, bracket_w, bracket_h;
 extern gint bracket_space_w, bracket_space_h;
+extern gchar *font_face;
 
 extern gboolean this_is_shiai(void);
 extern void msg_to_queue(struct message *msg);
@@ -131,6 +132,7 @@ extern gint timeout_ask_for_data(gpointer data);
 extern void write_matches(void);
 extern void read_svg_file(void);
 extern gint paint_svg(struct paint_data *pd);
+extern void font_dialog(GtkWidget *w, gpointer data);
 #ifndef EMSCRIPTEN
 extern gboolean show_bracket(void);
 extern cairo_status_t bracket_read(void *closure,

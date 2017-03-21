@@ -29,7 +29,7 @@ static GtkWidget *full_screen, *normal_display, *small_display, *horizontal_disp
 static GtkWidget *mirror, *whitefirst, *redbackground, *showbracket;
 static GtkWidget *tatami_show[NUM_TATAMIS];
 static GtkWidget *node_ip, *my_ip, *about;
-static GtkWidget *light, *menu_light;
+static GtkWidget *light, *menu_light, *display_font;
 static GtkWidget *writefile, *lang_menu_item, *svgfile;
 
 gboolean show_tatami[NUM_TATAMIS] = {0}, conf_show_tatami[NUM_TATAMIS] = {0};
@@ -284,6 +284,11 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(svgfile), "activate",
                      G_CALLBACK(set_svg_file), 0);
 
+    display_font = gtk_menu_item_new_with_label("");
+    gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), display_font);
+    g_signal_connect(G_OBJECT(display_font), "activate",
+		     G_CALLBACK(font_dialog), (gpointer)0);
+
     create_separator(preferencesmenu);
     quit    = create_menu_item(preferencesmenu, destroy, 0);
 
@@ -307,7 +312,7 @@ void set_preferences(void)
     GError *error = NULL;
     gchar  *str;
     gint    i;
-    gboolean b;
+    gboolean b1;
 
     error = NULL;
     if (g_key_file_get_boolean(keyfile, "preferences", "fullscreen", &error)) {
@@ -354,8 +359,8 @@ void set_preferences(void)
         gchar t[10];
         SPRINTF(t, "tatami%d", i);
         error = NULL;
-        b = g_key_file_get_boolean(keyfile, "preferences", t, &error);
-        if (b && !error) {
+        b1 = g_key_file_get_boolean(keyfile, "preferences", t, &error);
+        if (b1 && !error) {
             gtk_menu_item_activate(GTK_MENU_ITEM(tatami_show[i-1]));
             tatami_selection(tatami_show[i-1], gint_to_ptr(i));
         }
@@ -384,6 +389,8 @@ void set_preferences(void)
         read_svg_file();
     }
 
+    error = NULL;
+    font_face = g_key_file_get_string(keyfile, "preferences", "displayfont", &error);
 }
 
 gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param)
@@ -408,6 +415,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(writefile, _("Write to file"));
     change_menu_label(svgfile, _("SVG Templates"));
     change_menu_label(showbracket, _("Show bracket"));
+    change_menu_label(display_font, _("Font"));
 
     for (i = 0; i < NUM_TATAMIS; i++) {
         gchar buf[64];

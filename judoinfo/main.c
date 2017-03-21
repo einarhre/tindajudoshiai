@@ -83,8 +83,9 @@ gboolean       menu_hidden = FALSE;
 gchar         *filename = NULL;
 gint           bracket_x = 0, bracket_y = 0, bracket_w = 0, bracket_h = 0;
 gint           bracket_space_w = 0, bracket_space_h = 0;
+gchar         *font_face = NULL;
 
-#define MY_FONT "Arial"
+#define MY_FONT (font_face ? font_face : "Arial")
 
 #define THIN_LINE     (paper_width < 700.0 ? 1.0 : paper_width/700.0)
 #define THICK_LINE    (2*THIN_LINE)
@@ -205,6 +206,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
 
     num_rectangles = 0;
 
+    cairo_select_font_face(c, MY_FONT, 0, 0);
     cairo_set_font_size(c, 0.8*BOX_HEIGHT);
     cairo_text_extents(c, "Hj", &extents);
 
@@ -1203,6 +1205,31 @@ void write_matches(void)
     }
 
     fclose(fout);
+}
+
+void font_dialog(GtkWidget *w, gpointer data)
+{
+    GtkWidget *dialog;
+    dialog = gtk_font_chooser_dialog_new(_("Select font"), NULL);
+    if (font_face)
+	gtk_font_chooser_set_font(GTK_FONT_CHOOSER(dialog), font_face);
+
+    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+	if (font_face) g_free(font_face);
+	font_face = NULL;
+        font_face = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(dialog));
+	if (font_face) {
+	    gchar *p = strrchr(font_face, ' ');
+	    if (p) *p = 0;
+	    p = strstr(font_face, " Bold");
+	    if (p) *p = 0;
+	    p = strstr(font_face, " Italic");
+	    if (p) *p = 0;
+	}
+	g_key_file_set_string(keyfile, "preferences", "displayfont", font_face);
+    }
+
+    gtk_widget_destroy(dialog);
 }
 
 /*** profiling stuff ***/
