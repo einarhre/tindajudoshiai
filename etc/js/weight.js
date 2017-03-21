@@ -4,7 +4,7 @@ var webSocket;
 var scaleSocket;
 var svgtemplate;
 
-var COMM_VERSION = 3;
+var COMM_VERSION = 4;
 
 var APPLICATION_TYPE_UNKNOWN = 0;
 var APPLICATION_TYPE_SHIAI   = 1;
@@ -54,12 +54,11 @@ var GENDER_FEMALE = 0x100;
 
 var NUM_LOOKUP = 8;
 
-var commver = 3;
 var apptype = APPLICATION_TYPE_WEIGHT;
 var myaddr = 100;
 var judoka_ix = 0;
 
-var editcomp = [commver,MSG_EDIT_COMPETITOR,0,myaddr,
+var editcomp = [COMM_VERSION,MSG_EDIT_COMPETITOR,0,myaddr,
 		0,0,"","",0,"","",0,0,1,"",0,"","",0,0,0,"","","",""];
 var saved_msg;
 var control = 0;
@@ -112,7 +111,7 @@ function connect() {
 	webSocket = new ReconnectingWebSocket('ws://' + host + ':2315/');
 
         webSocket.onopen = function() {
-	    sendmsg([commver,7,0,myaddr,apptype,0]);
+	    sendmsg([COMM_VERSION,7,0,myaddr,apptype,0]);
 	    $("#dispweight").css("background-color", "white");
 	    get_translations();
         }
@@ -386,7 +385,7 @@ function print_svg() {
 }
 
 function xlate(en) {
-    var msg = [commver,MSG_LANG,0,myaddr,en,""];
+    var msg = [COMM_VERSION,MSG_LANG,0,myaddr,en,""];
     sendmsg(msg);
 }
 
@@ -529,7 +528,7 @@ $('#e_name').keypress(function(event) {
     var key = event.keyCode;
     if (key != '13') return;
 
-    var msg = [commver,MSG_LOOKUP_COMP,0,myaddr,
+    var msg = [COMM_VERSION,MSG_LOOKUP_COMP,0,myaddr,
 	       this.value];
     var i;
     for (i = 0; i < NUM_LOOKUP; i++) {
@@ -576,7 +575,7 @@ function scale_params() {
     var config = "type="+$("#stype").val()+
 	";baud="+$("#sbaud").val()+
 	";dev="+$("#sdevice").val();
-    var msg = [commver,MSG_SCALE,0,myaddr,0,config];
+    var msg = [COMM_VERSION,MSG_SCALE,0,myaddr,0,config];
     console.log("MSG="+msg);
     sendscalemsg(msg);
 

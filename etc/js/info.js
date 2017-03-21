@@ -3,7 +3,7 @@
 var webSocket;
 var svgtemplate;
 
-var COMM_VERSION = 3;
+var COMM_VERSION = 4;
 
 var APPLICATION_TYPE_UNKNOWN = 0;
 var APPLICATION_TYPE_SHIAI   = 1;
@@ -81,12 +81,11 @@ function ROUND_TYPE(_n) { return (_n & ROUND_TYPE_MASK); }
 function ROUND_NUMBER(_n) { return (_n & ROUND_MASK); }
 function ROUND_TYPE_NUMBER(_n) { return (ROUND_TYPE(_n) | ROUND_NUMBER(_n)); }
 
-var commver = 3;
 var apptype = APPLICATION_TYPE_INFO;
 var myaddr = 101;
 var judoka_ix = 0;
 
-var editcomp = [commver,MSG_EDIT_COMPETITOR,0,myaddr,
+var editcomp = [COMM_VERSION,MSG_EDIT_COMPETITOR,0,myaddr,
 		0,0,"","",0,"","",0,0,1,"",0,"","",0,0,0,"","","",""];
 var saved_msg;
 var control = 0;
@@ -109,7 +108,6 @@ var show_menu = true;
 var tatami_order= [];
 
 /* Initialize */
-
 var match_list = [];
 for (var i = 0; i < NUM_TATAMIS; i++) {
     var t = [];
@@ -188,8 +186,8 @@ function connect(){
 	webSocket = new ReconnectingWebSocket('ws://' + host + ':2315/');
 
         webSocket.onopen = function() {
-	    sendmsg([commver,MSG_DUMMY,0,myaddr,apptype,0]);
-	    sendmsg([commver,MSG_ALL_REQ,0,myaddr]);
+	    sendmsg([COMM_VERSION,MSG_DUMMY,0,myaddr,apptype,0]);
+	    sendmsg([COMM_VERSION,MSG_ALL_REQ,0,myaddr]);
 	    $(".hdr").css("background-color", "white");
 	    get_translations();
 	    get_comp_data();
@@ -352,7 +350,7 @@ function get_comp_by_id(ix) {
 }
 
 function xlate(en) {
-    var msg = [commver,MSG_LANG,0,myaddr,en,""];
+    var msg = [COMM_VERSION,MSG_LANG,0,myaddr,en,""];
     sendmsg(msg);
 }
 
@@ -385,7 +383,7 @@ function get_one_comp() {
     var c = comp_queue[0];
     if (c) {
 	comp_queue.shift();
-	sendmsg([commver,MSG_NAME_REQ,0,myaddr,c]);
+	sendmsg([COMM_VERSION,MSG_NAME_REQ,0,myaddr,c]);
     }
 }
 

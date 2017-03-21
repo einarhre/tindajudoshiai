@@ -35,7 +35,7 @@ var svgtemplate;
 var hide_zero_osaekomi_points = 0;
 
 var NUM_TATAMIS = 10;
-var COMM_VERSION = 3;
+var COMM_VERSION = 4;
 
 var APPLICATION_TYPE_UNKNOWN = 0;
 var APPLICATION_TYPE_SHIAI   = 1;
@@ -156,7 +156,6 @@ function ROUND_TYPE(_n) { return (_n & ROUND_TYPE_MASK); }
 function ROUND_NUMBER(_n) { return (_n & ROUND_MASK); }
 function ROUND_TYPE_NUMBER(_n) { return (ROUND_TYPE(_n) | ROUND_NUMBER(_n)); }
 
-var commver = 3;
 var apptype = APPLICATION_TYPE_TIMER;
 var myaddr = 104;
 var show_competitor_names = true;
@@ -412,7 +411,7 @@ function beep(txt) {
 }
 
 function cancel_rest_time(comp1, comp2) {
-    var msgout = [commver,MSG_CANCEL_REST_TIME,0,myaddr,
+    var msgout = [COMM_VERSION,MSG_CANCEL_REST_TIME,0,myaddr,
 		  current_category, current_match, comp1, comp2];
     sendmsg(msgout);
 }
@@ -648,8 +647,8 @@ function connect(){
 	webSocket = new ReconnectingWebSocket('ws://' + host + ':2315/');
 
         webSocket.onopen = function() {
-	    sendmsg([commver,MSG_DUMMY,0,myaddr,apptype,0]);
-	    sendmsg([commver,MSG_ALL_REQ,0,myaddr]);
+	    sendmsg([COMM_VERSION,MSG_DUMMY,0,myaddr,apptype,0]);
+	    sendmsg([COMM_VERSION,MSG_ALL_REQ,0,myaddr]);
 	    $("body").css("background-color", "white");
 	    get_translations();
         }
@@ -777,7 +776,7 @@ function expose() {
     expose_label(padding1);
     expose_label(padding2);
     expose_label(padding3);
-    
+
     for (i = 0; i < labels.length; i++) {
 	if (i != padding && i != padding1 &&
 	    i != padding2 && i != padding3)
@@ -1450,7 +1449,7 @@ function send_result(bluepts, whitepts, blue_vote, white_vote,
     if (current_category < 10000 || current_match >= 1000) {
         return;
     }
-    var msgout = [commver,MSG_RESULT,0,myaddr,
+    var msgout = [COMM_VERSION,MSG_RESULT,0,myaddr,
 		  tatami, current_category, current_match, get_match_time(),
 		  array2int(bluepts), array2int(whitepts),
 		  hikiwake ? 1 : blue_vote, hikiwake ? 1 : white_vote,
@@ -2122,7 +2121,7 @@ function voting_result(data) {
 }
 
 function xlate(en) {
-    var msg = [commver,MSG_LANG,0,myaddr,en,""];
+    var msg = [COMM_VERSION,MSG_LANG,0,myaddr,en,""];
     sendmsg(msg);
 }
 
