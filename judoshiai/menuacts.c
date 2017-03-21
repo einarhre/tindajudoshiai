@@ -250,6 +250,8 @@ void font_dialog(GtkWidget *w, gpointer data)
         gchar *font = gtk_font_selection_dialog_get_font_name(GTK_FONT_SELECTION_DIALOG(dialog));
 #endif
         set_font(font);
+	g_key_file_set_string(keyfile, "preferences", "sheetfont", font);
+	draw_match_graph();
         g_print("font=%s\n", font);
     }
 

@@ -28,7 +28,8 @@ static gboolean release_notify(GtkWidget *sheet_page,
 #define AREA_SHIFT        4
 #define ARG_MASK        0xf
 
-#define MY_FONT "Arial"
+//#define MY_FONT "Arial"
+#define MY_FONT get_font_props(NULL, NULL)
 
 #define THIN_LINE     (paper_width < 700.0 ? 1.0 : paper_width/700.0)
 #define THICK_LINE    (2*THIN_LINE)
@@ -115,7 +116,8 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
     cairo_surface_t *cs = userdata;
     gchar buf[64];
     struct match *mw = NULL;
-    
+
+    cairo_select_font_face(c, MY_FONT, 0, 0);
     cairo_set_font_size(c, 12);
     cairo_text_extents(c, "Hj", &extents);
 
