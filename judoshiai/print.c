@@ -958,7 +958,7 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
     cairo_rectangle(pd->c, 0.0, 0.0, pd->paper_width, pd->paper_height);
     cairo_fill(pd->c);
 
-    cairo_select_font_face(pd->c, MY_FONT,
+    cairo_select_font_face(pd->c, get_font_props(NULL, NULL),
                            CAIRO_FONT_SLANT_NORMAL,
                            CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size(pd->c, TEXT_HEIGHT);
@@ -1358,7 +1358,7 @@ static void paint_schedule(struct paint_data *pd)
     cairo_rectangle(c, 0.0, 0.0, pd->paper_width, pd->paper_height);
     cairo_fill(c);
 
-    cairo_select_font_face(c, MY_FONT,
+    cairo_select_font_face(c, get_font_props(NULL, NULL),
                            CAIRO_FONT_SLANT_NORMAL,
                            CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size(c, TEXT_HEIGHT*1.5);
