@@ -1658,10 +1658,10 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
     case SYSTEM_QPOOL:
     case SYSTEM_BEST_OF_3:
         mdata->mpositions = competitors;
-        mdata->mfrench_sys = -1;
+        mdata->mfrench_sys = POOL_SYS;
         break;
     case SYSTEM_CUSTOM:
-        mdata->mfrench_sys = -2;
+        mdata->mfrench_sys = CUST_SYS;
         custom_table = get_custom_table(mdata->sys.table);
 	mdata->custom_table = custom_table;
         mdata->mpositions = custom_table->competitors_max;
@@ -1839,8 +1839,9 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
 		    gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg1);
 		else
 		    gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg2);
-	    } else if ((i > mdata->mjudokas/4 && i <= mdata->mjudokas/2) ||
-		       (mdata->mfrench_sys == CUST_SYS && i > mdata->mjudokas*3/4))
+	    } else if ((i > custom_table->competitors_max/4 &&
+			i <= custom_table->competitors_max/2) ||
+		       i > custom_table->competitors_max*3/4)
 		gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg1);
 	    else
 		gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg2);
@@ -2009,6 +2010,21 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
             if (mdata->mfrench_sys >= 0) {
                 if (i & 1) comp = matches[(i+1)/2].blue;
                 else comp = matches[(i+1)/2].white;
+	    } else if (mdata->mfrench_sys == CUST_SYS) {
+		gint j;
+		for (j = 0; j < custom_table->num_matches; j++) {
+		    match_bare_t *m = &custom_table->matches[j];
+		    if (m->c1.type == COMP_TYPE_COMPETITOR &&
+			m->c1.num == i) {
+			comp = matches[j+1].blue;
+			break;
+		    }
+		    if (m->c2.type == COMP_TYPE_COMPETITOR &&
+			m->c2.num == i) {
+			comp = matches[j+1].white;
+			break;
+		    }
+		}
             } else {
                 gint j = 0;
                 typedef guint pair_t[2];
