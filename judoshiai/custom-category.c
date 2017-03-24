@@ -28,7 +28,7 @@ static void custlog(gchar *format, ...);
 static gchar *custom_directory = NULL;
 static struct custom_data *custom_brackets[NUM_CUSTOM_BRACKETS];
 static guint hash_values[NUM_CUSTOM_BRACKETS];
-static gint num_custom_brackets;
+gint num_custom_brackets = 0;
 
 enum data_types {
     CD_VERSION = 0,     // 0
@@ -483,6 +483,18 @@ static struct custom_data *decode_custom_data(unsigned char *buf, int len, struc
 }
 
 /**************************************************************/
+
+guint get_hash_value(gint i)
+{
+    if (i < num_custom_brackets)
+	return hash_values[i];
+    return 0;
+}
+
+struct custom_data *get_custom_table_by_n(guint n)
+{
+    return custom_brackets[n];
+}
 
 struct custom_data *get_custom_table(guint table)
 {

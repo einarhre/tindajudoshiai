@@ -843,6 +843,8 @@ extern gint match_crc[NUM_TATAMIS+1];
 
 extern gint cat_opts[NUM_CAT_OPTS];
 
+gint num_custom_brackets;
+
 /** Functions */
 
 extern void progress_show(gdouble progress, const gchar *text);
@@ -1274,8 +1276,8 @@ extern void init_print_texts(void);
 
 /* match-data */
 extern gchar *get_system_name_for_menu(gint num);
-extern gint get_system_number_by_menu_pos(gint num);
-extern gint get_system_menu_selection(gint active);
+extern gint get_system_number_by_menu_pos(gint num, guint *table);
+extern gint get_system_menu_selection(gint active, guint table);
 extern gboolean system_is_french(gint sys);
 extern gboolean system_wish_is_french(gint wish);
 extern struct compsys wish_to_system(gint sys, gint numcomp);
@@ -1297,6 +1299,10 @@ extern const gchar *get_points_str(gint points, gint catix);
 extern gint get_points_gint(gint points, gint catix);
 extern gchar *get_score_str(gint score, gint catix);
 extern gint match_on_page(gint category, gint match);
+extern gint num_systems(void);
+extern struct custom_data *get_custom_table_by_n(guint n);
+extern guint get_hash_value(gint i);
+extern void set_cat_system_menu(GtkWidget *combobox, gint wish, guint table);
 
 /* medal-matches */
 extern void move_medal_matches(GtkWidget *menuitem, gpointer userdata);
@@ -1325,7 +1331,7 @@ extern void reset_props(GtkWidget *button, void *data);
 extern void reset_props_1(GtkWidget *button, void *data, gboolean if_unset);
 extern void props_save_one(gint prop);
 extern void props_save_to_db(void);
-extern gint props_get_default_wishsys(gint age, gint competitors);
+extern gint props_get_default_wishsys(gint age, gint competitors, guint *table);
 extern gint props_get_grade(gchar *b);
 extern void prop_set_val(gint n, const gchar *dbval, gint intval);
 

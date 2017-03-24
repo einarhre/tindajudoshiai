@@ -1936,7 +1936,10 @@ struct compsys wish_to_system(gint sys, gint numcomp)
         case CAT_SYSTEM_DPOOL2: ret.system = SYSTEM_DPOOL2; break;
         case CAT_SYSTEM_DPOOL3: ret.system = SYSTEM_DPOOL3; break;
         case CAT_SYSTEM_BEST_OF_3: ret.system = SYSTEM_BEST_OF_3; break;
-        case CAT_SYSTEM_CUSTOM: ret.system = SYSTEM_CUSTOM; break;
+        case CAT_SYSTEM_CUSTOM:
+	    ret.system = SYSTEM_CUSTOM;
+	    ret.table = get_custom_table_number_by_competitors(numcomp);
+	    break;
         }
     }
 
@@ -1998,6 +2001,11 @@ gchar *get_system_description(gint index, gint competitors)
     return "";
 }
 
+gint num_systems(void)
+{
+    return NUM_SYSTEMS + num_custom_brackets;
+}
+
 // Return name of the system
 static gchar *get_system_name(gint num)
 {
@@ -2028,7 +2036,8 @@ static gchar *get_system_name(gint num)
     case CAT_SYSTEM_BEST_OF_3: return _("Best of 3");
     case CAT_SYSTEM_DEN_DOUBLE_ELIMINATION: return _("DEN Double Elimination");
     case CAT_SYSTEM_EST_D_KLASS_ONE_BRONZE: return _("EST Double Elim One Bronze");
-    case CAT_SYSTEM_CUSTOM: return _("Customized");
+    case CAT_SYSTEM_CUSTOM:
+	return _("Customized");
     case CAT_SYSTEM_GER_REPECHAGE: return _("GER Double Repechage");
     }
     return "";
@@ -2036,22 +2045,82 @@ static gchar *get_system_name(gint num)
 
 gchar *get_system_name_for_menu(gint num)
 {
-    return get_system_name(system_menu_order[num]);
+    if (num < num_custom_brackets) {
+        struct custom_data *ct = get_custom_table_by_n(num);
+        if (ct) return ct->name_long;
+        return _("Custom");
+    }
+    return get_system_name(system_menu_order[num - num_custom_brackets]);
 }
 
-gint get_system_number_by_menu_pos(gint num)
+gint get_system_number_by_menu_pos(gint num, guint *table)
 {
+    if (num_custom_brackets) {
+        if (num == 0) {
+            return CAT_SYSTEM_CUSTOM;
+        }
+        if (num < num_custom_brackets + 1) {
+            if (table) *table = get_hash_value(num - 1);
+            return CAT_SYSTEM_CUSTOM;
+        }
+
+        return system_menu_order[num - num_custom_brackets - 1];
+    }
     return system_menu_order[num];
 }
 
-gint get_system_menu_selection(gint active)
+gint get_system_menu_selection(gint active, guint table)
 {
     gint i;
+
+    if (active == CAT_SYSTEM_CUSTOM) {
+        for (i = 0; i < num_custom_brackets; i++) {
+            if (table == get_hash_value(i))
+                return i + 1;
+        }
+        return 0;
+    }
+
     for (i = 0; i < NUM_SYSTEMS; i++)
 	if (active == system_menu_order[i])
-	    return i;
+	    return i + num_custom_brackets +
+                (num_custom_brackets ? 1 : 0);
 
     return 0;
+}
+
+void set_cat_system_menu(GtkWidget *combobox, gint wish, guint table)
+{
+    gint i;
+    gchar buf[32];
+
+    if (num_custom_brackets) {
+        snprintf(buf, sizeof(buf), "* %s *", get_system_name(CAT_SYSTEM_CUSTOM));
+        gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combobox), NULL, buf);
+
+        for (i = 0; i < num_custom_brackets; i++) {
+            struct custom_data *ct = get_custom_table_by_n(i);
+            gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combobox), NULL,
+                                      ct ? ct->name_long : "xxx");
+
+        }
+
+        snprintf(buf, sizeof(buf), "* %s *", get_system_name(CAT_SYSTEM_DEFAULT));
+        gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combobox), NULL, buf);
+
+        for (i = 1; i < NUM_SYSTEMS; i++) {
+            gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combobox), NULL,
+                                      get_system_name(system_menu_order[i]));
+        }
+
+    } else {
+        for (i = 0; i < NUM_SYSTEMS; i++) {
+            gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(combobox), NULL,
+                                      get_system_name(system_menu_order[i]));
+        }
+    }
+
+    gtk_combo_box_set_active(GTK_COMBO_BOX(combobox), get_system_menu_selection(wish, table));
 }
 
 gboolean system_is_french(gint sys)

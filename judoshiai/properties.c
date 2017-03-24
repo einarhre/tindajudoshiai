@@ -24,7 +24,7 @@ static GtkWidget *get_prop_widget(enum properties num, gboolean label);
 struct default_cat {
     gint max_age;
     gint comp_min, comp_max;
-    gint catsys;
+    gint catsys, table;
 };
 
 struct default_cat default_cats[NUM_DEFAULT_CATS];
@@ -399,11 +399,12 @@ void init_property(gchar *prop, gchar *val)
             }
 
             if (i >= PROP_DEFAULT_CAT_1 && i < PROP_DEFAULT_CAT_1 + NUM_DEFAULT_CATS) {
-                sscanf(props[i].value, "%d %d %d %d",
+                sscanf(props[i].value, "%d %d %d %d %d",
                        &default_cats[i-PROP_DEFAULT_CAT_1].max_age,
                        &default_cats[i-PROP_DEFAULT_CAT_1].comp_min,
                        &default_cats[i-PROP_DEFAULT_CAT_1].comp_max,
-                       &default_cats[i-PROP_DEFAULT_CAT_1].catsys);
+                       &default_cats[i-PROP_DEFAULT_CAT_1].catsys,
+                       &default_cats[i-PROP_DEFAULT_CAT_1].table);
             }
 
             if (i == PROP_GRADE_NAMES) {
@@ -459,7 +460,8 @@ static void values_to_widgets(void)
         gtk_entry_set_text(GTK_ENTRY(catwidgets[i].max), buf);
 
         gtk_combo_box_set_active(GTK_COMBO_BOX(catwidgets[i].sys),
-                                 get_system_menu_selection(default_cats[i].catsys));
+                                 get_system_menu_selection(default_cats[i].catsys,
+							   default_cats[i].table));
     }
 
     for (i = 0; i < NUM_BELTS; i++) {
@@ -476,20 +478,24 @@ static void widgets_to_values(void)
         widget_to_value(i);
 
     for (i = 0; i < NUM_DEFAULT_CATS; i++) {
-        gint real = get_system_number_by_menu_pos(gtk_combo_box_get_active(GTK_COMBO_BOX(catwidgets[i].sys)));
-        snprintf(buf, sizeof(buf), "%s %s %s %d",
+	guint table;
+        gint real = get_system_number_by_menu_pos
+	    (gtk_combo_box_get_active(GTK_COMBO_BOX(catwidgets[i].sys)),
+	     &table);
+        snprintf(buf, sizeof(buf), "%s %s %s %d %d",
                  gtk_entry_get_text(GTK_ENTRY(catwidgets[i].age)),
                  gtk_entry_get_text(GTK_ENTRY(catwidgets[i].min)),
                  gtk_entry_get_text(GTK_ENTRY(catwidgets[i].max)),
-                 real);
+                 real, table);
         //gtk_entry_set_text(GTK_ENTRY(props[i + PROP_DEFAULT_CAT_1].w), buf);
         prop_set_val(i + PROP_DEFAULT_CAT_1, buf, 0);
 
-        sscanf(buf, "%d %d %d %d",
+        sscanf(buf, "%d %d %d %d %d",
                &default_cats[i].max_age,
                &default_cats[i].comp_min,
                &default_cats[i].comp_max,
-               &default_cats[i].catsys);
+               &default_cats[i].catsys,
+	       &default_cats[i].table);
     }
 
     buf[0] = 0;
@@ -636,11 +642,12 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
         }
 
         for (i = 0; i < NUM_DEFAULT_CATS; i++) {
-            snprintf(buf, sizeof(buf), "%d %d %d %d",
+            snprintf(buf, sizeof(buf), "%d %d %d %d %d",
                      default_cats[i].max_age,
                      default_cats[i].comp_min,
                      default_cats[i].comp_max,
-                     default_cats[i].catsys);
+                     default_cats[i].catsys,
+		     default_cats[i].table);
             prop_set_val(PROP_DEFAULT_CAT_1 + i, buf, 0);
         }
     }
@@ -839,21 +846,15 @@ void properties(GtkWidget *w, gpointer data)
 #endif
         catwidgets[i].max = tmp;
 
-#if (GTKVER == 3)
         tmp = gtk_combo_box_text_new();
+#if 1
+	set_cat_system_menu(tmp, 0, 0);
+#else
         gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(tmp), NULL, "?");
 	for (j = 1; j < NUM_SYSTEMS; j++)
 	    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(tmp), NULL, get_system_name_for_menu(j));
-
-        gtk_grid_attach(GTK_GRID(table3), tmp, 3, i+3, 1, 1);
-#else
-        tmp = gtk_combo_box_new_text();
-        gtk_combo_box_append_text(GTK_COMBO_BOX(tmp), "?");
-	for (j = 1; j < NUM_SYSTEMS; j++)
-	    gtk_combo_box_append_text(GTK_COMBO_BOX(tmp), get_system_name_for_menu(j));
-
-        gtk_table_attach_defaults(GTK_TABLE(table3), tmp, 3, 4, i+3, i+4);
 #endif
+        gtk_grid_attach(GTK_GRID(table3), tmp, 3, i+3, 1, 1);
         catwidgets[i].sys = tmp;
     }
 
@@ -1032,15 +1033,17 @@ void properties(GtkWidget *w, gpointer data)
     set_match_col_titles();
 }
 
-gint props_get_default_wishsys(gint age, gint competitors)
+gint props_get_default_wishsys(gint age, gint competitors, guint *table)
 {
     gint i;
 
     for (i = 0; i < NUM_DEFAULT_CATS; i++) {
         if ((age == 0 || default_cats[i].max_age == 0 || age <= default_cats[i].max_age) &&
             (competitors >= default_cats[i].comp_min || default_cats[i].comp_min == 0)   &&
-            (competitors <= default_cats[i].comp_max || default_cats[i].comp_max == 0))
+            (competitors <= default_cats[i].comp_max || default_cats[i].comp_max == 0)) {
+	    if (table) *table = default_cats[i].table;
             return default_cats[i].catsys;
+	}
     }
 
     return 0;

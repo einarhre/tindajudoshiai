@@ -195,7 +195,8 @@ static void judoka_edited_callback(GtkWidget *widget,
 
     if (judoka_tmp->system)
         system.wishsys = get_system_number_by_menu_pos(gtk_combo_box_get_active
-                                                       (GTK_COMBO_BOX(judoka_tmp->system)));
+                                                       (GTK_COMBO_BOX(judoka_tmp->system)),
+						       (guint *)(&system.table));
 
     if (judoka_tmp->comment)
         edited.comment = g_strdup(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment)));
@@ -813,27 +814,25 @@ void view_on_row_activated(GtkTreeView        *treeview,
             judoka_tmp->last = set_entry(table, 0, _("Category:"), last ? last : "");
 
             tmp = gtk_label_new(_("System:"));
-#if (GTKVER == 3)
+
             gtk_grid_attach(GTK_GRID(table), tmp, 0, 1, 1, 1);
             judoka_tmp->system = tmp = gtk_combo_box_text_new();
-
-            for (i = 0; i < NUM_SYSTEMS; i++)
+#if 1
+	    set_cat_system_menu(tmp, catdata->system.wishsys, catdata->system.table);
+	    if (catdata->match_status & REAL_MATCH_EXISTS)
+		gtk_widget_set_sensitive(GTK_WIDGET(tmp), FALSE);
+#else
+	    for (i = 0; i < num_systems(); i++)
                 gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(tmp), NULL, get_system_name_for_menu(i));
 
-            gtk_grid_attach(GTK_GRID(table), tmp, 1, 1, 1, 1);
-#else
-            gtk_table_attach_defaults(GTK_TABLE(table), tmp, 0, 1, 1, 2);
-            judoka_tmp->system = tmp = gtk_combo_box_new_text();
-
-            for (i = 0; i < NUM_SYSTEMS; i++)
-                gtk_combo_box_append_text(GTK_COMBO_BOX(tmp), get_system_name_for_menu(i));
-
-            gtk_table_attach_defaults(GTK_TABLE(table), tmp, 1, 2, 1, 2);
-#endif
             gtk_combo_box_set_active(GTK_COMBO_BOX(tmp),
                                      catdata ?
-                                     get_system_menu_selection(catdata->system.wishsys) :
+                                     get_system_menu_selection(catdata->system.wishsys,
+							       catdata->system.table) :
                                      CAT_SYSTEM_DEFAULT);
+
+#endif
+            gtk_grid_attach(GTK_GRID(table), tmp, 1, 1, 1, 1);
 
             tmp = gtk_label_new(_("Tatami:"));
 #if (GTKVER == 3)

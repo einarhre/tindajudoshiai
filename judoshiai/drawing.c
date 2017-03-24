@@ -1352,11 +1352,19 @@ struct compsys get_system_for_category(gint index, gint competitors)
         return systm;
 
     if (wishsys == CAT_SYSTEM_CUSTOM) {
-        table = get_custom_table_number_by_competitors(competitors);
-        if (table == 0) wishsys = CAT_SYSTEM_DEFAULT;
-        else {
-            sys = SYSTEM_CUSTOM;
-        }
+	struct custom_data *ct = get_custom_table(table);
+	if (!ct || competitors < ct->competitors_min ||
+	    competitors > ct->competitors_max) {
+	    table = get_custom_table_number_by_competitors(competitors);
+	    if (table == 0) wishsys = CAT_SYSTEM_DEFAULT;
+	    else {
+		sys = SYSTEM_CUSTOM;
+		goto out;
+	    }
+	} else {
+	    sys = SYSTEM_CUSTOM;
+	    goto out;
+	}
     }
 
     if (wishsys == CAT_SYSTEM_DEFAULT) {
@@ -1366,7 +1374,11 @@ struct compsys get_system_for_category(gint index, gint competitors)
             gint aix = find_age_index(cat->category);
             if (aix >= 0)
                 age = category_definitions[aix].age;
-            wishsys = props_get_default_wishsys(age, competitors);
+            wishsys = props_get_default_wishsys(age, competitors, &table);
+	    if (wishsys == CAT_SYSTEM_CUSTOM && table) {
+		sys = SYSTEM_CUSTOM;
+		goto out;
+	    }
         }
     }
 
@@ -1469,7 +1481,7 @@ struct compsys get_system_for_category(gint index, gint competitors)
             sys = SYSTEM_FRENCH_128;
         }
     }
-
+out:
     systm.system  = sys;
     systm.numcomp = competitors;
     systm.table   = table;
@@ -1888,7 +1900,8 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
     }
 
     // cut button
-    if (mdata->edit && mdata->mfrench_sys >= 0) {
+    if (mdata->edit &&
+	(mdata->mfrench_sys >= 0 || mdata->mfrench_sys == CUST_SYS)) {
         eventbox = gtk_event_box_new();
 #if (GTKVER == 3)
         GtkWidget *delete = gtk_image_new_from_icon_name("edit-cut", 24);
