@@ -3300,7 +3300,7 @@ gint get_points_gint(gint points, gint catix)
 	case 7: return 6;
 	case 5: return 2;
 	case 2: return 2;
-	case 1: return 1;
+	case 1: return 2;
 	}
     } else if (prop_get_int_val_cat(PROP_USE_PTS_10_5_1, catix)) {
 	switch (points) {
@@ -3309,7 +3309,7 @@ gint get_points_gint(gint points, gint catix)
 	case 7: return 10;
 	case 5: return 2;
 	case 2: return 2;
-	case 1: return 1;
+	case 1: return 2;
 	}
     } else { // PROP_USE_IJF_POINTS
 	switch (points) {
