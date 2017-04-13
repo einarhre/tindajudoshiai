@@ -26,6 +26,8 @@
 
 #include "judoshiai.h"
 
+#define TEAM_PTS(_n) _n/10000, (_n%10000)/2, (_n & 1) ? "½" : ""
+
 #define WINNER(_a) (COMP_1_PTS_WIN(m[_a]) ? m[_a].blue :                \
                     (COMP_2_PTS_WIN(m[_a]) ? m[_a].white :		\
 		       (m[_a].blue == GHOST ? m[_a].white :		\
@@ -369,6 +371,8 @@ gint paint_svg(struct paint_data *pd)
     cairo_status_t (*write_cb)(void *closure, const unsigned char *data,
 			       unsigned int length);
     void *closure;
+    struct category_data *catdata = avl_get_category(category);
+    gboolean team_event = catdata && (catdata->deleted & TEAM_EVENT);
 
     writebuflen = 0;
     write_cb = pd->write_cb;
@@ -654,27 +658,42 @@ gint paint_svg(struct paint_data *pd)
                     }
                 } else if (attr[1].code[0] == 'p') {
                     gint who = attr[1].value;
-                    gboolean ifmatched = FALSE;
+                    gboolean ifmatched = FALSE, ok_to_print = TRUE;
                     gint points = who == 1 ? m[fight].blue_points : m[fight].white_points;
                     gint next = 2;
                     if ((cnt > next) && attr[next].code[0] == 0) {
                         if (attr[next].value & 1)
                             ifmatched = TRUE;
+			// print only if winner
+                        if (attr[next].value & 2) {
+			    if ((who == 1 && m[fight].blue_points <= m[fight].white_points) ||
+				(who == 2 && m[fight].blue_points >= m[fight].white_points))
+				ok_to_print = FALSE;
+			}
                         next++;
                     }
                     if ((cnt > next) && attr[next].code[0] == '=') {
                         if (attr[next].value == points)
                             snprintf(buf, sizeof(buf), "%s", attr[next+1].code + 1);
-                        else if (attr[next+2].value == 0)
-                            snprintf(buf, sizeof(buf), "%s",
-				     get_points_str(points, m[fight].category));
-                        else
+                        else if (attr[next+2].value == 0) {
+			    if (team_event)
+				snprintf(buf, sizeof(buf), "%d/%d%s",
+					 TEAM_PTS(points));
+			    else
+				snprintf(buf, sizeof(buf), "%s",
+					 get_points_str(points, m[fight].category));
+                        } else
                             buf[0] = 0;
-                    } else
-                        snprintf(buf, sizeof(buf), "%s",
-				 get_points_str(points, m[fight].category));
+                    } else {
+			    if (team_event)
+				snprintf(buf, sizeof(buf), "%d/%d%s",
+					 TEAM_PTS(points));
+			    else
+				snprintf(buf, sizeof(buf), "%s",
+					 get_points_str(points, m[fight].category));
+		    }
 
-                    if ((ifmatched == FALSE || MATCHED(fight)) && buf[0])
+                    if (ok_to_print && (ifmatched == FALSE || MATCHED(fight)) && buf[0])
                         WRITE(buf);
                 } else if (attr[1].code[0] == 's') {
                     gint who = attr[1].value;
@@ -825,16 +844,16 @@ gint paint_svg(struct paint_data *pd)
                     } else if (attr2_code[0] == 'p') { // number of points
                         if (systm.system == SYSTEM_CUSTOM) {
                             if (pool && (pool->competitors[pcomp].pts || pool->finished)) {
-                                gint pts = pool->competitors[pcomp].pts;
+                                gint pts = pool->competitors[pcomp].pts%10000; // drop team wins
                                 snprintf(buf, sizeof(buf), "%d%s", pts/2, (pts & 1) ? "½" : "");
                                 WRITE(buf);
                             } else if (pair && (pair->competitors[pcomp].pts || pair->finished)) {
-                                gint pts = pair->competitors[pcomp].pts;
+                                gint pts = pair->competitors[pcomp].pts%10000; // drop team wins
                                 snprintf(buf, sizeof(buf), "%d%s", pts/2, (pts & 1) ? "½" : "");
                                 WRITE(buf);
                             }
                         } else if (pmp->pts[comp] || pmp->finished) {
-                            gint pts = pmp->pts[comp];
+                            gint pts = pmp->pts[comp]%10000; // drop team wins
                             snprintf(buf, sizeof(buf), "%d%s", pts/2, (pts & 1) ? "½" : "");
                             WRITE(buf);
                         }
