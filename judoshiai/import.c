@@ -429,6 +429,7 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     utf8 = gtk_check_button_new_with_label("UTF-8");
     gtk_widget_show(utf8);
     gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), utf8);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(utf8), TRUE);
 
     if (database_name[0] == 0) {
         if (current_directory[0] != '.')
