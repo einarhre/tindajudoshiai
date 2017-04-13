@@ -752,7 +752,7 @@ void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean
 		pm->pts[white] += pm->m[i].white_points; // team event points
 	    } else {
 		pm->pts[blue] += get_points_gint(pm->m[i].blue_points, category);
-		pm->pts[white] += get_points_gint(pm->m[i].white_points, category); // team event points
+		//pm->pts[white] += get_points_gint(pm->m[i].white_points, category); // team event points
 	    }
             pm->mw[blue][white] = TRUE;
             pm->mw[white][blue] = FALSE;
@@ -764,7 +764,7 @@ void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean
 		pm->pts[blue] += pm->m[i].blue_points; // team event points
 	    } else {
 		pm->pts[white] += get_points_gint(pm->m[i].white_points, category);
-		pm->pts[blue] += get_points_gint(pm->m[i].blue_points, category); // team event points
+		//pm->pts[blue] += get_points_gint(pm->m[i].blue_points, category); // team event points
 	    }
             pm->mw[blue][white] = FALSE;
             pm->mw[white][blue] = TRUE;
@@ -812,6 +812,24 @@ static gint find_comp_num_in_pool(struct pool *p, gint index)
         if (p->competitors[i].index == index) return i;
     }
     return -1;
+}
+
+void set_judoka_flags(gint index, gint flag, gboolean do_set)
+{
+    GtkTreeIter iter;
+    guint flags = 0;
+
+    if (find_iter(&iter, index) == FALSE) return;
+
+    gtk_tree_model_get(current_model, &iter,
+                       COL_DELETED, &flags,
+		       -1);
+    if (do_set) flags |= flag;
+    else flags &= ~flag;
+
+    gtk_tree_store_set((GtkTreeStore *)current_model, &iter,
+                       COL_DELETED, flags,
+		       -1);
 }
 
 void fill_custom_struct(gint category, struct custom_matches *cm)
@@ -890,6 +908,7 @@ void fill_custom_struct(gint category, struct custom_matches *cm)
         struct pool *p = &(cm->pm[poolnum]);
         round_robin_bare_t *cdpool = &(cd->round_robin_pools[poolnum]);
 
+	if (catdata) catdata->tie = FALSE;
         p->finished = TRUE;
         p->num_competitors = cdpool->num_competitors;
 
@@ -973,7 +992,8 @@ void fill_custom_struct(gint category, struct custom_matches *cm)
 			p->competitors[c2].pts += cm->m[n].white_points; // team event points
 		    } else {
 			p->competitors[c1].pts += get_points_gint(cm->m[n].blue_points, category);
-			p->competitors[c2].pts += get_points_gint(cm->m[n].white_points, category); // team event points
+			//p->competitors[c2].pts += get_points_gint(cm->m[n].white_points, category); // team event points
+			p->competitors[c1].match_time += cm->m[n].match_time;
 		    }
                     p->competitors[c1].mw[c2] = TRUE;
                     p->competitors[c2].mw[c1] = FALSE;
@@ -984,10 +1004,11 @@ void fill_custom_struct(gint category, struct custom_matches *cm)
 			p->competitors[c1].pts += cm->m[n].blue_points; // team event points
 		    } else {
 			p->competitors[c2].pts += get_points_gint(cm->m[n].white_points, category);
-			p->competitors[c1].pts += get_points_gint(cm->m[n].blue_points, category); // team event points
+			//p->competitors[c1].pts += get_points_gint(cm->m[n].blue_points, category); // team event points
+			p->competitors[c2].match_time += cm->m[n].match_time;
 		    }
-                    p->competitors[c2].mw[c1] = FALSE;
-                    p->competitors[c1].mw[c2] = TRUE;
+                    p->competitors[c2].mw[c1] = TRUE;
+                    p->competitors[c1].mw[c2] = FALSE;
                 } else
                     p->finished = FALSE;
             }
@@ -1031,6 +1052,155 @@ void fill_custom_struct(gint category, struct custom_matches *cm)
                 }
             } // for j
         } // for i
+
+#undef TIME
+#define TIME (_a) (p->competitors[_a].match_time)
+#undef WEIGHT
+#define WEIGHT(_a) ((ju = cm->j[find_comp_num(cm, p->competitors[_a].index)]) ? ju->weight : 0)
+#define SET_TIE(_a) set_judoka_flags(p->competitors[_a].index, POOL_TIE3, TRUE)
+
+	// check for ties
+        for (i = 0; i < p->num_competitors-2; i++) {
+	    struct judoka *ju;
+	    gint pos1 = p->competitors[i].position;
+	    gint pos2 = p->competitors[i+1].position;
+	    gint pos3 = p->competitors[i+2].position;
+
+	    if (p->competitors[pos1].wins == p->competitors[pos2].wins &&
+		p->competitors[pos2].wins == p->competitors[pos3].wins &&
+		p->competitors[pos1].pts == p->competitors[pos2].pts &&
+		p->competitors[pos2].pts == p->competitors[pos3].pts &&
+		p->competitors[pos1].mw[pos2] == p->competitors[pos2].mw[pos3] &&
+		p->competitors[pos2].mw[pos3] == p->competitors[pos3].mw[pos1]) {
+
+		gboolean t = TRUE;
+		gint resolve_method;
+		for (resolve_method = 1; resolve_method <= 2; resolve_method++) {
+		    gint t1, t2, t3;
+		    if (!t) break;
+
+		    if (resolve_method == 1) {
+			if (!prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_TIME))
+			    continue;
+			/* fastest wins */
+			t1 = p->competitors[pos1].match_time;
+			t2 = p->competitors[pos2].match_time;
+			t3 = p->competitors[pos3].match_time;
+		    }
+		    if (resolve_method == 2) {
+			if (!prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS))
+			    continue;
+			/* weight matters */
+			t1 = WEIGHT(pos1);
+			t2 = WEIGHT(pos2);
+			t3 = WEIGHT(pos3);
+		    }
+
+		    t = FALSE;
+
+		    if (t1 < t2 && t2 < t3) { // 1 2 3
+			/* already ok */
+		    } else if (t1 == t2 && t2 == t3) { // 1=2=3
+			/* not solvable */
+			t = TRUE;
+		    } else if (t1 < t2 && t2 > t3 && t3 > t1) { // 1 3 2
+			p->competitors[i+1].position = pos3;
+			p->competitors[i+2].position = pos2;
+		    } else if (t1 > t2 && t2 < t3 && t3 < t1) { // 2 1 3
+			p->competitors[i].position = pos2;
+			p->competitors[i+1].position = pos1;
+		    } else if (t1 > t2 && t2 < t3 && t3 < t1) { // 2 3 1
+			p->competitors[i].position = pos2;
+			p->competitors[i+1].position = pos3;
+			p->competitors[i+2].position = pos1;
+		    } else if (t1 < t2 && t2 > t3 && t3 < t1) { // 3 1 2
+			p->competitors[i].position = pos3;
+			p->competitors[i+1].position = pos1;
+			p->competitors[i+2].position = pos2;
+		    } else if (t1 > t2 && t2 > t3) { // 3 2 1
+			p->competitors[i].position = pos3;
+			p->competitors[i+2].position = pos1;
+		    } else if (t1 == t2) { // 1=2 3
+			if (t1 > t3) { // 1=2 > 3
+			    p->competitors[i].position = pos3;
+			    if (p->competitors[pos1].mw[pos2]) { // pos1 won pos2
+				p->competitors[i+1].position = pos1;
+				p->competitors[i+2].position = pos2;
+			    } else {
+				p->competitors[i+1].position = pos2;
+				p->competitors[i+2].position = pos1;
+			    }
+			} else { // 1=2 < 3
+			    p->competitors[i+2].position = pos3;
+			    if (p->competitors[pos1].mw[pos2]) { // pos1 won pos2
+				p->competitors[i].position = pos1;
+				p->competitors[i+1].position = pos2;
+			    } else {
+				p->competitors[i].position = pos2;
+				p->competitors[i+1].position = pos1;
+			    }
+			}
+		    } else if (t2 == t3) { // 1 2=3
+			if (t1 > t2) { // 1 > 2=3
+			    p->competitors[i+2].position = pos1;
+			    if (p->competitors[pos2].mw[pos3]) {
+				p->competitors[i].position = pos2;
+				p->competitors[i+1].position = pos3;
+			    } else {
+				p->competitors[i].position = pos3;
+				p->competitors[i+1].position = pos2;
+			    }
+			} else { // 1 < 2=3
+			    p->competitors[i].position = pos1;
+			    if (p->competitors[pos2].mw[pos3]) { // pos1 won pos2
+				p->competitors[i+1].position = pos2;
+				p->competitors[i+2].position = pos3;
+			    } else {
+				p->competitors[i+1].position = pos3;
+				p->competitors[i+2].position = pos2;
+			    }
+			}
+		    } else if (t1 == t3) { // 1=3 2
+			if (t1 > t2) { // 1=3 > 2
+			    p->competitors[i].position = pos2;
+			    if (p->competitors[pos1].mw[pos3]) {
+				p->competitors[i+1].position = pos1;
+				p->competitors[i+2].position = pos3;
+			    } else {
+				p->competitors[i+1].position = pos3;
+				p->competitors[i+2].position = pos1;
+			    }
+			} else { // 1=3 < 2
+			    p->competitors[i+2].position = pos2;
+			    if (p->competitors[pos1].mw[pos3]) { // pos1 won pos2
+				p->competitors[i].position = pos1;
+				p->competitors[i+1].position = pos3;
+			    } else {
+				p->competitors[i].position = pos3;
+				p->competitors[i+1].position = pos1;
+			    }
+			}
+		    } else {
+			t = TRUE;
+		    }
+
+		    pos1 = p->competitors[i].position;
+		    pos2 = p->competitors[i+1].position;
+		    pos3 = p->competitors[i+2].position;
+		} // for resolve_method
+
+		if (t) {
+		    p->competitors[pos1].tie = p->competitors[pos2].tie =
+			p->competitors[pos3].tie = TRUE;
+		    SET_TIE(pos1);
+		    SET_TIE(pos2);
+		    SET_TIE(pos3);
+		    if (catdata) catdata->tie = TRUE;
+		    p->finished = FALSE;
+		    break;
+		}
+	    }
+	}
     } // for pools
 }
 
@@ -2409,7 +2579,8 @@ void update_matches(guint category, struct compsys sys, gint tatami)
         if (catdata && (catdata->deleted & TEAM_EVENT)) {
 	    struct match last;
             gboolean draw = db_event_matches_update(category, &last);
-	    if (draw && last.number < 999) {
+	    if (draw && last.number < 999 &&
+		prop_get_int_val(PROP_EXTRA_MATCH_IN_TEAMS_TIE)) {
 		/* Another match is needed. */
 		struct match extra;
 		memset(&extra, 0, sizeof(extra));
