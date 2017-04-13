@@ -61,7 +61,7 @@ static void set_properties_button(GtkWidget *checkbox, gpointer arg)
     g_print("RED properties_button=%p\n", properties_button);
     if (properties_button) {
 	gtk_widget_set_name(properties_button, "button_red");
-	for (i = PROP_USE_IJF_POINTS; i <= PROP_USE_PTS_10_1_h; i++) { 
+	for (i = PROP_USE_IJF_POINTS; i <= PROP_USE_PTS_10_5_1; i++) { 
 	    w = get_prop_widget(i, TRUE);
 	    if (w) gtk_widget_set_name(w, "button_red");
 	}
@@ -261,6 +261,26 @@ struct property {
         .type = PROP_TYPE_CHECK,
         //.table = 1,
 	.radio_group = &points_group,
+    },
+    {
+        .name = "UsePts_10_3_1",
+        .label = N_("Use points 10/3/1:"),
+        .type = PROP_TYPE_CHECK,
+        //.table = 1,
+	.radio_group = &points_group,
+    },
+    {
+        .name = "UsePts_10_5_1",
+        .label = N_("Use points 10/5/1:"),
+        .type = PROP_TYPE_CHECK,
+        //.table = 1,
+	.radio_group = &points_group,
+    },
+    {
+        .name = "ExtraMatchInTeamsPointsTie",
+        .label = N_("Add extra match in teams points tie:"),
+        .type = PROP_TYPE_CHECK,
+	.action_func = set_properties_button,
     },
 };
 
@@ -584,6 +604,7 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
         SET_VAL(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS, "0", 0);
 
     SET_VAL(PROP_RULES_2017, "1", 1);
+    SET_VAL(PROP_EXTRA_MATCH_IN_TEAMS_TIE, "1", 1);
 
     if (draw_system == DRAW_FINNISH)
 	SET_VAL(PROP_USE_IJF_POINTS, "1", 1);
