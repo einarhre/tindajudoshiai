@@ -86,10 +86,9 @@ static gint current_page = 0;
         write_table(pd, &_t, _r, _c, _buf);                             \
     } while (0)
 
-#define WRITE_TABLE_PTSSUM(_t, _r, _c, _n) do {                            \
+#define WRITE_TABLE_PTSSUM(_t, _r, _c, _n) do {				\
         char _buf[16];                                                  \
-        if (team_event) snprintf(_buf, sizeof(_buf)-1, "%d/%d%s", TEAM_PTS(_n)); \
-        else snprintf(_buf, sizeof(_buf)-1, "%d%s", _n/2, (_n & 1) ? "½" : ""); \
+        snprintf(_buf, sizeof(_buf)-1, "%d%s", (_n%10000)/2, (_n & 1) ? "½" : ""); \
         write_table(pd, &_t, _r, _c, _buf);                             \
     } while (0)
 
