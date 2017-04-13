@@ -1273,6 +1273,7 @@ extern void print_schedule_cb(GtkWidget *menuitem, gpointer userdata);
 #define NUM_PRINT_LANGS 32
 #define IS_LANG_IS (print_lang_names[print_lang][0] == 'i' && print_lang_names[print_lang][1] == 's')
 #define IS_LANG_NB (print_lang_names[print_lang][0] == 'n' && print_lang_names[print_lang][1] == 'b')
+#define IS_LANG_SK (print_lang_names[print_lang][0] == 's' && print_lang_names[print_lang][1] == 'k')
 extern gchar *print_texts[numprinttexts][NUM_PRINT_LANGS];
 extern gchar *print_lang_menu_texts[NUM_PRINT_LANGS];
 extern gchar  print_lang_names[NUM_PRINT_LANGS][2];

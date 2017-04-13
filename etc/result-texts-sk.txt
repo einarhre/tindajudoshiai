@@ -55,11 +55,11 @@ Váha:
 ### 27: PRELIMINARY SCHEDULE
 HARMONOGRAM
 ### 28: weighin-notes.pdf (file name)
-váha-poznámky.pdf
+vaha-poznamky.pdf
 ### 29: schedule.pdf (file name)
 harmonogram.pdf
 ### 30: categories.pdf (file name)
-kategórie.pdf
+kategorie.pdf
 ### 31: Category
 Kategória
 ### 32: Next fights (for a list of fights)
@@ -69,7 +69,7 @@ Kategórie
 ### 34: Statistics
 Štatistiky
 ### 35: Medals
-Medaile
+Medaily
 ### 36: Total
 Spolu
 ### 37: Country
@@ -80,7 +80,7 @@ Nelosovaný
 Skončil/a
 ### 40: Match ongoing
 Zápasia
-### 41: Satarted (category has started)
+### 41: Started (category has started)
 Spustená
 ### 42: Drawing ready
 Vylosované

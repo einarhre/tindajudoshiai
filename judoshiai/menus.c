@@ -216,6 +216,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     gtk_widget_add_accelerator(competitor_new, "activate", group, GDK_N, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(competitor_search, "activate", group, GDK_F, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(competitor_add_from_text_file, "activate", group, GDK_I, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
     /* Create the Category menu content. */
     category_new             = gtk_menu_item_new_with_label(_("New Category"));
