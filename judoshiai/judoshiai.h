@@ -492,6 +492,9 @@ enum properties {
     PROP_USE_PTS_100_10_1_h,
     PROP_USE_PTS_10_7_5_1,
     PROP_USE_PTS_10_1_h,
+    PROP_USE_PTS_10_3_1,
+    PROP_USE_PTS_10_5_1,
+    PROP_EXTRA_MATCH_IN_TEAMS_TIE,
     NUM_PROPERTIES
 };
 
@@ -571,7 +574,8 @@ struct custom_matches {
             gint wins, pts, mw[21];
             gboolean all_matched;
             gboolean tie;
-            gint position;
+            gint position; // competitors[n].position tells who was nth, not pos of n
+	    gint match_time;
         } competitors[21];
         gint num_competitors;
         gboolean finished;
