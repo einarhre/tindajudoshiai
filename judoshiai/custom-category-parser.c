@@ -59,7 +59,7 @@
   -----
  */
 
-#define expect(_s) do { expect1(_s); if (stop) { /*fprintf(stderr, "%s:%d\n", __FUNCTION__, __LINE__); */ return 0; }} while (0)
+#define expect(_s) do { expect1(_s); if (stop) { return 0; }} while (0)
 
 static int block(void);
 
@@ -73,8 +73,8 @@ typedef enum {
 } Symbol;
 
 static char *labels[] = {
-    "", "rr", "ko", "b3", "match", "p", "colon", "prev", "ident", "number",
-    "competitor", "eol", "eof", "pos", "dash", "lparen", "rparen", "order",
+    "", "rr", "ko", "b3", "match", ".", ":", "p", "identifier", "number",
+    "competitor", "end-of-line", "end-of-file", "pos", "-", "(", ")", "order",
     "page", "svg", "info", "error", "id", "group"
 };
 
@@ -162,7 +162,6 @@ static int value, numvalue, ordernum, pagenum = 1;
 static char strvalue[256];
 static int linenum = 1;
 static char line[256];
-static int n = 0;
 
 static competitor_t compvalue;
 static int stop = 0;
@@ -222,20 +221,47 @@ static match_t *get_match(char *name) {
     return NULL;
 }
 
+static int GETC(FILE *file)
+{
+    int c = fgetc(file);
+
+    while (c == '\r') c = fgetc(file);
+    if (c == '\n') { /*linenum++;*/ }
+    else if (c == '\t') c = ' ';
+    else if (c == '\\') {
+	c = fgetc(file);
+	if (c == '\r') c = fgetc(file);
+	if (c == '\n') {
+	    linenum++;
+	    c = fgetc(file);
+	}
+    }
+    return c;
+}
+
 static void getsym(void)
 {
+    int c;
+
     if (stop) {
         sym = eof;
         goto out;
     }
 
-    int c = fgetc(f);
-    while (c == ' ') c = fgetc(f);
+again:
+    c = GETC(f);
+    while (c == ' ') c = GETC(f);
 
     if (c == '\n') {
-        linenum++;
         sym = eol;
+	linenum++;
         goto out;
+    }
+
+    if (c == '#') {
+	while (c != EOF && c != '\n') c = GETC(f);
+	linenum++;
+	goto again;
     }
 
     if (c < 0 || c > 255) {
@@ -270,10 +296,10 @@ static void getsym(void)
 
     if (c >= '0' && c <= '9') {
         value = c - '0';
-        c = fgetc(f);
+        c = GETC(f);
         while (c >= '0' && c <= '9') {
             value = 10*value + c - '0';
-            c = fgetc(f);
+            c = GETC(f);
         }
         ungetc(c, f);
         sym = number;
@@ -281,13 +307,13 @@ static void getsym(void)
     }
 
     if (c == '"') {
-        n = 0;
-        c = fgetc(f);
+        int n = 0;
+        c = GETC(f);
         while (n < sizeof(line)-1 && c != '"') {
             ERR_SYM((c < ' '), "Invalid character");
-            if (c == '\\') c = fgetc(f);
+            if (c == '\\') c = GETC(f);
             line[n++] = c;
-            c = fgetc(f);
+            c = GETC(f);
         }
         line[n] = 0;
         sym = ident;
@@ -296,13 +322,13 @@ static void getsym(void)
     }
 
     if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_') {
-        n = 0;
+        int n = 0;
         line[n++] = c;
-        c = fgetc(f);
+        c = GETC(f);
         while (n < sizeof(line)-1 &&
                ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_')) {
             line[n++] = c;
-            c = fgetc(f);
+            c = GETC(f);
         }
         line[n] = 0;
         ungetc(c, f);
@@ -403,7 +429,7 @@ static int accept(Symbol s) {
     return 0;
 }
 
-static char message[128];
+static char message[256];
 
 static int expect1(Symbol s) {
     if (accept(s))
@@ -414,7 +440,7 @@ static int expect1(Symbol s) {
     return 0;
 }
 
-static int player(void) {
+static int player(int must) {
     int p = 0;
     memset(&compvalue, 0, sizeof(compvalue));
     if (accept(competitor)) {
@@ -422,7 +448,8 @@ static int player(void) {
         if (max_comp < numvalue)
             max_comp = numvalue;
         return 1;
-    } else if (accept(ident)) {
+    }
+    if (accept(ident)) {
         compvalue.match = get_sym(strvalue);
         expect(dot);
         expect(number);
@@ -434,6 +461,11 @@ static int player(void) {
             compvalue.prev[p++] = numvalue;
         }
         return 2;
+    }
+    if (must) {
+	snprintf(message, sizeof(message), "%s line %d:\n Competitor expected\n",
+		 readname, linenum);
+	stop = 1;
     }
     return 0;
 }
@@ -479,9 +511,9 @@ static int block(void)
         m->number = linenum;
         m->page = pagenum;
         expect(colon);
-        player();
+        player(1);
         m->c1 = compvalue;
-        player();
+        player(1);
         m->c2 = compvalue;
         expect(eol);
         return 1;
@@ -504,9 +536,9 @@ static int block(void)
             best_of_three_pairs[num_best_of_three_pairs].matches[i] = get_sym(buf);
         }
         expect(colon);
-        player();
+        player(1);
         m[0]->c1 = m[1]->c1 = m[2]->c1 = compvalue;
-        player();
+        player(1);
         m[0]->c2 = m[1]->c2 = m[2]->c2 = compvalue;
         expect(eol);
         num_best_of_three_pairs++;
@@ -530,9 +562,11 @@ static int block(void)
         m1->type = rr;
         */
         expect(colon);
-        while (player()) {
+	int must = 1;
+        while (player(must)) {
             c[num_players++] = compvalue;
             pool->competitors[pool->num_competitors++] = compvalue;
+	    must = 0;
         }
         // Create round robin matches
         for (i = 0; i < num_players-1; i++) {
@@ -562,7 +596,8 @@ static int block(void)
         sym_t *name = get_sym(strvalue), *reference = NULL;
         expect(colon);
         int i = 1, n, lev = 1;
-        while (player()) {
+	int must = 2;
+        while (player(must)) {
             checkval((num_matches < NUM_CUSTOM_MATCHES),
                      "Too many matches, max = %d", NUM_CUSTOM_MATCHES);
 
@@ -577,7 +612,7 @@ static int block(void)
             m->number = linenum;
             m->page = pagenum;
             m->c1 = compvalue;
-            if (!player()) {
+            if (!player(must)) {
                 fprintf(stderr, "Line %d: missing player\n", linenum);
                 return 1;
             }
@@ -585,6 +620,7 @@ static int block(void)
             m->flags |= FLAG_LONG_NAME;
             num_players += 2;
             i++;
+	    must = 0;
         }
         // Create knock out matches
         for (n = num_players/4; n >= 1; n = n/2) {
@@ -628,12 +664,12 @@ static int block(void)
     }
 
     if (accept(order)) {
-        while (player()) {
+        while (player(0)) {
             checkval((num_ord < NUM_CUSTOM_MATCHES),
                      "Too many matches in order, max = %d", NUM_CUSTOM_MATCHES);
             match_order[num_ord].first = compvalue;
             expect(dash);
-            if (player()) {
+            if (player(0)) {
                 match_order[num_ord++].second = compvalue;
             }
         }
@@ -668,7 +704,7 @@ static int block(void)
             groups_type = 1;
         }
         groups[grpval].num_competitors = 0;
-        while (player()) {
+        while (player(0)) {
             if (compvalue.comp)
                 groups[grpval].competitors[groups[grpval].num_competitors++] = compvalue.comp;
         }
@@ -682,7 +718,7 @@ static int block(void)
     return 1;
 }
 
-static void solve(sym_t *mname, int level, int pos) {
+static void solve(sym_t *mname, int level, int pos1) {
     match_t *m;
 
     if (!mname)
@@ -695,7 +731,7 @@ static void solve(sym_t *mname, int level, int pos) {
 
     if (!m->level) {
         m->level = level;
-        m->pos = pos;
+        m->pos = pos1;
     }
 
     if (m->c1.comp && m->c2.comp) {
@@ -703,17 +739,17 @@ static void solve(sym_t *mname, int level, int pos) {
         return;
     }
     if (m->c1.comp) {
-        solve(m->c2.match, level+1, pos);
+        solve(m->c2.match, level+1, pos1);
         //printf("%s: comp%d match=%s.%d\n", m->name, m->c1.comp, m->c2.match, m->c2.pos);
         return;
     }
     if (m->c2.comp) {
-        solve(m->c1.match, level+1, pos);
+        solve(m->c1.match, level+1, pos1);
         //printf("%s: match=%s.%d comp%d\n", m->name, m->c1.match, m->c1.pos, m->c2.comp);
         return;
     }
-    solve(m->c1.match, level+1, pos);
-    solve(m->c2.match, level+1, pos);
+    solve(m->c1.match, level+1, pos1);
+    solve(m->c2.match, level+1, pos1);
     //printf("%s: match=%s.%d match=%s.%d\n", m->name, m->c1.match, m->c1.pos, m->c2.match, m->c2.pos);
 }
 
@@ -735,13 +771,13 @@ static void sort_matches(void) {
         for (j1 = i1+1; j1 < num_matches; j1++) {
             i = match_list[i1];
             j = match_list[j1];
-            int order = matches[i].ordernum > matches[j].ordernum &&
+            int order1 = matches[i].ordernum > matches[j].ordernum &&
                 matches[i].ordernum && matches[j].ordernum;
             int level = matches[i].level < matches[j].level &&
                 matches[i].level && matches[j].level;
-            int number = matches[i].level == matches[j].level &&
+            int number1 = matches[i].level == matches[j].level &&
                 matches[i].number > matches[j].number;
-            if (order || level || number) {
+            if (order1 || level || number1) {
                 /*printf("sort: %d:%d order=%d level=%d number=%d type=%d\n", i, j,
                   order, level, number, typ);*/
                 int tmp = match_list[i1];
@@ -811,7 +847,7 @@ static int get_b3_num(char *name) {
     return 0;
 }
 
-static struct player_bare get_palyer_bare(struct player *c)
+static struct player_bare get_player_bare(struct player *c)
 {
     struct player_bare b;
 
@@ -867,7 +903,7 @@ char *read_custom_category(char *name, struct custom_data *data)
     max_comp = 0;
     num_ord = 0;
     competitors_min = competitors_max = 0;
-    value = numvalue = ordernum = n = max_comp = stop = 0;
+    value = numvalue = ordernum = max_comp = stop = 0;
     pagenum = linenum = 1;
 
     for (i = 0; i < NUM_CUSTOM_MATCHES; i++)
@@ -911,7 +947,7 @@ char *read_custom_category(char *name, struct custom_data *data)
         } // for
         for (j = 0; j < round_robin_pools[i].num_competitors; j++) {
             data->round_robin_pools[i].competitors[j] =
-                get_palyer_bare(&round_robin_pools[i].competitors[j]);
+                get_player_bare(&round_robin_pools[i].competitors[j]);
         }
 
         data->round_robin_pools[i].num_rr_matches = round_robin_pools[i].num_rr_matches;
@@ -937,8 +973,8 @@ char *read_custom_category(char *name, struct custom_data *data)
     // matches
     for (i = 0; i < num_matches; i++) {
         match_t *m = &matches[match_list[i]];
-        data->matches[i].c1 = get_palyer_bare(&m->c1);
-        data->matches[i].c2 = get_palyer_bare(&m->c2);
+        data->matches[i].c1 = get_player_bare(&m->c1);
+        data->matches[i].c2 = get_player_bare(&m->c2);
     }
     data->num_matches = num_matches;
 

@@ -236,9 +236,9 @@ static gint get_string(unsigned char *b, gchar *s) {
 
 static gint get_rr_pool(unsigned char *b, round_robin_bare_t *pool, gboolean *err) {
     gint r = 0, i;
-    
+
     gint ret = get_string(b, pool->name);
-    b += ret; r += ret; 
+    b += ret; r += ret;
     LOG("POOL NAME = %s", pool->name);
     gint t = get8; b++; r++;
     if (t != CD_RR_POOL_NUM_MATCHES)
@@ -264,8 +264,8 @@ static gint get_rr_pool(unsigned char *b, round_robin_bare_t *pool, gboolean *er
     for (i = 0; i < pool->num_competitors; i++) {
         t = get8; b++; r++;
         if (t == CD_COMP) {
-            gint ret = get_competitor(b, &pool->competitors[i], err);
-            b += ret; r += ret;
+            gint ret1 = get_competitor(b, &pool->competitors[i], err);
+            b += ret1; r += ret1;
         } else ERROR("Expected CD_COMP, got %d", t);
     }
 
@@ -391,7 +391,7 @@ static gint get_best_of_three_pairs(unsigned char *b, struct custom_data *d, gbo
         gint t = get8; b++; r++;
         if (t != CD_BEST_OF_3_PAIR) ERROR("Expected CD_BEST_OF_3_PAIR, got %d", t);
         gint ret = get_string(b, d->best_of_three_pairs[i].name);
-        b += ret; r += ret; 
+        b += ret; r += ret;
         LOG("PAIR NAME = %s", d->best_of_three_pairs[i].name);
         for (j = 0; j < 3; j++) {
             d->best_of_three_pairs[i].matches[j] = get16; b += 2; r += 2;
@@ -432,7 +432,7 @@ static struct custom_data *decode_custom_data(unsigned char *buf, int len, struc
         LOG("buf[%d]=0x%02x=%d", ix, buf[ix], buf[ix]);
 
         switch (buf[ix++]) {
-        case CD_VERSION: { 
+        case CD_VERSION: {
             gint ver;
             ix += get_byte(&(buf[ix]), &ver);
             if (ver != 0) ERROR("Wrong version %d", ver);
@@ -603,7 +603,7 @@ void read_custom_files(void)
                                 show_msg(msgbuf, NULL, "  Creating example file\n");
                                 char *args[2] = {"", fullname};
 
-                                // obtain the existing locale name for numbers    
+                                // obtain the existing locale name for numbers
                                 char *old_locale = setlocale(LC_NUMERIC, NULL);
                                 // set locale that uses points as decimal separator
                                 setlocale(LC_NUMERIC, "en_US.UTF-8");
@@ -620,7 +620,7 @@ void read_custom_files(void)
                         if (error) g_error_free(error);
                         g_free(svgname);
                         svgname = NULL;
-                        if (!ok) 
+                        if (!ok)
                             break;
                     }
                     g_free(svgname);
@@ -764,7 +764,7 @@ gint get_custom_pos(struct custom_matches *cm, gint table, gint pos, gint *real_
         return 0;
 
     if (cd->positions[pos-1].type == COMP_TYPE_MATCH) {
-        g_print("posarg=%d pos=%d match=%d\n", pos, cd->positions[pos-1].pos, cd->positions[pos-1].match);
+        //g_print("posarg=%d pos=%d match=%d\n", pos, cd->positions[pos-1].pos, cd->positions[pos-1].match);
         if (cd->positions[pos-1].pos == 1)
             ix = WINNER(cd->positions[pos-1].match);
         else
@@ -808,7 +808,7 @@ static void custlog(gchar *format, ...)
 #define SIZEX 400
 #define SIZEY 400
 
-static void ok_cb(GtkWidget *widget, 
+static void ok_cb(GtkWidget *widget,
                   GdkEvent *event,
                   gpointer data)
 {
@@ -871,11 +871,11 @@ GtkTextBuffer *message_window(void)
     g_signal_connect(G_OBJECT(ok), "button-press-event", G_CALLBACK(ok_cb), window);
 
     gtk_text_buffer_create_tag (buffer, "red",
-                                "foreground", "red", NULL);  
+                                "foreground", "red", NULL);
     gtk_text_view_set_editable(GTK_TEXT_VIEW(result), FALSE);
 
     gtk_text_buffer_create_tag (buffer, "bold",
-                                "weight", PANGO_WEIGHT_BOLD, NULL);  
+                                "weight", PANGO_WEIGHT_BOLD, NULL);
     gtk_text_buffer_create_tag (buffer, "underline",
 			      "underline", PANGO_UNDERLINE_SINGLE, NULL);
     gtk_text_buffer_create_tag (buffer, "heading",
@@ -884,4 +884,3 @@ GtkTextBuffer *message_window(void)
                                 NULL);
     return buffer;
 }
-
