@@ -818,8 +818,11 @@ void view_on_row_activated(GtkTreeView        *treeview,
             gtk_grid_attach(GTK_GRID(table), tmp, 0, 1, 1, 1);
             judoka_tmp->system = tmp = gtk_combo_box_text_new();
 #if 1
-	    set_cat_system_menu(tmp, catdata->system.wishsys, catdata->system.table);
-	    if (catdata->match_status & REAL_MATCH_EXISTS)
+	    if (catdata)
+		set_cat_system_menu(tmp, catdata->system.wishsys, catdata->system.table);
+	    else
+		set_cat_system_menu(tmp, 0, 0);
+	    if (catdata && catdata->match_status & REAL_MATCH_EXISTS)
 		gtk_widget_set_sensitive(GTK_WIDGET(tmp), FALSE);
 #else
 	    for (i = 0; i < num_systems(); i++)
@@ -1076,7 +1079,7 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
                        COL_COMMENT, &comment, -1);
 
     if (visible) {
-        gint jstatus = get_competitor_position(index), cstatus = 0;
+        gint jstatus = get_competitor_position(index), cstatus = 0, ctie = 0;
         gchar pos[8];
         if (jstatus&0xf)
             sprintf(pos, " [%d]", jstatus&0xf);
@@ -1087,16 +1090,22 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
             guint catindex;
             gtk_tree_model_get(model, &parent, COL_INDEX, &catindex, -1);
             struct category_data *catdata = avl_get_category(catindex);
-            if (catdata)
+            if (catdata) {
                 cstatus = catdata->match_status;
+		ctie = catdata->tie;
+	    }
         }
 
+	ctie = deleted & POOL_TIE3;
+
         if (seeding)
-            g_snprintf(buf, sizeof(buf), "%s (%d)%s%s", last, seeding,
+            g_snprintf(buf, sizeof(buf), "%s%s (%d)%s%s", ctie ? "! ":"",
+		       last, seeding,
                        comment && comment[0] ? " *" : "",
                        jstatus&0xf ? pos : "");
         else
-            g_snprintf(buf, sizeof(buf), "%s%s%s", last,
+            g_snprintf(buf, sizeof(buf), "%s%s%s%s", ctie ? "! ":"",
+		       last,
                        comment && comment[0] ? " *" : "",
                        jstatus&0xf ? pos : "");
 
