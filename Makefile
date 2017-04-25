@@ -12,6 +12,10 @@ RELFILE=$(RELDIR)/bin/judoshiai$(SUFF)
 RUNDIR=$(DEVELDIR)
 
 all:
+	echo $(OS)	
+	echo $(TARGETOS)
+	echo $(TGT)
+	echo $(CURDIR)
 	rm -rf $(RELDIR)
 	mkdir -p $(RELDIR)/bin
 	mkdir -p $(RELDIR)/share/locale/

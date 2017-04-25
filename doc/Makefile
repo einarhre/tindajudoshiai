@@ -23,11 +23,11 @@ all: $(DOCFILES)
 
 %.pdf: %.odt
 	rm -f $@
-	libreoffice --headless --convert-to pdf $<
+	$(LIBREOFFICE) --headless --convert-to pdf $<
 
 %.pdf: %.odg
 	rm -f $@
-	libreoffice --headless --convert-to pdf $<
+	$(LIBREOFFICE) --headless --convert-to pdf $<
 
 clean:
 	rm -f *.pdf
