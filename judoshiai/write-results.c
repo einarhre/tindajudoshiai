@@ -270,9 +270,9 @@ static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_ju
         if (pm.finished == FALSE || pm.j[pm.c[i]] == NULL)
             continue;
 
-        gint nrprint = 3;
-        if (IS_LANG_NB) nrprint = 5;
-        else if (IS_LANG_SK) nrprint = 6;
+        gint nrprint = 8; // database table limit
+        //if (IS_LANG_NB) nrprint = 5;
+        //else if (IS_LANG_SK) nrprint = 6;
 
         // Spanish have two bronzes in pool system
         if (i <= 4 && prop_get_int_val_cat(PROP_TWO_POOL_BRONZES, category) &&
