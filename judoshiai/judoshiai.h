@@ -291,6 +291,7 @@ enum {
 
 enum {
     SORTID_NAME = 0,
+    SORTID_FIRSTNAME,
     SORTID_WEIGHT,
     SORTID_CLUB,
     SORTID_WCLASS,

@@ -1550,6 +1550,7 @@ static GtkWidget *create_view_and_model(void)
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
     gtk_tree_view_column_set_cell_data_func(col, renderer, first_name_cell_data_func, NULL, NULL);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
+    gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_FIRST_NAME);
 
 
     /* --- Column birthyear name --- */
@@ -1708,6 +1709,11 @@ static GtkWidget *create_view_and_model(void)
                                      COL_LAST_NAME,
                                      sort_iter_compare_func,
                                      GINT_TO_POINTER(SORTID_NAME),
+                                     NULL);
+    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(current_model),
+                                     COL_FIRST_NAME,
+                                     sort_iter_compare_func,
+                                     GINT_TO_POINTER(SORTID_FIRSTNAME),
                                      NULL);
     gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(current_model),
                                      COL_WEIGHT,
@@ -1896,6 +1902,24 @@ gint sort_iter_compare_func(GtkTreeModel *model,
 
         gtk_tree_model_get(model, a, COL_LAST_NAME, &name1, COL_VISIBLE, &visible1, -1);
         gtk_tree_model_get(model, b, COL_LAST_NAME, &name2, COL_VISIBLE, &visible2, -1);
+
+        if (visible1 == FALSE && visible2 == FALSE)
+            ret = sort_by_regcategory(name1, name2);
+        else
+            ret = sort_by_name(name1, name2);
+
+        g_free(name1);
+        g_free(name2);
+    }
+    break;
+
+    case SORTID_FIRSTNAME:
+    {
+        gchar *name1, *name2;
+        gboolean visible1, visible2;
+
+        gtk_tree_model_get(model, a, COL_FIRST_NAME, &name1, COL_VISIBLE, &visible1, -1);
+        gtk_tree_model_get(model, b, COL_FIRST_NAME, &name2, COL_VISIBLE, &visible2, -1);
 
         if (visible1 == FALSE && visible2 == FALSE)
             ret = sort_by_regcategory(name1, name2);
