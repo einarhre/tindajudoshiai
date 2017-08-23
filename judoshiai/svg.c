@@ -25,6 +25,7 @@
 #include <librsvg/rsvg.h>
 
 #include "judoshiai.h"
+#include "minilisp.h"
 
 #define TEAM_PTS(_n) _n/10000, (_n%10000)/2, (_n & 1) ? "½" : ""
 
@@ -47,6 +48,13 @@
 static gboolean debug = FALSE;
 static guchar writebuf[512];
 static gint writebuflen;
+static gboolean lisp = FALSE;
+static gchar lisp_code[128];
+static FILE *dfile;
+static cairo_status_t (*write_cb)(void *closure, const unsigned char *data,
+				  unsigned int length);
+static void *closure;
+static RsvgHandle *handle;
 
 #define WRITE2(_s, _l)                                                  \
     do {								\
@@ -98,7 +106,7 @@ static gint writebuflen;
 
 #define IS_SAME(_a, _b) (!strcmp((char *)_a, (char *)_b))
 
-#define CODE_LEN 16
+#define CODE_LEN 32
 
 static struct {
     guchar code[CODE_LEN];
@@ -270,10 +278,10 @@ static void reset_last_country(void)
 #define WRITE_FLAG_FG  2
 #define WRITE_FLAG_BG  4
 
-static gint write_judoka(RsvgHandle *handle, gint start, struct judoka *j, FILE *dfile, gint flags,
-			 cairo_status_t (*write_cb)(void *closure, const unsigned char *data,
+static gint write_judoka(RsvgHandle *hndl, gint start, struct judoka *j, FILE *df, gint flags,
+			 cairo_status_t (*w_cb)(void *closure, const unsigned char *data,
 						    unsigned int length),
-			 void *closure)
+			 void *clos)
 {
     gint i;
     GError *err = NULL;
@@ -282,7 +290,7 @@ static gint write_judoka(RsvgHandle *handle, gint start, struct judoka *j, FILE 
     g_free(last_country);
     last_country = g_strdup(j->country ? j->country : "empty");
 
-    if (create_statistics && dfile)
+    if (create_statistics && df)
         snprintf(buf, sizeof(buf), "<tspan class=\"cmp%d\" "
                  "onclick=\"top.location.href='%d.html'\" "
                  "style=\"cursor: pointer\""
@@ -294,6 +302,18 @@ static gint write_judoka(RsvgHandle *handle, gint start, struct judoka *j, FILE 
 		     (flags & WRITE_FLAG_BG) ? " filter=\"url(#nextmatchbg)\"" : "");
 
     WRITE2(buf, strlen(buf));
+
+    if (lisp) {
+	lisp_set_competitor(0, j->index,
+			    j->first, j->last,
+			    j->club, j->country,
+			    j->regcategory, j->category, j->id,
+			    j->comment, j->coachid,
+			    j->birthyear, j->belt,
+			    j->weight, j->seeding, j->clubseeding, j->gender);
+	lisp_exe(lisp_code);
+	goto out;
+    }
 
     for (i = start; i < cnt; i++) {
         if (attr[i].code[0] == '\'') {
@@ -363,17 +383,15 @@ gint paint_svg(struct paint_data *pd)
     gboolean yes_a[21], yes_b[21];
     gint c_a[21], c_b[21];
     gint key, svgwidth;
-    FILE *dfile = NULL;
+    //FILE *dfile = NULL;
     gchar *svgdata = NULL, *datamax = NULL;
     gboolean nextmatchbg = FALSE;
     gboolean nextmatchfg = FALSE;
     gint found = -1;
-    cairo_status_t (*write_cb)(void *closure, const unsigned char *data,
-			       unsigned int length);
-    void *closure;
     struct category_data *catdata = avl_get_category(category);
     gboolean team_event = catdata && (catdata->deleted & TEAM_EVENT);
 
+    dfile = NULL;
     writebuflen = 0;
     write_cb = pd->write_cb;
     closure = pd->closure;
@@ -450,7 +468,7 @@ gint paint_svg(struct paint_data *pd)
         cairo_fill(pd->c);
     }
 
-    RsvgHandle *handle = rsvg_handle_new();
+    handle = rsvg_handle_new();
 
     switch (systm.system) {
     case SYSTEM_POOL:
@@ -569,14 +587,33 @@ gint paint_svg(struct paint_data *pd)
         }
 #endif
 
-        if (*p == '%' && IS_LABEL_CHAR(p[1])) {
+        if (*p == '%' && (IS_LABEL_CHAR(p[1]) || p[1] == '(')) {
             memset(attr, 0, sizeof(attr));
             cnt = 0;
             p++;
 
-            while (IS_LABEL_CHAR(*p) || IS_VALUE_CHAR(*p) || *p == '-' || *p == '\'' || *p == '|' || *p == '!') {
-                while (IS_LABEL_CHAR(*p))
+	    // Lisp code?
+	    lisp = FALSE;
+	    lisp_code[0] = 0;
+	    if (*p == '(') {
+		gint par = 1;
+		i = 0;
+		lisp_code[i++] = *p++;
+		while (par && i < sizeof(lisp_code)-1) {
+		    if (*p == '(') par++;
+		    else if (*p == ')') par--;
+		    lisp_code[i++] = *p++;
+		}
+		lisp_code[i] = 0;
+		lisp = TRUE;
+	    }
+
+            while (IS_LABEL_CHAR(*p) || IS_VALUE_CHAR(*p) || *p == '-' ||
+		   *p == '\'' || *p == '|' || *p == '!') {
+
+                while (IS_LABEL_CHAR(*p)) {
                     attr[cnt].code[attr[cnt].codecnt++] = *p++;
+		}
 
                 if (*p == '-') p++;
 
@@ -620,6 +657,10 @@ gint paint_svg(struct paint_data *pd)
                 delayed = FALSE;
             }
 
+	    if (cnt == 0 && lisp) {
+		lisp_exe(lisp_code);
+	    }
+
             if (attr[0].code[0] == 'm' || attr[0].code[0] == 'M') {
                 gboolean dp2 = attr[0].code[0] == 'M';
                 gint fight = attr[0].value;
@@ -630,7 +671,7 @@ gint paint_svg(struct paint_data *pd)
                 set_competitor_position(m[fight].blue, COMP_POS_DRAWN);
                 set_competitor_position(m[fight].white, COMP_POS_DRAWN);
 
-                if (attr[1].code[0] == 0) { // name
+                if (attr[1].code[0] == 0 && attr[1].value) { // name
                     reset_last_country();
                     gint who = attr[1].value;
                     gint ix;
@@ -652,10 +693,20 @@ gint paint_svg(struct paint_data *pd)
                                     flags |= WRITE_FLAG_BG;
                             }
 
-                            write_judoka(handle, 2, j, dfile, flags, write_cb, closure);
+			    write_judoka(handle, 2, j, dfile, flags, write_cb, closure);
                             free_judoka(j);
                         }
                     }
+		} else if (lisp) {
+		    lisp_set_match(m[fight].category, fight,
+				   m[fight].blue, m[fight].white,
+				   m[fight].blue_score, m[fight].white_score,
+				   m[fight].blue_points, m[fight].white_points,
+				   m[fight].match_time, m[fight].comment,
+				   m[fight].tatami, m[fight].group, m[fight].flags,
+				   m[fight].forcedtatami, m[fight].forcednumber,
+				   m[fight].date, m[fight].legend, m[fight].round);
+		    lisp_exe(lisp_code);
                 } else if (attr[1].code[0] == 'p') {
                     gint who = attr[1].value;
                     gboolean ifmatched = FALSE, ok_to_print = TRUE;
@@ -806,7 +857,7 @@ gint paint_svg(struct paint_data *pd)
                             }
                         } // for i
                     }
-               } else if (systm.system == SYSTEM_POOL ||
+		} else if (systm.system == SYSTEM_POOL ||
                     systm.system == SYSTEM_QPOOL ||
                     systm.system == SYSTEM_DPOOL ||
                     systm.system == SYSTEM_DPOOL2 ||
@@ -826,61 +877,97 @@ gint paint_svg(struct paint_data *pd)
                 set_competitor_position(j->index, COMP_POS_DRAWN);
 
                 if (attr2_code[0] && attr2_code[1] == 0) { // one letter codes
-                    if (attr2_code[0] == 'w') { // number of wins
+		    gint l_wins = 0, l_pts = 0, l_r = 0;
+                    if (attr2_code[0] == 'w' || lisp) { // number of wins
                         if (systm.system == SYSTEM_CUSTOM) {
                             if (pool && (pool->competitors[pcomp].wins || pool->finished)) {
-                                snprintf(buf, sizeof(buf), "%d", pool->competitors[pcomp].wins);
-                                WRITE(buf);
+				if (lisp)
+				    l_wins = pool->competitors[pcomp].wins;
+				else {
+				    snprintf(buf, sizeof(buf), "%d", pool->competitors[pcomp].wins);
+				    WRITE(buf);
+				}
                             } else if (pair && (pair->competitors[pcomp].wins || pair->finished)) {
-                                snprintf(buf, sizeof(buf), "%d", pair->competitors[pcomp].wins);
-                                WRITE(buf);
+				if (lisp)
+				    l_wins = pair->competitors[pcomp].wins;
+				else {
+				    snprintf(buf, sizeof(buf), "%d", pair->competitors[pcomp].wins);
+				    WRITE(buf);
+				}
                             }
                         } else {
                             if (pmp->wins[comp] || pmp->finished) {
-                                snprintf(buf, sizeof(buf), "%d", pmp->wins[comp]);
-                                WRITE(buf);
+				if (lisp)
+				    l_wins = pmp->wins[comp];
+				else {
+				    snprintf(buf, sizeof(buf), "%d", pmp->wins[comp]);
+				    WRITE(buf);
+				}
                             }
                         }
-                    } else if (attr2_code[0] == 'p') { // number of points
+                    } else if (attr2_code[0] == 'p' || lisp) { // number of points
                         if (systm.system == SYSTEM_CUSTOM) {
                             if (pool && (pool->competitors[pcomp].pts || pool->finished)) {
                                 gint pts = pool->competitors[pcomp].pts%10000; // drop team wins
-                                snprintf(buf, sizeof(buf), "%d%s", pts/2, (pts & 1) ? "½" : "");
-                                WRITE(buf);
+				if (lisp)
+				    l_pts = pts;
+				else {
+				    snprintf(buf, sizeof(buf), "%d%s", pts/2, (pts & 1) ? "½" : "");
+				    WRITE(buf);
+				}
                             } else if (pair && (pair->competitors[pcomp].pts || pair->finished)) {
                                 gint pts = pair->competitors[pcomp].pts%10000; // drop team wins
-                                snprintf(buf, sizeof(buf), "%d%s", pts/2, (pts & 1) ? "½" : "");
-                                WRITE(buf);
+				if (lisp)
+				    l_pts = pts;
+				else {
+				    snprintf(buf, sizeof(buf), "%d%s", pts/2, (pts & 1) ? "½" : "");
+				    WRITE(buf);
+				}
                             }
                         } else if (pmp->pts[comp] || pmp->finished) {
                             gint pts = pmp->pts[comp]%10000; // drop team wins
-                            snprintf(buf, sizeof(buf), "%d%s", pts/2, (pts & 1) ? "½" : "");
-                            WRITE(buf);
+			    if (lisp)
+				l_pts = pts;
+			    else {
+				snprintf(buf, sizeof(buf), "%d%s", pts/2, (pts & 1) ? "½" : "");
+				WRITE(buf);
+			    }
                         }
-                    } else if (attr2_code[0] == 'r') { // pool result
+                    } else if (attr2_code[0] == 'r' || lisp) { // pool result
                         if (systm.system == SYSTEM_CUSTOM) {
                             if (pool && pool->finished && j) {
                                 gint k;
                                 for (k = 0; k < pool->num_competitors; k++) {
                                     if (pool->competitors[k].position == pcomp) {
-                                        snprintf(buf, sizeof(buf), "%d", k+1);
-                                        WRITE(buf);
+					if (lisp)
+					    l_r = k+1;
+					else {
+					    snprintf(buf, sizeof(buf), "%d", k+1);
+					    WRITE(buf);
+					}
                                         break;
                                     }
                                 }
                             } else if (pair && pair->finished && j) {
-                                if (pair->winner == pair->competitors[pcomp].index)
-                                    WRITE("1");
-                                else
-                                    WRITE("2");
+                                if (pair->winner == pair->competitors[pcomp].index) {
+				    if (lisp) l_r = 1;
+                                    else WRITE("1");
+                                } else {
+				    if (lisp) l_r = 2;
+                                    else WRITE("2");
+				}
                             }
                         } else if (systm.system == SYSTEM_POOL || systm.system == SYSTEM_BEST_OF_3 || dp2) {
                             if (pmp->finished) {
                                 gint k;
                                 for (k = 1; k <= dp2 ? 4 : num_judokas; k++) {
                                     if (pmp->c[k] == comp) {
-                                        snprintf(buf, sizeof(buf), "%d", k);
-                                        WRITE(buf);
+					if (lisp)
+					    l_r = k;
+					else {
+					    snprintf(buf, sizeof(buf), "%d", k);
+					    WRITE(buf);
+					}
                                         break;
                                     }
                                 }
@@ -893,8 +980,12 @@ gint paint_svg(struct paint_data *pd)
                                 if (pmp->finished) {
                                     for (k = 1; k <= num_pool_a; k++) {
                                         if (c_a[k] == comp) {
-                                            snprintf(buf, sizeof(buf), "%d", k);
-                                            WRITE(buf);
+					    if (lisp)
+						l_r = k;
+					    else {
+						snprintf(buf, sizeof(buf), "%d", k);
+						WRITE(buf);
+					    }
                                             break;
                                         }
                                     }
@@ -903,8 +994,12 @@ gint paint_svg(struct paint_data *pd)
                                 if (pmp->finished) {
                                     for (k = 1; k <= num_pool_b; k++) {
                                         if (c_b[k] == comp) {
-                                            snprintf(buf, sizeof(buf), "%d", k);
-                                            WRITE(buf);
+					    if (lisp)
+						l_r = k;
+					    else {
+						snprintf(buf, sizeof(buf), "%d", k);
+						WRITE(buf);
+					    }
                                             break;
                                         }
                                     }
@@ -917,8 +1012,12 @@ gint paint_svg(struct paint_data *pd)
                                         gint k;
                                         for (k = 1; k <= pool_size[i]; k++) {
                                             if (c[i][k] == comp) {
-                                                snprintf(buf, sizeof(buf), "%d", k);
-                                                WRITE(buf);
+						if (lisp)
+						    l_r = k;
+						else {
+						    snprintf(buf, sizeof(buf), "%d", k);
+						    WRITE(buf);
+						}
                                             }
                                         }
                                     }
@@ -927,8 +1026,10 @@ gint paint_svg(struct paint_data *pd)
                             }
                         }
                     }
+		    if (lisp)
+			lisp_set_comp_points(j->index, l_wins, l_pts, l_r);
                 } else { // strings
-                    write_judoka(handle, 1, j, dfile, 0, write_cb, closure);
+		    write_judoka(handle, 1, j, dfile, 0, write_cb, closure);
                 }
             } else if (attr[0].code[0] == 'r') { // results
                 reset_last_country();
@@ -1351,6 +1452,47 @@ void select_svg_dir(GtkWidget *menu_item, gpointer data)
     gtk_widget_destroy (dialog);
 
     read_svg_files(ok);
+    read_lisp_files(ok);
+}
+
+
+void read_lisp_files(gboolean ok)
+{
+    gchar *fullname;
+    gboolean initialized = FALSE;
+
+    if (ok == FALSE || svg_directory == NULL)
+        return;
+
+    GDir *dir = g_dir_open(svg_directory, 0, NULL);
+    if (dir) {
+        const gchar *fname = g_dir_read_name(dir);
+        while (fname) {
+            fullname = g_build_filename(svg_directory, fname, NULL);
+	    gchar *a = strstr(fname, ".lisp");
+            if (a && a[5] == 0) {
+		gchar *contents;
+		gsize len;
+		if (!g_file_get_contents(fullname, &contents, &len, NULL))
+		    g_print("CANNOT OPEN '%s'\n", fullname);
+		else  {
+		    if (!initialized) {
+			lisp_init(0, NULL);
+			initialized = TRUE;
+		    }
+
+		    g_print("reading lisp file %s\n", fullname);
+		    lisp_exe(contents);
+		    g_free(contents);
+		}
+	    } // if lisp
+
+            g_free(fullname);
+            fname = g_dir_read_name(dir);
+	} // while
+
+	g_dir_close(dir);
+    } // dir
 }
 
 void read_svg_files(gboolean ok)
@@ -1548,4 +1690,30 @@ void add_custom_svg(gchar *data, gsize len, gint table, gint page)
         if (page > info->pages)
             info->pages = page;
     }
+}
+
+int lisp_get_data(int ix)
+{
+    if (ix < 10) return -1;
+
+    struct judoka *j = get_data(ix);
+    if (j) {
+	lisp_set_competitor(0, j->index,
+			    j->first, j->last,
+			    j->club, j->country,
+			    j->regcategory, j->category, j->id,
+			    j->comment, j->coachid,
+			    j->birthyear, j->belt,
+			    j->weight, j->seeding, j->clubseeding, j->gender);
+	free_judoka(j);
+	return 0;
+    }
+    return -1;
+}
+
+int lisp_write_svg(char *txt, int len)
+{
+    GError *err = NULL;
+    WRITE2(txt, len);
+    return 0;
 }

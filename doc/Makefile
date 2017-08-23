@@ -16,8 +16,10 @@ DOCTIMER_EN=judotimer-en.pdf
 DOCTIMER_ES=judotimer-es.pdf
 DOCTIMER_SK=judotimer-sk.pdf
 SQL_GUIDE_EN=sql-guide-en.pdf
+LISP_EN=lisp_en.pdf
 DOCFILES=$(DOCSHIAI_FI) $(DOCSHIAI_EN) $(DOCSHIAI_ES) $(DOCSHIAI_UK) $(DOCSHIAI_NL) \
- $(DOCTIMER_FI) $(DOCTIMER_EN) $(DOCTIMER_ES) $(SQL_GUIDE_EN) $(DOCTIMER_SK)
+ $(DOCTIMER_FI) $(DOCTIMER_EN) $(DOCTIMER_ES) $(SQL_GUIDE_EN) $(DOCTIMER_SK) \
+ $(LISP_EN)
 
 all: $(DOCFILES)
 
@@ -31,4 +33,3 @@ all: $(DOCFILES)
 
 clean:
 	rm -f *.pdf
-
