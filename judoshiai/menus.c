@@ -663,6 +663,7 @@ void set_preferences(void)
         if (str[0]) {
             svg_directory = str;
             read_svg_files(TRUE);
+            read_lisp_files(TRUE);
         } else
             g_free(str);
     }
