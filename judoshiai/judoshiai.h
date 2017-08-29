@@ -1008,7 +1008,7 @@ extern void update_next_matches_coach_info(void);
 extern gboolean db_event_matches_update(guint category, struct match *last);
 extern void db_print_category_matches(struct category_data *catdata, FILE *f);
 extern void db_change_competitor(gint category, gint number, gboolean is_blue, gint index);
-extern void db_print_category_to_pdf_comments(gint catix);
+extern void db_print_category_to_pdf_comments(gint catix, gchar *filename);
 
 
 extern void db_synchronize(char *name_2);
@@ -1316,6 +1316,7 @@ extern void move_medal_matches(GtkWidget *menuitem, gpointer userdata);
 /* svg */
 extern gchar *svg_directory;
 extern void read_svg_files(gboolean ok);
+extern void read_lisp_files(gboolean ok);
 extern void select_svg_dir(GtkWidget *menu_item, gpointer data);
 extern gboolean get_svg_page_size(gint index, gint pagenum, gint *width, gint *height);
 extern gboolean svg_landscape(gint ctg, gint page);
