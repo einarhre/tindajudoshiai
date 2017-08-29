@@ -2043,7 +2043,10 @@ static int db_callback_matches_pdf(void *data, int argc, char **argv, char **azC
     return 0;
 }
 
-#define GO_OUT(_s) do { goto out; } while (0)
+#define LINE_LEN 512
+#define LINE_SPACE (LINE_LEN+4)
+
+#define GO_OUT(_s) do { g_print("%s[%d] Error: %s\n", __FUNCTION__, __LINE__, _s); goto out; } while (0)
 
 #define GETNUM(_a) do {					\
 	if (*p < '0' || *p > '9') p++;			\
@@ -2055,11 +2058,11 @@ static int db_callback_matches_pdf(void *data, int argc, char **argv, char **azC
     do {								\
 	if (_n >= num_xref) GO_OUT("obj too big");			\
 	if (fseek(pdf, xref[_n], SEEK_SET) < 0) GO_OUT("fseek");	\
-	gint r = fread(buf, 1, 256, pdf);				\
+	gint r = fread(buf, 1, LINE_LEN, pdf);				\
 	if (r <= 0) GO_OUT("fread");					\
 	buf[r] = buf[r+1] = 0;						\
 	p = strstr(buf, "endobj");					\
-	if (!p) GO_OUT("no endobj");					\
+	if (!p) {g_print("obj=%d\n", _n);GO_OUT("no endobj");}		\
 	p[6] = 0;								\
     } while (0)
 
@@ -2075,14 +2078,17 @@ static int db_callback_matches_pdf(void *data, int argc, char **argv, char **azC
     } while (0)
 
 
-void db_print_category_to_pdf_comments(gint catix)
+#define goto_out do { g_print("%s[%d] Error\n", __FUNCTION__, __LINE__); goto out; } while (0)
+
+#define NUM_XREF 1024
+static gint xref[NUM_XREF];
+
+void db_print_category_to_pdf_comments(gint catix, gchar *filename)
 {
-    gchar buf[260], trailer[260];
+    gchar buf[LINE_SPACE], trailer[LINE_SPACE];
     FILE *pdf = NULL;
     gchar *p;
     gint xrefstart = 0, root = 0, i, i1, i2;
-#define NUM_XREF 64
-    gint xref[NUM_XREF];
     gint num_xref = 0;
     gint obj1pos, obj2pos, obj3pos, xrefpos;
     gchar *trailer_p = NULL, *startxref_p = NULL;
@@ -2090,18 +2096,26 @@ void db_print_category_to_pdf_comments(gint catix)
     gchar saved;
     glong metastart;
     gint metalen;
-
-    struct category_data *catdata =
-        avl_get_category(catix);
-    if (!catdata) return;
-
+    gchar *pdfname = NULL;
     metalen = 0;
 
-    snprintf(buf, sizeof(buf), "%s.pdf", txt2hex(catdata->category));
-    gchar *pdfname = g_build_filename(current_directory, buf, NULL);
+    if (catix && !filename) {
+	struct category_data *catdata =
+	    avl_get_category(catix);
+	if (!catdata) return;
+
+	snprintf(buf, sizeof(buf), "%s.pdf", txt2hex(catdata->category));
+	pdfname = g_build_filename(current_directory, buf, NULL);
+    } else if (filename) {
+	pdfname = g_strdup(filename);
+    } else
+	return;
 
     pdf = fopen(pdfname, "rb");
-    if (!pdf) goto out;
+    if (!pdf) {
+	g_print("%s[%d]: Cannot open %s\n", __FUNCTION__, __LINE__, pdfname);
+	goto_out;
+    }
 
     // read last 256 bytes
     fseek(pdf, -256, SEEK_END);
@@ -2110,26 +2124,26 @@ void db_print_category_to_pdf_comments(gint catix)
 
     // find trailer
     trailer_p = strstr(trailer, "trailer");
-    if (!trailer_p) goto out;
+    if (!trailer_p) goto_out;
     // get root number
     p = strstr(trailer_p+8, "/Root");
-    if (!p) goto out;
+    if (!p) goto_out;
     p += 6;
     GETNUM(root);
 
     // get startxref
     p = startxref_p = strstr(trailer_p, "startxref");
-    if (!p) goto out;
+    if (!p) goto_out;
     p += 10;
     GETNUM(xrefstart);
 
     // read xref table
-    if (fseek(pdf, xrefstart, SEEK_SET) < 0) goto out;
+    if (fseek(pdf, xrefstart, SEEK_SET) < 0) goto_out;
     fgets(buf, sizeof(buf), pdf);
-    if (strncmp(buf, "xref", 4)) goto out;
+    if (strncmp(buf, "xref", 4)) goto_out;
     fgets(buf, sizeof(buf), pdf);
     sscanf(buf, "%d %d", &i1, &num_xref);
-    if (i1) goto out;
+    if (i1) goto_out;
     if (num_xref > NUM_XREF) num_xref = NUM_XREF;
     for (i = 0; i < num_xref; i++) {
 	fgets(buf, sizeof(buf), pdf);
@@ -2145,14 +2159,14 @@ void db_print_category_to_pdf_comments(gint catix)
 
     // append to pdf file
     pdf = fopen(pdfname, "ab");
-    if (!pdf) goto out;
+    if (!pdf) goto_out;
 
     fseek(pdf, 0, SEEK_END);
     obj1pos = ftell(pdf);
     // first page obj is in buf
     // find << and insert metadata reference
     p = strstr(buf, "<<");
-    if (!p) goto out;
+    if (!p) goto_out;
     saved = p[2];
     p[2] = 0;
     fprintf(pdf, "%s\n", buf);
@@ -2186,23 +2200,35 @@ void db_print_category_to_pdf_comments(gint catix)
     fprintf(pdf, "<js>END</js>\n");
 
     fprintf(pdf, "<js>TBL categories</js>\n");
-    db_exec_str(pdf, db_callback_matches_pdf,
-		"SELECT * FROM categories WHERE \"index\"=%d", catix);
+    if (catix)
+	db_exec_str(pdf, db_callback_matches_pdf,
+		    "SELECT * FROM categories WHERE \"index\"=%d", catix);
+    else
+	db_exec_str(pdf, db_callback_matches_pdf,
+		    "SELECT * FROM categories");
     fprintf(pdf, "<js>END</js>\n");
 
     nocomment = TRUE;
     fprintf(pdf, "<js>TBL competitors</js>\n");
-    db_exec_str(pdf, db_callback_matches_pdf,
-		"SELECT * FROM competitors WHERE \"index\" IN "
-		"(SELECT blue FROM matches WHERE \"category\"=%d UNION "
-		"SELECT white FROM matches WHERE \"category\"=%d)",
-		catix, catix);
+    if (catix)
+	db_exec_str(pdf, db_callback_matches_pdf,
+		    "SELECT * FROM competitors WHERE \"index\" IN "
+		    "(SELECT blue FROM matches WHERE \"category\"=%d UNION "
+		    "SELECT white FROM matches WHERE \"category\"=%d)",
+		    catix, catix);
+    else
+	db_exec_str(pdf, db_callback_matches_pdf,
+		    "SELECT * FROM competitors");
     fprintf(pdf, "<js>END</js>\n");
     nocomment = FALSE;
 
     fprintf(pdf, "<js>TBL matches</js>\n");
-    db_exec_str(pdf, db_callback_matches_pdf,
-		"SELECT * FROM matches WHERE \"category\"=%d", catix);
+    if (catix)
+	db_exec_str(pdf, db_callback_matches_pdf,
+		    "SELECT * FROM matches WHERE \"category\"=%d", catix);
+    else
+	db_exec_str(pdf, db_callback_matches_pdf,
+		    "SELECT * FROM matches");
     fprintf(pdf, "<js>END</js>\n");
 
 #if 0
@@ -2227,10 +2253,10 @@ void db_print_category_to_pdf_comments(gint catix)
 
     *startxref_p = 0;
     p = strstr(trailer_p, ">>");
-    if (!p) goto out;
+    if (!p) goto_out;
     *p = 0;
     p = strstr(trailer_p, "/Size");
-    if (!p) goto out;
+    if (!p) goto_out;
     p += 5;
     GETNUM(i2);
     (void)i2;
@@ -2240,7 +2266,6 @@ void db_print_category_to_pdf_comments(gint catix)
     fprintf(pdf, "%s%d%s\n   /Prev %d\n>>\n", trailer_p, num_xref+2, p, xrefstart);
 
     fprintf(pdf, "startxref\n%d\n%%EOF\n", xrefpos);
-
 
  out:
     if (pdfname) g_free(pdfname);
