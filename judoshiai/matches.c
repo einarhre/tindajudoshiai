@@ -768,7 +768,8 @@ void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean
 	    }
             pm->mw[blue][white] = FALSE;
             pm->mw[white][blue] = TRUE;
-        } else if (pm->yes[blue] == TRUE && pm->yes[white] == TRUE)
+        } else if (pm->yes[blue] == TRUE && pm->yes[white] == TRUE &&
+	    pm->m[i].blue_points == 0 && pm->m[i].white_points == 0)
             pm->finished = FALSE;
     }
 
@@ -1009,7 +1010,7 @@ void fill_custom_struct(gint category, struct custom_matches *cm)
 		    }
                     p->competitors[c2].mw[c1] = TRUE;
                     p->competitors[c1].mw[c2] = FALSE;
-                } else
+                } else if (cm->m[n].blue_points == 0 && cm->m[n].white_points == 0)
                     p->finished = FALSE;
             }
         }
