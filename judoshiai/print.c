@@ -235,7 +235,7 @@ void write_png(GtkWidget *menuitem, gpointer userdata)
         cairo_destroy(c_pdf);
         cairo_surface_destroy(cs_pdf);
 
-	db_print_category_to_pdf_comments(ctg);
+	db_print_category_to_pdf_comments(ctg, NULL);
     } else if (automatic_web_page_update) {
         // print png
         cs_png = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
@@ -317,7 +317,7 @@ void write_png(GtkWidget *menuitem, gpointer userdata)
         cairo_destroy(c_png);
         cairo_surface_destroy(cs_png);
 
-	db_print_category_to_pdf_comments(ctg);
+	db_print_category_to_pdf_comments(ctg, NULL);
     }
 
     free_judoka(ctgdata);
@@ -1907,6 +1907,7 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
     cairo_t *c;
     struct judoka *cat = NULL;
     gint i;
+    gint catix = 0;
 
     gint what  = ptr_to_gint(userdata) & PRINT_ITEM_MASK;
     gint where = ptr_to_gint(userdata) & PRINT_DEST_MASK;
@@ -1937,6 +1938,7 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
             if (cat) {
                 gchar *fn = g_strdup_printf("%s.pdf", cat->last);
                 filename = get_save_as_name(fn, FALSE, NULL);
+		catix = cat->index;
                 free_judoka(cat);
                 g_free(fn);
             } else {
@@ -2000,11 +2002,16 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
             break;
         }
 
-        g_free(filename);
         cairo_destroy(c);
         cairo_surface_flush(cs);
         cairo_surface_destroy(cs);
 
+        if (what == PRINT_ALL_CATEGORIES)
+	    db_print_category_to_pdf_comments(0, filename);
+        else if (what == PRINT_SHEET)
+	    db_print_category_to_pdf_comments(catix, filename);
+
+	g_free(filename);
         break;
     }
 }
