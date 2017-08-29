@@ -483,7 +483,7 @@ static void oToggle() {
             beep("SOREMADE");
     } else {
         judotimer_log("Osaekomi clock start");
-        //running = TRUE;
+        running = TRUE;
         osaekomi = ' ';
         oRunning = TRUE;
         oStartTime = g_timer_elapsed(timer, NULL);
