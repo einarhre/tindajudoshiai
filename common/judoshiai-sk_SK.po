@@ -361,7 +361,7 @@ msgid "Automatic Sheet Update"
 msgstr "Automatická aktualizácia Listov"
 
 msgid "Automatic Web Page Update"
-msgstr "Automatická aktualizácia z Web stránky"
+msgstr "Automatická aktualizácia Web stránky"
 
 msgid "Results in Finnish"
 msgstr "Výsledky - fínsky"
@@ -505,7 +505,7 @@ msgid "Category:"
 msgstr "Kategória:"
 
 msgid "No seeding"
-msgstr "Bez rozostavenia"
+msgstr "Bez nasadenia"
 
 msgid "Empty categories removed"
 msgstr "Prázdne kategórie odstránené"
@@ -876,7 +876,7 @@ msgid "REST TIME"
 msgstr "Doba prestávky"
 
 msgid "Seeding:"
-msgstr "Rozostavenie:"
+msgstr "Nasadenie:"
 
 msgid "1"
 msgstr "1"
@@ -1023,7 +1023,7 @@ msgid "Default"
 msgstr "Základné"
 
 msgid "FIN Double Repechage"
-msgstr "FIN Dvojitá Repasáž"
+msgstr "Dvojitá Repasáž"
 
 msgid "SWE Double Repechage"
 msgstr "SWE Dvojitá Repasáž"
@@ -1119,13 +1119,13 @@ msgid "IJF Dbl Rep"
 msgstr "IJF Dvojnásobná Repasáž"
 
 msgid "FIN Dbl Repchg"
-msgstr "FIN Dvojnásobná Repasáž"
+msgstr "Dvojnásobná Repasáž"
 
-msgid "SWE Dubb ?terkv"
+msgid "SWE Dubb återkv"
 msgstr "SWE Dvojnásobná Repasáž"
 
-msgid "SWE Dir ?terkv"
-msgstr "SWE priama Repasáž"
+msgid "SWE Dir återkv"
+msgstr "Celková Repasáž"
 
 msgid "EST D klass"
 msgstr "EST juniori D"
@@ -1133,7 +1133,7 @@ msgstr "EST juniori D"
 msgid "No Repechg"
 msgstr "Bez Repasáže"
 
-msgid "SWE Enkelt ?terkv"
+msgid "SWE Enkelt återkv"
 msgstr "SWE Jednoduchá Repasáž"
 
 msgid "ESP Dbl Lost"
@@ -1425,7 +1425,7 @@ msgid "Cancel"
 msgstr "Zrušiť"
 
 msgid "Club Seeding:"
-msgstr "Rozostavenie Klubov:"
+msgstr "Nasadenie Klubov:"
 
 msgid "Gender:"
 msgstr "Pohlavie:"
@@ -1443,19 +1443,19 @@ msgid "NOK"
 msgstr "Nie OK"
 
 msgid "Seeding"
-msgstr "Rozostavenie"
+msgstr "Nasadenie"
 
 msgid "Club Seeding"
-msgstr "Rozostavenie Klubov"
+msgstr "Nasadenie Klubov"
 
 msgid "Database Validation"
 msgstr "Databáza Kontrola Platnosti"
 
 msgid "Duplicate seedings:\n"
-msgstr "Duplicitné Rozostavenie:\n"
+msgstr "Duplicitné Nasadenie:\n"
 
 msgid "seeding"
-msgstr "rozostavenie"
+msgstr "nasadenie"
 
 msgid "defined"
 msgstr "zadefinované"
@@ -1464,7 +1464,7 @@ msgid "times"
 msgstr "krát"
 
 msgid "Duplicate club seedings:\n"
-msgstr "Zduplikované rozostavenia klubov:\n"
+msgstr "Zduplikované nasadenie klubov:\n"
 
 msgid "Missing category definitions:\n"
 msgstr "Chýbajúca definícia kategórie:\n"
@@ -1644,7 +1644,7 @@ msgid "IJF Quarter Final Repechage"
 msgstr "IJF Repasáž Do Štvrťfinále"
 
 msgid "SWE Direct Repechage"
-msgstr "SWE priama Repasáž"
+msgstr "Celková Repasáž"
 
 msgid "DEN Double Elimination"
 msgstr "DEN dvojité vylúčenie"
@@ -1765,15 +1765,6 @@ msgstr "ID"
 
 msgid "Index"
 msgstr "Index"
-
-msgid "SWE Dubb återkv"
-msgstr "SWE Dvojnásobná Repasáž"
-
-msgid "SWE Dir återkv"
-msgstr "SWE priama Repasáž"
-
-msgid "SWE Enkelt återkv"
-msgstr "SWE Jednoduchá Repasáž"
 
 msgid ""
 "Medal will be awarded \n"
