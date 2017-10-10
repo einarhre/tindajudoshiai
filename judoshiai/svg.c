@@ -310,7 +310,7 @@ static gint write_judoka(RsvgHandle *hndl, gint start, struct judoka *j, FILE *d
 			    j->regcategory, j->category, j->id,
 			    j->comment, j->coachid,
 			    j->birthyear, j->belt,
-			    j->weight, j->seeding, j->clubseeding, j->gender);
+			    j->weight, j->seeding, j->clubseeding, j->gender, j->deleted);
 	lisp_exe(lisp_code);
 	goto out;
     }
@@ -698,7 +698,7 @@ gint paint_svg(struct paint_data *pd)
                         }
                     }
 		} else if (lisp) {
-		    lisp_set_match(m[fight].category, fight,
+		    lisp_set_match(m[fight].category, m[fight].number,
 				   m[fight].blue, m[fight].white,
 				   m[fight].blue_score, m[fight].white_score,
 				   m[fight].blue_points, m[fight].white_points,
@@ -1459,7 +1459,7 @@ void select_svg_dir(GtkWidget *menu_item, gpointer data)
 void read_lisp_files(gboolean ok)
 {
     gchar *fullname;
-    gboolean initialized = FALSE;
+    //gboolean initialized = FALSE;
 
     if (ok == FALSE || svg_directory == NULL)
         return;
@@ -1476,11 +1476,12 @@ void read_lisp_files(gboolean ok)
 		if (!g_file_get_contents(fullname, &contents, &len, NULL))
 		    g_print("CANNOT OPEN '%s'\n", fullname);
 		else  {
+#if 0
 		    if (!initialized) {
 			lisp_init(0, NULL);
 			initialized = TRUE;
 		    }
-
+#endif
 		    g_print("reading lisp file %s\n", fullname);
 		    lisp_exe(contents);
 		    g_free(contents);
@@ -1704,7 +1705,7 @@ int lisp_get_data(int ix)
 			    j->regcategory, j->category, j->id,
 			    j->comment, j->coachid,
 			    j->birthyear, j->belt,
-			    j->weight, j->seeding, j->clubseeding, j->gender);
+			    j->weight, j->seeding, j->clubseeding, j->gender, j->deleted);
 	free_judoka(j);
 	return 0;
     }
