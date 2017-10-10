@@ -561,14 +561,29 @@ gboolean check_for_input(gpointer data)
     return TRUE;
 }
 
+extern void check_for_update(gulong addr, gchar *app);
+extern gchar *program_path;
+
 static gint conn_info_callback(gpointer data)
 {
     static gboolean last_ok = FALSE;
+    static gboolean update_checked = FALSE;
 
     if (connection_ok == last_ok)
         return TRUE;
 
     last_ok = connection_ok;
+
+    if (connection_ok && !update_checked) {
+	gulong addr = node_ip_addr;
+	if (addr == 0 && this_is_shiai() == FALSE)
+            addr = ssdp_ip_addr;
+	if (addr) {
+	    if (!this_is_shiai())
+		check_for_update(addr, program_path);
+	    update_checked = TRUE;
+	}
+    }
 
     return TRUE;
 }
