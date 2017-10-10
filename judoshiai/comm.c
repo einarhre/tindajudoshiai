@@ -37,7 +37,6 @@
 
 /* System-dependent definitions */
 #ifndef WIN32
-#define closesocket     close
 #define SOCKET          gint
 #define INVALID_SOCKET  -1
 #define SOCKET_ERROR    -1
@@ -51,6 +50,7 @@
 
 #include "sqlite3.h"
 #include "judoshiai.h"
+#include "sha.h"
 
 static void send_packet_1(struct message *msg);
 void send_packet(struct message *msg);
@@ -79,6 +79,16 @@ static struct {
 //static volatile struct message message_queue[MSG_QUEUE_LEN];
 //static volatile gint msg_put = 0, msg_get = 0;
 //static GStaticMutex msg_mutex = G_STATIC_MUTEX_INIT;
+
+static int closesock(int s)
+{
+#if defined(__WIN32__) || defined(WIN32)
+    shutdown(s, SD_SEND);
+    return closesocket(s);
+#else
+    return close(s);
+#endif
+}
 
 struct message *get_next_match_msg(int tatami)
 {
@@ -896,10 +906,7 @@ gpointer node_thread(gpointer args)
                     perror("sendto");
                     g_print("Node cannot send: conn=%d fd=%d\n", i, connections[i].fd);
 
-#if defined(__WIN32__) || defined(WIN32)
-		    shutdown(connections[i].fd, SD_SEND);
-#endif
-		    closesocket(connections[i].fd);
+		    closesock(connections[i].fd);
 		    FD_CLR(connections[i].fd, &read_fd);
 		    connections[i].fd = 0;
 		    connections[i].ssdp_info[0] = 0;
@@ -944,7 +951,7 @@ gpointer node_thread(gpointer args)
 
             if (i >= NUM_CONNECTIONS) {
                 g_print("Node cannot accept new connections!\n");
-                closesocket(tmp_fd);
+                closesock(tmp_fd);
                 continue;
             }
 
@@ -974,7 +981,7 @@ gpointer node_thread(gpointer args)
 
             if (i >= NUM_CONNECTIONS) {
                 g_print("Node cannot accept new connections!\n");
-                closesocket(tmp_fd);
+                closesock(tmp_fd);
                 continue;
             }
 
@@ -1049,10 +1056,7 @@ gpointer node_thread(gpointer args)
             } else {
                 g_print("Node: connection %d fd=%d closed (r=%d, err=%s)\n",
 			i, connections[i].fd, r, strerror(errno));
-#if defined(__WIN32__) || defined(WIN32)
-		shutdown(connections[i].fd, SD_SEND);
-#endif
-                closesocket(connections[i].fd);
+                closesock(connections[i].fd);
                 FD_CLR(connections[i].fd, &read_fd);
                 connections[i].fd = 0;
                 connections[i].ssdp_info[0] = 0;
@@ -1126,7 +1130,7 @@ gpointer server_thread(gpointer args)
             fclose(db_fd);
         }
         G_UNLOCK(db);
-        closesocket(tmp_fd);
+        closesock(tmp_fd);
     }
 
     g_thread_exit(NULL);    /* not required just good pratice */
@@ -1155,13 +1159,13 @@ gint read_file_from_net(gchar *filename, gint num)
     f = fopen(filename, "wb");
     if (f == NULL) {
         perror("file open");
-        closesocket(client_fd);
+        closesock(client_fd);
         return -1;
     }
 
     if (connect(client_fd, (struct sockaddr *)&server, sizeof(server))) {
         perror("client connect");
-        closesocket(client_fd);
+        closesock(client_fd);
         fclose(f);
         return -1;
     }
@@ -1172,7 +1176,7 @@ gint read_file_from_net(gchar *filename, gint num)
     }
 
     fclose(f);
-    closesocket(client_fd);
+    closesock(client_fd);
 
     if (ntot > 10)
         return 0;
@@ -1275,4 +1279,233 @@ gboolean keep_connection(void)
 gint get_port(void)
 {
     return SHIAI_PORT;
+}
+
+static gint read_all_files(SOCKET s, const gchar *subdirname, gint sendnow, gint level)
+{
+    gchar *dirname = g_build_filename(installation_dir, subdirname, NULL);
+    GDir *dir = g_dir_open(dirname, 0, NULL);
+    if (dir) {
+	const gchar *fname = g_dir_read_name(dir);
+	while (fname) {
+	    gchar *fullname = g_build_filename(dirname, fname, NULL);
+
+	    gchar *subname;
+	    if (subdirname) subname = g_build_filename(subdirname, fname, NULL);
+	    else subname = g_strdup(fname);
+
+	    if (g_file_test(fullname, G_FILE_TEST_IS_DIR)) {
+		if (read_all_files(s, subname, sendnow, level+1) < 0)
+		    return -1;
+	    } else {
+		gchar *contents;
+		gsize length;
+		if (g_file_get_contents(fullname, &contents, &length, NULL)) {
+		    gint i, n = 0;
+		    gchar buf[256];
+		    SHA_CTX context;
+		    sha1_byte digest[SHA1_DIGEST_LENGTH];
+		    memset(digest, 0, sizeof(digest));
+		    gchar *contcopy = g_malloc(length);
+		    memcpy(contcopy, contents, length);
+		    SHA1_Init(&context);
+		    SHA1_Update(&context, (guchar *)contcopy, length);
+		    SHA1_Final(digest, &context);
+		    g_free(contcopy);
+
+		    gchar *p = "get:";
+		    g_print(" %s", p); p = &buf[n];
+		    n = snprintf(buf, sizeof(buf), sendnow ? "FILE" : "NAME");
+		    buf[n++] = 0;
+		    g_print(" %s", p); p = &buf[n];
+		    for (i = 0; i < SHA1_DIGEST_LENGTH; i++)
+			n += snprintf(buf+n, sizeof(buf)-n, "%02x", digest[i]);
+		    buf[n++] = 0;
+		    g_print(" %s", p); p = &buf[n];
+		    n += snprintf(buf+n, sizeof(buf)-n, "%ld", length);
+		    buf[n++] = 0;
+		    g_print(" %s", p); p = &buf[n];
+		    n += snprintf(buf+n, sizeof(buf)-n, "%s", subname);
+		    buf[n++] = 0;
+		    g_print(" %s\n", p); p = &buf[n];
+
+		    if (send(s, buf, n, 0) < 0) {
+			g_free(contents);
+			g_print("auto-update send");
+			return -1;
+		    }
+
+		    if (sendnow) {
+			gchar *p = contents;
+			while (length) {
+			    if ((n = send(s, p, length, 0)) < 0) {
+				g_free(contents);
+				g_print("auto-update send 2");
+				return -1;
+			    }
+			    p += n;
+			    length -= n;
+			    if (n == 0) {
+				g_print("slow down\n");
+				usleep(100000);
+			    }
+			}
+		    }
+
+		    if ((n = recv(s, buf, 1, 0)) < 0) {
+			g_free(contents);
+			g_print("auto-update recv");
+			return -1;
+		    }
+
+		    g_free(contents);
+		} // if g_file_get_contents
+	    } // if (g_file_test(fullname != DIR
+	    g_free(subname);
+            g_free(fullname);
+            fname = g_dir_read_name(dir);
+	} // while (fname)
+        g_dir_close(dir);
+    } // if (dir)
+    g_free(dirname);
+
+    return 0;
+}
+
+gpointer auto_update_thread(gpointer args)
+{
+    SOCKET serv_fd, tmp_fd;
+    socklen_t alen;
+    struct sockaddr_in my_addr, caller;
+    gint reuse = 1;
+
+    if ((serv_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
+        perror("auto-update socket");
+        g_thread_exit(NULL);    /* not required just good pratice */
+        return NULL;
+    }
+
+    if (setsockopt(serv_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)) < 0) {
+        perror("auto-update (SO_REUSEADDR)");
+    }
+
+    memset(&my_addr, 0, sizeof(my_addr));
+    my_addr.sin_family = AF_INET;
+    my_addr.sin_port = htons(SHIAI_PORT-1);
+    my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    if (bind(serv_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
+        perror("auto-update bind");
+        g_thread_exit(NULL);    /* not required just good pratice */
+        return NULL;
+    }
+
+    if (listen(serv_fd, 1) < 0)
+        perror("auto-update listen");
+
+    for ( ; *((gboolean *)args) ; )   /* exit loop when flag is cleared */
+    {
+        alen = sizeof(caller);
+        if ((tmp_fd = accept(serv_fd, (struct sockaddr *)&caller, &alen)) < 0) {
+            perror("auto-update accept");
+	    usleep(1000000);
+            continue;
+        }
+
+	read_all_files(tmp_fd, NULL, 0, 0);
+
+        closesock(tmp_fd);
+    }
+
+    g_thread_exit(NULL);    /* not required just good pratice */
+    return NULL;
+}
+
+gpointer get_file_thread(gpointer args)
+{
+    SOCKET serv_fd, tmp_fd;
+    socklen_t alen;
+    struct sockaddr_in my_addr, caller;
+    gint reuse = 1;
+    gchar *contents;
+    gsize length;
+
+    if ((serv_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
+        perror("get-file socket");
+        g_thread_exit(NULL);    /* not required just good pratice */
+        return NULL;
+    }
+
+    if (setsockopt(serv_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)) < 0) {
+        perror("get-file (SO_REUSEADDR)");
+    }
+
+    memset(&my_addr, 0, sizeof(my_addr));
+    my_addr.sin_family = AF_INET;
+    my_addr.sin_port = htons(SHIAI_PORT-2);
+    my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    if (bind(serv_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
+        perror("get-file bind");
+        g_thread_exit(NULL);    /* not required just good pratice */
+        return NULL;
+    }
+
+    if (listen(serv_fd, 1) < 0)
+        perror("get-file listen");
+
+    for ( ; *((gboolean *)args) ; )   /* exit loop when flag is cleared */
+    {
+        gint n;
+        static gchar buf[500];
+
+        alen = sizeof(caller);
+        if ((tmp_fd = accept(serv_fd, (struct sockaddr *)&caller, &alen)) < 0) {
+            perror("get-file accept");
+	    usleep(1000000);
+            continue;
+        }
+
+	if ((n = recv(tmp_fd, buf, sizeof(buf), 0)) <= 0) {
+            perror("get-file recv");
+	    closesock(tmp_fd);
+	    continue;
+	}
+
+	buf[n] = 0;
+	gchar *p = strchr(buf, '\n');
+	if (p) *p = 0;
+	p = strchr(buf, '\r');
+	if (p) *p = 0;
+
+	if (!strcmp(buf, "VER")) {
+	    g_print("Get VER\n");
+	    p = full_version();
+	    send(tmp_fd, p, strlen(p), 0);
+	} else if (!strcmp(buf, "ALL")) {
+	    g_print("Get ALL\n");
+	    read_all_files(tmp_fd, NULL, 1, 0);
+	} else {
+	    gchar *fname = g_build_filename(installation_dir, buf, NULL);
+	    if (g_file_get_contents(fname, &contents, &length, NULL)) {
+		p = contents;
+		while (length > 0) {
+		    n = send(tmp_fd, p, length, 0);
+		    if (n <= 0) {
+			perror("get-file send");
+			break;
+		    }
+		    length -= n;
+		    p += n;
+		}
+		g_free(contents);
+	    } else perror(fname);
+	    g_free(fname);
+	}
+
+        closesock(tmp_fd);
+    }
+
+    g_thread_exit(NULL);    /* not required just good pratice */
+    return NULL;
 }

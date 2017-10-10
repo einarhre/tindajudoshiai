@@ -45,6 +45,7 @@
 #include "judoshiai.h"
 #include "language.h"
 #include "binreloc.h"
+#include "minilisp.h"
 
 guint current_year;
 gchar *installation_dir = NULL;
@@ -421,6 +422,7 @@ ok:
     }
 
     init_print_texts();
+    lisp_init(0, NULL);
 
 #if 0
     g_print("LOCALE = %s homedir=%s configdir=%s\n", 
@@ -547,60 +549,36 @@ ok:
 
         /* Create a bg thread using glib */
         gth = gth; // make compiler happy
-#if (GTKVER == 3)
-    gth = g_thread_new("Node",
-                       (GThreadFunc)node_thread,
-                       (gpointer)&run_flag); 
 
-    gth = g_thread_new("HTTPD",
-                       (GThreadFunc)httpd_thread,
-                       (gpointer)&run_flag); 
+	gth = g_thread_new("Node",
+			   (GThreadFunc)node_thread,
+			   (gpointer)&run_flag); 
 
-    gth = g_thread_new("Serial",
-                       (GThreadFunc)serial_thread,
-                       (gpointer)&run_flag); 
+	gth = g_thread_new("HTTPD",
+			   (GThreadFunc)httpd_thread,
+			   (gpointer)&run_flag); 
 
-    gth = g_thread_new("FTP",
-                       (GThreadFunc)ftp_thread,
-                       (gpointer)&run_flag); 
+	gth = g_thread_new("Serial",
+			   (GThreadFunc)serial_thread,
+			   (gpointer)&run_flag); 
 
-    gth = g_thread_new("SSDP",
-                       (GThreadFunc)ssdp_thread,
-                       (gpointer)&run_flag);
-#else // GTKVER != 3
+	gth = g_thread_new("FTP",
+			   (GThreadFunc)ftp_thread,
+			   (gpointer)&run_flag); 
 
-#if 0 // NO SERVER THREAD
-        gth = g_thread_create((GThreadFunc)server_thread,
-                              (gpointer)&run_flag, FALSE, NULL); 
-#endif // NO SERVER THREAD
+	gth = g_thread_new("SSDP",
+			   (GThreadFunc)ssdp_thread,
+			   (gpointer)&run_flag);
 
-        gth = g_thread_create((GThreadFunc)node_thread,
-                              (gpointer)&run_flag, FALSE, NULL); 
+	gth = g_thread_new("Auto-update",
+			   (GThreadFunc)auto_update_thread,
+			   (gpointer)&run_flag);
 
-#if 0 // NO CLIENT THREAD
-#if 1
-        gth = g_thread_create((GThreadFunc)client_thread,
-                              (gpointer)&run_flag, FALSE, NULL); 
-#else
-        idle_id = g_idle_add(client_thread, NULL);
-#endif
-#endif // NO CLIENT THREAD
+	gth = g_thread_new("Get-file",
+			   (GThreadFunc)get_file_thread,
+			   (gpointer)&run_flag);
 
-#if 1
-        gth = g_thread_create((GThreadFunc)httpd_thread,
-                              (gpointer)&run_flag, FALSE, NULL); 
-#endif
-        gth = g_thread_create((GThreadFunc)serial_thread,
-                              (gpointer)&run_flag, FALSE, NULL); 
-
-        gth = g_thread_create((GThreadFunc)ftp_thread,
-                              (gpointer)&run_flag, FALSE, NULL); 
-
-        gth = g_thread_create((GThreadFunc)ssdp_thread,
-                              (gpointer)&run_flag, FALSE, NULL); 
-#endif // GTKVER == 3
-
-        g_timeout_add(1000, check_for_connection_status, NULL);
+	g_timeout_add(1000, check_for_connection_status, NULL);
 
         g_print("Comm threads started\n");
     }
