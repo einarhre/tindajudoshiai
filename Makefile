@@ -6,8 +6,8 @@ JUDOINFOFILE=$(JS_BUILD_DIR)/judoinfo/$(OBJDIR)/judoinfo$(SUFF)
 JUDOWEIGHTFILE=$(JS_BUILD_DIR)/judoweight/$(OBJDIR)/judoweight$(SUFF)
 JUDOJUDOGIFILE=$(JS_BUILD_DIR)/judojudogi/$(OBJDIR)/judojudogi$(SUFF)
 JUDOPROXYFILE=$(JS_BUILD_DIR)/judoproxy/$(OBJDIR)/judoproxy$(SUFF)
+AUTOUPDATEFILE=$(JS_BUILD_DIR)/auto-update/$(OBJDIR)/auto-update$(SUFF)
 
-RELDIR=$(RELEASEDIR)/judoshiai
 RELFILE=$(RELDIR)/bin/judoshiai$(SUFF)
 RUNDIR=$(DEVELDIR)
 
@@ -38,6 +38,7 @@ all:
 	mkdir -p $(RELDIR)/licenses
 	mkdir -p $(RELDIR)/etc/www/js
 	mkdir -p $(RELDIR)/etc/www/css
+	mkdir -p $(RELDIR)/etc/bin
 	make -C common
 	make -C judoshiai
 	make -C judotimer
@@ -45,6 +46,7 @@ all:
 	make -C judoweight
 	make -C judojudogi
 	make -C serial
+	make -C auto-update
 ifeq ($(JUDOPROXY),YES)
 	make -C judoproxy
 endif
@@ -54,6 +56,7 @@ endif
 	cp $(JUDOINFOFILE) $(RELDIR)/bin/
 	cp $(JUDOWEIGHTFILE) $(RELDIR)/bin/
 	cp $(JUDOJUDOGIFILE) $(RELDIR)/bin/
+	cp $(AUTOUPDATEFILE) $(RELDIR)/bin/
 ifeq ($(JUDOPROXY),YES)
 	cp $(JUDOPROXYFILE) $(RELDIR)/bin/
 endif
@@ -63,6 +66,7 @@ ifeq ($(GTKVER),3)
 	mkdir -p $(RELDIR)/share/glib-2.0
 	cp -r $(RUNDIR)/share/glib-2.0/schemas $(RELDIR)/share/glib-2.0/
 endif
+	make -C auto-update install
 	cp $(RUNDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(SOUNDDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(RSVGDIR)/bin/*.dll $(RELDIR)/bin/
@@ -110,6 +114,9 @@ endif
 	cp licenses/* $(RELDIR)/licenses
 	cp -r svg $(RELDIR)/
 	cp -r custom-examples $(RELDIR)/
+	cp -r svg-lisp $(RELDIR)/
+	echo $(SHIAI_VER_NUM) >$(RELDIR)/etc/version.txt
+	find $(RELDIR) | wc -l | tr -d "\r\n" >$(RELDIR)/filecount.txt
 	@echo
 	@echo "To make a setup executable run"
 	@echo "  make setup"
@@ -133,6 +140,15 @@ else
 	cat etc/header.sh judoshiai.tar.gz >$(RELEASEDIR)/judoshiai-setup-$(SHIAI_VER_NUM).bin
 	chmod a+x $(RELEASEDIR)/judoshiai-setup-$(SHIAI_VER_NUM).bin
 	rm -f judoshiai.tar.gz
+endif
+
+$(RELEASEDIR)/judoshiai/etc/remote-install.exe:
+ifeq ($(TGT),WIN32)
+	sed "s/AppVerName=.*/AppVerName=Shiai $(SHIAI_VER_NUM)/" etc/remote-inst.iss >judoshiai1.iss
+	sed "s,RELDIR,$(RELEASEDIR)," judoshiai1.iss | tr '/' '\\' >judoshiai2.iss
+	$(INNOSETUP) judoshiai2.iss
+	rm -f judoshiai*.iss
+	mv $(RELEASEDIR)/remote-install.exe $(RELEASEDIR)/judoshiai/etc/
 endif
 
 install:
