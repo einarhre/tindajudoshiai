@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="circles.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="8.7988216"
+     inkscape:cy="289.06747"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1151"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="17.424921"
+       y="701.97443"
+       id="text4136"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4138"
+         x="17.424921"
+         y="701.97443"
+         style="font-size:7.5px">%!((lambda ()
+   (defun circles (x y r level angle)
+     (write &quot;&lt;circle cx='&quot; x &quot;' cy='&quot; y &quot;' r='&quot; r &quot;' stroke='&quot;
+	    (hexcolor (* angle 0.15) (* r 0.04) (* level 0.2)) &quot;' fill='none' /&gt;\n&quot;)
+     ((lambda (a)
+	(while (&lt; a 6.2831853)
+	  (if (&lt; level 3)
+	      (circles (+ x (* (cos a) r))
+		       (+ y (* (sin a) r))
+		       (* 0.5 r) (+ level 1) a))
+	  (setq a (+ a (/ 3.14159265 6)))
+	  )) 0.0))
+   (circles 350.0 400.0 150.0 0 0.0))
+   0)
+</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:13.75px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="90.451813"
+       y="760.4433"
+       id="text4137"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4139"
+         x="90.451813"
+         y="760.4433"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">((lambda ()</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="777.6308"
+         id="tspan4141"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">   (defun circles (x y r level angle)</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="794.8183"
+         id="tspan4143"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">     (write &quot;&lt;circle cx='&quot; x &quot;' cy='&quot; y &quot;' r='&quot; r &quot;' stroke='&quot;</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="812.0058"
+         id="tspan4145"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">	    (hexcolor (* angle 0.1) (* r 0.04) (* level 0.2)) &quot;' fill='none' /&gt;\n&quot;)</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="829.1933"
+         id="tspan4147"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">     ((lambda (a)</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="846.3808"
+         id="tspan4149"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">	(while (&lt; a 6.2831853)</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="863.5683"
+         id="tspan4151"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">	  (if (&lt; level 3)</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="880.7558"
+         id="tspan4153"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">	      (circles (+ x (* (cos a) r))</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="897.9433"
+         id="tspan4155"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">		       (+ y (* (sin a) r))</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="915.1308"
+         id="tspan4157"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">		       (* 0.5 r) (+ level 1) a))</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="932.3183"
+         id="tspan4159"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">	  (setq a (+ a (/ 3.14159265 12)))</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="949.5058"
+         id="tspan4161"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">	  )) 0.0))</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="966.6933"
+         id="tspan4163"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">   (circles 350.0 400.0 150.0 0 0.0))</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="983.8808"
+         id="tspan4165"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.75px;line-height:125%;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">   0))</tspan><tspan
+         sodipodi:role="line"
+         x="90.451813"
+         y="1001.0683"
+         id="tspan4167" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="93.944183"
+       y="730.12354"
+       id="text4169"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4171"
+         x="93.944183"
+         y="730.12354">Picture above is generated by this code:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:17.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="272.10663"
+       y="75.361946"
+       id="text4173"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4175"
+         x="272.10663"
+         y="75.361946">RECURSIVE DRAWING</tspan></text>
+  </g>
+</svg>
