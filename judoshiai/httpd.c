@@ -684,6 +684,12 @@ void send_html_top(http_parser_t *parser, gchar *bodyattr)
     sendf(s, "<a href=\"timer.html\"><img src=\"judotimer.png\"></a>\r\n");
     sendf(s, "<a href=\"info.html\"><img src=\"judoinfo.png\"></a>\r\n");
     sendf(s, "<a href=\"weight.html\"><img src=\"judoweight.png\"></a>\r\n");
+    sendf(s, "<p><a href=\"https://sourceforge.net/projects/judoshiai/\">"
+	  "<img src=\"auto-update.png\"><b>Download JudoShiai from Sourceforge.</b></a></p>");
+    sendf(s, "<p><a href=\"judoshiai-remote-setup-" SHIAI_VERSION ".exe\">"
+	  "<img src=\"auto-update.png\"><b>Install JudoShiai from communication node.</b></a>");
+    sendf(s, "<br>This is a partially installation intended to be used in JudoTimer and JudoInfo computers."
+	  "<br><tt>.shi</tt> files are not associated with JudoShiai program.");
 }
 
 void send_html_bottom(http_parser_t *parser)
@@ -1819,6 +1825,9 @@ void get_file(http_parser_t *parser)
         } else if (!strcmp(p2, "png")) {
 	    mime = "image/png";
 	    dir = "png";
+        } else if (!strcmp(p2, "ico")) {
+	    mime = "image/x-icon";
+	    dir = "png";
         } else if (!strcmp(p2, "jpg")) {
 	    mime = "image/jpg";
         } else if (!strcmp(p2, "class")) {
@@ -1841,6 +1850,9 @@ void get_file(http_parser_t *parser)
         } else if (!strcmp(p2, "mp3")) {
 	    mime = "audio/mpeg3";
 	    dir = "mp3";
+        } else if (!strcmp(p2, "exe")) {
+	    mime = "application/vnd.microsoft.portable-executable";
+	    dir = "bin";
 	}
     }
 
