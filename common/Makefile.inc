@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=2.6-beta11
+SHIAI_VER_NUM=2.6
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 
 ifndef JS_BUILD_DIR
@@ -111,6 +111,8 @@ else
 
   endif
 endif
+
+RELDIR=$(RELEASEDIR)/judoshiai
 
 ###################
 # CFLAGS and LIBS #
