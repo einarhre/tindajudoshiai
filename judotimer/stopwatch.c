@@ -1138,8 +1138,13 @@ void reset(guint key, struct msg_next_match *msg0)
     case GDK_1:
         total   = golden_score ? gs_time : 120.0;
         koka    = 0.0;
-        yuko    = 5.0;
-        wazaari = 10.0;
+	if (use_2017_rules) {
+	    yuko    = 0.0;
+	    wazaari = 5.0;
+	} else {
+	    yuko    = 5.0;
+	    wazaari = 10.0;
+	}
         ippon   = 15.0;
         break;
     case GDK_2:
