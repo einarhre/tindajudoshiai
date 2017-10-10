@@ -8,7 +8,8 @@ $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/comm.o $(OBJDIR)/ip.o \
-	$(OBJDIR)/protocol.o $(OBJDIR)/serial.o $(OBJDIR)/language.o $(OBJDIR)/print.o $(OBJDIR)/svg.o
+	$(OBJDIR)/protocol.o $(OBJDIR)/serial.o $(OBJDIR)/language.o \
+	$(OBJDIR)/print.o $(OBJDIR)/svg.o $(OBJDIR)/auto-update.o $(OBJDIR)/common.o
 
 CFLAGS += -DAPPLICATION="\"judoweight\""
 CFLAGS += -DAPP_NUM=4
@@ -46,6 +47,12 @@ $(OBJDIR)/serial.o: ../common/serial.c
 	${CC} -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/language.o: ../common/language.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/common.o: ../common/common.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/auto-update.o: ../common/auto-update.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: %.c

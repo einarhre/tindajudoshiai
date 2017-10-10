@@ -9,7 +9,7 @@ $(OBJDIR):
 
 OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/comm.o $(OBJDIR)/ip.o \
 	$(OBJDIR)/protocol.o $(OBJDIR)/trees.o $(OBJDIR)/avl.o $(OBJDIR)/language.o \
-	$(OBJDIR)/svg.o $(OBJDIR)/common.o
+	$(OBJDIR)/svg.o $(OBJDIR)/common.o  $(OBJDIR)/auto-update.o
 
 CFLAGS += -DAPPLICATION="\"judoinfo\""
 CFLAGS += -DAPP_NUM=3
@@ -47,6 +47,9 @@ $(OBJDIR)/language.o: ../common/language.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/common.o: ../common/common.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/auto-update.o: ../common/auto-update.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: %.c judoinfo.h ../common/comm.h

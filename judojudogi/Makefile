@@ -8,7 +8,8 @@ $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/comm.o $(OBJDIR)/ip.o \
-	$(OBJDIR)/protocol.o $(OBJDIR)/trees.o $(OBJDIR)/avl.o $(OBJDIR)/language.o
+	$(OBJDIR)/protocol.o $(OBJDIR)/trees.o $(OBJDIR)/avl.o \
+	$(OBJDIR)/language.o $(OBJDIR)/auto-update.o $(OBJDIR)/common.o
 
 CFLAGS += -DAPPLICATION="\"judojudogi\""
 CFLAGS += -DAPP_NUM=5
@@ -43,6 +44,12 @@ $(OBJDIR)/binreloc.o: ../common/binreloc.c
 	${CC} -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/language.o: ../common/language.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/common.o: ../common/common.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/auto-update.o: ../common/auto-update.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: %.c

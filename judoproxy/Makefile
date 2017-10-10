@@ -17,7 +17,8 @@ $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/comm.o $(OBJDIR)/ip.o \
-	$(OBJDIR)/protocol.o $(OBJDIR)/language.o $(OBJDIR)/html.o
+	$(OBJDIR)/protocol.o $(OBJDIR)/language.o $(OBJDIR)/html.o \
+	$(OBJDIR)/auto-update.o
 
 ifeq ($(VIDEO),yes)
 OBJS += $(OBJDIR)/camera-video.o
@@ -61,6 +62,9 @@ $(OBJDIR)/binreloc.o: ../common/binreloc.c
 	${CC} -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/language.o: ../common/language.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/auto-update.o: ../common/auto-update.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: %.c
