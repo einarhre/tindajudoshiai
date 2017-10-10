@@ -379,15 +379,20 @@ void free_judoka(struct judoka *j)
     g_free(j);
 }
 
-void show_message(gchar *msg)
+void show_message(const gchar *fmt, ...)
 {
     GtkWidget *dialog;
-        
+    va_list args;
+    va_start(args, fmt);
+    gchar *text = g_strdup_vprintf(fmt, args);
+    va_end(args);
+
     dialog = gtk_message_dialog_new (NULL,
                                      0 /*GTK_DIALOG_DESTROY_WITH_PARENT*/,
                                      GTK_MESSAGE_INFO,
                                      GTK_BUTTONS_OK,
-                                     "%s", msg);
+                                     "%s", text);
+    g_free(text);
 
     g_signal_connect_swapped (dialog, "response",
                               G_CALLBACK (gtk_widget_destroy),
