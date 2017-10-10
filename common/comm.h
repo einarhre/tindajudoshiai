@@ -510,4 +510,27 @@ extern struct message *get_rec_msg(void);
 extern void set_preferences(void);
 extern uint32_t host2net(uint32_t a);
 
+static inline char *full_version(void)
+{
+    static char buf[64];
+    int n = 0;
+
+    n = snprintf(buf, sizeof(buf), "%s", SHIAI_VERSION);
+#ifdef __arm__
+    n += snprintf(buf+n, sizeof(buf)-n, " arm");
+#else
+    if (sizeof(void *) == 8)
+	n += snprintf(buf+n, sizeof(buf)-n, " x86_64");
+    else
+	n += snprintf(buf+n, sizeof(buf)-n, " x86");
+#endif
+#ifdef WIN32
+    n += snprintf(buf+n, sizeof(buf)-n, " Windows");
+#else
+    n += snprintf(buf+n, sizeof(buf)-n, " Linux");
+#endif
+    return buf;
+}
+
+
 #endif
