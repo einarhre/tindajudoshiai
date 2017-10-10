@@ -984,17 +984,19 @@ void write_comp_stat(gint index)
             gint white_points = atoi(db_get_data(i, "white_points"));
             gint mtime = atoi(db_get_data(i, "time"));
             if (blue_points || white_points) {
+		gboolean c1_wins = blue_points > white_points;
                 fprintf(f,
                         "<tr><td "
                         "onclick=\"top.location.href='%s.html'\" "
                         "style=\"cursor: pointer\""
                         ">%s</td><td "
                         "onclick=\"top.location.href='%d.html'\" "
-                        "style=\"cursor: pointer\""
+                        "style=\"cursor: pointer;%s\""
                         ">%s %s</td><td class=\"%s\">",
                         txt2hex(c->last),
                         utf8_to_html(c->last),
                         j1->index,
+			c1_wins ? "font-weight:bold" : "",
                         utf8_to_html(firstname_lastname() ? j1->first : j1->last),
                         utf8_to_html(firstname_lastname() ? j1->last : j1->first),
                         prop_get_int_val(PROP_WHITE_FIRST) ? "wscore" : "bscore");
@@ -1031,9 +1033,10 @@ void write_comp_stat(gint index)
 		fprintf(f,
                         "</td><td "
                         "onclick=\"top.location.href='%d.html'\" "
-                        "style=\"cursor: pointer\""
+                        "style=\"cursor: pointer;%s\""
                         ">%s %s</td><td>%d:%02d</td></tr>\r\n",
                         j2->index,
+			c1_wins ? "" : "font-weight:bold",
                         utf8_to_html(firstname_lastname() ? j2->first : j2->last),
                         utf8_to_html(firstname_lastname() ? j2->last : j2->first), mtime/60, mtime%60);
 	    }
