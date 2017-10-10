@@ -154,7 +154,7 @@ enum french_systems {
 
 #define NUM_MATCHES 256
 #define NUM_COMPETITORS 128
-#define TOTAL_NUM_COMPETITORS 2048
+#define TOTAL_NUM_COMPETITORS (2048*2)
 
 #define NO_COMPETITOR  0
 #define GHOST          1
@@ -916,7 +916,7 @@ extern struct judoka *get_data_by_iter(GtkTreeIter *iter);
 extern struct judoka *get_data_by_iter_model(GtkTreeIter *iter, GtkTreeModel *model);
 extern void put_data_by_iter_model(struct judoka *j, GtkTreeIter *iter, GtkTreeModel *model);
 extern void free_judoka(struct judoka *j);
-extern void show_message(gchar *msg);
+extern void show_message(const gchar *msg, ...);
 extern gint ask_question(gchar *message);
 extern gint weight_grams(const gchar *s);
 extern void show_note(gchar *format, ...);
@@ -1158,6 +1158,8 @@ extern gpointer client_thread(gpointer args);
 extern gpointer httpd_thread(gpointer args);
 extern gpointer serial_thread(gpointer args);
 extern gpointer ssdp_thread(gpointer args);
+extern gpointer auto_update_thread(gpointer args);
+extern gpointer get_file_thread(gpointer args);
 struct sockaddr_in;
 extern void add_client_ssdp_info(gchar *p, struct sockaddr_in *client);
 extern gchar *other_info(gint num);
