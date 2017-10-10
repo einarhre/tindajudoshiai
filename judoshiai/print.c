@@ -55,7 +55,7 @@ static double rowheight1;
 //#define YPOS_L2 (1.3*rownum2*rowheight1 + top)
 
 static gchar *pdf_out = NULL, *schedule_pdf_out = NULL, *template_in = NULL, *schedule_start = NULL;
-static gint print_flags = 0, print_resolution = 30;
+static gint print_flags = PRINT_TEMPLATE, print_resolution = 30;
 static gboolean print_fixed = TRUE, dialog_run = FALSE;
 
 typedef enum {
@@ -68,7 +68,30 @@ struct print_struct {
     GtkWidget *layout_default, *layout_template;
     GtkWidget *print_printer, *print_pdf;
     GtkWidget *pdf_file, *template_file;
+    GtkWidget *page_size, *landscape;
 };
+
+static struct {
+    const gchar *display_name;
+    const gchar *name;
+    gdouble w_px, h_px;
+    gdouble w_mm, h_mm;
+} page_size_table[] = {
+    {"Auto", NULL,   595, 842, 210.0, 297.0},
+    {"A4", "iso_a4", 595, 842, 210.0, 297.0},
+    {"A5", "iso_a5", 419, 595, 148.0, 210.0},
+    {"A6", "iso_a6", 297, 419, 105.0, 148.0},
+    {"A7", "iso_a7", 209, 297, 74.0,  105.0},
+    {"A8", "iso_a8", 147, 207, 52.0,   74.0},
+    {"US Legal", "na_legal",     612,1008, 216.0, 356.0},
+    {"US Letter", "na_letter",   612, 792, 216.0, 279.0},
+    {"5×7", "na_5x7",            360, 504, 127.0, 177.8},
+    {"6×9 Envelope", "na_6x9",   432, 648, 154.4, 228.6},
+    {"8×10 Envelope", "na_8x10", 576, 720, 203.2, 254.0},
+    {NULL, NULL},
+};
+static gint selected_page_size = 0;
+static gboolean page_landscape = FALSE;
 
 #if defined(__WIN32__) || defined(WIN32)
 
@@ -810,9 +833,9 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
                 break;
             }
         } // while
+ out:
         g_free(font);
         fclose(f);
- out:
         if (!ok) {
             SHOW_MESSAGE("%s %d: %s", _("Line"), linenum, _("Syntax error"));
             return;
@@ -909,7 +932,7 @@ static gint get_num_pages(struct paint_data *pd)
         }
     }
 
-    if (x == 0.0 && y == 0.0)
+    if (x == 0.0 && y == 0.0 && pages > 1)
         pages--;
 
     return pages;
@@ -1766,6 +1789,27 @@ static gint fill_in_pages(gint category, gint all)
     return cat;
 }
 
+static void check_rotate(struct paint_data *pd)
+{
+    if (page_landscape) {
+	gdouble  tmp;
+
+	pd->rotate = TRUE;
+	tmp = pd->paper_width;
+	pd->paper_width = pd->paper_height;
+	pd->paper_height = tmp;
+	tmp = pd->paper_width_mm;
+	pd->paper_width_mm = pd->paper_height_mm;
+	pd->paper_height_mm = tmp;
+
+	if (pd->c) {
+	    cairo_translate(pd->c, pd->paper_height*0.5, pd->paper_width*0.5);
+	    cairo_rotate(pd->c, -0.5*M_PI);
+	    cairo_translate(pd->c, -pd->paper_width*0.5, -pd->paper_height*0.5);
+	}
+    }
+}
+
 static void begin_print(GtkPrintOperation *operation,
                         GtkPrintContext   *context,
                         gpointer           user_data)
@@ -1780,6 +1824,7 @@ static void begin_print(GtkPrintOperation *operation,
     } else if (what == PRINT_WEIGHING_NOTES) {
         GtkPageSetup *setup = gtk_print_context_get_page_setup(context);
         struct paint_data pd;
+	memset(&pd, 0, sizeof(pd));
 
 	pd.paper_width = gtk_print_context_get_width(context);
 	pd.paper_height = gtk_print_context_get_height(context);
@@ -1844,9 +1889,9 @@ static void draw_page(GtkPrintOperation *operation,
         gtk_page_setup_get_top_margin(setup, GTK_UNIT_MM) -
         gtk_page_setup_get_bottom_margin(setup, GTK_UNIT_MM);
 
-    if (print_landscape(pd.category)) {
+    /*if (print_landscape(pd.category)) {
         pd.rotate = TRUE;
-    }
+	}*/
 
     switch (ctg & PRINT_ITEM_MASK) {
 #if 0
@@ -1881,21 +1926,47 @@ void do_print(GtkWidget *menuitem, gpointer userdata)
 {
     GtkPrintOperation *print;
     //GtkPrintOperationResult res;
+    gint ctg = ptr_to_gint(userdata);
+    static GtkPrintSettings *settings = NULL;
 
     print = gtk_print_operation_new();
-
     g_signal_connect (print, "begin_print", G_CALLBACK (begin_print), userdata);
     g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), userdata);
 
     gtk_print_operation_set_use_full_page(print, FALSE);
     gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
     gtk_print_operation_set_allow_async(print, TRUE);
+    if (settings)
+	gtk_print_operation_set_print_settings (print, settings);
+
+    if ((ctg & PRINT_ITEM_MASK) == PRINT_WEIGHING_NOTES &&
+	selected_page_size) {
+	GtkPageSetup *setup = gtk_page_setup_new();
+	GtkPaperSize *ps_new =
+	    gtk_paper_size_new(page_size_table[selected_page_size].name);
+	gtk_page_setup_set_paper_size_and_default_margins(setup, ps_new);
+	gtk_paper_size_free(ps_new);
+
+	gtk_page_setup_set_right_margin(setup, 1.0, GTK_UNIT_MM);
+	gtk_page_setup_set_left_margin(setup, 1.0, GTK_UNIT_MM);
+	gtk_page_setup_set_top_margin(setup, 1.0, GTK_UNIT_MM);
+	gtk_page_setup_set_bottom_margin(setup, 1.0, GTK_UNIT_MM);
+
+	if (page_landscape)
+	    gtk_page_setup_set_orientation(setup, GTK_PAGE_ORIENTATION_LANDSCAPE);
+	gtk_print_operation_set_default_page_setup(print, setup);
+	if (setup) g_object_unref(setup);
+    }
 
     /*res = */gtk_print_operation_run(print,
                                       ptr_to_gint(userdata) & PRINT_TO_DEFAULT ?
                                       GTK_PRINT_OPERATION_ACTION_PRINT :
                                       GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
                                       GTK_WINDOW (main_window), NULL);
+
+
+    if (settings) g_object_unref(settings);
+    settings = g_object_ref(gtk_print_operation_get_print_settings(print));
 
     g_object_unref(print);
 }
@@ -1913,13 +1984,6 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
     gint where = ptr_to_gint(userdata) & PRINT_DEST_MASK;
     gint data  = ptr_to_gint(userdata) & PRINT_DATA_MASK;
 
-    struct paint_data pd;
-    memset(&pd, 0, sizeof(pd));
-    //XXXpd.row_height = 1;
-    pd.paper_width = SIZEX;
-    pd.paper_height = SIZEY;
-    pd.paper_width_mm = 210.0; // A4 paper
-    pd.paper_height_mm = 297.0;
 
     switch (where) {
     case PRINT_TO_PRINTER:
@@ -1956,7 +2020,17 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
         if (!filename)
             return;
 
-        cs = cairo_pdf_surface_create(filename, SIZEX, SIZEY);
+	struct paint_data pd;
+	memset(&pd, 0, sizeof(pd));
+	gint s = (what == PRINT_WEIGHING_NOTES) ? selected_page_size : 1; // default: A4
+	if (s == 0) s = 1; // auto -> A4
+
+	pd.paper_width = page_size_table[s].w_px;
+	pd.paper_height = page_size_table[s].h_px;
+	pd.paper_width_mm = page_size_table[s].w_mm;
+	pd.paper_height_mm = page_size_table[s].h_mm;
+
+	cs = cairo_pdf_surface_create(filename, pd.paper_width, pd.paper_height);
         c = pd.c = cairo_create(cs);
 
         switch (what) {
@@ -1978,6 +2052,8 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
 		read_print_template(template_in, NULL);
 	    else
 		read_print_template(NULL, NULL);
+
+	    check_rotate(&pd);
 
 	    if (ptr_to_gint(userdata) & PRINT_ALL)
 		find_print_judokas(NULL);
@@ -2256,6 +2332,17 @@ static void select_template(GtkWidget *w, GdkEventButton *event, gpointer *arg)
     }
 }
 
+static void select_page_size(GtkWidget *w, gpointer *data)
+{
+    struct print_struct *s = (struct print_struct *)data;
+    selected_page_size = gtk_combo_box_get_active(GTK_COMBO_BOX(s->page_size));
+}
+
+static void select_landscape(GtkWidget *w, gpointer *data)
+{
+    page_landscape = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w));
+}
+
 void print_accreditation_cards(gboolean all)
 {
     GtkWidget *dialog;
@@ -2278,60 +2365,56 @@ void print_accreditation_cards(gboolean all)
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                                           NULL);
 
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Layout:")), 0, 0, 1, 2);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Print To:")), 0, 2, 1, 2);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_("Layout:")), 0, 1, 0, 2);
-    gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_("Print To:")), 0, 1, 2, 4);
-#endif
+
     s->layout_default = gtk_radio_button_new_with_label(layout_group, _("Default"));
     layout_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(s->layout_default));
     s->layout_template = gtk_radio_button_new_with_label(layout_group, _("Template"));
 
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(table), s->layout_default,  1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->layout_template, 1, 1, 1, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), s->layout_default, 1, 2, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(table), s->layout_template, 1, 2, 1, 2);
-#endif
+
     s->print_printer = gtk_radio_button_new_with_label(print_group, _("Printer"));
     print_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(s->print_printer));
     s->print_pdf = gtk_radio_button_new_with_label(print_group, _("PDF"));
 
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(table), s->print_printer,  1, 2, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->print_pdf,      1, 3, 1, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), s->print_printer, 1, 2, 2, 3);
-    gtk_table_attach_defaults(GTK_TABLE(table), s->print_pdf, 1, 2, 3, 4);
-#endif
+
     one_per_page = gtk_check_button_new_with_label(_("One Card Per Page"));
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(table), one_per_page,  0, 4, 3, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), one_per_page, 0, 3, 4, 5);
-#endif
+
     if (!template_in)
         template_in = g_build_filename(installation_dir, "etc", "accreditation-card-example.txt", NULL);
     s->template_file = gtk_button_new_with_label(template_in);
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(table), s->template_file,  2, 1, 1, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), s->template_file, 2, 3, 1, 2);
-#endif
+
     if (!pdf_out) {
         gchar *dirname = g_path_get_dirname(database_name);
         pdf_out = g_build_filename(dirname, "output.pdf", NULL);
         g_free(dirname);
     }
     s->pdf_file = gtk_button_new_with_label(pdf_out);
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(table), s->pdf_file,  2, 3, 1, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), s->pdf_file, 2, 3, 3, 4);
-#endif
+
+    s->page_size = gtk_combo_box_text_new();
+    gint i = 0;
+    while (page_size_table[i].display_name) {
+	gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(s->page_size),
+				  page_size_table[i].name,
+				  page_size_table[i].display_name);
+	i++;
+    }
+    gtk_combo_box_set_active(GTK_COMBO_BOX(s->page_size),
+			     selected_page_size ? selected_page_size : 0);
+    gtk_grid_attach(GTK_GRID(table), s->page_size,  0, 5, 2, 1);
+
+    s->landscape = gtk_check_button_new_with_label(_("Landscape"));
+    gtk_grid_attach(GTK_GRID(table), s->landscape,  2, 5, 1, 1);
+    if (page_landscape)
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(s->landscape), TRUE);
+
     gtk_widget_set_sensitive(GTK_WIDGET(s->template_file), FALSE);
     gtk_widget_set_sensitive(GTK_WIDGET(s->pdf_file), FALSE);
 
@@ -2351,12 +2434,9 @@ void print_accreditation_cards(gboolean all)
     update_print_struct(NULL, s);
 
     gtk_widget_show_all(table);
-#if (GTKVER == 3)
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        table, FALSE, FALSE, 0);
-#else
-    gtk_container_add(GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), table);
-#endif
+
     g_signal_connect(G_OBJECT(s->layout_default), "toggled", G_CALLBACK(update_print_struct),
 		     (gpointer)s);
     g_signal_connect(G_OBJECT(s->layout_template), "toggled", G_CALLBACK(update_print_struct),
@@ -2364,6 +2444,10 @@ void print_accreditation_cards(gboolean all)
     g_signal_connect(G_OBJECT(s->print_printer), "toggled", G_CALLBACK(update_print_struct),
 		     (gpointer)s);
     g_signal_connect(G_OBJECT(s->print_pdf), "toggled", G_CALLBACK(update_print_struct),
+		     (gpointer)s);
+    g_signal_connect(G_OBJECT(s->page_size), "changed", G_CALLBACK(select_page_size),
+		     (gpointer)s);
+    g_signal_connect(G_OBJECT(s->landscape), "toggled", G_CALLBACK(select_landscape),
 		     (gpointer)s);
     g_signal_connect(G_OBJECT(s->pdf_file), "button-press-event", G_CALLBACK(select_pdf),
 		     (gpointer)s);
