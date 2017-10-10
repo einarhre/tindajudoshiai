@@ -9,60 +9,144 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <setjmp.h>
+#include <math.h>
 //#include <sys/mman.h>
 
 #include "sqlite3.h"
 
-extern void lisp_write_svg(char *txt, int len);
+extern int lisp_write_svg(char *txt, int len);
+extern int lisp_write_script(char *txt, int len);
 
+static jmp_buf ex_buf;
 static const unsigned char *code_line;
 static int code_ix;
 static char out[256];
 static int outlen;
-static char sqlcmd[512];
+static char errtxt[256];
+static char sqlcmd[2048];
 static int sqlcmdlen;
 static int print_stdout = 0;
 static int print_sqlcmd = 0;
+int lisp_print_script = 0;
+static int linenum = 0;
 
 static int GETCHAR(void) {
     int r = code_line[code_ix];
     if (!r) return EOF;
     code_ix++;
+
+    if (r == '&') {
+	if (!strncmp((const char *)&code_line[code_ix], "lt;", 3)) {
+	    code_ix += 3;
+	    return '<';
+	}
+	if (!strncmp((const char *)&code_line[code_ix], "gt;", 3)) {
+	    code_ix += 3;
+	    return '>';
+	}
+	if (!strncmp((const char *)&code_line[code_ix], "amp;", 4)) {
+	    code_ix += 4;
+	    return '&';
+	}
+	if (!strncmp((const char *)&code_line[code_ix], "quot;", 5)) {
+	    code_ix += 5;
+	    return '"';
+	}
+    }
+
+    if (r == '\n') linenum++;
     return r;
 }
 
 static int UNGETC(int c, FILE *stream) {
     if (code_ix == 0) return EOF;
+    if (c == '<' && code_ix >= 4 &&
+	!strncmp((const char *)&code_line[code_ix-4], "&lt;", 4)) {
+	code_ix -= 4;
+	return c;
+    }
+    if (c == '>' && code_ix >= 4 &&
+	!strncmp((const char *)&code_line[code_ix-4], "&gt;", 4)) {
+	code_ix -= 4;
+	return c;
+    }
+    if (c == '&' && code_ix >= 5 &&
+	!strncmp((const char *)&code_line[code_ix-5], "&amp;", 5)) {
+	code_ix -= 5;
+	return c;
+    }
+    if (c == '"' && code_ix >= 6 &&
+	!strncmp((const char *)&code_line[code_ix-6], "&quot;", 6)) {
+	code_ix -= 6;
+	return c;
+    }
     code_ix--;
+    if (c == '\n') linenum--;
     return c;
 }
 
+#if 0
+static const char *get_file_ptr(void)
+{
+    return (const char *)&code_line[code_ix];
+}
+
+static void file_skip(int n)
+{
+    int i;
+    for (i = 0; i < n; i++) {
+	if (GETCHAR() == EOF) return;
+    }
+}
+#endif
+
 #define printf(_fmt...) do {						\
-	if (print_sqlcmd) sqlcmdlen += snprintf(sqlcmd+sqlcmdlen, sizeof(sqlcmd)-sqlcmdlen, _fmt); \
-	else if (print_stdout) printf(_fmt);				\
+	if (print_sqlcmd) {						\
+	    sqlcmdlen += snprintf(sqlcmd+sqlcmdlen, sizeof(sqlcmd)-sqlcmdlen, _fmt); \
+	    if (sqlcmdlen > sizeof(sqlcmd)-10) fprintf(stderr, "Too long sql!\n"); \
+	} else if (print_stdout) printf(_fmt);				\
 	else {								\
 	    outlen = snprintf(out, sizeof(out), _fmt);			\
-	    lisp_write_svg(out, outlen);				\
+	    if (lisp_print_script)					\
+		lisp_write_script(out, outlen);				\
+	    else							\
+		lisp_write_svg(out, outlen);				\
 	}								\
     } while (0)
 
 #define getchar GETCHAR
 #define ungetc UNGETC
 
+#if 0
 static int READ_NUMBER(void) {
     char *endp = NULL;
     int val = strtol((char *)&code_line[code_ix], &endp, 0);
     while ((char *)(&code_line[code_ix]) < endp) code_ix++;
     return val;
 }
+#endif
 
-static __attribute((noreturn)) void error(char *fmt, ...) {
+#define GETVALUE(_a) (_a->type==TINT ? \
+		      (_a->value) : (_a->type==TDOUBLE ?		\
+				     _a->dbl : (_a->type==TSTRING ? atoi(_a->name) : \
+						error("cannot compare"))))
+
+#define PUTVALUE(_a, _v) do {			  \
+	if (_a->type==TINT) _a->value = _v;	  \
+	else if (_a->type==TDOUBLE) _a->dbl = _v; \
+	else error("variable not a number");	  \
+    } while (0)
+
+static int error(char *fmt, ...) {
+    int n;
     va_list ap;
     va_start(ap, fmt);
-    vfprintf(stderr, fmt, ap);
-    fprintf(stderr, "\n");
+    n = vsnprintf(errtxt, sizeof(errtxt), fmt, ap);
     va_end(ap);
-    exit(1);
+    if (linenum) snprintf(errtxt+n, sizeof(errtxt)-n, " (line %d)", linenum+1);
+    fprintf(stderr, "%s\n", errtxt);
+    longjmp(ex_buf, 1);
 }
 
 //======================================================================
@@ -73,6 +157,7 @@ static __attribute((noreturn)) void error(char *fmt, ...) {
 enum {
     // Regular objects visible from the user
     TINT = 1,
+    TDOUBLE,
     TCELL,
     TSYMBOL,
     TPRIMITIVE,
@@ -109,6 +194,8 @@ typedef struct Obj {
     union {
         // Int
         int value;
+	// Double
+	double dbl;
         // Cell
         struct {
             struct Obj *car;
@@ -171,7 +258,13 @@ typedef struct Obj2 {
     } while (0)
 
 static struct Obj *get_judoka(void *root, struct Obj **env, struct Obj **args);
-static Obj *judoka_ = &(Obj){ .type = TFUNCTION, .fn = get_judoka };
+//static Obj *judoka_ = &(Obj){ .type = TFUNCTION, .fn = get_judoka };
+static struct Obj *get_next_match(void *root, struct Obj **env, struct Obj **args);
+//static Obj *next_match_ = &(Obj){ .type = TFUNCTION, .fn = get_next_match };
+static Obj *prim_write(void *root, Obj **env, Obj **list);
+
+DEF_INT(page);
+DEF_INT(pages);
 
 DEF_INT(compix_1);
 DEF_STR(first_1);
@@ -200,6 +293,7 @@ DEF_INT(weight);
 DEF_INT(seeding);
 DEF_INT(clubseeding);
 DEF_INT(gender);
+DEF_INT(compflags);
 DEF_STR(comment);
 
 DEF_INT(wins_1);
@@ -215,7 +309,7 @@ DEF_INT(match_time);
 DEF_INT(order);
 DEF_INT(tatami);
 DEF_INT(group);
-DEF_INT(flags);
+DEF_INT(catflags);
 DEF_INT(forcedtatami);
 DEF_INT(forcednumber);
 DEF_INT(date);
@@ -226,6 +320,9 @@ static struct {
     char *name;
     Obj **obj;
 } judoshiai_objs[] = {
+    NAME2OBJ(page),
+    NAME2OBJ(pages),
+
     NAME2OBJ(compix_1),
     NAME2OBJ(first_1),
     NAME2OBJ(last_1),
@@ -254,10 +351,10 @@ static struct {
     NAME2OBJ(birthyear),
     NAME2OBJ(grade),
     NAME2OBJ(weight),
-    NAME2OBJ(flags),
     NAME2OBJ(seeding),
     NAME2OBJ(clubseeding),
     NAME2OBJ(gender),
+    NAME2OBJ(compflags),
 
     NAME2OBJ(catix),
     NAME2OBJ(number),
@@ -269,20 +366,20 @@ static struct {
     NAME2OBJ(order),
     NAME2OBJ(tatami),
     NAME2OBJ(group),
-    NAME2OBJ(flags),
+    NAME2OBJ(catflags),
     NAME2OBJ(forcedtatami),
     NAME2OBJ(forcednumber),
     NAME2OBJ(date),
     NAME2OBJ(legend),
     NAME2OBJ(roundnum),
 
-    NAME2OBJ(judoka),
+    //NAME2OBJ(judoka),
     {NULL, NULL}
 };
 
 void lisp_set_match(int catix, int number, int compix_1, int compix_2,
 		    int score_1, int score_2, int points_1, int points_2,
-		    int match_time, int order, int tatami, int group, int flags,
+		    int match_time, int order, int tatami, int group, int catflags,
 		    int forcedtatami, int forcednumber, int date, int legend, int roundnum)
 {
     INTCPY(catix);
@@ -297,7 +394,7 @@ void lisp_set_match(int catix, int number, int compix_1, int compix_2,
     INTCPY(order);
     INTCPY(tatami);
     INTCPY(group);
-    INTCPY(flags);
+    INTCPY(catflags);
     INTCPY(forcedtatami);
     INTCPY(forcednumber);
     INTCPY(date);
@@ -312,7 +409,7 @@ void lisp_set_competitor(int who, int compix,
 			 const char *compid,
 			 const char *comment, const char *coachid,
 			 int birthyear, int grade,
-			 int weight, int seeding, int clubseeding, int gender)
+			 int weight, int seeding, int clubseeding, int gender, int compflags)
 {
     if (who == 1) {
 	STRCPY_(1, first);
@@ -341,6 +438,7 @@ void lisp_set_competitor(int who, int compix,
 	INTCPY(seeding);
 	INTCPY(clubseeding);
 	INTCPY(gender);
+	INTCPY(compflags);
     }
 }
 
@@ -366,7 +464,7 @@ static Obj *Strings;
 //======================================================================
 
 // The size of the heap in byte
-static size_t memory_size = 65536*2;
+static size_t memory_size = 65536*4;
 #define MEMORY_SIZE memory_size
 
 // The pointer pointing to the beginning of the current heap
@@ -435,6 +533,14 @@ static void gc(void *root);
     Obj **var3 = (Obj **)(root_ADD_ROOT_ + 3);  \
     Obj **var4 = (Obj **)(root_ADD_ROOT_ + 4)
 
+#define DEFINE5(var1, var2, var3, var4, var5)	\
+    ADD_ROOT(5);                                \
+    Obj **var1 = (Obj **)(root_ADD_ROOT_ + 1);  \
+    Obj **var2 = (Obj **)(root_ADD_ROOT_ + 2);  \
+    Obj **var3 = (Obj **)(root_ADD_ROOT_ + 3);  \
+    Obj **var4 = (Obj **)(root_ADD_ROOT_ + 4);  \
+    Obj **var5 = (Obj **)(root_ADD_ROOT_ + 5)
+
 // Round up the given value to a multiple of size. Size must be a power of 2. It adds size - 1
 // first, then zero-ing the least significant bits to make the result a multiple of size. I know
 // these bit operations may look a little bit tricky, but it's efficient and thus frequently used.
@@ -466,13 +572,13 @@ static Obj *alloc(void *root, int type, size_t size) {
 
     // Otherwise, run GC only when the available memory is not large enough.
     if (!always_gc && MEMORY_SIZE < mem_nused + size) {
-	fprintf(stderr, "call gb: memsize=%ld, nused=%ld size=%ld\n",
-		MEMORY_SIZE, mem_nused, size);
+	//fprintf(stderr, "call gb: memsize=%d, nused=%d size=%d\n",
+	//	(int)MEMORY_SIZE, (int)mem_nused, (int)size);
         gc(root);
 	if (mem_nused > MEMORY_SIZE/2) {
 	    if (debug_gc)
-		fprintf(stderr, "mem_nused=%ld MEMORY_SIZE=%ld: double mem\n",
-			mem_nused, MEMORY_SIZE);
+		fprintf(stderr, "mem_nused=%d MEMORY_SIZE=%d: double mem\n",
+			(int)mem_nused, (int)MEMORY_SIZE);
 	    memory_size *= 2;
 	    gc(root);
 	}
@@ -567,6 +673,7 @@ static void gc(void *root) {
     while (scan1 < scan2) {
         switch (scan1->type) {
         case TINT:
+        case TDOUBLE:
         case TSYMBOL:
         case TPRIMITIVE:
 	case TSTRING:
@@ -612,6 +719,12 @@ static Obj *make_int(void *root, int value) {
     return r;
 }
 
+static Obj *make_dbl(void *root, double value) {
+    Obj *r = alloc(root, TDOUBLE, sizeof(double));
+    r->dbl = value;
+    return r;
+}
+
 static Obj *cons(void *root, Obj **car, Obj **cdr) {
     Obj *cell = alloc(root, TCELL, sizeof(Obj *) * 2);
     cell->car = *car;
@@ -647,7 +760,8 @@ struct Obj *make_env(void *root, Obj **vars, Obj **up) {
     return r;
 }
 
-static Obj *make_string(void *root, char *name) {
+static Obj *make_string(void *root, const char *name) {
+    if (!name) name = "";
     for (Obj *p = Strings; p != Nil; p = p->cdr)
         if (p && strcmp(name, p->car->name) == 0) {
             return p->car;
@@ -659,7 +773,7 @@ static Obj *make_string(void *root, char *name) {
     return *sym;
 }
 
-static Obj *make_string_copy(void *root, char *name) {
+static Obj *make_string_copy(void *root, const char *name) {
     DEFINE1(sym);
     *sym = alloc(root, TSTRING, strlen(name) + 1);
     strcpy((*sym)->name, name);
@@ -760,13 +874,33 @@ static Obj *read_quote(void *root) {
     return *tmp;
 }
 
-#if 0
-static int read_number(int val) {
+static Obj *read_number(void *root) {
+    int val = 0;
+    int neg = 0;
+
+    if (peek() == '-') {
+	neg = 1;
+	getchar();
+    }
+
     while (isdigit(peek()))
         val = val * 10 + (getchar() - '0');
-    return val;
+
+    if (peek() == '.') {
+	double d = val;
+	double i = 10.0;
+	getchar();
+	while (isdigit(peek())) {
+	    d = d + (getchar() - '0')/i;
+	    i = i*10.0;
+	}
+	if (neg) d = -d;
+	return make_dbl(root, d);
+    }
+
+    if (neg) val = -val;
+    return make_int(root, val);
 }
-#endif
 
 static Obj *read_symbol(void *root, char c) {
     char buf[SYMBOL_MAX_LEN + 1];
@@ -780,6 +914,42 @@ static Obj *read_symbol(void *root, char c) {
     buf[len] = '\0';
     return intern(root, buf);
 }
+
+#if 0
+static Obj *read_string(void *root, int qlen) {
+    char buf[SYMBOL_MAX_LEN + 1];
+    int len = 0;
+    const char *q = get_file_ptr();
+    int ch;
+
+    file_skip(qlen);
+
+    while (strncmp(get_file_ptr(), q, qlen) &&
+	   (ch = getchar()) != EOF && len < SYMBOL_MAX_LEN) {
+	if (ch == '\\') {
+	    ch = getchar();
+	    if (ch == 'n') ch = '\n';
+	    else if (ch == 'r') ch = '\r';
+	    else if (ch == 't') ch = '\t';
+	}
+	buf[len++] = ch;
+    }
+
+    buf[len] = 0;
+
+    if (SYMBOL_MAX_LEN <= len)
+	error("String too long [%s]", buf);
+    if (ch == EOF)
+	error("Unclosed string [%s]", buf);
+
+    file_skip(qlen);
+
+    DEFINE1(sym);
+    *sym = make_string(root, buf);
+    return *sym;
+}
+
+#else
 
 static Obj *read_string(void *root, char c) {
     char buf[SYMBOL_MAX_LEN + 1];
@@ -799,10 +969,16 @@ static Obj *read_string(void *root, char c) {
 
     buf[len] = 0;
 
+    if (SYMBOL_MAX_LEN <= len)
+	error("String too long [%s]", buf);
+    if (ch == EOF)
+	error("Unclosed string [%s]", buf);
+
     DEFINE1(sym);
     *sym = make_string(root, buf);
     return *sym;
 }
+#endif
 
 static int is_js_name(int c) {
     return isalnum(c) || c == '_';
@@ -827,20 +1003,9 @@ static Obj *read_expr(void *root) {
             return Dot;
         if (c == '\'')
             return read_quote(root);
-        if (isdigit(c)) {
-#if 1
+        if (isdigit(c) || (c == '-' && isdigit(peek()))) {
 	    ungetc(c, stdin);
-            return make_int(root, READ_NUMBER());
-#else
-            return make_int(root, read_number(c - '0'));
-#endif
-	}
-        if (c == '-' && isdigit(peek())) {
-#if 1
-            return make_int(root, -READ_NUMBER());
-#else
-            return make_int(root, -read_number(0));
-#endif
+            return read_number(root);
 	}
 	if (c == '%' && is_js_name(peek())) {
 	    // potentially judoshiai variable
@@ -856,33 +1021,47 @@ static Obj *read_expr(void *root) {
 		if (!strcmp(judoshiai_objs[i].name, name))
 		    return *judoshiai_objs[i].obj;
 	    }
-	    error("Cannot find JudoShiai object %s", name);
+	    error("Cannot find JudoShiai object \"%s\"", name);
 	}
-        if (isalpha(c) || strchr(symbol_chars, c))
+#if 0
+	if (c == '&' && !strncmp(get_file_ptr(), "quot;", 5)) {
+	    ungetc(c, stdin);
+	    return read_string(root, 6);
+	}
+#endif
+	if (isalpha(c) || strchr(symbol_chars, c))
             return read_symbol(root, c);
-	if (c == '"')
-		return read_string(root, c);
+
+	if (c == '"') {
+	    return read_string(root, c);
+	}
+
         error("Don't know how to handle %c", c);
     }
 }
 
 // Prints the given object.
-static void print(Obj *obj) {
+static void print(Obj *obj, int intend) {
+    int i;
     switch (obj->type) {
     case TCELL:
+        printf("\n");
+	for (i = 0; i < intend; i++) printf("  ");
+	intend++;
         printf("(");
         for (;;) {
-            print(obj->car);
+            print(obj->car, intend);
             if (obj->cdr == Nil)
                 break;
             if (obj->cdr->type != TCELL) {
                 printf(" . ");
-                print(obj->cdr);
+                print(obj->cdr, intend);
                 break;
             }
             printf(" ");
             obj = obj->cdr;
         }
+	intend--;
         printf(")");
         return;
 
@@ -891,6 +1070,16 @@ static void print(Obj *obj) {
         printf(__VA_ARGS__);                    \
         return
     CASE(TINT, "%d", obj->value);
+
+    case TDOUBLE: {
+	char buf[32];
+	snprintf(buf, sizeof(buf), "%f", obj->dbl);
+	char *p = strchr(buf, ',');
+	if (p) *p = '.';
+	printf("%s", buf);
+	return;
+    }
+
     CASE(TSYMBOL, "%s", obj->name);
     CASE(TSTRING, "%s", obj->name);
     CASE(TPRIMITIVE, "<primitive>");
@@ -907,8 +1096,11 @@ static void print(Obj *obj) {
 
 static void printdbg(Obj *obj) {
     print_stdout = 1;
-    print(obj);
+    printf("\n");
+    print(obj, 0);
+    printf("\n");
     print_stdout = 0;
+    fflush(NULL);
 }
 
 // Returns the length of the given list. -1 if it's not a proper list.
@@ -995,6 +1187,7 @@ static Obj *apply(void *root, Obj **env, Obj **fn, Obj **args) {
         return apply_func(root, env, fn, eargs);
     }
     error("not supported");
+    return Nil;
 }
 
 // Searches for a variable by symbol. Returns null if not found.
@@ -1024,10 +1217,9 @@ static Obj *macroexpand(void *root, Obj **env, Obj **obj) {
 
 // Evaluates the S expression.
 static Obj *eval(void *root, Obj **env, Obj **obj) {
-    //out[0] = 0; outlen = 0;
-
     switch ((*obj)->type) {
     case TINT:
+    case TDOUBLE:
     case TPRIMITIVE:
     case TFUNCTION:
     case TTRUE:
@@ -1052,13 +1244,15 @@ static Obj *eval(void *root, Obj **env, Obj **obj) {
         *fn = eval(root, env, fn);
         *args = (*obj)->cdr;
         if ((*fn)->type != TPRIMITIVE && (*fn)->type != TFUNCTION) {
-            error("The head of a list must be a function (%s)", out);
+	    prim_write(root, env, obj);
+            error("The head of a list must be a function [%s]", out);
 	}
         return apply(root, env, fn, args);
     }
     default:
         error("Bug: eval: Unknown tag type: %d", (*obj)->type);
     }
+    return Nil;
 }
 
 //======================================================================
@@ -1095,6 +1289,24 @@ static Obj *prim_cdr(void *root, Obj **env, Obj **list) {
     if (args->car->type != TCELL || args->cdr != Nil)
         error("Malformed cdr");
     return args->car->cdr;
+}
+
+// (consp <cell>)
+static Obj *prim_consp(void *root, Obj **env, Obj **list) {
+    Obj *args = eval_list(root, env, list);
+    return (args->car->type == TCELL) ? True : Nil;
+}
+
+// (atom <cell>)
+static Obj *prim_atom(void *root, Obj **env, Obj **list) {
+    Obj *args = eval_list(root, env, list);
+    return (args->car->type != TCELL) ? True : Nil;
+}
+
+// (null <cell>)
+static Obj *prim_null(void *root, Obj **env, Obj **list) {
+    Obj *args = eval_list(root, env, list);
+    return (args->car->type == TNIL) ? True : Nil;
 }
 
 // (setq <symbol> expr)
@@ -1146,48 +1358,96 @@ static Obj *prim_gensym(void *root, Obj **env, Obj **list) {
 // (+ <integer> ...)
 static Obj *prim_plus(void *root, Obj **env, Obj **list) {
     int sum = 0;
+    double sum2 = 0.0;
     for (Obj *args = eval_list(root, env, list); args != Nil; args = args->cdr) {
-        if (args->car->type != TINT)
+        if (args->car->type == TINT)
+	    sum += args->car->value;
+        else if (args->car->type == TDOUBLE)
+	    sum2 += args->car->dbl;
+	else
             error("+ takes only numbers");
-        sum += args->car->value;
+    }
+    if (sum2 != 0.0) {
+	sum2 += sum;
+	return make_dbl(root, sum2);
     }
     return make_int(root, sum);
 }
 
 // (- <integer> ...)
 static Obj *prim_minus(void *root, Obj **env, Obj **list) {
+    int t_int = 0, t_dbl = 0;
     Obj *args = eval_list(root, env, list);
-    for (Obj *p = args; p != Nil; p = p->cdr)
-        if (p->car->type != TINT)
-            error("- takes only numbers");
-    if (args->cdr == Nil)
-        return make_int(root, -args->car->value);
+    (void)t_int;
+
+    if (args->cdr == Nil) {
+	if (args->car->type == TINT)
+	    return make_int(root, -args->car->value);
+	if (args->car->type == TDOUBLE)
+	    return make_dbl(root, -args->car->dbl);
+	error("- takes only numbers");
+    }
+
+    for (Obj *p = args; p != Nil; p = p->cdr) {
+        if (p->car->type == TINT) t_int = 1;
+	else if (p->car->type == TDOUBLE) t_dbl = 1;
+	else error("- takes only numbers");
+    }
+
+    if (t_dbl) {
+	double d = GETVALUE((args->car));
+	for (Obj *p = args->cdr; p != Nil; p = p->cdr)
+	    d -= GETVALUE((p->car));
+	return make_dbl(root, d);
+    }
+
     int r = args->car->value;
     for (Obj *p = args->cdr; p != Nil; p = p->cdr)
-        r -= p->car->value;
+	r -= p->car->value;
     return make_int(root, r);
 }
 
 // (* <integer> ...)
 static Obj *prim_mul(void *root, Obj **env, Obj **list) {
     int mul = 1;
+    double mul2 = 1.0;
     for (Obj *args = eval_list(root, env, list); args != Nil; args = args->cdr) {
-        if (args->car->type != TINT)
+        if (args->car->type == TINT)
+	    mul *= args->car->value;
+        else if (args->car->type == TDOUBLE)
+	    mul2 *= args->car->dbl;
+	else
             error("* takes only numbers");
-        mul *= args->car->value;
+    }
+    if (mul2 != 1.0) {
+	mul2 *= mul;
+	return make_dbl(root, mul2);
     }
     return make_int(root, mul);
 }
 
 // (/ <integer> ...)
 static Obj *prim_div(void *root, Obj **env, Obj **list) {
+    int t_int = 0, t_dbl = 0;
     Obj *args = eval_list(root, env, list);
-    for (Obj *p = args; p != Nil; p = p->cdr)
-        if (p->car->type != TINT)
-            error("/ takes only numbers");
+    (void)t_int;
+
+    for (Obj *p = args; p != Nil; p = p->cdr) {
+        if (p->car->type == TINT) t_int = 1;
+	else if (p->car->type == TDOUBLE) t_dbl = 1;
+	else error("- takes only numbers");
+    }
+
+    if (t_dbl) {
+	double d = GETVALUE((args->car));
+	for (Obj *p = args->cdr; p != Nil; p = p->cdr)
+	    d /= GETVALUE((p->car));
+	return make_dbl(root, d);
+    }
+
     int r = args->car->value;
     for (Obj *p = args->cdr; p != Nil; p = p->cdr)
-        r /= p->car->value;
+	r /= p->car->value;
     return make_int(root, r);
 }
 
@@ -1201,6 +1461,102 @@ static Obj *prim_mod(void *root, Obj **env, Obj **list) {
     if (x->type != TINT || y->type != TINT)
         error("% takes only numbers");
     return make_int(root, x->value % y->value);
+}
+
+// (_name <double>)
+#define ARITH_FUNC(_name) \
+    static Obj *prim_##_name(void *root, Obj **env, Obj **list) { \
+	DEFINE1(arg);						  \
+	*arg = (*list)->car;					  \
+	*arg = eval(root, env, arg);				  \
+	double val;						  \
+	if ((*arg)->type == TINT) val = (*arg)->value;		  \
+	else if ((*arg)->type == TDOUBLE) val = (*arg)->dbl;	  \
+	else error(#_name " requires a number");		  \
+	return make_dbl(root, _name(val));			  \
+    }
+
+ARITH_FUNC(sqrt)
+ARITH_FUNC(sin)
+ARITH_FUNC(cos)
+ARITH_FUNC(tan)
+ARITH_FUNC(acos)
+ARITH_FUNC(asin)
+ARITH_FUNC(atan)
+ARITH_FUNC(log)
+ARITH_FUNC(exp)
+ARITH_FUNC(floor)
+ARITH_FUNC(ceil)
+
+// (truncate <double>)
+static Obj *prim_truncate(void *root, Obj **env, Obj **list) {
+    DEFINE1(arg);
+    *arg = (*list)->car;
+    *arg = eval(root, env, arg);
+    if ((*arg)->type != TDOUBLE) error("truncate requires a float");
+    int val;
+    if ((*arg)->dbl >= 0) {
+	val = floor((*arg)->dbl);
+	return make_int(root, val);
+    }
+    val = floor(-((*arg)->dbl));
+    return make_int(root, -val);
+}
+
+// (round <double>)
+static Obj *prim_round(void *root, Obj **env, Obj **list) {
+    DEFINE1(arg);
+    *arg = (*list)->car;
+    *arg = eval(root, env, arg);
+    if ((*arg)->type != TDOUBLE) error("round requires a float");
+    int val;
+    val = round((*arg)->dbl);
+    return make_int(root, val);
+}
+
+// (float <int>)
+static Obj *prim_float(void *root, Obj **env, Obj **list) {
+    DEFINE1(arg);
+    *arg = (*list)->car;
+    *arg = eval(root, env, arg);
+    if ((*arg)->type != TINT) error("float requires an integer");
+    double val = (*arg)->value;
+    return make_dbl(root, val);
+}
+
+// (pow <double>)
+static Obj *prim_pow(void *root, Obj **env, Obj **list) {
+    DEFINE2(arg1, arg2);
+    *arg1 = (*list)->car;
+    *arg1 = eval(root, env, arg1);
+    *arg2 = (*list)->cdr->car;
+    *arg2 = eval(root, env, arg2);
+    double val1, val2;
+    if ((*arg1)->type == TINT) val1 = (*arg1)->value;
+    else if ((*arg1)->type == TDOUBLE) val1 = (*arg1)->dbl;
+    else error("pow requires numbers");
+    if ((*arg2)->type == TINT) val2 = (*arg2)->value;
+    else if ((*arg2)->type == TDOUBLE) val2 = (*arg1)->dbl;
+    else error("pow requires numbers");
+    return make_dbl(root, pow(val1, val2));
+}
+
+// (hexcolor <float> <float> <float>)
+static Obj *prim_hexcolor(void *root, Obj **env, Obj **list) {
+    Obj *args = eval_list(root, env, list);
+    if (length(args) != 3)
+        error("malformed hexcolor");
+    Obj *r = args->car;
+    Obj *g = args->cdr->car;
+    Obj *b = args->cdr->cdr->car;
+    if (r->type != TDOUBLE || g->type != TDOUBLE || b->type != TDOUBLE)
+        error("hexcolor takes only floats");
+    unsigned char buf[32];
+    int ri = r->dbl < 0.0 ? 0 : (r->dbl > 1.0 ? 255 : (int)(r->value*255));
+    int gi = g->dbl < 0.0 ? 0 : (g->dbl > 1.0 ? 255 : (int)(g->value*255));
+    int bi = b->dbl < 0.0 ? 0 : (b->dbl > 1.0 ? 255 : (int)(b->value*255));
+    snprintf((char *)buf, sizeof(buf), "#%02x%02x%02x", ri, gi, bi);
+    return make_string(root, (char *)buf);
 }
 
 /* Bitwise Operations on Numbers */
@@ -1255,19 +1611,17 @@ static Obj *prim_bit_not(void *root, Obj **env, Obj **list) {
     static Obj *prim_num_##_name (void *root, Obj **env, Obj **list) {	\
 	Obj *args = eval_list(root, env, list);				\
 	if (length(args) != 2) error("malformed %s", _prim);		\
-	Obj *x = args->car;						\
-	Obj *y = args->cdr->car;					\
-	if (x->type != TINT || y->type != TINT)				\
-	    error("%s takes only numbers", _prim);			\
-	return (_cond) ? True : Nil;					\
+	Obj *a = args->car;						\
+	Obj *b = args->cdr->car;					\
+	return (_cond) ? True : Nil;		\
     }
 
-PRIM_COMP(lt, "<", (x->value < y->value))
-PRIM_COMP(gt, ">", (x->value > y->value))
-PRIM_COMP(le, "<=", (x->value <= y->value))
-PRIM_COMP(ge, ">=", (x->value >= y->value))
-PRIM_COMP(eq, "=", (x->value == y->value))
-PRIM_COMP(ne, "/=", (x->value != y->value))
+PRIM_COMP(lt, "<", (GETVALUE(a) < GETVALUE(b)))
+PRIM_COMP(gt, ">", (GETVALUE(a) > GETVALUE(b)))
+PRIM_COMP(le, "<=", (GETVALUE(a) <= GETVALUE(b)))
+PRIM_COMP(ge, ">=", (GETVALUE(a) >= GETVALUE(b)))
+PRIM_COMP(eq, "=", (GETVALUE(a) == GETVALUE(b)))
+PRIM_COMP(ne, "/=", (GETVALUE(a) != GETVALUE(b)))
 
 /* Logical Operations on Boolean Values */
 
@@ -1318,6 +1672,82 @@ static struct Obj *get_judoka(void *root, struct Obj **env, struct Obj **args)
     if (lisp_get_data(val))
 	return Nil;
     return True;
+}
+
+static struct Obj *get_next_match(void *root, struct Obj **env, struct Obj **list)
+{
+    DEFINE1(args);
+    *args = eval_list(root, env, list);
+    if (*args == Nil) return Nil;
+    if ((*args)->car == Nil) return Nil;
+    if ((*args)->cdr == Nil) return Nil;
+    if ((*args)->cdr->car == Nil) return Nil;
+    Obj *tatami = (*args)->car;
+    Obj *num = (*args)->cdr->car;
+    if (tatami->type != TINT) return Nil;
+    if (num->type != TINT) return Nil;
+
+    extern int lisp_get_next_match(int tatami, int fight);
+    if (lisp_get_next_match(tatami->value, num->value) < 0) return Nil;
+    return True;
+}
+
+static struct Obj *get_round_name(void *root, struct Obj **env, struct Obj **args)
+{
+    DEFINE2(arg, sym);
+    *arg = (*args)->car;
+    *arg = eval(root, env, arg);
+
+    if ((*arg)->type != TINT) return Nil;
+
+    extern const char *round_to_str(int round);
+    *sym = make_string(root, round_to_str((*arg)->value));
+    return *sym;
+}
+
+void lisp_increment_page(void)
+{
+    Obj *pg = page_;
+    Obj *pgs = pages_;
+    if (pgs->value == 0)
+	pgs->value = 1;
+    if ((pg->value + 1) >= pgs->value)
+	pg->value = 0;
+    else
+	pg->value++;
+}
+
+void lisp_set_page(int p)
+{
+    Obj *pg = page_;
+    Obj *pgs = pages_;
+    if (pgs->value == 0)
+	pgs->value = 1;
+    if ((p + 1) > pgs->value)
+	pg->value = pgs->value - 1;
+    else
+	pg->value = p;
+}
+
+static struct Obj *set_pages(void *root, struct Obj **env, struct Obj **list)
+{
+    Obj *pgs = pages_;
+    DEFINE1(args);
+    *args = eval_list(root, env, list);
+    if ((*args)->car == Nil) return Nil;
+    if ((*args)->car->type != TINT) return Nil;
+    pgs->value = (*args)->car->value;
+    if (pgs->value == 0)
+	pgs->value = 1;
+    return pgs;
+}
+
+int lisp_get_pages(void)
+{
+    Obj *pgs = pages_;
+    if (pgs->value == 0)
+	pgs->value = 1;
+    return pgs->value;
 }
 
 /********************************************/
@@ -1387,7 +1817,7 @@ static Obj *prim_macroexpand(void *root, Obj **env, Obj **list) {
 // (write expr...)
 static Obj *prim_write(void *root, Obj **env, Obj **list) {
     for (Obj *args = eval_list(root, env, list); args != Nil; args = args->cdr) {
-        print(args->car);
+        print(args->car, 0);
     }
     return Nil;
 }
@@ -1406,6 +1836,13 @@ static Obj *prim_println(void *root, Obj **env, Obj **list) {
     prim_write(root, env, list);
     printf("\n");
     print_stdout = 0;
+    return Nil;
+}
+
+static Obj *prim_print_env(void *root, Obj **env, Obj **list)
+{
+    printdbg(root);
+    //printdbg((*env)->vars);
     return Nil;
 }
 
@@ -1446,6 +1883,8 @@ static Obj *prim_copy(void *root, Obj **env, Obj **list) {
 	return make_string_copy(root, (*list)->car->name);
     if ((*list)->car && (*list)->car->type == TINT)
 	return make_int(root, (*list)->car->value);
+    if ((*list)->car && (*list)->car->type == TDOUBLE)
+	return make_dbl(root, (*list)->car->dbl);
     return Nil;
 }
 
@@ -1466,7 +1905,7 @@ static Obj *prim_sql(void *root, Obj **env, Obj **list) {
     print_sqlcmd = 1;
     prim_write(root, env, data);
     print_sqlcmd = 0;
-    fprintf(stderr, "sqlcmd=%s\n", sqlcmd);
+    //fprintf(stderr, "sqlcmd=%s\n", sqlcmd);
     rc = sqlite3_open(db_name, &db);
     if (rc)
 	return Nil;
@@ -1514,7 +1953,12 @@ static void define_primitives(void *root, Obj **env) {
     add_primitive(root, env, "quote", prim_quote);
     add_primitive(root, env, "cons", prim_cons);
     add_primitive(root, env, "car", prim_car);
+    add_primitive(root, env, "first", prim_car);
     add_primitive(root, env, "cdr", prim_cdr);
+    add_primitive(root, env, "rest", prim_cdr);
+    add_primitive(root, env, "consp", prim_consp);
+    add_primitive(root, env, "atom", prim_atom);
+    add_primitive(root, env, "null", prim_null);
     add_primitive(root, env, "setq", prim_setq);
     add_primitive(root, env, "setcar", prim_setcar);
     add_primitive(root, env, "while", prim_while);
@@ -1548,9 +1992,30 @@ static void define_primitives(void *root, Obj **env) {
     add_primitive(root, env, "write", prim_write);
     add_primitive(root, env, "print", prim_print);
     add_primitive(root, env, "println", prim_println);
+    add_primitive(root, env, "print-debug", prim_print_env);
     add_primitive(root, env, "sql", prim_sql);
     add_primitive(root, env, "get-data-by-ix", get_judoka);
+    add_primitive(root, env, "get-next-match", get_next_match);
+    add_primitive(root, env, "round-name", get_round_name);
+    add_primitive(root, env, "set-pages", set_pages);
     add_primitive(root, env, "copy", prim_copy);
+    add_primitive(root, env, "expt", prim_pow);
+#define PRIM(_name) add_primitive(root, env, #_name, prim_##_name)
+    PRIM(sqrt);
+    PRIM(sin);
+    PRIM(cos);
+    PRIM(tan);
+    PRIM(acos);
+    PRIM(asin);
+    PRIM(atan);
+    PRIM(log);
+    PRIM(exp);
+    PRIM(floor);
+    add_primitive(root, env, "ceiling", prim_ceil);
+    add_primitive(root, env, "float", prim_float);
+    add_primitive(root, env, "truncate", prim_truncate);
+    add_primitive(root, env, "round", prim_round);
+    add_primitive(root, env, "hexcolor", prim_hexcolor);
 }
 
 //======================================================================
@@ -1588,6 +2053,7 @@ int lisp_init(int argc, char **argv)
     define_constants(root, env);
     define_primitives(root, env);
 
+    pages_->value = 1;
     //lisp_exe("(print (+ 2 3))");
 
     return 0;
@@ -1601,11 +2067,16 @@ char *lisp_exe(char *code)
     code_ix = 0;
     out[0] = 0;
     outlen = 0;
+    errtxt[0] = 0;
+    linenum = 0;
+
+    if (setjmp(ex_buf))
+	return errtxt;
 
     while (1) {
 	*expr = read_expr(root);
 	if (!*expr) {
-	    return out;
+	    return NULL;
 	}
 	if (*expr == Cparen)
 	    error("Stray close parenthesis");
@@ -1615,7 +2086,7 @@ char *lisp_exe(char *code)
     }
     //print(eval(root, env, expr));
 
-    return out;
+    return NULL;
 }
 
 #ifndef SHIAI_VERSION
