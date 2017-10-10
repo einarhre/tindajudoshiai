@@ -15,6 +15,7 @@
 
 #include "sqlite3.h"
 #include "judoshiai.h"
+#include "minilisp.h"
 
 static void db_print_one_match(struct match *m);
 
@@ -97,6 +98,24 @@ static gint current_round = 0;
 struct match *get_cached_next_matches(gint tatami)
 {
     return next_matches[tatami];
+}
+
+int lisp_get_next_match(int tatami, int fight)
+{
+    if (tatami < 1 || tatami > NUM_TATAMIS) return -1;
+    if (fight < 1 || fight > NEXT_MATCH_NUM) return -1;
+
+    struct match *m = next_matches[tatami];
+    fight--;
+    lisp_set_match(m[fight].category, m[fight].number,
+		   m[fight].blue, m[fight].white,
+		   m[fight].blue_score, m[fight].white_score,
+		   m[fight].blue_points, m[fight].white_points,
+		   m[fight].match_time, m[fight].comment,
+		   m[fight].tatami, m[fight].group, m[fight].flags,
+		   m[fight].forcedtatami, m[fight].forcednumber,
+		   m[fight].date, m[fight].legend, m[fight].round);
+    return 0;
 }
 
 #define INSERT_SPACE(x)							\
@@ -1941,6 +1960,7 @@ static void db_print_one_match(struct match *m)
     if (m->blue_points == 0 && m->white_points == 0)
         return;
 
+    gboolean c1_wins = m->blue_points > m->white_points;
     struct judoka *j1 = get_data(m->blue);
     struct judoka *j2 = get_data(m->white);
     if (j1 == NULL || j2 == NULL)
@@ -1955,8 +1975,9 @@ static void db_print_one_match(struct match *m)
 
     fprintf(matches_file,
             "<td onclick=\"top.location.href='%d.html'\" "
-            "style=\"cursor: pointer\">%s %s</td><td class=\"%s\">",
+            "style=\"cursor: pointer;%s\">%s %s</td><td class=\"%s\">",
             j1->index,
+	    c1_wins ? "font-weight:bold" : "",
             utf8_to_html(firstname_lastname() ? j1->first : j1->last),
             utf8_to_html(firstname_lastname() ? j1->last : j1->first),
             prop_get_int_val(PROP_WHITE_FIRST) ? "wscore" : "bscore");
@@ -1992,9 +2013,10 @@ static void db_print_one_match(struct match *m)
 
     fprintf(matches_file,
             "<td onclick=\"top.location.href='%d.html'\" "
-            "style=\"cursor: pointer\">%s %s</td>"
+            "style=\"cursor: pointer;%s\">%s %s</td>"
             "<td>%d:%02d</td></tr>\r\n",
             j2->index,
+	    c1_wins ? "" : "font-weight:bold",
             utf8_to_html(firstname_lastname() ? j2->first : j2->last),
             utf8_to_html(firstname_lastname() ? j2->last : j2->first),
 	    m->match_time/60, m->match_time%60);
