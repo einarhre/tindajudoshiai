@@ -27,6 +27,7 @@
 #define HISTORY_LEN 8
 
 extern int run_basic_script(char *file, GtkTextBuffer *buffer);
+extern void svg_lisp_window(gchar *filename, GtkTextBuffer *buffer);
 
 static gchar *history[HISTORY_LEN];
 static gint history_line;
@@ -104,10 +105,13 @@ static void run_script(GtkWidget *w, GdkEventButton *event, gpointer *arg)
     GtkTextBuffer *buffer = GTK_TEXT_BUFFER(arg);
     GtkWidget *dialog;
     GtkFileFilter *filter = gtk_file_filter_new();
+    GtkFileFilter *filter2 = gtk_file_filter_new();
     gboolean run = FALSE;
 
     gtk_file_filter_add_pattern(filter, "*.bas");
     gtk_file_filter_set_name(filter, _("Basic Scripts"));
+    gtk_file_filter_add_pattern(filter2, "*.svg");
+    gtk_file_filter_set_name(filter2, _("SVG+Lisp"));
 
     dialog = gtk_file_chooser_dialog_new (_("Select Script"),
                                           NULL,
@@ -115,7 +119,13 @@ static void run_script(GtkWidget *w, GdkEventButton *event, gpointer *arg)
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                                           NULL);
+    if (filename) {
+	gchar *dirname = g_path_get_dirname(filename);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dirname);
+	g_free(dirname);
+    }
 
+    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter2);
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
 
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
@@ -128,8 +138,12 @@ static void run_script(GtkWidget *w, GdkEventButton *event, gpointer *arg)
 
     gtk_widget_destroy (dialog);
 
-    if (run)
-        run_basic_script(filename, buffer);
+    if (run) {
+	if (strstr(filename, ".svg"))
+	    svg_lisp_window(filename, buffer);
+	else
+	    run_basic_script(filename, buffer);
+    }
 }
 
 static void repeat_script(GtkWidget *w, GdkEventButton *event, gpointer *arg) 
@@ -138,7 +152,11 @@ static void repeat_script(GtkWidget *w, GdkEventButton *event, gpointer *arg)
 
     if (filename) {
         gtk_text_buffer_set_text(buffer, "", -1);
-        run_basic_script(filename, buffer);
+
+	if (strstr(filename, ".svg"))
+	    svg_lisp_window(filename, buffer);
+	else
+	    run_basic_script(filename, buffer);
     } else
         gtk_text_buffer_set_text(buffer, _("No script available"), -1);
 }
