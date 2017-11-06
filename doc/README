@@ -1,7 +1,3 @@
-***************************************************************************************
-****** NOTE: 2.6beta7 produced partly corrupted PDF files in Windows environment! *****
-***************************************************************************************
-
 Documentation is included in the software package, but online versions
 as well as other documents are available here:
 http://judoshiai.sourceforge.net/
@@ -13,7 +9,7 @@ Raspberry Pi: judoshiai_n.n-1_armhf.deb
 
 ==============================================
 RELEASE NOTE
-VERSION 2.6 beta 8
+VERSION 2.6
 
 Common
 ------
@@ -23,6 +19,7 @@ Common
   There has been lots of old setting to support past rules. Some of them
   have been removed for clarity. It is quite unlikely that for example koka
   will ever come back (well, IJF is unpredictable...).
++ Support for Chinese/Japan/Korean and other UTF-8 supported fonts.
 
 JudoShiai
 ----------
@@ -36,6 +33,10 @@ JudoShiai
 + Team event setup improved ("wizard").
 + If team event match set ends with same number of wins and points an extra match
   will be created automatically.
++ Support for Lisp language in SVG files.
++ Automatic software updates from JudoShiai.
++ Page size selection for accreditation card printing.
++ Maximum number of competitor increased to 4096.
 
 JudoTimer
 ----------
