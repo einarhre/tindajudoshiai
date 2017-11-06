@@ -157,8 +157,8 @@ gint paint_svg_lisp(struct paint_data *pd)
     gchar *lisp_end_code_b = NULL;
     gchar *lisp_end_code_e = NULL;
 
-    g_print("Open SVG debug file\n");
-    dfile = fopen("debug.svg", "w");
+    //g_print("Open SVG debug file\n");
+    //dfile = fopen("debug.svg", "w");
 
     while (*p && p < limit) {
         if ((*p == '%' && p[1] == '(') ||
