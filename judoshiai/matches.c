@@ -2577,7 +2577,8 @@ void update_matches(guint category, struct compsys sys, gint tatami)
     PROF_START;
     if (category) {
         struct category_data *catdata = avl_get_category(category);
-        if (catdata && (catdata->deleted & TEAM_EVENT)) {
+        if (catdata && (catdata->deleted & TEAM_EVENT) &&
+	    (category & MATCH_CATEGORY_SUB_MASK)) {
 	    struct match last;
             gboolean draw = db_event_matches_update(category, &last);
 	    if (draw && last.number < 999 &&
