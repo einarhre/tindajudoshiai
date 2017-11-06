@@ -1,0 +1,10 @@
+info "Pool 4" "pool4" 4 4
+
+rr pool: c1 c2 c3 c4
+
+pos1 pool.1
+pos2 pool.2
+pos3 pool.3
+pos4 pool.4
+
+order c1-c2 c3-c4 c1-c3 c2-c4 c1-c4 c2-c3

@@ -1,0 +1,6 @@
+info "Pool 2" "pool2" 1 2
+
+m: c1 c2
+
+pos1 m.1
+pos2 m.2

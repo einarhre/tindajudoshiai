@@ -1,0 +1,17 @@
+info "Dbl Pool 7" dpool7 7 7
+
+rr poolA: c1 c2 c3 c4
+rr poolB: c5 c6 c7
+
+semiA: poolA.1 poolB.2
+semiB: poolB.1 poolA.2
+
+final: semiA.1 semiB.1
+
+pos1 final.1
+pos2 final.2
+pos3 semiA.2
+pos4 semiB.2 3
+
+order c1-c2 c3-c4 c5-c6 c1-c3 c2-c4
+order c5-c7 c1-c4 c2-c3 c6-c7

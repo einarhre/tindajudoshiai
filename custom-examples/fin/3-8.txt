@@ -1,0 +1,16 @@
+info "Dbl Rep 8" "dblrep8" 6 8
+
+ko pool_a: c1 c2 c3 c4
+ko pool_b: c5 c6 c7 c8
+
+rep_a: pool_a_1_1.2 pool_a_1_2.2
+rep_b: pool_b_1_1.2 pool_b_1_2.2
+
+bronze_1: rep_a.1  pool_b.2
+bronze_2: rep_b.1  pool_a.2
+final:    pool_a.1 pool_b.1
+
+pos1 final.1
+pos2 final.2
+pos3 bronze_1.1
+pos4 bronze_2.1 3
