@@ -121,7 +121,9 @@ RELDIR=$(RELEASEDIR)/judoshiai
 ### Windows (host=Windows, target=Windows) ###
 ifeq ($(OS),Windows_NT)
 
-  CFLAGS = $(WARNINGS) -g \
+# -ggdb -gdwarf-2
+
+CFLAGS = $(WARNINGS) -g \
   -I$(DEVELDIR)/include/gtk-$(GTKVER).0 \
   -I$(DEVELDIR)/lib/gtk-$(GTKVER).0/include \
   -I$(DEVELDIR)/include/atk-1.0 \
