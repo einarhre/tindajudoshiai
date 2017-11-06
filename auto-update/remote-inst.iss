@@ -13,7 +13,7 @@ Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
 PrivilegesRequired=none
-SetupLogging=yes
+SetupLogging=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -84,7 +84,7 @@ begin
   Result := Dest
 end;
 
-function JudoShiaiAddr_NextButtonClick(Page: TWizardPage): Boolean;
+function JudoShiaiAddr_NextButtonClick({Page: TWizardPage}): Boolean;
 var
   s: string;
   ResultCode: Integer;
@@ -105,11 +105,11 @@ begin
   begin
     lblMsg.Caption := 'Starting ' +
          ExpandConstant('{app}\bin\auto-update.exe') + ' ' +
-	       ExpandConstant('{code:GetIpAddr} "{app}" -all') + ' home:' +
+	       ExpandConstant('{code:GetIpAddr} "{app}"') + ' home:' +
 	       ExpandConstant('{app}');
 
     if (Exec(ExpandConstant('{app}\bin\auto-update.exe'),
-        ExpandConstant('{code:GetIpAddr} "{app}" -all'),
+        ExpandConstant('{code:GetIpAddr} "{app}"'),
         ExpandConstant('{app}'), SW_SHOW,
         ewNoWait {ewWaitUntilTerminated}, ResultCode)) then
     begin
@@ -138,6 +138,7 @@ begin
       Result := True
     end else Result := False;
   end;
+  Result := True;
 end;
 
 procedure JudoShiaiAddr_Activate(Page: TWizardPage);
@@ -155,7 +156,6 @@ function JudoShiaiAddr_CreatePage(PreviousPageId: Integer): Integer;
 var
   Page: TWizardPage;
 begin
-  Log('Previous page = '+ IntToStr(PreviousPageId));
   Page := CreateCustomPage(
     PreviousPageId, 'Remote installation', 'Install from remote JudoShiai');
 
@@ -197,7 +197,7 @@ begin
   with Page do
   begin
     OnActivate := @JudoShiaiAddr_Activate;
-    OnNextButtonClick := @JudoShiaiAddr_NextButtonClick;
+    {OnNextButtonClick := @JudoShiaiAddr_NextButtonClick;}
   end;
 
   Result := Page.ID;
@@ -208,13 +208,20 @@ begin
   Result := Trim(tbIpAddr.Text);
 end;
 
-procedure CurPageChanged(CurPageID: Integer);
+function NextButtonClick(CurPageID: Integer): Boolean;
 begin
-    Log('Current page = '+IntToStr(CurPageID));
+  if CurPageID = wpSelectTasks then
+  begin
+    JudoShiaiAddr_CreatePage(CurPageID);
+    Result := True;
+  end else if CurPageID = wpReady then
+  begin
+    JudoShiaiAddr_NextButtonClick();
+    Result := True;
+  end else
+    Result := True;
 end;
 
 procedure InitializeWizard();
 begin
-  Log('wpInstalling='+IntToStr(wpInstalling));
-  JudoShiaiAddr_CreatePage(wpInstalling {wpReady wpWelcome wpSelectDir});
 end;
