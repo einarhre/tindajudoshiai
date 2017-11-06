@@ -190,6 +190,25 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
     return TRUE;
 }
 
+static gint file_is_utf8(gchar *fname)
+{
+    gchar line[256];
+    const gchar *end;
+    FILE *f = fopen(fname, "r");
+    if (!f)
+        return -1;
+
+    while (fgets(line, sizeof(line), f)) {
+	if (!g_utf8_validate(line, -1, &end)) {
+	    fclose(f);
+	    return 0;
+	}
+    }
+
+    fclose(f);
+    return 1;
+}
+
 static void import_txt(gchar *fname, gboolean test, struct i_text *d)
 {
     gsize x;
@@ -410,7 +429,6 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     gchar *name = NULL;
     gchar buf[32];
     gint i;
-    gboolean utf8code = FALSE;
 
     if (!combotxts[0]) {
         combotxts[0] = g_strdup(_("Not used"));
@@ -426,11 +444,6 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                                           NULL);
-    utf8 = gtk_check_button_new_with_label("UTF-8");
-    gtk_widget_show(utf8);
-    gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), utf8);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(utf8), TRUE);
-
     if (database_name[0] == 0) {
         if (current_directory[0] != '.')
             gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), current_directory);
@@ -444,13 +457,12 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
 
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
         name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-        utf8code = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(utf8));
     }
 
     gtk_widget_destroy (dialog);
 
     if (!name)
-        return ;
+        return;
 
     valid_ascii_string(name);
 
@@ -460,7 +472,6 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     memset(data, 0, sizeof(*data));
 
     data->filename = name;
-    data->utf8 = utf8code;
 
     get_preferences_int("importtxtcollast",   &data->columns[TXT_LAST]);
     get_preferences_int("importtxtcolfirst",  &data->columns[TXT_FIRST]);
@@ -495,6 +506,14 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     table = gtk_grid_new();
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        table, FALSE, FALSE, 0);
+
+    utf8 = gtk_check_button_new_with_label("UTF-8");
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       utf8, FALSE, FALSE, 0);
+    if (file_is_utf8(name) == 1) {
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(utf8), TRUE);
+	data->utf8 = TRUE;
+    }
 #else
     gtk_container_add(GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), data->lineread);
     table = gtk_table_new(3, 16, FALSE);
@@ -524,6 +543,8 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     import_txt(name, TRUE, data);
 
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
+	data->utf8 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(utf8));
+
         read_values(data);
         import_txt(name, FALSE, data);
         //matches_refresh();
