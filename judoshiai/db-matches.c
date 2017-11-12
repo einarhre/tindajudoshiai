@@ -76,6 +76,7 @@ static struct {
 static gint bluecomp, whitecomp, bluepts, whitepts;
 
 static gint team1_wins, team2_wins, no_team_wins, team1_pts, team2_pts;
+static gint team1_tot_time, team2_tot_time, team1_matches, team2_matches;
 static struct match team_last_match;
 static gboolean team_extra_exists;
 
@@ -575,10 +576,18 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
         if (m_static.blue_points && m_static.white_points == 0) {
             team1_wins++;
             team1_pts += get_points_gint(m_static.blue_points, m_static.category);
+	    if (m_static.match_time) {
+		team1_tot_time += m_static.match_time;
+		team1_matches++;
+	    }
         }
         if (m_static.white_points && m_static.blue_points == 0) {
             team2_wins++;
             team2_pts += get_points_gint(m_static.white_points, m_static.category);
+	    if (m_static.match_time) {
+		team2_tot_time += m_static.match_time;
+		team2_matches++;
+	    }
         }
         if (m_static.blue_points == 0 && m_static.white_points == 0) no_team_wins++;
         if (m_static.blue > COMPETITOR && m_static.white > COMPETITOR)
@@ -1911,6 +1920,7 @@ gboolean db_event_matches_update(guint category, struct match *last)
     gint number = category >> MATCH_CATEGORY_SUB_SHIFT;
     gint category1 = category & MATCH_CATEGORY_MASK;
     team1_wins = team2_wins = no_team_wins = team1_pts = team2_pts = 0;
+    team1_tot_time = team2_tot_time = team1_matches = team2_matches = 0;
     memset(&team_last_match, 0, sizeof(team_last_match));
     team_extra_exists = FALSE;
     db_exec_str(gint_to_ptr(DB_FIND_TEAM_WINNER), db_callback_matches,
@@ -1928,14 +1938,29 @@ gboolean db_event_matches_update(guint category, struct match *last)
 
     if (no_team_wins || ((team1_wins == team2_wins) && (team1_pts == team2_pts))) {
         db_exec_str(NULL, NULL,
-                    "UPDATE matches SET \"blue_points\"=0, \"white_points\"=0 "
+                    "UPDATE matches SET \"blue_points\"=0, \"white_points\"=0, "
+		    "\"time\"=0 "
                     "WHERE \"category\"=%d AND \"number\"=%d",
                     category1, number);
     } else {
+	gint ave_time = 0;
+
+	if (team1_wins*10000+team1_pts > team2_wins*10000+team2_pts) {
+	    if (team1_matches && team1_tot_time)
+		ave_time = team1_tot_time/team1_matches;
+	} else {
+	    if (team2_matches && team2_tot_time)
+		ave_time = team2_tot_time/team2_matches;
+	}
+
         db_exec_str(NULL, NULL,
-                    "UPDATE matches SET \"blue_points\"=%d, \"white_points\"=%d "
+                    "UPDATE matches SET \"blue_points\"=%d, \"white_points\"=%d, "
+		    "\"time\"=%d "
                     "WHERE \"category\"=%d AND \"number\"=%d",
-                    team1_wins*10000+team1_pts, team2_wins*10000+team2_pts, category1, number);
+                    team1_wins*10000+team1_pts, team2_wins*10000+team2_pts,
+		    ave_time,
+		    category1, number);
+
     }
     /*
     } else  if (team1_wins > team2_wins) {
