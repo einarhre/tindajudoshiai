@@ -9,6 +9,18 @@ Raspberry Pi: judoshiai_n.n-1_armhf.deb
 
 ==============================================
 RELEASE NOTE
+VERSION 2.6.1
+
+JudoShiai
+----------
++ Team event related bug fix.
++ Team event round robin system three way tie is resolved by match times.
++ Uploading results to a server supports protocols FTP, HTTP PUT, and HTTP POST.
++ Properties window made a scrolled window.
++ Competitor import from a text file detects UTF-8 coding automatically.
+
+==============================================
+RELEASE NOTE
 VERSION 2.6
 
 Common
