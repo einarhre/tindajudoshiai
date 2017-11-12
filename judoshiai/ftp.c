@@ -604,7 +604,6 @@ gpointer ftp_thread(gpointer args)
 			    if (proto == PROTO_FTP) {
 				put_using_ftp(fullname, fname);
 			    } else if (proto == PROTO_RFC1738) {
-				g_print("FILE %s\n", fname);
 				put_using_post(fullname, fname);
 			    } else {
 				put_using_put(fullname, fname);
