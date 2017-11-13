@@ -1035,16 +1035,18 @@ void properties(GtkWidget *w, gpointer data)
 
     GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_widget_set_size_request(scrolled_window, FRAME_WIDTH, FRAME_HEIGHT);
-    gtk_container_set_border_width(GTK_CONTAINER(scrolled_window), 4);
-    gtk_container_add(GTK_CONTAINER(scrolled_window), hbox);
-    gtk_widget_show_all(scrolled_window);
+    gtk_container_set_border_width(GTK_CONTAINER(scrolled_window), 10);
 
-#if (GTKVER == 3)
+#if (GTKVER == 3) && GTK_CHECK_VERSION(3,8,0)
+    gtk_container_add(GTK_CONTAINER(scrolled_window), hbox);
+#else
+    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), hbox);
+#endif
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        scrolled_window, TRUE, TRUE, 0);
-#else
-    gtk_container_add(GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), hbox);
-#endif
+
+    gtk_widget_show_all(scrolled_window);
+
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
         widgets_to_values();
         props_save_to_db();
