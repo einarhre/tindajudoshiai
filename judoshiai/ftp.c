@@ -36,7 +36,8 @@ static gboolean ftp_update = FALSE, do_ftp = FALSE;
 
 static const gchar *progr_file;
 static gchar progr_pros[32];
-static GtkWidget *progr_1w = NULL, *progr_2w = NULL;
+static GtkWidget *progr_1w = NULL, *progr_2w = NULL, *progr_3w = NULL;
+static gint xfer_ok = 0, xfer_nok = 0;
 
 #define STRDUP(_d, _s) do { g_free(_d); _d = g_strdup(_s); } while (0)
 #define GETSTR(_d, _s) do { g_free(_d);                                 \
@@ -89,11 +90,10 @@ static void ftp_to_server_callback(GtkWidget *widget,
 	if (progr_1w) gtk_label_set_text(GTK_LABEL(progr_1w), "OK");
 	if (progr_2w) gtk_label_set_text(GTK_LABEL(progr_2w),
 					 do_ftp ? "(starting)" : "(stopped)");
-
 	return;
     }
 
-    progr_1w = progr_2w = NULL;
+    progr_1w = progr_2w = progr_3w = NULL;
     g_free(uri);
     gtk_widget_destroy(widget);
 }
@@ -103,7 +103,7 @@ static gint timer_callback(gpointer data)
     static char *lines[4] = {"=___", "_=__", "__=_", "___="};
     static int i = 0;
 
-    if (progr_1w == NULL || progr_2w == NULL)
+    if (progr_1w == NULL || progr_2w == NULL || progr_3w == NULL)
 	return FALSE;
 
     if (progr_file) {
@@ -113,6 +113,12 @@ static gint timer_callback(gpointer data)
 	gtk_label_set_text(GTK_LABEL(progr_1w), "");
 	gtk_label_set_text(GTK_LABEL(progr_2w), do_ftp ? lines[i & 3] : "");
 	i = (i + 1) & 3;
+    }
+
+    if (do_ftp) {
+	gchar buf[32];
+	snprintf(buf, sizeof(buf), "OK: %d, FAIL: %d", xfer_ok, xfer_nok);
+	gtk_label_set_text(GTK_LABEL(progr_3w), buf);
     }
 
     return TRUE;
@@ -222,9 +228,11 @@ void ftp_to_server(GtkWidget *w, gpointer data)
     gtk_grid_set_column_homogeneous(GTK_GRID(hbox4), TRUE);
     progr_1w = gtk_label_new("");
     progr_2w = gtk_label_new("");
+    progr_3w = gtk_label_new("");
     gtk_grid_attach_next_to(GTK_GRID(hbox4), progr_1w, NULL, GTK_POS_RIGHT, 1, 1);
     //gtk_grid_attach_next_to(GTK_GRID(hbox4), gtk_label_new("    "), NULL, GTK_POS_RIGHT, 1, 1);
     gtk_grid_attach_next_to(GTK_GRID(hbox4), progr_2w, NULL, GTK_POS_RIGHT, 1, 1);
+    gtk_grid_attach_next_to(GTK_GRID(hbox4), progr_3w, NULL, GTK_POS_RIGHT, 1, 1);
 
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        hbox, FALSE, FALSE, 0);
@@ -402,9 +410,10 @@ int put_using_ftp(const char *fullname, const char *fname)
 	res = curl_easy_perform(curl);
 	/* Check for errors */
 	if (res != CURLE_OK) {
+	    xfer_nok++;
 	    snprintf(progr_pros, sizeof(progr_pros), "%s", curl_easy_strerror(res));
 	    usleep(2000000);
-	}
+	} else xfer_ok++;
 
 	/* clean up the FTP commands list */
 	curl_slist_free_all(headerlist);
@@ -474,9 +483,10 @@ int put_using_post(const char *fullname, const char *fname)
 	res = curl_easy_perform(curl);
 	/* Check for errors */
 	if (res != CURLE_OK) {
+	    xfer_nok++;
 	    snprintf(progr_pros, sizeof(progr_pros), "%s", curl_easy_strerror(res));
 	    usleep(2000000);
-	}
+	} else xfer_ok++;
 
 	/* always cleanup */
 	curl_easy_cleanup(curl);
@@ -551,9 +561,10 @@ int put_using_put(const char *fullname, const char *fname)
 	res = curl_easy_perform(curl);
 	/* Check for errors */
 	if (res != CURLE_OK) {
+	    xfer_nok++;
 	    snprintf(progr_pros, sizeof(progr_pros), "%s", curl_easy_strerror(res));
 	    usleep(2000000);
-	}
+	} else xfer_ok++;
 
 	/* always cleanup */
 	curl_easy_cleanup(curl);
@@ -582,6 +593,7 @@ gpointer ftp_thread(gpointer args)
     {
         time_t last_copy = 0;
         ftp_update = FALSE;
+	xfer_ok = xfer_nok = 0;
 
         while (!do_ftp || !ftp_server || !ftp_server[0] ||
                !current_directory[0] || current_directory[0] == '.') {
