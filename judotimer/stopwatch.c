@@ -51,6 +51,7 @@
 #include <string.h>
 
 #include "judotimer.h"
+#include "common-utils.h"
 
 void manipulate_time(GtkWidget *widget, gpointer data );
 static void gen_random_key(void);
@@ -717,7 +718,6 @@ static gboolean expose_ask(GtkWidget *widget, GdkEventExpose *event, gpointer us
     height = widget->allocation.height;
 #endif
 
-    cairo_text_extents_t extents;
 #if (GTKVER == 3)
     cairo_t *c = (cairo_t *)event;
 #else
@@ -749,18 +749,43 @@ static gboolean expose_ask(GtkWidget *widget, GdkEventExpose *event, gpointer us
 
     cairo_set_font_size(c, 0.6*FIRST_BLOCK_HEIGHT);
     cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
+#ifdef USE_PANGO
+    {
+	gdouble _x = width - 10.0, _y = 0, _w = 0, _h = FIRST_BLOCK_HEIGHT;
+	write_text(c, wtext, &_x, &_y, &_w, &_h,
+		   TEXT_ANCHOR_END, TEXT_ALIGN_MIDDLE, NULL,
+		   0.6*FIRST_BLOCK_HEIGHT, 0);
+	_x = 10.0; _y = 0; _w = 0; _h = FIRST_BLOCK_HEIGHT;
+	write_text(c, saved_cat, &_x, &_y, &_w, &_h,
+		   TEXT_ANCHOR_START, TEXT_ALIGN_MIDDLE, NULL,
+		   0.6*FIRST_BLOCK_HEIGHT, 0);
+    }
+#else
+    cairo_text_extents_t extents;
     cairo_text_extents(c, wtext, &extents);
     cairo_move_to(c, width - 10.0 - extents.width, (FIRST_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
     cairo_show_text(c, wtext);
     cairo_text_extents(c, saved_cat, &extents);
     cairo_move_to(c, 10.0, (FIRST_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
     cairo_show_text(c, saved_cat);
-
+#endif
     if ((winner == BLUE && white_first) || (winner == WHITE && white_first == FALSE))
         cairo_set_source_rgb(c, 0, 0, 0);
     else
         cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
 
+#ifdef USE_PANGO
+    {
+	gdouble _x = 10.0, _y = SECOND_BLOCK_START, _w = 0, _h = OTHER_BLOCK_HEIGHT;
+	write_text(c, last_wname, &_x, &_y, &_w, &_h,
+		   TEXT_ANCHOR_START, TEXT_ALIGN_MIDDLE, NULL,
+		   0.6*OTHER_BLOCK_HEIGHT, 0);
+	_x = 10.0; _y = THIRD_BLOCK_START; _w = 0; _h = OTHER_BLOCK_HEIGHT;
+	write_text(c, first_wname, &_x, &_y, &_w, &_h,
+		   TEXT_ANCHOR_START, TEXT_ALIGN_MIDDLE, NULL,
+		   0.6*OTHER_BLOCK_HEIGHT, 0);
+    }
+#else
     cairo_set_font_size(c, 0.6*OTHER_BLOCK_HEIGHT);
     cairo_text_extents(c, last_wname, &extents);
     cairo_move_to(c, 10.0, SECOND_BLOCK_START + (OTHER_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
@@ -768,6 +793,7 @@ static gboolean expose_ask(GtkWidget *widget, GdkEventExpose *event, gpointer us
     cairo_text_extents(c, first_wname, &extents);
     cairo_move_to(c, 10.0, THIRD_BLOCK_START + (OTHER_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
     cairo_show_text(c, first_wname);
+#endif
 
 #if (GTKVER != 3)
     cairo_show_page(c);

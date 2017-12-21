@@ -34,6 +34,7 @@
 #include "judotimer.h"
 #include "language.h"
 #include "binreloc.h"
+#include "common-utils.h"
 
 static inline void swap32(uint32_t *d) {
     uint32_t x = *d;
@@ -71,7 +72,7 @@ GTimer *timer;
 gboolean blue_wins_voting = FALSE, white_wins_voting = FALSE;
 gboolean hansokumake_to_blue = FALSE, hansokumake_to_white = FALSE;
 gboolean result_hikiwake = FALSE;
-static PangoFontDescription *font;
+static PangoFontDescription *pfont;
 gint mode = 0;
 GKeyFile *keyfile;
 gchar *conffile;
@@ -507,6 +508,7 @@ struct label {
     gboolean (*cb)(GtkWidget *, GdkEventButton *, void *);
     gchar status;
     gboolean wrap;
+    PangoFontDescription *desc;
 } labels[NUM_LABELS], defaults_for_labels[NUM_LABELS];
 static gint num_labels = 0;
 
@@ -532,9 +534,10 @@ static gint num_labels = 0;
 		labels[num_labels].bg_b = 0.0;		\
 		labels[num_labels].bg_a = 1.0;		\
                 labels[num_labels].status = 0;          \
-                labels[num_labels].wrap = 0;            \
-		_w = num_labels;			\
-		num_labels++;				\
+                labels[num_labels].wrap = 0;				\
+		labels[num_labels].desc = pango_font_description_copy(pfont); \
+		_w = num_labels;					\
+		num_labels++;						\
                 printf("%d = %s\n", _w, #_w); } while (0)
 
 static void set_fg_color(gint w, gint s, GdkColor *c)
@@ -994,12 +997,12 @@ void show_message(gchar *cat_1,
         memset(&msg, 0, sizeof(msg));
         msg.type = MSG_UPDATE_LABEL;
         msg.u.update_label.label_num = SHOW_MESSAGE;
-	strcpy(msg.u.update_label.cat_a, cat_1);
-	strcpy(msg.u.update_label.comp1_a, blue_1);
-	strcpy(msg.u.update_label.comp2_a, white_1);
-	strcpy(msg.u.update_label.cat_b, cat_2);
-	strcpy(msg.u.update_label.comp1_b, blue_2);
-	strcpy(msg.u.update_label.comp2_b, white_2);
+	strncpy(msg.u.update_label.cat_a, cat_1, sizeof(msg.u.update_label.cat_a)-1);
+	strncpy(msg.u.update_label.comp1_a, blue_1, sizeof(msg.u.update_label.comp1_a)-1);
+	strncpy(msg.u.update_label.comp2_a, white_1, sizeof(msg.u.update_label.comp2_a)-1);
+	strncpy(msg.u.update_label.cat_b, cat_2, sizeof(msg.u.update_label.cat_b)-1);
+	strncpy(msg.u.update_label.comp1_b, blue_2, sizeof(msg.u.update_label.comp1_b)-1);
+	strncpy(msg.u.update_label.comp2_b, white_2, sizeof(msg.u.update_label.comp2_b)-1);
 	msg.u.update_label.xalign = flags;
 	msg.u.update_label.round = rnd;
 
@@ -1217,25 +1220,32 @@ gboolean delete_big(gpointer data)
 
 static void show_big(void)
 {
-    cairo_text_extents_t extents;
     cairo_t *c = cairo_create(surface);
 
     cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
     cairo_rectangle(c, 0, 0,
                     W(1.0), H(0.2));
     cairo_fill(c);
+    cairo_set_source_rgb(c, 0.0, 0.0, 0.0);
 
+#ifdef USE_PANGO
+    gdouble _x = 0, _y = 0, _w = W(1.0), _h = H(0.2);
+    write_text(c, big_text, &_x, &_y, &_w, &_h,
+	       TEXT_ALIGN_MIDDLE, TEXT_ALIGN_MIDDLE,
+	       NULL, strlen(big_text) < 12 ? H(0.1) : H(0.05), 0);
+#else
+    cairo_text_extents_t extents;
     if (strlen(big_text) < 12)
         cairo_set_font_size(c, H(0.1));
     else
         cairo_set_font_size(c, H(0.05));
     cairo_text_extents(c, big_text, &extents);
 
-    cairo_set_source_rgb(c, 0.0, 0.0, 0.0);
     cairo_move_to(c, W(0.5)-extents.width/2.0,
                   (H(0.2)- extents.height)/2.0 -
                   extents.y_bearing);
     cairo_show_text(c, big_text);
+#endif
     cairo_show_page(c);
     cairo_destroy(c);
 
@@ -1288,6 +1298,10 @@ static void expose_label(cairo_t *c, gint w)
     gchar *txt1 = labels[w].text, *txt2 = labels[w].text2;
     gdouble fsize;
     gint zok = 0, orun = current_osaekomi_state == OSAEKOMI_DSP_YES;
+#ifdef USE_PANGO
+    PangoLayout *layout;
+    gint iwidth, iheight;
+#endif
 
     if (labels[w].w == 0.0)
         return;
@@ -1362,11 +1376,32 @@ static void expose_label(cairo_t *c, gint w)
     else
         fsize = H(labels[w].h*0.8);
 
-    if (font_face[0])
+    if (font_face[0]) {
+#ifdef USE_PANGO
+	pango_font_description_set_family(labels[w].desc, font_face);
+	pango_font_description_set_weight(labels[w].desc,
+					  font_weight == CAIRO_FONT_WEIGHT_BOLD ?
+					  PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
+	pango_font_description_set_style(labels[w].desc,
+					 font_slant == CAIRO_FONT_SLANT_ITALIC ?
+					 PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
+#else
         cairo_select_font_face(c, font_face, font_slant, font_weight);
+#endif
+    }
 
+#ifdef USE_PANGO
+    pango_font_description_set_absolute_size(labels[w].desc, fsize*PANGO_SCALE);
+    layout = pango_cairo_create_layout(c);
+    pango_layout_set_text(layout, txt1, -1);
+    pango_layout_set_font_description(layout, labels[w].desc);
+    pango_layout_get_size(layout, &iwidth, &iheight);
+    iwidth /= PANGO_SCALE;
+    iheight /= PANGO_SCALE;
+#else
     cairo_set_font_size(c, fsize);
     cairo_text_extents(c, txt1, &extents);
+#endif
 
     if (two_lines == FALSE &&
         labels[w].wrap &&
@@ -1385,37 +1420,73 @@ static void expose_label(cairo_t *c, gint w)
             txt2 = buf2;
 
             fsize /= 2.0;
+#ifdef USE_PANGO
+	    pango_font_description_set_absolute_size(labels[w].desc, fsize*PANGO_SCALE);
+	    pango_layout_set_font_description(layout, labels[w].desc);
+	    pango_layout_get_size(layout, &iwidth, &iheight);
+#else
             cairo_set_font_size(c, fsize);
-
             cairo_text_extents(c, txt1, &extents);
+#endif
             two_lines = TRUE;
         }
     }
 
     cairo_set_source_rgb(c, labels[w].fg_r,
                          labels[w].fg_g, labels[w].fg_b);
+#ifdef USE_PANGO
+    if (labels[w].xalign < 0)
+        x = W(labels[w].x);
+    else if (labels[w].xalign > 0)
+        x = W(labels[w].x + labels[w].w) - iwidth;
+    else
+        x = W(labels[w].x+labels[w].w/2.0) - iwidth/2.0 - 1;
+#else
     if (labels[w].xalign < 0)
         x = W(labels[w].x);
     else if (labels[w].xalign > 0)
         x = W(labels[w].x + labels[w].w) - extents.width;
     else
         x = W(labels[w].x+labels[w].w/2.0)-extents.width/2.0-1;
+#endif
 
     if (two_lines) {
+#ifdef USE_PANGO
+        y = H(labels[w].y) + (H(labels[w].h/2.0)- iheight)/2.0;
+#else
         y = H(labels[w].y) + (H(labels[w].h/2.0)- extents.height)/2.0 - extents.y_bearing;
+#endif
         cairo_move_to(c, x, y);
+#ifdef USE_PANGO
+	pango_cairo_show_layout(c, layout);
+	pango_layout_set_text(layout, txt2, -1);
+	pango_layout_get_size(layout, &iwidth, &iheight);
+        y = H(labels[w].y + labels[w].h/2.0) + (H(labels[w].h/2.0)- iheight)/2.0;
+        cairo_move_to(c, x, y);
+	pango_cairo_show_layout(c, layout);
+#else
         cairo_show_text(c, txt1);
         cairo_text_extents(c, txt2, &extents);
         y = H(labels[w].y + labels[w].h/2.0) + (H(labels[w].h/2.0)- extents.height)/2.0 - extents.y_bearing;
         cairo_move_to(c, x, y);
         cairo_show_text(c, txt2);
+#endif
     } else {
+#ifdef USE_PANGO
+        y = H(labels[w].y) + (H(labels[w].h) - iheight)/2.0;
+#else
         y = H(labels[w].y) + (H(labels[w].h)- extents.height)/2.0 - extents.y_bearing;
+#endif
         cairo_move_to(c, x, y);
         if ((w != flag_blue && w != flag_white &&
 	     w != bs && w != ws) ||
-	    ((w == bs || w == ws) && !show_shido_cards))
+	    ((w == bs || w == ws) && !show_shido_cards)) {
+#ifdef USE_PANGO
+	    pango_cairo_show_layout(c, layout);
+#else
             cairo_show_text(c, txt1);
+#endif
+	}
     }
 
     if (w == flag_blue || w == flag_white) {
@@ -1473,6 +1544,9 @@ static void expose_label(cairo_t *c, gint w)
         /* Now invalidate the affected region of the drawing area. */
         gtk_widget_queue_draw_area(darea, x1, y1, wi, he);
     }
+#ifdef USE_PANGO
+    g_object_unref(layout);
+#endif
 }
 
 static void clear_bg(cairo_t *c)
@@ -2012,7 +2086,7 @@ int main( int   argc,
 
     judotimer_log("JudoTimer starts");
 
-    font = pango_font_description_from_string("Sans bold 12");
+    pfont = pango_font_description_from_string("Arial bold 12");
 
     gdk_color_parse("#FFFF00", &color_yellow);
     gdk_color_parse("#FFFFFF", &color_white);
@@ -3462,241 +3536,3 @@ void font_dialog(GtkWidget *w, gpointer data)
 
     gtk_widget_destroy(dialog);
 }
-
-
-#if 0
-
-#define D     4.0
-#define FS    0.8
-#define WL1 200.0
-#define WL2 160.0
-#define RL1  24.0
-#define RL2  16.0
-#define CL1  16.0
-#define CL2  10.0
-#define SP    5.0
-
-gdouble tvlogo_scale = 1.0;
-
-#define tvc1 tvc
-#define tvc2 tvc
-#define tvcs1 tvcs
-#define tvcs2 tvcs
-
-cairo_surface_t *tvcs = NULL;
-cairo_t *tvc = NULL;
-
-G_LOCK_EXTERN(logofile);
-
-static void start_tv_logo(cairo_surface_t **cs, cairo_t **c, gdouble w, gdouble h, gint rows)
-{
-    if (*c) cairo_destroy(*c);
-    if (*cs) cairo_surface_destroy(*cs);
-
-    *cs = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h*rows);
-    *c = cairo_create(*cs);
-
-    cairo_set_font_size(*c, FS*h*tvlogo_scale);
-    cairo_select_font_face(*c, "arial",
-                           CAIRO_FONT_SLANT_NORMAL,
-                           CAIRO_FONT_WEIGHT_BOLD);
-}
-
-static void show_tv_logo(cairo_surface_t *cs, cairo_t *c)
-{
-    cairo_show_page(c);
-
-    G_LOCK(logofile);
-    if (++tvlogo_update >= NUM_LOGO_FILES)
-        tvlogo_update = 0;
-
-    if (tvlogofile[tvlogo_update])
-        cairo_surface_write_to_png(cs, tvlogofile[tvlogo_update]);
-    G_UNLOCK(logofile);
-}
-
-#define DSP_IS_LABEL(_x) (w == -1 || w == _x)
-#define DSP_TEXT(_x) (labels[_x].text)
-#define DSP_LBL(_x) labels[_x]
-
-void write_tv_logo(struct msg_update_label *msg)
-{
-    if (!vlc_connection_ok)
-        return;
-
-    gint i, w = msg ? msg->label_num : -1; // -1 updates everything
-    //cairo_surface_t *tvcs1 = NULL, *tvcs2 = NULL;
-    //cairo_t *tvc1 = NULL, *tvc2 = NULL;
-    gdouble row1 = RL1*tvlogo_scale, row2 = RL2*tvlogo_scale;
-    gdouble width1 = WL1*tvlogo_scale, width2 = WL2*tvlogo_scale;
-    gdouble col2 = CL2*tvlogo_scale;
-    gdouble d1 = row1*(1-FS), d2 = row2*(1-FS);
-    static glong wait_stop_competitors = 0;
-
-    if (w == STOP_COMPETITORS ||
-        (wait_stop_competitors && time(NULL) > wait_stop_competitors + 10))
-        wait_stop_competitors = 0;
-
-    if (wait_stop_competitors)
-        return;
-
-    if (w == START_BIG || w == STOP_BIG || w == STOP_COMPETITORS || w == SAVED_LAST_NAMES)
-        w = -1;
-
-    if (w == START_COMPETITORS) {
-        gchar *p;
-        gchar category[32];
-        gchar b_last[32];
-        gchar w_last[32];
-
-        start_tv_logo(&tvcs1, &tvc1, WL1, RL1, 3);
-
-        strncpy(category, msg->text3, sizeof(category)-1);
-        strncpy(b_last, msg->text, sizeof(b_last)-1);
-        strncpy(w_last, msg->text2, sizeof(w_last)-1);
-
-        p = strchr(b_last, '\t');
-        if (p) *p = 0;
-
-        p = strchr(w_last, '\t');
-        if (p) *p = 0;
-
-        cairo_set_source_rgb(tvc1, 0.0, 0.0, 0.0);
-        cairo_rectangle(tvc1, 0.0, 0.0, width1, row1);
-        cairo_fill(tvc1);
-
-        cairo_set_source_rgb(tvc1, 1.0, 1.0, 1.0);
-        cairo_rectangle(tvc1, 0.0, row1, width1, row1);
-        cairo_fill(tvc1);
-
-        cairo_set_source_rgb(tvc1, 0.0, 0.0, 1.0);
-        cairo_rectangle(tvc1, 0.0, 2*row1, width1, row1);
-        cairo_fill(tvc1);
-
-        cairo_set_source_rgb(tvc1, 1.0, 1.0, 1.0);
-        cairo_move_to(tvc1, 0.0, row1 - d1);
-        cairo_show_text(tvc1, category);
-
-        cairo_set_source_rgb(tvc1, 0.0, 0.0, 0.0);
-
-        //cairo_text_extents(c, labels[blue_name_1].text, &extents);
-        //gdouble y = (row1 + extents.height)/2.0;// - extents.y_bearing;
-        //g_print("row1=%f extheight=%f bear=%f\n", row1, extents.height, extents.y_bearing);
-        cairo_move_to(tvc1, 0.0, 2*row1 - d1);
-        cairo_show_text(tvc1, b_last);
-
-        cairo_set_source_rgb(tvc1, 1.0, 1.0, 1.0);
-        //cairo_text_extents(c, labels[white_name_1].text, &extents);
-        //y = row1 + (row1 + extents.height)/2.0;// - extents.y_bearing;
-        cairo_move_to(tvc1, 0.0, 3*row1 - d1);
-        cairo_show_text(tvc1, w_last);
-
-        wait_stop_competitors = time(NULL);
-
-        show_tv_logo(tvcs1, tvc1);
-        return;
-    }
-
-    start_tv_logo(&tvcs2, &tvc2, width2, row2, 2);
-
-    // blue_name_1
-    cairo_save(tvc2);
-    cairo_rectangle(tvc2, 0.0, 0.0, width2-8*col2-SP, row2);
-    cairo_clip(tvc2);
-    cairo_set_source_rgb(tvc2, 1.0, 1.0, 1.0);
-    cairo_rectangle(tvc2, 0.0, 0.0, width2-8*col2-SP, row2);
-    cairo_fill(tvc2);
-    cairo_set_source_rgb(tvc2, 0.0, 0.0, 0.0);
-    cairo_move_to(tvc2, 0.0, row2 - d2);
-    cairo_show_text(tvc2, saved_last1/*labels[blue_name_1].text*/);
-    cairo_restore(tvc2);
-
-    // white_name_1
-    cairo_save(tvc2);
-    cairo_rectangle(tvc2, 0.0, row2, width2-8*col2-SP, row2);
-    cairo_clip(tvc2);
-    cairo_set_source_rgb(tvc2, 0.0, 0.0, 1.0);
-    cairo_rectangle(tvc2, 0.0, row2, width2-8*col2-SP, row2);
-    cairo_fill(tvc2);
-    cairo_set_source_rgb(tvc2, 1.0, 1.0, 1.0);
-    cairo_move_to(tvc2, 0.0, 2*row2 - d2);
-    cairo_show_text(tvc2, saved_last2/*labels[white_name_1].text*/);
-    cairo_restore(tvc2);
-
-    // clocks
-    if (labels[o_sec].text[0] != '0' || labels[o_tsec].text[0] != '0') {
-        cairo_save(tvc2);
-        cairo_set_font_size(tvc2, row2);
-        cairo_set_source_rgb(tvc2, 0.0, 0.7, 0.0);
-        cairo_rectangle(tvc2, width2-4*col2, row2/2.0-4, 4*col2, row2+8);
-        cairo_fill(tvc2);
-        cairo_set_source_rgb(tvc2, 1.0, 1.0, 1.0);
-        cairo_move_to(tvc2, width2-3*col2, 1.5*row2 - d2);
-        cairo_show_text(tvc2, labels[o_tsec].text);
-        cairo_move_to(tvc2, width2-2*col2, 1.5*row2 - d2);
-        cairo_show_text(tvc2, labels[o_sec].text);
-        cairo_restore(tvc2);
-    } else {
-        cairo_save(tvc2);
-        cairo_set_font_size(tvc2, row2);
-        cairo_set_source_rgba(tvc2, 0.0, 0.0, 0.0, 0.5);
-        cairo_rectangle(tvc2, width2-4*col2, row2/2.0-4, 4*col2, row2+8);
-        cairo_fill(tvc2);
-        cairo_set_source_rgb(tvc2, labels[t_sec].fg_r, labels[t_sec].fg_g, labels[t_sec].fg_b);
-        cairo_move_to(tvc2, width2-4*col2, 1.5*row2 - d2);
-        cairo_show_text(tvc2, labels[t_min].text);
-        cairo_move_to(tvc2, width2-3*col2, 1.5*row2 - d2);
-        cairo_show_text(tvc2, labels[colon].text);
-        cairo_move_to(tvc2, width2-2*col2, 1.5*row2 - d2);
-        cairo_show_text(tvc2, labels[t_tsec].text);
-        cairo_move_to(tvc2, width2-col2, 1.5*row2 - d2);
-        cairo_show_text(tvc2, labels[t_sec].text);
-        cairo_restore(tvc2);
-    }
-
-    // score
-    static gint *lbls[2][4] = {{&bw, &by, &bk, &bs},{&ww, &wy, &wk, &ws}};
-    gint j;
-
-    cairo_set_source_rgb(tvc2, 1.0, 1.0, 1.0);
-    cairo_rectangle(tvc2, width2-8*col2, 0.0, 3*col2, row2);
-    cairo_fill(tvc2);
-
-    cairo_set_source_rgb(tvc2, 0.0, 0.0, 1.0);
-    cairo_rectangle(tvc2, width2-8*col2, row2, 3*col2, row2);
-    cairo_fill(tvc2);
-
-    for (i = 0; i < 2; i++) {
-        if (i == 0)
-            cairo_set_source_rgb(tvc2, 0.0, 0.0, 0.0);
-        else
-            cairo_set_source_rgb(tvc2, 1.0, 1.0, 1.0);
-
-        for (j = 0; j < 3; j++) {
-            cairo_move_to(tvc2, width2-(8-j)*col2, (i==0 ? row2 : 2*row2) - d2);
-            cairo_show_text(tvc2, labels[*lbls[i][j]].text);
-        }
-    }
-
-    if (labels[bs].text[0] != '0' || labels[ws].text[0] != '0') {
-        if (labels[bs].text[0] != '0') {
-            cairo_set_source_rgb(tvc2, 1.0, 1.0, 0.0);
-            cairo_rectangle(tvc2, width2-5*col2, 0, col2, row2);
-            cairo_fill(tvc2);
-            cairo_set_source_rgb(tvc2, 0.7, 0.0, 0.0);
-            cairo_move_to(tvc2, width2-5*col2, row2 - d2);
-            cairo_show_text(tvc2, labels[bs].text);
-        }
-        if (labels[ws].text[0] != '0') {
-            cairo_set_source_rgb(tvc2, 1.0, 1.0, 0.0);
-            cairo_rectangle(tvc2, width2-5*col2, row2, col2, row2);
-            cairo_fill(tvc2);
-            cairo_set_source_rgb(tvc2, 0.7, 0.0, 0.0);
-            cairo_move_to(tvc2, width2-5*col2, 2*row2 - d2);
-            cairo_show_text(tvc2, labels[ws].text);
-        }
-    }
-
-    show_tv_logo(tvcs2, tvc2);
-}
-#endif

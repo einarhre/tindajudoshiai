@@ -46,6 +46,7 @@
 #include <gtk/gtk.h>
 
 #include "judotimer.h"
+#include "common-utils.h"
 
 gboolean showflags = FALSE, showletter = FALSE;
 gdouble  flagsize = 7.0, namesize = 10.0;
@@ -1721,10 +1722,19 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
 	gdouble right = 0.0;
         cairo_set_font_size(c, 0.6*FIRST_BLOCK_HEIGHT);
         cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
+#if 0
         cairo_text_extents(c, category, &extents);
 	right = 10.0 + extents.width;
         cairo_move_to(c, 10.0, (FIRST_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
         cairo_show_text(c, category);
+#endif
+	{
+	    gdouble _x = 10.0, _y = 0, _w = 0, _h = FIRST_BLOCK_HEIGHT;
+	    write_text(c, category, &_x, &_y, &_w, &_h,
+		       TEXT_ANCHOR_START, TEXT_ANCHOR_MIDDLE, NULL,
+		       0.6*FIRST_BLOCK_HEIGHT, 0);
+	    right = 10.0 + _w;
+	}
 
         // rest time
         if (rrest) {
@@ -1775,10 +1785,18 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
         else
             cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
 
+/****
         cairo_set_font_size(c, namesize*0.06*OTHER_BLOCK_HEIGHT);
         cairo_text_extents(c, b_last, &extents);
         cairo_move_to(c, name_start+5.0, SECOND_BLOCK_START + (OTHER_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
         cairo_show_text(c, b_last);
+****/
+	{
+	    gdouble _x = 5.0, _y = SECOND_BLOCK_START, _w = 0, _h = OTHER_BLOCK_HEIGHT;
+	    write_text(c, b_last, &_x, &_y, &_w, &_h,
+		       TEXT_ALIGN_LEFT, TEXT_ALIGN_MIDDLE, NULL,
+		       namesize*0.06*OTHER_BLOCK_HEIGHT, 0);
+	}
 
         // name of the second competitor
         if (white_first)
@@ -1788,7 +1806,13 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
 
         cairo_text_extents(c, w_last, &extents);
         cairo_move_to(c, name_start+5.0, THIRD_BLOCK_START + (OTHER_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
-        cairo_show_text(c, w_last);
+        //cairo_show_text(c, w_last);
+	{
+	    gdouble _x = 5.0, _y = THIRD_BLOCK_START, _w = 0, _h = OTHER_BLOCK_HEIGHT;
+	    write_text(c, w_last, &_x, &_y, &_w, &_h,
+		       TEXT_ALIGN_LEFT, TEXT_ALIGN_MIDDLE, NULL,
+		       namesize*0.06*OTHER_BLOCK_HEIGHT, 0);
+	}
 
         // judogi control warning
         if (judogi_control) {

@@ -16,6 +16,7 @@
 
 #include "judoshiai.h"
 #include "language.h"
+#include "common-utils.h"
 
 //#include "my-cairo.h"
 
@@ -190,7 +191,9 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
     double x;
     double y = (white_y + blue_y)/2.0;
     double dy = (white_y - blue_y)/2.0;
+#ifndef USE_PANGO
     double py;
+#endif
     char buf[100];
     struct judoka *j;
     cairo_text_extents_t extents;
@@ -212,6 +215,7 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
 
     snprintf(numbuf, sizeof(numbuf), "%d", comp_num);
     cairo_text_extents(pd->c, numbuf, &extents1);
+
     r1 = extents1.height/2.0;
     r2 = 2.0*r1;
 
@@ -221,7 +225,11 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
     only_last = pos || (flags & F_SYSTEM_MASK) == SYSTEM_DPOOL ||
         (flags & F_REPECHAGE) || (flags & F_SYSTEM_MASK) == SYSTEM_DPOOL;
 
+#ifdef USE_PANGO
+    get_text_extents(pd->c, "Hj", pd->desc, &extents.width, &extents.height);
+#else
     cairo_text_extents(pd->c, "Hj", &extents);
+#endif
     //small = (white_y - blue_y) < 2.0*extents.height && pos == 0;
 
     if (system_is_french(pd->systm.system) && pd->systm.system >= SYSTEM_FRENCH_32) {
@@ -275,14 +283,20 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
             else
                 j = get_data(white);
             if (j) {
-                cairo_text_extents(pd->c, IS_LANG_IS ? j->first : j->last, &extents);
                 snprintf(buf, sizeof(buf)-1, "%s", IS_LANG_IS ? j->first : j->last);
+#ifdef USE_PANGO
+		gdouble _x = x + TEXT_OFFSET, _y = blue_y - 2 /*- H(0.005)*/, _w = 0, _h = 0;
+		write_text(pd->c, buf, &_x, &_y, &_w, &_h,
+			   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM, pd->desc, 0, 0);
+                add_judoka_rectangle(pd, _x, _y, _w, _h, j->index);
+#else
+                cairo_text_extents(pd->c, IS_LANG_IS ? j->first : j->last, &extents);
                 cairo_move_to(pd->c, x + TEXT_OFFSET,
                               blue_y - extents.height - extents.y_bearing - H(0.005));
                 cairo_show_text(pd->c, buf);
                 add_judoka_rectangle(pd, x + TEXT_OFFSET, blue_y - extents.height - H(0.005),
                                      extents.width, extents.height, j->index);
-
+#endif
                 free_judoka(j);
             }
         }
@@ -293,12 +307,19 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
 	y1 = y;
         cairo_move_to(pd->c, x, y);
         cairo_rel_line_to(pd->c, txtwidth + extra, 0);
+#ifdef USE_PANGO
+        cairo_rectangle(pd->c, x, y - extents.height,
+                        txtwidth + extra,
+                        2.0*extents.height);
+        blue_y = y;
+        white_y = blue_y + extents.height;
+#else
         cairo_rectangle(pd->c, x, y - extents.height - H(0.005),
                         txtwidth + extra,
                         2.0*extents.height + H(0.01));
-
         blue_y = y + H(0.002);
         white_y = blue_y + extents.height + H(0.007);
+#endif
     } else {
 	w1 = txtwidth + extra - r2;
 	x1 = x + w1;
@@ -401,6 +422,12 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
                              get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION));
             }
 
+#ifdef USE_PANGO
+	    gdouble _x = x + TEXT_OFFSET, _y = blue_y - 1, _w = 0, _h = 0;
+	    write_text(pd->c, buf, &_x, &_y, &_w, &_h, -1, 1, pd->desc, 0,
+		       (j->deleted & HANSOKUMAKE) ? TEXT_STRIKETHROUGH : 0);
+	    add_judoka_rectangle(pd, _x, _y, _w, _h, j->index);
+#else
             cairo_text_extents(pd->c, buf, &extents);
             py = blue_y - extents.height - extents.y_bearing - H(0.005);
             cairo_move_to(pd->c, x + TEXT_OFFSET, py);
@@ -415,23 +442,8 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
                     cairo_stroke(pd->c);
                 }
             }
-            free_judoka(j);
-
-#if 0
-            if (blue_pts || white_pts) {
-                if (blue_pts >= 10000 || white_pts >= 10000)
-                    sprintf(buf, "%d/%d", blue_pts/10000, blue_pts%10000);
-                else
-                    sprintf(buf, "%s", get_score_str(score1));
-
-                cairo_text_extents(pd->c, buf, &extents);
-                cairo_move_to(pd->c,
-                              extra +
-                              x + txtwidth - r2 + 2.0 - extents.x_bearing,
-                              py + (small ? 0 : 1.5*extents.height));
-                cairo_show_text(pd->c, buf);
-            }
 #endif
+            free_judoka(j);
         }
     }
 
@@ -456,6 +468,12 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
                              get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION));
             }
 
+#ifdef USE_PANGO
+	    gdouble _x = x + TEXT_OFFSET, _y = white_y - 1, _w = 0, _h = 0;
+	    write_text(pd->c, buf, &_x, &_y, &_w, &_h, -1, 1, pd->desc, 0,
+		       (j->deleted & HANSOKUMAKE) ? TEXT_STRIKETHROUGH : 0);
+	    add_judoka_rectangle(pd, _x, _y, _w, _h, j->index);
+#else
             cairo_text_extents(pd->c, buf, &extents);
             py = white_y - extents.height - extents.y_bearing - H(0.005);
             cairo_move_to(pd->c, x + TEXT_OFFSET, py);
@@ -470,21 +488,8 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
                     cairo_stroke(pd->c);
                 }
             }
-            free_judoka(j);
-#if 0
-            if (blue_pts || white_pts) {
-                if (blue_pts >= 10000 || white_pts >= 10000) // team event
-                    sprintf(buf, "%d/%d", white_pts/10000, white_pts%10000);
-                else
-                    sprintf(buf, "%s", get_score_str(score2));
-                cairo_text_extents(pd->c, buf, &extents);
-                cairo_move_to(pd->c,
-                              extra +
-                              x + txtwidth - r2 + 2.0 - extents.x_bearing,
-                              py + (small ? 0 : extents.height));
-                cairo_show_text(pd->c, buf);
-            }
 #endif
+            free_judoka(j);
         }
     }
 
@@ -500,7 +505,7 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
         cairo_set_font_size(pd->c, 0.75*global_text_h);
         cairo_text_extents(pd->c, buf, &extents);
         cairo_move_to(pd->c, extra + x + txtwidth + 8,
-                      y + extents1.height + 1);
+                      y + extents.height + 2);
         cairo_show_text(pd->c, buf);
         cairo_restore(pd->c);
     }
@@ -552,11 +557,24 @@ static void create_table(struct paint_data *pd, struct table *t)
 
 static void write_table(struct paint_data *pd, struct table *t, int row, int col, char *txt)
 {
-    cairo_text_extents_t extents;
     double x = t->position_x + colpos(pd, t, col);
     double y = t->position_y + row*ROW_HEIGHT;
 
-    //cairo_set_font_size(pd->c, TEXT_HEIGHT);
+#ifdef USE_PANGO
+    double h = ROW_HEIGHT;
+    double w = W(t->columns[col]);
+    gint halign = TEXT_ALIGN_LEFT;
+
+    if ((row == 0) || (txt[0] >= '0' && txt[0] <= '9'))
+	halign = TEXT_ALIGN_MIDDLE;
+    else
+        x += TEXT_OFFSET;
+
+    write_text(pd->c, txt, &x, &y, &w, &h,
+	       halign, TEXT_ALIGN_MIDDLE,
+	       pd->desc, 0, (row == 0 ? TEXT_BOLD : 0) | TEXT_KEEP_RIGHT);
+#else
+    cairo_text_extents_t extents;
     cairo_text_extents(pd->c, txt, &extents);
 
     if (row == 0 || (txt[0] >= '0' && txt[0] <= '9'))
@@ -574,6 +592,7 @@ static void write_table(struct paint_data *pd, struct table *t, int row, int col
                                CAIRO_FONT_WEIGHT_BOLD);
     cairo_show_text(pd->c, txt);
     cairo_restore(pd->c);
+#endif
 }
 
 static void add_judoka_rectangle_by_table(struct paint_data *pd, struct table *t, int row, int col, gint judoka_ix)
@@ -607,10 +626,26 @@ static void add_judoka_rectangle(struct paint_data *pd, gdouble x, gdouble y, gd
 
 static void write_table_h(struct paint_data *pd, struct table *t, int row, int col, gint del, char *txt)
 {
-    cairo_text_extents_t extents;
     double x = t->position_x + colpos(pd, t, col);
     double y = t->position_y + row*ROW_HEIGHT;
 
+#ifdef USE_PANGO
+    double h = ROW_HEIGHT;
+    double w = W(t->columns[col]);
+    gint halign = TEXT_ALIGN_LEFT;
+
+    if (row == 0 || (txt[0] >= '0' && txt[0] <= '9'))
+	halign = TEXT_ALIGN_MIDDLE;
+    else
+        x += TEXT_OFFSET;
+
+    write_text(pd->c, txt, &x, &y, &w, &h,
+	       halign, TEXT_ALIGN_MIDDLE,
+	       pd->desc, 0,
+	       (row == 0 ? TEXT_BOLD : 0) |
+	       ((del & HANSOKUMAKE) ? TEXT_STRIKETHROUGH : 0));
+#else
+    cairo_text_extents_t extents;
     if (del & HANSOKUMAKE) {
         double x1 = t->position_x + colpos(pd, t, col+1);
         cairo_save(pd->c);
@@ -632,10 +667,11 @@ static void write_table_h(struct paint_data *pd, struct table *t, int row, int c
     cairo_move_to(pd->c, x, y);
 
     cairo_save(pd->c);
-    if (row == 0)
+    if (row == 0) {
         cairo_select_font_face(pd->c, font_face,
                                font_slant,
                                CAIRO_FONT_WEIGHT_BOLD);
+    }
 
     /*
     if (use_weights == FALSE && (del & POOL_TIE3))
@@ -643,6 +679,7 @@ static void write_table_h(struct paint_data *pd, struct table *t, int row, int c
     */
     cairo_show_text(pd->c, txt);
     cairo_restore(pd->c);
+#endif
 }
 
 static void write_table_h_2(struct paint_data *pd, struct table *t, int row, int col, gint del, char *txt, gint judoka_ix)
@@ -653,9 +690,17 @@ static void write_table_h_2(struct paint_data *pd, struct table *t, int row, int
 
 static void write_table_title(struct paint_data *pd, struct table *t, char *txt)
 {
-    cairo_text_extents_t extents;
     double x = t->position_x;
     double y = t->position_y;
+
+#ifdef USE_PANGO
+    x = x + colpos(pd, t, t->num_cols)/2;
+    y -= TEXT_OFFSET;
+    write_text(pd->c, txt, &x, &y, NULL, NULL,
+	       TEXT_ANCHOR_MIDDLE, TEXT_ANCHOR_BOTTOM, pd->desc,
+	       TEXT_HEIGHT*1.2, TEXT_BOLD);
+#else
+    cairo_text_extents_t extents;
 
     cairo_save(pd->c);
     cairo_set_font_size(pd->c, TEXT_HEIGHT*1.2);
@@ -670,6 +715,7 @@ static void write_table_title(struct paint_data *pd, struct table *t, char *txt)
     cairo_move_to(pd->c, x, y);
     cairo_show_text(pd->c, txt);
     cairo_restore(pd->c);
+#endif
 }
 
 static void paint_table_cell(struct paint_data *pd, struct table *t, int row, int col,
@@ -2368,10 +2414,19 @@ void paint_category(struct paint_data *pd)
     cairo_rectangle(pd->c, 0.0, 0.0, pd->paper_width, pd->paper_height);
     cairo_fill(pd->c);
 
+#ifdef USE_PANGO
+    pd->desc = pango_font_description_from_string(font_face);
+    if (font_slant == CAIRO_FONT_SLANT_ITALIC)
+	pango_font_description_set_style(pd->desc, PANGO_STYLE_ITALIC);
+    if (font_weight == CAIRO_FONT_WEIGHT_BOLD)
+	pango_font_description_set_weight(pd->desc, PANGO_WEIGHT_BOLD);
+    pango_font_description_set_absolute_size(pd->desc, TEXT_HEIGHT*PANGO_SCALE);
+    get_text_extents(pd->c, "AjKp", pd->desc, &extents.width, &extents.height);
+#else
     cairo_select_font_face(pd->c, font_face, font_slant, font_weight);
     cairo_set_font_size(pd->c, TEXT_HEIGHT);
     cairo_text_extents(pd->c, "AjKp", &extents);
-
+#endif
     cairo_set_line_width(pd->c, THIN_LINE /*H(0.002f)*/);
     cairo_set_source_rgb(pd->c, 0.0, 0.0, 0.0);
 
@@ -2393,6 +2448,13 @@ void paint_category(struct paint_data *pd)
 
     if (use_logo != NULL && print_headers == FALSE) {
         snprintf(buf, sizeof(buf)-1, "%s", ctg->last);
+#ifdef USE_PANGO
+	{
+	    gdouble x1 = W(0.95), y1 = H(0.05);
+	    write_text(pd->c, buf, &x1, &y1, NULL, NULL, 1, -1, pd->desc,
+		       NAME_H*1.2, TEXT_BOLD);
+	}
+#else
         cairo_select_font_face(pd->c, font_face,
                                font_slant,
                                CAIRO_FONT_WEIGHT_BOLD);
@@ -2400,6 +2462,7 @@ void paint_category(struct paint_data *pd)
         cairo_text_extents(pd->c, buf, &extents);
         cairo_move_to(pd->c, (W(0.95)-extents.width), H(0.05));
         cairo_show_text(pd->c, buf);
+#endif
     } else {
         gdouble texth;
         snprintf(buf, sizeof(buf)-1, "%s  %s  %s   %s",
@@ -2407,6 +2470,14 @@ void paint_category(struct paint_data *pd)
                  prop_get_str_val(PROP_DATE),
                  prop_get_str_val(PROP_PLACE),
                  ctg->last);
+#ifdef USE_PANGO
+	{
+	    gdouble _x = W(1.0)/2.0, _y = H(0.05), _w = 0, _h = 0;
+	    write_text(pd->c, buf, &_x, &_y, &_w, &_h, 0, -1, pd->desc,
+		       NAME_H*1.2, TEXT_BOLD);
+	    texth = _h;
+	}
+#else
         cairo_select_font_face(pd->c, font_face,
                                font_slant,
                                CAIRO_FONT_WEIGHT_BOLD);
@@ -2416,19 +2487,34 @@ void paint_category(struct paint_data *pd)
         texth = extents.height;
         cairo_move_to(pd->c, (W(1.0)-extents.width)/2.0, H(0.05));
         cairo_show_text(pd->c, buf);
-
+#endif
         //pagenum
         if (num_pages(sys) > 1) {
-            cairo_set_font_size(pd->c, NAME_H*0.8);
             snprintf(buf, sizeof(buf)-1, "  (%d/%d)", pd->page+1, num_pages(sys));
+#ifdef USE_PANGO
+	    {
+		gdouble _x = -1, _y = -1;
+		write_text(pd->c, buf, &_x, &_y, NULL, NULL, -1, -1, pd->desc,
+			   NAME_H*0.8, 0);
+	    }
+#else
+            cairo_set_font_size(pd->c, NAME_H*0.8);
             cairo_show_text(pd->c, buf);
+#endif
         }
 
         snprintf(buf, sizeof(buf)-1, "%s: %d", _T(competitor), pd->systm.numcomp);
+#ifdef USE_PANGO
+	{
+	    gdouble _x = W(0.95), _y = H(0.05) + texth;
+	    write_text(pd->c, buf, &_x, &_y, NULL, NULL, 1, -1, pd->desc, NAME_H*0.6, 0);
+	}
+#else
         cairo_set_font_size(pd->c, NAME_H*0.6);
         cairo_text_extents(pd->c, buf, &extents);
         cairo_move_to(pd->c, W(0.95) - extents.width, H(0.05) + texth);
         cairo_show_text(pd->c, buf);
+#endif
     }
     cairo_restore(pd->c);
 
@@ -2485,6 +2571,9 @@ void paint_category(struct paint_data *pd)
         cairo_translate(pd->c, -paper_width_saved*0.5, -paper_height_saved*0.5);
     }
 
+#ifdef USE_PANGO
+    pango_font_description_free(pd->desc);
+#endif
     //close_svg();
 }
 
@@ -2493,12 +2582,16 @@ static void paint_point_box(struct paint_data *pd, gdouble horpos, gdouble verpo
 			    gint points, gboolean blue, gint tatami)
 {
     gchar txt[8];
+
+    gdouble fsize = NAME_H;
+    if (number_of_tatamis > 6) fsize = 6*fsize/number_of_tatamis;
+
     gdouble x = W(2.0 + horpos*0.06);
     gdouble y = H(verpos);
     gdouble x1 = x - 2;
-    gdouble y1 = y - NAME_H;
-    gdouble w = NAME_H*1.5;
-    gdouble h = NAME_H*1.2;
+    gdouble y1 = y - fsize;
+    gdouble w = fsize*1.3;
+    gdouble h = fsize*0.8;
 
     if (points < 0 || points > 10)
         return;
@@ -2509,7 +2602,7 @@ static void paint_point_box(struct paint_data *pd, gdouble horpos, gdouble verpo
         sprintf(txt, "%d", points);
 
     cairo_save(pd->c);
-
+    cairo_set_font_size(pd->c, fsize*0.7);
 
     if (points == 0)
         cairo_set_source_rgb(pd->c, 0.0, 0.0, 0.0);
@@ -2530,7 +2623,7 @@ static void paint_point_box(struct paint_data *pd, gdouble horpos, gdouble verpo
     else
         cairo_set_source_rgb(pd->c, 0.0, 0.0, 0.0);
 
-    cairo_move_to(pd->c, x, y);
+    cairo_move_to(pd->c, x, y-fsize*0.25);
     cairo_show_text(pd->c, txt);
 
     cairo_restore(pd->c);
@@ -2562,34 +2655,139 @@ void paint_next_matches(struct paint_data *pd)
     cairo_rectangle(pd->c, pd->paper_width, 0.0, W(0.3), pd->paper_height);
     cairo_fill(pd->c);
 
-    gdouble rowheight = 1.0/(gdouble)number_of_tatamis/*NUM_TATAMIS*//8.0;
+    gdouble rowheight = 1.0/(gdouble)number_of_tatamis/8.0;
 
     cairo_set_source_rgb(pd->c, 0.0, 0.0, 0.0);
     cairo_select_font_face(pd->c, get_font_props(NULL, NULL),
                            CAIRO_FONT_SLANT_NORMAL,
                            CAIRO_FONT_WEIGHT_BOLD);
 
+#ifdef USE_PANGO
+    PangoFontDescription *desc;
+    gdouble fsize = NAME_H*PANGO_SCALE;
+
+    if (number_of_tatamis > 6) fsize = 6*fsize/number_of_tatamis;
+
+    desc = pango_font_description_from_string(MY_FONT);
+    pango_font_description_set_absolute_size(desc, fsize);
+    pango_font_description_set_weight(desc, PANGO_WEIGHT_BOLD);
+
+    gdouble _x, _y;
+#endif
+
     for (i = 0; i < number_of_tatamis/*NUM_TATAMIS*/; i++) {
         gchar txt[200];
-        gdouble verpos = 0.05 + (gdouble)i/(gdouble)number_of_tatamis/*NUM_TATAMIS*/;
+        gdouble verpos = 0.03 + (gdouble)i/(gdouble)(number_of_tatamis);
         snprintf(buf, sizeof(buf)-1, "Tatami %d", i+1);
+#ifdef USE_PANGO
+	_x = W(1.4); _y = H(verpos);
+	write_text(pd->c, buf,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
+		   desc, fsize*1.2/PANGO_SCALE, 0);
+#else
         cairo_set_font_size(pd->c, NAME_H*1.2);
         cairo_move_to(pd->c, W(1.4), H(verpos));
         cairo_show_text(pd->c, buf);
+#endif
         cairo_set_font_size(pd->c, NAME_H*1.0);
 
         if (next_matches_info[i][0].won_catnum) {
+#ifdef USE_PANGO
+	    _x = -1; _y = -1;
+	    snprintf(buf, sizeof(buf)-1, "  %s: ", _T(prevwinner));
+	    write_text(pd->c, buf,
+		       &_x, &_y, NULL, NULL,
+		       TEXT_ANCHOR_START, TEXT_ANCHOR_TOP,
+		       desc, 0, 0);
+            snprintf(buf, sizeof(buf)-1, "%s: %s %s",
+                     next_matches_info[i][0].won_cat,
+                     next_matches_info[i][0].won_first,
+                     next_matches_info[i][0].won_last);
+	    write_text(pd->c, buf,
+		       &_x, &_y, NULL, NULL,
+		       TEXT_ANCHOR_START, TEXT_ANCHOR_TOP,
+		       desc, 0, 0);
+#else
             snprintf(buf, sizeof(buf)-1, "  (%s: %s: %s %s)",
                      _T(prevwinner),
                      next_matches_info[i][0].won_cat,
                      next_matches_info[i][0].won_first,
                      next_matches_info[i][0].won_last);
             cairo_show_text(pd->c, buf);
+#endif
         }
 
         if (next_matches_info[i][0].category[0] == 0)
             continue;
 
+#ifdef USE_PANGO
+        snprintf(txt, sizeof(txt), "%s: ", _T(match));
+	_x = W(1.4); _y = H(verpos + 1.0*rowheight);
+	write_text(pd->c, txt,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
+		   desc, 0, 0);
+        snprintf(txt, sizeof(txt), "%s", next_matches_info[i][0].category);
+	_x = -1; _y = -1;
+	write_text(pd->c, txt,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_TOP,
+		   desc, 0, 0);
+
+        snprintf(txt, sizeof(txt), "%s %s - %s",
+                 next_matches_info[i][0].blue_first,
+                 next_matches_info[i][0].blue_last,
+                 next_matches_info[i][0].blue_club);
+	_x = W(1.44); _y = H(verpos + 2.0*rowheight);
+	write_text(pd->c, txt,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
+		   desc, 0, 0);
+
+        snprintf(txt, sizeof(txt), "%s %s - %s",
+                 next_matches_info[i][0].white_first,
+                 next_matches_info[i][0].white_last,
+                 next_matches_info[i][0].white_club);
+	_x = W(1.44); _y = H(verpos + 3.0*rowheight);
+	write_text(pd->c, txt,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
+		   desc, 0, 0);
+
+        snprintf(txt, sizeof(txt), "%s: ", _T(nextmatch));
+	_x = W(1.4); _y = H(verpos + 4.0*rowheight);
+	write_text(pd->c, txt,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
+		   desc, 0, 0);
+        snprintf(txt, sizeof(txt), "%s", next_matches_info[i][1].category);
+	_x = -1; _y = -1;
+	write_text(pd->c, txt,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_TOP,
+		   desc, 0, 0);
+
+        snprintf(txt, sizeof(txt), "%s %s - %s",
+                 next_matches_info[i][1].blue_first,
+                 next_matches_info[i][1].blue_last,
+                 next_matches_info[i][1].blue_club);
+	_x = W(1.44); _y = H(verpos + 5.0*rowheight);
+	write_text(pd->c, txt,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
+		   desc, 0, 0);
+
+        snprintf(txt, sizeof(txt), "%s %s - %s",
+                 next_matches_info[i][1].white_first,
+                 next_matches_info[i][1].white_last,
+                 next_matches_info[i][1].white_club);
+	_x = W(1.44); _y = H(verpos + 6.0*rowheight);
+	write_text(pd->c, txt,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
+		   desc, 0, 0);
+#else
         cairo_move_to(pd->c, W(1.4), H(verpos + 1.0*rowheight));
         snprintf(txt, sizeof(txt), "%s: %s", _T(match), next_matches_info[i][0].category);
         cairo_show_text(pd->c, txt);
@@ -2625,7 +2823,7 @@ void paint_next_matches(struct paint_data *pd)
                  next_matches_info[i][1].white_last,
                  next_matches_info[i][1].white_club);
         cairo_show_text(pd->c, txt);
-
+#endif
         /* points */
         paint_point_box(pd, 1.0, verpos,                 0, TRUE, i);
 
@@ -2662,8 +2860,16 @@ void paint_next_matches(struct paint_data *pd)
         category_click_areas[num_category_click_areas].y2 = y + H(0.01);
         category_click_areas[num_category_click_areas].x2 = x + W(0.1);
         category_click_areas[num_category_click_areas].y1 = y - H(rowheight);
+#ifdef USE_PANGO
+	_x = x; _y = y;
+	write_text(pd->c, cat,
+		   &_x, &_y, NULL, NULL,
+		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
+		   desc, 0, 0);
+#else
         cairo_move_to(pd->c, x, y);
         cairo_show_text(pd->c, cat);
+#endif
         g_free(cat);
 
         num_category_click_areas++;
@@ -2672,6 +2878,9 @@ void paint_next_matches(struct paint_data *pd)
 
         ok = gtk_tree_model_iter_next(current_model, &iter);
     }
+#ifdef USE_PANGO
+    pango_font_description_free(desc);
+#endif
 }
 
 static GtkWidget *darea = NULL;

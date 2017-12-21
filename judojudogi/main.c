@@ -24,6 +24,7 @@
 #include "judojudogi.h"
 #include "language.h"
 #include "binreloc.h"
+#include "common-utils.h"
 
 static gboolean button_pressed(GtkWidget *sheet_page, 
 			       GdkEventButton *event, 
@@ -160,6 +161,14 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
     cairo_set_font_size(c, 0.8*BOX_HEIGHT);
     cairo_text_extents(c, "Hj", &extents);
 
+#ifdef USE_PANGO
+    PangoFontDescription *desc, *desc_bold;
+    desc = pango_font_description_from_string(MY_FONT);
+    pango_font_description_set_absolute_size(desc, 0.8*BOX_HEIGHT*PANGO_SCALE);
+    desc_bold = pango_font_description_copy(desc);
+    pango_font_description_set_weight(desc_bold, PANGO_WEIGHT_BOLD);
+#endif
+
     cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
     cairo_rectangle(c, 0.0, 0.0, paper_width, paper_height);
     cairo_fill(c);
@@ -245,7 +254,14 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                 cairo_move_to(c, left+5, y_pos+extents.height);
 
             snprintf(buf, sizeof(buf), "%s #%d", catdata ? catdata->last : "?", m->number);
+#ifdef USE_PANGO
+            if (k == 0)
+		WRITE_TEXT(left+5, y_pos+BOX_HEIGHT, buf, desc_bold);
+	    else
+		WRITE_TEXT(left+5, y_pos, buf, desc_bold);
+#else
             cairo_show_text(c, buf);
+#endif
             //cairo_show_text(c, catdata ? catdata->last : "?");
             cairo_restore(c);
 
@@ -272,6 +288,11 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                     cairo_set_source_rgb(c, 0, 0, 0);
 
                 cairo_select_font_face(c, MY_FONT, 0, CAIRO_FONT_WEIGHT_BOLD);
+#ifdef USE_PANGO
+		WRITE_TEXT(left+5+e, y_pos+2*BOX_HEIGHT, j->last, desc_bold);
+		WRITE_TEXT(left+5+e, y_pos+BOX_HEIGHT, j->first, desc);
+		WRITE_TEXT(left+5+e, y_pos+3*BOX_HEIGHT, j->club, desc);
+#else
                 cairo_move_to(c, left+5+e, y_pos+2*BOX_HEIGHT+extents.height);
                 cairo_show_text(c, j->last);
                 cairo_select_font_face(c, MY_FONT, 0, CAIRO_FONT_WEIGHT_NORMAL);
@@ -281,7 +302,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
 
                 cairo_move_to(c, left+5+e, y_pos+3*BOX_HEIGHT+extents.height);
                 cairo_show_text(c, j->club);
-
+#endif
                 cairo_restore(c);
             }
             j = avl_get_data(m->white);
@@ -306,6 +327,11 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                 else
                     cairo_set_source_rgb(c, 0, 0, 0);
 
+#ifdef USE_PANGO
+		WRITE_TEXT(left+5+colwidth/2, y_pos+2*BOX_HEIGHT, j->last, desc_bold);
+		WRITE_TEXT(left+5+colwidth/2, y_pos+BOX_HEIGHT, j->first, desc);
+		WRITE_TEXT(left+5+colwidth/2, y_pos+3*BOX_HEIGHT, j->club, desc);
+#else
                 cairo_select_font_face(c, MY_FONT, 0, CAIRO_FONT_WEIGHT_BOLD);
                 cairo_move_to(c, left+5+colwidth/2, y_pos+2*BOX_HEIGHT+extents.height);
                 cairo_show_text(c, j->last);
@@ -316,7 +342,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
 
                 cairo_move_to(c, left+5+colwidth/2, y_pos+3*BOX_HEIGHT+extents.height);
                 cairo_show_text(c, j->club);
-
+#endif
                 cairo_restore(c);
             }
 
@@ -412,6 +438,12 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
         cairo_move_to(c, dragged_x - extents.width/2.0, dragged_y);
         cairo_show_text(c, dragged_text);
     }
+
+#ifdef USE_PANGO
+    pango_font_description_free(desc);
+    pango_font_description_free(desc_bold);
+#endif
+
 #if 0
     if (update_later)
         g_timeout_add(5000, refresh_graph, NULL);

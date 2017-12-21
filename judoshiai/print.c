@@ -15,6 +15,7 @@
 #include <cairo-pdf.h>
 
 #include "judoshiai.h"
+#include "common-utils.h"
 
 #define SIZEX 630
 #define SIZEY 891
@@ -1155,6 +1156,14 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
                     cairo_surface_destroy(img);
                 }
             } else {
+#ifdef USE_PANGO
+		gdouble _x = 0, _y = 0;
+		write_text(pd->c, buf, &_x, &_y, NULL, NULL,
+			   wn_texts[t].align, -1, NULL,
+			   wn_texts[t].size,
+			   (wn_texts[t].weight == CAIRO_FONT_WEIGHT_BOLD ? TEXT_BOLD : 0) |
+			   (wn_texts[t].slant == CAIRO_FONT_SLANT_ITALIC ? TEXT_ITALIC : 0));
+#else
                 if (wn_texts[t].align != -1.0) {
                     cairo_text_extents(pd->c, buf, &extents);
                     if (wn_texts[t].align == 0.0)
@@ -1163,6 +1172,7 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
                         cairo_move_to(pd->c, -extents.width, 0);
                 }
                 cairo_show_text(pd->c, buf);
+#endif
             }
             cairo_restore(pd->c);
         } // for t
@@ -1365,6 +1375,13 @@ static void paint_schedule(struct paint_data *pd)
     gdouble  paper_width_saved;
     gdouble  paper_height_saved;
 
+#ifdef USE_PANGO
+    PangoFontDescription *desc =
+	pango_font_description_from_string(get_font_props(NULL, NULL));
+    pango_font_description_set_absolute_size(desc, TEXT_HEIGHT*1.3*PANGO_SCALE);
+    pango_font_description_set_weight(desc, PANGO_WEIGHT_BOLD);
+#endif
+
     calc_schedule();
 
     if (pd->rotate) {
@@ -1406,17 +1423,23 @@ static void paint_schedule(struct paint_data *pd)
     // header
 
     rownum1 = 1;
+#ifdef USE_PANGO
+    WRITE_TEXT(pd->rotate ? left : W(0.04), YPOS, _T(schedule), desc);
+#else
     cairo_move_to(c, pd->rotate ? left : W(0.04), YPOS);
     cairo_show_text(c, _T(schedule));
-
+#endif
     rownum1 = 2;
-    cairo_move_to(c, pd->rotate ? left : W(0.04), YPOS);
     snprintf(buf, sizeof(buf), "%s  %s  %s",
              prop_get_str_val(PROP_NAME),
              prop_get_str_val(PROP_DATE),
              prop_get_str_val(PROP_PLACE));
+#ifdef USE_PANGO
+    WRITE_TEXT(pd->rotate ? left : W(0.04), YPOS, buf, desc);
+#else
+    cairo_move_to(c, pd->rotate ? left : W(0.04), YPOS);
     cairo_show_text(c, buf);
-
+#endif
 
     // find max values
 
@@ -1496,10 +1519,17 @@ static void paint_schedule(struct paint_data *pd)
                 }
 
                 sprintf(buf, "%2d:%02d", tm/3600, (tm%3600)/60);
+#ifdef USE_PANGO
+		{
+		    gdouble _x = left - 4, _y = YPOS_L(rownum1);
+		    write_text(c, buf, &_x, &_y, NULL, NULL,
+			       TEXT_ANCHOR_END, TEXT_ANCHOR_TOP, desc, 0, 0);
+		}
+#else
                 cairo_text_extents(c, buf, &extents);
                 cairo_move_to(c, left - extents.width - extents.x_bearing - 4, YPOS_L(rownum1));
                 cairo_show_text(c, buf);
-
+#endif
                 for (t = 1; t <= NUM_TATAMIS; t++) {
                     gint rownum2 = rownum1;
                     struct grp_time *p1 = time_slots[t][i];
@@ -1511,11 +1541,20 @@ static void paint_schedule(struct paint_data *pd)
                     }
 
                     while (p1) {
+#ifdef USE_PANGO
+			set_xy(left + (t-1)*colwidth + 4, YPOS_L(rownum2));
+#else
                         cairo_move_to(c, left + (t-1)*colwidth + 4, YPOS_L(rownum2));
+#endif
                         struct cat_time *p2 = p1->cats;
                         while (p2) {
+#ifdef USE_PANGO
+			    WRITE_TEXT(-1, -1, p2->cat->category, desc);
+			    WRITE_TEXT(-1, -1, "  ", desc);
+#else
                             cairo_show_text(c, p2->cat->category);
                             cairo_show_text(c, "  ");
+#endif
                             p2 = p2->next;
                         }
 
@@ -1578,6 +1617,9 @@ static void paint_schedule(struct paint_data *pd)
     }
 
     free_schedule();
+#ifdef USE_PANGO
+    pango_font_description_free(desc);
+#endif
 }
 
 static void select_schedule_pdf(GtkWidget *w, GdkEventButton *event, gpointer arg)
