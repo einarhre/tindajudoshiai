@@ -58,7 +58,7 @@
 #define _COMM_H_
 
 #ifndef NUM_TATAMIS
-#define NUM_TATAMIS 10
+#define NUM_TATAMIS 20
 #endif
 
 #ifndef INFO_MATCH_NUM

@@ -223,8 +223,7 @@ static GtkWidget *separator1, *separator2, *quit, *viewlog, *showcomp_act, *show
 static GtkWidget *match0, *match1, *match2, *match3, *match4, *match5, *gs;
 static GtkWidget *blue_wins, *white_wins, *red_background, *full_screen, *hikiwake;
 static GtkWidget *rules_stop_ippon, *whitefirst, *showcomp, *confirm_match, *judogi_control;
-static GtkWidget *tatami_sel, *tatami_sel_none, *tatami_sel_1,  *tatami_sel_2,  *tatami_sel_3,  *tatami_sel_4;
-static GtkWidget *tatami_sel_5, *tatami_sel_6, *tatami_sel_7, *tatami_sel_8, *tatami_sel_9, *tatami_sel_10;
+static GtkWidget *tatami_sel, *tatami_sel_none, *tatami_sel_num[NUM_TATAMIS];
 static GtkWidget *node_ip, *my_ip, *video_ip, /* *vlc_cport,*/ *manual, *about, *quick_guide;
 static GtkWidget *light, *menu_light, *menu_switched, *timeset;
 static GtkWidget *inc_time, *dec_time, *inc_osaekomi, *dec_osaekomi, *clock_only, *set_time, *layout_sel;
@@ -456,17 +455,11 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     rules_2017      = gtk_check_menu_item_new_with_label("");
     confirm_match   = gtk_check_menu_item_new_with_label("");
     judogi_control  = gtk_check_menu_item_new_with_label("");
+
     tatami_sel_none = gtk_radio_menu_item_new_with_label(NULL, "");
-    tatami_sel_1    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
-    tatami_sel_2    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
-    tatami_sel_3    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
-    tatami_sel_4    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
-    tatami_sel_5    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
-    tatami_sel_6    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
-    tatami_sel_7    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
-    tatami_sel_8    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
-    tatami_sel_9    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
-    tatami_sel_10   = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
+    for (i = 0; i < NUM_TATAMIS; i++)
+	tatami_sel_num[i] = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)tatami_sel_none, "");
+
     node_ip         = gtk_menu_item_new_with_label("Communication node");
     my_ip           = gtk_menu_item_new_with_label("Own IP addresses");
     video_ip        = gtk_menu_item_new_with_label("");
@@ -521,16 +514,8 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     submenu = gtk_menu_new();
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(tatami_sel), submenu);
     gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_none);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_1);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_2);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_3);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_4);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_5);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_6);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_7);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_8);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_9);
-    gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_10);
+    for (i = 0; i < NUM_TATAMIS; i++)
+	gtk_menu_shell_append (GTK_MENU_SHELL (submenu), tatami_sel_num[i]);
 
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), gtk_separator_menu_item_new());
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), node_ip);
@@ -579,16 +564,9 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
         g_signal_connect(G_OBJECT(name_layouts[i]), "activate", G_CALLBACK(select_name_layout), gint_to_ptr(i));
 
     g_signal_connect(G_OBJECT(tatami_sel_none), "activate", G_CALLBACK(tatami_selection),     (gpointer)0);
-    g_signal_connect(G_OBJECT(tatami_sel_1),    "activate", G_CALLBACK(tatami_selection),     (gpointer)1);
-    g_signal_connect(G_OBJECT(tatami_sel_2),    "activate", G_CALLBACK(tatami_selection),     (gpointer)2);
-    g_signal_connect(G_OBJECT(tatami_sel_3),    "activate", G_CALLBACK(tatami_selection),     (gpointer)3);
-    g_signal_connect(G_OBJECT(tatami_sel_4),    "activate", G_CALLBACK(tatami_selection),     (gpointer)4);
-    g_signal_connect(G_OBJECT(tatami_sel_5),    "activate", G_CALLBACK(tatami_selection),     (gpointer)5);
-    g_signal_connect(G_OBJECT(tatami_sel_6),    "activate", G_CALLBACK(tatami_selection),     (gpointer)6);
-    g_signal_connect(G_OBJECT(tatami_sel_7),    "activate", G_CALLBACK(tatami_selection),     (gpointer)7);
-    g_signal_connect(G_OBJECT(tatami_sel_8),    "activate", G_CALLBACK(tatami_selection),     (gpointer)8);
-    g_signal_connect(G_OBJECT(tatami_sel_9),    "activate", G_CALLBACK(tatami_selection),     (gpointer)9);
-    g_signal_connect(G_OBJECT(tatami_sel_10),    "activate", G_CALLBACK(tatami_selection),    (gpointer)10);
+    for (i = 0; i < NUM_TATAMIS; i++)
+	g_signal_connect(G_OBJECT(tatami_sel_num[i]), "activate", G_CALLBACK(tatami_selection), gint_to_ptr(i+1));
+
     g_signal_connect(G_OBJECT(node_ip),         "activate", G_CALLBACK(ask_node_ip_address),  (gpointer)0);
     g_signal_connect(G_OBJECT(my_ip),           "activate", G_CALLBACK(show_my_ip_addresses), (gpointer)0);
     g_signal_connect(G_OBJECT(video_ip),        "activate", G_CALLBACK(ask_video_ip_address), (gpointer)0);
@@ -689,19 +667,10 @@ void set_preferences_keyfile(GKeyFile *key_file, gboolean defaults)
     error = NULL;
     i = g_key_file_get_integer(key_file, "preferences", "tatami", &error);
     if (!error) {
-        switch (i) {
-        case 0: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_none)); break;
-        case 1: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_1)); break;
-        case 2: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_2)); break;
-        case 3: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_3)); break;
-        case 4: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_4)); break;
-        case 5: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_5)); break;
-        case 6: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_6)); break;
-        case 7: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_7)); break;
-        case 8: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_8)); break;
-        case 9: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_9)); break;
-        case 10: gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_10)); break;
-        }
+	if (i == 0)
+	    gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_none));
+	else if (i >= 1 && i <= NUM_TATAMIS)
+	    gtk_menu_item_activate(GTK_MENU_ITEM(tatami_sel_num[i-1]));
     }
 
     error = NULL;
@@ -850,6 +819,8 @@ extern void set_menu_white_first(gboolean flag)
 extern gchar *menu_text_with_dots(gchar *text);
 gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param)
 {
+    gint i;
+
     language = ptr_to_gint(param);
     set_gui_language(language);
 
@@ -916,16 +887,11 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
 
     change_menu_label(tatami_sel,   _("Contest area"));
     change_menu_label(tatami_sel_none, _("Contest area not chosen"));
-    change_menu_label(tatami_sel_1, _("Contest area 1"));
-    change_menu_label(tatami_sel_2, _("Contest area 2"));
-    change_menu_label(tatami_sel_3, _("Contest area 3"));
-    change_menu_label(tatami_sel_4, _("Contest area 4"));
-    change_menu_label(tatami_sel_5, _("Contest area 5"));
-    change_menu_label(tatami_sel_6, _("Contest area 6"));
-    change_menu_label(tatami_sel_7, _("Contest area 7"));
-    change_menu_label(tatami_sel_8, _("Contest area 8"));
-    change_menu_label(tatami_sel_9, _("Contest area 9"));
-    change_menu_label(tatami_sel_10, _("Contest area 10"));
+    for (i = 0; i < NUM_TATAMIS; i++) {
+	gchar buf[32];
+	snprintf(buf, sizeof(buf), "%s %d", _("Contest area"), i+1);
+	change_menu_label(tatami_sel_num[i], buf);
+    }
 
     change_menu_label(node_ip,      menu_text_with_dots(_("Communication node")));
     change_menu_label(my_ip,        menu_text_with_dots(_("Own IP addresses")));

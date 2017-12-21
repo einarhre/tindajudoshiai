@@ -60,7 +60,7 @@
 #define BELT_4_DAN 9
 #define BELT_5_DAN 10
 
-#define NUM_TATAMIS 10
+#define NUM_TATAMIS 20
 
 #define SYSTEM_POOL        1
 #define SYSTEM_DPOOL       2
@@ -154,7 +154,7 @@ enum french_systems {
 
 #define NUM_MATCHES 256
 #define NUM_COMPETITORS 128
-#define TOTAL_NUM_COMPETITORS (2048*2)
+#define TOTAL_NUM_COMPETITORS (2048*4)
 
 #define NO_COMPETITOR  0
 #define GHOST          1
@@ -707,6 +707,9 @@ struct club_name_data {
 
 struct paint_data {
     cairo_t *c;
+#ifdef USE_PANGO
+    PangoFontDescription *desc;
+#endif
     gint     category;
     gint     page;
     struct compsys systm;

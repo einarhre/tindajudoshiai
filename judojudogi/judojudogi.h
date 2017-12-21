@@ -49,7 +49,7 @@
 #define HANSOKUMAKE_BLUE  3
 #define HANSOKUMAKE_WHITE 4
 
-#define NUM_TATAMIS  10
+#define NUM_TATAMIS  20
 #define NUM_LINES   10
 
 #define NORMAL_DISPLAY     0
