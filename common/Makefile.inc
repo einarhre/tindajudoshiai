@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=2.6.1
+SHIAI_VER_NUM=2.6.2-1
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 
 ifndef JS_BUILD_DIR
@@ -146,6 +146,7 @@ CFLAGS = $(WARNINGS) -g \
   -DSHIAI_VERSION=$(SHIAI_VERSION) \
   -DENABLE_NLS \
   -DGTKVER=$(GTKVER) \
+  -DUSE_PANGO \
   -Wno-deprecated-declarations
 
   ifeq ($(JUDOPROXY),YES)
@@ -203,6 +204,7 @@ else
     -DSHIAI_VERSION=$(SHIAI_VERSION) \
     -DENABLE_NLS \
     -DGTKVER=$(GTKVER) \
+    -DUSE_PANGO \
     -Wno-deprecated-declarations
 
     ifeq ($(JUDOPROXY),YES)
@@ -242,7 +244,8 @@ else
          $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags cairo) \
          $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags librsvg-2.0) \
          $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags glib-2.0) \
-         -DENABLE_BINRELOC -DENABLE_NLS -DGTKVER=$(GTKVER) -Wno-deprecated-declarations \
+         -DENABLE_BINRELOC -DENABLE_NLS -DGTKVER=$(GTKVER) -DUSE_PANGO \
+	 -Wno-deprecated-declarations \
          -I$(DEVELDIR)/include -I../common -DSHIAI_VERSION=$(SHIAI_VERSION)
 
     LIBS=$(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0) \
