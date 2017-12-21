@@ -27,7 +27,7 @@ OBJS += $(OBJDIR)/main.o $(OBJDIR)/competitors.o $(OBJDIR)/sheets.o $(OBJDIR)/se
 	$(OBJDIR)/custom-category-parser.o $(OBJDIR)/custom-category.o \
 	$(OBJDIR)/custom-category-svg-template.o $(OBJDIR)/common.o $(OBJDIR)/sha1.o \
 	$(OBJDIR)/websock.o $(OBJDIR)/websock-protocol.o  $(OBJDIR)/cJSON.o $(OBJDIR)/minilisp.o \
-	$(OBJDIR)/svg-lisp.o $(OBJDIR)/auto-update.o
+	$(OBJDIR)/svg-lisp.o $(OBJDIR)/auto-update.o $(OBJDIR)/common-utils.o
 
 CFLAGS += -DAPPLICATION="\"judoshiai\""
 CFLAGS += -DAPP_NUM=1
@@ -92,6 +92,9 @@ $(OBJDIR)/httpp.o: ../3rdparty/httpp/httpp.c
 
 $(OBJDIR)/minilisp.o: ../3rdparty/lisp/minilisp.c
 	${CC} -std=gnu99 $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/common-utils.o: ../common/common-utils.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 sqlite3-patched.c: ../3rdparty/sqlite3/sqlite3.c sqlite3.patch
 	cp ../3rdparty/sqlite3/sqlite3.c sqlite3-patched.c

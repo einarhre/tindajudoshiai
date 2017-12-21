@@ -9,7 +9,8 @@ $(OBJDIR):
 
 OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/stopwatch.o $(OBJDIR)/comm.o \
 	$(OBJDIR)/ip.o $(OBJDIR)/protocol.o $(OBJDIR)/show-ad.o $(OBJDIR)/sound.o \
-	$(OBJDIR)/video.o $(OBJDIR)/language.o $(OBJDIR)/common.o $(OBJDIR)/auto-update.o
+	$(OBJDIR)/video.o $(OBJDIR)/language.o $(OBJDIR)/common.o $(OBJDIR)/auto-update.o \
+	 $(OBJDIR)/common-utils.o
 
 CFLAGS += -DAPPLICATION="\"judotimer\""
 CFLAGS += -DAPP_NUM=2
@@ -52,6 +53,9 @@ $(OBJDIR)/common.o: ../common/common.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/auto-update.o: ../common/auto-update.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/common-utils.o: ../common/common-utils.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: %.c judotimer.h ../common/comm.h
