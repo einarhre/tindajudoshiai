@@ -16,6 +16,7 @@
 #include <librsvg/rsvg.h>
 
 #include "judoinfo.h"
+#include "common-utils.h"
 
 #define WRITE2(_s, _l)                                                  \
     do {                                                                \
@@ -158,7 +159,7 @@ gint write_judoka(RsvgHandle *handle, gint start, struct name_data *j)
             gchar *p = strchr(j->club, '/');
             if (p) {
                 gchar buf[32];
-                strncpy(buf, j->club, sizeof(buf)-1);
+                STRCPY_UTF8(buf, j->club);
                 buf[31] = 0;
                 p = strchr(buf, '/');
                 if (p) *p = 0;
