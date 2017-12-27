@@ -259,7 +259,7 @@ void update_clock(void)
     if (running && oRunning) {
 	oElap =  g_timer_elapsed(timer, NULL) - oStartTime;
 	score = 0;
-	if (oElap >= yuko && !use_2017_rules)
+	if (oElap >= yuko && !(use_2017_rules || use_2018_rules))
 	    score = 2;
 	if (oElap >= wazaari) {
 	    score = 3;
@@ -632,7 +632,10 @@ static gint get_winner(gboolean final_result)
 		     (whitepts[S] > bluepts[S])) winner = BLUE;
 	}
     } else if (bluepts[S] || whitepts[S]) {
-        if (bluepts[S] > whitepts[S]) winner = WHITE;
+	if (use_2018_rules) {
+	    if (bluepts[S] >= 3) winner = WHITE;
+	    else if (whitepts[S] >= 3) winner = BLUE;
+	} else if (bluepts[S] > whitepts[S]) winner = WHITE;
         else if (bluepts[S] < whitepts[S]) winner = BLUE;
     }
 
@@ -929,16 +932,16 @@ void display_ask_window(gchar *name, gchar *cat, gchar winner)
     if (winner == BLUE) {
         bluepts[I] = 1;
         whitepts[I] = 0;
-        strncpy(saved_last1, last, sizeof(saved_last1)-1);
-        strncpy(saved_first1, first, sizeof(saved_first1)-1);
+        STRCPY_UTF8(saved_last1, last);
+        STRCPY_UTF8(saved_first1, first);
     } else if (winner == WHITE) {
         bluepts[I] = 0;
         whitepts[I] = 1;
-        strncpy(saved_last2, last, sizeof(saved_last2)-1);
-        strncpy(saved_first2, first, sizeof(saved_first2)-1);
+        STRCPY_UTF8(saved_last2, last);
+        STRCPY_UTF8(saved_first2, first);
     }
 
-    strncpy(saved_cat, cat, sizeof(saved_cat)-1);
+    STRCPY_UTF8(saved_cat, cat);
     create_ask_window();
 }
 
@@ -980,7 +983,7 @@ void reset(guint key, struct msg_next_match *msg0)
     bp = array2int(bluepts);
     wp = array2int(whitepts);
 
-    if (use_2017_rules) {
+    if (use_2017_rules || use_2018_rules) {
 	// ignore shidos
 	bp &= ~0xf;
 	wp &= ~0xf;
@@ -1016,15 +1019,14 @@ void reset(guint key, struct msg_next_match *msg0)
         msg1.type = MSG_UPDATE_LABEL;
         msg1.u.update_label.label_num = START_WINNER;
         if (result_hikiwake)
-            snprintf(msg1.u.update_label.text, sizeof(msg1.u.update_label.text),
-                     "%s\t\t\t", _("Hikiwake"));
+            SNPRINTF_UTF8(msg1.u.update_label.text,
+			  "%s\t\t\t", _("Hikiwake"));
         else
-            snprintf(msg1.u.update_label.text, sizeof(msg1.u.update_label.text),
-                     "%s\t%s\t\t",
-                     winner == BLUE ? saved_last1 : saved_last2,
-                     winner == BLUE ? saved_first1 : saved_first2);
-        strncpy(msg1.u.update_label.text2, saved_cat,
-                sizeof(msg1.u.update_label.text2)-1);
+            SNPRINTF_UTF8(msg1.u.update_label.text,
+			  "%s\t%s\t\t",
+			  winner == BLUE ? saved_last1 : saved_last2,
+			  winner == BLUE ? saved_first1 : saved_first2);
+        STRCPY_UTF8(msg1.u.update_label.text2, saved_cat);
         msg1.u.update_label.text3[0] = winner;
         /*write_tv_logo(&(msg1.u.update_label));*/
 
@@ -1100,7 +1102,7 @@ void reset(guint key, struct msg_next_match *msg0)
     memset(&(stackval), 0, sizeof(stackval));
     stackdepth = 0;
 
-    if (use_2017_rules) {
+    if (use_2017_rules || use_2018_rules) {
         koka    = 0.000;
         yuko    = 0.000;
         wazaari = 10.000;
@@ -1135,17 +1137,17 @@ void reset(guint key, struct msg_next_match *msg0)
                 (!(msg0->flags & MATCH_FLAG_JUDOGI1_OK) ||
                  !(msg0->flags & MATCH_FLAG_JUDOGI2_OK))) {
                 gchar buf[128];
-                snprintf(buf, sizeof(buf), "%s: %s", _("CONTROL"),
-                         !(msg0->flags & MATCH_FLAG_JUDOGI1_OK) ? get_name(BLUE) : get_name(WHITE));
+                SNPRINTF_UTF8(buf, "%s: %s", _("CONTROL"),
+			      !(msg0->flags & MATCH_FLAG_JUDOGI1_OK) ? get_name(BLUE) : get_name(WHITE));
                 display_big(buf, 2);
                 jcontrol = TRUE;
                 jcontrol_flags = msg0->flags;
             } else if (msg0->rest_time) {
                 gchar buf[128];
-                snprintf(buf, sizeof(buf), "%s: %s", _("REST TIME"),
-                         msg0->minutes & MATCH_FLAG_BLUE_REST ?
-                         get_name(BLUE) :
-                         get_name(WHITE));
+                SNPRINTF_UTF8(buf, "%s: %s", _("REST TIME"),
+			      msg0->minutes & MATCH_FLAG_BLUE_REST ?
+			      get_name(BLUE) :
+			      get_name(WHITE));
                 rest_time = TRUE;
                 rest_flags = msg0->minutes;
                 total = msg0->rest_time;
@@ -1164,7 +1166,7 @@ void reset(guint key, struct msg_next_match *msg0)
     case GDK_1:
         total   = golden_score ? gs_time : 120.0;
         koka    = 0.0;
-	if (use_2017_rules) {
+	if (use_2017_rules || use_2018_rules) {
 	    yuko    = 0.0;
 	    wazaari = 5.0;
 	} else {
@@ -1226,7 +1228,7 @@ static void incdecpts(gint *p, gboolean decrement)
 #define INC FALSE
 #define DEC TRUE
 
-#define SHIDOMAX (use_2017_rules ? 3 : 4)
+#define SHIDOMAX ((use_2017_rules || use_2018_rules) ? 3 : 4)
 
 void check_ippon(void)
 {
@@ -1543,9 +1545,10 @@ void clock_key(guint key, guint event_state)
 	    incdecpts(&whitepts[S], shift);
             if (whitepts[S] >= SHIDOMAX)
                 bluepts[I] = 1;
-	} else
+	} else if (!use_2018_rules) {
 	    incdecpts(&whitepts[Y], shift);
-	log_scores("Yuko to ", WHITE);
+	    log_scores("Yuko to ", WHITE);
+	}
         break;
     case GDK_F8:
         if (shift) {
@@ -1590,9 +1593,10 @@ void clock_key(guint key, guint event_state)
 	    incdecpts(&bluepts[S], shift);
             if (bluepts[S] >= SHIDOMAX)
                 whitepts[I] = 1;
-	} else
+	} else if (!use_2018_rules) {
 	    incdecpts(&bluepts[Y], shift);
-	log_scores("Yuko to ", BLUE);
+	    log_scores("Yuko to ", BLUE);
+	}
         break;
     case GDK_F4:
         if (shift) {

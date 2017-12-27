@@ -233,7 +233,7 @@ static GtkWidget *mode_normal, /**mode_master,*/ *mode_slave, *no_texts;
 static GtkWidget *undo, *hansokumake_blue, *hansokumake_white, *clear_selection, *switch_sides;
 static GtkWidget *advertise, *sound, *lang_menu_item;
 static GtkWidget *name_layout, *name_layouts[NUM_NAME_LAYOUTS];
-static GtkWidget *display_font, *rules_2017;
+static GtkWidget *display_font, *rules_2017, *rules_2018;
 
 void activate_slave_mode(void)
 {
@@ -453,6 +453,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     rules_stop_ippon = gtk_check_menu_item_new_with_label("");
     //rules_no_free_shido = gtk_check_menu_item_new_with_label("");
     rules_2017      = gtk_check_menu_item_new_with_label("");
+    rules_2018      = gtk_check_menu_item_new_with_label("");
     confirm_match   = gtk_check_menu_item_new_with_label("");
     judogi_control  = gtk_check_menu_item_new_with_label("");
 
@@ -478,6 +479,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), red_background);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), full_screen);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_2017);
+    gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_2018);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_stop_ippon);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), confirm_match);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), showcomp);
@@ -546,6 +548,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(full_screen),     "activate", G_CALLBACK(toggle_full_screen),   (gpointer)0);
     g_signal_connect(G_OBJECT(rules_stop_ippon), "activate", G_CALLBACK(toggle_rules_stop_ippon), (gpointer)0);
     g_signal_connect(G_OBJECT(rules_2017),      "activate", G_CALLBACK(toggle_rules_2017),     (gpointer)0);
+    g_signal_connect(G_OBJECT(rules_2018),      "activate", G_CALLBACK(toggle_rules_2018),     (gpointer)0);
     g_signal_connect(G_OBJECT(confirm_match),   "activate", G_CALLBACK(toggle_confirm_match),  (gpointer)0);
     g_signal_connect(G_OBJECT(whitefirst),      "activate", G_CALLBACK(toggle_whitefirst),     (gpointer)0);
     g_signal_connect(G_OBJECT(no_texts),        "activate", G_CALLBACK(toggle_no_texts),       (gpointer)0);
@@ -654,7 +657,8 @@ void set_preferences_keyfile(GKeyFile *key_file, gboolean defaults)
 
     READ_BOOL("fullscreen", full_screen, FALSE);
     READ_BOOL("stopippon", rules_stop_ippon, FALSE);
-    READ_BOOL("rules2017", rules_2017, TRUE);
+    READ_BOOL("rules2017", rules_2017, FALSE);
+    READ_BOOL("rules2018", rules_2018, TRUE);
     READ_BOOL("confirmmatch", confirm_match, TRUE);
     READ_BOOL("whitefirst", whitefirst, TRUE);
     READ_BOOL("notexts", no_texts, FALSE);
@@ -854,6 +858,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
 
     //change_menu_label(rules_no_free_shido, _("No free shido"));
     change_menu_label(rules_2017, _("2017 Rules"));
+    change_menu_label(rules_2018, _("2018 Rules"));
 
     change_menu_label(confirm_match, _("Confirm New Match"));
     change_menu_label(clock_only,    _("View clocks only"));
@@ -1145,6 +1150,7 @@ void set_menu_active(void)
     SET_SENSITIVE(rules_stop_ippon,   ACTIVE);
 
     SET_SENSITIVE(rules_2017, ACTIVE);
+    SET_SENSITIVE(rules_2018, ACTIVE);
 
     SET_SENSITIVE(confirm_match, ACTIVE);
     SET_SENSITIVE(clock_only,    ACTIVE);

@@ -92,6 +92,7 @@ gboolean menu_hidden = FALSE;
 gboolean supports_alpha = FALSE;
 //gboolean rule_no_free_shido = FALSE;
 gboolean use_2017_rules = FALSE;
+gboolean use_2018_rules = FALSE;
 gint use_ger_u12_rules = 0;
 
 #define MY_FONT "Arial"
@@ -899,6 +900,7 @@ void set_score(guint score)
 void parse_name(const gchar *s, gchar *first, gchar *last, gchar *club, gchar *country)
 {
     const guchar *p = (const guchar *)s;
+    gchar *p1 = first, *p2 = last, *p3 = club, *p4 = country;
     gint i;
 
     *first = *last = *club = *country = 0;
@@ -909,6 +911,8 @@ void parse_name(const gchar *s, gchar *first, gchar *last, gchar *club, gchar *c
         i++;
     }
     *last = 0;
+    if (i >= 31) FIX_UTF8(p2);
+
     p++;
     i = 0;
     while (*p >= ' ' && i < 31) {
@@ -916,6 +920,8 @@ void parse_name(const gchar *s, gchar *first, gchar *last, gchar *club, gchar *c
         i++;
     }
     *first = 0;
+    if (i >= 31) FIX_UTF8(p1);
+
     p++;
     i = 0;
     while (*p >= ' ' && i < 31) {
@@ -923,6 +929,8 @@ void parse_name(const gchar *s, gchar *first, gchar *last, gchar *club, gchar *c
         i++;
     }
     *country = 0;
+    if (i >= 31) FIX_UTF8(p4);
+
     p++;
     i = 0;
     while (*p >= ' ' && i < 31) {
@@ -930,6 +938,7 @@ void parse_name(const gchar *s, gchar *first, gchar *last, gchar *club, gchar *c
         i++;
     }
     *club = 0;
+    if (i >= 31) FIX_UTF8(p3);
 }
 
 static gchar *get_name_by_layout(gchar *first, gchar *last, gchar *club, gchar *country)
@@ -997,12 +1006,12 @@ void show_message(gchar *cat_1,
         memset(&msg, 0, sizeof(msg));
         msg.type = MSG_UPDATE_LABEL;
         msg.u.update_label.label_num = SHOW_MESSAGE;
-	strncpy(msg.u.update_label.cat_a, cat_1, sizeof(msg.u.update_label.cat_a)-1);
-	strncpy(msg.u.update_label.comp1_a, blue_1, sizeof(msg.u.update_label.comp1_a)-1);
-	strncpy(msg.u.update_label.comp2_a, white_1, sizeof(msg.u.update_label.comp2_a)-1);
-	strncpy(msg.u.update_label.cat_b, cat_2, sizeof(msg.u.update_label.cat_b)-1);
-	strncpy(msg.u.update_label.comp1_b, blue_2, sizeof(msg.u.update_label.comp1_b)-1);
-	strncpy(msg.u.update_label.comp2_b, white_2, sizeof(msg.u.update_label.comp2_b)-1);
+	STRCPY_UTF8(msg.u.update_label.cat_a, cat_1);
+	STRCPY_UTF8(msg.u.update_label.comp1_a, blue_1);
+	STRCPY_UTF8(msg.u.update_label.comp2_a, white_1);
+	STRCPY_UTF8(msg.u.update_label.cat_b, cat_2);
+	STRCPY_UTF8(msg.u.update_label.comp1_b, blue_2);
+	STRCPY_UTF8(msg.u.update_label.comp2_b, white_2);
 	msg.u.update_label.xalign = flags;
 	msg.u.update_label.round = rnd;
 
@@ -1022,13 +1031,13 @@ void show_message(gchar *cat_1,
     parse_name(blue_1, b_first, b_last, b_club, b_country);
     parse_name(white_1, w_first, w_last, w_club, w_country);
 
-    strncpy(saved_last1, b_last, sizeof(saved_last1)-1);
-    strncpy(saved_last2, w_last, sizeof(saved_last2)-1);
-    strncpy(saved_first1, b_first, sizeof(saved_first1)-1);
-    strncpy(saved_first2, w_first, sizeof(saved_first2)-1);
-    strncpy(saved_cat, cat_1, sizeof(saved_cat)-1);
-    strncpy(saved_country1, b_country, sizeof(saved_country1)-1);
-    strncpy(saved_country2, w_country, sizeof(saved_country2)-1);
+    STRCPY_UTF8(saved_last1, b_last);
+    STRCPY_UTF8(saved_last2, w_last);
+    STRCPY_UTF8(saved_first1, b_first);
+    STRCPY_UTF8(saved_first2, w_first);
+    STRCPY_UTF8(saved_cat, cat_1);
+    STRCPY_UTF8(saved_country1, b_country);
+    STRCPY_UTF8(saved_country2, w_country);
 
     if (dsp_layout == 6) {
         g_utf8_strncpy(buf, b_first, 1);
@@ -1115,12 +1124,9 @@ void show_message(gchar *cat_1,
         memset(&msg, 0, sizeof(msg));
         msg.type = MSG_UPDATE_LABEL;
         msg.u.update_label.label_num = SAVED_LAST_NAMES;
-        strncpy(msg.u.update_label.text, saved_last1,
-                sizeof(msg.u.update_label.text)-1);
-        strncpy(msg.u.update_label.text2, saved_last2,
-                sizeof(msg.u.update_label.text2)-1);
-        strncpy(msg.u.update_label.text3, saved_cat,
-                sizeof(msg.u.update_label.text3)-1);
+        STRCPY_UTF8(msg.u.update_label.text, saved_last1);
+        STRCPY_UTF8(msg.u.update_label.text2, saved_last2);
+        STRCPY_UTF8(msg.u.update_label.text3, saved_cat);
         send_label_msg(&msg);
     }
 
@@ -1255,7 +1261,7 @@ static void show_big(void)
 void display_big(gchar *txt, gint tmo_sec)
 {
     gtk_window_set_title(GTK_WINDOW(main_window), txt);
-    strncpy(big_text, txt, sizeof(big_text)-1);
+    STRCPY_UTF8(big_text, txt);
     big_end = time(NULL) + tmo_sec;
     big_dialog = TRUE;
     if (no_big_text == FALSE)
@@ -1267,8 +1273,7 @@ void display_big(gchar *txt, gint tmo_sec)
         memset(&msg, 0, sizeof(msg));
         msg.type = MSG_UPDATE_LABEL;
         msg.u.update_label.label_num = START_BIG;
-        strncpy(msg.u.update_label.text, big_text,
-                sizeof(msg.u.update_label.text)-1);
+        STRCPY_UTF8(msg.u.update_label.text, big_text);
         send_label_msg(&msg);
     }
 }
@@ -1407,14 +1412,14 @@ static void expose_label(cairo_t *c, gint w)
         labels[w].wrap &&
         extents.width > W(labels[w].w)) {
         // needs two lines
-        snprintf(buf1, sizeof(buf1), "%s", labels[w].text);
+        SNPRINTF_UTF8(buf1, "%s", labels[w].text);
         gchar *p = strrchr(buf1, '-');
         if (!p)
             p = strrchr(buf1, '+');
         if (!p)
             p = strrchr(buf1, ' ');
         if (p) {
-            snprintf(buf2, sizeof(buf2), "%s", p);
+            SNPRINTF_UTF8(buf2, "%s", p);
             *p = 0;
             txt1 = buf1;
             txt2 = buf2;
@@ -1424,6 +1429,8 @@ static void expose_label(cairo_t *c, gint w)
 	    pango_font_description_set_absolute_size(labels[w].desc, fsize*PANGO_SCALE);
 	    pango_layout_set_font_description(layout, labels[w].desc);
 	    pango_layout_get_size(layout, &iwidth, &iheight);
+	    iwidth /= PANGO_SCALE;
+	    iheight /= PANGO_SCALE;
 #else
             cairo_set_font_size(c, fsize);
             cairo_text_extents(c, txt1, &extents);
@@ -1461,6 +1468,8 @@ static void expose_label(cairo_t *c, gint w)
 	pango_cairo_show_layout(c, layout);
 	pango_layout_set_text(layout, txt2, -1);
 	pango_layout_get_size(layout, &iwidth, &iheight);
+	iwidth /= PANGO_SCALE;
+	iheight /= PANGO_SCALE;
         y = H(labels[w].y + labels[w].h/2.0) + (H(labels[w].h/2.0)- iheight)/2.0;
         cairo_move_to(c, x, y);
 	pango_cairo_show_layout(c, layout);
@@ -1491,7 +1500,7 @@ static void expose_label(cairo_t *c, gint w)
 
     if (w == flag_blue || w == flag_white) {
         gchar buf[32];
-        snprintf(buf, sizeof(buf), "%s.png", txt1);
+        SNPRINTF_UTF8(buf, "%s.png", txt1);
         gchar *file = g_build_filename(installation_dir, "etc", "flags-ioc", buf, NULL);
         cairo_surface_t *image = cairo_image_surface_create_from_png(file);
         if (image && cairo_surface_status(image) == CAIRO_STATUS_SUCCESS) {
@@ -1898,8 +1907,7 @@ gboolean send_label(gint bigdsp)
 
                 if (bigdsp) {
                         msg.u.update_label.label_num = bigdsp;
-                        strncpy(msg.u.update_label.text, big_text,
-                                sizeof(msg.u.update_label.text)-1);
+                        STRCPY_UTF8(msg.u.update_label.text, big_text);
                         continue;
                 }
 
@@ -1910,8 +1918,7 @@ gboolean send_label(gint bigdsp)
                         msg.u.update_label.y = labels[update_next].y;
                         msg.u.update_label.w = labels[update_next].w;
                         msg.u.update_label.h = labels[update_next].h;
-                        strncpy(msg.u.update_label.text, labels[update_next].text,
-                                sizeof(msg.u.update_label.text)-1);
+                        STRCPY_UTF8(msg.u.update_label.text, labels[update_next].text);
                         msg.u.update_label.size = labels[update_next].size;
                         msg.u.update_label.xalign = labels[update_next].xalign;
                         msg.u.update_label.fg_r = labels[update_next].fg_r;
@@ -1991,9 +1998,9 @@ void update_label(struct msg_update_label *msg)
     } else if (w == STOP_WINNER) {
         close_ask_window();
     } else if (w == SAVED_LAST_NAMES) {
-        strncpy(saved_last1, msg->text, sizeof(saved_last1)-1);
-        strncpy(saved_last2, msg->text2, sizeof(saved_last2)-1);
-        strncpy(saved_cat, msg->text3, sizeof(saved_cat)-1);
+        STRCPY_UTF8(saved_last1, msg->text);
+        STRCPY_UTF8(saved_last2, msg->text2);
+        STRCPY_UTF8(saved_cat, msg->text3);
     } else if (w == SHOW_MESSAGE) {
 	show_message(msg->cat_a, msg->comp1_a, msg->comp2_a,
 		     msg->cat_b, msg->comp1_b, msg->comp2_b, msg->xalign, msg->round);
@@ -2628,7 +2635,23 @@ void toggle_rules_2017(GtkWidget *menu_item, gpointer data)
 {
     use_2017_rules = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
     g_key_file_set_boolean(keyfile, "preferences", "rules2017", use_2017_rules);
-    if (use_2017_rules) {
+    if (!(use_2017_rules || use_2018_rules)) {
+	set_text(MY_LABEL(wazaari), "I");
+	set_text(MY_LABEL(yuko), "W");
+	set_text(MY_LABEL(koka), "Y");
+    } else {
+	set_text(MY_LABEL(wazaari), "I");
+	set_text(MY_LABEL(yuko), "W");
+	set_text(MY_LABEL(koka), "");
+    }
+    select_display_layout(NULL, NULL);
+}
+
+void toggle_rules_2018(GtkWidget *menu_item, gpointer data)
+{
+    use_2018_rules = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
+    g_key_file_set_boolean(keyfile, "preferences", "rules2018", use_2018_rules);
+    if (!(use_2017_rules || use_2018_rules)) {
 	set_text(MY_LABEL(wazaari), "I");
 	set_text(MY_LABEL(yuko), "W");
 	set_text(MY_LABEL(koka), "Y");
@@ -2700,8 +2723,8 @@ void toggle_judogi_control(GtkWidget *menu_item, gpointer data)
 }
 
 #define SWITCH_TEXTS(_a, _b) \
-    do { gchar _s[32]; strncpy(_s, _a, sizeof(_s)-1); \
-        strncpy(_a, _b, sizeof(_a)-1); strncpy(_b, _s, sizeof(_b)-1); } while (0)
+    do { gchar _s[32]; STRCPY_UTF8(_s, _a); \
+        STRCPY_UTF8(_a, _b); STRCPY_UTF8(_b, _s); } while (0)
 
 void toggle_switch_sides(GtkWidget *menu_item, gpointer data)
 {
@@ -3255,7 +3278,7 @@ void select_display_layout(GtkWidget *menu_item, gpointer data)
 		    char pl[256];
 		    gchar *src = line;
 		    while (*src == ' ' || (*src >= '0' && *src <= '9')) src++;
-		    snprintf(pl, sizeof(pl), "[preferences]\n%s", src);
+		    SNPRINTF_UTF8(pl, "[preferences]\n%s", src);
 		    GKeyFile *key_file = g_key_file_new();
 		    g_key_file_load_from_data(key_file, pl, -1, G_KEY_FILE_NONE, NULL);
 		    set_preferences_keyfile(key_file, FALSE);
@@ -3362,20 +3385,38 @@ void select_display_layout(GtkWidget *menu_item, gpointer data)
     }
 
 
-    if (dsp_layout != 7 && use_2017_rules) {
-	labels[comp1_leg_grab].x = labels[bk].x;
-	labels[comp1_leg_grab].y = labels[bk].y;
-	labels[comp1_leg_grab].w = labels[bk].w;
-	labels[comp1_leg_grab].h = labels[bk].h;
-	labels[comp2_leg_grab].x = labels[wk].x;
-	labels[comp2_leg_grab].y = labels[wk].y;
-	labels[comp2_leg_grab].w = labels[wk].w;
-	labels[comp2_leg_grab].h = labels[wk].h;
-	NO_SHOW(koka);
-	NO_SHOW(bk);
-	NO_SHOW(wk);
+    if (dsp_layout != 7) {
+	if (use_2017_rules || use_2018_rules) {
+	    labels[comp1_leg_grab].x = labels[bk].x;
+	    labels[comp1_leg_grab].y = labels[bk].y;
+	    labels[comp1_leg_grab].w = labels[bk].w;
+	    labels[comp1_leg_grab].h = labels[bk].h;
+	    labels[comp2_leg_grab].x = labels[wk].x;
+	    labels[comp2_leg_grab].y = labels[wk].y;
+	    labels[comp2_leg_grab].w = labels[wk].w;
+	    labels[comp2_leg_grab].h = labels[wk].h;
+	    NO_SHOW(koka);
+	    NO_SHOW(bk);
+	    NO_SHOW(wk);
+	}
+
+	if (use_2017_rules) {
+	    set_text(comp1_leg_grab, "L");
+	    set_text2(comp1_leg_grab, "G");
+	    set_text(comp2_leg_grab, "L");
+	    set_text2(comp2_leg_grab, "G");
+
+	} else if (use_2018_rules) {
+	    set_text(comp1_leg_grab, "");
+	    set_text2(comp1_leg_grab, "");
+	    set_text(comp2_leg_grab, "");
+	    set_text2(comp2_leg_grab, "");
+	} else {
+	    NO_SHOW(comp1_leg_grab);
+	    NO_SHOW(comp2_leg_grab);
+	}
     }
- 
+
     set_colors();
     init_display();
 
@@ -3510,7 +3551,7 @@ void set_font(gchar *font1)
 static gchar *get_font_face()
 {
     static gchar buf[64];
-    snprintf(buf, sizeof(buf), "%s 12", font_face);
+    SNPRINTF_UTF8(buf, "%s 12", font_face);
     return buf;
 }
 

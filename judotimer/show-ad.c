@@ -2297,29 +2297,29 @@ void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2,
 
     gchar *p;
 
-    strncpy(category, cat, sizeof(category)-1);
+    STRCPY_UTF8(category, cat);
     cat_round = round;
 
     if (showletter) {
         gchar buf[8];
         if (first1[0]) {
             g_utf8_strncpy(buf, first1, 1);
-            snprintf(b_last, sizeof(b_last), "%s.%s", buf, comp1);
+            SNPRINTF_UTF8(b_last, "%s.%s", buf, comp1);
         } else
-            strncpy(b_last, comp1, sizeof(b_last)-1);
+            STRCPY_UTF8(b_last, comp1);
 
         if (first2[0]) {
             g_utf8_strncpy(buf, first2, 1);
-            snprintf(w_last, sizeof(w_last), "%s.%s", buf, comp2);
+            SNPRINTF_UTF8(w_last, "%s.%s", buf, comp2);
         } else
-            strncpy(w_last, comp2, sizeof(w_last)-1);
+            STRCPY_UTF8(w_last, comp2);
     } else {
-        strncpy(b_last, comp1, sizeof(b_last)-1);
-        strncpy(w_last, comp2, sizeof(w_last)-1);
+        STRCPY_UTF8(b_last, comp1);
+        STRCPY_UTF8(w_last, comp2);
     }
 
-    strncpy(b_country, country1, sizeof(b_country)-1);
-    strncpy(w_country, country2, sizeof(w_country)-1);
+    STRCPY_UTF8(b_country, country1);
+    STRCPY_UTF8(w_country, country2);
 
     p = strchr(b_last, '\t');
     if (p) *p = 0;
