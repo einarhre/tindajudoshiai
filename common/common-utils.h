@@ -48,4 +48,34 @@ void write_text(cairo_t *cr,
 void get_text_extents(cairo_t *cr, gchar *txt, PangoFontDescription *desc,
 		      gdouble *w, gdouble *h);
 
+// Safely copy utf-8 string. Bytes are removed from the end as necessary.
+#define STRCPY_UTF8(_dst, _src)						\
+    do {								\
+	if (g_strlcpy(_dst, _src, sizeof(_dst)) >= sizeof(_dst)) {	\
+	    gchar *end = NULL;						\
+	    if (g_utf8_validate(_dst, -1, (const gchar **)&end) == FALSE) \
+		if (end) *end = 0;					\
+	}} while (0)
+
+#define FIX_UTF8(_dst)							\
+    do {								\
+	gchar *end = NULL;						\
+	if (g_utf8_validate(_dst, -1, (const gchar **)&end) == FALSE)	\
+	    if (end) *end = 0;						\
+    } while (0)
+
+#define SNPRINTF_UTF8(_dst, _fmt...)				\
+    do {							\
+	if (snprintf(_dst, sizeof(_dst), _fmt) >= sizeof(_dst)) \
+	    FIX_UTF8(_dst);					\
+    } while (0)
+
+#define CHECK_UTF8(_s)							\
+    do {								\
+	if (g_utf8_validate(_s, -1, NULL) == FALSE)			\
+	    g_print("%s:%d: STRING %s NOT UTF-8\n", __FILE__, __LINE__, _s); \
+    } while (0)
+
+
+
 #endif

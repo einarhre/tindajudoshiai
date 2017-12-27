@@ -51,6 +51,12 @@ void write_text(cairo_t *cr,
     gdouble x1, y1;
     gint width, height;
 
+    if (!g_utf8_validate(txt, -1, NULL)) {
+	g_print("NOT VALID UTF-8: %s\n", txt);
+	g_print("STRLEN=%d\n", (int)strlen(txt));
+	txt = "NOT UTF-8";
+    }
+
     if (desc == NULL && size == 0 && h && *h > 0) size = 7*(*h)*PANGO_SCALE/10;
     else if (size > 0) size *= PANGO_SCALE;
 
