@@ -929,9 +929,11 @@ void write_comp_stat(gint index)
                 "<td align=\"center\" class=\"cshdr\">%s<td class=\"cshdr\">%s"
                 "<td class=\"cshdr\">%s<td class=\"cshdr\">%s</tr>\r\n",
                 j->last, _T(name),
-		prop_get_int_val_cat(PROP_RULES_2017, catix) ? "IW/S" : "IWY/S",
+		(prop_get_int_val_cat(PROP_RULES_2017, catix) ||
+		 prop_get_int_val_cat(PROP_RULES_2018, catix)) ? "IW/S" : "IWY/S",
 		_T(points),
-		prop_get_int_val_cat(PROP_RULES_2017, catix) ? "IW/S" : "IWY/S",
+		(prop_get_int_val_cat(PROP_RULES_2017, catix) ||
+		 prop_get_int_val_cat(PROP_RULES_2018, catix)) ? "IW/S" : "IWY/S",
 		_T(name), _T(time));
 
         db_print_category_matches(catdata, f);
@@ -948,9 +950,11 @@ void write_comp_stat(gint index)
             utf8_to_html(firstname_lastname() ? j->last : j->first),
             utf8_to_html(j->club),
             _T(category), _T(name),
-	    prop_get_int_val_cat(PROP_RULES_2017, catix) ? "IW/S" : "IWY/S",
+	    (prop_get_int_val_cat(PROP_RULES_2017, catix) ||
+	     prop_get_int_val_cat(PROP_RULES_2018, catix)) ? "IW/S" : "IWY/S",
 	    _T(points),
-	    prop_get_int_val_cat(PROP_RULES_2017, catix) ? "IW/S" : "IWY/S",
+	    (prop_get_int_val_cat(PROP_RULES_2017, catix) ||
+	     prop_get_int_val_cat(PROP_RULES_2018, catix)) ? "IW/S" : "IWY/S",
 	    _T(name), _T(time));
 
 
@@ -1001,7 +1005,8 @@ void write_comp_stat(gint index)
                         utf8_to_html(firstname_lastname() ? j1->last : j1->first),
                         prop_get_int_val(PROP_WHITE_FIRST) ? "wscore" : "bscore");
 
-		if (prop_get_int_val_cat(PROP_RULES_2017, cat))
+		if (prop_get_int_val_cat(PROP_RULES_2017, cat) ||
+		    prop_get_int_val_cat(PROP_RULES_2018, cat))
 		    fprintf(f,
 			    "%d%d/%d%s",
 			    (blue_score>>16)&15, (blue_score>>12)&15,
@@ -1019,7 +1024,8 @@ void write_comp_stat(gint index)
                         get_points_str(white_points, catix),
                         prop_get_int_val_cat(PROP_WHITE_FIRST, cat) ? "bscore" : "wscore");
 
-		if (prop_get_int_val_cat(PROP_RULES_2017, cat))
+		if (prop_get_int_val_cat(PROP_RULES_2017, cat) ||
+		    prop_get_int_val_cat(PROP_RULES_2018, cat))
 		    fprintf(f,
 			    "%d%d/%d%s",
 			    (white_score>>16)&15, (white_score>>12)&15,

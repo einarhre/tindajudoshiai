@@ -1153,7 +1153,8 @@ gint db_set_score(gint category, gint number, gint score, gboolean is_blue, gboo
     gint points = 0;
     gint blue_score, white_score, blue_points, white_points;
 
-    if (prop_get_int_val_cat(PROP_RULES_2017, category))
+    if (prop_get_int_val_cat(PROP_RULES_2017, category) ||
+	prop_get_int_val_cat(PROP_RULES_2018, category))
 	maxshido = 3;
 
     // find current match data
@@ -2007,7 +2008,8 @@ static void db_print_one_match(struct match *m)
             utf8_to_html(firstname_lastname() ? j1->last : j1->first),
             prop_get_int_val(PROP_WHITE_FIRST) ? "wscore" : "bscore");
 
-    if (prop_get_int_val_cat(PROP_RULES_2017, m->category))
+    if (prop_get_int_val_cat(PROP_RULES_2017, m->category) ||
+	prop_get_int_val_cat(PROP_RULES_2018, m->category))
 	fprintf(matches_file,
 		"%d%d/%d%s</td>",
 		(m->blue_score>>16)&15, (m->blue_score>>12)&15,
@@ -2025,7 +2027,8 @@ static void db_print_one_match(struct match *m)
             get_points_str(m->white_points, m->category),
             prop_get_int_val(PROP_WHITE_FIRST) ? "bscore" : "wscore");
 
-    if (prop_get_int_val_cat(PROP_RULES_2017, m->category))
+    if (prop_get_int_val_cat(PROP_RULES_2017, m->category) ||
+	prop_get_int_val_cat(PROP_RULES_2018, m->category))
 	fprintf(matches_file,
 		"%d%d/%d%s</td>",
 		(m->white_score>>16)&15, (m->white_score>>12)&15,

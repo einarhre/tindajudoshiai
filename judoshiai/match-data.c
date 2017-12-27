@@ -3335,7 +3335,8 @@ gchar *get_score_str(gint score, gint catix)
     a = (score >> 12) & 0xf;
     if (a > 9) a = 9;
     *p++ = '0' + a;
-    if (!prop_get_int_val_cat(PROP_RULES_2017, catix)) {
+    if (!(prop_get_int_val_cat(PROP_RULES_2017, catix) ||
+	  prop_get_int_val_cat(PROP_RULES_2018, catix))) {
 	a = (score >> 8) & 0xf;
 	if (a > 9) a = 9;
 	*p++ = '0' + a;

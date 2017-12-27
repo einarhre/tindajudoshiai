@@ -58,7 +58,6 @@ static void set_properties_button(GtkWidget *checkbox, gpointer arg)
     gint i;
     GtkWidget *w;
 
-    g_print("RED properties_button=%p\n", properties_button);
     if (properties_button) {
 	gtk_widget_set_name(properties_button, "button_red");
 	for (i = PROP_USE_IJF_POINTS; i <= PROP_USE_PTS_10_5_1; i++) { 
@@ -153,6 +152,12 @@ struct property {
     {
         .name = "Rules2017",
         .label = N_("2017 Rules:"),
+        .type = PROP_TYPE_CHECK,
+	.action_func = set_properties_button,
+    },
+    {
+        .name = "Rules2018",
+        .label = N_("2018 Rules:"),
         .type = PROP_TYPE_CHECK,
 	.action_func = set_properties_button,
     },
@@ -603,7 +608,8 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
     else
         SET_VAL(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS, "0", 0);
 
-    SET_VAL(PROP_RULES_2017, "1", 1);
+    SET_VAL(PROP_RULES_2017, "0", 0);
+    SET_VAL(PROP_RULES_2018, "1", 1);
     SET_VAL(PROP_EXTRA_MATCH_IN_TEAMS_TIE, "1", 1);
 
     if (draw_system == DRAW_FINNISH)

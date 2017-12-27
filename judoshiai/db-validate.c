@@ -210,6 +210,28 @@ void db_validation(GtkWidget *w, gpointer data)
         db_close_table();
         
     // badly written names
+    rows = db_get_table("select category from categories where deleted&1=0");
+
+    if (rows > 0) {
+        gboolean hdr_printed = FALSE;
+        for (row = 0; row < rows; row++) {
+            gchar *word;
+            if ((word = db_get_row_col_data(row, 0))) {
+                gint val = validate_word(word);
+                if (val) {
+                    warnings++;
+                    if (!hdr_printed) {
+                        insert_tag(buffer, _("Category typing errors\n"), "bold", 1);
+                        hdr_printed = TRUE;
+                    }
+		}
+	    }
+	}
+    }
+
+    if (rows >= 0)
+        db_close_table();
+
     rows = db_get_table("select * from competitors where deleted&1=0");
 
     if (rows > 0) {

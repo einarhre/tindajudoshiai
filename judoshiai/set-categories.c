@@ -917,7 +917,8 @@ static void init_cat_data(void)
                 def.pin_time_yuko = 10;
                 def.pin_time_wazaari = 15;
                 def.pin_time_ippon = 20;
-	    } else if (prop_get_int_val(PROP_RULES_2017)) {
+	    } else if (prop_get_int_val(PROP_RULES_2017) ||
+		       prop_get_int_val(PROP_RULES_2018)) {
                 def.pin_time_koka = 0;
                 def.pin_time_yuko = 0;
                 def.pin_time_wazaari = 10;
@@ -1036,6 +1037,7 @@ out:
 
 gint optlist[] = {
     PROP_RULES_2017,
+    PROP_RULES_2018,
     PROP_USE_IJF_POINTS,
     PROP_USE_PTS_100_10_1_h,
     PROP_USE_PTS_10_7_5_1,
@@ -1138,6 +1140,7 @@ void set_categories_dialog(GtkWidget *w, gpointer arg)
         gtk_grid_attach(GTK_GRID(vbox1), tables[i], 0, r++, 1, 1);
         gtk_grid_attach(GTK_GRID(vbox1), gtk_label_new(" "), 0, r++, 1, 1);
     }
+
     r = 0;
     tmp = gtk_label_new(_("Women"));
     gtk_grid_attach(GTK_GRID(vbox2), tmp, 0, r++, 1, 1);

@@ -476,6 +476,7 @@ enum properties {
     /*PROP_EQ_SCORE_LESS_SHIDO_WINS,*/
     PROP_GS_WIN_GIVES_1_POINT,
     PROP_RULES_2017,
+    PROP_RULES_2018,
     PROP_DEFAULT_CAT_1,
     PROP_DEFAULT_CAT_2,
     PROP_DEFAULT_CAT_3,
@@ -1370,6 +1371,8 @@ extern void handle_websock(struct jsconn *conn, char *in, gint length);
 extern gint websock_send_msg(gint fd, struct message *msg);
 
 /* profiling stuff */
+//#define PROFILE
+
 extern guint64 cumul_db_time;
 extern gint    cumul_db_count;
 
@@ -1410,13 +1413,15 @@ static inline void prof_end(void) {
     guint64 stop = rdtsc(), prev = prof_start;
     g_print("PROF:\n");
     for (i = 0; i < num_prof_data; i++) {
-        g_print("%s:%d: %ld\n", prof_data[i].func, prof_data[i].line, (prof_data[i].time_stamp - prev)/1000);
+        g_print("%s:%d: %ld\n", prof_data[i].func, prof_data[i].line,
+		(long)((prof_data[i].time_stamp - prev)/1000));
         prev = prof_data[i].time_stamp;
     }
 
     guint64 tot_time_div = (stop - prof_start)/100;
     guint64 relative_time = cumul_db_time/tot_time_div;
-    g_print("\nDB-writes=%d db-time=%ld\n", cumul_db_count, relative_time);
+    g_print("\nDB-writes=%d db-time=%ld%%\n", cumul_db_count,
+	    (long)relative_time);
 
 }
 #define PROF_END prof_end()
