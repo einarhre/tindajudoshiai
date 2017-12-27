@@ -253,7 +253,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
             else
                 cairo_move_to(c, left+5, y_pos+extents.height);
 
-            snprintf(buf, sizeof(buf), "%s #%d", catdata ? catdata->last : "?", m->number);
+            SNPRINTF_UTF8(buf, "%s #%d", catdata ? catdata->last : "?", m->number);
 #ifdef USE_PANGO
             if (k == 0)
 		WRITE_TEXT(left+5, y_pos+BOX_HEIGHT, buf, desc_bold);
@@ -563,7 +563,7 @@ static void on_enter(GtkEntry *entry, gpointer user_data)
     memset(&output_msg, 0, sizeof(output_msg));
     output_msg.type = MSG_EDIT_COMPETITOR;
     output_msg.u.edit_competitor.operation = EDIT_OP_GET_BY_ID;
-    strncpy(output_msg.u.edit_competitor.id, the_text, sizeof(output_msg.u.edit_competitor.id));
+    STRCPY_UTF8(output_msg.u.edit_competitor.id, the_text);
     send_packet(&output_msg);
 
     gtk_entry_set_text(GTK_ENTRY(entry), "");
@@ -632,7 +632,7 @@ void set_display(struct msg_edit_competitor *msg)
         return;
     }
 
-    snprintf(buf, sizeof(buf), "%s %s", msg->last, msg->first);
+    SNPRINTF_UTF8(buf, "%s %s", msg->last, msg->first);
     gtk_label_set_label(GTK_LABEL(name_box), buf);
 
     if (msg->matchflags & JUDOGI_OK)
