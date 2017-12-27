@@ -12,6 +12,7 @@
 
 #include "sqlite3.h"
 #include "judoshiai.h"
+#include "common-utils.h"
 
 
 //static guint destination;
@@ -251,7 +252,7 @@ void view_popup_menu_move_matches(GtkWidget *menuitem, gpointer userdata)
 	else g_print("ERROR %s:%d\n", __FUNCTION__, __LINE__);
     }
 
-    snprintf(buf, sizeof(buf), "%s (%s)", _("Move Matches"), catdata->category);
+    SNPRINTF_UTF8(buf, "%s (%s)", _("Move Matches"), catdata->category);
     dialog = gtk_dialog_new_with_buttons (buf,
                                           GTK_WINDOW(main_window),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -271,7 +272,7 @@ void view_popup_menu_move_matches(GtkWidget *menuitem, gpointer userdata)
 	rname = round_to_str(r_id & ~ROUND_UP_DOWN_MASK);
 
 	if (up_down) {
-	    snprintf(buf, sizeof(buf), "%s A/B", _(rname));
+	    SNPRINTF_UTF8(buf, "%s A/B", _(rname));
 	    r[i].sel_w = gtk_check_button_new_with_label(buf);
 	    gtk_grid_attach(GTK_GRID(table), r[i].sel_w, 0, i, 1, 1);
 	    r[i+1].sel_w = gtk_check_button_new_with_label("C/D");

@@ -13,6 +13,7 @@
 
 #include "sqlite3.h"
 #include "judoshiai.h"
+#include "common-utils.h"
 
 static void set_comment(GtkWidget *menuitem, gpointer userdata);
 
@@ -27,8 +28,8 @@ GtkWidget *next_match[NUM_TATAMIS][2];
 
 struct next_match_info next_matches_info[NUM_TATAMIS][2];
 
-#define COPY_MATCH_INFO(_what, _tatami, _which, _str) g_strlcpy(next_matches_info[_tatami-1][_which]._what, \
-                                                                _str, sizeof(next_matches_info[0][0]._what))
+#define COPY_MATCH_INFO(_what, _tatami, _which, _str) \
+    STRCPY_UTF8(next_matches_info[_tatami-1][_which]._what, _str)
 
 #define NULL_MATCH_INFO(_what, _tatami, _which) next_matches_info[_tatami-1][_which]._what[0] = 0
 
@@ -138,7 +139,7 @@ static void name_cell_data_func (GtkTreeViewColumn *col,
         g_object_set(renderer,
                      "cell-background-set", FALSE,
                      NULL);
-        g_snprintf(buf, sizeof(buf), "%s [%d]", sys, data->system.numcomp);
+        SNPRINTF_UTF8(buf, "%s [%d]", sys, data->system.numcomp);
         g_object_set(renderer, "text", buf, NULL);
 
         return;
@@ -150,7 +151,7 @@ static void name_cell_data_func (GtkTreeViewColumn *col,
     } else {
         j = get_data(index);
         if (j && j->index)
-            g_snprintf(buf, sizeof(buf), "%s %s", j->first, j->last);
+            SNPRINTF_UTF8(buf, "%s %s", j->first, j->last);
         else
             g_snprintf(buf, sizeof(buf), "?");
 
@@ -191,7 +192,7 @@ static void category_cell_data_func (GtkTreeViewColumn *col,
 
     j = get_data(index);
     if (j) {
-        g_snprintf(buf, sizeof(buf), "%s", j->last);
+        SNPRINTF_UTF8(buf, "%s", j->last);
         g_object_set(renderer, "foreground-set", FALSE, NULL); /* print this normal */
         free_judoka(j);
     } else {
@@ -222,7 +223,7 @@ static void number_cell_data_func (GtkTreeViewColumn *col,
         if (number & MATCH_CATEGORY_SUB_MASK) {
             gchar *wcname = get_weight_class_name_by_index(cat, (number & MATCH_CATEGORY_MASK) - 1);
             if (wcname)
-                g_snprintf(buf, sizeof(buf), "%d/%s",
+                SNPRINTF_UTF8(buf, "%d/%s",
                            number >> MATCH_CATEGORY_SUB_SHIFT,
                            wcname);
             else
@@ -285,7 +286,8 @@ static void score_cell_data_func (GtkTreeViewColumn *col,
                        -1);
 
     if (visible) {
-	if (prop_get_int_val_cat(PROP_RULES_2017, category))
+	if (prop_get_int_val_cat(PROP_RULES_2017, category) ||
+	    prop_get_int_val_cat(PROP_RULES_2018, category))
 	    g_snprintf(buf, sizeof(buf), "%d%d/%d%s",
 		       (score>>16)&15, (score>>12)&15,
 		       score&7, score&8?"H":"");
@@ -2387,7 +2389,7 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
         j2 = get_data(nm[0].white);
 
         if (g && j1 && j2) {
-            gchar buf[100];
+            gchar *buf = NULL;
 
             if (avl_get_competitor_status(nm[0].blue) & JUDOGI_OK)
                 msg.u.next_match.flags |= MATCH_FLAG_JUDOGI1_OK;
@@ -2418,25 +2420,23 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
             if (nm[0].category & MATCH_CATEGORY_SUB_MASK) {
                 gint ix = find_age_index(g->last);
                 if (ix >= 0 && nm[0].number > 0 && nm[0].number < NUM_CAT_DEF_WEIGHTS) {
-                    snprintf(msg.u.next_match.cat_1,
-                             sizeof(msg.u.next_match.cat_1),
-                             "%s", category_definitions[ix].weights[nm[0].number-1].weighttext);
+                    SNPRINTF_UTF8(msg.u.next_match.cat_1,
+				  "%s", category_definitions[ix].weights[nm[0].number-1].weighttext);
                 }
             } else
-                snprintf(msg.u.next_match.cat_1,
-                         sizeof(msg.u.next_match.cat_1),
-                         "%s", g->last);
+                SNPRINTF_UTF8(msg.u.next_match.cat_1,
+			      "%s", g->last);
 
-            snprintf(msg.u.next_match.blue_1,
-                     sizeof(msg.u.next_match.blue_1),
-                     "%s\t%s\t%s\t%s", j1->last, j1->first, j1->country, j1->club);
-            snprintf(msg.u.next_match.white_1, sizeof(msg.u.next_match.white_1),
-                     "%s\t%s\t%s\t%s", j2->last, j2->first, j2->country, j2->club);
+            SNPRINTF_UTF8(msg.u.next_match.blue_1,
+			  "%s\t%s\t%s\t%s", j1->last, j1->first, j1->country, j1->club);
 
-            snprintf(buf, sizeof(buf), "%s: %s: %s %s, %s - %s %s, %s", _("Match"),
-                     g->last,
-                     j1->first, j1->last, get_club_text(j1, 0),
-                     j2->first, j2->last, get_club_text(j2, 0));
+            SNPRINTF_UTF8(msg.u.next_match.white_1,
+			  "%s\t%s\t%s\t%s", j2->last, j2->first, j2->country, j2->club);
+
+            buf = g_strdup_printf("%s: %s: %s %s, %s - %s %s, %s", _("Match"),
+				  g->last,
+				  j1->first, j1->last, get_club_text(j1, 0),
+				  j2->first, j2->last, get_club_text(j2, 0));
 
             if (tatami > 0 && tatami <= NUM_TATAMIS) {
                 gtk_label_set_text(GTK_LABEL(next_match[tatami-1][0]), buf);
@@ -2452,12 +2452,12 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
                 next_matches_info[tatami-1][0].blue = nm[0].blue;
                 next_matches_info[tatami-1][0].white = nm[0].white;
             }
+	    g_free(buf);
         } else if (g) {
             msg.u.next_match.tatami = tatami;
             gtk_label_set_text(GTK_LABEL(next_match[tatami-1][0]), _("Match:"));
-            snprintf(msg.u.next_match.cat_1,
-                     sizeof(msg.u.next_match.cat_1),
-                     "%s", g->last);
+            SNPRINTF_UTF8(msg.u.next_match.cat_1,
+			  "%s", g->last);
             snprintf(msg.u.next_match.blue_1, sizeof(msg.u.next_match.blue_1), "\t\t\t");
             snprintf(msg.u.next_match.white_1, sizeof(msg.u.next_match.white_1), "\t\t\t");
         }
@@ -2495,37 +2495,36 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
         j2 = get_data(nm[1].white);
 
         if (g) {
-            gchar buf[100];
+            gchar *buf = NULL;
 
             if (nm[1].category & MATCH_CATEGORY_SUB_MASK) {
                 gint ix = find_age_index(g->last);
                 if (ix >= 0 && nm[1].number > 0 && nm[1].number < NUM_CAT_DEF_WEIGHTS) {
-                    snprintf(msg.u.next_match.cat_2,
-                             sizeof(msg.u.next_match.cat_2),
-                             "%s", category_definitions[ix].weights[nm[1].number-1].weighttext);
+                    SNPRINTF_UTF8(msg.u.next_match.cat_2,
+				  "%s", category_definitions[ix].weights[nm[1].number-1].weighttext);
                 }
             } else
-                snprintf(msg.u.next_match.cat_2, sizeof(msg.u.next_match.cat_2),
-                         "%s", g->last);
+                SNPRINTF_UTF8(msg.u.next_match.cat_2,
+			      "%s", g->last);
             if (j1)
-                snprintf(msg.u.next_match.blue_2, sizeof(msg.u.next_match.blue_2),
-                         "%s\t%s\t%s\t%s", j1->last, j1->first, j1->country, j1->club);
+                SNPRINTF_UTF8(msg.u.next_match.blue_2,
+			      "%s\t%s\t%s\t%s", j1->last, j1->first, j1->country, j1->club);
             else
                 snprintf(msg.u.next_match.blue_2, sizeof(msg.u.next_match.blue_2), "?");
 
             if (j2)
-                snprintf(msg.u.next_match.white_2, sizeof(msg.u.next_match.white_2),
-                         "%s\t%s\t%s\t%s", j2->last, j2->first, j2->country, j2->club);
+                SNPRINTF_UTF8(msg.u.next_match.white_2,
+			      "%s\t%s\t%s\t%s", j2->last, j2->first, j2->country, j2->club);
             else
                 snprintf(msg.u.next_match.white_2, sizeof(msg.u.next_match.white_2), "?");
 
             if (j1 && j2)
-                snprintf(buf, sizeof(buf), "%s: %s: %s %s, %s - %s %s, %s", _("Preparing"),
-                         g->last,
-                         j1->first, j1->last, get_club_text(j1, 0),
-                         j2->first, j2->last, get_club_text(j2, 0));
+                buf = g_strdup_printf("%s: %s: %s %s, %s - %s %s, %s", _("Preparing"),
+				      g->last,
+				      j1->first, j1->last, get_club_text(j1, 0),
+				      j2->first, j2->last, get_club_text(j2, 0));
             else
-                snprintf(buf, sizeof(buf), "%s: %s: ? - ?", _("Preparing"), g->last);
+                buf = g_strdup_printf("%s: %s: ? - ?", _("Preparing"), g->last);
 
             if (tatami > 0 && tatami <= NUM_TATAMIS) {
                 gtk_label_set_text(GTK_LABEL(next_match[tatami-1][1]), buf);
@@ -2541,6 +2540,7 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
                 next_matches_info[tatami-1][1].blue = nm[1].blue;
                 next_matches_info[tatami-1][1].white = nm[1].white;
             }
+	    g_free(buf);
         }
         free_judoka(g);
         free_judoka(j1);
@@ -2795,7 +2795,8 @@ void set_points_and_score(struct message *msg)
     if (number >= 1000 || category < 10000)
         return;
 
-    if (prop_get_int_val_cat(PROP_RULES_2017, category)) {
+    if (prop_get_int_val_cat(PROP_RULES_2017, category) ||
+	prop_get_int_val_cat(PROP_RULES_2018, category)) {
 	maxshido = 3;
     }
 
@@ -3219,7 +3220,8 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
 					      NULL);
 
     s->ippon = gtk_spin_button_new_with_range(0.0, 1.0, 1.0);
-    if (prop_get_int_val_cat(PROP_RULES_2017, category)) {
+    if (prop_get_int_val_cat(PROP_RULES_2017, category) ||
+	prop_get_int_val_cat(PROP_RULES_2018, category)) {
 	s->yuko = gtk_spin_button_new_with_range(0.0, 0.0, 1.0);
 	s->wazaari = gtk_spin_button_new_with_range(0.0, 9.0, 1.0);
 	s->shido = gtk_spin_button_new_with_range(0.0, 3.0, 1.0);
@@ -3564,7 +3566,8 @@ static GtkWidget *create_view_and_model(void)
     g_object_set(renderer, "editable", TRUE, NULL);
     col_offset = gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(view),
                                                              -1,
-							     prop_get_int_val(PROP_RULES_2017) ?
+							     (prop_get_int_val(PROP_RULES_2017) ||
+							      prop_get_int_val(PROP_RULES_2018))?
 							     "IW/S" : "IWY/S",
                                                              renderer, "text",
                                                              COL_MATCH_BLUE_SCORE,
@@ -3615,7 +3618,8 @@ static GtkWidget *create_view_and_model(void)
     g_object_set(renderer, "editable", TRUE, NULL);
     col_offset = gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(view),
                                                              -1,
-							     prop_get_int_val(PROP_RULES_2017) ?
+							     (prop_get_int_val(PROP_RULES_2017) ||
+							      prop_get_int_val(PROP_RULES_2018)) ?
 							     "IW/S" : "IWY/S",
                                                              renderer, "text",
                                                              COL_MATCH_WHITE_SCORE,

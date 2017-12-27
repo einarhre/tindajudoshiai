@@ -287,13 +287,13 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                     gint ageix = find_age_index(catdata->category);
                     if (ageix >= 0 && m->number > 0 &&
                         category_definitions[ageix].weights[m->number-1].weighttext[0]) {
-                        snprintf(buf, sizeof(buf), "%s #%d%s", catdata->category,
+                        SNPRINTF_UTF8(buf, "%s #%d%s", catdata->category,
                                  m->category >> MATCH_CATEGORY_SUB_SHIFT,
                                  category_definitions[ageix].weights[m->number-1].weighttext);
                     } else
-                        snprintf(buf, sizeof(buf), "%s", catdata->category);
+                        SNPRINTF_UTF8(buf, "%s", catdata->category);
                 } else
-                    snprintf(buf, sizeof(buf), "%s #%d",
+                    SNPRINTF_UTF8(buf, "%s #%d",
 			     catdata->category, m->number);
             } else
                 snprintf(buf, sizeof(buf), "?");
@@ -313,21 +313,21 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                 cairo_move_to(c, left+5+colwidth/2, y_pos+extents.height);
                 if (i == 0) {
                     if (txt && txt[0] && m->forcedtatami)
-                        snprintf(buf, sizeof(buf), "T%d:%s", m->forcedtatami, txt);
+                        SNPRINTF_UTF8(buf, "T%d:%s", m->forcedtatami, txt);
                     else if (txt && txt[0])
-                        snprintf(buf, sizeof(buf), "T%d:%s",
+                        SNPRINTF_UTF8(buf, "T%d:%s",
                                  catdata ? catdata->tatami : 0, txt);
                     else
-                        snprintf(buf, sizeof(buf), "T%d",
+                        SNPRINTF_UTF8(buf, "T%d",
                                  catdata ? catdata->tatami : 0);
                 } else if (txt && txt[0] && m->forcedtatami)
-                    snprintf(buf, sizeof(buf), "T%d:%s",
+                    SNPRINTF_UTF8(buf, "T%d:%s",
                              catdata ? catdata->tatami : 0,
                              txt);
                 else if (m->forcedtatami)
                     snprintf(buf, sizeof(buf), "T%d", catdata ? catdata->tatami : 0);
                 else if (txt && txt[0])
-                    snprintf(buf, sizeof(buf), "%s", txt);
+                    SNPRINTF_UTF8(buf, "%s", txt);
 #ifdef USE_PANGO
 		WRITE_TEXT(left+5+colwidth/2, y_pos, buf, desc_bold);
 #else
@@ -739,7 +739,6 @@ static gboolean query_tooltip (GtkWidget  *widget, gint x, gint y, gboolean keyb
                                GtkTooltip *tooltip, gpointer user_data)
 {
     gchar buf[128];
-    gint n = 0;
     gint t = find_box(x, y);
     if (t < 0)
         return FALSE;
@@ -751,20 +750,13 @@ static gboolean query_tooltip (GtkWidget  *widget, gint x, gint y, gboolean keyb
     if (!m)
         return FALSE;
 
-    buf[0] = 0;
-    struct judoka *j = get_data(m->blue);
-    if (j) {
-        n = snprintf(buf, sizeof(buf), "%s %s, %s", j->last, j->first, get_club_text(j, 0));
-        free_judoka(j);
-    } else
-        n = snprintf(buf, sizeof(buf), "???");
-
-    j = get_data(m->white);
-    if (j) {
-        n += snprintf(buf+n, sizeof(buf)-n, "\n%s %s, %s", j->last, j->first, get_club_text(j, 0));
-        free_judoka(j);
-    } else
-        n += snprintf(buf+n, sizeof(buf)-n, "\n???");
+    struct judoka *j1 = get_data(m->blue);
+    struct judoka *j2 = get_data(m->white);
+    SNPRINTF_UTF8(buf, "%s %s, %s\n%s %s, %s",
+	     j1 ? j1->last : "?", j1 ? j1->first : "?", j1 ? get_club_text(j1, 0) : "?",
+	     j2 ? j2->last : "?", j2 ? j2->first : "?", j2 ? get_club_text(j2, 0) : "?");
+    if (j1) free_judoka(j1);
+    if (j2) free_judoka(j2);
 
     gtk_tooltip_set_text(tooltip, buf);
     return TRUE;
@@ -925,7 +917,7 @@ static gboolean mouse_click(GtkWidget *sheet_page,
         } else {
             struct category_data *catdata = avl_get_category(dragged_match.category);
             if (catdata)
-                snprintf(dragged_text, sizeof(dragged_text), "%s:%d",
+                SNPRINTF_UTF8(dragged_text, "%s:%d",
                          catdata->category, dragged_match.number);
         }
 
@@ -1051,7 +1043,7 @@ static gboolean motion_notify(GtkWidget *sheet_page,
 
     struct category_data *catdata = avl_get_category(dragged_match.category);
     if (catdata)
-        snprintf(dragged_text, sizeof(dragged_text), "%s:%d (%d)",
+        SNPRINTF_UTF8(dragged_text, "%s:%d (%d)",
                  catdata->category, dragged_match.number,
                  point_click_areas[dragged_t].position);
 #if 0

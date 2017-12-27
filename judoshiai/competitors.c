@@ -18,6 +18,7 @@
 
 #include "sqlite3.h"
 #include "judoshiai.h"
+#include "common-utils.h"
 
 #define RESPONSE_PRINT 1000
 #define RESPONSE_COACH 1001
@@ -958,7 +959,7 @@ void print_competitors_dialog(const gchar *cid, gint ix)
         tmp = gtk_button_new_with_label("");
         j = get_data(ix);
         if (j) {
-            snprintf(buf, sizeof(buf), "%s %s: %s %s",
+            SNPRINTF_UTF8(buf, "%s %s: %s %s",
                      _("Coach"), cid, j->first, j->last);
             gtk_button_set_label(GTK_BUTTON(tmp), buf);
             free_judoka(j);
@@ -985,7 +986,7 @@ void print_competitors_dialog(const gchar *cid, gint ix)
     for (i = 0; i < num_selected_judokas; i++) {
         j = get_data(selected_judokas[i]);
         if (j) {
-            snprintf(buf, sizeof(buf), "    %s %s", j->first, j->last);
+            SNPRINTF_UTF8(buf, "    %s %s", j->first, j->last);
             tmp = gtk_label_new(buf);
             g_object_set(tmp, "xalign", 0.0, NULL);
 #if (GTKVER == 3)
@@ -1099,15 +1100,15 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
 	ctie = deleted & POOL_TIE3;
 
         if (seeding)
-            g_snprintf(buf, sizeof(buf), "%s%s (%d)%s%s", ctie ? "! ":"",
-		       last, seeding,
-                       comment && comment[0] ? " *" : "",
-                       jstatus&0xf ? pos : "");
+            SNPRINTF_UTF8(buf, "%s%s (%d)%s%s", ctie ? "! ":"",
+			  last, seeding,
+			  comment && comment[0] ? " *" : "",
+			  jstatus&0xf ? pos : "");
         else
-            g_snprintf(buf, sizeof(buf), "%s%s%s%s", ctie ? "! ":"",
-		       last,
-                       comment && comment[0] ? " *" : "",
-                       jstatus&0xf ? pos : "");
+            SNPRINTF_UTF8(buf, "%s%s%s%s", ctie ? "! ":"",
+			  last,
+			  comment && comment[0] ? " *" : "",
+			  jstatus&0xf ? pos : "");
 
         if (deleted & HANSOKUMAKE)
             g_object_set(renderer, "strikethrough", TRUE, "cell-background-set", FALSE, NULL);
@@ -1219,7 +1220,7 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
                          "foreground", "Brown", FALSE,
                          NULL);
 
-        g_snprintf(buf, sizeof(buf), "%s%s", extra ? "! " : "", last);
+        SNPRINTF_UTF8(buf, "%s%s", extra ? "! " : "", last);
         g_object_set(renderer, "strikethrough", FALSE, NULL);
     }
 
@@ -1249,7 +1250,7 @@ void first_name_cell_data_func (GtkTreeViewColumn *col,
                        COL_DELETED, &deleted, -1);
 
     if (visible) {
-        g_snprintf(buf, sizeof(buf), "%s", first);
+        SNPRINTF_UTF8(buf, "%s", first);
     } else {
         buf[0] = 0;
         gint n = gtk_tree_model_iter_n_children(model, iter);
@@ -1258,7 +1259,7 @@ void first_name_cell_data_func (GtkTreeViewColumn *col,
             if (data->deleted & TEAM)
                 g_snprintf(buf, sizeof(buf), "%s", _("Team"));
             else
-                g_snprintf(buf, sizeof(buf), "%s", get_system_description(index, n));
+                SNPRINTF_UTF8(buf, "%s", get_system_description(index, n));
         }
     }
 

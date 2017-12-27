@@ -11,6 +11,7 @@
 #include <gtk/gtk.h>
 #include "sqlite3.h"
 #include "judoshiai.h"
+#include "common-utils.h"
 
 #define switch_comp(_a, _b) do {                \
         struct comp_s tmp = comp[_a];           \
@@ -674,8 +675,8 @@ static gboolean select_number(GtkWidget *eventbox, GdkEventButton *event, void *
         mdata->mcomp[mdata->selected].pos = 0;
     }
 
-    snprintf(buf, sizeof(buf), "%2d. %s", get_competitor_number(num, mdata),
-             gtk_label_get_text(GTK_LABEL(mdata->mcomp[mdata->selected].label)));
+    SNPRINTF_UTF8(buf, "%2d. %s", get_competitor_number(num, mdata),
+		  gtk_label_get_text(GTK_LABEL(mdata->mcomp[mdata->selected].label)));
     gtk_label_set_text(GTK_LABEL(mdata->mpos[num].label), buf);
 
 #if (GTKVER == 3)
@@ -1374,7 +1375,7 @@ struct compsys get_system_for_category(gint index, gint competitors)
             gint aix = find_age_index(cat->category);
             if (aix >= 0)
                 age = category_definitions[aix].age;
-            wishsys = props_get_default_wishsys(age, competitors, &table);
+            wishsys = props_get_default_wishsys(age, competitors, (guint *)&table);
 	    if (wishsys == CAT_SYSTEM_CUSTOM && table) {
 		sys = SYSTEM_CUSTOM;
 		goto out;
@@ -1763,16 +1764,16 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
 
         j = get_data(index);
 	if (j && j->club && j->club[0] && j->country && j->country[0])
-	    snprintf(buf, sizeof(buf), "%s %s, %s/%s",
-		     j->first, j->last, j->club, j->country);
+	    SNPRINTF_UTF8(buf, "%s %s, %s/%s",
+			  j->first, j->last, j->club, j->country);
 	else if (j && j->club && j->club[0])
-	    snprintf(buf, sizeof(buf), "%s %s, %s",
-		     j->first, j->last, j->club);
+	    SNPRINTF_UTF8(buf, "%s %s, %s",
+			  j->first, j->last, j->club);
 	else if (j && j->country && j->country[0])
-	    snprintf(buf, sizeof(buf), "%s %s, %s",
-		     j->first, j->last, j->country);
+	    SNPRINTF_UTF8(buf, "%s %s, %s",
+			  j->first, j->last, j->country);
 	else
-	    snprintf(buf, sizeof(buf), "%s %s", j->first, j->last);
+	    SNPRINTF_UTF8(buf, "%s %s", j->first, j->last);
 
         mdata->mcomp[i+1].label = gtk_label_new(buf);
         gtk_label_set_width_chars(GTK_LABEL(mdata->mcomp[i+1].label), 20);
@@ -2077,7 +2078,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
                 if (cnum) {
                     mdata->mpos[i].judoka = cnum;
                     mdata->mcomp[cnum].pos = i;
-                    snprintf(buf, sizeof(buf), "%2d. %s", get_competitor_number(i, mdata),
+                    SNPRINTF_UTF8(buf, "%2d. %s", get_competitor_number(i, mdata),
                              gtk_label_get_text(GTK_LABEL(mdata->mcomp[cnum].label)));
                     gtk_label_set_text(GTK_LABEL(mdata->mpos[i].label), buf);
 

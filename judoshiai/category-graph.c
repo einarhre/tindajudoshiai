@@ -277,7 +277,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
 
 		    cairo_restore(c);
 
-		    snprintf(buf, sizeof(buf), "%s (T%d)", catdata->category, tatami);
+		    SNPRINTF_UTF8(buf, "%s (T%d)", catdata->category, tatami);
 #ifdef USE_PANGO
 		    WRITE_TEXT(left+5, y_pos[i], buf, desc);
 #else
@@ -655,7 +655,7 @@ static gboolean mouse_click(GtkWidget *sheet_page,
 
 	    struct category_data *catdata = avl_get_category(dragged_cat);
 	    if (catdata)
-		snprintf(dragged_text, sizeof(dragged_text), "%s -> ?",
+		SNPRINTF_UTF8(dragged_text, "%s -> ?",
 			 catdata->category);
 
 	    refresh_window();
@@ -747,7 +747,7 @@ static gboolean motion_notify(GtkWidget *sheet_page,
 
     struct category_data *catdata = avl_get_category(dragged_cat);
     if (catdata && t >= 0)
-        snprintf(dragged_text, sizeof(dragged_text), "%s -> T%d:%d",
+        SNPRINTF_UTF8(dragged_text, "%s -> T%d:%d",
                  catdata->category, point_click_areas[t].tatami,
                  point_click_areas[t].group);
     refresh_window();

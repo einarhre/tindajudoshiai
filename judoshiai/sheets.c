@@ -54,20 +54,20 @@ static gint current_page = 0;
 #define POOL_WIN_Y     POOL_JUDOKAS_Y
 
 #define WRITE_TABLE(_t, _r, _c, _txt...) do {   \
-        char _buf[100];                         \
-        snprintf(_buf, sizeof(_buf)-1, _txt);   \
+        char _buf[256];                         \
+        SNPRINTF_UTF8(_buf, _txt);		\
         write_table(pd, &_t, _r, _c, _buf);     \
     } while (0)
 
 #define WRITE_TABLE_H(_t, _r, _c, _del, _txt...) do {   \
-        char _buf[100];                                 \
-        snprintf(_buf, sizeof(_buf)-1, _txt);           \
+        char _buf[256];                                 \
+        SNPRINTF_UTF8(_buf, _txt);			\
         write_table_h(pd, &_t, _r, _c, _del, _buf);     \
     } while (0)
 
 #define WRITE_TABLE_H_2(_t, _r, _c, _del, _ix, _txt...) do {   \
-        char _buf[100];                                 \
-        snprintf(_buf, sizeof(_buf)-1, _txt);           \
+        char _buf[256];					       \
+        SNPRINTF_UTF8(_buf, _txt);			       \
         write_table_h_2(pd, &_t, _r, _c, _del, _buf, _ix);     \
     } while (0)
 
@@ -283,7 +283,7 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
             else
                 j = get_data(white);
             if (j) {
-                snprintf(buf, sizeof(buf)-1, "%s", IS_LANG_IS ? j->first : j->last);
+                SNPRINTF_UTF8(buf, "%s", IS_LANG_IS ? j->first : j->last);
 #ifdef USE_PANGO
 		gdouble _x = x + TEXT_OFFSET, _y = blue_y - 2 /*- H(0.005)*/, _w = 0, _h = 0;
 		write_text(pd->c, buf, &_x, &_y, &_w, &_h,
@@ -405,20 +405,20 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
         j = get_data(blue);
         if (j) {
             if (only_last)
-                snprintf(buf, sizeof(buf)-1, "%s", IS_LANG_IS ? j->first : j->last);
+                SNPRINTF_UTF8(buf, "%s", IS_LANG_IS ? j->first : j->last);
             else if (number_b) {
                 if (j->belt && grade_visible)
-                    snprintf(buf, sizeof(buf)-1, "%d. %s (%s)",
+                    SNPRINTF_UTF8(buf, "%d. %s (%s)",
                              number_b, get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION), belts[j->belt]);
                 else
-                    snprintf(buf, sizeof(buf)-1, "%d. %s",
+                    SNPRINTF_UTF8(buf, "%d. %s",
                              number_b, get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION));
             } else {
                 if (j->belt && grade_visible)
-                    snprintf(buf, sizeof(buf)-1, "%s (%s)",
+                    SNPRINTF_UTF8(buf, "%s (%s)",
                              get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION), belts[j->belt]);
                 else
-                    snprintf(buf, sizeof(buf)-1, "%s",
+                    SNPRINTF_UTF8(buf, "%s",
                              get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION));
             }
 
@@ -451,21 +451,21 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
         j = get_data(white);
         if (j) {
             if (only_last)
-                sprintf(buf, "%s", IS_LANG_IS ? j->first : j->last);
+                SNPRINTF_UTF8(buf, "%s", IS_LANG_IS ? j->first : j->last);
             else if (number_w) {
                 if (j->belt && grade_visible)
-                    snprintf(buf, sizeof(buf)-1, "%d. %s (%s)",
+                    SNPRINTF_UTF8(buf, "%d. %s (%s)",
                              number_w, get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION), belts[j->belt]);
                 else
-                    snprintf(buf, sizeof(buf)-1, "%d. %s",
+                    SNPRINTF_UTF8(buf, "%d. %s",
                              number_w, get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION));
             } else {
                 if (j->belt && grade_visible)
-                    snprintf(buf, sizeof(buf)-1, "%s (%s)",
+                    SNPRINTF_UTF8(buf, "%s (%s)",
                              get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION), belts[j->belt]);
                 else
-                    snprintf(buf, sizeof(buf)-1, "%s",
-                             get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION));
+                    SNPRINTF_UTF8(buf, "%s",
+			     get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION));
             }
 
 #ifdef USE_PANGO
@@ -682,7 +682,8 @@ static void write_table_h(struct paint_data *pd, struct table *t, int row, int c
 #endif
 }
 
-static void write_table_h_2(struct paint_data *pd, struct table *t, int row, int col, gint del, char *txt, gint judoka_ix)
+static void write_table_h_2(struct paint_data *pd, struct table *t, int row,
+			    int col, gint del, char *txt, gint judoka_ix)
 {
     write_table_h(pd, t, row, col, del, txt);
     add_judoka_rectangle_by_table(pd, t, row, col, judoka_ix);
@@ -797,11 +798,11 @@ static void paint_pool(struct paint_data *pd, gint category, struct judoka *ctg,
         snprintf(num, sizeof(num), "%d", i);
 
         if (weights_in_sheets)
-            snprintf(name, sizeof(name), "%s  (%d,%02d)",
+            SNPRINTF_UTF8(name, "%s  (%d,%02d)",
                         get_name_and_club_text(pm.j[i], CLUB_TEXT_NO_CLUB),
                         pm.j[i]->weight/1000, (pm.j[i]->weight%1000)/10);
         else
-            snprintf(name, sizeof(name), "%s", get_name_and_club_text(pm.j[i], CLUB_TEXT_NO_CLUB));
+            SNPRINTF_UTF8(name, "%s", get_name_and_club_text(pm.j[i], CLUB_TEXT_NO_CLUB));
 
         write_table(pd, &judoka_table, i, 0, num);
         write_table_h_2(pd, &judoka_table, i, 1, pm.j[i]->deleted, name, pm.j[i]->index);
@@ -1004,15 +1005,15 @@ static void paint_pool_2(struct paint_data *pd, gint category, struct judoka *ct
         sprintf(num, "%d", i);
 
         if (weights_in_sheets)
-            snprintf(name, sizeof(name), "%s  (%d,%02d)",
+            SNPRINTF_UTF8(name, "%s  (%d,%02d)",
                         get_name_and_club_text(pm.j[i], CLUB_TEXT_NO_CLUB),
                         pm.j[i]->weight/1000, (pm.j[i]->weight%1000)/10);
         else
-            snprintf(name, sizeof(name), "%s", get_name_and_club_text(pm.j[i], CLUB_TEXT_NO_CLUB));
+            SNPRINTF_UTF8(name, "%s", get_name_and_club_text(pm.j[i], CLUB_TEXT_NO_CLUB));
 
         write_table(pd, &pool_table_2, 2*i-1, 0, num);
         write_table_h_2(pd, &pool_table_2, 2*i-1, 1, pm.j[i]->deleted, name, pm.j[i]->index);
-        sprintf(name, "%s", get_club_text(pm.j[i], 0));
+        SNPRINTF_UTF8(name, "%s", get_club_text(pm.j[i], 0));
         write_table(pd, &pool_table_2, 2*i, 1, name);
 
         set_competitor_position(pm.j[i]->index, COMP_POS_DRAWN);
@@ -2447,7 +2448,7 @@ void paint_category(struct paint_data *pd)
     }
 
     if (use_logo != NULL && print_headers == FALSE) {
-        snprintf(buf, sizeof(buf)-1, "%s", ctg->last);
+        SNPRINTF_UTF8(buf, "%s", ctg->last);
 #ifdef USE_PANGO
 	{
 	    gdouble x1 = W(0.95), y1 = H(0.05);
@@ -2465,7 +2466,7 @@ void paint_category(struct paint_data *pd)
 #endif
     } else {
         gdouble texth;
-        snprintf(buf, sizeof(buf)-1, "%s  %s  %s   %s",
+        SNPRINTF_UTF8(buf, "%s  %s  %s   %s",
                  prop_get_str_val(PROP_NAME),
                  prop_get_str_val(PROP_DATE),
                  prop_get_str_val(PROP_PLACE),
@@ -2636,7 +2637,7 @@ static void paint_point_box(struct paint_data *pd, gdouble horpos, gdouble verpo
 
 void paint_next_matches(struct paint_data *pd)
 {
-    gchar buf[200];
+    gchar buf[256];
 
     /* next matches */
     if (pd->total_width < pd->paper_width)
@@ -2676,7 +2677,6 @@ void paint_next_matches(struct paint_data *pd)
 #endif
 
     for (i = 0; i < number_of_tatamis/*NUM_TATAMIS*/; i++) {
-        gchar txt[200];
         gdouble verpos = 0.03 + (gdouble)i/(gdouble)(number_of_tatamis);
         snprintf(buf, sizeof(buf)-1, "Tatami %d", i+1);
 #ifdef USE_PANGO
@@ -2700,7 +2700,7 @@ void paint_next_matches(struct paint_data *pd)
 		       &_x, &_y, NULL, NULL,
 		       TEXT_ANCHOR_START, TEXT_ANCHOR_TOP,
 		       desc, 0, 0);
-            snprintf(buf, sizeof(buf)-1, "%s: %s %s",
+            SNPRINTF_UTF8(buf, "%s: %s %s",
                      next_matches_info[i][0].won_cat,
                      next_matches_info[i][0].won_first,
                      next_matches_info[i][0].won_last);
@@ -2709,7 +2709,7 @@ void paint_next_matches(struct paint_data *pd)
 		       TEXT_ANCHOR_START, TEXT_ANCHOR_TOP,
 		       desc, 0, 0);
 #else
-            snprintf(buf, sizeof(buf)-1, "  (%s: %s: %s %s)",
+            SNPRINTF_UTF8(buf, "  (%s: %s: %s %s)",
                      _T(prevwinner),
                      next_matches_info[i][0].won_cat,
                      next_matches_info[i][0].won_first,
@@ -2722,107 +2722,107 @@ void paint_next_matches(struct paint_data *pd)
             continue;
 
 #ifdef USE_PANGO
-        snprintf(txt, sizeof(txt), "%s: ", _T(match));
+        snprintf(buf, sizeof(buf), "%s: ", _T(match));
 	_x = W(1.4); _y = H(verpos + 1.0*rowheight);
-	write_text(pd->c, txt,
+	write_text(pd->c, buf,
 		   &_x, &_y, NULL, NULL,
 		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
 		   desc, 0, 0);
-        snprintf(txt, sizeof(txt), "%s", next_matches_info[i][0].category);
+        SNPRINTF_UTF8(buf, "%s", next_matches_info[i][0].category);
 	_x = -1; _y = -1;
-	write_text(pd->c, txt,
+	write_text(pd->c, buf,
 		   &_x, &_y, NULL, NULL,
 		   TEXT_ANCHOR_START, TEXT_ANCHOR_TOP,
 		   desc, 0, 0);
 
-        snprintf(txt, sizeof(txt), "%s %s - %s",
+        SNPRINTF_UTF8(buf, "%s %s - %s",
                  next_matches_info[i][0].blue_first,
                  next_matches_info[i][0].blue_last,
                  next_matches_info[i][0].blue_club);
 	_x = W(1.44); _y = H(verpos + 2.0*rowheight);
-	write_text(pd->c, txt,
+	write_text(pd->c, buf,
 		   &_x, &_y, NULL, NULL,
 		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
 		   desc, 0, 0);
 
-        snprintf(txt, sizeof(txt), "%s %s - %s",
+        SNPRINTF_UTF8(buf, "%s %s - %s",
                  next_matches_info[i][0].white_first,
                  next_matches_info[i][0].white_last,
                  next_matches_info[i][0].white_club);
 	_x = W(1.44); _y = H(verpos + 3.0*rowheight);
-	write_text(pd->c, txt,
+	write_text(pd->c, buf,
 		   &_x, &_y, NULL, NULL,
 		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
 		   desc, 0, 0);
 
-        snprintf(txt, sizeof(txt), "%s: ", _T(nextmatch));
+        snprintf(buf, sizeof(buf), "%s: ", _T(nextmatch));
 	_x = W(1.4); _y = H(verpos + 4.0*rowheight);
-	write_text(pd->c, txt,
+	write_text(pd->c, buf,
 		   &_x, &_y, NULL, NULL,
 		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
 		   desc, 0, 0);
-        snprintf(txt, sizeof(txt), "%s", next_matches_info[i][1].category);
+        SNPRINTF_UTF8(buf, "%s", next_matches_info[i][1].category);
 	_x = -1; _y = -1;
-	write_text(pd->c, txt,
+	write_text(pd->c, buf,
 		   &_x, &_y, NULL, NULL,
 		   TEXT_ANCHOR_START, TEXT_ANCHOR_TOP,
 		   desc, 0, 0);
 
-        snprintf(txt, sizeof(txt), "%s %s - %s",
+        SNPRINTF_UTF8(buf, "%s %s - %s",
                  next_matches_info[i][1].blue_first,
                  next_matches_info[i][1].blue_last,
                  next_matches_info[i][1].blue_club);
 	_x = W(1.44); _y = H(verpos + 5.0*rowheight);
-	write_text(pd->c, txt,
+	write_text(pd->c, buf,
 		   &_x, &_y, NULL, NULL,
 		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
 		   desc, 0, 0);
 
-        snprintf(txt, sizeof(txt), "%s %s - %s",
+        SNPRINTF_UTF8(buf, "%s %s - %s",
                  next_matches_info[i][1].white_first,
                  next_matches_info[i][1].white_last,
                  next_matches_info[i][1].white_club);
 	_x = W(1.44); _y = H(verpos + 6.0*rowheight);
-	write_text(pd->c, txt,
+	write_text(pd->c, buf,
 		   &_x, &_y, NULL, NULL,
 		   TEXT_ANCHOR_START, TEXT_ANCHOR_BOTTOM,
 		   desc, 0, 0);
 #else
         cairo_move_to(pd->c, W(1.4), H(verpos + 1.0*rowheight));
-        snprintf(txt, sizeof(txt), "%s: %s", _T(match), next_matches_info[i][0].category);
-        cairo_show_text(pd->c, txt);
+        SNPRINTF_UTF8(buf, "%s: %s", _T(match), next_matches_info[i][0].category);
+        cairo_show_text(pd->c, buf);
 
         cairo_move_to(pd->c, W(1.4), H(verpos + 2.0*rowheight));
-        snprintf(txt, sizeof(txt), "    %s %s - %s",
+        SNPRINTF_UTF8(buf, "    %s %s - %s",
                  next_matches_info[i][0].blue_first,
                  next_matches_info[i][0].blue_last,
                  next_matches_info[i][0].blue_club);
-        cairo_show_text(pd->c, txt);
+        cairo_show_text(pd->c, buf);
 
         cairo_move_to(pd->c, W(1.4), H(verpos + 3.0*rowheight));
-        snprintf(txt, sizeof(txt), "    %s %s - %s",
+        SNPRINTF_UTF8(buf, "    %s %s - %s",
                  next_matches_info[i][0].white_first,
                  next_matches_info[i][0].white_last,
                  next_matches_info[i][0].white_club);
-        cairo_show_text(pd->c, txt);
+        cairo_show_text(pd->c, buf);
 
         cairo_move_to(pd->c, W(1.4), H(verpos + 4.0*rowheight));
-        snprintf(txt, sizeof(txt), "%s: %s", _T(nextmatch), next_matches_info[i][1].category);
-        cairo_show_text(pd->c, txt);
+        SNPRINTF_UTF8(buf, "%s: %s", _T(nextmatch), next_matches_info[i][1].category);
+        cairo_show_text(pd->c, buf);
 
         cairo_move_to(pd->c, W(1.4), H(verpos + 5.0*rowheight));
-        snprintf(txt, sizeof(txt), "    %s %s - %s",
+        SNPRINTF_UTF8(buf, "    %s %s - %s",
                  next_matches_info[i][1].blue_first,
                  next_matches_info[i][1].blue_last,
                  next_matches_info[i][1].blue_club);
-        cairo_show_text(pd->c, txt);
+        cairo_show_text(pd->c, buf);
 
         cairo_move_to(pd->c, W(1.4), H(verpos + 6.0*rowheight));
-        snprintf(txt, sizeof(txt), "    %s %s - %s",
+        SNPRINTF_UTF8(buf, "    %s %s - %s",
                  next_matches_info[i][1].white_first,
                  next_matches_info[i][1].white_last,
                  next_matches_info[i][1].white_club);
-        cairo_show_text(pd->c, txt);
+        cairo_show_text(pd->c, buf);
 #endif
         /* points */
         paint_point_box(pd, 1.0, verpos,                 0, TRUE, i);

@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2006-2017 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +14,7 @@
 #include "sqlite3.h"
 #include "judoshiai.h"
 #include "language.h"
+#include "common-utils.h"
 
 
 static GtkTreeIter found_iter;
@@ -74,11 +75,11 @@ static gboolean traverse_rows_for_name(GtkTreeModel *model,
     gchar **names = data;
     gchar *lastname = NULL, *firstname = NULL, *clubname = NULL, *regcat = NULL, *id = NULL;
     gboolean result = FALSE;
-	
+
     gtk_tree_model_get(model, iter,
                        COL_LAST_NAME, &lastname,
-                       COL_FIRST_NAME, &firstname, 
-                       COL_CLUB, &clubname, 
+                       COL_FIRST_NAME, &firstname,
+                       COL_CLUB, &clubname,
                        COL_WCLASS, &regcat,
                        COL_ID, &id,
                        -1);
@@ -126,7 +127,7 @@ gboolean find_iter_name(GtkTreeIter *iter, const gchar *last, const gchar *first
     return FALSE;
 }
 
-gboolean find_iter_name_2(GtkTreeIter *iter, const gchar *last, const gchar *first, 
+gboolean find_iter_name_2(GtkTreeIter *iter, const gchar *last, const gchar *first,
 			  const gchar *club, const gchar *category)
 {
     const gchar *names[5];
@@ -148,7 +149,7 @@ gboolean find_iter_name_2(GtkTreeIter *iter, const gchar *last, const gchar *fir
     return FALSE;
 }
 
-gboolean find_iter_name_id(GtkTreeIter *iter, const gchar *last, const gchar *first, 
+gboolean find_iter_name_id(GtkTreeIter *iter, const gchar *last, const gchar *first,
                            const gchar *club, const gchar *category, const gchar *id)
 {
     const gchar *names[5];
@@ -233,21 +234,21 @@ struct judoka *get_data_by_iter(GtkTreeIter *iter)
     gtk_tree_model_get(current_model, iter,
                        COL_INDEX, &j->index,
                        COL_LAST_NAME, &j->last,
-                       COL_FIRST_NAME, &j->first, 
-                       COL_BIRTHYEAR, &j->birthyear, 
-                       COL_CLUB, &j->club, 
-                       COL_COUNTRY, &j->country, 
-                       COL_WCLASS, &j->regcategory, 
-                       COL_BELT, &j->belt, 
-                       COL_WEIGHT, &j->weight, 
+                       COL_FIRST_NAME, &j->first,
+                       COL_BIRTHYEAR, &j->birthyear,
+                       COL_CLUB, &j->club,
+                       COL_COUNTRY, &j->country,
+                       COL_WCLASS, &j->regcategory,
+                       COL_BELT, &j->belt,
+                       COL_WEIGHT, &j->weight,
                        COL_VISIBLE, &j->visible,
                        COL_CATEGORY, &j->category,
                        COL_DELETED, &j->deleted,
-                       COL_ID, &j->id, 
-                       COL_SEEDING, &j->seeding, 
-                       COL_CLUBSEEDING, &j->clubseeding, 
-                       COL_COMMENT, &j->comment, 
-                       COL_COACHID, &j->coachid, 
+                       COL_ID, &j->id,
+                       COL_SEEDING, &j->seeding,
+                       COL_CLUBSEEDING, &j->clubseeding,
+                       COL_COMMENT, &j->comment,
+                       COL_COACHID, &j->coachid,
                        -1);
     return j;
 }
@@ -259,21 +260,21 @@ struct judoka *get_data_by_iter_model(GtkTreeIter *iter, GtkTreeModel *model)
     gtk_tree_model_get(model, iter,
                        COL_INDEX, &j->index,
                        COL_LAST_NAME, &j->last,
-                       COL_FIRST_NAME, &j->first, 
-                       COL_BIRTHYEAR, &j->birthyear, 
-                       COL_CLUB, &j->club, 
-                       COL_COUNTRY, &j->country, 
-                       COL_WCLASS, &j->regcategory, 
-                       COL_BELT, &j->belt, 
-                       COL_WEIGHT, &j->weight, 
+                       COL_FIRST_NAME, &j->first,
+                       COL_BIRTHYEAR, &j->birthyear,
+                       COL_CLUB, &j->club,
+                       COL_COUNTRY, &j->country,
+                       COL_WCLASS, &j->regcategory,
+                       COL_BELT, &j->belt,
+                       COL_WEIGHT, &j->weight,
                        COL_VISIBLE, &j->visible,
                        COL_CATEGORY, &j->category,
                        COL_DELETED, &j->deleted,
-                       COL_ID, &j->id, 
-                       COL_SEEDING, &j->seeding, 
-                       COL_CLUBSEEDING, &j->clubseeding, 
-                       COL_COMMENT, &j->comment, 
-                       COL_COACHID, &j->coachid, 
+                       COL_ID, &j->id,
+                       COL_SEEDING, &j->seeding,
+                       COL_CLUBSEEDING, &j->clubseeding,
+                       COL_COMMENT, &j->comment,
+                       COL_COACHID, &j->coachid,
                        -1);
     return j;
 }
@@ -282,7 +283,7 @@ struct judoka *get_data(guint index)
 {
     GtkTreeIter iter;
 
-    if (find_iter(&iter, index & MATCH_CATEGORY_MASK) == FALSE) 
+    if (find_iter(&iter, index & MATCH_CATEGORY_MASK) == FALSE)
         return NULL;
 
     return get_data_by_iter(&iter);
@@ -294,7 +295,7 @@ void put_data_by_iter(struct judoka *j, GtkTreeIter *iter)
     if (!current_model)
         return;
 
-    gtk_tree_store_set((GtkTreeStore *)current_model, 
+    gtk_tree_store_set((GtkTreeStore *)current_model,
                        iter,
                        COL_INDEX,      j->index,
                        COL_LAST_NAME,  j->last ? j->last : "?",
@@ -309,10 +310,10 @@ void put_data_by_iter(struct judoka *j, GtkTreeIter *iter)
                        COL_CATEGORY,   j->category ? j->category : "?",
                        COL_DELETED,    j->deleted,
                        COL_ID,         j->id ? j->id : "",
-                       COL_SEEDING,    j->seeding, 
-                       COL_CLUBSEEDING,j->clubseeding, 
-                       COL_COMMENT,    j->comment ? j->comment : "", 
-                       COL_COACHID,    j->coachid ? j->coachid : "", 
+                       COL_SEEDING,    j->seeding,
+                       COL_CLUBSEEDING,j->clubseeding,
+                       COL_COMMENT,    j->comment ? j->comment : "",
+                       COL_COACHID,    j->coachid ? j->coachid : "",
                        -1);
 }
 
@@ -327,7 +328,7 @@ void put_data_by_iter_model(struct judoka *j, GtkTreeIter *iter, GtkTreeModel *m
     if (!j)
         return;
 
-    gtk_tree_store_set((GtkTreeStore *)model, 
+    gtk_tree_store_set((GtkTreeStore *)model,
                        iter,
                        COL_INDEX,      j->index,
                        COL_LAST_NAME,  j->last ? j->last : "?",
@@ -342,10 +343,10 @@ void put_data_by_iter_model(struct judoka *j, GtkTreeIter *iter, GtkTreeModel *m
                        COL_CATEGORY,   j->category ? j->category : "?",
                        COL_DELETED,    j->deleted,
                        COL_ID,         j->id ? j->id : "",
-                       COL_SEEDING,    j->seeding, 
-                       COL_CLUBSEEDING,j->clubseeding, 
-                       COL_COMMENT,    j->comment ? j->comment : "", 
-                       COL_COACHID,    j->coachid ? j->coachid : "", 
+                       COL_SEEDING,    j->seeding,
+                       COL_CLUBSEEDING,j->clubseeding,
+                       COL_COMMENT,    j->comment ? j->comment : "",
+                       COL_COACHID,    j->coachid ? j->coachid : "",
                        -1);
 }
 
@@ -353,7 +354,7 @@ void put_data(struct judoka *j, guint index)
 {
     GtkTreeIter iter;
 
-    if (find_iter(&iter, index) == FALSE) 
+    if (find_iter(&iter, index) == FALSE)
         return;
 
     put_data_by_iter(j, &iter);
@@ -367,9 +368,9 @@ void free_judoka(struct judoka *j)
         return;
 
     FREE(last);
-    FREE(first); 
-    FREE(club); 
-    FREE(regcategory); 
+    FREE(first);
+    FREE(club);
+    FREE(regcategory);
     FREE(category);
     FREE(country);
     FREE(id);
@@ -433,10 +434,10 @@ gint ask_question(gchar *message)
                                           _("Do not change"),        Q_CONTINUE,
                                           _("Stop synchronization"),   Q_QUIT,
                                           NULL);
-        
+
     label = gtk_label_new (message);
 #if (GTKVER == 3)
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        label, FALSE, FALSE, 0);
 #else
     gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
@@ -453,7 +454,7 @@ gint ask_question(gchar *message)
 gint weight_grams(const gchar *s)
 {
     gint weight = 0, decimal = 0;
-        
+
     while (*s) {
         if (*s == '.' || *s == ',') {
             decimal = 1;
@@ -470,7 +471,7 @@ gint weight_grams(const gchar *s)
         }
         s++;
     }
-        
+
     return weight;
 }
 
@@ -529,29 +530,29 @@ const gchar *get_name_and_club_text(struct judoka *j, gint flags)
     static gchar buffers[4][128];
     static gint n = 0;
     gchar *p;
-    
+
     if (flags & CLUB_TEXT_NO_CLUB) {
         switch (name_layout) {
         case NAME_LAYOUT_N_S_C:
-            snprintf(buffers[n], 128, "%s %s", j->first, j->last);
+            SNPRINTF_UTF8(buffers[n], "%s %s", j->first, j->last);
             break;
         case NAME_LAYOUT_S_N_C:
         case NAME_LAYOUT_C_S_N:
-            snprintf(buffers[n], 128, "%s %s", j->last, j->first);
+            SNPRINTF_UTF8(buffers[n], "%s %s", j->last, j->first);
             break;
         }
     } else {
         switch (name_layout) {
         case NAME_LAYOUT_N_S_C:
-            snprintf(buffers[n], 128, "%s %s, %s", 
+            SNPRINTF_UTF8(buffers[n], "%s %s, %s",
                      j->first, j->last, get_club_text(j, flags));
             break;
         case NAME_LAYOUT_S_N_C:
-            snprintf(buffers[n], 128, "%s %s, %s", 
+            SNPRINTF_UTF8(buffers[n], "%s %s, %s",
                      j->last, j->first, get_club_text(j, flags));
             break;
         case NAME_LAYOUT_C_S_N:
-            snprintf(buffers[n], 128, "%s, %s %s", 
+            SNPRINTF_UTF8(buffers[n], "%s, %s %s",
                      get_club_text(j, flags), j->last, j->first);
             break;
         }
@@ -560,13 +561,12 @@ const gchar *get_name_and_club_text(struct judoka *j, gint flags)
     p = buffers[n];
     if (++n >= 4)
 	n = 0;
-
     return p;
 }
 
 const gchar *get_club_text(struct judoka *j, gint flags)
 {
-    static gchar buffers[4][64];
+    static gchar buffers[4][128];
     static gint n = 0;
     gchar *p;
     struct club_name_data *data = NULL;
@@ -576,7 +576,7 @@ const gchar *get_club_text(struct judoka *j, gint flags)
 
     if (flags & CLUB_TEXT_ABBREVIATION &&
         club_abbr) {
-	if ((club_text & CLUB_TEXT_COUNTRY) && 
+	if ((club_text & CLUB_TEXT_COUNTRY) &&
 	    j->country && j->country[0])
 	    return j->country;
 	if (data && data->abbreviation && data->abbreviation[0])
@@ -584,11 +584,11 @@ const gchar *get_club_text(struct judoka *j, gint flags)
 	return j->club ? j->club : "";
     }
 
-    if ((flags & CLUB_TEXT_ADDRESS) && 
+    if ((flags & CLUB_TEXT_ADDRESS) &&
 	(club_text & CLUB_TEXT_COUNTRY) == 0) {
 	if (data && data->address && data->address[0]) {
-	    snprintf(buffers[n], 64, "%s, %s", 
-		     j->club ? j->club : "", 
+	    SNPRINTF_UTF8(buffers[n], "%s, %s",
+		     j->club ? j->club : "",
 		     data->address);
 	    p = buffers[n];
 	    if (++n >= 4)
@@ -610,7 +610,7 @@ const gchar *get_club_text(struct judoka *j, gint flags)
     if (j->country && (j->club == NULL || j->club[0] == 0))
 	return j->country;
 
-    snprintf(buffers[n], 64, "%s/%s", j->country, j->club);
+    SNPRINTF_UTF8(buffers[n], "%s/%s", j->country, j->club);
 
     p = buffers[n];
     if (++n >= 4)

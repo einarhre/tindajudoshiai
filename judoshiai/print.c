@@ -1369,7 +1369,7 @@ static void free_schedule(void)
 static void paint_schedule(struct paint_data *pd)
 {
     gint i;
-    gchar buf[100];
+    gchar buf[128];
     cairo_t *c = pd->c;
     cairo_text_extents_t extents;
     gdouble  paper_width_saved;
@@ -1430,7 +1430,7 @@ static void paint_schedule(struct paint_data *pd)
     cairo_show_text(c, _T(schedule));
 #endif
     rownum1 = 2;
-    snprintf(buf, sizeof(buf), "%s  %s  %s",
+    SNPRINTF_UTF8(buf, "%s  %s  %s",
              prop_get_str_val(PROP_NAME),
              prop_get_str_val(PROP_DATE),
              prop_get_str_val(PROP_PLACE));
