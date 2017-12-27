@@ -12,6 +12,7 @@
 #include <gdk/gdkkeysyms.h> 
 
 #include "judoshiai.h"
+#include "common-utils.h"
 
 extern void view_on_row_activated (GtkTreeView        *treeview,
                                    GtkTreePath        *path,
@@ -71,7 +72,7 @@ static void lookup(GtkWidget *w, gpointer arg)
     gboolean ok_cat, ok_j;
     struct find_data *data = arg;
     gint n = 0, i;
-    gchar buf[80];
+    gchar buf[128];
 
     gchar *name = g_utf8_casefold(gtk_entry_get_text(GTK_ENTRY(data->name)), -1);
 
@@ -102,10 +103,10 @@ static void lookup(GtkWidget *w, gpointer arg)
 
             if (strncmp(name, last_u, strlen(name)) == 0) {
 		if (country && country[0])
-		    snprintf(buf, sizeof(buf), "%s, %s, %s/%s, %s", 
+		    SNPRINTF_UTF8(buf, "%s, %s, %s/%s, %s", 
 			     last, first, club, country, cat);
 		else
-		    snprintf(buf, sizeof(buf), "%s, %s, %s, %s", 
+		    SNPRINTF_UTF8(buf, "%s, %s, %s, %s", 
 			     last, first, club, cat);
 
                 gtk_button_set_label(GTK_BUTTON(data->results[n]), buf);
@@ -225,13 +226,11 @@ void lookup_competitor(struct msg_lookup_comp *msg)
 
             if (strncmp(name, last_u, strlen(name)) == 0) {
 		if (country && country[0])
-		    snprintf(msg->result[n].fullname,
-			     sizeof(msg->result[n].fullname),
+		    SNPRINTF_UTF8(msg->result[n].fullname,
 			     "%s, %s, %s/%s, %s",
 			     last, first, club, country, cat);
 		else
-		    snprintf(msg->result[n].fullname,
-			     sizeof(msg->result[n].fullname),
+		    SNPRINTF_UTF8(msg->result[n].fullname,
 			     "%s, %s, %s, %s",
 			     last, first, club, cat);
 
