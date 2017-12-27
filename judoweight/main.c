@@ -24,6 +24,7 @@
 #include "judoweight.h"
 #include "language.h"
 #include "binreloc.h"
+#include "common-utils.h"
 
 #define JUDOGI_STATUS
 
@@ -101,45 +102,44 @@ void set_display(struct msg_edit_competitor *msg)
     if (msg->operation == EDIT_OP_CONFIRM) {
 
 #if (GTKVER == 3)
-        snprintf(buf, sizeof(buf), "<span font_desc=\"30.0\">%s %s</span>",
+        SNPRINTF_UTF8(buf, "<span font_desc=\"30.0\">%s %s</span>",
                  msg->first, msg->last);
         gtk_label_set_markup(GTK_LABEL(confirm_box), buf);
 
-        snprintf(buf, sizeof(buf), "<span font_desc=\"30.0\">%s/%s</span>",
+        SNPRINTF_UTF8(buf, "<span font_desc=\"30.0\">%s/%s</span>",
                  msg->club, msg->country);
         gtk_label_set_markup(GTK_LABEL(confirm_box1), buf);
 
-        snprintf(buf, sizeof(buf), "<span font_desc=\"20.0\">%s</span>",
+        SNPRINTF_UTF8(buf, "<span font_desc=\"20.0\">%s</span>",
                  _("Weight:"));
         gtk_label_set_markup(GTK_LABEL(confirm_box21), buf);
 
-        snprintf(buf, sizeof(buf), "<span font_desc=\"50.0\">%d.%02d kg</span>",
+        SNPRINTF_UTF8(buf, "<span font_desc=\"50.0\">%d.%02d kg</span>",
                  msg->weight/1000, (msg->weight%1000)/10);
         gtk_label_set_markup(GTK_LABEL(confirm_box2), buf);
 
-        snprintf(buf, sizeof(buf), "<span font_desc=\"20.0\">%s</span>",
+        SNPRINTF_UTF8(buf, "<span font_desc=\"20.0\">%s</span>",
                  _("Category:"));
         gtk_label_set_markup(GTK_LABEL(confirm_box31), buf);
 
         if (msg->regcategory[0] && msg->estim_category[0] &&
             strcmp(msg->regcategory, msg->estim_category))
-            snprintf(buf, sizeof(buf), "<span font_desc=\"50.0\" foreground=\"red\">%s</span>",
+            SNPRINTF_UTF8(buf, "<span font_desc=\"50.0\" foreground=\"red\">%s</span>",
                      msg->estim_category);
             else
-                snprintf(buf, sizeof(buf), "<span font_desc=\"50.0\">%s</span>",
+                SNPRINTF_UTF8(buf, "<span font_desc=\"50.0\">%s</span>",
                          msg->estim_category);
         gtk_label_set_markup(GTK_LABEL(confirm_box3), buf);
 
         if (msg->deleted & JUDOGI_OK)
-            snprintf(buf, sizeof(buf), "<span font_desc=\"30.0\" foreground=\"green\">OK</span>");
+            SNPRINTF_UTF8(buf, "<span font_desc=\"30.0\" foreground=\"green\">OK</span>");
         else if (msg->deleted & JUDOGI_NOK)
-            snprintf(buf, sizeof(buf), "<span font_desc=\"30.0\" foreground=\"red\">NOK</span>");
+            SNPRINTF_UTF8(buf, "<span font_desc=\"30.0\" foreground=\"red\">NOK</span>");
         else
-            snprintf(buf, sizeof(buf), "%s",
-                     _("WARNING: NO CONTROL"));
+            SNPRINTF_UTF8(buf, "%s", _("WARNING: NO CONTROL"));
         gtk_label_set_markup(GTK_LABEL(confirm_control), buf);
 #else
-        snprintf(buf, sizeof(buf), "%s %s, %s/%s: %s (%s): %d.%02d %s",
+        SNPRINTF_UTF8(buf, "%s %s, %s/%s: %s (%s): %d.%02d %s",
                  msg->last, msg->first, msg->country, msg->club, msg->category, msg->regcategory,
                  msg->weight/1000, (msg->weight%1000)/10,
                  (msg->deleted & JUDOGI_OK) ? "OK" :
@@ -156,14 +156,14 @@ void set_display(struct msg_edit_competitor *msg)
                 gchar *labels[4];
                 time_t t = time(NULL);
                 struct tm *tm = localtime(&t);
-                snprintf(buf, sizeof(buf), "%04d-%02d-%02d %02d:%02d:%02d",
+                SNPRINTF_UTF8(buf, "%04d-%02d-%02d %02d:%02d:%02d",
                          tm->tm_year+1900,
                          tm->tm_mon+1,
                          tm->tm_mday,
                          tm->tm_hour,
                          tm->tm_min,
                          tm->tm_sec);
-                snprintf(buf1, sizeof(buf1), "%d.%02d kg",
+                SNPRINTF_UTF8(buf1, "%d.%02d kg",
                          msg->weight/1000, (msg->weight%1000)/10);        
                 labels[0] = buf;
                 labels[1] = buf1;
@@ -177,12 +177,12 @@ void set_display(struct msg_edit_competitor *msg)
 
     saved.u.edit_competitor = *msg;
 
-//    snprintf(buf, sizeof(buf), "%s %s, %s/%s: %s (%s)",
+//    SNPRINTF_UTF8(buf, sizeof(buf), "%s %s, %s/%s: %s (%s)",
 //             msg->last, msg->first, msg->country, msg->club, msg->category, msg->regcategory);
-    snprintf(buf, sizeof(buf), "%s %s, %s/%s (%s): %s", 
+    SNPRINTF_UTF8(buf, "%s %s, %s/%s (%s): %s", 
              msg->last, msg->first, msg->country, msg->club, msg->beltstr, msg->regcategory);
     gtk_label_set_label(GTK_LABEL(name_box), buf);
-    snprintf(buf, sizeof(buf), "%d.%02d", msg->weight/1000, (msg->weight%1000)/10);
+    SNPRINTF_UTF8(buf, "%d.%02d", msg->weight/1000, (msg->weight%1000)/10);
     gtk_entry_set_text(GTK_ENTRY(weight_box), buf);
     gtk_widget_grab_focus(weight_box);
 
@@ -299,7 +299,7 @@ static void on_enter(GtkEntry *entry, gpointer user_data)
     memset(&output_msg, 0, sizeof(output_msg));
     output_msg.type = MSG_EDIT_COMPETITOR;
     output_msg.u.edit_competitor.operation = EDIT_OP_GET_BY_ID;
-    strncpy(output_msg.u.edit_competitor.id, the_text, sizeof(output_msg.u.edit_competitor.id));
+    STRCPY_UTF8(output_msg.u.edit_competitor.id, the_text);
     send_packet(&output_msg);
 
     gtk_entry_set_text(GTK_ENTRY(entry), "");
