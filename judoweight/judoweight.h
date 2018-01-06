@@ -86,5 +86,8 @@ extern void do_print(gpointer userdata);
 extern void do_print_svg(struct paint_data *pd);
 extern void read_svg_file(void);
 extern gint paint_svg(struct paint_data *pd);
+extern gint weight_grams(const gchar *s);
+extern gchar *weight_to_str(gint weight);
+extern gint get_calibrated_weight(gint weight);
 
 #endif
