@@ -2635,6 +2635,8 @@ void toggle_rules_2017(GtkWidget *menu_item, gpointer data)
 {
     use_2017_rules = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
     g_key_file_set_boolean(keyfile, "preferences", "rules2017", use_2017_rules);
+    if (use_2017_rules)
+	set_rules_year(2017);
     if (!(use_2017_rules || use_2018_rules)) {
 	set_text(MY_LABEL(wazaari), "I");
 	set_text(MY_LABEL(yuko), "W");
@@ -2651,6 +2653,8 @@ void toggle_rules_2018(GtkWidget *menu_item, gpointer data)
 {
     use_2018_rules = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
     g_key_file_set_boolean(keyfile, "preferences", "rules2018", use_2018_rules);
+    if (use_2018_rules)
+	set_rules_year(2018);
     if (!(use_2017_rules || use_2018_rules)) {
 	set_text(MY_LABEL(wazaari), "I");
 	set_text(MY_LABEL(yuko), "W");

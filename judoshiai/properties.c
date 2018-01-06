@@ -53,19 +53,7 @@ enum {
 static GSList *points_group = NULL;
 
 static GtkWidget *properties_button = NULL;
-static void set_properties_button(GtkWidget *checkbox, gpointer arg)
-{
-    gint i;
-    GtkWidget *w;
-
-    if (properties_button) {
-	gtk_widget_set_name(properties_button, "button_red");
-	for (i = PROP_USE_IJF_POINTS; i <= PROP_USE_PTS_10_5_1; i++) { 
-	    w = get_prop_widget(i, TRUE);
-	    if (w) gtk_widget_set_name(w, "button_red");
-	}
-    }
-}
+static void set_properties_button(GtkWidget *checkbox, gpointer arg);
 
 struct property {
     gchar *name; // name in database
@@ -288,6 +276,28 @@ struct property {
 	.action_func = set_properties_button,
     },
 };
+
+static void set_properties_button(GtkWidget *checkbox, gpointer arg)
+{
+    gint i;
+    GtkWidget *w;
+    gint prop = ptr_to_gint(arg);
+
+    if (prop == PROP_RULES_2017 &&
+	gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(props[prop].w)))
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(props[PROP_RULES_2018].w), FALSE);
+    else if (prop == PROP_RULES_2018 &&
+	gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(props[prop].w)))
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(props[PROP_RULES_2017].w), FALSE);
+
+    if (properties_button) {
+	gtk_widget_set_name(properties_button, "button_red");
+	for (i = PROP_USE_IJF_POINTS; i <= PROP_USE_PTS_10_5_1; i++) { 
+	    w = get_prop_widget(i, TRUE);
+	    if (w) gtk_widget_set_name(w, "button_red");
+	}
+    }
+}
 
 static GtkWidget *get_prop_widget(enum properties num, gboolean label) {
     if (label) return props[num].label_w;
@@ -834,7 +844,7 @@ void properties(GtkWidget *w, gpointer data)
 #endif
 		if (props[i].action_func)
 		    g_signal_connect(G_OBJECT(tmp), "clicked",
-				     G_CALLBACK(props[i].action_func), NULL);
+				     G_CALLBACK(props[i].action_func), gint_to_ptr(i));
                 break;
             }
 
@@ -844,8 +854,6 @@ void properties(GtkWidget *w, gpointer data)
     } // for (i = 0; i < NUM_PROPERTIES; i++)
 
     for (i = 0; i < NUM_DEFAULT_CATS; i++) {
-        gint j;
-
         tmp = gtk_entry_new();
         gtk_entry_set_width_chars(GTK_ENTRY(tmp), 3);
 #if (GTKVER == 3)

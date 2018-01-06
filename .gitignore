@@ -15,6 +15,7 @@ release-*
 test
 *.rc
 *.res
+*.rej
 *~
 GPATH
 GRTAGS
@@ -25,3 +26,6 @@ etc/websock-serial.zip
 judoshiai/sqlite3-patched.c
 judoshiai/sqlite3-patched.c.orig
 backup*
+*.patch
+a.out
+xx*

@@ -254,5 +254,6 @@ extern void set_menu_active(void);
 
 extern void set_menu_white_first(gboolean flag);
 extern void activate_slave_mode(void);
+extern void set_rules_year(gint year);
 
 #endif

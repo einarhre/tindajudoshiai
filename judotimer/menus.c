@@ -608,6 +608,17 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     return menubar;
 }
 
+void set_rules_year(gint year)
+{
+    if (year == 2017) {
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(rules_2018), FALSE);
+	use_2018_rules = FALSE;
+    } else if (year == 2018) {
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(rules_2017), FALSE);
+	use_2017_rules = FALSE;
+    }
+}
+
 void set_preferences(void)
 {
     set_preferences_keyfile(keyfile, TRUE);

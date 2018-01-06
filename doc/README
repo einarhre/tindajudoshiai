@@ -9,6 +9,24 @@ Raspberry Pi: judoshiai_n.n-1_armhf.deb
 
 ==============================================
 RELEASE NOTE
+VERSION 2.7
+
+JudoShiai
+----------
++ Year 2018 rules.
++ Support for right-to-left languages like Hebrew.
++ Max number of tatamis has been increased to 20 (requires powerful hardware).
+
+JudoTimer
+---------
++ Year 2018 rules.
+
+JudoWeight
+----------
++ Scale calibration table.
+
+==============================================
+RELEASE NOTE
 VERSION 2.6.1
 
 JudoShiai

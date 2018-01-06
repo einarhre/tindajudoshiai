@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-25 13:22+0300\n"
+"POT-Creation-Date: 2017-12-31 08:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1847,3 +1847,90 @@ msgstr "Käytä IJF-pisteitä"
 
 msgid "Show bracket"
 msgstr "Näytä kaavio"
+
+msgid "2017 Rules"
+msgstr "Vuoden 2017 säännöt"
+
+msgid "2018 Rules"
+msgstr "Vuoden 2018 säännöt"
+
+msgid "Category typing errors\n"
+msgstr "Kategoriassa kirjoitusvirheitä\n"
+
+msgid "GER Repchg"
+msgstr ""
+
+msgid "GER Double Repechage"
+msgstr ""
+
+msgid "2017 Rules:"
+msgstr "Vuoden 2017 säännöt:"
+
+msgid "2018 Rules:"
+msgstr "Vuoden 2018 säännöt:"
+
+msgid "Use points 10/1/0:"
+msgstr "Pisteet 10/1/0:"
+
+msgid "Use points 100/10/1/½:"
+msgstr "Pisteet 100/10/1/½:"
+
+msgid "Use points 10/7/1:"
+msgstr "Pisteet 10/7/1:"
+
+msgid "Use points 10/1/½:"
+msgstr "Pisteet 10/1/½:"
+
+msgid "Use points 10/3/1:"
+msgstr "Pisteet 10/3/1:"
+
+msgid "Use points 10/5/1:"
+msgstr "Pisteet 10/5/1:"
+
+msgid "Add extra match in teams points tie:"
+msgstr "Lisää ottelu jos joukkueiden pisteet tasan:"
+
+msgid "Yes"
+msgstr "Kyllä"
+
+msgid "No"
+msgstr "Ei"
+
+msgid "Copy"
+msgstr "Kopioi"
+
+msgid "SVG+Lisp"
+msgstr ""
+
+msgid "Update"
+msgstr "Päivitä"
+
+msgid "New version:"
+msgstr "Uusi versio:"
+
+msgid "Current version:"
+msgstr "Nykyinen versio:"
+
+msgid "Update to new version?"
+msgstr "Päivitä uuteen versioon?"
+
+msgid "Scale Correction"
+msgstr "Puntarin korjaus"
+
+msgid "Corrected:"
+msgstr "Korjattu:"
+
+msgid "Real"
+msgstr "Todellinen"
+
+msgid "Display"
+msgstr "Näyttö"
+
+msgid "Error"
+msgstr "Virhe"
+
+msgid "ERROR"
+msgstr "VIRHE"
+
+msgid "Scale Correction Table..."
+msgstr "Puntarin korjaustaulukko"
