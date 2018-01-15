@@ -345,7 +345,7 @@ int put_using_ftp(const char *fullname, const char *fname)
     curl_off_t fsize;
     gchar *u;
 
-    struct curl_slist *headerlist = NULL;
+    //struct curl_slist *headerlist = NULL;
 
     /* get the file size of the local file */
     if (g_stat(fullname, &file_info)) {
@@ -369,15 +369,16 @@ int put_using_ftp(const char *fullname, const char *fname)
 
 	init_curl(curl);
 
+#if 0
 	/* build a list of commands to pass to libcurl */
-	headerlist = curl_slist_append(headerlist, "RNFR TMPXYZ");
-	gchar *n = g_strdup_printf("RNTO %s", fname);
+	gchar *n = g_strdup_printf("DELE %s", fname);
 	headerlist = curl_slist_append(headerlist, n);
 	g_free(n);
-	//n = g_strdup_printf("chmod 0644 %s", fname);
-	//headerlist = curl_slist_append(headerlist, n);
-	//g_free(n);
-
+	headerlist = curl_slist_append(headerlist, "RNFR TMPXYZ");
+	n = g_strdup_printf("RNTO %s", fname);
+	headerlist = curl_slist_append(headerlist, n);
+	g_free(n);
+#endif
 	/* we want to use our own read function */
 	curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
 
@@ -386,15 +387,15 @@ int put_using_ftp(const char *fullname, const char *fname)
 
 	/* specify target */
 	if (ftp_path && ftp_path[0])
-	    u = g_strdup_printf("ftp://%s/%s/TMPXYZ", ftp_server, ftp_path);
+	    u = g_strdup_printf("ftp://%s/%s/%s", ftp_server, ftp_path, fname);
 	else
-	    u = g_strdup_printf("ftp://%s/TMPXYZ", ftp_server);
+	    u = g_strdup_printf("ftp://%s/%s", ftp_server, fname);
 
 	curl_easy_setopt(curl, CURLOPT_URL, u);
 	g_free(u);
 
 	/* pass in that last of FTP commands to run after the transfer */
-	curl_easy_setopt(curl, CURLOPT_POSTQUOTE, headerlist);
+	//curl_easy_setopt(curl, CURLOPT_POSTQUOTE, headerlist);
 
 	/* now specify which file to upload */
 	curl_easy_setopt(curl, CURLOPT_READDATA, hd_src);
@@ -416,7 +417,7 @@ int put_using_ftp(const char *fullname, const char *fname)
 	} else xfer_ok++;
 
 	/* clean up the FTP commands list */
-	curl_slist_free_all(headerlist);
+	//curl_slist_free_all(headerlist);
 
 	/* always cleanup */
 	curl_easy_cleanup(curl);
