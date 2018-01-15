@@ -47,16 +47,16 @@ static GtkWidget *lang_menu, *flags[NUM_LANGS];
 static const gchar *flags_files[NUM_LANGS] = {
     "finland.png", "sweden.png", "uk.png", "spain.png", "estonia.png", "ukraine.png", "iceland.png", 
     "norway.png", "poland.png", "slovakia.png", "netherlands.png", "czech.png", "germany.png",
-    "russia.png"
+    "russia.png", "denmark.png"
 };
 
 static const gchar *lang_names[NUM_LANGS] = {
-    "fi", "sv", "en", "es", "et", "uk", "is", "nb", "pl", "sk", "nl", "cs", "de", "ru"
+    "fi", "sv", "en", "es", "et", "uk", "is", "nb", "pl", "sk", "nl", "cs", "de", "ru", "da"
 };
 
 static const gchar *lang_names_in_own_language[NUM_LANGS] = {
     "Suomi", "Svensk", "English", "Español", "Eesti", "Українська", "Íslenska", "Norsk", "Polski",
-    "Slovenčina", "Nederlands", "Čeština", "Deutsch", "Русский язык"
+    "Slovenčina", "Nederlands", "Čeština", "Deutsch", "Русский язык", "Dansk"
 };
 
 static GtkWidget *get_picture(const gchar *name)
@@ -181,7 +181,7 @@ GtkWidget *get_language_menu(GtkWidget *window, cb_t cb)
 const gchar *timer_help_file_names[NUM_LANGS] = {
     "judotimer-fi.pdf", "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-es.pdf", "judotimer-en.pdf",
     "judotimer-uk.pdf", "judotimer-en.pdf", "judotimer-nb.pdf", "judotimer-en.pdf", "judotimer-en.pdf",
-    "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-en.pdf"
+    "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-en.pdf"
 };
 
 
@@ -199,7 +199,8 @@ static const gchar *help_file_names[NUM_LANGS] = {
     "judoshiai-nl.pdf", // nl
     "judoshiai-en.pdf", // cs
     "judoshiai-de.pdf", // de
-    "judoshiai-en.pdf"  // ru
+    "judoshiai-en.pdf", // ru
+    "judoshiai-en.pdf"  // da
 };
 
 #ifdef WIN32

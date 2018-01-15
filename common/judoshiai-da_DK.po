@@ -1,0 +1,1938 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-12-31 08:23+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Address of the communication node"
+msgstr "Adresse til kommunikationsnoden"
+
+msgid "IP address:"
+msgstr "IP-adresse:"
+
+msgid "(Connection OK)"
+msgstr "(Forbindelse OK)"
+
+msgid "(Connection broken)"
+msgstr "(Forbindelse afbrudt)"
+
+msgid "Own IP addresses"
+msgstr "Egne IP-adresser"
+
+msgid "Blue won the voting"
+msgstr "Blå vandt afstemningen"
+
+msgid "White won the voting"
+msgstr "Hvid vandt afstemningen"
+
+msgid "Match:"
+msgstr "Kamp:"
+
+msgid "Next:"
+msgstr "Næste:"
+
+msgid "Fight:"
+msgstr "Kamp:"
+
+msgid "Contest"
+msgstr "Konkurrence"
+
+msgid "Preferences"
+msgstr "Indstillinger"
+
+msgid "Help"
+msgstr "Hjælp"
+
+msgid "Match duration: automatic"
+msgstr "Kampvarighed: automatisk"
+
+msgid "Match duration: 2 min E-juniors"
+msgstr "Kampvarighed: 2 min E-juniors"
+
+msgid "Match duration: 2 min"
+msgstr "Kampvarighed: 2 min"
+
+msgid "Match duration: 3 min"
+msgstr "Kampvarighed: 3 min"
+
+msgid "Match duration: 4 min"
+msgstr "Kampvarighed: 4 min"
+
+msgid "Match duration: 5 min"
+msgstr "Kampvarighed: 5 min"
+
+msgid "Contest duration: automatic"
+msgstr "Kampvarighed: automatisk"
+
+msgid "Contest duration: 2 min (short pin times)"
+msgstr "Kampvarighed: 2 min (short pin times)"
+
+msgid "Contest duration: 2 min"
+msgstr "Kampvarighed: 2 min"
+
+msgid "Contest duration: 3 min"
+msgstr "Kampvarighed: 3 min"
+
+msgid "Contest duration: 4 min"
+msgstr "Kampvarighed: 4 min"
+
+msgid "Contest duration: 5 min"
+msgstr "Kampvarighed: 5 min"
+
+msgid "Hantei: blue wins"
+msgstr "Hantei: blå vinder"
+
+msgid "Hantei: white wins"
+msgstr "Hantei: hvid vinder"
+
+msgid "Quit"
+msgstr "Afslut"
+
+msgid "Red background"
+msgstr "Rød baggrund"
+
+msgid "Contest area not chosen"
+msgstr "Ingen måtte er valgt"
+
+msgid "Contest area 1"
+msgstr "Måtte 1"
+
+msgid "Contest area 2"
+msgstr "Måtte 2"
+
+msgid "Contest area 3"
+msgstr "Måtte 3"
+
+msgid "Contest area 4"
+msgstr "Måtte 4"
+
+msgid "Contest area 5"
+msgstr "Måtte 5"
+
+msgid "Contest area 6"
+msgstr "Måtte 6"
+
+msgid "Contest area 7"
+msgstr "Måtte 7"
+
+msgid "Contest area 8"
+msgstr "Måtte 8"
+
+msgid "Communication node"
+msgstr "Kommunikationsnode"
+
+msgid "Increment time"
+msgstr "Forøg kamptiden"
+
+msgid "Decrement time"
+msgstr "Formindsk kamptiden"
+
+msgid "Manual"
+msgstr "Manual"
+
+msgid "About"
+msgstr "Om"
+
+msgid "Contest duration automatically from JudoShiai program"
+msgstr "Kampvarighed automatisk fra JudoShiai programmet"
+
+msgid "View clocks only"
+msgstr "Vis kun ur"
+
+msgid "Increment pin time"
+msgstr "Forøg holdegrebstid"
+
+msgid "Decrement pin time"
+msgstr "Formindsk holdegrebstid"
+
+msgid "Points going to blue"
+msgstr "Point går til blå"
+
+msgid "Points going to white"
+msgstr "Point går til hvid"
+
+msgid "About Judotimer"
+msgstr "Om Judotimer"
+
+msgid "Full screen mode"
+msgstr "Fuldskærmstilstand"
+
+msgid "Normal operation"
+msgstr "Normal tilstand"
+
+msgid "Master mode"
+msgstr "Master tilstand"
+
+msgid "Slave mode"
+msgstr "Slave tilstand"
+
+msgid "Undo!"
+msgstr "Fortryd!"
+
+msgid "Set clocks"
+msgstr "Indstil ur"
+
+msgid "Clock:"
+msgstr "Ur:"
+
+msgid "Short pin times"
+msgstr "Korte holdegrebstider"
+
+msgid "Hansoku-make to blue"
+msgstr "Hansoku-make til blå"
+
+msgid "Hansoku-make to white"
+msgstr "Hansoku-make til hvid"
+
+msgid "Clear selection"
+msgstr "Fjern markering"
+
+msgid "Display layout 1"
+msgstr "Skærm layout 1"
+
+msgid "Display layout 2"
+msgstr "Skærm layout 2"
+
+msgid "Display layout 3"
+msgstr "Skærm layout 3"
+
+msgid "Display layout 4"
+msgstr "Skærm layout 4"
+
+msgid "Display layout 5"
+msgstr "Skærm layout 5"
+
+msgid "Quick guide"
+msgstr "Hurtigguide"
+
+msgid "Start New Match?"
+msgstr "Start Ny Kamp?"
+
+msgid "Hansokumake to blue"
+msgstr "Hansokumake til blå"
+
+msgid "Hansokumake to white"
+msgstr "Hansokumake til hvid"
+
+msgid "Match"
+msgstr "Kamp"
+
+msgid "Golden Score"
+msgstr "Golden score"
+
+msgid "Start Golden Score?"
+msgstr "Start Golden Score?"
+
+msgid "Hantei"
+msgstr "Hantei"
+
+msgid "Blue wins"
+msgstr "Blå vinder"
+
+msgid "White wins"
+msgstr "Hvid vinder"
+
+msgid "REST TIME"
+msgstr "HVILETID"
+
+msgid "Advertise"
+msgstr "Annoncer"
+
+msgid "Run Advertisements"
+msgstr "Kør Annonceringer"
+
+msgid "Advertisement"
+msgstr "Annoncering"
+
+msgid "Choose a directory"
+msgstr "Vælg en mappe"
+
+msgid "No koka"
+msgstr "Ingen koka"
+
+msgid "Leave points for GS"
+msgstr "Overfør point til GS"
+
+msgid "View Log"
+msgstr "Vis Log"
+
+msgid "Display layout"
+msgstr "Skærmlayout"
+
+msgid "Contest area"
+msgstr "Måtte"
+
+msgid "Set time"
+msgstr "Indstil tid"
+
+msgid "Sound"
+msgstr "Lyd"
+
+msgid "Choose a file"
+msgstr "Vælg en fil"
+
+msgid "Sound Files"
+msgstr "Lydfiler"
+
+msgid "All Files"
+msgstr "Alle Filer"
+
+msgid "Stop clock on Ippon"
+msgstr "Stop uret ved Ippon"
+
+msgid "Switch sides"
+msgstr "Byt sider"
+
+msgid "Display customized layout"
+msgstr "Vis tilpasset layout"
+
+msgid "White first"
+msgstr "Hvid først"
+
+msgid "Confirm New Match"
+msgstr "Bekræft Ny Kamp"
+
+msgid "Contest area 9"
+msgstr "Måtte 9"
+
+msgid "Contest area 10"
+msgstr "Måtte 10"
+
+msgid "White has a judogi problem."
+msgstr "Hvid har et problem med judogi."
+
+msgid "Blue has a judogi problem."
+msgstr "Blå har et problem med judogi."
+
+msgid "Show Competitors"
+msgstr "Vis Deltagere"
+
+msgid "Show competitors"
+msgstr "Vis deltagere"
+
+msgid "Name format"
+msgstr "Navneformat"
+
+msgid "Name Surname, Country/Club"
+msgstr "Fornavn Efternavn, Land/Klub"
+
+msgid "Surname, Name, Country/Club"
+msgstr "Efternavn, Fornavn, Land/Klub"
+
+msgid "Country/Club  Surname, Name"
+msgstr "Land/Klub  Efternavn, Fornavn"
+
+msgid "Country  Surname, Name"
+msgstr "Land  Efternavn, Fornavn"
+
+msgid "Club  Surname, Name"
+msgstr "Klub  Efternavn, Fornavn"
+
+msgid "Country Surname"
+msgstr "Land Efternavn"
+
+msgid "Club Surname"
+msgstr "Klub Efternavn"
+
+msgid "Surname, Name"
+msgstr "Efternavn, Fornavn"
+
+msgid "Surname"
+msgstr "Efternavn"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Club"
+msgstr "Klub"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "WINNER"
+msgstr "VINDER"
+
+msgid "Cancel"
+msgstr "Afbryd"
+
+msgid "- - -"
+msgstr "- - -"
+
+msgid "Select font"
+msgstr "Vælg skrifttype"
+
+msgid "Font"
+msgstr "Skrifttype"
+
+msgid "Replay Video"
+msgstr "Afspil Video"
+
+msgid "Video server"
+msgstr "Videoserver"
+
+msgid "Video server URL"
+msgstr "Video server URL"
+
+msgid "User:"
+msgstr "Bruger:"
+
+msgid "Password:"
+msgstr "Kodeord:"
+
+msgid "Proxy:"
+msgstr "Proxy:"
+
+msgid "Show Video"
+msgstr "Vis Video"
+
+msgid "No Limit"
+msgstr "Ingen Tidsbegrænsning"
+
+msgid "If equal score less shido wins"
+msgstr "Hvis uafgjort færrest shido vinder"
+
+msgid "VLC control"
+msgstr "VLC kontrol"
+
+msgid "X:"
+msgstr "X:"
+
+msgid "Y:"
+msgstr "Y:"
+
+msgid "Scale:"
+msgstr "Vægt:"
+
+msgid "Competitor already exists!"
+msgstr "Deltager findes allerede!"
+
+msgid "Competitor"
+msgstr "Deltager"
+
+msgid "copied"
+msgstr "kopieret"
+
+msgid "Category already exists!"
+msgstr "Kategori findes allerede!"
+
+msgid "Category"
+msgstr "Kategori"
+
+msgid "has been copied with competitors and matches"
+msgstr "er blevet kopieret med deltagere og kampe"
+
+msgid "Last Name"
+msgstr "Efternavn"
+
+msgid "First Name"
+msgstr "Fornavn"
+
+msgid "Year of Birth"
+msgstr "Fødselsår"
+
+msgid "Grade"
+msgstr "Grad"
+
+msgid "Reg. Category"
+msgstr "Reg. Kategori"
+
+msgid "Weight"
+msgstr "Vægt"
+
+msgid "Id"
+msgstr "Id"
+
+msgid "Tournaments"
+msgstr "Turneringer"
+
+msgid "Tournament"
+msgstr "Turnering"
+
+msgid "Cannot move"
+msgstr "Kan ikke flytte"
+
+msgid "Category drawn"
+msgstr "Kategori udtrukket"
+
+msgid "All the categories located to the tatamis"
+msgstr "Alle kategorierne flyttet til måtter"
+
+msgid "Unlocated"
+msgstr "Ej placeret"
+
+msgid "Categories"
+msgstr "Kategorier"
+
+msgid "Connections to this node"
+msgstr "Forbindelser til denne node"
+
+msgid "already exists!"
+msgstr "findes allerede!"
+
+msgid "Remove drawing first"
+msgstr "Slet udtrækning først"
+
+msgid "Competitors"
+msgstr "Deltagere"
+
+msgid "Last Name:"
+msgstr "Efternavn:"
+
+msgid "First Name:"
+msgstr "Fornavn:"
+
+msgid "Year of Birth:"
+msgstr "Fødselsår:"
+
+msgid "Grade:"
+msgstr "Grad:"
+
+msgid "Club:"
+msgstr "Klub:"
+
+msgid "Country:"
+msgstr "Land:"
+
+msgid "Reg. Category:"
+msgstr "Reg. Kategori:"
+
+msgid "Category:"
+msgstr "Kategori:"
+
+msgid "Weight:"
+msgstr "Vægt:"
+
+msgid "Seeding:"
+msgstr "Seedning:"
+
+msgid "No seeding"
+msgstr "Ingen seedning"
+
+msgid "Club Seeding:"
+msgstr "Klub Seedning:"
+
+msgid "Id:"
+msgstr "Id:"
+
+msgid "Coach Id:"
+msgstr "Træner Id:"
+
+msgid "Gender:"
+msgstr "Køn:"
+
+msgid "Male"
+msgstr "Mand"
+
+msgid "Female"
+msgstr "Kvinde"
+
+msgid "Control:"
+msgstr "Kontrol:"
+
+msgid "NOK"
+msgstr "NOK"
+
+msgid "Comment:"
+msgstr "Kommentar:"
+
+msgid "System:"
+msgstr "System:"
+
+msgid "Group:"
+msgstr "Gruppe:"
+
+msgid "Coach"
+msgstr "Træner"
+
+msgid "Group"
+msgstr "Gruppe"
+
+msgid "Seeding"
+msgstr "Seedning"
+
+msgid "Club Seeding"
+msgstr "Klub Seedning"
+
+msgid "Empty categories removed"
+msgstr "Tomme kategorier slettet"
+
+msgid "Unweighted competitors removed"
+msgstr "Uvejede deltagere slettet"
+
+msgid "Matches exist. Undo the drawing first."
+msgstr "Kampe eksisterer. Slet lodtrækning først."
+
+msgid "Competitors removed"
+msgstr "Deltagere slettet"
+
+msgid "Bar code search"
+msgstr "Stregkodesøgning"
+
+msgid "Type the barcode:"
+msgstr "Indtast stregkoden:"
+
+msgid "Cannot handle: Database created with newer JudoShiai version."
+msgstr "Kan ikke håndtere: Database oprettet med nyere version af JudoShiai."
+
+msgid "Database tables updated."
+msgstr "Databasetabeller opdateret."
+
+msgid "Weights do not match"
+msgstr "Vægte stemmer ikke overens"
+
+msgid "Database Validation"
+msgstr "Databasevalidering"
+
+msgid "Duplicate seedings:\n"
+msgstr "Duplerede seedninger:\n"
+
+msgid "seeding"
+msgstr "seedning"
+
+msgid "defined"
+msgstr "defineret"
+
+msgid "times"
+msgstr "gange"
+
+msgid "Duplicate club seedings:\n"
+msgstr "Duplerede klub seedninger:\n"
+
+msgid "Missing category definitions:\n"
+msgstr "Manglende kategoridefinitioner:\n"
+
+msgid "is not"
+msgstr "er ikke"
+
+msgid "Typing errors:\n"
+msgstr "Indtastningsfejl:\n"
+
+msgid "UTF-8 errors"
+msgstr "UTF-8 fejl"
+
+msgid "Extra spaces"
+msgstr "Ekstra mellemrum"
+
+msgid "Possible duplicate competitors:\n"
+msgstr "Mulige dupletter for deltagere:\n"
+
+msgid "Possible duplicate club names:\n"
+msgstr "Mulige dupletter for klubnavne:\n"
+
+msgid "Suspicious weights:\n"
+msgstr "Mistænkelig vægte:\n"
+
+msgid "Corrupted competitor data:\n"
+msgstr "Beskadiget deltageredata:\n"
+
+msgid "Corrupted category data:\n"
+msgstr "Beskadiget kategoridata:\n"
+
+msgid "warnings"
+msgstr "advarsler"
+
+msgid "Drawing not finished!"
+msgstr "Lodtrækning ikke afsluttet!"
+
+msgid "Matches matched in category"
+msgstr "Kampe fundet i kategori"
+
+msgid "Clear the results first"
+msgstr "Nulstil resultaterne først"
+
+msgid "Move the competitors"
+msgstr "Flyt deltagerne"
+
+msgid "Next"
+msgstr "Næste"
+
+msgid "Rest"
+msgstr "Hvil"
+
+msgid "Number"
+msgstr "Nummer"
+
+msgid "Select first a competitor and then a number."
+msgstr "Vælg først en deltager og dernæst et nummer."
+
+msgid "All the categories has been drawn"
+msgstr "Alle kategorierne er udtrukket"
+
+msgid "Server URL"
+msgstr "Server URL"
+
+msgid "Copy to Server"
+msgstr "Kopier til Server"
+
+msgid "Proxy User:"
+msgstr "Proxy Bruger:"
+
+msgid "Proxy Password:"
+msgstr "Proxy Kodeord:"
+
+msgid "Matches"
+msgstr "Kampe"
+
+msgid "Sheet"
+msgstr "Ark"
+
+msgid "Previous winner"
+msgstr "Forrige vinder"
+
+msgid "Cancel the match"
+msgstr "Aflys kampen"
+
+msgid "Select a tatami"
+msgstr "Vælg en måtte"
+
+msgid "Password accepted.<br>"
+msgstr "Kodeord accepteret.<br>"
+
+msgid "User"
+msgstr "Bruger"
+
+msgid "Password"
+msgstr "Kodeord"
+
+msgid "Back"
+msgstr "Tilbage"
+
+msgid "Wrong password"
+msgstr "Forkert kodeord"
+
+msgid "Show"
+msgstr "Vis"
+
+msgid "Show Deleted"
+msgstr "Vis Slettet"
+
+msgid "New Competitor"
+msgstr "Ny Deltager"
+
+msgid "Logout"
+msgstr "Log ud"
+
+msgid "Login"
+msgstr "Log ind"
+
+msgid "No rights to give results"
+msgstr "Ingen rettigheder til at give resultater"
+
+msgid "No competitor found!"
+msgstr "Ingen deltager fundet!"
+
+msgid "Add"
+msgstr "Tilføj"
+
+msgid "Name"
+msgstr "Navn"
+
+msgid "Reg.Cat"
+msgstr "Reg.Kat."
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Index"
+msgstr "Index"
+
+msgid "Not used"
+msgstr "Ej anvendt"
+
+msgid "Column"
+msgstr "Kolonne"
+
+msgid "Import from file"
+msgstr "Importer fra fil"
+
+msgid "Sex:"
+msgstr "Køn:"
+
+msgid "Girl Text:"
+msgstr "Pigetekst:"
+
+msgid "Column Separator:"
+msgstr "Kolonneseparator:"
+
+msgid "competitors added"
+msgstr "deltagere tilføjet"
+
+msgid "errors"
+msgstr "fejl"
+
+msgid "competitors existed already"
+msgstr "deltagere eksisterede allerede"
+
+msgid "syntax errors"
+msgstr "syntaksfejl"
+
+msgid "Time"
+msgstr "Tid"
+
+msgid "Class"
+msgstr "Klasse"
+
+msgid "Message"
+msgstr "Besked"
+
+msgid "Log"
+msgstr "Log"
+
+msgid "Communication error"
+msgstr "Kommunikationsfejl"
+
+msgid "Cannot open"
+msgstr "Kan ikke åbne"
+
+msgid "Is there another JudoShiai program running?"
+msgstr "Er et andet JudoShiai program kørende?"
+
+msgid "Yes, another JudoShiai program is running"
+msgstr "Ja, et andet JudoShiai programmer er kørende"
+
+msgid ""
+"No, this the only JudoShiai program. \n"
+"Purge erroneous lock file."
+msgstr ""
+"Nej, dette er det eneste JudoShiai program. \n"
+"Rens forkert låsefil"
+
+msgid ""
+"Communication is blocked! \n"
+"You can still use the program to create categories etc."
+msgstr ""
+"Kommunikationen er blokeret! \n"
+"Du kan fortsat anvende programmet til at oprette kategorier etc."
+
+msgid "Best of 3"
+msgstr "Bedst af 3"
+
+msgid "One match"
+msgstr "En kamp"
+
+msgid "Pool"
+msgstr "Pulje"
+
+msgid "Double Pool"
+msgstr "Dobbelt Pujle"
+
+msgid "Quad Pool"
+msgstr "Quad Pulje"
+
+msgid "Double Pool 2"
+msgstr "Dobbelt Pulje 2"
+
+msgid "IJF Qrt Final Rep"
+msgstr "IJF Qrt Final Rep"
+
+msgid "FIN Dbl Repchg"
+msgstr "FIN Dbl Repchg"
+
+msgid "SWE Dubb återkv"
+msgstr "SWE Dubb återkv"
+
+msgid "SWE Dir återkv"
+msgstr "SWE Dir återkv"
+
+msgid "EST D klass"
+msgstr "EST D klass"
+
+msgid "No Repechg"
+msgstr "No Repechg"
+
+msgid "SWE Enkelt återkv"
+msgstr "SWE Enkelt återkv"
+
+msgid "ESP Dbl Lost"
+msgstr "ESP Dbl Lost"
+
+msgid "ESP Dbl Rep"
+msgstr "ESP Dbl Rep"
+
+msgid "ESP Simple Rep"
+msgstr "ESP Simple Rep"
+
+msgid "Modified Dbl Elim"
+msgstr "Modified Dbl Elim"
+
+msgid "FIN Dbl Repchg One Bronze"
+msgstr "FIN Dbl Repchg One Bronze"
+
+msgid "Double Lost"
+msgstr "Double Lost"
+
+msgid "GBR Knock Out"
+msgstr "GBR Knock Out"
+
+msgid "DEN Dbl Elim"
+msgstr "DEN Dbl Elim"
+
+msgid "EST D klass 1 brz"
+msgstr "EST D klass 1 brz"
+
+msgid "IJF Quarter Final Repechage"
+msgstr "IJF Quarter Final Repechage"
+
+msgid "Default"
+msgstr "Standard"
+
+msgid "FIN Double Repechage"
+msgstr "FIN Double Repechage"
+
+msgid "SWE Double Repechage"
+msgstr "SWE Double Repechage"
+
+msgid "SWE Direct Repechage"
+msgstr "SWE Direct Repechage"
+
+msgid "EST Double Elimination"
+msgstr "EST Double Elimination"
+
+msgid "Single Elimination"
+msgstr "Single Elimination"
+
+msgid "SWE Single Repechage"
+msgstr "SWE Single Repechage"
+
+msgid "ESP Double Lost"
+msgstr "ESP Double Lost"
+
+msgid "ESP Double Repechage"
+msgstr "ESP Double Repechage"
+
+msgid "ESP Simple Repechage"
+msgstr "ESP Simple Repechage"
+
+msgid "Modified Double Elimination"
+msgstr "Modified Double Elimination"
+
+msgid "FIN Double Repechage One Bronze"
+msgstr "FIN Double Repechage One Bronze"
+
+msgid "DEN Double Elimination"
+msgstr "DEN Double Elimination"
+
+msgid "EST Double Elim One Bronze"
+msgstr "EST Double Elim One Bronze"
+
+msgid "Next match"
+msgstr "Næste kamp"
+
+msgid "Preparing"
+msgstr "Forberedes"
+
+msgid "Delay the match"
+msgstr "Udsæt kampen"
+
+msgid "canceled"
+msgstr "aflyst"
+
+msgid "changed"
+msgstr "ændret"
+
+msgid "Gold medal match"
+msgstr "Guldmedaljekamp"
+
+msgid "Bronze match A"
+msgstr "Broncekamp A"
+
+msgid "Bronze match B"
+msgstr "Broncekamp B"
+
+msgid "Semifinal"
+msgstr "Semifinale"
+
+msgid "Semifinal A"
+msgstr "Semifinale A"
+
+msgid "Semifinal B"
+msgstr "Semifinale B"
+
+msgid "Silver medal match"
+msgstr "Sølvmedaljekamp"
+
+msgid "Preparing:"
+msgstr "Forberedes:"
+
+msgid "points"
+msgstr "point"
+
+msgid "Expand All"
+msgstr "Udvid Alle"
+
+msgid "Collapse All"
+msgstr "Komprimer Alle"
+
+msgid "Remove comment"
+msgstr "Slet kommentar"
+
+msgid "Set score"
+msgstr "Sæt score"
+
+msgid "White"
+msgstr "Hvid"
+
+msgid "Blue"
+msgstr "Blå"
+
+msgid "Points"
+msgstr "Point"
+
+msgid "Comment"
+msgstr "Kommentar"
+
+msgid "Prev. winner:"
+msgstr "For. vinder:"
+
+msgid "Delayed"
+msgstr "Udsat"
+
+msgid "Remove delay"
+msgstr "Slet udsættelse"
+
+msgid "Freeze match order"
+msgstr "Lås kamprækkefølge"
+
+msgid "Unfreeze exported"
+msgstr "Lås eksporterede op"
+
+msgid "Unfreeze imported"
+msgstr "Lås importerede op"
+
+msgid "Unfreeze this"
+msgstr "Lås denne op"
+
+msgid "Move Medal Matches"
+msgstr "Flyt Medaljekampe"
+
+msgid "Move match "
+msgstr "Flyt kamp"
+
+msgid "to tatami and/or"
+msgstr "til måtte og/eller"
+
+msgid " delay"
+msgstr " udsæt"
+
+msgid "Final"
+msgstr "Finale"
+
+msgid "Bronze"
+msgstr "Bronce"
+
+msgid "Bronze1"
+msgstr "Bronce1"
+
+msgid "Bronze2"
+msgstr "Bronce2"
+
+msgid "Pool's last"
+msgstr "Puljens sidste"
+
+msgid "No move"
+msgstr "Flyt ikke"
+
+msgid "Tournament from the net"
+msgstr "Turnering fra nettet"
+
+msgid "Contests"
+msgstr "Turnering"
+
+msgid "Select sheet font"
+msgstr "Vælg skrifttype på ark"
+
+msgid "Picture Files"
+msgstr "Billedfiler"
+
+msgid "Print Headers"
+msgstr "Udskriv Overskrifter"
+
+msgid "Add competitors"
+msgstr "Tilføj deltagere"
+
+msgid "Clean up duplicates and update reg. categories"
+msgstr "Rens for dupletter og opdater reg. kategorier"
+
+msgid "Weighed only"
+msgstr "Kun indvejede"
+
+msgid "With weights"
+msgstr "Med vægte"
+
+msgid "competitors added and updated"
+msgstr "deltagere tilføjet og opdateret"
+
+msgid "competitors already existed"
+msgstr "deltagere eksisterede allerede"
+
+msgid "competitors added unchanged"
+msgstr "tilføjede deltagere uændret"
+
+msgid "Copy Weights"
+msgstr "Kopier Vægte"
+
+msgid "weights updated"
+msgstr "vægte opdateret"
+
+msgid "Do Backup"
+msgstr "Udfør Backup"
+
+msgid "CANNOT OPEN BACKUP FILE"
+msgstr "KAN IKKE ÅBNE BACKUPFIL"
+
+msgid "Drawing"
+msgstr "Lodtrækning"
+
+msgid "Results"
+msgstr "Resultat"
+
+msgid "Judotimer"
+msgstr "Judotimer"
+
+msgid "New Tournament"
+msgstr "Ny Turnering"
+
+msgid "Open Tournament"
+msgstr "Åbn Turnering"
+
+msgid "Open Tournament from Net"
+msgstr "Åben Turnering fra Netværket"
+
+msgid "Properties"
+msgstr "Egenskaber"
+
+msgid "Tournament Backup"
+msgstr "Turnering Sikkerhedskopi"
+
+msgid "Validate Database"
+msgstr "Validér Database"
+
+msgid "SQL Dialog"
+msgstr "SQL Dialog"
+
+msgid "Search Competitor"
+msgstr "Søg Deltagere"
+
+msgid "Select From Another Shiai"
+msgstr "Vælg Fra En Anden Shiai"
+
+msgid "Add From a Text File"
+msgstr "Tilføj fra Tekstfil"
+
+msgid "Add All From Another Shiai"
+msgstr "Tilføj fra En Anden Shiai"
+
+msgid "Update Weights From Another Shiai"
+msgstr "Opdatere Vægte Fra En Anden Shiai"
+
+msgid "Remove Unweighted"
+msgstr "Slet Uvejede"
+
+msgid "Restore Removed"
+msgstr "Genskab Slettede"
+
+msgid "Bar Code Search"
+msgstr "Søg Efter Stregkode"
+
+msgid "Print Weight Notes"
+msgstr "Udskriv Vægtnoter"
+
+msgid "New Category"
+msgstr "Ny Kategori"
+
+msgid "Remove Empty"
+msgstr "Slet Tomme"
+
+msgid "Create Categories"
+msgstr "Opret Kategorier"
+
+msgid "Print All"
+msgstr "Udskriv Alt"
+
+msgid "Print All (PDF)"
+msgstr "Udskriv Alt (PDF)"
+
+msgid "Print Matches (CSV)"
+msgstr "Udskriv Kampe (CSV)"
+
+msgid "Place To"
+msgstr "Flyt Til"
+
+msgid "Tatamis"
+msgstr "Måtter"
+
+msgid "Draw All Categories"
+msgstr "Udtræk Alle Kategorier"
+
+msgid "Print All (Web And PDF)"
+msgstr "Udskriv Alle (Web Og PDF)"
+
+msgid "Print Schedule to Printer"
+msgstr "Udskriv Tidsplan til Printer"
+
+msgid "Print Schedule to PDF"
+msgstr "Udskriv Tidsplan til PDF"
+
+msgid "Control Tatami"
+msgstr "Kontrol af Måtte"
+
+msgid "Communication Node"
+msgstr "Kommunikationsnode"
+
+msgid "Own IP Addresses"
+msgstr "Egne IP-adresser"
+
+msgid "Show Attached Connections"
+msgstr "Vis Tilsluttede Forbindelser"
+
+msgid "Automatic Sheet Update"
+msgstr "Automatisk Arkopdatering"
+
+msgid "Club Name Only"
+msgstr "Kun Klubnavn"
+
+msgid "Country Name Only"
+msgstr "Kun Landenavn"
+
+msgid "Both Club and Country"
+msgstr "Både Klub og Land"
+
+msgid "Abbreviations in Sheets"
+msgstr "Forkortelser på Ark"
+
+msgid "Weights Visible in Pool Sheets"
+msgstr "Vægt Synlig på Puljeark"
+
+msgid "Sheet Font"
+msgstr "Ark Skrifttype"
+
+msgid "SVG Templates"
+msgstr "SVG Skabeloner"
+
+msgid "Language Selection"
+msgstr "Sprogvalg"
+
+msgid "Print Accreditation Cards"
+msgstr "Udskriv Akkrediteringskort"
+
+msgid "Print Schedule"
+msgstr "Udskriv Tidsplan"
+
+msgid "Communication"
+msgstr "Kommunikation"
+
+msgid "Club Text Selection"
+msgstr "Klubtekstvalg"
+
+msgid "Sheet Layout"
+msgstr "Ark Layout"
+
+msgid "Weights Visible"
+msgstr "Vægt Synlig"
+
+msgid "Grade Visible"
+msgstr "Grad Synlig"
+
+msgid "Name Format"
+msgstr "Navneformat"
+
+msgid "Surname Name, Country/Club"
+msgstr "Efternavn Fornavn, Land/Klub"
+
+msgid "Country/Club,  Surname Name"
+msgstr "Land/Klub,  Efternavn, Fornavn"
+
+msgid "Pool Style 2"
+msgstr "Pulje Design 2"
+
+msgid "Use Belt Colors"
+msgstr "Brug Bæltefarver"
+
+msgid "Mirror Tatami Order"
+msgstr "Omvendt Måtterækkefølge"
+
+msgid "Automatic Match Delay"
+msgstr "Automatisk Kampudsættelse"
+
+msgid "Print Logo"
+msgstr "Udskriv Logo"
+
+msgid "Scale Serial Interface..."
+msgstr "Vægt Serielt Interface..."
+
+msgid "Medal Matches..."
+msgstr "Medaljekampe..."
+
+msgid "Matches matched. Clear the results first."
+msgstr "Kampe fundet. Nulstil resultaterne først."
+
+msgid "already exists"
+msgstr "eksisterer allerede"
+
+msgid "Move Competitors to Category..."
+msgstr "Flyt Deltagere til Kategori..."
+
+msgid "Move Competitors Here"
+msgstr "Flyt Deltagere Hertil"
+
+msgid "Compose Unofficial Category"
+msgstr "Opret Uofficiel Kategori"
+
+msgid "Draw Selected"
+msgstr "Udtræk Valgte"
+
+msgid "Draw and Print Selected"
+msgstr "Udtræk og Udskriv Valgte"
+
+msgid "Draw Manually"
+msgstr "Manuel Lodtrækning"
+
+msgid "Remove Drawing"
+msgstr "Slet Lodtrækning"
+
+msgid "Edit Drawing"
+msgstr "Rediger Lodtrækning"
+
+msgid "Copy Competitors"
+msgstr "Kopier Deltagere"
+
+msgid "Remove Competitors"
+msgstr "Slet Deltagere"
+
+msgid "Show Sheet"
+msgstr "Vis Ark"
+
+msgid "Print Selected Sheets (Printer)"
+msgstr "Udskriv Valgte Ark (Printer)"
+
+msgid "Print Selected Sheets (PDF)"
+msgstr "Udskriv Valgte Ark (PDF)"
+
+msgid "Print Selected Accreditation Cards"
+msgstr "Udskriv Valgte Akkrediteringskort"
+
+msgid "Save file"
+msgstr "Gem fil"
+
+msgid "Landscape"
+msgstr "Liggende"
+
+msgid "Line"
+msgstr "Linje"
+
+msgid "Syntax error"
+msgstr "Syntaxfejl"
+
+msgid "Print To:"
+msgstr "Udskriv Til:"
+
+msgid "Printer"
+msgstr "Printer"
+
+msgid "PDF"
+msgstr "PDF"
+
+msgid "Start time:"
+msgstr "Starttid:"
+
+msgid "Resolution (min):"
+msgstr "Opløsning (min):"
+
+msgid "Compressed timeline"
+msgstr "Komprimeret tidslinje"
+
+msgid "Match File"
+msgstr "Kampfil"
+
+msgid "Print Not Started Categories"
+msgstr "Udskriv Ikke Startede Kategorier"
+
+msgid "Print Started Categories"
+msgstr "Udskriv Startede Kategorier"
+
+msgid "Print Finished Categories"
+msgstr "Udskriv Afsluttede Kategorier"
+
+msgid "Print Unmatched"
+msgstr "Udskriv ikke parrede"
+
+msgid "Print Result"
+msgstr "Udskriv Resultat"
+
+msgid "Print IWYKS"
+msgstr "Udskriv IWYKS"
+
+msgid "Print Comment"
+msgstr "Udskriv Kommentar"
+
+msgid "Layout:"
+msgstr "Layout:"
+
+msgid "Template"
+msgstr "Skabelon"
+
+msgid "One Card Per Page"
+msgstr "Et Kort Per Side"
+
+msgid "Results in Finnish"
+msgstr "Resultater på finsk"
+
+msgid "Results in Swedish"
+msgstr "Resultater på svensk"
+
+msgid "Results in English"
+msgstr "Resultater på engelsk"
+
+msgid "Results in Spanish"
+msgstr "Resultater på spansk"
+
+msgid "Results in Estonian"
+msgstr "Resultater på estisk"
+
+msgid "Results in Ukrainian"
+msgstr "Resultater på ukrainsk"
+
+msgid "Results in Norwegian"
+msgstr "Resultater på norsk"
+
+msgid "Results in Icelandic"
+msgstr "Resultater på islandsk"
+
+msgid "Results in Polish"
+msgstr "Resultater på polsk"
+
+msgid "Results in Slovak"
+msgstr "Resultater på slovakisk"
+
+msgid "Results in Dutch"
+msgstr "Resultater på hollandsk"
+
+msgid "Tournament:"
+msgstr "Turnering:"
+
+msgid "Date:"
+msgstr "Dato:"
+
+msgid "Place:"
+msgstr "Sted:"
+
+msgid "Number of tatamis:"
+msgstr "Antal måtter:"
+
+msgid "White first:"
+msgstr "Hvid først:"
+
+msgid "Best two out of three matches:"
+msgstr "Bedst 2 ud af 3 kampe:"
+
+msgid ""
+"Medal will be awarded \n"
+"only if a contest was won:"
+msgstr ""
+"Medlje tildeles kun \n"
+"hvis en kamp er vundet:"
+
+msgid "Seeded to fixed places:"
+msgstr "Seedet til faste pladser:"
+
+msgid "Win in Golden Score gives 1 point"
+msgstr "Sejr i Golden Score giver 1 point"
+
+msgid "Double Pool 2 with carried forward points:"
+msgstr "Dobbelt Pulje 2 med overførte point:"
+
+msgid "Two pool bronzes:"
+msgstr "To Puljebroncer:"
+
+msgid "Resolve 3-way ties by weights:"
+msgstr "Løs 3-vejs uafgjort med vægt:"
+
+msgid "Tournament properties"
+msgstr "Turneringsegenskaber"
+
+msgid "General"
+msgstr "Generelt"
+
+msgid "Pool settings"
+msgstr "Pujleindstillinger"
+
+msgid "Competitors:"
+msgstr "Deltagere:"
+
+msgid "Weighted:"
+msgstr "Indvejede:"
+
+msgid "Statistics"
+msgstr "Statistik"
+
+msgid "Reset to"
+msgstr "Nulstil til"
+
+msgid "Initialize"
+msgstr "Initialisér"
+
+msgid "Players"
+msgstr "Deltagere"
+
+msgid "Max age"
+msgstr "Max alder"
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "System"
+msgstr "System"
+
+msgid "Default systems"
+msgstr "Standardsystemer"
+
+msgid "Grade names"
+msgstr "Grad-navne"
+
+msgid "Remote address"
+msgstr "Fjernadresse"
+
+msgid "Remote Control"
+msgstr "Fjernkontrol"
+
+msgid "Search"
+msgstr "Søg"
+
+msgid "Reset to Defaults"
+msgstr "Nulstil til Standard"
+
+msgid "----- Men -----"
+msgstr "----- Mænd -----"
+
+msgid "----- Women -----"
+msgstr "----- Kvinder -----"
+
+msgid "Men"
+msgstr "Mænd"
+
+msgid "Women"
+msgstr "Kvinder"
+
+msgid "Highest age:"
+msgstr "Højeste alder:"
+
+msgid "Age text:"
+msgstr "Ålderstekst:"
+
+msgid "Match time:"
+msgstr "Kampvarighed:"
+
+msgid "Rest time:"
+msgstr "Hviletid:"
+
+msgid "Golden Score:"
+msgstr "Golden Score: "
+
+msgid "Pin times (IWYK):"
+msgstr "Holdegrebstider (IWYK):"
+
+msgid "Rep. time:"
+msgstr "Rep. tid:"
+
+msgid "Highest weight (g):"
+msgstr "Højeste vægt (g):"
+
+msgid "Weight text:"
+msgstr "Vægttekst:"
+
+msgid "Sheets"
+msgstr "Ark"
+
+msgid "Basic Scripts"
+msgstr "Basisscripts"
+
+msgid "Select Script"
+msgstr "Vælg Script"
+
+msgid "No script available"
+msgstr "Intet script tilgængelig"
+
+msgid "SQL"
+msgstr "SQL"
+
+msgid "Run Script"
+msgstr "Kør Script"
+
+msgid "Repeat Script"
+msgstr "Gentag Script"
+
+msgid "Use SVG Templates"
+msgstr "Anvend SVG Skabeloner"
+
+msgid "Which one is correct?"
+msgstr "Hvilken er korrekt?"
+
+msgid "Own database"
+msgstr "Egen database"
+
+msgid "Foreign database"
+msgstr "Anden database"
+
+msgid "Do not change"
+msgstr "Ændre ikke"
+
+msgid "Stop synchronization"
+msgstr "Stop synkronisering"
+
+msgid "NOTE"
+msgstr "NOTE"
+
+msgid "is not a valid ASCII string!"
+msgstr "er ikke en gyldig ASCII streng!"
+
+msgid "Automatic Web Page Update"
+msgstr "Opdater Webside Automatisk"
+
+msgid "Create Statistics"
+msgstr "Opret Statistik"
+
+msgid "Print SVG"
+msgstr "Udskriv SVG"
+
+msgid "Category starts"
+msgstr "Kategori starter"
+
+msgid "About JudoInfo"
+msgstr "Om JudoInfo"
+
+msgid "Normal display"
+msgstr "Normal display"
+
+msgid "Small display"
+msgstr "Lille display"
+
+msgid "Horizontal display"
+msgstr "Horisontal display"
+
+msgid "Mirror tatami order"
+msgstr "Omvendt måtterækkefølge"
+
+msgid "Write to file"
+msgstr "Skriv til fil"
+
+msgid "Show Tatami"
+msgstr "Vis Måtte"
+
+msgid "Serial Communication"
+msgstr "Seriel Kommunikation"
+
+msgid "In Use"
+msgstr "I brug"
+
+msgid "Device"
+msgstr "Enhed"
+
+msgid "Baudrate"
+msgstr "Buadhastighed"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "WARNING: NO CONTROL"
+msgstr "ADVARSEL: INGEN KONTROL"
+
+msgid "ID:"
+msgstr "ID:"
+
+msgid "Name:"
+msgstr "Navn:"
+
+msgid "Confirm:"
+msgstr "Bekræft:"
+
+msgid "About JudoWeight"
+msgstr "Om JudoWeight"
+
+msgid "No match soon! Please wait for a while."
+msgstr "Ingen snarlige kampe! Vent til senere."
+
+msgid "About JudoJudogi"
+msgstr "Om JudoJudogi"
+
+msgid "International System"
+msgstr "International System"
+
+msgid "Finnish System"
+msgstr "Finsk System"
+
+msgid "Swedish System"
+msgstr "Svensk System"
+
+msgid "Estonian System"
+msgstr "Etnisk System"
+
+msgid "Spanish System"
+msgstr "Spansk System"
+
+msgid "Norwegian System"
+msgstr "Norsk System"
+
+msgid "British System"
+msgstr "Britisk System"
+
+msgid "Australian System"
+msgstr "Australsk System"
+
+msgid "Danish System"
+msgstr "Dansk System"
+
+msgid "Polish System"
+msgstr "Polsk System"
+
+msgid "Slovakian System"
+msgstr "Slovakisk System"
+
+msgid "Tatami"
+msgstr "Måtte"
+
+msgid "Hikiwake"
+msgstr "Hikiwake"
+
+msgid "Require judogi control"
+msgstr "Kræv judogi kontrol"
+
+msgid "CTL"
+msgstr "CTL"
+
+msgid "Show Flags"
+msgstr "Vis Flag"
+
+msgid "Show Initial of Name"
+msgstr "Vis Initialer"
+
+msgid "Flag size:"
+msgstr "Flagstørrelse:"
+
+msgid "Name size:"
+msgstr "Navnestørrelse"
+
+msgid "CONTROL"
+msgstr "KONTROL"
+
+msgid "THIS APPLICATION"
+msgstr "DENNE APPLIKATION"
+
+msgid "NOT CONNECTED"
+msgstr "IKKE FORBUNDET"
+
+msgid "Team:"
+msgstr "Hold:"
+
+msgid "Tatami:"
+msgstr "Måtte:"
+
+msgid "Create default members:"
+msgstr "Opret standardmedlemmer:"
+
+msgid "Team"
+msgstr "Hold"
+
+msgid "Messages"
+msgstr "Beskeder"
+
+msgid "Double Pool 3"
+msgstr "Dobbelt Pulje 3"
+
+msgid "Custom"
+msgstr "Tilpasset"
+
+msgid "UKR Dbl Repchg"
+msgstr "UKR Dbl Repchg"
+
+msgid "UKR Double Repechage"
+msgstr "UKR Double Repechage"
+
+msgid "Customized"
+msgstr "Tilpasset"
+
+msgid "Load Custom Systems"
+msgstr "Indlæd Tilpassede Systemer"
+
+msgid "New Team"
+msgstr "Nyt Hold"
+
+msgid "New Team Category"
+msgstr "Ny Holdkategori"
+
+msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr "Udskriv Valgte Akkrediteringskort Til Standardprinter"
+
+msgid "Results in German"
+msgstr "Resultater på Tysk"
+
+msgid "Results in Russian"
+msgstr "Resultater på Russisk"
+
+msgid "Ukrainian System"
+msgstr "Ukrainsk System"
+
+msgid "Open file"
+msgstr "Åbn fil"
+
+msgid "New Password:"
+msgstr "Nyt Kodeord:"
+
+msgid "Old Password:"
+msgstr "Gammelt Kodeord:"
+
+msgid "Wrong password!"
+msgstr "Forkert Kodeord!"
+
+msgid "No manual edit"
+msgstr "Ingen manuel editering"
+
+msgid "Automatic send"
+msgstr "Automatisk Afsendelse"
+
+msgid "Print label"
+msgstr "Udskriv label"
+
+msgid "No margins"
+msgstr "Ingen marginer"
+
+msgid "Fit page"
+msgstr "Tilpas side"
+
+msgid "No SOREMADE/IPPON texts"
+msgstr "Ingen SOREMADE/IPPON tekst"
+
+msgid "Custom layout file..."
+msgstr "Fil til tilpasset visning..."
+
+msgid "Resolve 3-way ties by time:"
+msgstr "Løs 3-vejs uafgjort med hurtigste sejr:"
+
+msgid "Move Matches"
+msgstr "Flyt Kampe"
+
+msgid "Match order from file"
+msgstr "Kamprækkefølge fra fil"
+
+msgid "Match Order from File"
+msgstr "Kamprækkefølge fra Fil"
+
+msgid "Move Matches..."
+msgstr "Flyt Kampe..."
+
+msgid "Use the first places only:"
+msgstr "Benyt kun førstepladser:"
+
+msgid "Round"
+msgstr "Runde"
+
+msgid "Round Robin"
+msgstr "Round Robin"
+
+msgid "Repechage"
+msgstr "Repechage"
+
+msgid "Mix pool matches into rounds:"
+msgstr "Bland puljekampe i runder"
+
+msgid "Use IJF points:"
+msgstr "Brug IJF point:"
+
+msgid "Show bracket"
+msgstr "Vis bracket"
+
+msgid "2017 Rules"
+msgstr "2017 Regler"
+
+msgid "2018 Rules"
+msgstr "2018 Regler"
+
+msgid "Category typing errors\n"
+msgstr "Skrivefejl i Kategori\n"
+
+msgid "GER Repchg"
+msgstr "GER Repchg"
+
+msgid "GER Double Repechage"
+msgstr "GER Double Repechage"
+
+msgid "2017 Rules:"
+msgstr "2017 Regler:"
+
+msgid "2018 Rules:"
+msgstr "2018 Regler:"
+
+msgid "Use points 10/1/0:"
+msgstr "Benyt point 10/1/0:"
+
+msgid "Use points 100/10/1/½:"
+msgstr "Benyt point 100/10/1/½"
+
+msgid "Use points 10/7/1:"
+msgstr "Benyt point 10/7/1:"
+
+msgid "Use points 10/1/½:"
+msgstr "Benyt point 10/1/½:"
+
+msgid "Use points 10/3/1:"
+msgstr "Benyt point 10/3/1:"
+
+msgid "Use points 10/5/1:"
+msgstr "Benyt point 10/5/1:"
+
+msgid "Add extra match in teams points tie:"
+msgstr "Tilføj ekstra kamp hvis holdpoint uafgjort:"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "Copy"
+msgstr "Kopier"
+
+msgid "SVG+Lisp"
+msgstr "SVG+Lisp"
+
+msgid "Update"
+msgstr "Opdater"
+
+msgid "New version:"
+msgstr "Ny version:"
+
+msgid "Current version:"
+msgstr "Nuværende version:"
+
+msgid "Update to new version?"
+msgstr "Opdater til ny version?"
+
+msgid "Corrected:"
+msgstr "Korrigeret:"
+
+msgid "Scale Correction"
+msgstr "Vægtkorrektion"
+
+msgid "Real"
+msgstr "Real"
+
+msgid "Display"
+msgstr "Display"
+
+msgid "Error"
+msgstr "Fejl"
+
+msgid "ERROR"
+msgstr "FEJL"
+
+msgid "Scale Correction Table..."
+msgstr "Vægtkorrigeringstabel..."
