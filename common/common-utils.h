@@ -77,5 +77,6 @@ void get_text_extents(cairo_t *cr, gchar *txt, PangoFontDescription *desc,
     } while (0)
 
 
+void print_trace(void);
 
 #endif
