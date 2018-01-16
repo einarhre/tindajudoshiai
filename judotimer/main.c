@@ -1160,13 +1160,16 @@ void set_comment_text(gchar *txt)
 void voting_result(GtkWidget *w,
                    gpointer   data)
 {
+    gint selection = ptr_to_gint(data) & SELECTION_MASK;
+    gboolean checkippon = (ptr_to_gint(data) & NO_IPPON_CHECK) == 0;
+
     blue_wins_voting = FALSE;
     white_wins_voting = FALSE;
     hansokumake_to_blue = FALSE;
     hansokumake_to_white = FALSE;
     result_hikiwake = FALSE;
 
-    switch (ptr_to_gint(data)) {
+    switch (selection) {
     case HANTEI_BLUE:
         if (white_first)
             set_text(MY_LABEL(comment), _("White won the voting"));
@@ -1205,7 +1208,8 @@ void voting_result(GtkWidget *w,
     }
     expose_label(NULL, comment);
 
-    set_hantei_winner(ptr_to_gint(data));
+    if (checkippon)
+	set_hantei_winner(ptr_to_gint(data));
 }
 
 gboolean delete_big(gpointer data)

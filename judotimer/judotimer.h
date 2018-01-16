@@ -50,6 +50,8 @@
 #define HANSOKUMAKE_BLUE  3
 #define HANSOKUMAKE_WHITE 4
 #define HIKIWAKE          5
+#define NO_IPPON_CHECK   16
+#define SELECTION_MASK   15
 
 #define MODE_NORMAL 0
 #define MODE_MASTER 1

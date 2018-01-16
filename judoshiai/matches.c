@@ -452,7 +452,8 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
 		       (m[_a].blue == GHOST ? m[_a].white :		\
 			(m[_a].white == GHOST ? m[_a].blue :            \
 			 (db_has_hansokumake(m[_a].blue) ? m[_a].white : \
-			  (db_has_hansokumake(m[_a].white) ? m[_a].blue : NO_COMPETITOR))))))
+			  (db_has_hansokumake(m[_a].white) ? m[_a].blue : \
+			   (m[_a].blue_points == 11 && m[_a].white_points == 11 ? GHOST : NO_COMPETITOR)))))))
 
 #define WINNER(x) (x < 0 ? WINNER_1(-x) : WINNER_1(x))
 
@@ -461,7 +462,8 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
 		      (m[_a].blue == GHOST ? m[_a].blue :		\
 		       (m[_a].white == GHOST ? m[_a].white :		\
 			(db_has_hansokumake(m[_a].blue) ? m[_a].blue :  \
-			 (db_has_hansokumake(m[_a].white) ? m[_a].white : NO_COMPETITOR))))))
+			 (db_has_hansokumake(m[_a].white) ? m[_a].white : \
+			  (m[_a].blue_points == 11 && m[_a].white_points == 11 ? GHOST : NO_COMPETITOR)))))))
 
 #define LOSER(x) (x < 0 ? LOSER_1(-x) : LOSER_1(x))
 
@@ -489,6 +491,9 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
         else { _w = french_matches[table][sys][_x][1]; _l = french_matches[table][sys][_x][0];} \
     } while (0)
 
+
+#define HIKIWAKE_1(_a) (m[_a].blue_points == 11 && m[_a].white_points == 11)
+#define HIKIWAKE(_a) (_a < 0 ? HIKIWAKE_1(-_a) : HIKIWAKE_1(_a))
 
 #define CAN_WIN_H (yes[c[j]] && (ju[c[j]]->deleted & HANSOKUMAKE) == 0)
 #define CAN_WIN (yes[c[j]])
@@ -1824,6 +1829,8 @@ static void update_french_matches(gint category, struct compsys systm)
                     if (db_has_hansokumake(m[i].blue) && prev_match_blue < 0 &&
 			!MATCHED(i))
                         m[i].blue = GHOST;
+		    else if (m[i].blue == NO_COMPETITOR && HIKIWAKE(prev_match_blue))
+                        m[i].blue = GHOST;
 
                 } else if (m[i].blue) {
                     if (MATCHED(i))
@@ -1867,6 +1874,8 @@ static void update_french_matches(gint category, struct compsys systm)
 
                     if (db_has_hansokumake(m[i].white) && prev_match_white < 0 &&
 			!MATCHED(i))
+                        m[i].white = GHOST;
+		    else if (m[i].white == NO_COMPETITOR && HIKIWAKE(prev_match_white))
                         m[i].white = GHOST;
 
                 } else if (m[i].white) {
@@ -2800,6 +2809,12 @@ void set_points_and_score(struct message *msg)
 	maxshido = 3;
     }
 
+    if (msg->u.result.blue_vote && msg->u.result.white_vote) { // hikiwake
+	blue_pts = 11;
+	white_pts = 11;
+	goto set_points_label;
+    }
+
     if (msg->u.result.blue_hansokumake || (msg->u.result.blue_score & 0xf) >= maxshido) {
         msg->u.result.blue_score &= 0xffff;
         msg->u.result.white_score |= 0x10000;
@@ -2869,7 +2884,7 @@ void set_points_and_score(struct message *msg)
                                  msg->u.result.white_hansokumake);
     }
     ***/
-
+ set_points_label:
     db_set_points(category, number, minutes,
                   blue_pts, white_pts, msg->u.result.blue_score, msg->u.result.white_score,
                   msg->u.result.legend); // bits 0-7 are legend, bit #8 = golden score

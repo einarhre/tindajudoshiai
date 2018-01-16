@@ -1288,14 +1288,26 @@ void check_ippon(void)
 	    if (oRunning) oToggle();
 	    if (running) toggle();
         }
-        beep("IPPON");
+	if (whitepts[I] && bluepts[I]) {
+	    voting_result(NULL, gint_to_ptr(HIKIWAKE | NO_IPPON_CHECK));
+	    big_displayed = FALSE;
+	    delete_big(NULL);
+	    beep("HIKIWAKE");
+	    judotimer_log("%s: Hikiwake (%f s)",
+			  get_cat(), elap);
+	} else {
+	    voting_result(NULL, gint_to_ptr(CLEAR_SELECTION | NO_IPPON_CHECK));
+	    big_displayed = FALSE;
+	    delete_big(NULL);
+	    beep("IPPON");
 
-        gchar *name = get_name(whitepts[I] ? WHITE : BLUE);
-        if (name == NULL || name[0] == 0)
-            name = whitepts[I] ? "white" : "blue";
+	    gchar *name = get_name(whitepts[I] ? WHITE : BLUE);
+	    if (name == NULL || name[0] == 0)
+		name = whitepts[I] ? "white" : "blue";
 
-        judotimer_log("%s: %s wins by %f s Ippon)!",
-                      get_cat(), name, elap);
+	    judotimer_log("%s: %s wins by %f s Ippon)!",
+			  get_cat(), name, elap);
+	}
     } else if (golden_score && get_winner(FALSE)) {
         beep(_("Golden Score"));
     } else if ((whitepts[S] >= SHIDOMAX || bluepts[S] >= SHIDOMAX) &&
