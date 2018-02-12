@@ -558,10 +558,10 @@ void get_pool_winner(gint num, gint c[21], gboolean yes[21],
                 (wins[c[i]] < wins[c[j]] && CAN_WIN) || /* more wins  */
 
                 (wins[c[i]] == wins[c[j]] &&            /* same wins, more points  */
-                 pts[c[i]] < pts[c[j]]  && CAN_WIN) ||
+                 pts[c[i]]%1000 < pts[c[j]]%1000  && CAN_WIN) ||
 
                 (wins[c[i]] == wins[c[j]] &&            /* wins same, points same */
-                 pts[c[i]] == pts[c[j]] &&
+                 pts[c[i]]%1000 == pts[c[j]]%1000 &&
                  mw[c[j]][c[i]] && CAN_WIN)) {
                 gint tmp = c[i];
                 c[i] = c[j];
@@ -756,7 +756,7 @@ void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean
 	    pm->tim[blue] += pm->m[i].match_time;
 	    if (team_event) { // team numbers
 		pm->pts[blue] += pm->m[i].blue_points;
-		pm->pts[white] += pm->m[i].white_points; // team event points
+		//pm->pts[white] += pm->m[i].white_points; // team event points
 	    } else {
 		pm->pts[blue] += get_points_gint(pm->m[i].blue_points, category);
 		//pm->pts[white] += get_points_gint(pm->m[i].white_points, category); // team event points
@@ -768,7 +768,7 @@ void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean
 	    pm->tim[white] += pm->m[i].match_time;
 	    if (team_event) { // team numbers
 		pm->pts[white] += pm->m[i].white_points;
-		pm->pts[blue] += pm->m[i].blue_points; // team event points
+		//pm->pts[blue] += pm->m[i].blue_points; // team event points
 	    } else {
 		pm->pts[white] += get_points_gint(pm->m[i].white_points, category);
 		//pm->pts[blue] += get_points_gint(pm->m[i].blue_points, category); // team event points
@@ -997,7 +997,7 @@ void fill_custom_struct(gint category, struct custom_matches *cm)
                     p->competitors[c1].wins++;
 		    if (team_event) {
 			p->competitors[c1].pts += cm->m[n].blue_points;
-			p->competitors[c2].pts += cm->m[n].white_points; // team event points
+			//p->competitors[c2].pts += cm->m[n].white_points; // team event points
 		    } else {
 			p->competitors[c1].pts += get_points_gint(cm->m[n].blue_points, category);
 			//p->competitors[c2].pts += get_points_gint(cm->m[n].white_points, category); // team event points
@@ -1009,7 +1009,7 @@ void fill_custom_struct(gint category, struct custom_matches *cm)
                     p->competitors[c2].wins++;
 		    if (team_event) {
 			p->competitors[c2].pts += cm->m[n].white_points;
-			p->competitors[c1].pts += cm->m[n].blue_points; // team event points
+			//p->competitors[c1].pts += cm->m[n].blue_points; // team event points
 		    } else {
 			p->competitors[c2].pts += get_points_gint(cm->m[n].white_points, category);
 			//p->competitors[c1].pts += get_points_gint(cm->m[n].blue_points, category); // team event points
