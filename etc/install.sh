@@ -31,7 +31,7 @@ Name=JudoShiai
 Exec=$DIR/judoshiai/bin/judoshiai
 Terminal=false
 Type=Application
-Icon=$DIR/judoshiai/etc/judoshiai.png
+Icon=$DIR/judoshiai/etc/png/judoshiai.png
 Categories=Application
 EOF
     
@@ -41,7 +41,7 @@ Name=JudoTimer
 Exec=$DIR/judoshiai/bin/judotimer
 Terminal=false
 Type=Application
-Icon=$DIR/judoshiai/etc/judotimer.png
+Icon=$DIR/judoshiai/etc/png/judotimer.png
 Categories=Application
 EOF1
 
@@ -51,7 +51,7 @@ Name=JudoInfo
 Exec=$DIR/judoshiai/bin/judoinfo
 Terminal=false
 Type=Application
-Icon=$DIR/judoshiai/etc/judoinfo.png
+Icon=$DIR/judoshiai/etc/png/judoinfo.png
 Categories=Application
 EOF2
 
