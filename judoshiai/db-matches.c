@@ -575,18 +575,22 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
     } else if (flags & DB_FIND_TEAM_WINNER) {
         if (m_static.blue_points && m_static.white_points == 0) {
             team1_wins++;
-            team1_pts += get_points_gint(m_static.blue_points, m_static.category);
-	    if (m_static.match_time) {
-		team1_tot_time += m_static.match_time;
-		team1_matches++;
+	    if (m_static.number != 999) {
+		team1_pts += get_points_gint(m_static.blue_points, m_static.category);
+		if (m_static.match_time) {
+		    team1_tot_time += m_static.match_time;
+		    team1_matches++;
+		}
 	    }
         }
         if (m_static.white_points && m_static.blue_points == 0) {
             team2_wins++;
-            team2_pts += get_points_gint(m_static.white_points, m_static.category);
-	    if (m_static.match_time) {
-		team2_tot_time += m_static.match_time;
-		team2_matches++;
+	    if (m_static.number != 999) {
+		team2_pts += get_points_gint(m_static.white_points, m_static.category);
+		if (m_static.match_time) {
+		    team2_tot_time += m_static.match_time;
+		    team2_matches++;
+		}
 	    }
         }
         if (m_static.blue_points == 0 && m_static.white_points == 0) no_team_wins++;
@@ -1927,9 +1931,9 @@ gboolean db_event_matches_update(guint category, struct match *last)
     db_exec_str(gint_to_ptr(DB_FIND_TEAM_WINNER), db_callback_matches,
                 "SELECT * FROM matches WHERE \"category\"=%d",
                 category);
-    /*g_print("cat=%d/%d nowins=%d t1wins=%d/%d t2wins=%d/%d\n",
+    g_print("cat=%d/%d nowins=%d t1wins=%d/%d t2wins=%d/%d\n",
             category1, number,
-            no_team_wins, team1_wins, team1_pts, team2_wins, team2_pts);*/
+            no_team_wins, team1_wins, team1_pts, team2_wins, team2_pts);
     if (no_team_wins == 0 && team_extra_exists == FALSE &&
 	(team1_wins == team2_wins) && (team1_pts == team2_pts)) {
 	/* No matches left and equal result. One match more is required. */
