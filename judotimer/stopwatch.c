@@ -633,6 +633,7 @@ static gint get_winner(gboolean final_result)
 	}
     } else if (bluepts[S] || whitepts[S]) {
 	if (use_2018_rules) {
+	    if (bluepts[S] >= 3 && whitepts[S] >= 3) return 0;
 	    if (bluepts[S] >= 3) winner = WHITE;
 	    else if (whitepts[S] >= 3) winner = BLUE;
 	} else if (bluepts[S] > whitepts[S]) winner = WHITE;
@@ -1288,33 +1289,34 @@ void check_ippon(void)
 	    if (oRunning) oToggle();
 	    if (running) toggle();
         }
-	if (whitepts[I] && bluepts[I]) {
-	    voting_result(NULL, gint_to_ptr(HIKIWAKE | NO_IPPON_CHECK));
-	    big_displayed = FALSE;
-	    delete_big(NULL);
-	    beep("HIKIWAKE");
-	    judotimer_log("%s: Hikiwake (%f s)",
-			  get_cat(), elap);
-	} else {
-	    voting_result(NULL, gint_to_ptr(CLEAR_SELECTION | NO_IPPON_CHECK));
-	    big_displayed = FALSE;
-	    delete_big(NULL);
+	voting_result(NULL, gint_to_ptr(CLEAR_SELECTION | NO_IPPON_CHECK));
+	big_displayed = FALSE;
+	delete_big(NULL);
+	if (whitepts[S] >= SHIDOMAX || bluepts[S] >= SHIDOMAX)
+	    beep("HANSOKUMAKE");
+	else
 	    beep("IPPON");
 
-	    gchar *name = get_name(whitepts[I] ? WHITE : BLUE);
-	    if (name == NULL || name[0] == 0)
-		name = whitepts[I] ? "white" : "blue";
+	gchar *name = get_name(whitepts[I] ? WHITE : BLUE);
+	if (name == NULL || name[0] == 0)
+	    name = whitepts[I] ? "white" : "blue";
 
-	    judotimer_log("%s: %s wins by %f s Ippon)!",
-			  get_cat(), name, elap);
-	}
+	judotimer_log("%s: %s wins by %f s Ippon)!",
+		      get_cat(), name, elap);
     } else if (golden_score && get_winner(FALSE)) {
         beep(_("Golden Score"));
+    } else if (whitepts[S] >= SHIDOMAX && bluepts[S] >= SHIDOMAX) {
+	voting_result(NULL, gint_to_ptr(HIKIWAKE | NO_IPPON_CHECK));
+	big_displayed = FALSE;
+	delete_big(NULL);
+	beep("HANSOKUMAKE");
+	judotimer_log("%s: Double hansokumake (%f s)",
+		      get_cat(), elap);
     } else if ((whitepts[S] >= SHIDOMAX || bluepts[S] >= SHIDOMAX) &&
                rules_stop_ippon_2) {
     	if (oRunning) oToggle();
     	if (running) toggle();
-        beep("SHIDO, Hansokumake");
+        beep("HANSOKUMAKE");
         gchar *name = get_name(whitepts[I] ? WHITE : BLUE);
         if (name == NULL || name[0] == 0)
             name = whitepts[I] ? "white" : "blue";
@@ -1574,7 +1576,13 @@ void clock_key(guint key, guint event_state)
             incdecpts(&whitepts[S], INC);
 
             if (whitepts[S] >= SHIDOMAX) {
-                bluepts[I] = 1;
+		if (bluepts[S] >= SHIDOMAX) {
+		    judotimer_log("Double shido");
+		    bluepts[I] = 0;
+		    whitepts[I] = 0;
+		} else {
+		    bluepts[I] = 1;
+		}
             }
 	    last_shido_to = WHITE;
             log_scores("Shido to ", WHITE);
@@ -1621,7 +1629,13 @@ void clock_key(guint key, guint event_state)
         } else {
             incdecpts(&bluepts[S], INC);
             if (bluepts[S] >= SHIDOMAX) {
-                whitepts[I] = 1;
+		if (whitepts[S] >= SHIDOMAX) {
+		    judotimer_log("Double shido");
+		    bluepts[I] = 0;
+		    whitepts[I] = 0;
+		} else {
+		    whitepts[I] = 1;
+		}
             }
 	    last_shido_to = BLUE;
             log_scores("Shido to ", BLUE);
