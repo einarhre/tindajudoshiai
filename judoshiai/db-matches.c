@@ -1931,9 +1931,9 @@ gboolean db_event_matches_update(guint category, struct match *last)
     db_exec_str(gint_to_ptr(DB_FIND_TEAM_WINNER), db_callback_matches,
                 "SELECT * FROM matches WHERE \"category\"=%d",
                 category);
-    g_print("cat=%d/%d nowins=%d t1wins=%d/%d t2wins=%d/%d\n",
+    /*g_print("cat=%d/%d nowins=%d t1wins=%d/%d t2wins=%d/%d\n",
             category1, number,
-            no_team_wins, team1_wins, team1_pts, team2_wins, team2_pts);
+            no_team_wins, team1_wins, team1_pts, team2_wins, team2_pts);*/
     if (no_team_wins == 0 && team_extra_exists == FALSE &&
 	(team1_wins == team2_wins) && (team1_pts == team2_pts)) {
 	/* No matches left and equal result. One match more is required. */
