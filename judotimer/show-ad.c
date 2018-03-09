@@ -1792,7 +1792,7 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
         cairo_show_text(c, b_last);
 ****/
 	{
-	    gdouble _x = 5.0, _y = SECOND_BLOCK_START, _w = 0, _h = OTHER_BLOCK_HEIGHT;
+	    gdouble _x = name_start+5.0, _y = SECOND_BLOCK_START, _w = 0, _h = OTHER_BLOCK_HEIGHT;
 	    write_text(c, b_last, &_x, &_y, &_w, &_h,
 		       TEXT_ALIGN_LEFT, TEXT_ALIGN_MIDDLE, NULL,
 		       namesize*0.06*OTHER_BLOCK_HEIGHT, 0);
@@ -1808,7 +1808,7 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
         cairo_move_to(c, name_start+5.0, THIRD_BLOCK_START + (OTHER_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
         //cairo_show_text(c, w_last);
 	{
-	    gdouble _x = 5.0, _y = THIRD_BLOCK_START, _w = 0, _h = OTHER_BLOCK_HEIGHT;
+	    gdouble _x = name_start+5.0, _y = THIRD_BLOCK_START, _w = 0, _h = OTHER_BLOCK_HEIGHT;
 	    write_text(c, w_last, &_x, &_y, &_w, &_h,
 		       TEXT_ALIGN_LEFT, TEXT_ALIGN_MIDDLE, NULL,
 		       namesize*0.06*OTHER_BLOCK_HEIGHT, 0);
