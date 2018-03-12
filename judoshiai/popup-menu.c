@@ -620,12 +620,14 @@ void view_popup_menu(GtkWidget *treeview,
 
         menuitem = gtk_menu_item_new_with_label(_("Print Selected Sheets (Printer)"));
         g_signal_connect(menuitem, "activate",
-                         (GCallback) print_doc, gint_to_ptr(ptr_to_gint(userdata) | PRINT_SHEET | PRINT_TO_PRINTER));
+                         (GCallback) print_doc,
+			 gint_to_ptr(ptr_to_gint(userdata) | PRINT_SHEET | PRINT_TO_PRINTER));
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
         menuitem = gtk_menu_item_new_with_label(_("Print Selected Sheets (PDF)"));
         g_signal_connect(menuitem, "activate",
-                         (GCallback) print_doc, gint_to_ptr(ptr_to_gint(userdata) | PRINT_SHEET | PRINT_TO_PDF));
+                         (GCallback) print_doc,
+			 gint_to_ptr(ptr_to_gint(userdata) | PRINT_SHEET | PRINT_TO_PDF));
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     }
 

@@ -380,7 +380,7 @@ static void judoka_edited_callback(GtkWidget *widget,
         update_category_status_info_all();
 
         if (event_id == RESPONSE_PRINT)
-            print_doc(NULL, gint_to_ptr(edited.index | PRINT_SHEET | PRINT_TO_PRINTER));
+            print_doc(NULL, gint_to_ptr(edited.index | PRINT_ARG_SHEET | PRINT_TO_PRINTER));
     }
 
     // Update JudoInfo

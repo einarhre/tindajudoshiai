@@ -218,6 +218,7 @@ enum special_match_types {
 #define PRINT_WEIGHING_NOTES 0x10000000
 #define PRINT_SCHEDULE       0x20000000
 #define PRINT_ALL_CATEGORIES 0x30000000
+#define PRINT_ARG_SHEET      0x40000000
 #define PRINT_LANDSCAPE      PRINT_ONE_PER_PAGE
 
 #define IS(x) (!strcmp(azColName[i], #x))

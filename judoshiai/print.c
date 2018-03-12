@@ -1715,44 +1715,46 @@ void print_schedule_cb(GtkWidget *menuitem, gpointer userdata)
     print_schedule();
 }
 
-static gint fill_in_pages(gint category, gint all)
+static gint fill_in_pages(gint category, gint what)
 {
     GtkTreeIter iter;
-    gboolean ok;
     GtkTreeSelection *selection =
         gtk_tree_view_get_selection(GTK_TREE_VIEW(current_view));
     gint cat = 0, i;
 
     numpages = 0;
 
-    ok = gtk_tree_model_get_iter_first(current_model, &iter);
-    while (ok) {
-        gint index;
-        struct compsys sys;
+    if (what != PRINT_ARG_SHEET) {
+	gboolean ok;
+	ok = gtk_tree_model_get_iter_first(current_model, &iter);
+	while (ok) {
+	    gint index;
+	    struct compsys sys;
 
-        gtk_tree_model_get(current_model, &iter,
-                           COL_INDEX, &index,
-                           -1);
+	    gtk_tree_model_get(current_model, &iter,
+			       COL_INDEX, &index,
+			       -1);
 
-        if (all ||
-            gtk_tree_selection_iter_is_selected(selection, &iter)) {
-            sys = db_get_system(index);
+	    if (what == PRINT_ALL_CATEGORIES ||
+		gtk_tree_selection_iter_is_selected(selection, &iter)) {
+		sys = db_get_system(index);
 
-            for (i = 0; i < num_pages(sys) && numpages < NUM_PAGES; i++) {
-                pages_to_print[numpages].cat = index;
-                pages_to_print[numpages++].pagenum = i;
-            }
+		for (i = 0; i < num_pages(sys) && numpages < NUM_PAGES; i++) {
+		    pages_to_print[numpages].cat = index;
+		    pages_to_print[numpages++].pagenum = i;
+		}
 
-            if (cat)
-                cat = -1;
-            else
-                cat = index;
+		if (cat)
+		    cat = -1;
+		else
+		    cat = index;
 
-            struct category_data *d = avl_get_category(index);
-            if (d && all == FALSE)
-                d->match_status |= CAT_PRINTED;
-        }
-        ok = gtk_tree_model_iter_next(current_model, &iter);
+		struct category_data *d = avl_get_category(index);
+		if (d && what != PRINT_ALL_CATEGORIES)
+		    d->match_status |= CAT_PRINTED;
+	    }
+	    ok = gtk_tree_model_iter_next(current_model, &iter);
+	}
     }
 
     if (numpages == 0) {
@@ -1802,9 +1804,8 @@ static void begin_print(GtkPrintOperation *operation,
     gint what = ptr_to_gint(user_data) & PRINT_ITEM_MASK;
     numpages = 1;
 
-    if (what == PRINT_ALL_CATEGORIES || what == PRINT_SHEET) {
-        fill_in_pages(ptr_to_gint(user_data) & PRINT_DATA_MASK,
-                      what == PRINT_ALL_CATEGORIES);
+    if (what == PRINT_ALL_CATEGORIES || what == PRINT_SHEET || what == PRINT_ARG_SHEET) {
+        fill_in_pages(ptr_to_gint(user_data) & PRINT_DATA_MASK, what);
         gtk_print_operation_set_n_pages(operation, numpages);
     } else if (what == PRINT_WEIGHING_NOTES) {
         GtkPageSetup *setup = gtk_print_context_get_page_setup(context);
@@ -1894,6 +1895,7 @@ static void draw_page(GtkPrintOperation *operation,
         paint_schedule(&pd);
         break;
     case PRINT_SHEET:
+    case PRINT_ARG_SHEET:
     case PRINT_ALL_CATEGORIES:
         pd.category = pages_to_print[page_nr].cat;
         pd.page = pages_to_print[page_nr].pagenum;
@@ -1981,7 +1983,8 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
             filename = g_strdup("all.pdf");
             break;
         case PRINT_SHEET:
-            data = fill_in_pages(data, FALSE);
+        case PRINT_ARG_SHEET:
+            data = fill_in_pages(data, what);
             if (data > 0)
                 cat = get_data(data);
             if (cat) {
@@ -2021,6 +2024,7 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
         switch (what) {
         case PRINT_ALL_CATEGORIES:
         case PRINT_SHEET:
+        case PRINT_ARG_SHEET:
             for (i = 0; i < numpages; i++) {
                 pd.category = pages_to_print[i].cat;
                 if (svg_landscape(pd.category, i) || print_landscape(pd.category))
@@ -2069,7 +2073,7 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
 
         if (what == PRINT_ALL_CATEGORIES)
 	    db_print_category_to_pdf_comments(0, filename);
-        else if (what == PRINT_SHEET)
+        else if (what == PRINT_SHEET || what == PRINT_ARG_SHEET)
 	    db_print_category_to_pdf_comments(catix, filename);
 
 	g_free(filename);

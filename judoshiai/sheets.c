@@ -2976,7 +2976,7 @@ static gboolean print_cat(GtkWidget *window,
         gint x = event->x, y = event->y;
 
         if (x < 32 && y < 32) {
-            print_doc(NULL, gint_to_ptr(pd->category | PRINT_SHEET | PRINT_TO_PRINTER));
+            print_doc(NULL, gint_to_ptr(pd->category | PRINT_ARG_SHEET | PRINT_TO_PRINTER));
             return TRUE;
         } else  {
             pd->page = next_page(pd->category, pd->page);
