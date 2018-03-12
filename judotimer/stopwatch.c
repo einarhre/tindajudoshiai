@@ -1290,8 +1290,6 @@ void check_ippon(void)
 	    if (running) toggle();
         }
 	voting_result(NULL, gint_to_ptr(CLEAR_SELECTION | NO_IPPON_CHECK));
-	big_displayed = FALSE;
-	delete_big(NULL);
 	if (whitepts[S] >= SHIDOMAX || bluepts[S] >= SHIDOMAX)
 	    beep("HANSOKUMAKE");
 	else
@@ -1307,8 +1305,6 @@ void check_ippon(void)
         beep(_("Golden Score"));
     } else if (whitepts[S] >= SHIDOMAX && bluepts[S] >= SHIDOMAX) {
 	voting_result(NULL, gint_to_ptr(HIKIWAKE | NO_IPPON_CHECK));
-	big_displayed = FALSE;
-	delete_big(NULL);
 	beep("HANSOKUMAKE");
 	judotimer_log("%s: Double hansokumake (%f s)",
 		      get_cat(), elap);
