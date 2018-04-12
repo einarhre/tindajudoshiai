@@ -1776,9 +1776,10 @@ static void paint_qpool(struct paint_data *pd, gint category, struct judoka *ctg
 static gint first_matches[NUM_FRENCH] = {4, 8, 16, 32, 64};
 
 #define PAINT_WINNER(_w, _f)						\
-    paint_comp(pd, NULL, level[_w]+1,                                   \
-               positions[_w], 0.0, &m[_w],                              \
-               _f, 0, 0, _w)
+    do {								\
+	if (double_hm_2_1 == 0) paint_comp(pd, NULL, level[_w]+1,	\
+					   positions[_w], 0.0, &m[_w],	\
+					   _f, 0, 0, _w); } while (0)
 
 #define PAINT_GOLD(_w)							\
     gold = (COMP_1_PTS_WIN(m[_w]) || m[_w].white==GHOST) ? m[_w].blue : \
@@ -1809,7 +1810,7 @@ static gint first_matches[NUM_FRENCH] = {4, 8, 16, 32, 64};
     fifth2 = (COMP_1_PTS_WIN(m[_w]) && m[_w].white > GHOST) ? m[_w].white : \
         ((COMP_2_PTS_WIN(m[_w]) && m[_w].blue > GHOST) ? m[_w].blue : 0);
 
-#define GET_WINNER_AND_LOSER(_w)							\
+#define GET_WINNER_AND_LOSER(_w)					\
     winner = (COMP_1_PTS_WIN(m[_w]) || m[_w].white==GHOST) ? m[_w].blue : \
         ((COMP_2_PTS_WIN(m[_w]) || m[_w].blue==GHOST) ? m[_w].white : 0); \
     loser = (COMP_1_PTS_WIN(m[_w]) || m[_w].white==GHOST) ? m[_w].white : \
@@ -1826,7 +1827,9 @@ static void paint_french(struct paint_data *pd, gint category, struct judoka *ct
     double space = NAME_S;
     struct judoka *j1;
     gint gold = 0, silver = 0, bronze1 = 0, bronze2 = 0, fourth = 0,
-        fifth1 = 0, fifth2 = 0, seventh1 = 0, seventh2 = 0;
+        fifth1 = 0, fifth2 = 0, seventh1 = 0, seventh2 = 0,
+	double_hm_2_1 = 0, double_hm_2_2 = 0,
+	double_hm_5_1 = 0, double_hm_5_2 = 0;
     gint winner, loser;
     gint sysflag = 0;
     gint sys = systm.system - SYSTEM_FRENCH_8;
@@ -1839,6 +1842,23 @@ static void paint_french(struct paint_data *pd, gint category, struct judoka *ct
     memset(level, 0, sizeof(level));
     memset(m, 0, sizeof(m));
     db_read_category_matches(category, m);
+
+    struct category_data *cd = avl_get_category(category);
+    if (cd) {
+	for (i = 1; i < NUM_MATCHES && m[i].number; i++) {
+	    if (m[i].blue_points == 11 &&
+		m[i].white_points == 11) {
+		gint rnd = round_number(cd, i);
+		if ((rnd & ROUND_TYPE_MASK) == ROUND_FINAL) {
+		    double_hm_2_1 = m[i].blue;
+		    double_hm_2_2 = m[i].white;
+		} else if ((rnd & ROUND_TYPE_MASK) == ROUND_SEMIFINAL) {
+		    double_hm_5_1 = m[i].blue;
+		    double_hm_5_2 = m[i].white;
+		}
+	    }
+	}
+    }
 
     switch (sys) {
     case FRENCH_8:
@@ -2257,11 +2277,18 @@ static void paint_french(struct paint_data *pd, gint category, struct judoka *ct
 	bronze2 = fifth2;
 	fifth1 = fifth2 = 0;
         seventh1 = seventh2 = 0;
-    }
-
-    if (table == TABLE_DOUBLE_REPECHAGE_ONE_BRONZE ||
-        table == TABLE_EST_D_KLASS_ONE_BRONZE) {
+    } else if (table == TABLE_DOUBLE_REPECHAGE_ONE_BRONZE ||
+	       table == TABLE_EST_D_KLASS_ONE_BRONZE) {
         seventh1 = seventh2 = 0;
+    } else {
+	if (double_hm_2_1 && double_hm_2_2) {
+	    gold = double_hm_2_1;
+	    silver = double_hm_2_2;
+	}
+	if (double_hm_5_1 && double_hm_5_2) {
+	    fifth1 = double_hm_5_1;
+	    fifth2 = double_hm_5_2;
+	}
     }
 
     /* results */
@@ -2284,7 +2311,7 @@ static void paint_french(struct paint_data *pd, gint category, struct judoka *ct
     WRITE_TABLE(result_table_2, 0, 0, "%s", _T(position));
     WRITE_TABLE(result_table_2, 0, 1, "%s", _T(name));
 
-    WRITE_TABLE(result_table_2, 1, 0, "1");
+    WRITE_TABLE(result_table_2, 1, 0, double_hm_2_1 ? "2" : "1");
     WRITE_TABLE(result_table_2, 2, 0, "2");
     WRITE_TABLE(result_table_2, 3, 0, "3");
     if (table != TABLE_MODIFIED_DOUBLE_ELIMINATION) {
@@ -2302,7 +2329,10 @@ static void paint_french(struct paint_data *pd, gint category, struct judoka *ct
 
     if (gold && (j1 = get_data(gold))) {
         WRITE_TABLE_H_2(result_table_2, 1, 1, j1->deleted, j1->index, "%s", get_name_and_club_text(j1, 0));
-        set_competitor_position(j1->index, COMP_POS_DRAWN | 1);
+	if (double_hm_2_1 && double_hm_2_2)
+	    set_competitor_position(j1->index, COMP_POS_DRAWN | 2);
+	else
+	    set_competitor_position(j1->index, COMP_POS_DRAWN | 1);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(silver))) {

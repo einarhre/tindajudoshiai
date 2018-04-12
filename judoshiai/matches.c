@@ -447,15 +447,69 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
 
 #define MATCHED_FRENCH(x) (x < 0 ? MATCHED_FRENCH_1(-x) : MATCHED_FRENCH_1(x))
 
-#define WINNER_1(_a) (COMP_1_PTS_WIN(m[_a]) ? m[_a].blue :             \
+static gint winner_1(struct match *m) {
+    if (m->blue_points && m->blue_points > m->white_points)
+	return m->blue;
+    if (m->white_points && m->white_points > m->blue_points)
+	return m->white;
+
+    gboolean hm1 = db_has_hansokumake(m->blue);
+    gboolean hm2 = db_has_hansokumake(m->white);
+    if (hm1 && hm2)
+	return GHOST;
+    if (hm1)
+	return m->white;
+    if (hm2)
+	return m->blue;
+
+    if (m->blue == GHOST)
+	return m->white;
+    if (m->white == GHOST)
+	return m->blue;
+
+    if (m->blue_points == 11 && m->white_points == 11)
+	return GHOST;
+
+    return NO_COMPETITOR;
+}
+
+static gint loser_1(struct match *m) {
+    if (m->blue_points && m->blue_points > m->white_points)
+	return m->white;
+    if (m->white_points && m->white_points > m->blue_points)
+	return m->blue;
+    if (m->blue == GHOST || m->white == GHOST)
+	return GHOST;
+
+    gboolean hm1 = db_has_hansokumake(m->blue);
+    gboolean hm2 = db_has_hansokumake(m->white);
+    if (hm1 && hm2)
+	return GHOST;
+    if (hm1)
+	return m->blue;
+    if (hm2)
+	return m->white;
+
+    if (m->blue_points == 11 && m->white_points == 11)
+	return GHOST;
+
+    return NO_COMPETITOR;
+}
+
+#define WINNER_1(_a) winner_1(&m[_a])
+#define WINNER(x) (x < 0 ? WINNER_1(-x) : WINNER_1(x))
+#define LOSER_1(_a) loser_1(&m[_a])
+#define LOSER(x) (x < 0 ? LOSER_1(-x) : LOSER_1(x))
+#define WINNER_OR_LOSER(x) (x < 0 ? LOSER_1(-x) : WINNER_1(x))
+
+#if 0
+#define WINNER_1(_a) (COMP_1_PTS_WIN(m[_a]) ? m[_a].blue :		\
 		      (COMP_2_PTS_WIN(m[_a]) ? m[_a].white :		\
 		       (m[_a].blue == GHOST ? m[_a].white :		\
 			(m[_a].white == GHOST ? m[_a].blue :            \
 			 (db_has_hansokumake(m[_a].blue) ? m[_a].white : \
 			  (db_has_hansokumake(m[_a].white) ? m[_a].blue : \
 			   (m[_a].blue_points == 11 && m[_a].white_points == 11 ? GHOST : NO_COMPETITOR)))))))
-
-#define WINNER(x) (x < 0 ? WINNER_1(-x) : WINNER_1(x))
 
 #define LOSER_1(_a) (COMP_1_PTS_WIN(m[_a]) ? m[_a].white :             \
 		     (COMP_2_PTS_WIN(m[_a]) ? m[_a].blue :             \
@@ -464,10 +518,8 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
 			(db_has_hansokumake(m[_a].blue) ? m[_a].blue :  \
 			 (db_has_hansokumake(m[_a].white) ? m[_a].white : \
 			  (m[_a].blue_points == 11 && m[_a].white_points == 11 ? GHOST : NO_COMPETITOR)))))))
+#endif
 
-#define LOSER(x) (x < 0 ? LOSER_1(-x) : LOSER_1(x))
-
-#define WINNER_OR_LOSER(x) (x < 0 ? LOSER_1(-x) : WINNER_1(x))
 
 #define PREV_BLUE(_x) french_matches[table][sys][_x][0]
 #define PREV_WHITE(_x) french_matches[table][sys][_x][1]
@@ -3176,6 +3228,14 @@ static void set_score(GtkWidget *widget,
 		       db_find_match_tatami(s->category, s->number));
 	db_force_match_number(s->category);
 	make_backup();
+    } else if (ptr_to_gint(event) == GTK_RESPONSE_NO) {
+	db_set_score(s->category, s->number, 0, TRUE, 0);
+	db_set_score(s->category, s->number, 0, FALSE, 0);
+	db_read_match(s->category, s->number);
+	update_matches(s->category, db_get_system(s->category),
+		       db_find_match_tatami(s->category, s->number));
+	db_force_match_number(s->category);
+	make_backup();
     }
 
     g_free(s);
@@ -3223,6 +3283,7 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
 					      NULL,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      "Hikiwake", HIKIWAKE_OK,
+					      GTK_STOCK_CLEAR, GTK_RESPONSE_NO,
 					      GTK_STOCK_OK, GTK_RESPONSE_OK,
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					      NULL);
@@ -3230,6 +3291,7 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
 	dialog = gtk_dialog_new_with_buttons (_("Set score"),
 					      NULL,
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
+					      GTK_STOCK_CLEAR, GTK_RESPONSE_NO,
 					      GTK_STOCK_OK, GTK_RESPONSE_OK,
 					      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					      NULL);

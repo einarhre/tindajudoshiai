@@ -27,8 +27,15 @@
 #include "judoshiai.h"
 #include "minilisp.h"
 
+#define WINNER_1(_a) winner_1(&m[_a])
+#define WINNER(x) (x < 0 ? WINNER_1(-x) : WINNER_1(x))
+#define LOSER_1(_a) loser_1(&m[_a])
+#define LOSER(x) (x < 0 ? LOSER_1(-x) : LOSER_1(x))
+#define WINNER_OR_LOSER(x) (x < 0 ? LOSER_1(-x) : WINNER_1(x))
+
 #define TEAM_PTS(_n) _n/10000, (_n%10000)/2, (_n & 1) ? "½" : ""
 
+#if 0
 #define WINNER(_a) (COMP_1_PTS_WIN(m[_a]) ? m[_a].blue :                \
                     (COMP_2_PTS_WIN(m[_a]) ? m[_a].white :		\
 		       (m[_a].blue == GHOST ? m[_a].white :		\
@@ -42,6 +49,7 @@
 		       (m[_a].white == GHOST ? m[_a].white :		\
 			(db_has_hansokumake(m[_a].blue) ? m[_a].blue :  \
 			 (db_has_hansokumake(m[_a].white) ? m[_a].white : NO_COMPETITOR))))))
+#endif
 
 #define MATCHED(_a) (m[_a].blue_points || m[_a].white_points)
 
@@ -264,6 +272,54 @@ gint get_svg_match_page(struct compsys systm, gint matchnum, gboolean info)
     return -1;
 }
 
+static gint winner_1(struct match *m) {
+    if (m->blue_points && m->blue_points > m->white_points)
+	return m->blue;
+    if (m->white_points && m->white_points > m->blue_points)
+	return m->white;
+
+    gboolean hm1 = db_has_hansokumake(m->blue);
+    gboolean hm2 = db_has_hansokumake(m->white);
+    if (hm1 && hm2)
+	return GHOST;
+    if (hm1)
+	return m->white;
+    if (hm2)
+	return m->blue;
+
+    if (m->blue == GHOST)
+	return m->white;
+    if (m->white == GHOST)
+	return m->blue;
+
+    if (m->blue_points == 11 && m->white_points == 11)
+	return GHOST;
+
+    return NO_COMPETITOR;
+}
+
+static gint loser_1(struct match *m) {
+    if (m->blue_points && m->blue_points > m->white_points)
+	return m->white;
+    if (m->white_points && m->white_points > m->blue_points)
+	return m->blue;
+    if (m->blue == GHOST || m->white == GHOST)
+	return GHOST;
+
+    gboolean hm1 = db_has_hansokumake(m->blue);
+    gboolean hm2 = db_has_hansokumake(m->white);
+    if (hm1 && hm2)
+	return GHOST;
+    if (hm1)
+	return m->blue;
+    if (hm2)
+	return m->white;
+
+    if (m->blue_points == 11 && m->white_points == 11)
+	return GHOST;
+
+    return NO_COMPETITOR;
+}
 
 static gchar *last_country = NULL;
 extern gboolean create_statistics;
@@ -786,7 +842,11 @@ gint paint_svg(struct paint_data *pd)
                             write_judoka(handle, 2, j, dfile, 0, write_cb, closure);
                             free_judoka(j);
                         }
-                    }
+                    } else if (m[fight].blue_points == 11 &&
+			       m[fight].white_points == 11 &&
+			       (m[fight].blue_score & 0xf) == 3) {
+			WRITE("2xHANSOKUMAKE");
+		    }
                 }
             } else if (attr[0].code[0] == 'c' ||
                        attr[0].code[0] == 'C') {
@@ -1156,6 +1216,14 @@ gint paint_svg(struct paint_data *pd)
                             ix = LOSER(get_abs_matchnum_by_pos(systm, 7, 2));
                         break;
                     }
+
+		    if (ix == GHOST && (res == 1 || res == 2)) {
+			gint n = get_abs_matchnum_by_pos(systm, 1, 1);
+			if (m[n].blue_points == 11 && m[n].white_points == 11) {
+			    if (res == 1) ix = m[n].blue;
+			    else ix = m[n].white;
+			}
+		    }
 
                     if (ix >= 10) {
                         struct judoka *j = get_data(ix);
