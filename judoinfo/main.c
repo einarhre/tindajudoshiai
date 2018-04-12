@@ -590,65 +590,65 @@ void paint_bracket(cairo_t *c, gdouble paper_width, gdouble paper_height)
     if (!show_bracket() || !bracket_ok)
         return;
 
-        cairo_surface_t *image;
+    cairo_surface_t *image;
 
-	if (bracket_x == 0 || bracket_w == 0) {
-	    bracket_x = paper_width/4;
-	    bracket_y = BOX_HEIGHT + 2;
-	    bracket_w = paper_width - bracket_x;
-	    bracket_h = paper_height - bracket_y;
-	    bracket_space_w = paper_width;
-	    bracket_space_h = paper_height;
-	}
+    if (bracket_x == 0 || bracket_w == 0) {
+	bracket_x = paper_width/4;
+	bracket_y = BOX_HEIGHT + 2;
+	bracket_w = paper_width - bracket_x;
+	bracket_h = paper_height - bracket_y;
+	bracket_space_w = paper_width;
+	bracket_space_h = paper_height;
+    }
 
-        if (bracket_type() == BRACKET_TYPE_PNG) {
-            bracket_pos = 0;
-            image = cairo_image_surface_create_from_png_stream(bracket_read, NULL);
-            if (cairo_surface_status(image) == CAIRO_STATUS_SUCCESS) {
-                gint w, h;
-                w = cairo_image_surface_get_width(image);
-                h = cairo_image_surface_get_height(image);
-		gdouble scale_w = (gdouble)(bracket_w*paper_width)/(gdouble)(w*bracket_space_w);
-		gdouble scale_h = (gdouble)(bracket_h*paper_height)/(gdouble)(h*bracket_space_h);
-                gdouble scale = scale_w < scale_h ? scale_w : scale_h;
-		cairo_translate(c,
-				(gdouble)(bracket_x*paper_width)/(double)bracket_space_w,
-				(gdouble)(bracket_y*paper_height)/(double)bracket_space_h);
-                cairo_save(c);
-                cairo_scale(c, scale, scale);
-                //cairo_set_source_surface(c, image, paper_width*0.25/scale, (BOX_HEIGHT + 2)/scale);
-                cairo_set_source_surface(c, image, 0, 0);
-                cairo_paint(c);
-                cairo_surface_destroy(image);
-                cairo_restore(c);
-            } else
-                g_print("image fails\n");
-        } else if (bracket_type() == BRACKET_TYPE_SVG) {
-            GError *err = NULL;
-            RsvgHandle *handle = rsvg_handle_new();
-            if (!rsvg_handle_write(handle, bracket_start, bracket_len, &err)) {
-                g_print("\nJudoInfo: SVG error %s: %s %d\n",
-                        err->message, __FUNCTION__, __LINE__);
-            }
-            rsvg_handle_close(handle, NULL);
-
-            RsvgDimensionData dim;
-            rsvg_handle_get_dimensions(handle, &dim);
-	    gdouble scale_w = (gdouble)(bracket_w*paper_width)/(gdouble)(dim.width*bracket_space_w);
-            gdouble scale_h = (gdouble)(bracket_h*paper_height)/(gdouble)(dim.height*bracket_space_h);
-            gdouble scale = scale_w < scale_h ? scale_w : scale_h;
-
-            cairo_save(c);
-            cairo_translate(c,
+    if (bracket_type() == BRACKET_TYPE_PNG) {
+	bracket_pos = 0;
+	image = cairo_image_surface_create_from_png_stream(bracket_read, NULL);
+	if (cairo_surface_status(image) == CAIRO_STATUS_SUCCESS) {
+	    gint w, h;
+	    w = cairo_image_surface_get_width(image);
+	    h = cairo_image_surface_get_height(image);
+	    gdouble scale_w = (gdouble)(bracket_w*paper_width)/(gdouble)(w*bracket_space_w);
+	    gdouble scale_h = (gdouble)(bracket_h*paper_height)/(gdouble)(h*bracket_space_h);
+	    gdouble scale = scale_w < scale_h ? scale_w : scale_h;
+	    cairo_translate(c,
 			    (gdouble)(bracket_x*paper_width)/(double)bracket_space_w,
 			    (gdouble)(bracket_y*paper_height)/(double)bracket_space_h);
-            cairo_scale(c, scale, scale);
-            if (!rsvg_handle_render_cairo(handle, c))
-                g_print("SVG rendering failed\n");
-            cairo_restore(c);
-            g_object_unref(handle);
-        } else
-            g_print("BRACKET TYPE error\n");
+	    cairo_save(c);
+	    cairo_scale(c, scale, scale);
+	    //cairo_set_source_surface(c, image, paper_width*0.25/scale, (BOX_HEIGHT + 2)/scale);
+	    cairo_set_source_surface(c, image, 0, 0);
+	    cairo_paint(c);
+	    cairo_surface_destroy(image);
+	    cairo_restore(c);
+	} else
+	    g_print("image fails\n");
+    } else if (bracket_type() == BRACKET_TYPE_SVG) {
+	GError *err = NULL;
+	RsvgHandle *handle = rsvg_handle_new();
+	if (!rsvg_handle_write(handle, bracket_start, bracket_len, &err)) {
+	    g_print("\nJudoInfo: SVG error %s: %s %d\n",
+		    err->message, __FUNCTION__, __LINE__);
+	}
+	rsvg_handle_close(handle, NULL);
+
+	RsvgDimensionData dim;
+	rsvg_handle_get_dimensions(handle, &dim);
+	gdouble scale_w = (gdouble)(bracket_w*paper_width)/(gdouble)(dim.width*bracket_space_w);
+	gdouble scale_h = (gdouble)(bracket_h*paper_height)/(gdouble)(dim.height*bracket_space_h);
+	gdouble scale = scale_w < scale_h ? scale_w : scale_h;
+
+	cairo_save(c);
+	cairo_translate(c,
+			(gdouble)(bracket_x*paper_width)/(double)bracket_space_w,
+			(gdouble)(bracket_y*paper_height)/(double)bracket_space_h);
+	cairo_scale(c, scale, scale);
+	if (!rsvg_handle_render_cairo(handle, c))
+	    g_print("SVG rendering failed\n");
+	cairo_restore(c);
+	g_object_unref(handle);
+    } else
+	g_print("BRACKET TYPE error\n");
 }
 
 /* This is called when we need to draw the windows contents */

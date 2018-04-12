@@ -44,8 +44,10 @@ struct name_data *avl_get_data(gint index)
     if (avl_get_by_key(competitors_tree, &data, &data1) == 0) {
         return data1;
     }
-    //g_print("cannot find name index %d!\n", index);
-    //assert(0);
+
+    // request data
+    ask_for_data(index);
+
     return NULL;
 }
 

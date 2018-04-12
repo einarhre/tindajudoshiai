@@ -58,6 +58,8 @@
 static void get_bracket(gint tatami, gint last_category, gint last_number);
 void send_packet(struct message *msg);
 
+G_LOCK_DEFINE_STATIC(req_mutex);
+
 time_t traffic_last_rec_time;
 
 void copy_packet(struct message *msg)
@@ -78,32 +80,85 @@ gint timeout_callback(gpointer data)
     return TRUE;
 }
 
-#define ASK_TABLE_LEN 1024
+#define ASK_TABLE_LEN (4*1024)
 static gint ask_table[ASK_TABLE_LEN];
-static gint put_ptr = 0, get_ptr = 0;
+static gint put_ptr = 0, answers = 0;
+
+static gint remove_pos(gint p)
+{
+    gint i, r = 0;
+    G_LOCK(req_mutex);
+    r = ask_table[p];
+    for (i = p; i < put_ptr-1; i++)
+	ask_table[i] = ask_table[i+1];
+    put_ptr--;
+    G_UNLOCK(req_mutex);
+    return r;
+}
 
 gint timeout_ask_for_data(gpointer data)
 {
-    struct message msg;
-    extern gint my_address;
+    if (put_ptr == 0)
+	return TRUE;
 
-    if (get_ptr != put_ptr) {
-        msg.type = MSG_NAME_REQ;
-        msg.sender = my_address;
-        msg.u.name_req.index = ask_table[get_ptr++];
-        send_packet(&msg);
-
-        if (get_ptr >= ASK_TABLE_LEN)
-            get_ptr = 0;
+    // Slow down if lots of answers since most probably
+    // other infos are asking, too.
+    if (answers > 10) {
+	if (rand() & 7)	return TRUE;
+    } else if (answers > 5) {
+	if (rand() & 3) return TRUE;
+    } else if (answers > 2) {
+	if (rand() & 1) return TRUE;
     }
+    answers = 0;
+
+    gint ix = remove_pos(rand() % put_ptr);
+
+    if (ix < 10)
+	return TRUE;
+
+    struct name_data *j = avl_get_data(ix);
+    if (j)
+	return TRUE;
+
+    extern gint my_address;
+    struct message msg;
+    msg.type = MSG_NAME_REQ;
+    msg.sender = my_address;
+    msg.u.name_req.index = ix;
+    send_packet(&msg);
+    g_print("REQ %d\n", ix);
+
     return TRUE;
 }
 
-static void ask_for_data(gint index)
+static void remove_from_req_queue(gint ix)
 {
-    ask_table[put_ptr++] = index;
-    if (put_ptr >= ASK_TABLE_LEN)
-        put_ptr = 0;
+    gint i;
+    G_LOCK(req_mutex);
+    for (i = 0; i < put_ptr; i++) {
+	if (ask_table[i] == ix)
+	    ask_table[i] = 0;
+    }
+    G_UNLOCK(req_mutex);
+}
+
+void ask_for_data(gint index)
+{
+    // already requested?
+    gint i;
+    G_LOCK(req_mutex);
+    for (i = 0; i < put_ptr; i++) {
+	if (ask_table[i] == index) {
+	    G_UNLOCK(req_mutex);
+	    return;
+	}
+    }
+
+    if (put_ptr < ASK_TABLE_LEN)
+	ask_table[put_ptr++] = index;
+    else g_print("%s:%d queue overflow!\n", __FUNCTION__, __LINE__);
+    G_UNLOCK(req_mutex);
 }
 
 gboolean msg_accepted(struct message *m)
@@ -146,6 +201,8 @@ static void handle_info_msg(struct msg_match_info *input_msg)
 	match_list[tatami][position].blue,
 	match_list[tatami][position].white);
     ***/
+
+#if 0 // let avl search initiate data request (need to know basis)
     j = avl_get_data(match_list[tatami][position].category);
     if (j == NULL) {
 	ask_for_data(match_list[tatami][position].category);
@@ -162,6 +219,7 @@ static void handle_info_msg(struct msg_match_info *input_msg)
 	    ask_for_data(match_list[tatami][position].white);
 	}
     }
+#endif
 
     write_matches();
     //refresh_window();
@@ -207,10 +265,14 @@ void msg_received(struct message *input_msg)
         break;
 
     case MSG_NAME_INFO:
+	remove_from_req_queue(input_msg->u.name_info.index);
+
         avl_set_data(input_msg->u.name_info.index,
                      input_msg->u.name_info.first,
                      input_msg->u.name_info.last,
                      input_msg->u.name_info.club);
+	answers++;
+	g_print("ANS %d\n", input_msg->u.name_info.index);
         //refresh_window();
 #if 0
         g_print("name info %d: %s %s, %s\n",
