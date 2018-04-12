@@ -263,9 +263,17 @@ void update_clock(void)
 	    score = 2;
 	if (oElap >= wazaari) {
 	    score = 3;
-	    if (!use_2017_rules &&
-		((osaekomi_winner == BLUE && bluepts[W]) ||
-		 (osaekomi_winner == WHITE && whitepts[W]))) {
+	    // waza-ari stops the golden score
+	    if (golden_score && use_2018_rules) {
+		running = FALSE;
+		oRunning = FALSE;
+		gint tmp = osaekomi_winner;
+		give_osaekomi_score();
+		if (tmp)
+		    approve_osaekomi_score(0);
+	    } else if (!use_2017_rules &&
+		       ((osaekomi_winner == BLUE && bluepts[W]) ||
+			(osaekomi_winner == WHITE && whitepts[W]))) {
 		running = FALSE;
 		oRunning = FALSE;
 		give_osaekomi_score();
