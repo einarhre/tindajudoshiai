@@ -376,13 +376,13 @@ static gint write_judoka(RsvgHandle *hndl, gint start, struct judoka *j, FILE *d
             // quoted text
             WRITE1((attr[i].code+1), attr[i].codecnt - 1);
         } else if (IS_SAME(attr[i].code, "first")) {
-            WRITE(j->first);
+            WRITE((gdpr_ok(j) ? j->first : "Xxx"));
         } else if (IS_SAME(attr[i].code, "last")) {
-            WRITE(j->last);
+            WRITE((gdpr_ok(j) ? j->last : "Xxx"));
         } else if (IS_SAME(attr[i].code, "grd")) {
             WRITE(belts[j->belt]);
         } else if (IS_SAME(attr[i].code, "club")) {
-            WRITE(j->club);
+            WRITE((gdpr_ok(j) ? j->club : "Xxx"));
         } else if (IS_SAME(attr[i].code, "country")) {
             WRITE(j->country);
         } else if (IS_SAME(attr[i].code, "weight")) {

@@ -87,7 +87,7 @@ static GtkWidget *menubar,
     *preference_mirror, *preference_auto_arrange, *preference_club_text,
     *preference_club_text_club, *preference_club_text_country, *preference_club_text_both,
     *preference_club_text_abbr, *preference_use_logo,
-    *preference_serial, *preference_medal_matches,
+    *preference_serial, *preference_medal_matches, *preference_gdpr,
     *help_manual, *help_about;
 
 static GSList *lang_group = NULL, *club_group = NULL;
@@ -341,6 +341,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     preference_serial                 = gtk_menu_item_new_with_label("");
     preference_medal_matches          = gtk_menu_item_new_with_label("");
+    preference_gdpr                   = gtk_menu_item_new_with_label("");
 
     //gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_comm_node);
     preference_comm = gtk_menu_item_new_with_label("");
@@ -407,6 +408,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_serial);
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_medal_matches);
+    gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_gdpr);
 
     g_signal_connect(G_OBJECT(preference_comm_node),              "activate", G_CALLBACK(ask_node_ip_address), 0);
     g_signal_connect(G_OBJECT(preference_own_ip_addr),            "activate", G_CALLBACK(show_my_ip_addresses), 0);
@@ -444,6 +446,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(preference_use_logo),               "activate", G_CALLBACK(select_use_logo), 0);
     g_signal_connect(G_OBJECT(preference_serial),                 "activate", G_CALLBACK(set_serial_dialog), 0);
     g_signal_connect(G_OBJECT(preference_medal_matches),          "activate", G_CALLBACK(move_medal_matches), 0);
+    g_signal_connect(G_OBJECT(preference_gdpr),                   "activate", G_CALLBACK(set_gdpr), 0);
 
 
     /* Create the Drawing menu content. */
@@ -668,6 +671,19 @@ void set_preferences(void)
             g_free(str);
     }
 
+    error = NULL;
+    x1 = g_key_file_get_integer(keyfile, "preferences", "gdprcompage", &error);
+    if (!error)
+        gdpr_comp_age = x1;
+    else
+        gdpr_comp_age = 0;
+
+    error = NULL;
+    x1 = g_key_file_get_integer(keyfile, "preferences", "gdprcatage", &error);
+    if (!error)
+        gdpr_cat_age = x1;
+    else
+        gdpr_cat_age = 0;
 }
 
 static void change_menu_label(GtkWidget *item, const gchar *new_text)
@@ -827,6 +843,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
 
     change_menu_label(preference_serial                , _("Scale Serial Interface..."));
     change_menu_label(preference_medal_matches         , _("Medal Matches..."));
+    change_menu_label(preference_gdpr                  , _("GDPR..."));
 
     change_menu_label(help_manual, _("Manual"));
     change_menu_label(help_about , _("About"));

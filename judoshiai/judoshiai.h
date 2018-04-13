@@ -172,6 +172,7 @@ enum french_systems {
 #define GENDER_MALE   0x80
 #define GENDER_FEMALE 0x100
 #define POOL_TIE3     0x200
+#define DO_NOT_SHOW   0x400
 // category flags
 #define TEAM          0x04
 #define TEAM_EVENT    0x08
@@ -1022,6 +1023,7 @@ extern void db_print_competitors_by_club(FILE *f);
 extern void db_list_competitors(gboolean by_club);
 extern gint db_get_next_listed_competitor(void);
 extern gint db_get_index_by_id(const gchar *id, gboolean *coach);
+extern void write_competitor(FILE *f, struct judoka *j, gint club_flags, gboolean by_club);
 extern void write_competitor_for_coach_display(struct judoka *j);
 extern int db_get_table(char *command);
 extern void db_close_table(void);
@@ -1212,6 +1214,7 @@ extern gchar *find_correct_category(gint age, gint weight, gint gender, const gc
 extern gboolean fill_in_next_match_message_data(const gchar *cat, struct msg_next_match *msg);
 extern gint get_category_rest_time(const gchar *cat);
 extern gint get_category_match_time(const gchar *cat);
+extern gint find_max_age(const gchar *category);
 
 /* category_graph */
 extern void draw_gategory_graph(void);
@@ -1370,6 +1373,13 @@ extern void read_match_order_dialog(GtkWidget *w, gpointer arg);
 /* websock */
 extern void handle_websock(struct jsconn *conn, char *in, gint length);
 extern gint websock_send_msg(gint fd, struct message *msg);
+
+/* gdpr */
+extern gint gdpr_comp_age, gdpr_cat_age;
+extern gint gdpr_enable;
+
+extern gboolean gdpr_ok(struct judoka *j);
+extern void set_gdpr(GtkWidget *menuitem, gpointer userdata);
 
 /* profiling stuff */
 //#define PROFILE

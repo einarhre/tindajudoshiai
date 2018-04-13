@@ -27,7 +27,8 @@ OBJS += $(OBJDIR)/main.o $(OBJDIR)/competitors.o $(OBJDIR)/sheets.o $(OBJDIR)/se
 	$(OBJDIR)/custom-category-parser.o $(OBJDIR)/custom-category.o \
 	$(OBJDIR)/custom-category-svg-template.o $(OBJDIR)/common.o $(OBJDIR)/sha1.o \
 	$(OBJDIR)/websock.o $(OBJDIR)/websock-protocol.o  $(OBJDIR)/cJSON.o $(OBJDIR)/minilisp.o \
-	$(OBJDIR)/svg-lisp.o $(OBJDIR)/auto-update.o $(OBJDIR)/common-utils.o
+	$(OBJDIR)/svg-lisp.o $(OBJDIR)/auto-update.o $(OBJDIR)/common-utils.o \
+	$(OBJDIR)/gdpr.o
 
 CFLAGS += -DAPPLICATION="\"judoshiai\""
 CFLAGS += -DAPP_NUM=1

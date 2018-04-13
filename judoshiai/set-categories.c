@@ -704,6 +704,33 @@ gint find_age_index(const gchar *category)
     return -1;
 }
 
+gint find_max_age(const gchar *category)
+{
+    gint i;
+    gchar catbuf[32], ch = 0;
+
+    if (category == NULL || category[0] == 0)
+        return 0;
+
+    g_strlcpy(catbuf, category, sizeof(catbuf));
+    gchar *p = strrchr(catbuf, '-');
+    if (!p)
+        p = strrchr(catbuf, '+');
+    if (p) {
+        ch = *p;
+        *p = 0;
+    }
+
+    for (i = 0; i < num_categories; i++) {
+        if (category_definitions[i].agetext[0] == 0 && category_definitions[i].age == 0)
+            continue;
+
+        if (strcmp(category_definitions[i].agetext, catbuf) == 0)
+	    return category_definitions[i].age;
+    }
+    return 0;
+}
+
 gint find_age_index_by_age(gint age, gint gender)
 {
     gint i, age_ix = -1, best_age = 100000000;

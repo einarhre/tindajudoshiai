@@ -15,9 +15,6 @@
 #include "judoshiai.h"
 #include "language.h"
 
-extern void write_competitor(FILE *f, const gchar *first, const gchar *last, const gchar *belt, 
-                             const gchar *club, const gchar *category, const gint index, const gboolean by_club);
-
 #define ADD_COMPETITORS               1
 #define ADD_COMPETITORS_WITH_WEIGHTS  2
 #define ADD_DELETED_COMPETITORS       4
@@ -108,12 +105,7 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
     if (flags & (PRINT_COMPETITORS | PRINT_COMPETITORS_BY_CLUB)) {
         if (print_file == NULL)
             return 1;
-        const gchar *b = "?";
-        if (j.belt >= 0 && j.belt < NUM_BELTS)
-            b = belts[j.belt];
-        write_competitor(print_file, j.first, j.last, b, 
-                         get_club_text(&j, CLUB_TEXT_ADDRESS), 
-                         j.category, j.index, flags & PRINT_COMPETITORS_BY_CLUB);
+        write_competitor(print_file, &j, CLUB_TEXT_ADDRESS, flags & PRINT_COMPETITORS_BY_CLUB);
         write_competitor_for_coach_display(&j);
         return 0;
     }

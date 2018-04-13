@@ -283,7 +283,8 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
             else
                 j = get_data(white);
             if (j) {
-                SNPRINTF_UTF8(buf, "%s", IS_LANG_IS ? j->first : j->last);
+		if (!gdpr_ok(j)) SNPRINTF_UTF8(buf, "Xxx");
+		else SNPRINTF_UTF8(buf, "%s", IS_LANG_IS ? j->first : j->last);
 #ifdef USE_PANGO
 		gdouble _x = x + TEXT_OFFSET, _y = blue_y - 2 /*- H(0.005)*/, _w = 0, _h = 0;
 		write_text(pd->c, buf, &_x, &_y, &_w, &_h,
@@ -404,9 +405,10 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
     if (blue >= COMPETITOR) {
         j = get_data(blue);
         if (j) {
-            if (only_last)
-                SNPRINTF_UTF8(buf, "%s", IS_LANG_IS ? j->first : j->last);
-            else if (number_b) {
+            if (only_last) {
+		if (!gdpr_ok(j)) SNPRINTF_UTF8(buf, "Xxx");
+                else SNPRINTF_UTF8(buf, "%s", IS_LANG_IS ? j->first : j->last);
+            } else if (number_b) {
                 if (j->belt && grade_visible)
                     SNPRINTF_UTF8(buf, "%d. %s (%s)",
                              number_b, get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION), belts[j->belt]);
@@ -450,9 +452,10 @@ static double paint_comp(struct paint_data *pd, struct pool_matches *unused1, in
     if (white >= COMPETITOR) {
         j = get_data(white);
         if (j) {
-            if (only_last)
-                SNPRINTF_UTF8(buf, "%s", IS_LANG_IS ? j->first : j->last);
-            else if (number_w) {
+            if (only_last) {
+		if (!gdpr_ok(j)) SNPRINTF_UTF8(buf, "Xxx");
+                else SNPRINTF_UTF8(buf, "%s", IS_LANG_IS ? j->first : j->last);
+            } else if (number_w) {
                 if (j->belt && grade_visible)
                     SNPRINTF_UTF8(buf, "%d. %s (%s)",
                              number_w, get_name_and_club_text(j, CLUB_TEXT_ABBREVIATION), belts[j->belt]);

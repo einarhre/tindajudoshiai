@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=2.7
+SHIAI_VER_NUM=2.7.2
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 
 ifndef JS_BUILD_DIR
@@ -240,7 +240,7 @@ else
 
     PKGCONFIG=pkg-config
 
-    CFLAGS= $(WARNINGS) $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags gtk+-$(GTKVER).0) \
+    CFLAGS= -g $(WARNINGS) $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags gtk+-$(GTKVER).0) \
          $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags cairo) \
          $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags librsvg-2.0) \
          $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags glib-2.0) \

@@ -75,6 +75,7 @@ struct judoka_widget {
     GtkWidget *judogi;
     GtkWidget *comment;
     GtkWidget *coachid;
+    GtkWidget *do_not_show; // GDPR
 };
 
 GtkWidget *weight_entry = NULL;
@@ -190,6 +191,10 @@ static void judoka_edited_callback(GtkWidget *widget,
     if (judoka_tmp->hansokumake &&
         gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(judoka_tmp->hansokumake)))
         edited.deleted |= HANSOKUMAKE;
+
+    if (judoka_tmp->do_not_show &&
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(judoka_tmp->do_not_show)))
+        edited.deleted |= DO_NOT_SHOW;
 
     if (judoka_tmp->id)
         edited.id = g_strdup(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->id)));
@@ -804,6 +809,15 @@ void view_on_row_activated(GtkTreeView        *treeview,
 
         judoka_tmp->comment = set_entry(table, row++, _("Comment:"), comment);
         gtk_entry_set_max_length(GTK_ENTRY(judoka_tmp->comment), 100);
+
+        tmp = gtk_label_new(_("Hide name:"));
+        gtk_grid_attach(GTK_GRID(table), tmp, 0, row, 1, 1);
+        judoka_tmp->do_not_show = gtk_check_button_new();
+        gtk_grid_attach(GTK_GRID(table), judoka_tmp->do_not_show, 1, row, 1, 1);
+        if (deleted & DO_NOT_SHOW)
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(judoka_tmp->do_not_show), TRUE);
+
+	row++;
     } else {
         struct category_data *catdata = NULL;
         catdata = avl_get_category(index);
@@ -1111,9 +1125,14 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
 			  jstatus&0xf ? pos : "");
 
         if (deleted & HANSOKUMAKE)
-            g_object_set(renderer, "strikethrough", TRUE, "cell-background-set", FALSE, NULL);
+            g_object_set(renderer, "strikethrough", TRUE, NULL);
         else
-            g_object_set(renderer, "strikethrough", FALSE, "cell-background-set", FALSE, NULL);
+            g_object_set(renderer, "strikethrough", FALSE, NULL);
+
+	if (deleted & DO_NOT_SHOW)
+	    g_object_set(renderer, "cell-background", "grey", "cell-background-set", TRUE, NULL);
+        else
+            g_object_set(renderer, "cell-background-set", FALSE, NULL);
 
         if (deleted & JUDOGI_OK)
             g_object_set(renderer,

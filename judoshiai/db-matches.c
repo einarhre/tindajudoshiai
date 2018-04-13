@@ -1987,6 +1987,9 @@ static FILE *matches_file = NULL;
 
 static void db_print_one_match(struct match *m)
 {
+    const gchar *first1 = "Xxx", *last1 = "Xxx";
+    const gchar *first2 = "Xxx", *last2 = "Xxx";
+
     if (m->blue_points == 0 && m->white_points == 0)
         return;
 
@@ -1995,6 +1998,16 @@ static void db_print_one_match(struct match *m)
     struct judoka *j2 = get_data(m->white);
     if (j1 == NULL || j2 == NULL)
         goto out;
+
+    // GDPR
+    if (gdpr_ok(j1)) {
+	first1 = j1->first;
+	last1 = j1->last;
+    }
+    if (gdpr_ok(j2)) {
+	first2 = j2->first;
+	last2 = j2->last;
+    }
 
     if (m->category & MATCH_CATEGORY_SUB_MASK)
         fprintf(matches_file,
@@ -2008,8 +2021,8 @@ static void db_print_one_match(struct match *m)
             "style=\"cursor: pointer;%s\">%s %s</td><td class=\"%s\">",
             j1->index,
 	    c1_wins ? "font-weight:bold" : "",
-            utf8_to_html(firstname_lastname() ? j1->first : j1->last),
-            utf8_to_html(firstname_lastname() ? j1->last : j1->first),
+            utf8_to_html(firstname_lastname() ? first1 : last1),
+            utf8_to_html(firstname_lastname() ? last1 : first1),
             prop_get_int_val(PROP_WHITE_FIRST) ? "wscore" : "bscore");
 
     if (prop_get_int_val_cat(PROP_RULES_2017, m->category) ||
@@ -2049,8 +2062,8 @@ static void db_print_one_match(struct match *m)
             "<td>%d:%02d</td></tr>\r\n",
             j2->index,
 	    c1_wins ? "" : "font-weight:bold",
-            utf8_to_html(firstname_lastname() ? j2->first : j2->last),
-            utf8_to_html(firstname_lastname() ? j2->last : j2->first),
+            utf8_to_html(firstname_lastname() ? first2 : last2),
+            utf8_to_html(firstname_lastname() ? last2 : first2),
 	    m->match_time/60, m->match_time%60);
 
  out:

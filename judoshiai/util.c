@@ -532,6 +532,9 @@ const gchar *get_name_and_club_text(struct judoka *j, gint flags)
     gchar *p;
 
     if (flags & CLUB_TEXT_NO_CLUB) {
+	if (!gdpr_ok(j))
+	    return "Xxx Xxx";
+
         switch (name_layout) {
         case NAME_LAYOUT_N_S_C:
             SNPRINTF_UTF8(buffers[n], "%s %s", j->first, j->last);
@@ -542,6 +545,9 @@ const gchar *get_name_and_club_text(struct judoka *j, gint flags)
             break;
         }
     } else {
+	if (!gdpr_ok(j))
+	    return "Xxx Xxx, Xxx";
+
         switch (name_layout) {
         case NAME_LAYOUT_N_S_C:
             SNPRINTF_UTF8(buffers[n], "%s %s, %s",
@@ -570,6 +576,9 @@ const gchar *get_club_text(struct judoka *j, gint flags)
     static gint n = 0;
     gchar *p;
     struct club_name_data *data = NULL;
+
+    if (!gdpr_ok(j))
+	return "Xxx";
 
     if (j->club)
 	data = club_name_get(j->club);
