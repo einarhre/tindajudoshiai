@@ -3198,7 +3198,7 @@ static void view_match_points_popup_menu(GtkWidget *treeview,
 struct score {
     guint category, number;
     gboolean is_blue;
-    GtkWidget *ippon, *wazaari, *yuko, *shido, *gs;
+    GtkWidget *ippon, *wazaari, *yuko, *shido, *gs, *hantei;
 };
 
 struct match_time {
@@ -3221,6 +3221,11 @@ static void set_score(GtkWidget *widget,
 			 (gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->yuko))<<8) |
 			 gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->shido)),
 			 s->is_blue, ptr_to_gint(event) == HIKIWAKE_OK);
+
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(s->hantei)))
+	    db_set_points(s->category, s->number, 0,
+			  s->is_blue ? 1 : 0,
+			  s->is_blue ? 0 : 1, 0, 0, 0);
 
 	log_match(s->category, s->number, pts >> 8, pts & 0xff);
 	db_read_match(s->category, s->number);
@@ -3309,6 +3314,7 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
 	s->shido = gtk_spin_button_new_with_range(0.0, 4.0, 1.0);
     }
     s->gs = gtk_check_button_new();
+    s->hantei = gtk_check_button_new();
 
     table = gtk_grid_new();
     gtk_grid_attach(GTK_GRID(table), gtk_label_new("I"), 0, 0, 1, 1);
@@ -3317,12 +3323,14 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
     gtk_grid_attach(GTK_GRID(table), gtk_label_new("/"), 3, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new("S"), 4, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new("GS"),5, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new("Hantei"),6, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->ippon,           0, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->wazaari,         1, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->yuko,            2, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new("/"), 3, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->shido,           4, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->gs,              5, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), s->hantei,          6, 1, 1, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->ippon), (score>>16)&15);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->wazaari), (score>>12)&15);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->yuko), (score>>8)&15);
