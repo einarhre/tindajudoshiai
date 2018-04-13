@@ -117,53 +117,53 @@ struct offial_category official_categories[NUM_DRAWS][2][10] = {
     }, { // swedish
         { // men
             {
-                "Herrar", 1000, 240, 0, 600, // name, max age, match gs rest times
+                "H", 1000, 240, 0, 600, // name, max age, match gs rest times
                 {{60000, "60"}, {66000, "66"}, {73000, "73"},
                  {81000, "81"}, {90000, "90"}, {100000, "100"}, {0, NULL}}
             }, {
-                "Herrar U21", 20, 240, 0, 600, // name, max age, match gs rest times
+                "H21", 20, 240, 0, 600, // name, max age, match gs rest times
                 {{55000, "55"}, {60000, "60"}, {66000, "66"}, {73000, "73"},
                  {81000, "81"}, {90000, "90"}, {100000, "100"}, {0, NULL}}
             }, {
-                "Pojkar U18", 17, 180, 0, 600, // name, max age, match gs rest times
+                "P18", 17, 180, 0, 600, // name, max age, match gs rest times
                 {{46000, "46"}, {50000, "50"}, {55000, "55"}, {60000, "60"},
                  {66000, "66"}, {73000, "73"}, {81000, "81"}, {0, NULL}}
             }, {
-                "Pojkar U15", 14, 180, 0, 180, // name, max age, match gs rest times
+                "P15", 14, 180, 0, 180, // name, max age, match gs rest times
                 {{34000, "34"}, {38000, "38"}, {42000, "42"}, {46000, "46"},
                  {50000, "50"}, {55000, "55"}, {60000, "60"}, {66000, "66"}, {0, NULL}}
             }, {
-                "Pojkar U13", 12, 120, 0, 180, // name, max age, match gs rest times
+                "P13", 12, 120, 0, 180, // name, max age, match gs rest times
                 {{24000, "24"}, {27000, "27"}, {30000, "30"}, {34000, "34"},
                  {38000, "38"}, {42000, "42"}, {46000, "46"}, {50000, "50"}, {0, NULL}}
             }, {
-                "Pojkar U11", 10, 120, 0, 180, // name, max age, match gs rest times
+                "P11", 10, 120, 0, 180, // name, max age, match gs rest times
                 {{24000, "24"}, {27000, "27"}, {30000, "30"}, {34000, "34"},
                  {38000, "38"}, {42000, "42"}, {46000, "46"}, {50000, "50"}, {0, NULL}}
             }, { NULL, 0, 0, 0, 0, {{0, NULL}}}
         }, { // women
             {
-                "Damer", 1000, 240, 0, 600, // name, max age, match gs rest times
+                "D", 1000, 240, 0, 600, // name, max age, match gs rest times
                 {{48000, "48"}, {52000, "52"}, {57000, "57"},
                  {63000, "63"}, {70000, "70"}, {78000, "78"}, {0, NULL}}
             }, {
-                "Damer U21", 20, 240, 0, 600, // name, max age, match gs rest times
+                "D21", 20, 240, 0, 600, // name, max age, match gs rest times
                 {{44000, "44"}, {48000, "48"}, {52000, "52"}, {57000, "57"},
                  {63000, "63"}, {70000, "70"}, {78000, "78"}, {0, NULL}}
             }, {
-                "Flickor U18", 17, 180, 0, 600, // name, max age, match gs rest times
+                "F18", 17, 180, 0, 600, // name, max age, match gs rest times
                 {{44000, "44"}, {48000, "48"}, {52000, "52"}, {57000, "57"},
                  {63000, "63"}, {70000, "70"}, {0, NULL}}
             }, {
-                "Flickor U15", 14, 180, 0, 180, // name, max age, match gs rest times
+                "F15", 14, 180, 0, 180, // name, max age, match gs rest times
                 {{32000, "32"}, {36000, "36"}, {40000, "40"}, {44000, "44"},
                  {48000, "48"}, {52000, "52"}, {57000, "57"}, {63000, "63"}, {0, NULL}}
             }, {
-                "Flickor U13", 12, 120, 0, 180, // name, max age, match gs rest times
+                "F13", 12, 120, 0, 180, // name, max age, match gs rest times
                 {{22000, "22"}, {25000, "25"}, {28000, "28"}, {32000, "32"},
                  {36000, "36"}, {40000, "40"}, {44000, "44"}, {48000, "48"}, {0, NULL}}
             }, {
-                "Flickor U11", 10, 120, 0, 180, // name, max age, match gs rest times
+                "F11", 10, 120, 0, 180, // name, max age, match gs rest times
                 {{22000, "22"}, {25000, "25"}, {28000, "28"}, {32000, "32"},
                  {36000, "36"}, {40000, "40"}, {44000, "44"}, {48000, "48"}, {0, NULL}}
             }, { NULL, 0, 0, 0, 0, {{0, NULL}}}
