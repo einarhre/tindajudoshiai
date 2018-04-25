@@ -61,6 +61,7 @@ endif
 ifeq ($(JUDOPROXY),YES)
 	cp $(JUDOPROXYFILE) $(RELDIR)/bin/
 endif
+
 ### Windows executable ###
 ifeq ($(TGT),WIN32)
 ifeq ($(GTKVER),3)
@@ -118,6 +119,8 @@ endif
 	cp -r svg $(RELDIR)/
 	cp -r custom-examples $(RELDIR)/
 	cp -r svg-lisp $(RELDIR)/
+	-cp $(JS_BUILD_DIR)/serial/obj-linux/websock-serial-pkg/websock-serial $(RELDIR)/etc/html/
+	-cp $(JS_BUILD_DIR)/serial/obj-win32/websock-serial-pkg.zip $(RELDIR)/etc/html/
 	echo $(SHIAI_VER_NUM) >$(RELDIR)/etc/version.txt
 	find $(RELDIR) | wc -l | tr -d "\r\n" >$(RELDIR)/filecount.txt
 	@echo

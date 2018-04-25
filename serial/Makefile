@@ -1,8 +1,7 @@
 include ../common/Makefile.inc
 
-
 EXE = websock-serial$(SUFF)
-APP = websock-serial$(ZIP)
+APP = websock-serial-pkg$(ZIP)
 
 OBJS = $(OBJDIR)/main.o $(OBJDIR)/serial.o $(OBJDIR)/comm.o \
        $(OBJDIR)/websock-protocol.o $(OBJDIR)/cJSON.o \
