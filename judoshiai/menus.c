@@ -77,7 +77,8 @@ static GtkWidget *menubar,
     *category_print_all, *category_print_all_pdf, *category_print_matches,
     *category_properties, *category_to_tatamis[NUM_TATAMIS],
     *draw_all_categories, 
-    *results_print_all, *results_print_schedule_printer, *results_print_schedule_pdf, *results_ftp,
+    *results_print_all, *results_print_schedule_printer, *results_print_schedule_pdf,
+    *results_ftp, *results_gdpr,
     *preference_comm, *preference_comm_node, *preference_own_ip_addr, *preference_show_connections,
     *preference_auto_sheet_update, *preference_result_languages[NUM_PRINT_LANGS], *preference_langsel,
     *preference_weights_to_pool_sheets, 
@@ -87,7 +88,7 @@ static GtkWidget *menubar,
     *preference_mirror, *preference_auto_arrange, *preference_club_text,
     *preference_club_text_club, *preference_club_text_country, *preference_club_text_both,
     *preference_club_text_abbr, *preference_use_logo,
-    *preference_serial, *preference_medal_matches, *preference_gdpr,
+    *preference_serial, *preference_medal_matches,
     *help_manual, *help_about;
 
 static GSList *lang_group = NULL, *club_group = NULL;
@@ -277,10 +278,12 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     results_print_schedule_printer = gtk_menu_item_new_with_label(_("Print Schedule to Printer"));
     results_print_schedule_pdf     = gtk_menu_item_new_with_label(_("Print Schedule to PDF"));
     results_ftp                    = gtk_menu_item_new_with_label(_("Copy to Server"));
+    results_gdpr                   = gtk_menu_item_new_with_label("");
 
     gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_print_all);
     gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_print_schedule_printer);
     gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_ftp);
+    gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_gdpr);
     //gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_print_schedule_pdf);
 
     g_signal_connect(G_OBJECT(results_print_all),              "activate", G_CALLBACK(make_png_all), 0);
@@ -288,6 +291,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(results_print_schedule_pdf),      "activate", G_CALLBACK(print_doc),
                      (gpointer)(PRINT_SCHEDULE | PRINT_TO_PDF));
     g_signal_connect(G_OBJECT(results_ftp),                    "activate", G_CALLBACK(ftp_to_server), 0);
+    g_signal_connect(G_OBJECT(results_gdpr),                   "activate", G_CALLBACK(set_gdpr), 0);
 
 
     /* Create the Judotimer menu content. */
@@ -341,7 +345,6 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     preference_serial                 = gtk_menu_item_new_with_label("");
     preference_medal_matches          = gtk_menu_item_new_with_label("");
-    preference_gdpr                   = gtk_menu_item_new_with_label("");
 
     //gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_comm_node);
     preference_comm = gtk_menu_item_new_with_label("");
@@ -408,7 +411,6 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_serial);
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_medal_matches);
-    gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_gdpr);
 
     g_signal_connect(G_OBJECT(preference_comm_node),              "activate", G_CALLBACK(ask_node_ip_address), 0);
     g_signal_connect(G_OBJECT(preference_own_ip_addr),            "activate", G_CALLBACK(show_my_ip_addresses), 0);
@@ -446,7 +448,6 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(preference_use_logo),               "activate", G_CALLBACK(select_use_logo), 0);
     g_signal_connect(G_OBJECT(preference_serial),                 "activate", G_CALLBACK(set_serial_dialog), 0);
     g_signal_connect(G_OBJECT(preference_medal_matches),          "activate", G_CALLBACK(move_medal_matches), 0);
-    g_signal_connect(G_OBJECT(preference_gdpr),                   "activate", G_CALLBACK(set_gdpr), 0);
 
 
     /* Create the Drawing menu content. */
@@ -799,6 +800,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(results_print_schedule_printer, _("Print Schedule"));
     change_menu_label(results_print_schedule_pdf    , _("Print Schedule to PDF"));
     change_menu_label(results_ftp                   , _("Copy to Server"));
+    change_menu_label(results_gdpr                  , _("GDPR"));
 
     for (i = 0; i < NUM_TATAMIS; i++) {
         SPRINTF(buf, "%s %d", _("Control Tatami"), i+1);
@@ -843,7 +845,6 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
 
     change_menu_label(preference_serial                , _("Scale Serial Interface..."));
     change_menu_label(preference_medal_matches         , _("Medal Matches..."));
-    change_menu_label(preference_gdpr                  , _("GDPR..."));
 
     change_menu_label(help_manual, _("Manual"));
     change_menu_label(help_about , _("About"));
