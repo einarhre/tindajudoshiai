@@ -1786,3 +1786,29 @@ int lisp_write_svg(char *txt, int len)
     WRITE2(txt, len);
     return 0;
 }
+
+FILE *lisp_get_file_name(void)
+{
+    GtkWidget *dialog;
+    gchar *filename;
+    FILE *res = NULL;
+
+    dialog = gtk_file_chooser_dialog_new(_("Choose a file"),
+                                         GTK_WINDOW(main_window),
+                                         GTK_FILE_CHOOSER_ACTION_SAVE,
+                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                         GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                         NULL);
+
+    if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_ACCEPT) {
+	gtk_widget_destroy(dialog);
+        return NULL;
+    }
+
+    filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+    if (filename)
+	res = fopen(filename, "w");
+
+    gtk_widget_destroy(dialog);
+    return res;
+}
