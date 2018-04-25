@@ -114,7 +114,7 @@ static void run_script(GtkWidget *w, GdkEventButton *event, gpointer *arg)
     gtk_file_filter_set_name(filter2, _("SVG+Lisp"));
 
     dialog = gtk_file_chooser_dialog_new (_("Select Script"),
-                                          NULL,
+                                          GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_OPEN,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,

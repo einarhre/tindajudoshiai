@@ -17,6 +17,7 @@
 
 extern int lisp_write_svg(char *txt, int len);
 extern int lisp_write_script(char *txt, int len);
+extern FILE *lisp_get_file_name(void);
 
 static jmp_buf ex_buf;
 static const unsigned char *code_line;
@@ -28,8 +29,10 @@ static char sqlcmd[2048];
 static int sqlcmdlen;
 static int print_stdout = 0;
 static int print_sqlcmd = 0;
+static int print_file = 0;
 int lisp_print_script = 0;
 static int linenum = 0;
+static FILE *fileout = NULL;
 
 static int GETCHAR(void) {
     int r = code_line[code_ix];
@@ -105,8 +108,12 @@ static void file_skip(int n)
 	if (print_sqlcmd) {						\
 	    sqlcmdlen += snprintf(sqlcmd+sqlcmdlen, sizeof(sqlcmd)-sqlcmdlen, _fmt); \
 	    if (sqlcmdlen > sizeof(sqlcmd)-10) fprintf(stderr, "Too long sql!\n"); \
-	} else if (print_stdout) printf(_fmt);				\
-	else {								\
+	} else if (print_stdout) {					\
+	    printf(_fmt);						\
+	} else if (print_file) {					\
+	    if (fileout)						\
+		fprintf(fileout, _fmt);					\
+	} else {							\
 	    outlen = snprintf(out, sizeof(out), _fmt);			\
 	    if (lisp_print_script)					\
 		lisp_write_script(out, outlen);				\
@@ -1846,6 +1853,45 @@ static Obj *prim_print_env(void *root, Obj **env, Obj **list)
     return Nil;
 }
 
+// (fwrite expr...)
+static Obj *prim_fwrite(void *root, Obj **env, Obj **list) {
+    if (!fileout) {
+	error("No file open");
+	return Nil;
+    }
+    print_file = 1;
+    prim_write(root, env, list);
+    print_file = 0;
+    return Nil;
+}
+
+// (fopen expr...)
+static Obj *prim_fopen(void *root, Obj **env, Obj **args) {
+    if (length(*args) != 1) {
+	fileout = lisp_get_file_name();
+	if (fileout)
+	    return True;
+	return Nil;
+    }
+
+    DEFINE1(arg);
+    *arg = (*args)->car;
+    *arg = eval(root, env, arg);
+
+    if ((*arg)->type == TSTRING) {
+	fileout = fopen((*arg)->name, "w");
+	if (fileout) return True;
+    }
+
+    return Nil;
+}
+
+// (fclose expr...)
+static Obj *prim_fclose(void *root, Obj **env, Obj **list) {
+    if (fileout) fclose(fileout);
+    return Nil;
+}
+
 // (if expr expr expr ...)
 static Obj *prim_if(void *root, Obj **env, Obj **list) {
     if (length(*list) < 2)
@@ -1993,6 +2039,9 @@ static void define_primitives(void *root, Obj **env) {
     add_primitive(root, env, "print", prim_print);
     add_primitive(root, env, "println", prim_println);
     add_primitive(root, env, "print-debug", prim_print_env);
+    add_primitive(root, env, "fopen", prim_fopen);
+    add_primitive(root, env, "fclose", prim_fclose);
+    add_primitive(root, env, "fwrite", prim_fwrite);
     add_primitive(root, env, "sql", prim_sql);
     add_primitive(root, env, "get-data-by-ix", get_judoka);
     add_primitive(root, env, "get-next-match", get_next_match);

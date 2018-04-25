@@ -29,7 +29,6 @@ static FILE *dfile = NULL;
 void read_svg_file_lisp(void);
 
 static gboolean nomarg = FALSE;
-static gboolean shrink = FALSE;
 static gboolean scale = TRUE;
 
 static gchar *svg_data = NULL;
@@ -139,7 +138,6 @@ static void svg_lisp_read_file(gchar *filename, GtkTextBuffer *buffer)
 gint paint_svg_lisp(struct paint_data *pd)
 {
     GError *err = NULL;
-    GtkTextBuffer *buffer = pd->closure;
 
     if (svg_ok == FALSE)
         return FALSE;
@@ -260,20 +258,9 @@ static gboolean svg_lisp_expose(GtkWidget *widget, GdkEventExpose *event, gpoint
         print_icon = cairo_image_surface_create_from_png(file);
         g_free(file);
     }
-#if 0
-    if (pd->landscape)
-        pd->paper_height = SIZEX*gtk_widget_get_allocated_width(widget)/SIZEY;
-    else
-        pd->paper_height = SIZEY*gtk_widget_get_allocated_width(widget)/SIZEX;
-    pd->paper_width = gtk_widget_get_allocated_width(widget);
-    pd->total_width = gtk_widget_get_allocated_width(widget);
-#endif
 
     if (pd->scroll) {
         GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pd->scroll));
-        //gdouble lower = gtk_adjustment_get_lower(GTK_ADJUSTMENT(adj));
-        //gdouble upper = gtk_adjustment_get_upper(GTK_ADJUSTMENT(adj));
-        //gdouble value = gtk_adjustment_get_value(GTK_ADJUSTMENT(adj));
         gtk_adjustment_set_upper(GTK_ADJUSTMENT(adj), pd->paper_width*SIZEY/SIZEX);
         gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(pd->scroll), adj);
     }
@@ -281,8 +268,6 @@ static gboolean svg_lisp_expose(GtkWidget *widget, GdkEventExpose *event, gpoint
     cairo_t *c = (cairo_t *)event;
     cairo_set_source_surface(c, surface, 0, 0);
     cairo_paint(c);
-
-    //paint_svg_lisp(pd);
 
     cairo_set_source_surface(c, print_icon, 0, 0);
     cairo_paint(c);
@@ -299,6 +284,9 @@ static gboolean svg_lisp_delete_event( GtkWidget *widget,
 static void svg_lisp_destroy( GtkWidget *widget,
 			      gpointer   data )
 {
+    if (surface)
+	cairo_surface_destroy(surface);
+    surface = NULL;
     g_free(data);
 }
 
@@ -322,12 +310,8 @@ static void draw_page(GtkPrintOperation *operation,
     pd->c = gtk_print_context_get_cairo_context(context);
     pd->paper_width = gtk_print_context_get_width(context);
     pd->paper_height = gtk_print_context_get_height(context);
-#if 0
-    g_print("SVG DRAW nomarg=%d scale=%d page=%fx%f Margins=%f-%f/%f-%f\n", 
-            nomarg, scale, pd->paper_width, pd->paper_height, top,bot, left,right);
-#endif
     paint_svg_lisp(pd);
-}
+ }
 
 static void begin_print(GtkPrintOperation *operation,
                         GtkPrintContext   *context,
@@ -389,27 +373,6 @@ static gboolean svg_lisp_print(GtkWidget *window,
     return FALSE;
 }
 
-static gboolean configure_event_cb(GtkWidget         *widget,
-                                   GdkEventConfigure *event,
-                                   gpointer           data)
-{
-    struct paint_data *pd = data;
-    if (surface)
-        cairo_surface_destroy(surface);
-
-    pd->paper_width = gtk_widget_get_allocated_width(widget);
-    pd->paper_height = gtk_widget_get_allocated_height(widget);
-
-    surface = gdk_window_create_similar_surface(gtk_widget_get_window(widget),
-                                                CAIRO_CONTENT_COLOR,
-						pd->paper_width, pd->paper_height);
-
-    init_display(widget, pd);
-
-    /* We've handled the configure event, no need for further processing. */
-    return TRUE;
-}
-
 void svg_lisp_window(gchar *filename, GtkTextBuffer *buffer)
 {
     GdkScreen *scr = gdk_screen_get_default();
@@ -432,7 +395,7 @@ void svg_lisp_window(gchar *filename, GtkTextBuffer *buffer)
 
     GtkWindow *window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_title(GTK_WINDOW(window), "Lisp");
-    gtk_widget_set_size_request(GTK_WIDGET(window), width_req+20, height_req+20);
+    gtk_widget_set_size_request(GTK_WIDGET(window), 600 /*width_req+20*/, 600 /*height_req+20*/);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
     darea1 = gtk_drawing_area_new();
@@ -460,6 +423,9 @@ void svg_lisp_window(gchar *filename, GtkTextBuffer *buffer)
     extern void lisp_set_page(int p);
     lisp_set_page(0);
 
+    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width_req, height_req);
+    init_display(darea1, pd);
+
     g_signal_connect(G_OBJECT(darea1),
                      "button-press-event", G_CALLBACK(svg_lisp_print), pd);
     g_signal_connect (G_OBJECT (window), "delete_event",
@@ -468,6 +434,4 @@ void svg_lisp_window(gchar *filename, GtkTextBuffer *buffer)
                       G_CALLBACK (svg_lisp_destroy), pd);
     g_signal_connect(G_OBJECT(darea1),
                      "draw", G_CALLBACK(svg_lisp_expose), pd);
-    g_signal_connect(G_OBJECT(darea1),"configure-event",
-                     G_CALLBACK(configure_event_cb), pd);
 }

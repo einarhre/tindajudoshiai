@@ -226,3 +226,42 @@
        )
   )
 
+
+(defun file-match-stat (line)
+  (fwrite "'" (nth line 0) "','" (nth line 1) "','" (nth line 2) "','"
+	  (nth line 4) "'," (nth line 7) "\n")
+  (setq line-num (+ line-num 1)))
+
+(defun file-match-stats (club)
+  (fopen)
+  (setq line-num 0)
+  (sql file-match-stat
+       "select c.id, c.first, c.last, c.club, c.category,"
+       " ( select count(1) from matches where"
+       " (c.'index'=matches.blue and matches.blue_points>0) or"
+       " (c.'index'=matches.white and matches.white_points>0)"
+       " ) as 'Winnings',"
+       " (select count(1) from matches where"
+       " (c.'index'=matches.blue and matches.blue_points=0 and matches.white_points>0) or"
+       " (c.'index'=matches.white and matches.white_points=0 and matches.blue_points>0)"
+       " ) as 'Losses',"
+       " (select case"
+       " when pos1=c.'index' then '1'"
+       " when pos2=c.'index' then '2'"
+       " when pos3=c.'index' then '3'"
+       " when pos4=c.'index' and system<>1 then '3'"
+       " when pos4=c.'index' and system=1 then '4'"
+       " when pos5=c.'index' or pos6=c.'index' then '5'"
+       " when pos7=c.'index' or pos8=c.'index' then '7'"
+       " else '0'"
+       " end"
+       " from categories,matches where"
+       " categories.'index'=matches.category and"
+       " (c.'index'=matches.blue or c.'index'=matches.white)"
+       ") as 'position'"
+       " from competitors as c where c.weight > 0"
+       " and c.club like '" club "' "
+       " group by last,first"
+       )
+  (fclose)
+  (write line-num " lines written\n"))
