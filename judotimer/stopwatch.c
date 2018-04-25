@@ -475,13 +475,6 @@ int get_match_time(void)
 }
 
 static void oToggle() {
-    /*
-    if (running == FALSE && (elap < total || total == 0.0)) {
-        if (oRunning)
-            toggle();
-        return;
-    }
-    */
     if (oRunning) {
         judotimer_log("Osaekomi clock stop after %f s", oElap);
         oRunning = FALSE;
@@ -492,6 +485,8 @@ static void oToggle() {
             beep("SOREMADE");
     } else {
         judotimer_log("Osaekomi clock start");
+	if (!running)
+	    startTime = g_timer_elapsed(timer, NULL) - elap;
         running = TRUE;
         osaekomi = ' ';
         oRunning = TRUE;
