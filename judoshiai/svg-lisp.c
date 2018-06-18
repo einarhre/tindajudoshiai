@@ -397,6 +397,7 @@ void svg_lisp_window(gchar *filename, GtkTextBuffer *buffer)
     gtk_window_set_title(GTK_WINDOW(window), "Lisp");
     gtk_widget_set_size_request(GTK_WIDGET(window), 600 /*width_req+20*/, 600 /*height_req+20*/);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+    gtk_window_set_type_hint(GTK_WINDOW(window), GDK_WINDOW_TYPE_HINT_DIALOG);
 
     darea1 = gtk_drawing_area_new();
     gtk_widget_set_size_request(GTK_WIDGET(darea1), width_req, height_req);
@@ -425,6 +426,7 @@ void svg_lisp_window(gchar *filename, GtkTextBuffer *buffer)
 
     surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width_req, height_req);
     init_display(darea1, pd);
+    //gtk_window_present(GTK_WINDOW(window));
 
     g_signal_connect(G_OBJECT(darea1),
                      "button-press-event", G_CALLBACK(svg_lisp_print), pd);

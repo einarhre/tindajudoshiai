@@ -127,7 +127,6 @@ gint timeout_ask_for_data(gpointer data)
     msg.sender = my_address;
     msg.u.name_req.index = ix;
     send_packet(&msg);
-    g_print("REQ %d\n", ix);
 
     return TRUE;
 }
@@ -177,7 +176,6 @@ static void handle_info_msg(struct msg_match_info *input_msg)
 {
     gint tatami;
     gint position;
-    struct name_data *j;
 
     tatami = input_msg->tatami - 1;
     position = input_msg->position;
@@ -272,7 +270,6 @@ void msg_received(struct message *input_msg)
                      input_msg->u.name_info.last,
                      input_msg->u.name_info.club);
 	answers++;
-	g_print("ANS %d\n", input_msg->u.name_info.index);
         //refresh_window();
 #if 0
         g_print("name info %d: %s %s, %s\n",

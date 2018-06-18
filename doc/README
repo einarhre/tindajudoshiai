@@ -9,6 +9,37 @@ Raspberry Pi: judoshiai_n.n-1_armhf.deb
 
 ==============================================
 RELEASE NOTE
+VERSION 2.7.2
+
+Common
+------
++ Danish language added.
+
+JudoShiai
+----------
++ Support for double hansokumake.
++ Team event functionaly clarified in round robin systems.
++ Initial support for General Data Protection Regulation. It is difficult
+  to say what GDPR means in real life and does it affect to JudoShiai, but
+  here you have at least something.
++ Lisp+SVG file writing functions.
++ Swedish default category names changed.
++ Better manual result correction (set hantei winner).
++ Club names text file renamed to clubs-example.txt.
++ Bug fix: sometimes wrong category printed.
+
+JudoTimer
+---------
++ Waza-ari stops osaekomi clock if golden score (new rule).
++ Support for double hansokumake.
++ Bug fix: Name and flag overlapped in competitor introduction display.
+
+JudoInfo
+--------
++ Communication with JudoShiai rationalized to load less.
+
+==============================================
+RELEASE NOTE
 VERSION 2.7
 
 JudoShiai
