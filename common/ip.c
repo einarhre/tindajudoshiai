@@ -350,6 +350,27 @@ static void node_ip_address_callback(GtkWidget *widget,
     gtk_widget_destroy(widget);
 }
 
+static void multicast_cb(GtkWidget *w, gpointer arg)
+{
+    GtkWidget *address = (GtkWidget *)arg;
+    gulong myaddr;
+    gchar addrstr[64];
+    gboolean mc = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w));
+
+    if (mc) {
+	myaddr = MULTICAST_ADDR;
+    } else if (ntohl(node_ip_addr) == MULTICAST_ADDR) {
+	myaddr = 0;
+    } else {
+	myaddr = ntohl(node_ip_addr);
+    }
+
+    sprintf(addrstr, "%ld.%ld.%ld.%ld",
+	    (myaddr>>24)&0xff, (myaddr>>16)&0xff,
+	    (myaddr>>8)&0xff, (myaddr)&0xff);
+    gtk_entry_set_text(GTK_ENTRY(address), addrstr);
+}
+
 void ask_node_ip_address( GtkWidget *w,
                           gpointer   data )
 {
@@ -371,18 +392,22 @@ void ask_node_ip_address( GtkWidget *w,
     label = gtk_label_new(_("IP address:"));
     address = gtk_entry_new();
     gtk_entry_set_text(GTK_ENTRY(address), addrstr);
-#if (GTKVER == 3)
     hbox = gtk_grid_new();
     gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
     gtk_grid_attach(GTK_GRID(hbox), label, 0, 0, 1, 1);
     gtk_grid_attach_next_to(GTK_GRID(hbox), address, label, GTK_POS_RIGHT, 1, 1);
-#else
-    hbox = gtk_hbox_new(FALSE, 5);
-    gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
-    gtk_box_pack_start_defaults(GTK_BOX(hbox), label);
-    gtk_box_pack_start_defaults(GTK_BOX(hbox), address);
-#endif
 
+    if (!this_is_shiai()) {
+	gtk_grid_attach(GTK_GRID(hbox), gtk_label_new(_("Multicast")), 0, 1, 1, 1);
+	GtkWidget *multicast = gtk_check_button_new();
+	gtk_grid_attach(GTK_GRID(hbox), multicast, 1, 1, 1, 1);
+	if (myaddr == MULTICAST_ADDR) {
+	    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(multicast), TRUE);
+	}
+	g_signal_connect(G_OBJECT(multicast), "clicked",
+			 G_CALLBACK(multicast_cb), address);
+    }
+    
     if (connection_ok && node_ip_addr == 0) {
         gulong myaddr1 = ntohl(tmp_node_addr);
         g_snprintf(addrstr, sizeof(addrstr), "%s: %ld.%ld.%ld.%ld", _("(Connection OK)"),
@@ -393,14 +418,9 @@ void ask_node_ip_address( GtkWidget *w,
         label = gtk_label_new(_("(Connection OK)"));
     else
         label = gtk_label_new(_("(Connection broken)"));
-#if (GTKVER == 3)
     gtk_grid_attach_next_to(GTK_GRID(hbox), label, address, GTK_POS_RIGHT, 1, 1);
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
  		      hbox, TRUE, TRUE, 0);
-#else
-    gtk_box_pack_start_defaults(GTK_BOX(hbox), label);
-    gtk_box_pack_start_defaults(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox);
-#endif
     gtk_widget_show_all(dialog);
 
     g_signal_connect(G_OBJECT(dialog), "response",
@@ -649,10 +669,24 @@ struct message *put_to_rec_queue(volatile struct message *m)
     return ret;
 }
 
-gint send_msg(gint fd, struct message *msg)
+gint send_msg(gint fd, struct message *msg, gint mcastport)
 {
     gint i = 0, err = 0, k = 0, len;
     guchar out[1024], buf[512];
+
+    if (mcastport) {
+	struct sockaddr_in mcast_out;
+
+	memset((gchar*)&mcast_out, 0, sizeof(mcast_out));
+	mcast_out.sin_family = AF_INET;
+	mcast_out.sin_port = htons(mcastport);
+	mcast_out.sin_addr.s_addr = htonl(MULTICAST_ADDR);
+
+	if (sendto(fd, msg, sizeof(*msg), 0,
+		   (struct sockaddr *)(&mcast_out), sizeof(mcast_out)) < 0)
+	    perror("multicast send");
+	return sizeof(*msg);
+    }
 
     len = encode_msg(msg, buf, sizeof(buf));
     if (len < 0)
@@ -716,7 +750,7 @@ gpointer client_thread(gpointer args)
     fd_set read_fd, fds;
     gint old_port = get_port();
     struct message msg_out;
-    gboolean msg_out_ready;
+    gboolean msg_out_ready, multicast;
 
     for ( ; *((gboolean *)args) ; )   /* exit loop when flag is cleared */
     {
@@ -731,38 +765,84 @@ gpointer client_thread(gpointer args)
             tmp_node_addr = node_ip_addr;
         }
 
-        if ((comm_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
-            perror("serv socket");
-            g_print("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
-            g_thread_exit(NULL);    /* not required just good pratice */
-            return NULL;
-        }
-#if 0
-        int nodelayflag = 1;
-        if (setsockopt(comm_fd, IPPROTO_TCP, TCP_NODELAY,
-                       (void *)&nodelayflag, sizeof(nodelayflag))) {
-            g_print("CANNOT SET TCP_NODELAY\n");
-        }
-#endif
+	if (ntohl(tmp_node_addr) == MULTICAST_ADDR)
+	    multicast = TRUE;
+	else
+	    multicast = FALSE;
+	
+	if (multicast) {
+	    g_print("Multicast socket\n");
+	    if ((comm_fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
+		perror("client udp socket");
+		g_print("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
+		g_thread_exit(NULL);    /* not required just good pratice */
+		return NULL;
+	    }
+	} else {
+	    g_print("TCP socket\n");
+	    if ((comm_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
+		perror("client tcp socket");
+		g_print("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
+		g_thread_exit(NULL);    /* not required just good pratice */
+		return NULL;
+	    }
+	}
+
         memset(&node, 0, sizeof(node));
         node.sin_family      = AF_INET;
         node.sin_port        = htons(get_port());
         node.sin_addr.s_addr = tmp_node_addr;
 
-        if (connect(comm_fd, (struct sockaddr *)&node, sizeof(node))) {
-            closesocket(comm_fd);
-            g_usleep(1000000);
-            continue;
-        }
+	if (multicast) {
+	    struct ip_mreq mreq;
+	    gint reuse = 1;
+
+	    if (setsockopt(comm_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)) < 0) {
+		perror("setsockopt (SO_REUSEADDR)");
+	    }
+
+	    node.sin_port        = htons(MULTICAST_PORT_FROM_JS);
+	    node.sin_addr.s_addr = 0;
+	    if (bind(comm_fd, (struct sockaddr *)&node, sizeof(node)) == -1) {
+		perror("Multicast bind");
+		closesocket(comm_fd);
+		g_usleep(1000000);
+		continue;
+	    }
+
+	    memset(&mreq, 0, sizeof(mreq));
+	    mreq.imr_multiaddr.s_addr = htonl(MULTICAST_ADDR);
+	    mreq.imr_interface.s_addr = 0;
+	    if (setsockopt(comm_fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) == -1) {
+		perror("Multicast setsockopt");
+		closesocket(comm_fd);
+		g_usleep(1000000);
+		continue;
+	    }
+	} else {
+	    if (connect(comm_fd, (struct sockaddr *)&node, sizeof(node))) {
+		closesocket(comm_fd);
+		g_usleep(1000000);
+		continue;
+	    }
+	}
 
         g_print("Connection OK.\n");
 
-        /* send something to keep the connection open */
-        input_msg.type = MSG_DUMMY;
-        input_msg.sender = my_address;
-        input_msg.u.dummy.application_type = application_type();
-        send_msg(comm_fd, &input_msg);
+	/* send something to keep the connection open */
+	input_msg.type = MSG_DUMMY;
+	input_msg.sender = my_address;
+	input_msg.u.dummy.application_type = application_type();
+	send_msg(comm_fd, &input_msg, multicast ? MULTICAST_PORT_TO_JS : 0);
 
+#if (APP_NUM == APPLICATION_TYPE_INFO)	
+	struct message msg;
+	msg.type = MSG_ALL_REQ;
+	msg.sender = my_address;
+	send_packet(&msg);
+	g_print("JudoInfo connection ok: requesting all\n");
+#endif
+	
         connection_ok = TRUE;
 
         FD_ZERO(&read_fd);
@@ -789,11 +869,7 @@ gpointer client_thread(gpointer args)
             // Mutex may be locked for a long time if there are network problems
             // during send. Thus we send a copy to unlock the mutex immediatelly.
             msg_out_ready = FALSE;
-#if (GTKVER == 3)
             G_LOCK(send_mutex);
-#else
-            g_static_mutex_lock(&send_mutex);
-#endif
             if (msg_queue_get != msg_queue_put) {
                 msg_out = msg_to_send[msg_queue_get];
                 msg_queue_get++;
@@ -801,13 +877,10 @@ gpointer client_thread(gpointer args)
                     msg_queue_get = 0;
                 msg_out_ready = TRUE;
             }
-#if (GTKVER == 3)
             G_UNLOCK(send_mutex);
-#else
-            g_static_mutex_unlock(&send_mutex);
-#endif
+
             if (msg_out_ready)
-                send_msg(comm_fd, &msg_out);
+                send_msg(comm_fd, &msg_out, multicast ? MULTICAST_PORT_TO_JS : 0);
 
             if (r <= 0)
                 continue;
@@ -818,47 +891,52 @@ gpointer client_thread(gpointer args)
                 static gboolean escape = FALSE;
                 static guchar p[512];
 
-                if ((n = recv(comm_fd, (char *)inbuf, sizeof(inbuf), 0)) > 0) {
-                    gint i;
-                    for (i = 0; i < n; i++) {
-                        guchar c = inbuf[i];
-                        if (c == COMM_ESCAPE) {
-                            escape = TRUE;
-                        } else if (escape) {
-                            if (c == COMM_FF) {
-                                if (ri < sizeof(p))
-                                    p[ri++] = COMM_ESCAPE;
-                            } else if (c == COMM_BEGIN) {
-                                ri = 0;
-                                memset(p, 0, sizeof(p));
-                            } else if (c == COMM_END) {
-				decode_msg(&m, p, ri);
-                                if (msg_accepted(&m)) {
-#if (GTKVER == 3)
-                                    G_LOCK(rec_mutex);
-#else
-                                    g_static_mutex_lock(&rec_mutex);
-#endif
-                                    rec_msgs[rec_msg_queue_put] = m;
-                                    rec_msg_queue_put++;
-                                    if (rec_msg_queue_put >= MSG_QUEUE_LEN)
-                                        rec_msg_queue_put = 0;
-#if (GTKVER == 3)
-                                    G_UNLOCK(rec_mutex);
-#else
-                                    g_static_mutex_unlock(&rec_mutex);
-#endif
-                                }
-                            } else {
-                                g_print("Wrong char 0x%02x after esc!\n", c);
-                            }
-                            escape = FALSE;
-                        } else if (ri < sizeof(p)) {
-                            p[ri++] = c;
-                        }
-                    }
-                } else
-                    break;
+		if (multicast) {
+		    if ((n = recv(comm_fd, &m, sizeof(m), 0)) > 0) {
+			if (msg_accepted(&m)) {
+			    G_LOCK(rec_mutex);
+			    rec_msgs[rec_msg_queue_put] = m;
+			    rec_msg_queue_put++;
+			    if (rec_msg_queue_put >= MSG_QUEUE_LEN)
+				rec_msg_queue_put = 0;
+			    G_UNLOCK(rec_mutex);
+			}
+		    }
+		} else {
+		    if ((n = recv(comm_fd, (char *)inbuf, sizeof(inbuf), 0)) > 0) {
+			gint i;
+			for (i = 0; i < n; i++) {
+			    guchar c = inbuf[i];
+			    if (c == COMM_ESCAPE) {
+				escape = TRUE;
+			    } else if (escape) {
+				if (c == COMM_FF) {
+				    if (ri < sizeof(p))
+					p[ri++] = COMM_ESCAPE;
+				} else if (c == COMM_BEGIN) {
+				    ri = 0;
+				    memset(p, 0, sizeof(p));
+				} else if (c == COMM_END) {
+				    decode_msg(&m, p, ri);
+				    if (msg_accepted(&m)) {
+					G_LOCK(rec_mutex);
+					rec_msgs[rec_msg_queue_put] = m;
+					rec_msg_queue_put++;
+					if (rec_msg_queue_put >= MSG_QUEUE_LEN)
+					    rec_msg_queue_put = 0;
+					G_UNLOCK(rec_mutex);
+				    }
+				} else {
+				    g_print("Wrong char 0x%02x after esc!\n", c);
+				}
+				escape = FALSE;
+			    } else if (ri < sizeof(p)) {
+				p[ri++] = c;
+			    }
+			} // for
+		    } else
+			break;
+		}
             }
         } // while
 

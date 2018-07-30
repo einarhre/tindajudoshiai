@@ -380,7 +380,7 @@ gpointer master_thread(gpointer args)
                 if (connections[i].fd == 0)
                     continue;
 
-                if (send_msg(connections[i].fd, (struct message *)&message_queue[msg_get]) < 0) {
+                if (send_msg(connections[i].fd, (struct message *)&message_queue[msg_get], 0) < 0) {
                     perror("sendto");
                     g_print("Node cannot send: conn=%d fd=%d\n", i, connections[i].fd);
                 }

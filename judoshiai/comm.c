@@ -76,6 +76,8 @@ static struct {
     gchar ssdp_info[SSDP_INFO_LEN];
 } noconnections[NUM_CONNECTIONS];
 
+static SOCKET mcast_out_fd;
+
 //static volatile struct message message_queue[MSG_QUEUE_LEN];
 //static volatile gint msg_put = 0, msg_get = 0;
 //static GStaticMutex msg_mutex = G_STATIC_MUTEX_INIT;
@@ -106,9 +108,11 @@ void send_info_packet(struct message *msg)
 		if (connections[i].websock_ok)
 		    websock_send_msg(connections[i].fd, msg);
 	    } else
-		send_msg(connections[i].fd, msg);
+		send_msg(connections[i].fd, msg, 0);
 	}
     }
+
+    send_msg(mcast_out_fd, msg, MULTICAST_PORT_FROM_JS);
 }
 
 void add_client_ssdp_info(gchar *rec, struct sockaddr_in *client)
@@ -165,7 +169,7 @@ void add_client_ssdp_info(gchar *rec, struct sockaddr_in *client)
 gchar *other_info(gint num)
 {
     guint addr = ntohl(others[num].addr);
-    static gchar buf[100];
+    static gchar buf[256];
 
     if (others[num].time + 10 > time(NULL)) {
         snprintf(buf, sizeof(buf), "%s - %s - %s (%d.%d.%d.%d)",
@@ -776,7 +780,7 @@ gchar *xml = "<?xml version=\"1.0\"?>\n"
 
 gpointer node_thread(gpointer args)
 {
-    SOCKET node_fd, tmp_fd, websock_fd;
+    SOCKET node_fd, tmp_fd, websock_fd, mcast_in_fd;
     socklen_t alen;
     struct sockaddr_in my_addr, caller;
     gint reuse = 1;
@@ -835,6 +839,42 @@ gpointer node_thread(gpointer args)
         return NULL;
     }
 
+    /* Multicast out socket */
+    if ((mcast_out_fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
+        perror("multicast out socket");
+        g_thread_exit(NULL);    /* not required just good pratice */
+        return NULL;
+    }
+
+    /* Multicast in socket */
+    if ((mcast_in_fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
+        perror("multicast in socket");
+        g_thread_exit(NULL);    /* not required just good pratice */
+        return NULL;
+    }
+
+    if (setsockopt(mcast_in_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)) < 0) {
+        perror("setsockopt (SO_REUSEADDR)");
+    }
+
+    struct sockaddr_in mc_addr;
+    struct ip_mreq mreq;
+
+    memset(&mc_addr, 0, sizeof(mc_addr));
+    mc_addr.sin_family      = AF_INET;
+    mc_addr.sin_port        = htons(MULTICAST_PORT_TO_JS);
+    mc_addr.sin_addr.s_addr = htonl(MULTICAST_ADDR);
+    if (bind(mcast_in_fd, (struct sockaddr *)&mc_addr, sizeof(mc_addr)) == -1) {
+	perror("Multicast addr bind");
+    }
+
+    memset(&mreq, 0, sizeof(mreq));
+    mreq.imr_multiaddr.s_addr = htonl(MULTICAST_ADDR);
+    mreq.imr_interface.s_addr = 0;
+    if (setsockopt(mcast_in_fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) == -1) {
+	perror("Multicast setsockopt");
+    }
+
     /***/
 
     listen(node_fd, 5);
@@ -843,6 +883,7 @@ gpointer node_thread(gpointer args)
     FD_ZERO(&read_fd);
     FD_SET(node_fd, &read_fd);
     FD_SET(websock_fd, &read_fd);
+    FD_SET(mcast_in_fd, &read_fd);
 
     for ( ; *((gboolean *)args) ; )   /* exit loop when flag is cleared */
     {
@@ -900,7 +941,7 @@ gpointer node_thread(gpointer args)
 		    if (connections[i].websock_ok)
 			ret = websock_send_msg(connections[i].fd, &msg_out);
 		} else
-		    ret = send_msg(connections[i].fd, &msg_out);
+		    ret = send_msg(connections[i].fd, &msg_out, 0);
 
                 if (ret < 0) {
                     perror("sendto");
@@ -913,6 +954,8 @@ gpointer node_thread(gpointer args)
                 }
                 msg_out_start_time = 0;
             }
+
+	    send_msg(mcast_out_fd, &msg_out, MULTICAST_PORT_FROM_JS);
 
 	    gettimeofday(&cpu_end, NULL);
 	    cpu_diff = cpu_end.tv_usec - cpu_start.tv_usec;
@@ -995,7 +1038,15 @@ gpointer node_thread(gpointer args)
             FD_SET(tmp_fd, &read_fd);
         }
 
-        for (i = 0; i < NUM_CONNECTIONS; i++) {
+	if (FD_ISSET(mcast_in_fd, &fds)) {
+	    struct message msg;
+            r = recv(mcast_in_fd, &msg, sizeof(msg), 0);
+            if (r > 0) {
+		put_to_rec_queue(&msg);
+	    }
+	}
+
+	for (i = 0; i < NUM_CONNECTIONS; i++) {
             static guchar inbuf[2000];
 
             if (connections[i].fd == 0)

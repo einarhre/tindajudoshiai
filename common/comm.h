@@ -70,6 +70,10 @@
 #define WEBSOCK_PORT   2315
 #define SERIAL_PORT    2316
 
+#define MULTICAST_ADDR 0xe0013a01 // 244.1.58.1
+#define MULTICAST_PORT_FROM_JS 12310
+#define MULTICAST_PORT_TO_JS   12311
+
 #define COMM_VERSION 4
 
 #define APPLICATION_TYPE_UNKNOWN 0
@@ -484,7 +488,7 @@ extern char ssdp_id[64];
 /* comm.c */
 extern void open_comm_socket(void);
 extern void send_packet(struct message *msg);
-extern int send_msg(int fd, struct message *msg);
+extern int send_msg(int fd, struct message *msg, gint mcastport);
 extern int msg_accepted(struct message *m);
 extern int keep_connection(void);
 extern int get_port(void);
