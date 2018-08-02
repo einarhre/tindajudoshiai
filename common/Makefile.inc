@@ -135,9 +135,6 @@ CFLAGS = $(WARNINGS) -g \
   -I$(DEVELDIR)/include \
   -I$(DEVELDIR)/include/libpng14   \
   -I$(DEVELDIR)/include/cairo \
-  -I$(DEVELDIR)/include/freetype2 \
-  -I$(DEVELDIR)/include \
-  -I$(DEVELDIR)/include/libpng14   \
   -I$(DEVELDIR)/include/gdk-pixbuf-2.0 \
   -I$(WIN32DIR)/w32api/include \
   -I$(RSVGDIR)/include/librsvg-2.0 \
@@ -193,9 +190,6 @@ else
     -I$(DEVELDIR)/include \
     -I$(DEVELDIR)/include/libpng14   \
     -I$(DEVELDIR)/include/cairo \
-    -I$(DEVELDIR)/include/freetype2 \
-    -I$(DEVELDIR)/include \
-    -I$(DEVELDIR)/include/libpng14   \
     -I$(DEVELDIR)/include/gdk-pixbuf-2.0 \
     -I/opt/win32/w32api/include \
     -I/opt/win32/rsvg/include/librsvg-2.0 \
