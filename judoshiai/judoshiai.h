@@ -460,6 +460,7 @@ enum default_drawing_system {
     DRAW_POLISH,
     DRAW_SLOVAKIAN,
     DRAW_UKRAINIAN,
+    DRAW_GERMAN,
     NUM_DRAWS
 };
 
