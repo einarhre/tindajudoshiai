@@ -422,6 +422,34 @@ gint avl_get_competitor_status(gint index)
     return 0;
 }
 
+void avl_set_competitor_info_sent(gint index, gboolean sent)
+{
+    struct competitor_data data, *data1;
+
+    if (!competitors_tree)
+        return;
+
+    data.index = index;
+    if (avl_get_by_key(competitors_tree, &data, (void **)&data1) == 0) {
+        data1->info_sent = sent;
+    }
+}
+
+gboolean avl_get_competitor_info_sent(gint index)
+{
+    struct competitor_data data, *data1;
+
+    if (!competitors_tree)
+        return FALSE;
+
+    data.index = index;
+    if (avl_get_by_key(competitors_tree, &data, (void **)&data1) == 0) {
+        return data1->info_sent;
+    }
+
+    return FALSE;
+}
+
 void avl_set_competitor_position(gint index, gint position)
 {
     struct competitor_data data, *data1;

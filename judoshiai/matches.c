@@ -2284,8 +2284,35 @@ void send_packet_cache(struct message *msg)
 }
 #endif
 
+void send_name_info(gint index)
+{
+    struct message msg;
+
+    if (avl_get_competitor_info_sent(index))
+	return;
+
+    struct judoka *j = get_data(index);
+    if (!j)
+	return;
+    
+    memset(&msg, 0, sizeof(msg));
+    msg.type = MSG_NAME_INFO;
+    msg.u.name_info.index = index;
+    strncpy(msg.u.name_info.last, j->last, sizeof(msg.u.name_info.last)-1);
+    strncpy(msg.u.name_info.first, j->first, sizeof(msg.u.name_info.first)-1);
+    strncpy(msg.u.name_info.club, get_club_text(j, CLUB_TEXT_ABBREVIATION),
+	    sizeof(msg.u.name_info.club)-1);
+    send_packet(&msg);
+    free_judoka(j);
+
+    avl_set_competitor_info_sent(index, TRUE);
+}
+
 void fill_match_info(struct message *msg, gint tatami, gint pos, struct match *m)
 {
+    send_name_info(m->blue);
+    send_name_info(m->white);
+
     msg->u.match_info_11.info[pos].tatami   = tatami;
     msg->u.match_info_11.info[pos].position = pos;
     msg->u.match_info_11.info[pos].category = m->category;

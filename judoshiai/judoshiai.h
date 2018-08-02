@@ -686,6 +686,7 @@ struct competitor_data {
     gint hash;
     gint status;
     gint position;
+    gboolean info_sent;
 };
 
 struct club_data {
@@ -1235,6 +1236,8 @@ extern void avl_reset_competitor_last_match_time(gint index);
 extern time_t avl_get_competitor_last_match_time(gint index);
 extern void avl_set_competitor_status(gint index, gint status);
 extern gint avl_get_competitor_status(gint index);
+extern void avl_set_competitor_info_sent(gint index, gboolean sent);
+extern gboolean avl_get_competitor_info_sent(gint index);
 extern void avl_set_competitor_position(gint index, gint position);
 extern gint avl_get_competitor_position(gint index);
 extern void avl_init_competitor_position(void);
