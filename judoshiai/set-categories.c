@@ -791,7 +791,7 @@ gint find_age_index_by_age(gint age, gint gender)
     return age_ix;
 }
 
-static gint find_weight_index(gint ageix, const gchar *category)
+gint find_weight_index(gint ageix, const gchar *category)
 {
     gint i;
 

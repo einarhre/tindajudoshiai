@@ -987,6 +987,10 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
         gchar *country = db_get_data(0, "country");
         gchar *cat = db_get_data(0, "regcategory");
         gchar *realcat = db_get_data(0, "category");
+        gint catidx = find_age_index(realcat);
+        gint weightidx = find_weight_index(catidx,realcat);
+        gchar *agecat = category_definitions[catidx].agetext;
+        gchar *weightcat = category_definitions[catidx].weights[weightidx].weighttext;
         gchar *ix = db_get_data(0, "index");
         gchar *id = db_get_data(0, "id");
         gchar *weight = db_get_data(0, "weight");
@@ -1037,6 +1041,10 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
                         d += sprintf(buf + d, "%s", cat);
                     else if (IS_STR("%REALCATEGORY%"))
                         d += sprintf(buf + d, "%s", realcat);
+                    else if (IS_STR("%AGECAT%"))
+                        d += sprintf(buf + d, "%s", agecat);
+                    else if (IS_STR("%WEIGHTCAT%"))
+                        d += sprintf(buf + d, "%s", weightcat);
                     else if (IS_STR("%LAST%"))
                         d += sprintf(buf + d, "%s", last);
                     else if (IS_STR("%FIRST%"))

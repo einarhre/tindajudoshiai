@@ -85,6 +85,8 @@
 #
 # %REGCATEGORY%       Name of the category the competitor registered.
 # %REALCATEGORY%      Name of the category the competitor really participates.
+# %AGECAT%            Only the age text part of the real category.
+# %WEIGHTCAT%         Only the weight text part of the real category.
 # %LAST%              Last name.
 # %FIRST%             First name.
 # %CLUB%              Name of the club.
