@@ -1555,6 +1555,9 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_cell_data_func(col, renderer, last_name_cell_data_func, NULL, NULL);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_LAST_NAME);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 50);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
     /* --- Column first name --- */
 
@@ -1571,7 +1574,9 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_cell_data_func(col, renderer, first_name_cell_data_func, NULL, NULL);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_FIRST_NAME);
-
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
     /* --- Column birthyear name --- */
 
@@ -1587,7 +1592,10 @@ static GtkWidget *create_view_and_model(void)
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
     gtk_tree_view_column_set_cell_data_func(col, renderer, birthyear_cell_data_func, NULL, NULL);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
-
+    gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_BIRTHYEAR);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
     /* --- Column belt --- */
 
@@ -1602,6 +1610,9 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_cell_data_func(col, renderer, belt_cell_data_func, NULL, NULL);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_BELT);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
     /* --- Column club --- */
 
@@ -1617,6 +1628,9 @@ static GtkWidget *create_view_and_model(void)
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_CLUB);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
     /* --- Column country --- */
 
@@ -1632,6 +1646,9 @@ static GtkWidget *create_view_and_model(void)
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_COUNTRY);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
     /* --- Column regcategory --- */
 
@@ -1647,6 +1664,9 @@ static GtkWidget *create_view_and_model(void)
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_WCLASS);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
     /* --- Column weight --- */
 
@@ -1661,6 +1681,9 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_cell_data_func(col, renderer, weight_cell_data_func, NULL, NULL);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_WEIGHT);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
     /* --- Column id --- */
 
@@ -1673,6 +1696,9 @@ static GtkWidget *create_view_and_model(void)
                                                               NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_ID);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
   /* --- Column seeding --- */
 
@@ -1687,6 +1713,9 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_cell_data_func(col, renderer, seeding_cell_data_func, NULL, NULL);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_SEEDING);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
   /* --- Column clubseeding --- */
 
@@ -1701,6 +1730,9 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_cell_data_func(col, renderer, seeding_cell_data_func, (gpointer)1, NULL);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_CLUBSEEDING);
+    gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+    gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+    gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
 
     /*****/
 
