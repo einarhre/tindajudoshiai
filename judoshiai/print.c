@@ -1109,11 +1109,13 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
             } else {
 #ifdef USE_PANGO
 		gdouble _x = 0, _y = 0;
+		PangoFontDescription *desc = pango_font_description_from_string(wn_texts[t].font);
 		write_text(pd->c, buf, &_x, &_y, NULL, NULL,
-			   wn_texts[t].align, -1, NULL,
+			   wn_texts[t].align, -1, desc,
 			   wn_texts[t].size,
 			   (wn_texts[t].weight == CAIRO_FONT_WEIGHT_BOLD ? TEXT_BOLD : 0) |
 			   (wn_texts[t].slant == CAIRO_FONT_SLANT_ITALIC ? TEXT_ITALIC : 0));
+		pango_font_description_free(desc);
 #else
                 if (wn_texts[t].align != -1.0) {
                     cairo_text_extents(pd->c, buf, &extents);
