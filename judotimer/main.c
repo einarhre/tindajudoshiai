@@ -21,6 +21,8 @@
 #endif
 
 #ifdef WIN32
+#include <winsock2.h>
+#include <windows.h>
 #include <process.h>
 //#include <glib/gwin32.h>
 #else
@@ -1206,7 +1208,10 @@ void voting_result(GtkWidget *w,
         set_text(MY_LABEL(comment), "");
         break;
     }
+
     expose_label(NULL, comment);
+    if (big_dialog)
+        show_big();
 
     if (checkippon)
 	set_hantei_winner(ptr_to_gint(data));
