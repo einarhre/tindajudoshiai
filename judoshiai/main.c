@@ -265,7 +265,7 @@ void open_shiai_display(void)
     SYS_LOG_INFO("%s %s", _("Tournament"), database_name);
 
     if (r == 55555)
-        properties(NULL, NULL);
+        open_properties(NULL, NULL);
 }
 
 #if 0
@@ -455,7 +455,6 @@ ok:
 
     g_free(file);
     /*--------------------------------------------------------*/
-
 
     wait_cursor = gdk_cursor_new(GDK_WATCH);
 

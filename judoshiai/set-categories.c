@@ -295,82 +295,82 @@ struct offial_category official_categories[NUM_DRAWS][2][10] = {
             {
                 "SenH", 1000, 240, 0, 240, // name, max age, match gs rest times
                 {{60000, "60"}, {66000, "66"}, {73000, "73"},
-                 {81000, "81"}, {90000, "90"}, {100000, "100"}, {1000000, "+100"},
+                 {81000, "81"}, {90000, "90"}, {100000, "100"},
 		 {0, NULL}}
             }, {
                 "U21H", 20, 240, 0, 240, // name, max age, match gs rest times
                 {{55000, "55"}, {60000, "60"}, {66000, "66"}, {73000, "73"},
-                 {81000, "81"}, {90000, "90"}, {100000, "100"}, {1000000, "+100"},
+                 {81000, "81"}, {90000, "90"}, {100000, "100"},
 		 {0, NULL}}
             }, {
                 "U18G", 17, 240, 0, 240, // name, max age, match gs rest times
                 {{46000, "46"}, {50000, "50"}, {55000, "55"}, {60000, "60"},
                  {66000, "66"}, {73000, "73"}, {81000, "81"}, {90000, "90"},
-		 {1000000, "+90"}, {0, NULL}}
+		 {0, NULL}}
             }, {
                 "U15G", 14, 180, 0, 180, // name, max age, match gs rest times
                 {{34000, "34"}, {38000, "38"}, {42000, "42"}, {46000, "46"},
                  {50000, "50"}, {55000, "55"}, {60000, "60"}, {66000, "66"},
-		 {1000000, "+66"}, {0, NULL}}
+		 {0, NULL}}
             },{
-                "U13G", 12, 120, 0, 120, // name, max age, match gs rest times
+                "U13G", 12, 120, 0, 0, // name, max age, match gs rest times
                 {{24000, "24"}, {27000, "27"}, {30000, "30"}, {34000, "34"},
                  {38000, "38"}, {42000, "42"}, {46000, "46"}, {50000, "50"},
-		 {1000000, "+50"}, {0, NULL}}
+		 {0, NULL}}
             }, {
-                "U11G", 10, 120, 0, 120, // name, max age, match gs rest times
+                "U11G", 10, 120, 0, 0, // name, max age, match gs rest times
                 {{24000, "24"}, {27000, "27"}, {30000, "30"}, {34000, "34"},
                  {38000, "38"}, {42000, "42"}, {46000, "46"}, {50000, "50"},
-		 {1000000, "+50"}, {0, NULL}}
+		 {0, NULL}}
             }, {
-                "U9G", 8, 120, 0, 120, // name, max age, match gs rest times
-                {{100000, "-100"}, {1000000, "+100"}, {0, NULL}}
+                "U9G", 8, 120, 0, 0, // name, max age, match gs rest times
+                {{100000, "-100"}, {0, NULL}}
             }, {
-                "U7G", 6, 120, 0, 120, // name, max age, match gs rest times
-                {{100000, "-100"}, {1000000, "+100"}, {0, NULL}}
+                "U7G", 6, 120, 0, 0, // name, max age, match gs rest times
+                {{100000, "-100"}, {0, NULL}}
             }, {
                 "ÅpenH", 1000, 240, 0, 240, // name, max age, match gs rest times
-                {{73000, "-73"}, {1000000, ""}, {0, NULL}}
+                {{73000, "73"}, {0, NULL}}
             }, { NULL, 0, 0, 0, 0, {{0, NULL}}}
         }, { // women
             {
                 "SenD", 1000, 240, 0, 240, // name, max age, match gs rest times
                 {{48000, "48"}, {52000, "52"}, {57000, "57"},
-                 {63000, "63"}, {70000, "70"}, {78000, "78"}, {1000000, "+78"},
+                 {63000, "63"}, {70000, "70"}, {78000, "78"},
 		 {0, NULL}}
             }, {
                 "U21D", 20, 240, 0, 240, // name, max age, match gs rest times
                 {{48000, "48"}, {52000, "52"}, {57000, "57"},
-                 {63000, "63"}, {70000, "70"}, {78000, "78"}, {1000000, "+78"},
+                 {63000, "63"}, {70000, "70"}, {78000, "78"},
 		 {0, NULL}}
             }, {
                 "U18J", 17, 240, 0, 240, // name, max age, match gs rest times
                 {{40000, "40"}, {44000, "44"}, {48000, "48"}, {52000, "52"}, {57000, "57"},
-                 {63000, "63"}, {70000, "70"}, {1000000, "+70"}, {0, NULL}}
+                 {63000, "63"}, {70000, "70"}, {0, NULL}}
             }, {
                 "U15J", 14, 180, 0, 180, // name, max age, match gs rest times
                 {{32000, "32"}, {36000, "36"}, {40000, "40"}, {44000, "44"},
                  {48000, "48"}, {52000, "52"}, {57000, "57"}, {63000, "63"},
-		 {1000000, "+63"}, {0, NULL}}
+		 {0, NULL}}
             },{
-                "U13J", 12, 120, 0, 120, // name, max age, match gs rest times
+                "U13J", 12, 120, 0, 0, // name, max age, match gs rest times
                 {{24000, "24"}, {27000, "27"}, {30000, "30"}, {34000, "34"},
                  {38000, "38"}, {42000, "42"}, {46000, "46"}, {50000, "50"},
-		 {1000000, "+50"}, {0, NULL}}
+		 {0, NULL}}
             }, {
-                "U11J", 10, 120, 0, 120, // name, max age, match gs rest times
+                "U11JG", 10, 120, 0, 0, // name, max age, match gs rest times
                 {{24000, "24"}, {27000, "27"}, {30000, "30"}, {34000, "34"},
                  {38000, "38"}, {42000, "42"}, {46000, "46"}, {50000, "50"},
-		 {1000000, "+50"}, {0, NULL}}
+		 {0, NULL}}
             }, {
-                "U9J", 8, 120, 0, 120, // name, max age, match gs rest times
-                {{100000, "-100"}, {1000000, "+100"}, {0, NULL}}
+                "U9J", 8, 120, 0, 0, // name, max age, match gs rest times
+                {{100000, "100"}, {0, NULL}}
             }, {
-                "U7J", 6, 120, 0, 120, // name, max age, match gs rest times
-                {{100000, "-100"}, {1000000, "+100"}, {0, NULL}}
+                "U7J", 6, 120, 0, 0, // name, max age, match gs rest times
+                {{100000, "100"}, {0, NULL}}
             }, {
                 "ÅpenD", 1000, 240, 0, 240, // name, max age, match gs rest times
-                {{63000, "-63"}, {1000000, ""}, {0, NULL}}
+                {{63000, "63"}, {0, NULL}}
             }, { NULL, 0, 0, 0, 0, {{0, NULL}}}
         }
     }, { // british
@@ -983,11 +983,6 @@ static void init_cat_data(void)
                 def.pin_time_yuko = 0;
                 def.pin_time_wazaari = 5;
                 def.pin_time_ippon = 15;
-            } else if (i == DRAW_NORWEGIAN) {
-                def.pin_time_koka = 0;
-                def.pin_time_yuko = 10;
-                def.pin_time_wazaari = 15;
-                def.pin_time_ippon = 20;
 	    } else if (prop_get_int_val(PROP_RULES_2017) ||
 		       prop_get_int_val(PROP_RULES_2018)) {
                 def.pin_time_koka = 0;
@@ -1159,12 +1154,22 @@ void set_categories_dialog(GtkWidget *w, gpointer arg)
     gtk_container_set_border_width(GTK_CONTAINER(scrolled_window2), 4);
     gtk_container_set_border_width(GTK_CONTAINER(scrolled_window3), 4);
 
+#if 1
+    GtkWidget *notebook = gtk_notebook_new();
+    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(notebook), GTK_POS_TOP);
+    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), scrolled_window1, gtk_label_new(_("Men")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), scrolled_window2, gtk_label_new(_("Women")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), scrolled_window3, gtk_label_new(_("Properties")));
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       notebook, TRUE, TRUE, 0);
+#else
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        scrolled_window1, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        scrolled_window2, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        scrolled_window3, FALSE, FALSE, 0);
+#endif
     vbox1 = gtk_grid_new();
     vbox2 = gtk_grid_new();
     optbox = gtk_grid_new();
@@ -1614,15 +1619,15 @@ void edit_category_dialog(gint ix, gboolean is_new_team)
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OK, GTK_RESPONSE_OK,
                                           NULL);
-
     scrolled_window = gtk_scrolled_window_new(NULL, NULL);
-    gtk_widget_set_size_request(scrolled_window, FRAME_WIDTH, 240 /*FRAME_HEIGHT*/);
+    gtk_widget_set_size_request(scrolled_window, FRAME_WIDTH, 280);
     gtk_container_set_border_width(GTK_CONTAINER(scrolled_window), 4);
     table = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(scrolled_window), table);
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-		       scrolled_window, FALSE, FALSE, 0);
+		       scrolled_window, TRUE, TRUE, 0);
 
+    
 #define ATTACH_TABLE(_what, _col, _row)				\
     gtk_grid_attach(GTK_GRID(table), _what, _col, _row, 1, 1)
 

@@ -500,6 +500,7 @@ enum properties {
     PROP_USE_PTS_10_3_1,
     PROP_USE_PTS_10_5_1,
     PROP_EXTRA_MATCH_IN_TEAMS_TIE,
+    PROP_IJF_TEAM_EVENT_JULY_2018_RULES,
     NUM_PROPERTIES
 };
 
@@ -1343,7 +1344,7 @@ extern gint get_svg_match_page(struct compsys systm, gint matchnum, gboolean inf
 
 /* properties */
 extern void init_property(gchar *prop, gchar *val);
-extern void properties(GtkWidget *w, gpointer data);
+extern void open_properties(GtkWidget *w, gpointer data);
 extern const gchar *get_prop_name(enum properties num);
 extern gint prop_get_int_val(gint name);
 extern gint prop_get_int_val_cat(gint name, gint ix);

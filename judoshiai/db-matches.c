@@ -77,6 +77,7 @@ static gint bluecomp, whitecomp, bluepts, whitepts;
 
 static gint team1_wins, team2_wins, no_team_wins, team1_pts, team2_pts;
 static gint team1_tot_time, team2_tot_time, team1_matches, team2_matches;
+static gint team_matches_total;
 static struct match team_last_match;
 static gboolean team_extra_exists;
 
@@ -573,6 +574,9 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
         if (m_static.white > COMPETITOR && (flags & DB_RESET_LAST_MATCH_TIME_W))
             avl_reset_competitor_last_match_time(m_static.white);
     } else if (flags & DB_FIND_TEAM_WINNER) {
+	if (m_static.blue_points != 11 && m_static.white_points != 11)
+	    team_matches_total++; // do not count draws
+
         if (m_static.blue_points && m_static.white_points == 0) {
             team1_wins++;
 	    if (m_static.number != 999) {
@@ -583,6 +587,7 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
 		}
 	    }
         }
+
         if (m_static.white_points && m_static.blue_points == 0) {
             team2_wins++;
 	    if (m_static.number != 999) {
@@ -593,9 +598,13 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
 		}
 	    }
         }
-        if (m_static.blue_points == 0 && m_static.white_points == 0) no_team_wins++;
+
+        if (m_static.blue_points == 0 && m_static.white_points == 0)
+	    no_team_wins++;
+
         if (m_static.blue > COMPETITOR && m_static.white > COMPETITOR)
 	    team_last_match = m_static;
+
 	if (m_static.number == 999)
 	    team_extra_exists = TRUE;
     } else if (flags & DB_PRINT_CAT_MATCHES) {
@@ -1924,16 +1933,27 @@ gboolean db_event_matches_update(guint category, struct match *last)
 {
     gint number = category >> MATCH_CATEGORY_SUB_SHIFT;
     gint category1 = category & MATCH_CATEGORY_MASK;
+    gboolean winner_found = FALSE;
+
     team1_wins = team2_wins = no_team_wins = team1_pts = team2_pts = 0;
     team1_tot_time = team2_tot_time = team1_matches = team2_matches = 0;
+    team_matches_total = 0;
     memset(&team_last_match, 0, sizeof(team_last_match));
     team_extra_exists = FALSE;
+
     db_exec_str(gint_to_ptr(DB_FIND_TEAM_WINNER), db_callback_matches,
                 "SELECT * FROM matches WHERE \"category\"=%d",
                 category);
+
     /*g_print("cat=%d/%d nowins=%d t1wins=%d/%d t2wins=%d/%d\n",
             category1, number,
             no_team_wins, team1_wins, team1_pts, team2_wins, team2_pts);*/
+
+    if (prop_get_int_val(PROP_IJF_TEAM_EVENT_JULY_2018_RULES)) {
+	// IJF does not care about points
+	team1_pts = team2_pts = 0;
+    }
+
     if (no_team_wins == 0 && team_extra_exists == FALSE &&
 	(team1_wins == team2_wins) && (team1_pts == team2_pts)) {
 	/* No matches left and equal result. One match more is required. */
@@ -1941,7 +1961,20 @@ gboolean db_event_matches_update(guint category, struct match *last)
 	return TRUE;
     }
 
-    if (no_team_wins || ((team1_wins == team2_wins) && (team1_pts == team2_pts))) {
+    if (prop_get_int_val(PROP_IJF_TEAM_EVENT_JULY_2018_RULES) &&
+	(team1_wins > team_matches_total/2 ||
+	 team2_wins > team_matches_total/2)) {
+	// The first team reaching the majority of wins is declared the winner
+	winner_found = TRUE;
+        db_exec_str(NULL, NULL,
+                    "UPDATE matches SET \"blue_points\"=11, \"white_points\"=11, "
+		    "\"time\"=0 "
+                    "WHERE \"category\"=%d AND \"blue_points\"=0 AND \"white_points\"=0",
+                    category);
+    }
+
+    if (!winner_found &&
+	(no_team_wins || ((team1_wins == team2_wins) && (team1_pts == team2_pts)))) {
         db_exec_str(NULL, NULL,
                     "UPDATE matches SET \"blue_points\"=0, \"white_points\"=0, "
 		    "\"time\"=0 "

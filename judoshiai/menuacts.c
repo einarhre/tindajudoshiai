@@ -35,7 +35,7 @@ void about_shiai( GtkWidget *w, gpointer data)
                            "name", "JudoShiai",
                            "title", "About JudoShiai",
                            "copyright", "Copyright 2006-2017 Hannu Jokinen",
-                           "version", SHIAI_VERSION,
+                           "version", full_version(),
                            "website", "http://sourceforge.net/projects/judoshiai/",
                            NULL);
 }
@@ -87,7 +87,7 @@ void new_shiai(GtkWidget *w, gpointer data)
         gtk_widget_destroy (dialog);
 
         open_shiai_display();
-        properties(NULL, NULL);
+        open_properties(NULL, NULL);
         set_match_col_titles();
         return;
     }

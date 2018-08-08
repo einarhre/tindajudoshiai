@@ -55,7 +55,7 @@ static GSList *points_group = NULL;
 static GtkWidget *properties_button = NULL;
 static void set_properties_button(GtkWidget *checkbox, gpointer arg);
 
-struct property {
+static struct property {
     gchar *name; // name in database
     gchar *label;
     gint type;
@@ -272,6 +272,12 @@ struct property {
     {
         .name = "ExtraMatchInTeamsPointsTie",
         .label = N_("Add extra match in teams points tie:"),
+        .type = PROP_TYPE_CHECK,
+	.action_func = set_properties_button,
+    },
+    {
+        .name = "IJFTeamEventJuly2018Rules",
+        .label = N_("IJF team event July 2018 rules:"),
         .type = PROP_TYPE_CHECK,
 	.action_func = set_properties_button,
     },
@@ -653,8 +659,8 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
             default_cats[4] = (struct default_cat){0, 8, 0, CAT_ESP_REPESCA_DOBLE};
             break;
         case DRAW_NORWEGIAN:
-            default_cats[2] = (struct default_cat){0, 6, 10, CAT_SYSTEM_DPOOL};
-            default_cats[3] = (struct default_cat){0, 8, 0, CAT_SYSTEM_DUBBELT_AATERKVAL};
+            default_cats[2] = (struct default_cat){0, 6, 8, CAT_SYSTEM_DPOOL};
+            default_cats[3] = (struct default_cat){0, 9, 0, CAT_SYSTEM_DEN_DOUBLE_ELIMINATION};
             break;
         case DRAW_BRITISH:
             default_cats[3] = (struct default_cat){0, 8, 0, CAT_SYSTEM_GBR_KNOCK_OUT};
@@ -735,7 +741,7 @@ static void update_match_order(void)
 
 #define NUM_TBLS 2
 
-void properties(GtkWidget *w, gpointer data)
+void open_properties(GtkWidget *w, gpointer data)
 {
     GtkWidget *dialog, *tmp, *reset;
 #if (GTKVER == 3)

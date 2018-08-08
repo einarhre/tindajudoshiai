@@ -42,7 +42,6 @@ extern void toggle_pool_style(gpointer callback_data,
                               guint callback_action, GtkWidget *menu_item);
 extern void toggle_belt_colors(gpointer callback_data, 
                                guint callback_action, GtkWidget *menu_item);
-extern void properties(GtkWidget *w, gpointer data);
 extern void get_from_old_competition(GtkWidget *w, gpointer data);
 extern void get_weights_from_old_competition(GtkWidget *w, gpointer data);
 extern void start_help(GtkWidget *w, gpointer data);
@@ -166,7 +165,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(tournament_new),        "activate", G_CALLBACK(new_shiai), 0);
     g_signal_connect(G_OBJECT(tournament_choose),     "activate", G_CALLBACK(open_shiai), 0);
     g_signal_connect(G_OBJECT(tournament_choose_net), "activate", G_CALLBACK(open_shiai_from_net), 0);
-    g_signal_connect(G_OBJECT(tournament_properties), "activate", G_CALLBACK(properties), 0);
+    g_signal_connect(G_OBJECT(tournament_properties), "activate", G_CALLBACK(open_properties), 0);
     g_signal_connect(G_OBJECT(tournament_backup),     "activate", G_CALLBACK(backup_shiai), 0);
     g_signal_connect(G_OBJECT(tournament_validation), "activate", G_CALLBACK(db_validation), 0);
     g_signal_connect(G_OBJECT(tournament_custom),     "activate", G_CALLBACK(select_custom_dir), 0);
