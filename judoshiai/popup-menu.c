@@ -336,6 +336,140 @@ void view_popup_menu_move_matches(GtkWidget *menuitem, gpointer userdata)
     gtk_widget_destroy(dialog);
 }
 
+
+static void random_select(gint num, GtkTextBuffer *msgwin)
+{
+    gint i, j;
+
+    for (i = 0; i < num; i++) {
+	if (num_selected_judokas == 0)
+	    return;
+
+	gint ix = rand()%num_selected_judokas;
+	gint sel = selected_judokas[ix];
+
+	for (j = ix; j < num_selected_judokas-1; j++) {
+	    selected_judokas[j] = selected_judokas[j+1];
+	}
+
+	num_selected_judokas--;
+
+	struct judoka *ju = get_data(sel);
+	if (!ju) continue;
+
+	gint maxweight = 0;
+	gchar catbuf[32];
+	g_strlcpy(catbuf, ju->category, sizeof(catbuf));
+	gchar *p = strrchr(catbuf, '-');
+	if (!p) maxweight = 0;
+	else maxweight = atoi(p+1)*1000*105/100;
+
+	gchar *name = g_strdup_printf("%s, %s", ju->last, ju->first);
+	show_msg(msgwin, "bold", "%8s: %-24s\t Max 5%%: %3d.%02d kg\n",
+		 ju->category, name,
+		 maxweight/1000, (maxweight%1000)/10);
+	g_free(name);
+	free_judoka(ju);
+    }
+}
+
+void view_popup_menu_random_weighin(GtkWidget *menuitem, gpointer userdata)
+{
+    GtkWidget *dialog;
+    GtkWidget *table = gtk_grid_new(), *num_w;
+    struct category_data *catdata = avl_get_category(ptr_to_gint(userdata));
+    GtkWidget *from_all, *from_each;
+
+    if (!catdata)
+	return;
+
+    gint status = catdata->match_status;
+
+    dialog = gtk_dialog_new_with_buttons (_("Random Weigh-In"),
+                                          GTK_WINDOW(main_window),
+                                          GTK_DIALOG_DESTROY_WITH_PARENT,
+                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                          GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+                                          NULL);
+
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Select")), 0, 0, 1, 1);
+    num_w = gtk_entry_new();
+    gtk_entry_set_width_chars(GTK_ENTRY(num_w), 3);
+    gtk_entry_set_text(GTK_ENTRY(num_w), "4");
+    gtk_grid_attach(GTK_GRID(table), num_w, 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("competitors from")), 2, 0, 1, 1);
+
+    from_each = gtk_radio_button_new_with_label_from_widget(NULL, _("each category"));
+    from_all = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(from_each), _("all categories"));
+    gtk_grid_attach(GTK_GRID(table), from_each, 3, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), from_all, 3, 1, 1, 1);
+
+    gtk_widget_show_all(table);
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       table, FALSE, FALSE, 0);
+
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+	gint num = atoi(gtk_entry_get_text(GTK_ENTRY(num_w)));
+	gboolean each = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(from_each));
+	gboolean ok;
+	GtkTreeIter iter;
+	GtkTreeSelection *selection =
+	    gtk_tree_view_get_selection(GTK_TREE_VIEW(current_view));
+
+	GtkTextBuffer *msgwin = message_window();
+
+	num_selected_judokas = 0;
+
+	ok = gtk_tree_model_get_iter_first(current_model, &iter);
+	while (ok) {
+	    if (gtk_tree_selection_iter_is_selected(selection, &iter)) {
+		gint index;
+		gboolean visible;
+
+		gtk_tree_model_get(current_model, &iter,
+				   COL_INDEX, &index,
+				   COL_VISIBLE, &visible,
+				   -1);
+
+		if (visible) {
+		    if (num_selected_judokas < TOTAL_NUM_COMPETITORS - 1)
+			selected_judokas[num_selected_judokas++] = index;
+		} else {
+		    GtkTreeIter iter2;
+		    gboolean ok2;
+
+		    if (each)
+			num_selected_judokas = 0;
+
+		    ok2 = gtk_tree_model_iter_children(current_model, &iter2, &iter);
+		    while (ok2) {
+			guint index2;
+
+			gtk_tree_model_get(current_model, &iter2,
+					   COL_INDEX, &index2,
+					   -1);
+
+			if (num_selected_judokas < TOTAL_NUM_COMPETITORS - 1)
+			    selected_judokas[num_selected_judokas++] = index2;
+
+			ok2 = gtk_tree_model_iter_next(current_model, &iter2);
+		    }
+
+		    if (each)
+			random_select(num, msgwin);
+		}
+	    } // if is selected
+	    ok = gtk_tree_model_iter_next(current_model, &iter);
+	} // while ok
+
+	if (!each)
+	    random_select(num, msgwin);
+    } // response accept
+
+    num_selected_judokas = 0;
+    gtk_widget_destroy(dialog);
+}
+
 static void change_display(GtkWidget *menuitem, gpointer userdata)
 {
     if (userdata)
@@ -645,6 +779,12 @@ void view_popup_menu(GtkWidget *treeview,
     menuitem = gtk_menu_item_new_with_label(_("Move Matches..."));
     g_signal_connect(menuitem, "activate",
                      (GCallback) view_popup_menu_move_matches, userdata);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
+    menuitem = gtk_menu_item_new_with_label(_("Random Weigh-In..."));
+    g_signal_connect(menuitem, "activate",
+                     (GCallback) view_popup_menu_random_weighin, userdata);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     gtk_widget_show_all(menu);
