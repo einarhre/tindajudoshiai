@@ -529,7 +529,7 @@ static inline char *full_version(void)
 	n += snprintf(buf+n, sizeof(buf)-n, " x86");
 #endif
 #ifdef WIN32
-    n += snprintf(buf+n, sizeof(buf)-n, " Windows");
+    n += snprintf(buf+n, sizeof(buf)-n, " Windows%s", TGTEXT_S);
 #else
     n += snprintf(buf+n, sizeof(buf)-n, " Linux");
 #endif

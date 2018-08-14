@@ -8,14 +8,15 @@ AppPublisher=Oh2ncp
 AppPublisherURL=http://oh2ncp.kolumbus.fi
 AppSupportURL=http://oh2ncp.kolumbus.fi
 AppUpdatesURL=http://oh2ncp.kolumbus.fi
-DefaultDirName={pf}\JudoShiai
-DefaultGroupName=JudoShiai
+DefaultDirName={pf}\JudoShiaiTGTEXT
+DefaultGroupName=JudoShiaiTGTEXT
 OutputDir=RELDIR
 OutputBaseFilename=judoshiai-setup
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
 PrivilegesRequired=none
+ARCHMODE
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

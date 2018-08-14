@@ -2,114 +2,160 @@ SHIAI_VER_NUM=2.7.2
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 
 ifndef JS_BUILD_DIR
-  ifeq ($(OS),Windows_NT)
-    JS_BUILD_DIR=C:/js-build
-  else
-    JS_BUILD_DIR=/home/$(USER)/js-build
-  endif
+    ifeq ($(OS),Windows_NT)
+        JS_BUILD_DIR=C:/js-build
+    else
+        JS_BUILD_DIR=/home/$(USER)/js-build
+    endif
 endif
 
 LASTPART := $(shell basename $(CURDIR))
-
 GTKVER=3
-
 OBJS=
-
 WARNINGS = -Wall -Wshadow
+JUDOPROXY=NO
+TOOL=NORMAL
+MXEDIR=/home/$(USER)/mxe/usr
+TGTEXT_S="\"?\""
 
 ### Target executable type ###
 ifeq ($(TARGETOS),WIN32)
-  TGT=WIN32
-else
-  ifeq ($(OS),Windows_NT)
     TGT=WIN32
-  else
-    TGT=LINUX
-    JUDOPROXY=YES
-  endif
+    TOOL=MXE
+    TGTEXT=32
+    TGTEXT_S="\"$(TGTEXT)\""
+else ifeq ($(TARGETOS),WIN64)
+    TGT=WIN32
+    TOOL=MXE
+    TGTEXT=64
+    TGTEXT_S="\"$(TGTEXT)\""
+else ifeq ($(TARGETOS),WINXP)
+    TGT=WIN32
+    TGTEXT=XP
+    TGTEXT_S="\"$(TGTEXT)\""
+else
+    ifeq ($(OS),Windows_NT)
+        TGT=WIN32
+        TGTEXT=NT
+        TGTEXT_S="\"$(TGTEXT)\""
+    else
+        TGT=LINUX
+        JUDOPROXY=YES
+    endif
 endif
 
 ####################################
 # Default directories and programs #
 ####################################
 
-#EMCC := $(shell command -v emcc 2> /dev/null)
-
-### Windows (host=Windows, target=Windows) ###
 ifeq ($(OS),Windows_NT)
-
-  ifndef WIN32_DIR
-    WIN32_DIR=/c/win32
-  endif
-  ifndef MINGW32_DIR
-    MINGW32_DIR=/c/MinGW
-  endif
-
-  CC=gcc
-  LD=gcc
-  LIBREOFFICE=soffice.exe
-
-  SUFF=.exe
-  ZIP=
-  DEVELDIR=$(WIN32_DIR)/gtk
-  SOUNDDIR=$(WIN32_DIR)/mpg123
-  RSVGDIR=$(WIN32_DIR)/rsvg
-  CURLDIR=$(WIN32_DIR)/curl
-  WEBKITDIR=$(WIN32_DIR)/webkitgtk
-  SOAPDIR=$(WIN32_DIR)/soup
-  RESHACKER=$(WIN32_DIR)/bin/ResHacker.exe
-  WINDRES=$(MINGW32_DIR)/bin/windres.exe
-  INNOSETUP="$(WIN32_DIR)/Inno Setup 5/ISCC.exe"
-  OBJDIR=obj-win32
-  RELEASEDIR=$(JS_BUILD_DIR)/release-win32
-
-else
-  ### Cross compilation (host=Linux, target=Windows) ###
-  ifeq ($(TARGETOS),WIN32)
+### Windows (host=Windows, target=Windows) ###
 
     ifndef WIN32_DIR
-      WIN32_DIR=/opt/win32
+        WIN32_DIR=/c/win32
+    endif
+    ifndef MINGW32_DIR
+        MINGW32_DIR=/c/MinGW
     endif
 
-    NEWCC := $(shell command -v i686-w64-mingw32-gcc 2> /dev/null)
-    ifdef NEWCC
-      CC=i686-w64-mingw32-gcc
-      LD=i686-w64-mingw32-gcc
-    else
-      CC=i586-mingw32msvc-gcc
-      LD=i586-mingw32msvc-gcc
-    endif
-    LIBREOFFICE=libreoffice
+    CC=gcc
+    LD=gcc
+    LIBREOFFICE=soffice.exe
 
     SUFF=.exe
-    ZIP=.zip
+    ZIP=
     DEVELDIR=$(WIN32_DIR)/gtk
     SOUNDDIR=$(WIN32_DIR)/mpg123
     RSVGDIR=$(WIN32_DIR)/rsvg
     CURLDIR=$(WIN32_DIR)/curl
     WEBKITDIR=$(WIN32_DIR)/webkitgtk
     SOAPDIR=$(WIN32_DIR)/soup
-    RESHACKER=wine "C:\\bin\\ResHacker.exe"
-    WINDRES=wine "/opt/win32/MinGW/bin/windres.exe"
-    INNOSETUP=wine "/opt/win32/Inno Setup 5/ISCC.exe"
+    RESHACKER=$(WIN32_DIR)/bin/ResHacker.exe
+    WINDRES=$(MINGW32_DIR)/bin/windres.exe
+    INNOSETUP="$(WIN32_DIR)/Inno Setup 5/ISCC.exe"
     OBJDIR=obj-win32
     RELEASEDIR=$(JS_BUILD_DIR)/release-win32
-### Linux ###
-  else
 
-    CC=gcc
-    LD=gcc
-    LIBREOFFICE=libreoffice
-    SUFF=
-    ZIP=
-    DEVELDIR=
-    RESHACKER=
-    WINDRES=
-    INNOSETUP=
-    OBJDIR=obj-linux
-    RELEASEDIR=$(JS_BUILD_DIR)/release-linux
+else
+### Compilation in Linux ###
 
-  endif
+    ifeq ($(TGT),WIN32)
+    # Common Windows definitions
+        SUFF=.exe
+        ZIP=.zip
+        RESHACKER=wine "C:\\bin\\ResHacker.exe"
+        INNOSETUP=wine "/opt/win32/Inno Setup 5/ISCC.exe"
+        LIBREOFFICE=libreoffice
+    endif
+
+    ifeq ($(TARGETOS),WINXP)
+    ### Cross compilation (host=Linux, target=WindowsXP) ###
+
+        WINDRES=wine "/opt/win32/MinGW/bin/windres.exe"
+        OBJDIR=obj-winxp
+        RELEASEDIR=$(JS_BUILD_DIR)/release-winxp
+
+        ifndef WIN32_DIR
+            WIN32_DIR=/opt/win32
+        endif
+
+        NEWCC := $(shell command -v i686-w64-mingw32-gcc 2> /dev/null)
+        ifdef NEWCC
+            CC=i686-w64-mingw32-gcc
+            LD=i686-w64-mingw32-gcc
+        else
+            CC=i586-mingw32msvc-gcc
+            LD=i586-mingw32msvc-gcc
+        endif
+
+        DEVELDIR=$(WIN32_DIR)/gtk
+        SOUNDDIR=$(WIN32_DIR)/mpg123
+        RSVGDIR=$(WIN32_DIR)/rsvg
+        CURLDIR=$(WIN32_DIR)/curl
+        WEBKITDIR=$(WIN32_DIR)/webkitgtk
+        SOAPDIR=$(WIN32_DIR)/soup
+
+    else ifeq ($(TOOL),MXE)
+    ### Cross compilation (host=Linux, target=Windows32/64) ###
+
+        ifeq ($(TARGETOS),WIN32)
+            # 32 bit Windows
+            OBJDIR=obj-win32
+            RELEASEDIR=$(JS_BUILD_DIR)/release-win32
+            MXE_CPU=i686
+        else
+            # 64 bit Windows
+            OBJDIR=obj-win64
+            RELEASEDIR=$(JS_BUILD_DIR)/release-win64
+            MXE_CPU=x86_64
+        endif
+
+        WARNINGS += -Wjump-misses-init
+        MXE_DYN=shared
+        WIN32_DIR=$(MXEDIR)
+        DEVELDIR=$(WIN32_DIR)/$(MXE_CPU)-w64-mingw32.$(MXE_DYN)
+        PKGCONFIG = PATH=$(WIN32_DIR)/bin:$(PATH) $(MXE_CPU)-w64-mingw32.$(MXE_DYN)-pkg-config
+        CC = PATH=$(WIN32_DIR)/bin:$(PATH) $(MXE_CPU)-w64-mingw32.$(MXE_DYN)-gcc
+        LD = PATH=$(WIN32_DIR)/bin:$(PATH) $(MXE_CPU)-w64-mingw32.$(MXE_DYN)-gcc
+        WINDRES = PATH=$(WIN32_DIR)/bin:$(PATH) $(MXE_CPU)-w64-mingw32.$(MXE_DYN)-windres
+
+    else
+    ### Linux ###
+
+        CC=gcc
+        LD=gcc
+        PKGCONFIG=pkg-config
+        LIBREOFFICE=libreoffice
+        SUFF=
+        ZIP=
+        DEVELDIR=
+        RESHACKER=
+        WINDRES=
+        INNOSETUP=
+        OBJDIR=obj-linux
+        RELEASEDIR=$(JS_BUILD_DIR)/release-linux
+    # end Linux
+    endif
 endif
 
 RELDIR=$(RELEASEDIR)/judoshiai
@@ -118,68 +164,13 @@ RELDIR=$(RELEASEDIR)/judoshiai
 # CFLAGS and LIBS #
 ###################
 
-### Windows (host=Windows, target=Windows) ###
 ifeq ($(OS),Windows_NT)
+### Windows (host=Windows, target=Windows) ###
 
-# -ggdb -gdwarf-2
-
-CFLAGS = $(WARNINGS) -g \
-  -I$(DEVELDIR)/include/gtk-$(GTKVER).0 \
-  -I$(DEVELDIR)/lib/gtk-$(GTKVER).0/include \
-  -I$(DEVELDIR)/include/atk-1.0 \
-  -I$(DEVELDIR)/include/cairo \
-  -I$(DEVELDIR)/include/pango-1.0 \
-  -I$(DEVELDIR)/include/glib-2.0 \
-  -I$(DEVELDIR)/lib/glib-2.0/include \
-  -I$(DEVELDIR)/include/freetype2 \
-  -I$(DEVELDIR)/include \
-  -I$(DEVELDIR)/include/libpng14   \
-  -I$(DEVELDIR)/include/cairo \
-  -I$(DEVELDIR)/include/gdk-pixbuf-2.0 \
-  -I$(WIN32DIR)/w32api/include \
-  -I$(RSVGDIR)/include/librsvg-2.0 \
-  -I$(CURLDIR)/include \
-  -I../common -mms-bitfields \
-  -DSHIAI_VERSION=$(SHIAI_VERSION) \
-  -DENABLE_NLS \
-  -DGTKVER=$(GTKVER) \
-  -DUSE_PANGO \
-  -Wno-deprecated-declarations
-
-  ifeq ($(JUDOPROXY),YES)
-    CFLAGS += -I$(WEBKITDIR)/include/webkitgtk-3.0 \
-         -I$(SOAPDIR)/include/libsoup-2.4
-  endif
-
-  LIBS=-L$(DEVELDIR)/lib $(DEVELDIR)/lib/glib-2.0.lib -L$(RSVGDIR)/bin \
-  -L$(DEVELDIR)/bin \
-  -lgtk-win32-$(GTKVER).0 -lgdk-win32-$(GTKVER).0 -latk-1.0 -lgio-2.0 -lgdk_pixbuf-2.0 \
-  -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 \
-  -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lcairo \
-  -lcroco-0.6-3 -lrsvg-2-2 -lxml2-2 \
-  -L$(CURLDIR)/bin -lcurl \
-  -L$(WIN32DIR)/w32api/lib -lws2_32 -mwindows
-  # To add console out:
-  # -mconsole
-
-  DLLS = $(DEVELDIR)/bin/libglib-2.0-0.dll $(DEVELDIR)/bin/libiconv-2.dll \
-         $(DEVELDIR)/bin/libintl-8.dll $(DEVELDIR)/bin/pthreadGC2.dll
-
-  ifeq ($(JUDOPROXY),YES)
-    LIBS += -L$(WEBKITDIR)/lib -lwebkitgtk-3.0.dll \
-       -L$(SOAPDIR)/lib -lsoup-2.4.dll
-  endif
-
-  ifeq ($(WINCOMP),new)
-    WARNINGS += -Wjump-misses-init
-  endif
-
-else
-### Cross compilation ###
-  ifeq ($(TARGETOS),WIN32)
+    # debug flags: -ggdb -gdwarf-2
 
     CFLAGS = $(WARNINGS) -g \
-    -I$(DEVELDIR)/include/gtk-$(GTKVER).0 \
+             -I$(DEVELDIR)/include/gtk-$(GTKVER).0 \
     -I$(DEVELDIR)/lib/gtk-$(GTKVER).0/include \
     -I$(DEVELDIR)/include/atk-1.0 \
     -I$(DEVELDIR)/include/cairo \
@@ -188,22 +179,22 @@ else
     -I$(DEVELDIR)/lib/glib-2.0/include \
     -I$(DEVELDIR)/include/freetype2 \
     -I$(DEVELDIR)/include \
-    -I$(DEVELDIR)/include/libpng14   \
+    -I$(DEVELDIR)/include/libpng14     \
     -I$(DEVELDIR)/include/cairo \
     -I$(DEVELDIR)/include/gdk-pixbuf-2.0 \
-    -I/opt/win32/w32api/include \
-    -I/opt/win32/rsvg/include/librsvg-2.0 \
-    -I/opt/win32/curl/include \
+    -I$(WIN32DIR)/w32api/include \
+    -I$(RSVGDIR)/include/librsvg-2.0 \
+    -I$(CURLDIR)/include \
     -I../common -mms-bitfields \
-    -DSHIAI_VERSION=$(SHIAI_VERSION) \
+    -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S) \
     -DENABLE_NLS \
     -DGTKVER=$(GTKVER) \
     -DUSE_PANGO \
     -Wno-deprecated-declarations
 
     ifeq ($(JUDOPROXY),YES)
-      CFLAGS += -I/opt/win32/webkitgtk/include/webkitgtk-3.0 \
-         -I/opt/win32/soup/include/libsoup-2.4
+        CFLAGS += -I$(WEBKITDIR)/include/webkitgtk-3.0 \
+                  -I$(SOAPDIR)/include/libsoup-2.4
     endif
 
     LIBS=-L$(DEVELDIR)/lib $(DEVELDIR)/lib/glib-2.0.lib -L$(RSVGDIR)/bin \
@@ -212,42 +203,98 @@ else
     -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 \
     -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lcairo \
     -lcroco-0.6-3 -lrsvg-2-2 -lxml2-2 \
-    -L/opt/win32/curl/bin -lcurl \
-    -L/opt/win32/w32api/lib -lws2_32 -mwindows
+    -L$(CURLDIR)/bin -lcurl \
+    -L$(WIN32DIR)/w32api/lib -lws2_32 -mwindows
     # To add console out:
     # -mconsole
 
-	DLLS = $(DEVELDIR)/bin/libglib-2.0-0.dll $(DEVELDIR)/bin/libiconv-2.dll \
-	       $(DEVELDIR)/bin/libintl-8.dll $(DEVELDIR)/bin/pthreadGC2.dll
+    DLLS = $(DEVELDIR)/bin/libglib-2.0-0.dll $(DEVELDIR)/bin/libiconv-2.dll \
+                 $(DEVELDIR)/bin/libintl-8.dll $(DEVELDIR)/bin/pthreadGC2.dll
 
     ifeq ($(JUDOPROXY),YES)
-      LIBS += -L/opt/win32/webkitgtk/lib -lwebkitgtk-3.0.dll \
-       -L/opt/win32/soup/lib -lsoup-2.4.dll
+        LIBS += -L$(WEBKITDIR)/lib -lwebkitgtk-3.0.dll \
+             -L$(SOAPDIR)/lib -lsoup-2.4.dll
     endif
 
-    ifeq ($(WINCOMP),new)
-      WARNINGS += -Wjump-misses-init
+else
+### Cross compilation ###
+
+    ifeq ($(TARGETOS),WINXP)
+    # WindowsXP
+        CFLAGS = $(WARNINGS) -g \
+                 -I$(DEVELDIR)/include/gtk-$(GTKVER).0 \
+                 -I$(DEVELDIR)/lib/gtk-$(GTKVER).0/include \
+                 -I$(DEVELDIR)/include/atk-1.0 \
+                 -I$(DEVELDIR)/include/cairo \
+                 -I$(DEVELDIR)/include/pango-1.0 \
+                 -I$(DEVELDIR)/include/glib-2.0 \
+                 -I$(DEVELDIR)/lib/glib-2.0/include \
+                 -I$(DEVELDIR)/include/freetype2 \
+                 -I$(DEVELDIR)/include \
+                 -I$(DEVELDIR)/include/libpng14   \
+                 -I$(DEVELDIR)/include/cairo \
+                 -I$(DEVELDIR)/include/gdk-pixbuf-2.0 \
+                 -I/opt/win32/w32api/include \
+                 -I/opt/win32/rsvg/include/librsvg-2.0 \
+                 -I/opt/win32/curl/include \
+                 -I../common -mms-bitfields \
+                 -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S) \
+                 -DENABLE_NLS \
+                 -DGTKVER=$(GTKVER) \
+                 -DUSE_PANGO \
+                 -Wno-deprecated-declarations
+
+        LIBS=-L$(DEVELDIR)/lib $(DEVELDIR)/lib/glib-2.0.lib -L$(RSVGDIR)/bin \
+             -L$(DEVELDIR)/bin \
+             -lgtk-win32-$(GTKVER).0 -lgdk-win32-$(GTKVER).0 -latk-1.0 -lgio-2.0 -lgdk_pixbuf-2.0 \
+             -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 \
+             -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lcairo \
+             -lcroco-0.6-3 -lrsvg-2-2 -lxml2-2 \
+             -L/opt/win32/curl/bin -lcurl \
+             -L/opt/win32/w32api/lib -lws2_32 -mwindows
+             # To add console out:
+             # -mconsole
+
+    else ifeq ($(TOOL),MXE)
+    ### Windows32/64 using mxe tools ###
+        CFLAGS = $(WARNINGS) -g \
+                 -I$(DEVELDIR)/include/gtk-$(GTKVER).0 \
+                 -I$(DEVELDIR)/include/atk-1.0 \
+                 -I$(DEVELDIR)/include/cairo \
+                 -I$(DEVELDIR)/include/pango-1.0 \
+                 -I$(DEVELDIR)/include/glib-2.0 \
+                 -I$(DEVELDIR)/lib/glib-2.0/include \
+                 -I$(DEVELDIR)/include/freetype2 \
+                 -I$(DEVELDIR)/include \
+                 -I$(DEVELDIR)/include/libpng16   \
+                 -I$(DEVELDIR)/include/cairo \
+                 -I$(DEVELDIR)/include/gdk-pixbuf-2.0 \
+                 -I$(DEVELDIR)/include/librsvg-2.0 \
+                 -I../common -mms-bitfields \
+                 -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S) \
+                 -DENABLE_NLS \
+                 -DGTKVER=$(GTKVER) \
+                 -DUSE_PANGO \
+                 -Wno-deprecated-declarations
+
+        LIBS=$(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0) \
+             $(shell $(DEVELDIR)/bin/curl-config --libs) -lws2_32 -mwindows
+
+    else
+    ### Linux ###
+        CFLAGS= -g $(WARNINGS) \
+                $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags gtk+-$(GTKVER).0) \
+                $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags cairo) \
+                $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags librsvg-2.0) \
+                $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags glib-2.0) \
+                -DENABLE_BINRELOC -DENABLE_NLS -DGTKVER=$(GTKVER) -DUSE_PANGO  \
+                -Wno-deprecated-declarations \
+                -I$(DEVELDIR)/include -I../common -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S)
+
+        LIBS=$(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0) \
+             $(shell curl-config --libs) -ldl
+
+        OBJS += $(OBJDIR)/binreloc.o
+
     endif
-
-  ### Linux ###
-  else
-
-    PKGCONFIG=pkg-config
-
-    CFLAGS= -g $(WARNINGS) $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags gtk+-$(GTKVER).0) \
-         $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags cairo) \
-         $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags librsvg-2.0) \
-         $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags glib-2.0) \
-         -DENABLE_BINRELOC -DENABLE_NLS -DGTKVER=$(GTKVER) -DUSE_PANGO \
-	 -Wno-deprecated-declarations \
-         -I$(DEVELDIR)/include -I../common -DSHIAI_VERSION=$(SHIAI_VERSION)
-
-    LIBS=$(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0) \
-   $(shell curl-config --libs) -ldl
-
-    OBJS += $(OBJDIR)/binreloc.o
-
-    WARNINGS += -Wjump-misses-init
-
-  endif
 endif

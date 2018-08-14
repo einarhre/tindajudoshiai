@@ -12,12 +12,21 @@ OBJDIR := $(JS_BUILD_DIR)/$(LASTPART)/$(OBJDIR)
 
 CFLAGS += -I../3rdparty/httpp -I../3rdparty/sqlite3 -I../3rdparty/cJSON
 
+ifeq ($(TGTEXT),XP)
+DLLS = $(DEVELDIR)/bin/libglib-2.0-0.dll $(DEVELDIR)/bin/libiconv-2.dll \
+       $(DEVELDIR)/bin/libintl-8.dll $(DEVELDIR)/bin/pthreadGC2.dll
+endif
+
+ifeq ($(TGTEXT),XP)
 $(OBJDIR)/$(APP): $(OBJDIR)/$(EXE)
-ifeq ($(ZIP),.zip)
 	zip -j $(OBJDIR)/$(APP) $(OBJDIR)/$(EXE) $(DLLS)
-else
+else ifeq ($(TGT),LINUX)
+$(OBJDIR)/$(APP): $(OBJDIR)/$(EXE)
 	mkdir -p $(OBJDIR)/$(APP)
-	cp $(OBJDIR)/$(EXE) $(DLLS) $(OBJDIR)/$(APP)
+	cp $(OBJDIR)/$(EXE) $(OBJDIR)/$(APP)/
+else
+$(OBJDIR)/$(APP):
+	-cp $(OBJDIR)/../obj-winxp/$(APP) $(OBJDIR)/
 endif
 
 $(OBJDIR):
@@ -25,9 +34,6 @@ $(OBJDIR):
 
 $(OBJDIR)/$(EXE): $(OBJDIR) $(OBJS)
 	$(LD) $(STATIC) -g $(OBJS) -o $(OBJDIR)/$(EXE) $(LIBS)
-ifeq ($(TARGETOS),WIN32)
-	cp $(DLLS) $(OBJDIR)
-endif
 
 $(OBJDIR)/%.o: %.c
 	${CC} -g $(CFLAGS) -c $< -o $@

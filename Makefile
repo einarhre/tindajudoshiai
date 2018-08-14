@@ -11,11 +11,41 @@ AUTOUPDATEFILE=$(JS_BUILD_DIR)/auto-update/$(OBJDIR)/auto-update$(SUFF)
 RELFILE=$(RELDIR)/bin/judoshiai$(SUFF)
 RUNDIR=$(DEVELDIR)
 
+ifeq ($(TOOL),MXE)
+    DLLS = libao-4.dll libatk-1.0-0.dll libbz2.dll
+    DLLS += libcairo-2.dll libcairo-gobject-2.dll libcroco-0.6-3.dll
+    DLLS += libcurl-4.dll libepoxy-0.dll libexpat-1.dll
+    DLLS += libffi-6.dll libfontconfig-1.dll libfreetype-6.dll
+    DLLS += libgcrypt-20.dll libgdk-3-0.dll
+    DLLS += libgdk_pixbuf-2.0-0.dll libgio-2.0-0.dll libglib-2.0-0.dll
+    DLLS += libgmodule-2.0-0.dll libgmp-10.dll libgnutls-30.dll
+    DLLS += libgobject-2.0-0.dll libgthread-2.0-0.dll
+    DLLS += libgtk-3-0.dll libharfbuzz-0.dll libhogweed-4.dll
+    DLLS += libiconv-2.dll libidn2-0.dll libintl-8.dll
+    DLLS += libjpeg-9.dll liblzma-5.dll libmpg123-0.dll
+    DLLS += libnettle-6.dll libpango-1.0-0.dll libpangocairo-1.0-0.dll
+    DLLS += libpangoft2-1.0-0.dll libpangowin32-1.0-0.dll libpcre-1.dll
+    DLLS += libpixman-1-0.dll libpng16-16.dll librsvg-2-2.dll
+    DLLS += libssh2-1.dll libtiff-5.dll libunistring-2.dll
+    DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll
+
+    ifeq ($(TARGETOS),WIN32)
+        DLLS += libgpg-error-0.dll libgcc_s_sjlj-1.dll
+    else
+        DLLS += libgpg-error6-0.dll libgcc_s_seh-1.dll
+    endif
+endif
+
+
 all:
-	echo $(OS)	
-	echo $(TARGETOS)
-	echo $(TGT)
-	echo $(CURDIR)
+	@echo "---------------------------"
+	@echo "Environment: $(OS)"
+	@echo "Target: $(TARGETOS)"
+	@echo "Common target: $(TGT)"
+	@echo "Current dir: $(CURDIR)"
+	@echo "---------------------------"
+	@echo "Create release directories"
+	@echo "---------------------------"
 	rm -rf $(RELDIR)
 	mkdir -p $(RELDIR)/bin
 	mkdir -p $(RELDIR)/share/locale/
@@ -40,6 +70,9 @@ all:
 	mkdir -p $(RELDIR)/etc/www/js
 	mkdir -p $(RELDIR)/etc/www/css
 	mkdir -p $(RELDIR)/etc/bin
+	@echo "---------------------------"
+	@echo "Run make in subdirectories"
+	@echo "---------------------------"
 	make -C common
 	make -C judoshiai
 	make -C judotimer
@@ -52,6 +85,9 @@ ifeq ($(JUDOPROXY),YES)
 	make -C judoproxy
 endif
 	make -C doc
+	@echo "---------------------------"
+	@echo "Copy program files"
+	@echo "---------------------------"
 	cp $(JUDOSHIAIFILE) $(RELDIR)/bin/
 	cp $(JUDOTIMERFILE) $(RELDIR)/bin/
 	cp $(JUDOINFOFILE) $(RELDIR)/bin/
@@ -69,15 +105,25 @@ ifeq ($(GTKVER),3)
 	cp -r $(RUNDIR)/share/glib-2.0/schemas $(RELDIR)/share/glib-2.0/
 endif
 	make -C auto-update install
-	cp $(RUNDIR)/bin/*.dll $(RELDIR)/bin/
-	cp $(SOUNDDIR)/bin/*.dll $(RELDIR)/bin/
-	cp $(RSVGDIR)/bin/*.dll $(RELDIR)/bin/
-	cp $(CURLDIR)/bin/*.dll $(RELDIR)/bin/
-ifeq ($(JUDOPROXY),YES)
-	cp $(WEBKITDIR)/bin/*.dll $(RELDIR)/bin/
-	cp $(SOAPDIR)/bin/*.dll $(RELDIR)/bin/
-endif
+	@echo "---------------------------"
+	@echo "Copy DLLs"
+	@echo "---------------------------"
+ifeq ($(TOOL),MXE)
+	    cp $(foreach dll,$(DLLS),$(DEVELDIR)/bin/$(dll)) $(RELDIR)/bin/
+else
+	    cp $(RUNDIR)/bin/*.dll $(RELDIR)/bin/
+	    cp $(SOUNDDIR)/bin/*.dll $(RELDIR)/bin/
+	    cp $(RSVGDIR)/bin/*.dll $(RELDIR)/bin/
+	    cp $(CURLDIR)/bin/*.dll $(RELDIR)/bin/
+            ifeq ($(JUDOPROXY),YES)
+		cp $(WEBKITDIR)/bin/*.dll $(RELDIR)/bin/
+		cp $(SOAPDIR)/bin/*.dll $(RELDIR)/bin/
+            endif
 	cp -r $(RUNDIR)/lib/gtk-$(GTKVER).0 $(RELDIR)/lib/
+endif
+	@echo "---------------------------"
+	@echo "Copy share files"
+	@echo "---------------------------"
 	cp -r $(RUNDIR)/share/locale/fi $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/sv $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/es $(RELDIR)/share/locale/
@@ -95,11 +141,19 @@ endif
 	cp -r $(RUNDIR)/share/locale/en_GB $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/themes $(RELDIR)/share/
 	cp -r $(RUNDIR)/etc $(RELDIR)/
-### Linux executable ###
-else
 
+	mkdir -p $(RELDIR)/etc/gtk-3.0
+	echo 'gtk-theme-name="MS-Windows"' >$(RELDIR)/etc/gtk-3.0/gtkrc
+	echo '[Settings]' >$(RELDIR)/etc/gtk-3.0/settings.ini
+	echo 'gtk-theme-name=win32' >>$(RELDIR)/etc/gtk-3.0/settings.ini
 endif
+	@echo "---------------------------"
+	@echo "Copy documents"
+	@echo "---------------------------"
 	cp doc/*.pdf $(RELDIR)/doc/
+	@echo "---------------------------"
+	@echo "Copy translations"
+	@echo "---------------------------"
 	cp common/judoshiai-fi_FI.mo $(RELDIR)/share/locale/fi/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-sv_SE.mo $(RELDIR)/share/locale/sv/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-es_ES.mo $(RELDIR)/share/locale/es/LC_MESSAGES/judoshiai.mo
@@ -114,13 +168,16 @@ endif
 	cp common/judoshiai-de_DE.mo $(RELDIR)/share/locale/de/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-ru_RU.mo $(RELDIR)/share/locale/ru/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-da_DK.mo $(RELDIR)/share/locale/da/LC_MESSAGES/judoshiai.mo
+	@echo "---------------------------"
+	@echo "Copy other files"
+	@echo "---------------------------"
 	cp -r etc $(RELDIR)/
 	cp licenses/* $(RELDIR)/licenses
 	cp -r svg $(RELDIR)/
 	cp -r custom-examples $(RELDIR)/
 	cp -r svg-lisp $(RELDIR)/
 	-cp $(JS_BUILD_DIR)/serial/obj-linux/websock-serial-pkg/websock-serial $(RELDIR)/etc/html/
-	-cp $(JS_BUILD_DIR)/serial/obj-win32/websock-serial-pkg.zip $(RELDIR)/etc/html/
+	-cp $(JS_BUILD_DIR)/serial/obj-winxp/websock-serial-pkg.zip $(RELDIR)/etc/html/
 	echo $(SHIAI_VER_NUM) >$(RELDIR)/etc/version.txt
 	find $(RELDIR) | wc -l | tr -d "\r\n" >$(RELDIR)/filecount.txt
 	@echo
@@ -130,14 +187,19 @@ endif
 	@echo "To make a Debian package run (Linux only)"
 	@echo "  sudo -E JS_BUILD_DIR=$(JS_BUILD_DIR) make debian"
 
-#echo 'gtk-theme-name = "MS-Windows"' >$(RELDIR)/etc/gtk-2.0/gtkrc
 
 setup:
 ifeq ($(TGT),WIN32)
 	sed "s/AppVerName=.*/AppVerName=Shiai $(SHIAI_VER_NUM)/" etc/judoshiai.iss >judoshiai1.iss
-	sed "s/OutputBaseFilename=.*/OutputBaseFilename=judoshiai-setup-$(SHIAI_VER_NUM)/" judoshiai1.iss >judoshiai2.iss
-	sed "s,RELDIR,$(RELEASEDIR)," judoshiai2.iss | tr '/' '\\' >judoshiai3.iss
-	$(INNOSETUP) judoshiai3.iss
+	sed "s/OutputBaseFilename=.*/OutputBaseFilename=judoshiai-setup-$(SHIAI_VER_NUM)-$(TGTEXT)/" judoshiai1.iss >judoshiai2.iss
+	sed "s/TGTEXT/$(TGTEXT)/" judoshiai2.iss >judoshiai1.iss
+ifeq ($(TGTEXT),64)
+	sed "s/ARCHMODE/ArchitecturesInstallIn64BitMode=x64/" judoshiai1.iss >judoshiai2.iss
+else
+	sed "s/ARCHMODE//" judoshiai1.iss >judoshiai2.iss
+endif
+	sed "s,RELDIR,$(RELEASEDIR)," judoshiai2.iss | tr '/' '\\' >judoshiai1.iss
+	$(INNOSETUP) judoshiai1.iss
 	rm -f judoshiai*.iss
 else
 	tar -C $(RELEASEDIR) -cf judoshiai.tar judoshiai
