@@ -85,10 +85,10 @@ static void update_callback(GtkWidget *widget,
 			    GtkWidget *data)
 {
     if (ptr_to_gint(event) == GTK_RESPONSE_OK) {
+#ifdef WIN32
 	gchar buf[1024];
 	struct in_addr addr;
 	addr.s_addr = (gint)(uintptr_t)data;
-#ifdef WIN32
 	gchar *updater = g_build_filename(installation_dir, "bin", "auto-update.exe", NULL);
 	snprintf(buf, sizeof(buf), "%s \"%s\" \"%s\" %d",
 		 inet_ntoa(addr),
@@ -153,7 +153,7 @@ void check_for_update(gulong addr, gchar *app)
     closesock(comm_fd);
 
     buf[n] = 0;
-    gchar *p1, *p = strchr(buf, '\n');
+    gchar *p1, *p2, *p = strchr(buf, '\n');
     if (p) *p = 0;
     p = strchr(buf, '\r');
     if (p) *p = 0;
@@ -167,13 +167,20 @@ void check_for_update(gulong addr, gchar *app)
 
     g_print("Local: %s, remote: %s\n", p, buf);
 
-    if (!strstr(p, "Windows")) {
+    p1 = strstr(p, "Windows");
+    if (!p1) {
 	g_print("This is not Windows\n");
 	return;
     }
 
-    if (!strstr(buf, "Windows")) {
+    p2 = strstr(buf, "Windows");
+    if (!p2) {
 	g_print("Remote is not Windows\n");
+	return;
+    }
+
+    if (strcmp(p1, p2)) {
+	g_print("Different kind Windows'\n");
 	return;
     }
 
