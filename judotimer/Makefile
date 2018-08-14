@@ -15,15 +15,19 @@ OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/stopwatch.o $(OBJDIR)/comm.
 CFLAGS += -DAPPLICATION="\"judotimer\""
 CFLAGS += -DAPP_NUM=2
 
-### Windows executable ###
+### WindowsXP executable ###
 ifeq ($(TGT),WIN32)
 CFLAGS += -I$(SOUNDDIR)/include
+ifeq ($(TOOL),MXE)
+LIBS += -lmpg123 -lao
+else
 LIBS += -L$(SOUNDDIR)/bin -lmpg123-0 -lao-4
+endif
 RPATH =
-OBJS += judotimer-icon.res
+OBJS += $(OBJDIR)/judotimer-icon.res
 
-judotimer-icon.res: judotimer-icon.rc
-	$(WINDRES) -O coff judotimer-icon.rc judotimer-icon.res
+$(OBJDIR)/judotimer-icon.res: judotimer-icon.rc
+	$(WINDRES) -O coff judotimer-icon.rc $(OBJDIR)/judotimer-icon.res
 
 judotimer-icon.rc:
 	echo "APPICONS ICON \"../etc/judotimer.ico\"" >judotimer-icon.rc

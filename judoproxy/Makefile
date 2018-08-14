@@ -34,10 +34,10 @@ endif
 
 ### Windows executable ###
 ifeq ($(TGT),WIN32)
-OBJS += judoproxy-icon.res
+OBJS += $(OBJDIR)/judoproxy-icon.res
 
-judoproxy-icon.res: judoproxy-icon.rc
-	$(WINDRES) -O coff judoproxy-icon.rc judoproxy-icon.res
+$(OBJDIR)/judoproxy-icon.res: judoproxy-icon.rc
+	$(WINDRES) -O coff judoproxy-icon.rc $(OBJDIR)/judoproxy-icon.res
 
 judoproxy-icon.rc:
 	echo "APPICONS ICON \"../etc/judoproxy.ico\"" >judoproxy-icon.rc

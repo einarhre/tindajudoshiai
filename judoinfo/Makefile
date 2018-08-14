@@ -17,10 +17,10 @@ CFLAGS += -DAPP_NUM=3
 
 ### Windows executable ###
 ifeq ($(TGT),WIN32)
-OBJS += judoinfo-icon.res
+OBJS += $(OBJDIR)/judoinfo-icon.res
 
-judoinfo-icon.res: judoinfo-icon.rc
-	$(WINDRES) -O coff judoinfo-icon.rc judoinfo-icon.res
+$(OBJDIR)/judoinfo-icon.res: judoinfo-icon.rc
+	$(WINDRES) -O coff judoinfo-icon.rc $(OBJDIR)/judoinfo-icon.res
 
 judoinfo-icon.rc:
 	echo "APPICONS ICON \"../etc/judoinfo.ico\"" >judoinfo-icon.rc

@@ -36,10 +36,10 @@ CFLAGS += -I../3rdparty/httpp -I../3rdparty/sqlite3 -I../3rdparty/cJSON -I../3rd
 
 ### Windows executable ###
 ifeq ($(TGT),WIN32)
-OBJS += judoshiai-icon.res
+OBJS += $(OBJDIR)/judoshiai-icon.res
 
-judoshiai-icon.res: judoshiai-icon.rc
-	$(WINDRES) -O coff judoshiai-icon.rc judoshiai-icon.res
+$(OBJDIR)/judoshiai-icon.res: judoshiai-icon.rc
+	$(WINDRES) -O coff judoshiai-icon.rc $(OBJDIR)/judoshiai-icon.res
 
 judoshiai-icon.rc: ../etc/judoshiai.ico
 	echo "APPICONS ICON \"../etc/judoshiai.ico\"" >judoshiai-icon.rc

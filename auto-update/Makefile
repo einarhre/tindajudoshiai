@@ -16,10 +16,10 @@ endif
 all: $(OBJDIR) $(OBJDIR)/$(EXE) $(OBJDIR)/REM_INST$(SUFF)
 
 ifeq ($(TGT),WIN32)
-OBJS += auto-update-icon.res
+OBJS += $(OBJDIR)/auto-update-icon.res
 
-auto-update-icon.res: auto-update-icon.rc
-	$(WINDRES) -O coff auto-update-icon.rc auto-update-icon.res
+$(OBJDIR)/auto-update-icon.res: auto-update-icon.rc
+	$(WINDRES) -O coff auto-update-icon.rc $(OBJDIR)/auto-update-icon.res
 
 auto-update-icon.rc:
 	echo "APPICONS ICON \"../etc/auto-update.ico\"" >auto-update-icon.rc

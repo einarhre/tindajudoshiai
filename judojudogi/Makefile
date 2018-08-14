@@ -17,10 +17,10 @@ CFLAGS += -DAPP_NUM=5
 
 ### Windows executable ###
 ifeq ($(TGT),WIN32)
-OBJS += judojudogi-icon.res
+OBJS += $(OBJDIR)/judojudogi-icon.res
 
-judojudogi-icon.res: judojudogi-icon.rc
-	$(WINDRES) -O coff judojudogi-icon.rc judojudogi-icon.res
+$(OBJDIR)/judojudogi-icon.res: judojudogi-icon.rc
+	$(WINDRES) -O coff judojudogi-icon.rc $(OBJDIR)/judojudogi-icon.res
 
 judojudogi-icon.rc:
 	echo "APPICONS ICON \"../etc/judojudogi.ico\"" >judojudogi-icon.rc
