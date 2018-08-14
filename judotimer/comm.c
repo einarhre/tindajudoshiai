@@ -10,10 +10,10 @@
 #define  __USE_W32_SOCKETS
 //#define Win32_Winsock
 
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 
 #else /* UNIX */
@@ -210,7 +210,8 @@ void msg_received(struct message *input_msg)
 
         //g_print("minutes=%d auto=%d\n", input_msg->u.next_match.minutes, automatic);
         if (input_msg->u.next_match.minutes && automatic)
-            reset(GDK_0, &input_msg->u.next_match);
+            reset((input_msg->u.next_match.round & ROUND_GOLDEN_SCORE) ? GDK_9 : GDK_0,
+		  &input_msg->u.next_match);
 
         if (golden_score)
             set_comment_text(_("Golden Score"));

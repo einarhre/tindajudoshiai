@@ -664,7 +664,7 @@ static gint find_cat_data_index(const gchar *category)
     return -1;
 }
 
-static gint find_cat_data_index_by_index(gint index)
+gint find_cat_data_index_by_index(gint index)
 {
     gint r = -1;
     struct judoka *j = get_data(index);

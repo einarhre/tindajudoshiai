@@ -80,6 +80,8 @@ static gint team1_tot_time, team2_tot_time, team1_matches, team2_matches;
 static gint team_matches_total;
 static struct match team_last_match;
 static gboolean team_extra_exists;
+static gchar team_weight_classes[NUM_CAT_DEF_WEIGHTS];
+static gint team_num_weight_classes;
 
 /* Use mutex when calling db_next_match(). */
 #if (GTKVER == 3)
@@ -293,10 +295,10 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
         gboolean team = (catdata->deleted & TEAM_EVENT) != 0;
 	if (team)
 	    DEBUG_LOG("TEAM cat=%d, bracket match=%d, weight class match=%d, round=0x%04x",
-		      m_static.category&MATCH_CATEGORY_MASK,
-		      m_static.category >> MATCH_CATEGORY_SUB_SHIFT,
+		      MATCH_CATEGORY_GET(m_static.category),
+		      MATCH_CATEGORY_SUB_GET(m_static.category),
 		      m_static.number,
-		      round_number(catdata, m_static.category >> MATCH_CATEGORY_SUB_SHIFT));
+		      round_number(catdata, MATCH_CATEGORY_SUB_GET(m_static.category)));
 
         if (team && (m_static.category & MATCH_CATEGORY_SUB_MASK) == 0)
             return 0;
@@ -311,7 +313,7 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
 
         m_static.group = catdata->group;
 	if (team)
-	    m_static.round = round_number(catdata, m_static.category >> MATCH_CATEGORY_SUB_SHIFT);
+	    m_static.round = round_number(catdata, MATCH_CATEGORY_SUB_GET(m_static.category));
 	else
 	    m_static.round = round_number(catdata, m_static.number);
 
@@ -577,7 +579,18 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
 	if (m_static.blue_points != 11 && m_static.white_points != 11)
 	    team_matches_total++; // do not count draws
 
-        if (m_static.blue_points && m_static.white_points == 0) {
+	// find possible extra matches
+	if ((m_static.blue_points || m_static.white_points) &&  // match has been fought
+	    m_static.blue_points != 11 &&                       // not hikiwake == no competitors
+	    m_static.white_points != 11 &&
+	    m_static.number != 999 &&                           // skip extra match
+	    (prop_get_int_val(PROP_IJF_TEAM_EVENT_JULY_2018_RULES) || // one competitor can be missing
+	     m_static.match_time)) {                            // real match with two competitors
+	    if (team_num_weight_classes < NUM_CAT_DEF_WEIGHTS)
+		team_weight_classes[team_num_weight_classes++] = m_static.number;
+	}
+
+	if (m_static.blue_points && m_static.white_points == 0) {
             team1_wins++;
 	    if (m_static.number != 999) {
 		team1_pts += get_points_gint(m_static.blue_points, m_static.category);
@@ -1048,12 +1061,12 @@ void db_set_match(struct match *m1)
             struct category_data *cat = avl_get_category(m1->category);
             if (cat && (cat->deleted & TEAM_EVENT) && (m1->category & MATCH_CATEGORY_SUB_MASK) == 0) {
                 db_exec_str(NULL, NULL, "UPDATE matches SET \"blue\"=%d "
-                            "WHERE \"category\"=%d AND \"blue\"=0",
-                            m1->blue,
+                            "WHERE \"category\"&%d=%d AND \"blue\"=0",
+                            m1->blue, MATCH_CATEGORY_MASK | MATCH_CATEGORY_SUB_MASK,
                             m1->category | (m1->number << MATCH_CATEGORY_SUB_SHIFT));
                 db_exec_str(NULL, NULL, "UPDATE matches SET \"white\"=%d "
-                            "WHERE \"category\"=%d AND \"white\"=0",
-                            m1->white,
+                            "WHERE \"category\"&%d=%d AND \"white\"=0",
+                            m1->white, MATCH_CATEGORY_MASK | MATCH_CATEGORY_SUB_MASK,
                             m1->category | (m1->number << MATCH_CATEGORY_SUB_SHIFT));
             }
         }
@@ -1929,21 +1942,21 @@ void update_next_matches_coach_info(void)
     }
 }
 
-gboolean db_event_matches_update(guint category, struct match *last)
+gboolean db_event_matches_update(guint category, struct match *last, gint *weightclass)
 {
-    gint number = category >> MATCH_CATEGORY_SUB_SHIFT;
+    gint number = MATCH_CATEGORY_SUB_GET(category);
     gint category1 = category & MATCH_CATEGORY_MASK;
     gboolean winner_found = FALSE;
 
     team1_wins = team2_wins = no_team_wins = team1_pts = team2_pts = 0;
     team1_tot_time = team2_tot_time = team1_matches = team2_matches = 0;
-    team_matches_total = 0;
+    team_matches_total = team_num_weight_classes = 0;
     memset(&team_last_match, 0, sizeof(team_last_match));
     team_extra_exists = FALSE;
 
     db_exec_str(gint_to_ptr(DB_FIND_TEAM_WINNER), db_callback_matches,
-                "SELECT * FROM matches WHERE \"category\"=%d",
-                category);
+                "SELECT * FROM matches WHERE \"category\"&%d=%d",
+		~MATCH_CATEGORY_CAT_MASK, category);
 
     /*g_print("cat=%d/%d nowins=%d t1wins=%d/%d t2wins=%d/%d\n",
             category1, number,
@@ -1958,6 +1971,30 @@ gboolean db_event_matches_update(guint category, struct match *last)
 	(team1_wins == team2_wins) && (team1_pts == team2_pts)) {
 	/* No matches left and equal result. One match more is required. */
 	*last = team_last_match;
+
+	if (team_num_weight_classes) {
+	    gint sel_ix = rand()%team_num_weight_classes;
+	    *weightclass = team_weight_classes[sel_ix];
+
+	    gint j, i = find_cat_data_index_by_index(category);
+	    if (i >= 0) {
+		GtkTextBuffer *msgwin = message_window();
+		show_msg(msgwin, "bold", "\nDraw was done from categories\n");
+
+		for (j = 0; j < team_num_weight_classes; j++) {
+		    gint ix = team_weight_classes[j] - 1;
+		    if (ix >= 0 && ix < NUM_CAT_DEF_WEIGHTS)
+			show_msg(msgwin, NULL, "%s ",
+				 category_definitions[i].weights[ix].weighttext);
+		}
+		show_msg(msgwin, "red", "\n\nDrawn category: %s.\n",
+			 category_definitions[i].weights[*weightclass - 1].weighttext);
+
+		change_team_competitors_to_real_persons(category,
+							*weightclass, &last->blue, &last->white);
+	    }
+	}
+
 	return TRUE;
     }
 
@@ -1980,6 +2017,13 @@ gboolean db_event_matches_update(guint category, struct match *last)
 		    "\"time\"=0 "
                     "WHERE \"category\"=%d AND \"number\"=%d",
                     category1, number);
+
+	if (team_extra_exists)
+	    db_exec_str(NULL, NULL,
+			"UPDATE matches SET \"blue_points\"=0, \"white_points\"=0, "
+			"\"time\"=0 "
+			"WHERE \"category\"=%d AND \"number\"=999",
+			category);
     } else {
 	gint ave_time = 0;
 
@@ -2044,7 +2088,7 @@ static void db_print_one_match(struct match *m)
 
     if (m->category & MATCH_CATEGORY_SUB_MASK)
         fprintf(matches_file,
-                "<tr><td>%d/%d</td>", m->category >> MATCH_CATEGORY_SUB_SHIFT, m->number);
+                "<tr><td>%d/%d</td>", MATCH_CATEGORY_SUB_GET(m->category), m->number);
     else
         fprintf(matches_file,
                 "<tr><td>%d</td>", m->number);

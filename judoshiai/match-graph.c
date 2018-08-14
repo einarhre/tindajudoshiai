@@ -285,11 +285,16 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
             if (catdata) {
                 if (catdata->deleted & TEAM_EVENT) {
                     gint ageix = find_age_index(catdata->category);
-                    if (ageix >= 0 && m->number > 0 &&
-                        category_definitions[ageix].weights[m->number-1].weighttext[0]) {
-                        SNPRINTF_UTF8(buf, "%s #%d%s", catdata->category,
-                                 m->category >> MATCH_CATEGORY_SUB_SHIFT,
-                                 category_definitions[ageix].weights[m->number-1].weighttext);
+		    gint n = m->number;
+		    if (n == 999)
+			n = MATCH_CATEGORY_CAT_GET(m->category);
+
+                    if (ageix >= 0 && n > 0 && n <= NUM_CAT_DEF_WEIGHTS) {
+                        SNPRINTF_UTF8(buf, "%s%s #%d%s",
+				      m->number == 999 ? "*" : "",
+				      catdata->category,
+				      MATCH_CATEGORY_SUB_GET(m->category),
+				      category_definitions[ageix].weights[n - 1].weighttext);
                     } else
                         SNPRINTF_UTF8(buf, "%s", catdata->category);
                 } else

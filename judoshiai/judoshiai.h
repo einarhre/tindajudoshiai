@@ -388,9 +388,36 @@ enum {
 #define MATCH_STATUS_TATAMI_MASK  0xf
 #define MATCH_STATUS_TATAMI_SHIFT 0
 
-#define MATCH_CATEGORY_MASK       0x00ffff
-#define MATCH_CATEGORY_SUB_MASK   0xff0000
+/*
+  Team events have details hidden in category index. Bits from MSB to LSB:
+  4 bits: reserved.
+  4 bits: weight class for extra match (for example 1 = -66, 2 = -73,...).
+  8 bits: root match number (for example 1 - 11).
+  16 bits: category index.
+
+  Root match numbers go normally (1 - 11).
+  Sub match numbers go normally (for example 1 = -66, 2 = -73,...).
+
+  In tatami display the same information is hidden in number column.
+*/
+
+#define MATCH_CATEGORY_MASK       0x0000ffff
+#define MATCH_CATEGORY_SUB_MASK   0x00ff0000
 #define MATCH_CATEGORY_SUB_SHIFT  16
+#define MATCH_CATEGORY_CAT_MASK   0x0f000000
+#define MATCH_CATEGORY_CAT_SHIFT  24
+
+#define MATCH_CATEGORY_GET(_c) \
+    (_c & MATCH_CATEGORY_MASK)
+#define MATCH_CATEGORY_SUB_SET(_c, _n)					\
+    _c = (_c & ~MATCH_CATEGORY_SUB_MASK) | (_n << MATCH_CATEGORY_SUB_SHIFT)
+#define MATCH_CATEGORY_SUB_GET(_c) \
+    ((_c & MATCH_CATEGORY_SUB_MASK) >> MATCH_CATEGORY_SUB_SHIFT)
+#define MATCH_CATEGORY_CAT_SET(_c, _n)					\
+    _c = (_c & ~MATCH_CATEGORY_CAT_MASK) | (_n << MATCH_CATEGORY_CAT_SHIFT)
+#define MATCH_CATEGORY_CAT_GET(_c) \
+    ((_c & MATCH_CATEGORY_CAT_MASK) >> MATCH_CATEGORY_CAT_SHIFT)
+
 
 #define FREEZE_MATCHES    0
 #define UNFREEZE_EXPORTED 1
@@ -1014,7 +1041,7 @@ extern void set_judogi_status(gint index, gint flags);
 extern gint get_judogi_status(gint index);
 extern gint db_force_match_number(gint category);
 extern void update_next_matches_coach_info(void);
-extern gboolean db_event_matches_update(guint category, struct match *last);
+extern gboolean db_event_matches_update(guint category, struct match *last, gint *weightclass);
 extern void db_print_category_matches(struct category_data *catdata, FILE *f);
 extern void db_change_competitor(gint category, gint number, gboolean is_blue, gint index);
 extern void db_print_category_to_pdf_comments(gint catix, gchar *filename);
@@ -1208,6 +1235,7 @@ extern gint pwcrc32(const guchar *str, gint len);
 extern gint find_num_weight_classes(const gchar *category);
 extern gchar *get_weight_class_name(const gchar *category, gint num);
 extern gchar *get_weight_class_name_by_index(gint index, gint num);
+extern gint find_cat_data_index_by_index(gint index);
 extern gint find_age_index(const gchar *category);
 extern void read_cat_definitions(void);
 extern void set_categories_dialog(GtkWidget *w, gpointer arg);

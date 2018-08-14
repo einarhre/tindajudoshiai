@@ -333,7 +333,10 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
             else
                 cairo_move_to(c, left+5, y_pos+extents.height);
 
-            SNPRINTF_UTF8(buf, "%s #%d", catdata ? catdata->last : "?", m->number);
+	    if (m->number == 999)
+		SNPRINTF_UTF8(buf, "%s *", catdata ? catdata->last : "?");
+	    else
+		SNPRINTF_UTF8(buf, "%s #%d", catdata ? catdata->last : "?", m->number);
 #ifdef USE_PANGO
             if (k == 0)
 		WRITE_TEXT(left+5, y_pos+BOX_HEIGHT, buf, desc_bold);

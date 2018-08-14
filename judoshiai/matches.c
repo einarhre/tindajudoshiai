@@ -221,15 +221,21 @@ static void number_cell_data_func (GtkTreeViewColumn *col,
 
     if (visible) {
         if (number & MATCH_CATEGORY_SUB_MASK) {
-            gchar *wcname = get_weight_class_name_by_index(cat, (number & MATCH_CATEGORY_MASK) - 1);
-            if (wcname)
-                SNPRINTF_UTF8(buf, "%d/%s",
-                           number >> MATCH_CATEGORY_SUB_SHIFT,
-                           wcname);
+            gchar *wcname = get_weight_class_name_by_index(cat, MATCH_CATEGORY_GET(number) - 1);
+	    if (!wcname)
+		wcname = get_weight_class_name_by_index(cat, MATCH_CATEGORY_CAT_GET(number) - 1);
+	    if (wcname)
+                SNPRINTF_UTF8(buf, "%d/%s%s",
+			      MATCH_CATEGORY_SUB_GET(number),
+			      MATCH_CATEGORY_GET(number) == 999 ? "*" : "",
+			      wcname);
+            else if (MATCH_CATEGORY_GET(number) == 999)
+                g_snprintf(buf, sizeof(buf), "%d/*",
+			   MATCH_CATEGORY_SUB_GET(number));
             else
                 g_snprintf(buf, sizeof(buf), "%d/%d",
-                           number >> MATCH_CATEGORY_SUB_SHIFT,
-                           number & MATCH_CATEGORY_MASK);
+			   MATCH_CATEGORY_SUB_GET(number),
+			   MATCH_CATEGORY_GET(number));
         } else
             g_snprintf(buf, sizeof(buf), "%d", number);
 
@@ -2507,9 +2513,20 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
 
             if (nm[0].category & MATCH_CATEGORY_SUB_MASK) {
                 gint ix = find_age_index(g->last);
-                if (ix >= 0 && nm[0].number > 0 && nm[0].number < NUM_CAT_DEF_WEIGHTS) {
-                    SNPRINTF_UTF8(msg.u.next_match.cat_1,
-				  "%s", category_definitions[ix].weights[nm[0].number-1].weighttext);
+                if (ix >= 0) {
+		    gint n = nm[0].number;
+
+		    if (n == 999) {
+			n = MATCH_CATEGORY_CAT_GET(nm[0].category);
+			msg.u.next_match.round |= ROUND_EXTRA_MATCH;
+			if (prop_get_int_val(PROP_IJF_TEAM_EVENT_JULY_2018_RULES))
+			    msg.u.next_match.round |= ROUND_GOLDEN_SCORE;
+		    }
+
+		    if (n > 0 && n <= NUM_CAT_DEF_WEIGHTS) {
+			SNPRINTF_UTF8(msg.u.next_match.cat_1,
+				      "%s", category_definitions[ix].weights[n - 1].weighttext);
+		    }
                 }
             } else
                 SNPRINTF_UTF8(msg.u.next_match.cat_1,
@@ -2668,13 +2685,15 @@ void update_matches(guint category, struct compsys sys, gint tatami)
         if (catdata && (catdata->deleted & TEAM_EVENT) &&
 	    (category & MATCH_CATEGORY_SUB_MASK)) {
 	    struct match last;
-            gboolean draw = db_event_matches_update(category, &last);
+	    gint weightclass = 0;
+            gboolean draw = db_event_matches_update(category, &last, &weightclass);
 	    if (draw && last.number < 999 &&
 		prop_get_int_val(PROP_EXTRA_MATCH_IN_TEAMS_TIE)) {
 		/* Another match is needed. */
 		struct match extra;
 		memset(&extra, 0, sizeof(extra));
 		extra.category = last.category;
+		MATCH_CATEGORY_CAT_SET(extra.category, weightclass);
 		extra.number = 999;
 		extra.blue = last.blue;
 		extra.white = last.white;
@@ -4051,7 +4070,8 @@ void set_match(struct match *m)
     if (c && (c->deleted & TEAM_EVENT)) { // team event
         if (m->category & MATCH_CATEGORY_SUB_MASK) {
             m1.category = m->category & MATCH_CATEGORY_MASK;
-            m1.number = m->number | (m->category & MATCH_CATEGORY_SUB_MASK);
+            m1.number = m->number | (m->category & MATCH_CATEGORY_SUB_MASK)
+		| (m->category & MATCH_CATEGORY_CAT_MASK);
         } else {
 #if (GTKVER == 3)
             G_UNLOCK(set_match_mutex);

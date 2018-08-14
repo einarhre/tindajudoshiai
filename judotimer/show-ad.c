@@ -1721,7 +1721,10 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
         // write category
 	gdouble right = 0.0;
         cairo_set_font_size(c, 0.6*FIRST_BLOCK_HEIGHT);
-        cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
+	if (cat_round & ROUND_EXTRA_MATCH)
+	    cairo_set_source_rgb(c, 1.0, 1.0, 0.0);
+	else
+	    cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
 #if 0
         cairo_text_extents(c, category, &extents);
 	right = 10.0 + extents.width;
