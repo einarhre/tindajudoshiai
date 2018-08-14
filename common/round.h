@@ -24,4 +24,7 @@
 #define ROUND_NUMBER(_n)      (_n & ROUND_MASK)
 #define ROUND_TYPE_NUMBER(_n) (ROUND_TYPE(_n) | ROUND_NUMBER(_n))
 
+#define ROUND_EXTRA_MATCH     0x010000
+#define ROUND_GOLDEN_SCORE    0x020000
+
 #endif
