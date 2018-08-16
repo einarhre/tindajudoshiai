@@ -399,8 +399,8 @@ void view_popup_menu_random_weighin(GtkWidget *menuitem, gpointer userdata)
     gtk_grid_attach(GTK_GRID(table), num_w, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("competitors from")), 2, 0, 1, 1);
 
-    from_each = gtk_radio_button_new_with_label_from_widget(NULL, _("each category"));
-    from_all = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(from_each), _("all categories"));
+    from_each = gtk_radio_button_new_with_label_from_widget(NULL, _("each selected category"));
+    from_all = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(from_each), _("all selected categories"));
     gtk_grid_attach(GTK_GRID(table), from_each, 3, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), from_all, 3, 1, 1, 1);
 
