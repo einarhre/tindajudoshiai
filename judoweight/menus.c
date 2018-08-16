@@ -50,7 +50,7 @@ static void about_judoinfo( GtkWidget *w,
                            "name", "JudoWeight",
                            "title", _("About JudoWeight"),
                            "copyright", "Copyright 2006-2017 Hannu Jokinen",
-                           "version", SHIAI_VERSION,
+                           "version", full_version(),
                            "website", "http://sourceforge.net/projects/judoshiai/",
                            NULL);
 }

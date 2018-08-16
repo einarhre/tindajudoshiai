@@ -32,7 +32,7 @@ static void about_judotimer( GtkWidget *w,
                            "name", "Judotimer",
                            "title", _("About Judotimer"),
                            "copyright", "Copyright 2006-2017 Hannu Jokinen",
-                           "version", SHIAI_VERSION,
+                           "version", full_version(),
                            "website", "http://sourceforge.net/projects/judoshiai/",
                            NULL);
 }
