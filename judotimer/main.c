@@ -2098,6 +2098,13 @@ int main( int   argc,
     gboolean   run_flag = TRUE;   /* used as exit flag for threads */
     gint i;
 
+#ifdef WIN32
+    if (argc >= 2 && !strcmp(argv[1], "-console")) {
+	AllocConsole();
+	freopen("CON", "w", stdout);
+    }
+#endif
+
     putenv("UBUNTU_MENUPROXY=");
 
     judotimer_log("JudoTimer starts");
@@ -2229,7 +2236,8 @@ int main( int   argc,
 #else
     gtk_box_pack_start_defaults(GTK_BOX(main_vbox), darea);
 #endif
-#if 1
+
+#ifndef WIN32
     GdkScreen *screen = gtk_widget_get_screen(window);
     GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
 
