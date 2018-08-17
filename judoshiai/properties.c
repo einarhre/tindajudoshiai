@@ -17,6 +17,7 @@
 #include "judoshiai.h"
 
 #define NUM_DEFAULT_CATS 6
+#define NUM_TBLS 4
 
 enum properties;
 static GtkWidget *get_prop_widget(enum properties num, gboolean label);
@@ -114,16 +115,19 @@ static struct property {
         .name = "WinNeededForMedal",
         .label = N_("Medal will be awarded \nonly if a contest was won:"),
         .type = PROP_TYPE_CHECK,
+        .table = 3,
     },
     {
         .name = "SeededToFixedPlaces",
         .label = N_("Seeded to fixed places:"),
         .type = PROP_TYPE_CHECK,
+        .table = 3,
     },
     {
         .name = "UseFirstPlacesOnly",
         .label = N_("Use the first places only:"),
         .type = PROP_TYPE_CHECK,
+        .table = 3,
     },
 /*
     {
@@ -136,18 +140,21 @@ static struct property {
         .name = "GoldenScoreWinGives1Point",
         .label = N_("Win in Golden Score gives 1 point"),
         .type = PROP_TYPE_CHECK,
+        .table = 3,
     },
     {
         .name = "Rules2017",
         .label = N_("2017 Rules:"),
         .type = PROP_TYPE_CHECK,
 	.action_func = set_properties_button,
+        .table = 3,
     },
     {
         .name = "Rules2018",
         .label = N_("2018 Rules:"),
         .type = PROP_TYPE_CHECK,
 	.action_func = set_properties_button,
+        .table = 3,
     },
     {
         .name = "DefaultCat1",
@@ -231,7 +238,7 @@ static struct property {
         .name = "UseIjfPoints",
         .label = N_("Use points 10/1/0:"),
         .type = PROP_TYPE_CHECK,
-        //.table = 1,
+        .table = 3,
 	.radio_group = &points_group,
     },
     {
@@ -240,6 +247,7 @@ static struct property {
         .type = PROP_TYPE_CHECK,
         //.table = 1,
 	.radio_group = &points_group,
+        .table = 3,
     },
     {
         .name = "UsePts_10_7_5_1",
@@ -247,6 +255,7 @@ static struct property {
         .type = PROP_TYPE_CHECK,
         //.table = 1,
 	.radio_group = &points_group,
+        .table = 3,
     },
     {
         .name = "UsePts_10_1_h",
@@ -254,6 +263,7 @@ static struct property {
         .type = PROP_TYPE_CHECK,
         //.table = 1,
 	.radio_group = &points_group,
+        .table = 3,
     },
     {
         .name = "UsePts_10_3_1",
@@ -261,6 +271,7 @@ static struct property {
         .type = PROP_TYPE_CHECK,
         //.table = 1,
 	.radio_group = &points_group,
+        .table = 3,
     },
     {
         .name = "UsePts_10_5_1",
@@ -268,18 +279,42 @@ static struct property {
         .type = PROP_TYPE_CHECK,
         //.table = 1,
 	.radio_group = &points_group,
+        .table = 3,
     },
     {
         .name = "ExtraMatchInTeamsPointsTie",
         .label = N_("Add extra match in teams points tie:"),
         .type = PROP_TYPE_CHECK,
-	.action_func = set_properties_button,
+        .table = 2,
     },
     {
-        .name = "IJFTeamEventJuly2018Rules",
-        .label = N_("IJF team event July 2018 rules:"),
+        .name = "IgnorePointsInTeamEvent",
+        .label = N_("Only wins count, ignore match points:"),
         .type = PROP_TYPE_CHECK,
-	.action_func = set_properties_button,
+        .table = 2,
+    },
+    {
+        .name = "SkipUnnecessaryMatches",
+        .label = N_("The first team reaching the majority\n"
+		    "of wins is declared the winner.\n"
+		    "The remaining contests will not be fought:"),
+        .type = PROP_TYPE_CHECK,
+        .table = 2,
+    },
+    {
+        .name = "ExtraMatchGoldenScore",
+        .label = N_("The athletes in the drawn category will\n"
+		    "refight a golden score contest:"),
+        .type = PROP_TYPE_CHECK,
+        .table = 2,
+    },
+    {
+        .name = "ExtraMatchIfOneCompMissing",
+        .label = N_("Draw for extra match is done from\n"
+		    "all categories regardless\n"
+		    "if the team has a player or not:"),
+        .type = PROP_TYPE_CHECK,
+        .table = 2,
     },
 };
 
@@ -739,47 +774,35 @@ static void update_match_order(void)
     update_category_status_info_all();
 }
 
-#define NUM_TBLS 2
-
 void open_properties(GtkWidget *w, gpointer data)
 {
     GtkWidget *dialog, *tmp, *reset;
-    GtkWidget *hbox = gtk_grid_new();
-    GtkWidget *hbox1 = gtk_grid_new();
-    GtkWidget *vbox1 = gtk_grid_new();
-    GtkWidget *vbox2 = gtk_grid_new();
     GtkWidget *table2 = gtk_grid_new();
     GtkWidget *table3 = gtk_grid_new();
     GtkWidget *table4 = gtk_grid_new();
     GtkWidget *table5 = gtk_grid_new();
     GtkWidget *table6 = gtk_grid_new();
 
-    points_group = NULL;
-
-    gtk_grid_set_column_spacing(GTK_GRID(vbox1), 5);
-    gtk_grid_set_row_spacing(GTK_GRID(vbox1), 5);
-    gtk_grid_set_column_spacing(GTK_GRID(vbox2), 5);
-    gtk_grid_set_row_spacing(GTK_GRID(vbox2), 5);
-    gtk_grid_set_column_spacing(GTK_GRID(hbox1), 5);
-    gtk_grid_set_row_spacing(GTK_GRID(hbox1), 5);
-    gtk_grid_set_column_spacing(GTK_GRID(hbox), 5);
-    gtk_grid_set_row_spacing(GTK_GRID(hbox), 5);
     GtkWidget *tables[NUM_TBLS];
     gint       num_comp, num_weighted;
     gint       row[NUM_TBLS] = {0}, col[NUM_TBLS] = {0}, i;
     gint       tbl = 0;
     gchar      buf[16];
 
+    points_group = NULL;
+
     for (i = 0; i < NUM_TBLS; i++)
         tables[i] = gtk_grid_new();
     db_read_competitor_statistics(&num_comp, &num_weighted);
 
     dialog = gtk_dialog_new_with_buttons (_("Tournament properties"),
-                                          NULL,
+                                          main_window,
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                                           NULL);
+    GtkWidget *prop_notebook = gtk_notebook_new();
+    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(prop_notebook), GTK_POS_TOP);
 
     for (i = 0; i < NUM_TBLS; i++) {
         gtk_grid_set_column_spacing(GTK_GRID(tables[i]), 5);
@@ -795,9 +818,11 @@ void open_properties(GtkWidget *w, gpointer data)
         if (props[i].row >= 0) {
             if (props[i].row) row[tbl] = props[i].row - 1;
             if (props[i].col) col[tbl] = props[i].col - 1;
+
             tmp = props[i].label_w = gtk_label_new(_(props[i].label));
             gtk_misc_set_alignment(GTK_MISC(tmp), 1, 0.5);
             gtk_grid_attach(GTK_GRID(tables[tbl]), tmp, col[tbl], row[tbl], 1, 1);
+
             switch (props[i].type) {
             case PROP_TYPE_TEXT:
             case PROP_TYPE_INT:
@@ -816,7 +841,9 @@ void open_properties(GtkWidget *w, gpointer data)
 			gtk_radio_button_get_group(GTK_RADIO_BUTTON(tmp));
 		} else
 		    tmp = gtk_check_button_new();
+
                 gtk_grid_attach(GTK_GRID(tables[tbl]), tmp, col[tbl]+1, row[tbl], 1, 1);
+
 		if (props[i].action_func)
 		    g_signal_connect(G_OBJECT(tmp), "clicked",
 				     G_CALLBACK(props[i].action_func), gint_to_ptr(i));
@@ -845,13 +872,7 @@ void open_properties(GtkWidget *w, gpointer data)
         catwidgets[i].max = tmp;
 
         tmp = gtk_combo_box_text_new();
-#if 1
 	set_cat_system_menu(tmp, 0, 0);
-#else
-        gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(tmp), NULL, "?");
-	for (j = 1; j < NUM_SYSTEMS; j++)
-	    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(tmp), NULL, get_system_name_for_menu(j));
-#endif
         gtk_grid_attach(GTK_GRID(table3), tmp, 3, i+3, 1, 1);
         catwidgets[i].sys = tmp;
     }
@@ -865,12 +886,6 @@ void open_properties(GtkWidget *w, gpointer data)
 
     values_to_widgets();
 
-    GtkWidget *frame = gtk_frame_new(_("General"));
-    gtk_container_add(GTK_CONTAINER(frame), tables[0]);
-    gtk_grid_attach(GTK_GRID(vbox2), frame, 0, 0, 1, 1);
-    frame = gtk_frame_new(_("Pool settings"));
-    gtk_container_add(GTK_CONTAINER(frame), tables[1]);
-    gtk_grid_attach(GTK_GRID(vbox2), frame, 0, 1, 1, 1);
     // table6 -- statistics
     gtk_grid_attach(GTK_GRID(table6), gtk_label_new(_("Competitors:")), 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table6), gtk_label_new(_("Weighted:")), 0, 1, 1, 1);
@@ -878,21 +893,16 @@ void open_properties(GtkWidget *w, gpointer data)
     gtk_grid_attach(GTK_GRID(table6), gtk_label_new(buf), 1, 0, 1, 1);
     sprintf(buf, "%d", num_weighted);
     gtk_grid_attach(GTK_GRID(table6), gtk_label_new(buf), 1, 1, 1, 1);
-    frame = gtk_frame_new(_("Statistics"));
-    gtk_container_add(GTK_CONTAINER(frame), table6);
-    gtk_grid_attach(GTK_GRID(vbox2), frame, 0, 2, 1, 1);
 
-    gtk_grid_attach(GTK_GRID(hbox), vbox2, 0, 0, 1, 1);
+
     // table4: category properties button
-    gtk_grid_attach(GTK_GRID(table4), gtk_label_new(" "), 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table2), gtk_label_new("Categories"), 2, 0, 1, 1);
     tmp = properties_button = gtk_button_new_with_label(_("Properties"));
-    gtk_grid_attach(GTK_GRID(table4), tmp, 0, 1, 1, 1);
-    gtk_grid_attach(GTK_GRID(table4), gtk_label_new(" "), 0, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(table2), tmp, 2, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table2), gtk_label_new(" "), 1, 0, 1, 1);
     g_signal_connect(G_OBJECT(tmp), "clicked", G_CALLBACK(set_categories_dialog), NULL);
     //gtk_box_pack_start(GTK_BOX(vbox1), table4, FALSE, FALSE, 0);
-    frame = gtk_frame_new(_("Categories"));
-    gtk_container_add(GTK_CONTAINER(frame), table4);
-    gtk_grid_attach(GTK_GRID(hbox1), frame, 0, 0, 1, 1);
+
     // table2
     gtk_grid_attach(GTK_GRID(table2), gtk_label_new(_("Reset to")), 0, 0, 1, 1);
 
@@ -906,11 +916,7 @@ void open_properties(GtkWidget *w, gpointer data)
     reset = gtk_button_new_from_stock(GTK_STOCK_APPLY);
     g_signal_connect(G_OBJECT(reset), "clicked", G_CALLBACK(reset_props1), tmp);
     gtk_grid_attach(GTK_GRID(table2), reset, 0, 2, 1, 1);
-    frame = gtk_frame_new(_("Initialize"));
-    gtk_container_add(GTK_CONTAINER(frame), table2);
-    gtk_grid_attach(GTK_GRID(hbox1), frame, 1, 0, 1, 1);
 
-    gtk_grid_attach(GTK_GRID(vbox1), hbox1, 0, 0, 1, 1);
     // table3
     //gtk_table_attach_defaults(GTK_TABLE(table3), gtk_label_new(_("Default systems")), 0, 4, 0, 1);
     gtk_grid_attach(GTK_GRID(table3), gtk_label_new(_("Players")), 1, 1, 2, 1);
@@ -919,21 +925,21 @@ void open_properties(GtkWidget *w, gpointer data)
     gtk_grid_attach(GTK_GRID(table3), gtk_label_new(_("Max")),     2, 2, 1, 1);
     gtk_grid_attach(GTK_GRID(table3), gtk_label_new(_("System")),  3, 2, 1, 1);
 
-    frame = gtk_frame_new(_("Default systems"));
-    gtk_container_add(GTK_CONTAINER(frame), table3);
-    gtk_grid_attach(GTK_GRID(vbox1), frame, 0, 1, 2, 1);
-
-    frame = gtk_frame_new(_("Grade names"));
-    gtk_container_add(GTK_CONTAINER(frame), table5);
-    gtk_grid_attach(GTK_GRID(vbox1), frame, 0, 2, 2, 1);
-
-    gtk_grid_attach(GTK_GRID(hbox), vbox1, 1, 0, 2, 1);
+    gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), tables[0], gtk_label_new(_("General")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), table2,    gtk_label_new(_("Initialize")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), tables[3], gtk_label_new(_("Rules")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), tables[1], gtk_label_new(_("Pool settings")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), tables[2], gtk_label_new(_("Team event")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), table3,    gtk_label_new(_("Default systems")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), table5,    gtk_label_new(_("Grade names")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), table6,    gtk_label_new(_("Statistics")));
 
     GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_widget_set_size_request(scrolled_window, FRAME_WIDTH, FRAME_HEIGHT);
     gtk_container_set_border_width(GTK_CONTAINER(scrolled_window), 10);
 
-    gtk_container_add(GTK_CONTAINER(scrolled_window), hbox);
+    gtk_container_add(GTK_CONTAINER(scrolled_window), prop_notebook);
+
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        scrolled_window, TRUE, TRUE, 0);
 

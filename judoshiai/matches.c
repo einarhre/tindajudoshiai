@@ -2519,7 +2519,7 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
 		    if (n == 999) {
 			n = MATCH_CATEGORY_CAT_GET(nm[0].category);
 			msg.u.next_match.round |= ROUND_EXTRA_MATCH;
-			if (prop_get_int_val(PROP_IJF_TEAM_EVENT_JULY_2018_RULES))
+			if (prop_get_int_val(PROP_TEAM_EVENT_EXTRA_MATCH_GOLDEN_SCORE))
 			    msg.u.next_match.round |= ROUND_GOLDEN_SCORE;
 		    }
 

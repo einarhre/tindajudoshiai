@@ -584,7 +584,7 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
 	    m_static.blue_points != 11 &&                       // not hikiwake == no competitors
 	    m_static.white_points != 11 &&
 	    m_static.number != 999 &&                           // skip extra match
-	    (prop_get_int_val(PROP_IJF_TEAM_EVENT_JULY_2018_RULES) || // one competitor can be missing
+	    (prop_get_int_val(PROP_TEAM_EVENT_DRAW_IF_ONE_COMP_MISSING) || // one competitor can be missing
 	     m_static.match_time)) {                            // real match with two competitors
 	    if (team_num_weight_classes < NUM_CAT_DEF_WEIGHTS)
 		team_weight_classes[team_num_weight_classes++] = m_static.number;
@@ -1962,7 +1962,7 @@ gboolean db_event_matches_update(guint category, struct match *last, gint *weigh
             category1, number,
             no_team_wins, team1_wins, team1_pts, team2_wins, team2_pts);*/
 
-    if (prop_get_int_val(PROP_IJF_TEAM_EVENT_JULY_2018_RULES)) {
+    if (prop_get_int_val(PROP_TEAM_EVENT_IGNORE_POINTS)) {
 	// IJF does not care about points
 	team1_pts = team2_pts = 0;
     }
@@ -1998,7 +1998,7 @@ gboolean db_event_matches_update(guint category, struct match *last, gint *weigh
 	return TRUE;
     }
 
-    if (prop_get_int_val(PROP_IJF_TEAM_EVENT_JULY_2018_RULES) &&
+    if (prop_get_int_val(PROP_TEAM_EVENT_SKIP_UNNECESSARY_MATCHES) &&
 	(team1_wins > team_matches_total/2 ||
 	 team2_wins > team_matches_total/2)) {
 	// The first team reaching the majority of wins is declared the winner
