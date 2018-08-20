@@ -751,7 +751,7 @@ gint find_age_index(const gchar *category)
 gint find_max_age(const gchar *category)
 {
     gint i;
-    gchar catbuf[32], ch = 0;
+    gchar catbuf[32];
 
     if (category == NULL || category[0] == 0)
         return 0;
@@ -761,7 +761,6 @@ gint find_max_age(const gchar *category)
     if (!p)
         p = strrchr(catbuf, '+');
     if (p) {
-        ch = *p;
         *p = 0;
     }
 
@@ -1155,13 +1154,13 @@ void set_categories_dialog(GtkWidget *w, gpointer arg)
     gtk_container_set_border_width(GTK_CONTAINER(scrolled_window3), 4);
 
 #if 1
-    GtkWidget *notebook = gtk_notebook_new();
-    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(notebook), GTK_POS_TOP);
-    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), scrolled_window1, gtk_label_new(_("Men")));
-    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), scrolled_window2, gtk_label_new(_("Women")));
-    gtk_notebook_append_page(GTK_NOTEBOOK(notebook), scrolled_window3, gtk_label_new(_("Properties")));
+    GtkWidget *cat_notebook = gtk_notebook_new();
+    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(cat_notebook), GTK_POS_TOP);
+    gtk_notebook_append_page(GTK_NOTEBOOK(cat_notebook), scrolled_window1, gtk_label_new(_("Men")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(cat_notebook), scrolled_window2, gtk_label_new(_("Women")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(cat_notebook), scrolled_window3, gtk_label_new(_("Properties")));
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-                       notebook, TRUE, TRUE, 0);
+                       cat_notebook, TRUE, TRUE, 0);
 #else
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        scrolled_window1, FALSE, FALSE, 0);

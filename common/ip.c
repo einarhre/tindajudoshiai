@@ -10,10 +10,10 @@
 #define  __USE_W32_SOCKETS
 //#define Win32_Winsock
 
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 
 #else /* UNIX */
@@ -126,6 +126,7 @@ gint nodescan(guint network) // addr in network byte order
     fd_set xxx;
     gint ret;
     struct timeval timeout;
+    (void)r;
 
     addr = ntohl(network) & 0xffffff00;
 
@@ -682,7 +683,7 @@ gint send_msg(gint fd, struct message *msg, gint mcastport)
 	mcast_out.sin_port = htons(mcastport);
 	mcast_out.sin_addr.s_addr = htonl(MULTICAST_ADDR);
 
-	if (sendto(fd, msg, sizeof(*msg), 0,
+	if (sendto(fd, (void *)msg, sizeof(*msg), 0,
 		   (struct sockaddr *)(&mcast_out), sizeof(mcast_out)) < 0)
 	    perror("multicast send");
 	return sizeof(*msg);
@@ -813,7 +814,7 @@ gpointer client_thread(gpointer args)
 	    memset(&mreq, 0, sizeof(mreq));
 	    mreq.imr_multiaddr.s_addr = htonl(MULTICAST_ADDR);
 	    mreq.imr_interface.s_addr = 0;
-	    if (setsockopt(comm_fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) == -1) {
+	    if (setsockopt(comm_fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void *)&mreq, sizeof(mreq)) == -1) {
 		perror("Multicast setsockopt");
 		closesocket(comm_fd);
 		g_usleep(1000000);
@@ -892,7 +893,7 @@ gpointer client_thread(gpointer args)
                 static guchar p[512];
 
 		if (multicast) {
-		    if ((n = recv(comm_fd, &m, sizeof(m), 0)) > 0) {
+		    if ((n = recv(comm_fd, (void *)&m, sizeof(m), 0)) > 0) {
 			if (msg_accepted(&m)) {
 			    G_LOCK(rec_mutex);
 			    rec_msgs[rec_msg_queue_put] = m;

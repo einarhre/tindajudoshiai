@@ -998,6 +998,7 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
         gchar *grade = db_get_data(0, "belt");
 
         struct judoka j;
+	j.index = 0;
         j.club = club;
         j.country = country;
 

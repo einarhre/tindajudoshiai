@@ -10,10 +10,10 @@
 #define  __USE_W32_SOCKETS
 //#define Win32_Winsock
 
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 
 #else /* UNIX */
@@ -82,7 +82,7 @@ static void websock_message(struct jsconn *conn, unsigned char *p, gint length)
 {
     SOCKET s = conn->fd;
     gint i;
-    gboolean fin = (p[0] & 0x80) != 0;
+    //gboolean fin = (p[0] & 0x80) != 0;
     gboolean masked = (p[1] & 0x80) != 0;
     gint opcode = p[0] & 0x0f;
     gint len = p[1] & 0x7f;

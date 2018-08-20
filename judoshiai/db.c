@@ -48,8 +48,8 @@ static void category_prop(sqlite3_context *context, int argc, sqlite3_value **ar
 void db_notify_cb(void *arg, int op, char const *db_nam,
 		  char const *table_name, sqlite3_int64 rowid)
 {
-    g_print("db %s table %s op=%d rowid=%lld\n",
-	    db_nam, table_name, op, rowid);
+    g_print("db %s table %s op=%d rowid=%d\n",
+	    db_nam, table_name, op, (int)rowid);
 }
 
 gint db_exec(const char *dbn, char *cmd, void *data, void *dbcb)

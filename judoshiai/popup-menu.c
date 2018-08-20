@@ -377,13 +377,7 @@ void view_popup_menu_random_weighin(GtkWidget *menuitem, gpointer userdata)
 {
     GtkWidget *dialog;
     GtkWidget *table = gtk_grid_new(), *num_w;
-    struct category_data *catdata = avl_get_category(ptr_to_gint(userdata));
     GtkWidget *from_all, *from_each;
-
-    if (!catdata)
-	return;
-
-    gint status = catdata->match_status;
 
     dialog = gtk_dialog_new_with_buttons (_("Random Weigh-In"),
                                           GTK_WINDOW(main_window),

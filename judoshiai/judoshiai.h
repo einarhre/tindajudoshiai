@@ -1250,6 +1250,7 @@ extern gboolean fill_in_next_match_message_data(const gchar *cat, struct msg_nex
 extern gint get_category_rest_time(const gchar *cat);
 extern gint get_category_match_time(const gchar *cat);
 extern gint find_max_age(const gchar *category);
+extern gint find_weight_index(gint ageix, const gchar *category);
 
 /* category_graph */
 extern void draw_gategory_graph(void);

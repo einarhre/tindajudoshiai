@@ -779,7 +779,6 @@ void open_properties(GtkWidget *w, gpointer data)
     GtkWidget *dialog, *tmp, *reset;
     GtkWidget *table2 = gtk_grid_new();
     GtkWidget *table3 = gtk_grid_new();
-    GtkWidget *table4 = gtk_grid_new();
     GtkWidget *table5 = gtk_grid_new();
     GtkWidget *table6 = gtk_grid_new();
 
@@ -796,7 +795,7 @@ void open_properties(GtkWidget *w, gpointer data)
     db_read_competitor_statistics(&num_comp, &num_weighted);
 
     dialog = gtk_dialog_new_with_buttons (_("Tournament properties"),
-                                          main_window,
+                                          GTK_WINDOW(main_window),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,

@@ -423,7 +423,7 @@ gpointer master_thread(gpointer args)
             connections[i].fd = tmp_fd;
             connections[i].addr = caller.sin_addr.s_addr;
             g_print("Master: new connection[%d]: fd=%d addr=%s\n",
-                    i, tmp_fd, inet_ntoa(caller.sin_addr));
+                    i, (int)tmp_fd, inet_ntoa(caller.sin_addr));
             FD_SET(tmp_fd, &read_fd);
         }
 

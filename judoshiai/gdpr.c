@@ -54,7 +54,7 @@ void set_gdpr(GtkWidget *menuitem, gpointer userdata)
 
 gboolean gdpr_ok(struct judoka *j)
 {
-    if (!gdpr_enable)
+    if (gdpr_enable == FALSE || j == NULL || j->index < 10)
 	return TRUE;
 
     if (gdpr_enable < 0) {
@@ -64,7 +64,7 @@ gboolean gdpr_ok(struct judoka *j)
     }
 
     if (j->index >= 10000) {
-	if (gdpr_cat_age == 0)
+	if (gdpr_cat_age <= 0)
 	    return TRUE;
 
 	gint age = find_max_age(j->last);
@@ -77,7 +77,7 @@ gboolean gdpr_ok(struct judoka *j)
     if (j->deleted & DO_NOT_SHOW)
 	return FALSE;
 
-    if (gdpr_comp_age == 0)
+    if (gdpr_comp_age <= 0)
 	return TRUE;
 
     if (current_year - j->birthyear >= gdpr_comp_age)

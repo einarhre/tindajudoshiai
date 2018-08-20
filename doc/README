@@ -3,9 +3,47 @@ as well as other documents are available here:
 http://judoshiai.sourceforge.net/
 
 Versions:
-Windows: judoshiai-setup-n.n.exe
+Windows XP: judoshiai-setup-n.n.n-XP.exe
+Windows 32: judoshiai-setup-n.n.n-32.exe
+Windows 64: judoshiai-setup-n.n.n-64.exe
 Linux (Debian based): judoshiai_n.n-1_amd64.deb
 Raspberry Pi: judoshiai_n.n-1_armhf.deb
+
+NOTE for Windows:
+  Windows XP should work everywhere, but there are reports that Win10 has problems.
+  JudoShiai32 and JudoShiai64 do not work in Windows XP and they are experimental.
+  Default installation directories are JudoShiaiXP, JudoShiai32, and JudoShiai64.
+
+  In some operations JudoShiai64 is much faster than JudoShiaiXP in Win64 PC.
+  For example opening category definitions is 500% faster.
+
+  Please report your experiences to oh2ncp @ gmail . com
+
+==============================================
+RELEASE NOTE
+VERSION 2.8
+
+Common
+------
++ Separate versions for Win XP, 32, and 64.
++ Multicast added as an option for communication.
++ Hebrew language added.
+
+JudoShiai
+---------
++ Properties layout changed.
++ IJF July 2018 rules supported.
+  - Waza-ari do not stop osaekomi during golden score.
+  - New options for team event (ignore points, skip unnecessary matches,
+    extra match as golden score, extra match weight class draw includes also
+    classes where one competitor is missing.
++ Automatic team event extra match draw.
++ Random weigh-in draw (max weight +5%).
++ Norwegian defaults changed.
++ Accreditation card printing bug fixed.
++ Possibility to use AGECAT and WEIGHTCAT in accreditation cards
++ German default systems and category definitions added.
++ All columns in Judoka view dragable, sortable, and resizable.
 
 ==============================================
 RELEASE NOTE

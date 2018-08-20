@@ -18,10 +18,10 @@
 #ifdef WIN32
 
 #define  __USE_W32_SOCKETS
+#include <winsock2.h>
 #include <windows.h>
 //#include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 #include <process.h>
 

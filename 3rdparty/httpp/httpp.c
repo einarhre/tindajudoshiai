@@ -26,6 +26,9 @@
 
 #ifdef _WIN32
 #include <winsock2.h>
+#ifdef strcasecmp
+#undef strcasecmp
+#endif
 #define strcasecmp stricmp
 #else
 #include <unistd.h>

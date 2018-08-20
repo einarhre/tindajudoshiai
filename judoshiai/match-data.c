@@ -2953,6 +2953,7 @@ const gint french_rounds[NUM_TABLES][NUM_FRENCH][NUM_MATCHES] = {
     }
 };
 
+#if 0
 static gint is_on_path(gint t, gint s, gint f, gint m, gint level)
 {
     gint r;
@@ -2977,6 +2978,7 @@ static gint is_on_path(gint t, gint s, gint f, gint m, gint level)
 
     return 0;
 }
+#endif
 
 gint round_number(struct category_data *cd, gint m)
 {

@@ -10,10 +10,10 @@
 #define  __USE_W32_SOCKETS
 //#define Win32_Winsock
 
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 
 #else /* UNIX */
@@ -386,7 +386,7 @@ static void get_bracket(gint tatami, gint category, gint number)
         return;
     }
 
-    while ((n = recv(fd, &bracket[bracket_len], sizeof(bracket) - bracket_len - 1, 0)) > 0) {
+    while ((n = recv(fd, (void *)&bracket[bracket_len], sizeof(bracket) - bracket_len - 1, 0)) > 0) {
         bracket_len += n;
     }
 

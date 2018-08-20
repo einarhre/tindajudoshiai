@@ -11,10 +11,10 @@
 #define  __USE_W32_SOCKETS
 //#define Win32_Winsock
 
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 
 #else /* UNIX */
 

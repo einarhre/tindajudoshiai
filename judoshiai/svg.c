@@ -13,8 +13,8 @@
 #include <assert.h>
 
 #if defined(__WIN32__) || defined(WIN32)
-#include <windows.h>
 #include <winsock2.h>
+#include <windows.h>
 #include <ws2tcpip.h>
 #else /* UNIX */
 #include <unistd.h>

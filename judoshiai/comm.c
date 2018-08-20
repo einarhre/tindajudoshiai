@@ -10,10 +10,10 @@
 #define  __USE_W32_SOCKETS
 //#define Win32_Winsock
 
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 
 #else /* UNIX */
@@ -871,7 +871,7 @@ gpointer node_thread(gpointer args)
     memset(&mreq, 0, sizeof(mreq));
     mreq.imr_multiaddr.s_addr = htonl(MULTICAST_ADDR);
     mreq.imr_interface.s_addr = 0;
-    if (setsockopt(mcast_in_fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) == -1) {
+    if (setsockopt(mcast_in_fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void *)&mreq, sizeof(mreq)) == -1) {
 	perror("Multicast setsockopt");
     }
 
@@ -1005,7 +1005,7 @@ gpointer node_thread(gpointer args)
             connections[i].websock = FALSE;
             connections[i].websock_ok = FALSE;
             g_print("Node: new connection[%d]: fd=%d addr=%s\n",
-                    i, tmp_fd, inet_ntoa(caller.sin_addr));
+                    i, (int)tmp_fd, inet_ntoa(caller.sin_addr));
             FD_SET(tmp_fd, &read_fd);
         }
 
@@ -1013,7 +1013,7 @@ gpointer node_thread(gpointer args)
             alen = sizeof(caller);
             if ((tmp_fd = accept(websock_fd, (struct sockaddr *)&caller, &alen)) < 0) {
                 perror("websock accept");
-		g_print("websock=%d tmpfd=%d\n", websock_fd, tmp_fd);
+		g_print("websock=%d tmpfd=%d\n", (int)websock_fd, (int)tmp_fd);
 		usleep(1000000);
                 continue;
             }
@@ -1034,13 +1034,13 @@ gpointer node_thread(gpointer args)
             connections[i].conn_type = 0;
             connections[i].websock = TRUE;
             g_print("Node: new websock connection[%d]: fd=%d addr=%s\n",
-                    i, tmp_fd, inet_ntoa(caller.sin_addr));
+                    i, (int)tmp_fd, inet_ntoa(caller.sin_addr));
             FD_SET(tmp_fd, &read_fd);
         }
 
 	if (FD_ISSET(mcast_in_fd, &fds)) {
 	    struct message msg;
-            r = recv(mcast_in_fd, &msg, sizeof(msg), 0);
+            r = recv(mcast_in_fd, (void *)&msg, sizeof(msg), 0);
             if (r > 0) {
 		put_to_rec_queue(&msg);
 	    }
