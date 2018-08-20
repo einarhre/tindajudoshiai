@@ -3237,7 +3237,8 @@ void refresh_sheet_display(gboolean forced)
 
     if (automatic_web_page_update) {
         write_png(NULL, gint_to_ptr(current_category));
-        make_next_matches_html();
+        make_next_matches_html(TRUE);
+        make_next_matches_html(FALSE);
     }
 }
 

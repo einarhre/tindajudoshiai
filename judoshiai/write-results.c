@@ -154,9 +154,10 @@ void write_competitor(FILE *f, struct judoka *j, gint club_flags, gboolean by_cl
     }
 }
 
-static void make_top_frame_1(FILE *f, gchar *meta)
+static void make_top_frame_1(FILE *f, gchar *meta, gboolean frame)
 {
-    fprintf(f, "<html><head>"
+    if (frame)
+	fprintf(f, "<html><head>"
 	    "<meta name=\"viewport\" content=\"width=device-width, "
 	    "target-densitydpi=device-dpi\">\r\n"
             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n"
@@ -170,16 +171,29 @@ static void make_top_frame_1(FILE *f, gchar *meta)
             SHIAI_VERSION,
             prop_get_str_val(PROP_NAME), prop_get_str_val(PROP_DATE), prop_get_str_val(PROP_PLACE),
             prop_get_str_val(PROP_NAME), prop_get_str_val(PROP_DATE), prop_get_str_val(PROP_PLACE));
+    else
+	fprintf(f, "<html><head>"
+	    "<meta name=\"viewport\" content=\"width=device-width, "
+	    "target-densitydpi=device-dpi\">\r\n"
+            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n"
+            "%s"
+            "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\r\n"
+            "<meta name=\"keywords\" content=\"JudoShiai-%s\" />\r\n"
+            "<title>%s  %s  %s</title></head>\r\n"
+		"<body class=\"titleframe\"><table><tr>\r\n",
+            meta,
+            SHIAI_VERSION,
+            prop_get_str_val(PROP_NAME), prop_get_str_val(PROP_DATE), prop_get_str_val(PROP_PLACE));
 }
 
 static void make_top_frame(FILE *f)
 {
-    make_top_frame_1(f, "");
+    make_top_frame_1(f, "", TRUE);
 }
 
-static void make_top_frame_refresh(FILE *f)
+static void make_top_frame_refresh(FILE *f, gboolean frame)
 {
-    make_top_frame_1(f, "<meta http-equiv=\"refresh\" content=\"30\"/>\r\n");
+    make_top_frame_1(f, "<meta http-equiv=\"refresh\" content=\"30\"/>\r\n", frame);
 }
 
 static void make_bottom_frame(FILE *f)
@@ -720,7 +734,8 @@ void write_html(gint cat)
     gdpr_enable++;
     make_top_frame_1(f, "<script defer=\"defer\" type=\"text/javascript\" src=\"sie.js\"></script>\r\n"
                      "<script type=\"text/javascript\" src=\"jquery-1.10.2.min.js\" charset=\"utf-8\"></script>\r\n"
-                     "<script type=\"text/javascript\" src=\"coach.js\" charset=\"utf-8\"></script>\r\n");
+                     "<script type=\"text/javascript\" src=\"coach.js\" charset=\"utf-8\"></script>\r\n",
+		     TRUE);
     make_left_frame(f);
 
     hextext = txt2hex(j->last);
@@ -1270,7 +1285,8 @@ static gboolean make_png_all_bg(gpointer user_data)
         init_club_data();
 
         if (automatic_web_page_update) {
-            make_next_matches_html();
+            make_next_matches_html(TRUE);
+            make_next_matches_html(FALSE);
         }
         make_png_all_state = MAKE_PNG_STATE_CAT_HTMLS_1;
         return TRUE;
@@ -1304,7 +1320,8 @@ static gboolean make_png_all_bg(gpointer user_data)
     case MAKE_PNG_STATE_COMPETITORS_HTML_1:
         f = open_write("competitors.html");
         if (!f) return FALSE;
-        make_top_frame_1(f, "<script type=\"text/javascript\" src=\"coach.js\" charset=\"utf-8\"></script>");
+        make_top_frame_1(f, "<script type=\"text/javascript\" src=\"coach.js\" charset=\"utf-8\"></script>",
+			 TRUE);
 	gdpr_enable++;
         make_left_frame(f);
         saved_competitor_cnt = 0;
@@ -1352,7 +1369,8 @@ static gboolean make_png_all_bg(gpointer user_data)
     case MAKE_PNG_STATE_COMPETITORS2_HTML_1:
         f = open_write("competitors2.html");
         if (!f) return FALSE;
-        make_top_frame_1(f, "<script type=\"text/javascript\" src=\"coach.js\" charset=\"utf-8\"></script>");
+        make_top_frame_1(f, "<script type=\"text/javascript\" src=\"coach.js\" charset=\"utf-8\"></script>",
+			 TRUE);
 	gdpr_enable++;
         make_left_frame(f);
         db_list_competitors(TRUE);
@@ -1553,7 +1571,7 @@ void make_png_all(GtkWidget *w, gpointer data)
     progress_show(0.0, "");
 }
 
-void make_next_matches_html(void)
+void make_next_matches_html(gboolean frame)
 {
     FILE *f;
     gint i, k;
@@ -1563,12 +1581,18 @@ void make_next_matches_html(void)
             return;
     }
 
-    f = open_write("nextmatches.html");
+    if (frame)
+	f = open_write("nextmatches.html");
+    else
+	f = open_write("nextm.html");
     if (!f)
         return;
 
-    make_top_frame_refresh(f);
-    make_left_frame(f);
+    make_top_frame_refresh(f, frame);
+    if (frame)
+	make_left_frame(f);
+    else
+	fprintf(f, "<td></td>\r\n");
 
     // header row
     fprintf(f, "<td><table class=\"nextmatches\"><tr>");

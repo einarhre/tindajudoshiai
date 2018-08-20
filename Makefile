@@ -149,7 +149,7 @@ endif
 
 	mkdir -p $(RELDIR)/etc/gtk-3.0
 	echo '[Settings]' >$(RELDIR)/etc/gtk-3.0/settings.ini
-	echo 'gtk-theme-name=Adwaita' >>$(RELDIR)/etc/gtk-3.0/settings.ini
+	echo '#gtk-theme-name=Adwaita' >>$(RELDIR)/etc/gtk-3.0/settings.ini
 	echo '#gtk-theme-name=win32' >>$(RELDIR)/etc/gtk-3.0/settings.ini
 endif
 	@echo "---------------------------"

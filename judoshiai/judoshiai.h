@@ -1101,7 +1101,7 @@ extern void locate_4(GtkWidget *w, gpointer data);
 extern void make_png_all(GtkWidget *w, gpointer data);
 extern int get_output_directory(void);
 extern gchar *txt2hex(const gchar *txt);
-extern void make_next_matches_html(void);
+extern void make_next_matches_html(gboolean frame);
 extern void update_category_status_info(gint category);
 extern void update_category_status_info_all(void);
 extern struct compsys get_cat_system(gint index);
