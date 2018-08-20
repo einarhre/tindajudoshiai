@@ -64,6 +64,8 @@ all:
 	mkdir -p $(RELDIR)/share/locale/ru/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/da/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/en_GB/LC_MESSAGES
+	mkdir -p $(RELDIR)/share/themes
+	mkdir -p $(RELDIR)/share/icons
 	mkdir -p $(RELDIR)/lib
 	mkdir -p $(RELDIR)/doc
 	mkdir -p $(RELDIR)/licenses
@@ -139,13 +141,14 @@ endif
 	cp -r $(RUNDIR)/share/locale/ru $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/da $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/en_GB $(RELDIR)/share/locale/
-	cp -r $(RUNDIR)/share/themes $(RELDIR)/share/
+	cp -r share/themes $(RELDIR)/share/
+	cp -r share/icons $(RELDIR)/share/
 	cp -r $(RUNDIR)/etc $(RELDIR)/
 
 	mkdir -p $(RELDIR)/etc/gtk-3.0
-	echo 'gtk-theme-name="MS-Windows"' >$(RELDIR)/etc/gtk-3.0/gtkrc
 	echo '[Settings]' >$(RELDIR)/etc/gtk-3.0/settings.ini
-	echo 'gtk-theme-name=win32' >>$(RELDIR)/etc/gtk-3.0/settings.ini
+	echo 'gtk-theme-name=Adwaita' >>$(RELDIR)/etc/gtk-3.0/settings.ini
+	echo '#gtk-theme-name=win32' >>$(RELDIR)/etc/gtk-3.0/settings.ini
 endif
 	@echo "---------------------------"
 	@echo "Copy documents"
