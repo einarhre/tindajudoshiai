@@ -1409,7 +1409,7 @@ extern void get_bracket_2(gint tatami, gint catid, gint svg, gint page, gint con
 extern void read_match_order_dialog(GtkWidget *w, gpointer arg);
 
 /* websock */
-extern void handle_websock(struct jsconn *conn, char *in, gint length);
+extern void handle_websock(struct jsconn *conn, char *in, gint length, struct message *msg);
 extern gint websock_send_msg(gint fd, struct message *msg);
 
 /* gdpr */

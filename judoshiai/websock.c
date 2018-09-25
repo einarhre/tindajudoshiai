@@ -78,7 +78,8 @@ static void encodeblock( unsigned char *in, unsigned char *out, int len )
 #define OP_CODE_PING       9
 #define OP_CODE_PONG      10
 
-static void websock_message(struct jsconn *conn, unsigned char *p, gint length)
+static void websock_message(struct jsconn *conn, unsigned char *p,
+			    gint length, struct message *msg_out)
 {
     SOCKET s = conn->fd;
     gint i;
@@ -111,7 +112,7 @@ static void websock_message(struct jsconn *conn, unsigned char *p, gint length)
 	}
     }
 
-    g_print("OP CODE %d\n", opcode);
+    //g_print("OP CODE %d\n", opcode);
 
     if (opcode == OP_CODE_PING) {
 	out[0] = 0x80 | OP_CODE_PONG;
@@ -153,14 +154,29 @@ static void websock_message(struct jsconn *conn, unsigned char *p, gint length)
 		g_print("Node: conn=%d type=%d id=%08x\n",
 			i, conn->conn_type, conn->id);
 	    }
+	} else if (msg_out) {
+	    *msg_out = msg;
 	} else {
+#if (APP_NUM == APPLICATION_TYPE_SERVER)
+	    g_print("%s: %s from web, conn type = %d, port = %d\n", __FUNCTION__,
+		    msg_name(msg.type), conn->websock, conn->listen_port);
+	    if (msg.type == MSG_DUMMY) {
+		msg.u.dummy.application_type = application_type();
+	    }
+	    if (conn->websock == APPLICATION_TYPE_INFO)
+		msg_to_queue(&msg);
+	    else if (conn->websock == APPLICATION_TYPE_TIMER)
+		web_to_timer_rec_queue(conn, &msg);
+#else
 	    put_to_rec_queue(&msg);
+#endif
 	}
-
+#if 0
 	g_print("Text len=%d:\n  ", len);
 	for (i = 0; i < len; i++)
 	    g_print("%c", p[data+i]);
 	g_print("\n");
+#endif
     }
 }
 
@@ -219,17 +235,22 @@ static void websock_handshake(struct jsconn *conn, char *in, gint length)
 	g_print("KEY=%s REPLY %d bytes:\n%s\n", key, n, buf);
 	send(s, buf, n, 0);
 	conn->websock_ok = TRUE;
+
+#if (APP_NUM == APPLICATION_TYPE_SERVER)
+	extern void notify_conn(struct jsconn *conn);
+	notify_conn(conn);
+#endif
     }
 
     httpp_destroy(parser);
 }
 
-void handle_websock(struct jsconn *conn, char *in, gint length)
+void handle_websock(struct jsconn *conn, char *in, gint length, struct message *msg)
 {
     if (in[0] == 'G' && in[1] == 'E' && in[2] == 'T') {
 	websock_handshake(conn, in, length);
     } else {
-	websock_message(conn, (unsigned char *)in, length);
+	websock_message(conn, (unsigned char *)in, length, msg);
     }
 }
 
@@ -237,6 +258,8 @@ gint websock_send_msg(gint fd, struct message *msg)
 {
     guchar buf[1024], *p = buf + 16;
     gint len = websock_encode_msg(msg, p, sizeof(buf)-16);
+
+    //g_print("%s: %s to web\n", __FUNCTION__, msg_name(msg->type));
 
     if (len < 0) {
 	return 0;

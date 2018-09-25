@@ -636,7 +636,7 @@ gint timeout_callback(gpointer data)
 {
     int i;
 
-    for (i = 0; i < NUM_TATAMIS; i++) {
+    for (i = 0; i < number_of_tatamis; i++) {
         /* DON'T CARE
            if (!tatami_state[i])
            continue;
@@ -742,28 +742,30 @@ void set_tatami_state(GtkWidget *menu_item, gpointer data)
 
 /* Which message is sent to who? Avoid sending unnecessary messages. */
 static gboolean send_message_to_application[NUM_MESSAGES][NUM_APPLICATION_TYPES] = {
-    // ALL  SHIAI  TIMER  INFO   WEIGHT JUDOGI PROXY
-    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // 0,
-    {TRUE,  FALSE, TRUE , FALSE, FALSE, FALSE, FALSE}, // MSG_NEXT_MATCH = 1,
-    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_RESULT,
-    {TRUE,  FALSE, TRUE , FALSE, FALSE, FALSE, FALSE}, // MSG_ACK,
-    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_SET_COMMENT,
-    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_SET_POINTS,
-    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_HELLO,
-    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_DUMMY,
-    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE}, // MSG_MATCH_INFO,
-    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE}, // MSG_NAME_INFO,
-    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_NAME_REQ,
-    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_ALL_REQ,
-    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE}, // MSG_CANCEL_REST_TIME,
-    {TRUE,  FALSE, TRUE , FALSE, FALSE, FALSE, FALSE}, // MSG_UPDATE_LABEL,
-    {FALSE, FALSE, FALSE, FALSE, TRUE , TRUE , FALSE}, // MSG_EDIT_COMPETITOR,
-    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_SCALE,
-    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE}, // MSG_11_NAME_INFO,
-    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_EVENT,
-    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_WEB,
-    {TRUE,  FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE},  // MSG_LANG,
-    {FALSE, FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE}, // MSG_LOOKUP_COMP,
+    // ALL  SHIAI  TIMER  INFO   WEIGHT JUDOGI PROXY  SERVER
+    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // 0,
+    {TRUE,  FALSE, TRUE , FALSE, FALSE, FALSE, FALSE,  TRUE}, // MSG_NEXT_MATCH = 1,
+    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_RESULT,
+    {TRUE,  FALSE, TRUE , FALSE, FALSE, FALSE, FALSE,  TRUE}, // MSG_ACK,
+    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_SET_COMMENT,
+    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_SET_POINTS,
+    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_HELLO,
+    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_DUMMY,
+    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE,  TRUE}, // MSG_MATCH_INFO,
+    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE,  TRUE}, // MSG_NAME_INFO,
+    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_NAME_REQ,
+    {TRUE,  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_ALL_REQ,
+    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE,  TRUE}, // MSG_CANCEL_REST_TIME,
+    {TRUE,  FALSE, TRUE , FALSE, FALSE, FALSE, FALSE,  TRUE}, // MSG_UPDATE_LABEL,
+    {FALSE, FALSE, FALSE, FALSE, TRUE , TRUE , FALSE, FALSE}, // MSG_EDIT_COMPETITOR,
+    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_SCALE,
+    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE,  TRUE}, // MSG_11_NAME_INFO,
+    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_EVENT,
+    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_WEB,
+    {TRUE,  FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE}, // MSG_LANG,
+    {FALSE, FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE}, // MSG_LOOKUP_COMP,
+    {FALSE, FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE}, // MSG_INPUT,
+    {FALSE, FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE}, // MSG_LABELS,
 };
 
 /*
@@ -1058,7 +1060,7 @@ gpointer node_thread(gpointer args)
             r = recv(connections[i].fd, (char *)inbuf, sizeof(inbuf), 0);
             if (r > 0) {
 		if (connections[i].websock) {
-		    handle_websock(&connections[i], (gchar *)inbuf, r);
+		    handle_websock(&connections[i], (gchar *)inbuf, r, NULL);
 		} else {
 		    guchar *p = connections[i].buf;
 		    gint j, blen = sizeof(connections[i].buf);
@@ -1244,7 +1246,7 @@ void show_node_connections( GtkWidget *w,
     gint i, line = 0;
 
     dialog = gtk_dialog_new_with_buttons (_("Connections to this node"),
-                                          NULL,
+                                          GTK_WINDOW(main_window),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
                                           GTK_STOCK_OK, GTK_RESPONSE_OK,
                                           NULL);
@@ -1267,6 +1269,7 @@ void show_node_connections( GtkWidget *w,
         case APPLICATION_TYPE_INFO:  t = "JudoInfo";  break;
         case APPLICATION_TYPE_WEIGHT:t = "JudoWeight";  break;
         case APPLICATION_TYPE_JUDOGI:t = "JudoJudogi";  break;
+        case APPLICATION_TYPE_SERVER:t = "JudoServer";  break;
         }
 
         myaddr = ntohl(connections[i].addr);
@@ -1387,14 +1390,14 @@ static gint read_all_files(SOCKET s, const gchar *subdirname, gint sendnow, gint
 		    }
 
 		    if (sendnow) {
-			gchar *p = contents;
+			gchar *p1 = contents;
 			while (length) {
-			    if ((n = send(s, p, length, 0)) < 0) {
+			    if ((n = send(s, p1, length, 0)) < 0) {
 				g_free(contents);
 				g_print("auto-update send 2");
 				return -1;
 			    }
-			    p += n;
+			    p1 += n;
 			    length -= n;
 			    if (n == 0) {
 				g_print("slow down\n");
