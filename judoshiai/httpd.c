@@ -1801,7 +1801,7 @@ void get_file(http_parser_t *parser)
     gint n, w, i;
 
     char *mime = "application/octet-stream";
-    char *p = parser->uri + 1;
+    const char *p = parser->uri + 1;
     if (*p == 0)
         p = "index.html";
 
@@ -1816,6 +1816,9 @@ void get_file(http_parser_t *parser)
 	    dir = "html";
         } else if (!strcmp(p2, "htm")) {
 	    mime = "text/html";
+	    dir = "html";
+        } else if (!strcmp(p2, "svg")) {
+	    mime = "image/svg+xml";
 	    dir = "html";
         } else if (!strcmp(p2, "css")) {
 	    mime = "text/css";
@@ -1838,8 +1841,6 @@ void get_file(http_parser_t *parser)
 	    mime = "application/pdf";
         } else if (!strcmp(p2, "swf")) {
 	    mime = "application/x-shockwave-flash";
-        } else if (!strcmp(p2, "ico")) {
-	    mime = "image/vnd.microsoft.icon";
         } else if (!strcmp(p2, "js")) {
 	    mime = "text/javascript";
 	    dir = "js";
