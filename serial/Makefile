@@ -11,6 +11,7 @@ OBJS = $(OBJDIR)/main.o $(OBJDIR)/serial.o $(OBJDIR)/comm.o \
 OBJDIR := $(JS_BUILD_DIR)/$(LASTPART)/$(OBJDIR)
 
 CFLAGS += -I../3rdparty/httpp -I../3rdparty/sqlite3 -I../3rdparty/cJSON
+CFLAGS += -fPIC
 
 ifeq ($(TGTEXT),XP)
 DLLS = $(DEVELDIR)/bin/libglib-2.0-0.dll $(DEVELDIR)/bin/libiconv-2.dll \
