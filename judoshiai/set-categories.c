@@ -1136,7 +1136,7 @@ void set_categories_dialog(GtkWidget *w, gpointer arg)
     gint i, j, m = 0, f = NUM_CATEGORIES/2;
 
     dialog = gtk_dialog_new_with_buttons (_("Categories"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_DIALOG_MODAL,
                                           _("Reset to Defaults"), Q_RESET,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,

@@ -149,7 +149,7 @@ void search_competitor_args(GtkWidget *w, gpointer cb, gpointer args)
     data->args = args;
 
     dialog = gtk_dialog_new_with_buttons (_("Search"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
                                           GTK_STOCK_OK, GTK_RESPONSE_OK,
                                           NULL);

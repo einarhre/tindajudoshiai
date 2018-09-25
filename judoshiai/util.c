@@ -388,7 +388,7 @@ void show_message(const gchar *fmt, ...)
     gchar *text = g_strdup_vprintf(fmt, args);
     va_end(args);
 
-    dialog = gtk_message_dialog_new (NULL,
+    dialog = gtk_message_dialog_new (GTK_WINDOW(main_window),
                                      0 /*GTK_DIALOG_DESTROY_WITH_PARENT*/,
                                      GTK_MESSAGE_INFO,
                                      GTK_BUTTONS_OK,
@@ -427,7 +427,7 @@ gint ask_question(gchar *message)
     gint response;
 
     dialog = gtk_dialog_new_with_buttons (_("Which one is correct?"),
-                                          NULL,
+                                          GTK_WINDOW(main_window),
                                           GTK_DIALOG_MODAL,
                                           _("Own database"),        Q_LOCAL,
                                           _("Foreign database"),     Q_REMOTE,

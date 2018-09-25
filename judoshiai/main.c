@@ -522,7 +522,7 @@ ok:
     if (!first_instance) {
         GtkWidget *dialog = 
             gtk_dialog_new_with_buttons(_("Is there another JudoShiai program running?"),
-                                        NULL,
+					GTK_WINDOW(main_window),
                                         GTK_DIALOG_MODAL,
                                         _("Yes, another JudoShiai program is running"), 1000,
                                         _("No, this the only JudoShiai program. \nPurge erroneous lock file."), 1001,

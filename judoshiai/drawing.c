@@ -1787,7 +1787,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
 
     // Create the dialog.
     dialog = gtk_dialog_new_with_buttons (_("Move the competitors"), //XXXX
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
                                           _("Next"), BUTTON_NEXT,
                                           _("Rest"), BUTTON_REST,

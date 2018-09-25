@@ -439,7 +439,7 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     }
 
     dialog = gtk_file_chooser_dialog_new (_("Import from file"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_OPEN,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -493,7 +493,7 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
         strcpy(data->separator, ",");
 
     dialog = gtk_dialog_new_with_buttons (_("Preferences"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_DIALOG_MODAL,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OK, GTK_RESPONSE_OK,

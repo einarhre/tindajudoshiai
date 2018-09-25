@@ -746,7 +746,7 @@ void set_old_shiai_display(GtkWidget *w, gpointer data)
     gtk_file_filter_set_name(filter, _("Tournaments"));
 
     dialog = gtk_file_chooser_dialog_new (_("Tournament"),
-                                          NULL,
+                                          GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_OPEN,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,

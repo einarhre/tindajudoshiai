@@ -3331,7 +3331,7 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
 
     if (category & MATCH_CATEGORY_SUB_MASK)
 	dialog = gtk_dialog_new_with_buttons (_("Set score"),
-					      NULL,
+					      GTK_WINDOW(main_window),
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      "Hikiwake", HIKIWAKE_OK,
 					      GTK_STOCK_CLEAR, GTK_RESPONSE_NO,
@@ -3340,7 +3340,7 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
 					      NULL);
     else
 	dialog = gtk_dialog_new_with_buttons (_("Set score"),
-					      NULL,
+					      GTK_WINDOW(main_window),
 					      GTK_DIALOG_DESTROY_WITH_PARENT,
 					      GTK_STOCK_CLEAR, GTK_RESPONSE_NO,
 					      GTK_STOCK_OK, GTK_RESPONSE_OK,
@@ -3402,7 +3402,7 @@ static void view_match_time_popup_menu(GtkWidget *treeview,
     s->number = number;
 
     dialog = gtk_dialog_new_with_buttons (_("Set time"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
                                           GTK_STOCK_OK, GTK_RESPONSE_OK,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,

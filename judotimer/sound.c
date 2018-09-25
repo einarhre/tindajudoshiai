@@ -117,7 +117,7 @@ void select_sound(GtkWidget *menu_item, gpointer data)
     play = FALSE;
 
     dialog = gtk_file_chooser_dialog_new(_("Choose a file"),
-                                         NULL,
+                                         GTK_WINDOW(main_window),
                                          GTK_FILE_CHOOSER_ACTION_OPEN,
                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                          "Stop Sound", 1000,
@@ -167,7 +167,7 @@ void select_sound(GtkWidget *menu_item, gpointer data)
         gtk_widget_destroy(dialog);
         return;
     }
-               
+
     G_LOCK(sound);
 
     g_free(sound_file);

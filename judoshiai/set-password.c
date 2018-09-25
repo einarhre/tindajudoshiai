@@ -20,7 +20,7 @@ void set_webpassword_dialog(GtkWidget *w, gpointer data )
     GtkWidget *dialog, *label, *password, *hbox;
 
     dialog = gtk_dialog_new_with_buttons (_("Password"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_DIALOG_MODAL,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OK, GTK_RESPONSE_OK,

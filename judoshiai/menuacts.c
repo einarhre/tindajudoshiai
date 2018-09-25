@@ -45,7 +45,7 @@ void new_shiai(GtkWidget *w, gpointer data)
     GtkWidget *dialog;
 
     dialog = gtk_file_chooser_dialog_new (_("Tournament"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -108,7 +108,7 @@ void open_shiai_from_net(GtkWidget *w, gpointer data)
     gint i;
 
     dialog = gtk_file_chooser_dialog_new (_("Tournament from the net"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -183,7 +183,7 @@ void open_shiai(GtkWidget *w, gpointer data)
     gtk_file_filter_set_name(filter, _("Contests"));
 
     dialog = gtk_file_chooser_dialog_new (_("Contest"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_OPEN,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -264,7 +264,7 @@ void select_use_logo(GtkWidget *w, gpointer data)
     GtkFileFilter *filter;
 
     dialog = gtk_file_chooser_dialog_new(_("Choose a file"),
-                                         NULL,
+					 GTK_WINDOW(main_window),
                                          GTK_FILE_CHOOSER_ACTION_OPEN,
                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                          "No Logo", 1000,
@@ -433,7 +433,7 @@ static void get_competitors(void)
     gtk_file_filter_set_name(filter, _("Tournaments"));
 
     dialog = gtk_file_chooser_dialog_new (_("Add competitors"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_OPEN,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -513,7 +513,7 @@ void get_weights_from_old_competition(GtkWidget *w, gpointer data)
     gtk_file_filter_set_name(filter, _("Tournaments"));
 
     dialog = gtk_file_chooser_dialog_new (_("Copy Weights"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_OPEN,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -603,7 +603,7 @@ void backup_shiai(GtkWidget *w, gpointer data)
     GtkWidget *dialog, *do_backup;
 
     dialog = gtk_file_chooser_dialog_new(_("Choose a directory"),
-                                         NULL,
+					 GTK_WINDOW(main_window),
                                          GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                          GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -622,7 +622,7 @@ void backup_shiai(GtkWidget *w, gpointer data)
         gtk_widget_destroy(dialog);
         return;
     }
-                
+
     g_free(backup_directory);
     backup_directory = NULL;
 

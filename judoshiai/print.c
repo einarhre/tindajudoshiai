@@ -2102,7 +2102,7 @@ void print_matches(GtkWidget *menuitem, gpointer userdata)
     gtk_file_filter_set_name(filter, _("Matches"));
 
     dialog = gtk_file_chooser_dialog_new (_("Match File"),
-                                          NULL,
+					  GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
