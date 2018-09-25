@@ -196,6 +196,29 @@ gint encode_msg(struct message *m, guchar *buf, gint buflen)
 	    putstr(m->u.lookup_comp.result[i].fullname);
 	}
 	break;
+    case MSG_INPUT:
+	put32(m->u.input.tatami);
+	put32(m->u.input.key);
+	put32(m->u.input.shift);
+	put32(m->u.input.button);
+	put32(m->u.input.label);
+	break;
+    case MSG_LABELS:
+	put32(m->u.labels.longtxt);
+	if (m->u.labels.longtxt) {
+	    put32(m->u.labels.longlabel.lbl);
+	    putstr(m->u.labels.longlabel.text);
+	    putstr(m->u.labels.longlabel.fg);
+	    putstr(m->u.labels.longlabel.bg);
+	} else {
+	    for (i = 0; i < 4; i++) {
+		put32(m->u.labels.labels[i].lbl);
+		putstr(m->u.labels.labels[i].text);
+		putstr(m->u.labels.labels[i].fg);
+		putstr(m->u.labels.labels[i].bg);
+	    }
+	}
+	break;
     }
 
     len = (gint)(p - buf);
@@ -388,6 +411,29 @@ gint decode_msg(struct message *m, guchar *buf, gint buflen)
 	for (i = 0; i < NUM_LOOKUP; i++) {
 	    get32(m->u.lookup_comp.result[i].index);
 	    getstr(m->u.lookup_comp.result[i].fullname);
+	}
+	break;
+    case MSG_INPUT:
+	get32(m->u.input.tatami);
+	get32(m->u.input.key);
+	get32(m->u.input.shift);
+	get32(m->u.input.button);
+	get32(m->u.input.label);
+	break;
+    case MSG_LABELS:
+	get32(m->u.labels.longtxt);
+	if (m->u.labels.longtxt) {
+	    get32(m->u.labels.longlabel.lbl);
+	    getstr(m->u.labels.longlabel.text);
+	    getstr(m->u.labels.longlabel.fg);
+	    getstr(m->u.labels.longlabel.bg);
+	} else {
+	    for (i = 0; i < 4; i++) {
+		get32(m->u.labels.labels[i].lbl);
+		getstr(m->u.labels.labels[i].text);
+		getstr(m->u.labels.labels[i].fg);
+		getstr(m->u.labels.labels[i].bg);
+	    }
 	}
 	break;
     }

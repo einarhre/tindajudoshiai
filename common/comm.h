@@ -65,10 +65,13 @@
 #define INFO_MATCH_NUM 10
 #endif
 
-#define SHIAI_PORT     2310
-#define JUDOTIMER_PORT 2311
-#define WEBSOCK_PORT   2315
-#define SERIAL_PORT    2316
+#define SHIAI_PORT          2310
+#define JUDOTIMER_PORT      2311
+#define WEBSOCK_PORT        2315
+#define SERIAL_PORT         2316
+#define JUDOSERVER_PORT     5000
+#define WEBSOCK_INFO_PORT   5030
+#define WEBSOCK_TIMER_PORT  5001
 
 #define MULTICAST_ADDR 0xe0013a01 // 244.1.58.1
 #define MULTICAST_PORT_FROM_JS 12310
@@ -83,7 +86,8 @@
 #define APPLICATION_TYPE_WEIGHT  4
 #define APPLICATION_TYPE_JUDOGI  5
 #define APPLICATION_TYPE_PROXY   6
-#define NUM_APPLICATION_TYPES    7
+#define APPLICATION_TYPE_SERVER  7
+#define NUM_APPLICATION_TYPES    8
 
 #define COMM_ESCAPE 0xff
 #define COMM_FF     0xfe
@@ -95,22 +99,24 @@ enum message_types {
     MSG_RESULT,
     MSG_ACK,
     MSG_SET_COMMENT,
-    MSG_SET_POINTS,
+    MSG_SET_POINTS,  // 5
     MSG_HELLO,
     MSG_DUMMY,
     MSG_MATCH_INFO,
     MSG_NAME_INFO,
-    MSG_NAME_REQ,
+    MSG_NAME_REQ,    // 10
     MSG_ALL_REQ,
     MSG_CANCEL_REST_TIME,
     MSG_UPDATE_LABEL,
     MSG_EDIT_COMPETITOR,
-    MSG_SCALE,
+    MSG_SCALE,       // 15
     MSG_11_MATCH_INFO,
     MSG_EVENT,
     MSG_WEB,
     MSG_LANG,
-    MSG_LOOKUP_COMP,
+    MSG_LOOKUP_COMP, // 20
+    MSG_INPUT,
+    MSG_LABELS,
     NUM_MESSAGES
 };
 
@@ -435,6 +441,39 @@ struct msg_lookup_comp {
     } result[NUM_LOOKUP];
 };
 
+struct msg_input {
+    int tatami;
+    int key;
+#define INPUT_CTL   4
+#define INPUT_SHIFT 1
+    int shift;
+#define INPUT_LEFT_BUTTON   1
+#define INPUT_MIDDLE_BUTTON 2
+#define INPUT_RIGHT_BUTTON  3
+#define INPUT_SCROLL_UP     4
+#define INPUT_SCROLL_DOWN   5
+    int button;
+    int label;
+};
+
+struct msg_labels {
+    int longtxt;
+    union {
+	struct {
+	    int  lbl;
+	    char text[32];
+	    char fg[8];
+	    char bg[8];
+	} labels[4];
+	struct {
+	    int lbl;
+	    char text[128];
+	    char fg[8];
+	    char bg[8];
+	} longlabel;
+    };
+};
+
 struct message {
     long  src_ip_addr; // Source address of the packet. Added by the comm node (network byte order).
     char  type;
@@ -459,12 +498,20 @@ struct message {
 	struct msg_web_req     web;
 	struct msg_lang        lang;
 	struct msg_lookup_comp lookup_comp;
+	struct msg_input       input;
+	struct msg_labels      labels;
     } u;
 };
 
 #define SSDP_INFO_LEN 48
+enum {
+    WEBSOCK_NO = 0,
+    WEBSOCK_TIMER,
+    WEBSOCK_INFO
+};
 struct jsconn {
     int fd;
+    int listen_port;
     uint32_t addr;
     int id;
     uint8_t buf[512];
@@ -513,6 +560,7 @@ extern void msg_to_queue(struct message *msg);
 extern struct message *get_rec_msg(void);
 extern void set_preferences(void);
 extern uint32_t host2net(uint32_t a);
+extern gchar *msg_name(gint msg);
 
 static inline char *full_version(void)
 {

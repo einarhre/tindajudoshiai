@@ -71,10 +71,19 @@ static int putstr_esc(char *p, int len, char *s)
     return a;
 }
 
+static int putdbl1(char *b, int l, double d)
+{
+    int n = snprintf(b, l, "%f,", d);
+    char *c = strchr(b, ',');
+    if (c) *c = '.'; // change comma to full stop
+    return n;
+}
+
 #define put8(_n) len += snprintf(p+len, buflen-len, "%d,", _n)
 #define put16(_n) len += snprintf(p+len, buflen-len, "%d,", _n)
 #define put32(_n) len += snprintf(p+len, buflen-len, "%d,", _n)
-#define putdbl(_n) len += snprintf(p+len, buflen-len, "%f,", _n)
+#define putdbl(_n) len += putdbl1(p+len, buflen-len, _n)
+//#define putdbl(_n) len += snprintf(p+len, buflen-len, "%f,", _n)
 #define putstr(_s) len += putstr_esc(p+len, buflen-len, _s)
 
 int websock_encode_msg(struct message *m, unsigned char *buf, int buflen)
@@ -248,6 +257,29 @@ int websock_encode_msg(struct message *m, unsigned char *buf, int buflen)
 	for (i = 0; i < NUM_LOOKUP; i++) {
 	    put32(m->u.lookup_comp.result[i].index);
 	    putstr(m->u.lookup_comp.result[i].fullname);
+	}
+	break;
+    case MSG_INPUT:
+	put32(m->u.input.tatami);
+	put32(m->u.input.key);
+	put32(m->u.input.shift);
+	put32(m->u.input.button);
+	put32(m->u.input.label);
+	break;
+    case MSG_LABELS:
+	put32(m->u.labels.longtxt);
+	if (m->u.labels.longtxt) {
+	    put32(m->u.labels.longlabel.lbl);
+	    putstr(m->u.labels.longlabel.text);
+	    putstr(m->u.labels.longlabel.fg);
+	    putstr(m->u.labels.longlabel.bg);
+	} else {
+	    for (i = 0; i < 4; i++) {
+		put32(m->u.labels.labels[i].lbl);
+		putstr(m->u.labels.labels[i].text);
+		putstr(m->u.labels.labels[i].fg);
+		putstr(m->u.labels.labels[i].bg);
+	    }
 	}
 	break;
     }
@@ -441,6 +473,29 @@ int websock_decode_msg(struct message *m, cJSON *json)
 	for (i = 0; i < NUM_LOOKUP; i++) {
 	    get32(m->u.lookup_comp.result[i].index);
 	    getstr(m->u.lookup_comp.result[i].fullname);
+	}
+	break;
+    case MSG_INPUT:
+	get32(m->u.input.tatami);
+	get32(m->u.input.key);
+	get32(m->u.input.shift);
+	get32(m->u.input.button);
+	get32(m->u.input.label);
+	break;
+    case MSG_LABELS:
+	get32(m->u.labels.longtxt);
+	if (m->u.labels.longtxt) {
+	    get32(m->u.labels.longlabel.lbl);
+	    getstr(m->u.labels.longlabel.text);
+	    getstr(m->u.labels.longlabel.fg);
+	    getstr(m->u.labels.longlabel.bg);
+	} else {
+	    for (i = 0; i < 4; i++) {
+		get32(m->u.labels.labels[i].lbl);
+		getstr(m->u.labels.labels[i].text);
+		getstr(m->u.labels.labels[i].fg);
+		getstr(m->u.labels.labels[i].bg);
+	    }
 	}
 	break;
     }
