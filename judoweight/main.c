@@ -159,7 +159,7 @@ void set_display(struct msg_edit_competitor *msg)
                          tm->tm_hour,
                          tm->tm_min,
                          tm->tm_sec);
-                SNPRINTF_UTF8(buf1, "%d.%02d kg", weight_to_str(msg->weight));
+                SNPRINTF_UTF8(buf1, "%s kg", weight_to_str(msg->weight));
                 labels[0] = buf;
                 labels[1] = buf1;
                 labels[2] = NULL;
