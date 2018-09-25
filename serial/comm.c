@@ -52,7 +52,7 @@
 #include <sys/time.h>
 
 extern gint websock_send_msg(gint fd, struct message *msg);
-extern void handle_websock(struct jsconn *conn, char *in, gint length);
+extern void handle_websock(struct jsconn *conn, char *in, gint length, struct message *msg);
 extern void serial_set_device(gchar *dev);
 extern void serial_set_baudrate(gint baud);
 extern void serial_set_type(gint type);
@@ -284,7 +284,7 @@ gpointer websock_thread(gpointer args)
 
             r = recv(connections[i].fd, (char *)inbuf, sizeof(inbuf), 0);
             if (r > 0) {
-		handle_websock(&connections[i], (gchar *)inbuf, r);
+		handle_websock(&connections[i], (gchar *)inbuf, r, NULL);
             } else {
                 g_print("Connection %d fd=%d closed (r=%d, err=%s)\n",
 			i, connections[i].fd, r, strerror(errno));
