@@ -1164,7 +1164,7 @@ void reset(guint key, struct msg_next_match *msg0)
         koka    = 0.0;
 	if (use_2017_rules || use_2018_rules) {
 	    yuko    = 0.0;
-	    wazaari = 5.0;
+	    wazaari = 10.0;
 	} else {
 	    yuko    = 5.0;
 	    wazaari = 10.0;

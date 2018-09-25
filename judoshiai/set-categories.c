@@ -977,10 +977,10 @@ static void init_cat_data(void)
             def.gs_time = official_categories[i][j][k].gs_time;
             def.rep_time = 0;
             def.layout[0] = 0;
-            if (i == DRAW_FINNISH && def.age <= 10) { // E-juniors
+            if (def.age <= 10) { // E-juniors
                 def.pin_time_koka = 0;
                 def.pin_time_yuko = 0;
-                def.pin_time_wazaari = 5;
+                def.pin_time_wazaari = 10;
                 def.pin_time_ippon = 15;
 	    } else if (prop_get_int_val(PROP_RULES_2017) ||
 		       prop_get_int_val(PROP_RULES_2018)) {
