@@ -77,6 +77,21 @@ void get_text_extents(cairo_t *cr, gchar *txt, PangoFontDescription *desc,
     } while (0)
 
 
+/* For stopwatch variables */
+#define SNPRINTF(_dst, _fmt...)					  \
+    do { gchar *dst = get_##_dst(); gint s = sizeof_##_dst();	  \
+	if (snprintf(dst, s, _fmt) >= s)			  \
+	    FIX_UTF8(dst);					  \
+    } while (0)
+
+#define STRCPY(_dst, _src)						\
+    do { gchar *dst = get_##_dst(); gint s = sizeof_##_dst();		\
+	if (g_strlcpy(dst, _src, s) >= s) {				\
+	    gchar *end = NULL;						\
+	    if (g_utf8_validate(dst, -1, (const gchar **)&end) == FALSE) \
+		if (end) *end = 0;					\
+	}} while (0)
+
 void print_trace(void);
 
 #endif
