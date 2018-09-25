@@ -1020,7 +1020,7 @@ gint paint_svg(struct paint_data *pd)
                         } else if (systm.system == SYSTEM_POOL || systm.system == SYSTEM_BEST_OF_3 || dp2) {
                             if (pmp->finished) {
                                 gint k;
-                                for (k = 1; k <= dp2 ? 4 : num_judokas; k++) {
+                                for (k = 1; k <= (dp2 ? 4 : num_judokas); k++) {
                                     if (pmp->c[k] == comp) {
 					if (lisp)
 					    l_r = k;
@@ -1480,7 +1480,7 @@ void select_svg_dir(GtkWidget *menu_item, gpointer data)
     gboolean ok;
 
     dialog = gtk_file_chooser_dialog_new(_("Choose a directory"),
-                                         NULL,
+					 GTK_WINDOW(main_window),
                                          GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                          GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
