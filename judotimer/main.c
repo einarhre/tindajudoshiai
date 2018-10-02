@@ -1188,16 +1188,16 @@ void voting_result(GtkWidget *w,
         break;
     case HANSOKUMAKE_BLUE:
         if (white_first)
-            set_text(MY_LABEL(comment), _("Hansokumake to white"));
+            set_text(MY_LABEL(comment), _("Hansoku-make to white"));
         else
-            set_text(MY_LABEL(comment), _("Hansokumake to blue"));
+            set_text(MY_LABEL(comment), _("Hansoku-make to blue"));
 	hansokumake_to_blue = TRUE;
         break;
     case HANSOKUMAKE_WHITE:
         if (white_first)
-            set_text(MY_LABEL(comment), _("Hansokumake to blue"));
+            set_text(MY_LABEL(comment), _("Hansoku-make to blue"));
         else
-            set_text(MY_LABEL(comment), _("Hansokumake to white"));
+            set_text(MY_LABEL(comment), _("Hansoku-make to white"));
 	hansokumake_to_white = TRUE;
         break;
     case HIKIWAKE:

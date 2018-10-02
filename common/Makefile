@@ -1,37 +1,29 @@
+include ../common/Makefile.inc
+
 MSGFMT=msgfmt
 XGETTEXT=xgettext
+MSGMERGE=msgmerge
 pos := $(wildcard *.po)
 mos := $(patsubst %.po,%.mo,$(pos))
-tmps := $(patsubst %.po,%.tmp,$(pos))
+csources := $(wildcard ../judotimer/*.c ../judoshiai/*.c ../judoinfo/*.c ../common/*.c ../judoweight/*.c ../judojudogi/*.c ../judoproxy/*.c)
 
 locale: $(mos)
+
+merge: $(pos)
+
+clean:
+	rm -f $(mos)
+	rm -f $(merges)
+	rm -f judoshiai.pot
+
+.PHONY: clean merge locale
 
 %.mo: %.po
 	$(MSGFMT) -o $@ $< 
 
-%.po:
-	$(XGETTEXT) --from-code=UTF-8 -d $* -C --keyword=_ --keyword=N_ -j ../judotimer/*.c -j ../judoshiai/*.c \
-	-j ../judoinfo/*.c ../common/*.c ../judoweight/*.c ../judojudogi/*.c
+judoshiai.pot: $(csources)
+	$(XGETTEXT) --from-code=UTF-8 -o judoshiai.pot --language=C --keyword=_ --keyword=N_ --add-location=file --package-name=judoshiai --package-version=$(SHIAI_VER_NUM) \
+	$(csources)
 
-%.tmp: %.po
-	$(XGETTEXT) --from-code=UTF-8 -d $* -C --keyword=_ --keyword=N_ -j ../judotimer/*.c -j ../judoshiai/*.c \
-	-j ../judoinfo/*.c ../common/*.c ../judoweight/*.c ../judojudogi/*.c
-ifneq ($(COMMENT),YES)
-	grep -v '^#' $< > $@
-	mv $@ $< 
-endif
-
-FORCE:
-
-po: $(tmps)
-
-clean:
-	rm -f *.mo
-
-# for future use
-#merge:
-#	echo '' > messages.po # xgettext needs that file, and we need it empty
-#	find .. -type f -iname "*.c" | xgettext --from-code=UTF-8 --keyword=_ --keyword=N_ -j -f -
-#	msgmerge -N existing.po messages.po > new.po
-#	mv new.po existing.po
-#	rm messages.po
+%.po: judoshiai.pot
+	$(MSGMERGE) -U --backup=none $*.po judoshiai.pot

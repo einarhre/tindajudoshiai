@@ -263,7 +263,7 @@ void ask_tvlogo_settings( GtkWidget *w,
 
 #if (GTKVER == 3)
     hbox = gtk_grid_new();
-    gtk_grid_attach(GTK_GRID(hbox), gtk_label_new("VLC port:"), 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(hbox), gtk_label_new(_("VLC port:")), 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(hbox), vlc->port,                  1, 0, 1, 1);
 
     hbox1 = gtk_grid_new();
@@ -277,7 +277,7 @@ void ask_tvlogo_settings( GtkWidget *w,
     gtk_grid_attach(GTK_GRID(hbox2), vlc->scale,                 1, 0, 1, 1);
 #else
     hbox = gtk_hbox_new(FALSE, 4);
-    gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new("VLC port:"), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_("VLC port:")), FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), vlc->port, FALSE, FALSE, 0);
 
     hbox1 = gtk_hbox_new(FALSE, 4);
