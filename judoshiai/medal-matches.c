@@ -67,6 +67,8 @@ void move_medal_matches(GtkWidget *menuitem, gpointer userdata)
     GtkWidget *dialog;
 #if (GTKVER == 3)
     GtkWidget *table = gtk_grid_new();
+    gtk_grid_set_row_spacing (GTK_GRID (table), 6);
+    gtk_grid_set_column_spacing (GTK_GRID (table), 12);
 #else
     GtkWidget *table = gtk_table_new(3, 5, FALSE);
 #endif
@@ -89,18 +91,18 @@ void move_medal_matches(GtkWidget *menuitem, gpointer userdata)
                                           NULL);
 
 #if (GTKVER == 3)
-    gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Move match ")),      0, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("to tatami and/or")), 1, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(table), gtk_label_new(_(" delay")),           2, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Move match")),      0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("to tatami")), 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("delay")),           2, 0, 1, 1);
 
     gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Final")),            0, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Bronze1")),          0, 2, 1, 1);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Bronze2")),          0, 3, 1, 1);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Pool's last")),      0, 4, 1, 1);
 #else
-    gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_("Move match ")), 0, 1, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_("to tatami and/or")), 1, 2, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_(" delay")), 2, 3, 0, 1);
+    gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_("Move match")), 0, 1, 0, 1);
+    gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_("to tatami")), 1, 2, 0, 1);
+    gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_("delay")), 2, 3, 0, 1);
 
     gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_("Final")), 0, 1, 1, 2);
     gtk_table_attach_defaults(GTK_TABLE(table), gtk_label_new(_("Bronze1")), 0, 1, 2, 3);

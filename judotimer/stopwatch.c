@@ -867,7 +867,7 @@ static void create_ask_window(void)
         gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, TRUE, 0);
 #endif
     } else {
-        lbl = gtk_label_new(_("- - -"));
+        lbl = gtk_label_new("- - -");
 #if (GTKVER == 3)
         gtk_grid_attach(GTK_GRID(vbox), lbl, 0, 0, 1, 1);
 #else
@@ -997,7 +997,7 @@ void reset(guint key, struct msg_next_match *msg0)
         key = GDK_9;
         match_time = elap;
         judotimer_log("Golden score starts");
-        set_gs_text("GOLDEN SCORE");
+        set_gs_text(_("GOLDEN SCORE"));
     } else if (demo == 0 &&
                asked == FALSE &&
                ((bluepts[I] == 0 && whitepts[I] == 0 &&

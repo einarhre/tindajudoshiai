@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: judoshiai 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-02 03:37+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2018-10-03 09:49+0200\n"
+"PO-Revision-Date: 2018-10-02 21:04+0200\n"
+"Last-Translator: Felix von Poblotzki <xilaew@gmail.com>\n"
+"Language-Team: \n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -82,9 +82,8 @@ msgid "Match duration: automatic"
 msgstr "Kampfzeit: automatisch"
 
 #: ../judotimer/menus.c
-#, fuzzy
 msgid "Match duration: 2 min (short pin times)"
-msgstr "Kampfzeit: 2 Min U12 (kurze Haltezeit)"
+msgstr "Kampfzeit: 2 Min (kurze Haltezeit)"
 
 #: ../judotimer/menus.c
 msgid "Match duration: 2 min"
@@ -495,8 +494,8 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: ../judotimer/stopwatch.c
-msgid "- - -"
-msgstr "- - -"
+msgid "GOLDEN SCORE"
+msgstr ""
 
 #: ../judotimer/stopwatch.c
 msgid "CONTROL"
@@ -556,7 +555,7 @@ msgstr "Setzplätze fest zuweisen:"
 
 #: ../judoshiai/properties.c
 msgid "Use the first places only:"
-msgstr ""
+msgstr "Nur die ersten drei Platzierungen Anzeigen:"
 
 #: ../judoshiai/properties.c
 msgid "Win in Golden Score gives 1 point"
@@ -1772,15 +1771,18 @@ msgid "Move Medal Matches"
 msgstr "Medaillenkämpfe verschieben"
 
 #: ../judoshiai/medal-matches.c
-msgid "Move match "
+#, fuzzy
+msgid "Move match"
 msgstr "Kampf verschieben"
 
 #: ../judoshiai/medal-matches.c
-msgid "to tatami and/or"
+#, fuzzy
+msgid "to tatami"
 msgstr "auf Matte und/oder"
 
 #: ../judoshiai/medal-matches.c
-msgid " delay"
+#, fuzzy
+msgid "delay"
 msgstr " Verzögerung"
 
 #: ../judoshiai/medal-matches.c ../common/common.c
@@ -2581,6 +2583,12 @@ msgstr "Judotimer"
 #: ../judoproxy/main.c
 msgid "Reload"
 msgstr ""
+
+#~ msgid "- - -"
+#~ msgstr "- - -"
+
+#~ msgid " delay"
+#~ msgstr " Verzögerung"
 
 #~ msgid "Hansokumake to white"
 #~ msgstr "Hansoku-make für weiß"
