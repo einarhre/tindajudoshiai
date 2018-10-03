@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-02 03:37+0200\n"
+"POT-Creation-Date: 2016-10-25 13:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -11,2682 +11,1816 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../judotimer/comm.c ../judotimer/menus.c ../judotimer/main.c
-#: ../judotimer/stopwatch.c
-msgid "Golden Score"
-msgstr "ניקוד זהב"
-
-#: ../judotimer/video.c
-msgid "Video server URL"
-msgstr "Videopalvelimen URL"
-
-#: ../judotimer/video.c ../judoshiai/ftp.c
-msgid "User:"
-msgstr "Käyttäjä:"
-
-#: ../judotimer/video.c ../judoshiai/ftp.c ../judoshiai/set-password.c
-#: ../judoweight/main.c
-msgid "Password:"
-msgstr "סיסמא"
-
-#: ../judotimer/video.c ../judoshiai/ftp.c
-msgid "Proxy:"
-msgstr "Välityspalvelin:"
-
-#: ../judotimer/video.c ../judotimer/tvlogo.c ../common/ip.c
-msgid "(Connection OK)"
-msgstr "תקשורת תקינה"
-
-#: ../judotimer/video.c ../judotimer/tvlogo.c ../common/ip.c
-msgid "(Connection broken)"
-msgstr "תקשורת שבורה"
-
-#: ../judotimer/video.c ../judoproxy/video.c
-msgid "Show Video"
-msgstr "Näytä video"
-
-#: ../judotimer/menus.c
-msgid "About Judotimer"
-msgstr "אודות שעון תחרות"
-
-#: ../judotimer/menus.c
-msgid "Set clocks"
-msgstr "הגדר שעונים"
-
-#: ../judotimer/menus.c
-msgid "Clock:"
-msgstr "שעון"
-
-#: ../judotimer/menus.c ../judoshiai/matches.c ../judoshiai/httpd.c
-msgid "Match"
-msgstr "הבא"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c ../judoshiai/import.c
-#: ../judoinfo/menus.c ../judoweight/menus.c ../judojudogi/menus.c
-#: ../judoproxy/menus.c
-msgid "Preferences"
-msgstr "מאפיינים"
-
-#: ../judotimer/menus.c ../judoshiai/sql-dialog.c ../judoshiai/menus.c
-#: ../judoinfo/menus.c ../judoweight/menus.c ../judojudogi/menus.c
-#: ../judoproxy/menus.c
-msgid "Help"
-msgstr "עזרה"
-
-#: ../judotimer/menus.c
-msgid "Undo!"
-msgstr "בטל"
-
-#: ../judotimer/menus.c
-msgid "Match duration: automatic"
-msgstr "משך ההתמודדות: אוטומטית"
-
-#: ../judotimer/menus.c
-#, fuzzy
-msgid "Match duration: 2 min (short pin times)"
-msgstr "משך קרב: 2 דקות (ריתוק קצר)"
-
-#: ../judotimer/menus.c
-msgid "Match duration: 2 min"
-msgstr "משך קרב: 2 דקות"
-
-#: ../judotimer/menus.c
-msgid "Match duration: 3 min"
-msgstr "משך קרב: 3 דקות"
-
-#: ../judotimer/menus.c
-msgid "Match duration: 4 min"
-msgstr "משך קרב: 4 דקות"
-
-#: ../judotimer/menus.c
-msgid "Match duration: 5 min"
-msgstr "משך קרב: 5 דקות"
-
-#: ../judotimer/menus.c
-msgid "Hantei: blue wins"
-msgstr "הנטיי: כחול מנצח"
-
-#: ../judotimer/menus.c
-msgid "Hantei: white wins"
-msgstr "הנטיי: לבן מנצח"
-
-#: ../judotimer/menus.c ../judotimer/main.c
-msgid "Hansoku-make to blue"
-msgstr "הנסוקומקה לכחול"
-
-#: ../judotimer/menus.c ../judotimer/main.c
-msgid "Hansoku-make to white"
-msgstr "הנסוקומקה ללבן"
-
-#: ../judotimer/menus.c ../judotimer/main.c ../judotimer/stopwatch.c
-msgid "Hikiwake"
-msgstr "היקיוואקה"
-
-#: ../judotimer/menus.c
-msgid "Clear selection"
-msgstr "בטל בחירה"
-
-#: ../judotimer/menus.c
-msgid "View Log"
-msgstr "צפה בלוג"
-
-#: ../judotimer/menus.c ../judotimer/show-ad.c
-msgid "Show Competitors"
-msgstr "הצג  מתחרים"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
-#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "Quit"
-msgstr "יציאה"
-
-#: ../judotimer/menus.c ../judoshiai/menuacts.c
-msgid "Contest"
-msgstr "קרב"
-
-#: ../judotimer/menus.c
-msgid "Switch sides"
-msgstr "החלף צדדים"
-
-#: ../judotimer/menus.c
-msgid "Replay Video"
-msgstr "Näytä video uusintana"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Red background"
-msgstr "רקע אדום"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Full screen mode"
-msgstr "מוד מסך מלא"
-
-#: ../judotimer/menus.c
-msgid "Stop clock on Ippon"
-msgstr "עצור שעון באיפון"
-
-#: ../judotimer/menus.c
-msgid "2017 Rules"
-msgstr ""
-
-#: ../judotimer/menus.c
-msgid "2018 Rules"
-msgstr ""
-
-#: ../judotimer/menus.c
-msgid "Confirm New Match"
-msgstr "אשר קרב חדש"
-
-#: ../judotimer/menus.c
-msgid "View clocks only"
-msgstr "צפה בשעונים בלבד"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "White first"
-msgstr "לבן תחילה"
-
-#: ../judotimer/menus.c
-msgid "No SOREMADE/IPPON texts"
-msgstr "ללא טקסט איפון/ סורהמדה"
-
-#: ../judotimer/menus.c
-msgid "Show competitors"
-msgstr "הצג  מתחרים"
-
-#: ../judotimer/menus.c
-msgid "Require judogi control"
-msgstr "דרוש בקרת חליפה"
-
-#: ../judotimer/menus.c
-msgid "Display layout"
-msgstr "תצוגה"
-
-#: ../judotimer/menus.c
-msgid "Display layout 1"
-msgstr "תצוגה 1"
-
-#: ../judotimer/menus.c
-msgid "Display layout 2"
-msgstr "תצוגה 2"
-
-#: ../judotimer/menus.c
-msgid "Display layout 3"
-msgstr "תצוגה 3"
-
-#: ../judotimer/menus.c
-msgid "Display layout 4"
-msgstr "תצוגה 4"
-
-#: ../judotimer/menus.c
-msgid "Display layout 5"
-msgstr "תצוגה 5"
-
-#: ../judotimer/menus.c
-msgid "Display customized layout"
-msgstr "הצג תצוגה מאופיינת אישית"
-
-#: ../judotimer/menus.c
-msgid "Custom layout file..."
-msgstr "Custom layout file..."
-
-#: ../judotimer/menus.c
-msgid "Name format"
-msgstr "תצורת זמן"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c
-msgid "Name Surname, Country/Club"
-msgstr " שם משפחה פרטי, מדינה/ אגודה"
-
-#: ../judotimer/menus.c
-msgid "Surname, Name, Country/Club"
-msgstr "שפ פרטי משפחה, מדינה/ אגודה"
-
-#: ../judotimer/menus.c
-msgid "Country/Club  Surname, Name"
-msgstr "מדינה/ אגודה שם פרטי שם משפחה"
-
-#: ../judotimer/menus.c
-msgid "Country  Surname, Name"
-msgstr "מדינה שם פרטי משפחה"
-
-#: ../judotimer/menus.c
-msgid "Club  Surname, Name"
-msgstr "אגודה שם פרטי משפחה"
-
-#: ../judotimer/menus.c
-msgid "Country Surname"
-msgstr "מדינה שם"
-
-#: ../judotimer/menus.c
-msgid "Club Surname"
-msgstr "אגודה שם"
-
-#: ../judotimer/menus.c
-msgid "Surname, Name"
-msgstr "שם משפחה, פרטי"
-
-#: ../judotimer/menus.c ../judoshiai/httpd.c
-msgid "Surname"
-msgstr "שם משפחה"
-
-#: ../judotimer/menus.c ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-#: ../judoshiai/httpd.c
-msgid "Country"
-msgstr "מדינה"
-
-#: ../judotimer/menus.c ../judoshiai/db-validate.c ../judoshiai/another-shiai.c
-#: ../judoshiai/competitors.c ../judoshiai/httpd.c
-msgid "Club"
-msgstr "אגודה"
-
-#: ../judotimer/menus.c
-msgid "Contest area"
-msgstr "אזור תחרות"
-
-#: ../judotimer/menus.c
-msgid "Contest area not chosen"
-msgstr "לא נבחה זירת התמודדות"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../judoweight/menus.c
-#: ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "Communication node"
-msgstr "רכיב תקשורת"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../common/ip.c
-#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "Own IP addresses"
-msgstr " כתובת שרת עצמית"
-
-#: ../judotimer/menus.c
-msgid "Video server"
-msgstr "Videopalvelin"
-
-#: ../judotimer/menus.c ../judoshiai/matches.c
-msgid "Set time"
-msgstr "הגדר זמן"
-
-#: ../judotimer/menus.c
-msgid "Increment time"
-msgstr "העלאת זמן"
-
-#: ../judotimer/menus.c
-msgid "Decrement time"
-msgstr "הורדת זמן"
-
-#: ../judotimer/menus.c
-msgid "Increment pin time"
-msgstr "זמן ריתוק עולה"
-
-#: ../judotimer/menus.c
-msgid "Decrement pin time"
-msgstr "זמן ריתוק יורד"
-
-#: ../judotimer/menus.c
-msgid "Normal operation"
-msgstr "הפעלה רגילה"
-
-#: ../judotimer/menus.c
-msgid "Slave mode"
-msgstr "מסך עוקב"
-
-#: ../judotimer/menus.c
-msgid "Advertise"
-msgstr "פרסומות"
-
-#: ../judotimer/menus.c
-msgid "Sound"
-msgstr "קול"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c
-msgid "Font"
-msgstr "גופן"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
-#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "Manual"
-msgstr "ידני"
-
-#: ../judotimer/menus.c
-msgid "Quick guide"
-msgstr "מדריך מהיר"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
-#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "About"
-msgstr "אודות"
-
-#: ../judotimer/tvlogo.c
-msgid "VLC control"
-msgstr "VLC control"
-
-#: ../judotimer/tvlogo.c
-#, fuzzy
-msgid "VLC port:"
-msgstr "VLC control"
-
-#: ../judotimer/tvlogo.c
-msgid "X:"
-msgstr "X:"
-
-#: ../judotimer/tvlogo.c
-msgid "Y:"
-msgstr "Y:"
-
-#: ../judotimer/tvlogo.c
-msgid "Scale:"
-msgstr "משקל:"
-
-#: ../judotimer/show-ad.c
-msgid "CTL"
-msgstr ""
-
-#: ../judotimer/show-ad.c
-msgid "Advertisement"
-msgstr "פרסומת"
-
-#: ../judotimer/show-ad.c ../judotimer/stopwatch.c ../judoshiai/db-validate.c
-#: ../judoshiai/competitors.c ../judoshiai/custom-category.c
-#: ../judoshiai/httpd.c ../judoweight/main.c ../judojudogi/main.c
-msgid "OK"
-msgstr "OK"
-
-#: ../judotimer/show-ad.c
-msgid "Show Flags"
-msgstr "הצג דגלים"
-
-#: ../judotimer/show-ad.c
-msgid "Show Initial of Name"
-msgstr "הצג ראשית שם"
-
-#: ../judotimer/show-ad.c
-msgid "Flag size:"
-msgstr "גודל דגל"
-
-#: ../judotimer/show-ad.c
-msgid "Name size:"
-msgstr "גודל שם:"
-
-#: ../judotimer/show-ad.c ../judoshiai/menuacts.c
-#: ../judoshiai/custom-category.c ../judoshiai/write-results.c
-#: ../judoshiai/svg.c
-msgid "Choose a directory"
-msgstr "בחר נתיב"
-
-#: ../judotimer/show-ad.c
-msgid "Run Advertisements"
-msgstr "הרץ פרסומות"
-
-#: ../judotimer/main.c
-msgid "White has a judogi problem."
-msgstr "בעיית חליפה ללבן"
-
-#: ../judotimer/main.c
-msgid "Blue has a judogi problem."
-msgstr "בעיית חליפה לכחול"
-
-#: ../judotimer/main.c
-msgid "White won the voting"
-msgstr "לבן מנצח"
-
-#: ../judotimer/main.c
 msgid "Blue won the voting"
 msgstr "כחול מנצח"
 
-#: ../judotimer/main.c ../judoshiai/matches.c
+msgid "White won the voting"
+msgstr "לבן מנצח"
+
 msgid "Match:"
 msgstr "קרב"
 
-#: ../judotimer/main.c
 msgid "Next:"
 msgstr "הבא"
 
-#: ../judotimer/main.c ../judoinfo/svg.c
-msgid "Open file"
-msgstr "פתח קובץ"
-
-#: ../judotimer/main.c
-msgid "Fight:"
-msgstr "קרב"
-
-#: ../judotimer/main.c ../judoinfo/main.c
-msgid "Select font"
-msgstr "בחר גופן"
-
-#: ../judotimer/sound.c ../judoshiai/menuacts.c ../judoshiai/svg.c
-#: ../judoweight/svg.c
-msgid "Choose a file"
-msgstr "בחר קובץ"
-
-#: ../judotimer/sound.c
-msgid "Sound Files"
-msgstr "קובצי קול"
-
-#: ../judotimer/sound.c
-msgid "All Files"
-msgstr "כל הקבצים"
-
-#: ../judotimer/stopwatch.c
-msgid "Start Golden Score?"
-msgstr "התחל ניקוד זהב?"
-
-#: ../judotimer/stopwatch.c
-msgid "No Limit"
-msgstr "ללא הגבלה"
-
-#: ../judotimer/stopwatch.c
-msgid "Hantei"
-msgstr "הנטיי"
-
-#: ../judotimer/stopwatch.c
-msgid "Blue wins"
-msgstr " כחול מנצח"
-
-#: ../judotimer/stopwatch.c
-msgid "White wins"
-msgstr "לבן מנצח"
-
-#: ../judotimer/stopwatch.c
-msgid "WINNER"
-msgstr "מנמח"
-
-#: ../judotimer/stopwatch.c
-msgid "Start New Match?"
-msgstr "התחל קרב חדש?"
-
-#: ../judotimer/stopwatch.c
-msgid "Cancel"
-msgstr "בטל"
-
-#: ../judotimer/stopwatch.c
-msgid "- - -"
-msgstr "- - -"
-
-#: ../judotimer/stopwatch.c
-msgid "CONTROL"
-msgstr "בקרה"
-
-#: ../judotimer/stopwatch.c
-msgid "REST TIME"
-msgstr "זמן מנוחה"
-
-#: ../judotimer/stopwatch.c
-msgid "Points going to blue"
-msgstr "ניקוד לטובת כחול"
-
-#: ../judotimer/stopwatch.c
-msgid "Points going to white"
-msgstr "ניקוד לטובת לבן"
-
-#: ../judoshiai/properties.c
-msgid "Tournament:"
-msgstr "תחרות"
-
-#: ../judoshiai/properties.c
-msgid "Date:"
-msgstr "תאריך"
-
-#: ../judoshiai/properties.c
-msgid "Place:"
-msgstr "מיקום"
-
-#: ../judoshiai/properties.c ../judoshiai/print.c
-msgid "Start time:"
-msgstr "זמן התחלה"
-
-#: ../judoshiai/properties.c
-msgid "Number of tatamis:"
-msgstr "מספר זירות"
-
-#: ../judoshiai/properties.c
-msgid "White first:"
-msgstr "לבן תחילה"
-
-#: ../judoshiai/properties.c
-msgid "Best two out of three matches:"
-msgstr "הטוב משלוש"
-
-#: ../judoshiai/properties.c
-msgid ""
-"Medal will be awarded \n"
-"only if a contest was won:"
-msgstr "הענקת מדליה רק עם ניצח קרב"
-
-#: ../judoshiai/properties.c
-msgid "Seeded to fixed places:"
-msgstr "מדורגים למקומות קבועים:"
-
-#: ../judoshiai/properties.c
-msgid "Use the first places only:"
-msgstr "השתמש במקומות הראשונים בלבד"
-
-#: ../judoshiai/properties.c
-msgid "Win in Golden Score gives 1 point"
-msgstr "מנצח בניקוד זהב מעניק נקודה אחת"
-
-#: ../judoshiai/properties.c
-msgid "2017 Rules:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "2018 Rules:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Double Pool 2 with carried forward points:"
-msgstr "Double Pool 2 with carried forward points:"
-
-#: ../judoshiai/properties.c
-msgid "Two pool bronzes:"
-msgstr "Two pool bronzes:"
-
-#: ../judoshiai/properties.c
-msgid "Resolve 3-way ties by time:"
-msgstr "פתור שיוויון בליגה באמצעות זמן"
-
-#: ../judoshiai/properties.c
-msgid "Resolve 3-way ties by weights:"
-msgstr "פתור נצחון ליגה לפי משקל"
-
-#: ../judoshiai/properties.c
-msgid "Mix pool matches into rounds:"
-msgstr "ערבב קרבות ליגה לתוך הסיבובים"
-
-#: ../judoshiai/properties.c
-#, fuzzy
-msgid "Use points 10/1/0:"
-msgstr "השתמש בניקוד איגוד עולמי"
-
-#: ../judoshiai/properties.c
-msgid "Use points 100/10/1/½:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-#, fuzzy
-msgid "Use points 10/7/1:"
-msgstr "השתמש בניקוד איגוד עולמי"
-
-#: ../judoshiai/properties.c
-#, fuzzy
-msgid "Use points 10/1/½:"
-msgstr "השתמש בניקוד איגוד עולמי"
-
-#: ../judoshiai/properties.c
-#, fuzzy
-msgid "Use points 10/3/1:"
-msgstr "השתמש בניקוד איגוד עולמי"
-
-#: ../judoshiai/properties.c
-#, fuzzy
-msgid "Use points 10/5/1:"
-msgstr "השתמש בניקוד איגוד עולמי"
-
-#: ../judoshiai/properties.c
-msgid "Add extra match in teams points tie:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Only wins count, ignore match points:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid ""
-"The first team reaching the majority\n"
-"of wins is declared the winner.\n"
-"The remaining contests will not be fought:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid ""
-"The athletes in the drawn category will\n"
-"refight a golden score contest:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid ""
-"Draw for extra match is done from\n"
-"all categories regardless\n"
-"if the team has a player or not:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "International System"
-msgstr "שיטה בינלאומית"
-
-#: ../judoshiai/properties.c
-msgid "Finnish System"
-msgstr "שיטה פינית"
-
-#: ../judoshiai/properties.c
-msgid "Swedish System"
-msgstr "שיטה שבדית"
-
-#: ../judoshiai/properties.c
-msgid "Estonian System"
-msgstr "שיטה אסטונית"
-
-#: ../judoshiai/properties.c
-msgid "Spanish System"
-msgstr "שיטה ספרדית"
-
-#: ../judoshiai/properties.c
-msgid "Norwegian System"
-msgstr "Norwegian System"
-
-#: ../judoshiai/properties.c
-msgid "British System"
-msgstr "שיטהה בריטית"
-
-#: ../judoshiai/properties.c
-msgid "Australian System"
-msgstr "שיטה אוסטרלית"
-
-#: ../judoshiai/properties.c
-msgid "Danish System"
-msgstr "שיטה דנית"
-
-#: ../judoshiai/properties.c
-msgid "Polish System"
-msgstr "שיטה פולנית"
-
-#: ../judoshiai/properties.c
-msgid "Slovakian System"
-msgstr "שיטה סלובקית"
-
-#: ../judoshiai/properties.c
-msgid "Ukrainian System"
-msgstr "שיטה אוקראינית"
-
-#: ../judoshiai/properties.c
-#, fuzzy
-msgid "German System"
-msgstr "שיטה דנית"
-
-#: ../judoshiai/properties.c
-msgid "Tournament properties"
-msgstr "מאפייני תחרות"
-
-#: ../judoshiai/properties.c
-msgid "Competitors:"
-msgstr "מתחרים"
-
-#: ../judoshiai/properties.c
-msgid "Weighted:"
-msgstr "נשקלו:"
-
-#: ../judoshiai/properties.c ../judoshiai/set-categories.c ../judoshiai/menus.c
-msgid "Properties"
-msgstr "מאפיינים"
-
-#: ../judoshiai/properties.c
-msgid "Reset to"
-msgstr "שחזר"
-
-#: ../judoshiai/properties.c
-msgid "Players"
-msgstr "שחקנים"
-
-#: ../judoshiai/properties.c
-msgid "Max age"
-msgstr "גיל מירבי"
-
-#: ../judoshiai/properties.c
-msgid "Min"
-msgstr "מינ."
-
-#: ../judoshiai/properties.c
-msgid "Max"
-msgstr "מקס'"
-
-#: ../judoshiai/properties.c
-msgid "System"
-msgstr "שיטה"
-
-#: ../judoshiai/properties.c
-msgid "General"
-msgstr "Yleiset asetukset"
-
-#: ../judoshiai/properties.c
-msgid "Initialize"
-msgstr "Initialize"
-
-#: ../judoshiai/properties.c
-msgid "Rules"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Pool settings"
-msgstr "הגדרות ליגה"
-
-#: ../judoshiai/properties.c
-msgid "Team event"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Default systems"
-msgstr "שיטות ברירת מחדל"
-
-#: ../judoshiai/properties.c
-msgid "Grade names"
-msgstr "שם דרגות"
-
-#: ../judoshiai/properties.c
-msgid "Statistics"
-msgstr "סטטיסטיקה"
-
-#: ../judoshiai/matches.c ../judoshiai/match-graph.c
-msgid "Next match"
-msgstr "קרב הבא"
-
-#: ../judoshiai/matches.c ../judoshiai/match-graph.c
-msgid "Preparing"
-msgstr "מתכונן"
-
-#: ../judoshiai/matches.c ../judoshiai/match-graph.c
-msgid "Delay the match"
-msgstr "דחה הקרב"
-
-#: ../judoshiai/matches.c
-msgid "canceled"
-msgstr "מבוטל"
-
-#: ../judoshiai/matches.c
-msgid "changed"
-msgstr "השתנה"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Gold medal match"
-msgstr "גמר"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Bronze match A"
-msgstr "קרב על ארד 1"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Bronze match B"
-msgstr "קרב על ארד 2"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Semifinal A"
-msgstr "עלייה לגמר 1"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Semifinal B"
-msgstr "עלייה לגמר 2"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../common/common.c
-#: ../judojudogi/main.c
-msgid "Silver medal match"
-msgstr "קרב על מדליית כסף"
-
-#: ../judoshiai/matches.c
-msgid "Preparing:"
-msgstr "מתכונן"
-
-#: ../judoshiai/matches.c
-msgid "points"
-msgstr " נקודות"
-
-#: ../judoshiai/matches.c ../judoshiai/popup-menu.c
-msgid "Expand All"
-msgstr "הרחב הכל"
-
-#: ../judoshiai/matches.c ../judoshiai/popup-menu.c
-msgid "Collapse All"
-msgstr "כווץ הכל"
-
-#: ../judoshiai/matches.c
-msgid "Remove comment"
-msgstr "הסר הערה"
-
-#: ../judoshiai/matches.c
-msgid "Set score"
-msgstr "קבע ניקוד"
-
-#: ../judoshiai/matches.c ../judoshiai/competitors.c
-msgid "Group"
-msgstr "קבוצה"
-
-#: ../judoshiai/matches.c ../judoshiai/sheets.c ../judoshiai/db-validate.c
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Category"
-msgstr "קטגוריה"
-
-#: ../judoshiai/matches.c
-msgid "White"
-msgstr "לבן"
-
-#: ../judoshiai/matches.c
-msgid "Blue"
-msgstr "כחול"
-
-#: ../judoshiai/matches.c
-msgid "Points"
-msgstr "נקודות"
-
-#: ../judoshiai/matches.c ../judoshiai/log.c
-msgid "Time"
-msgstr "זמן"
-
-#: ../judoshiai/matches.c
-msgid "Comment"
-msgstr "הערה"
-
-#: ../judoshiai/sheets.c
-msgid "Sheets"
-msgstr "דפים"
-
-#: ../judoshiai/comm.c
-msgid "Connections to this node"
-msgstr "חיבורים לחיבור זה"
-
-#: ../judoshiai/comm.c
-msgid "THIS APPLICATION"
-msgstr "האפליקציה הנוכחית"
-
-#: ../judoshiai/comm.c
-msgid "NOT CONNECTED"
-msgstr "ללא חיבור"
-
-#: ../judoshiai/db-validate.c
-msgid "Database Validation"
-msgstr "בדיקת תקינות מסד נתונים"
-
-#: ../judoshiai/db-validate.c
-msgid "Duplicate seedings:\n"
-msgstr "Duplicate seedings:\n"
-
-#: ../judoshiai/db-validate.c
-msgid "seeding"
-msgstr "דירוג"
-
-#: ../judoshiai/db-validate.c
-msgid "defined"
-msgstr "מוגדר"
-
-#: ../judoshiai/db-validate.c
-msgid "times"
-msgstr "זמנים"
-
-#: ../judoshiai/db-validate.c
-msgid "Duplicate club seedings:\n"
-msgstr "Duplicate club seedings:\n"
-
-#: ../judoshiai/db-validate.c
-msgid "Missing category definitions:\n"
-msgstr "Missing category definitions:\n"
-
-#: ../judoshiai/db-validate.c
-msgid "is not"
-msgstr "לא"
-
-#: ../judoshiai/db-validate.c
-#, fuzzy
-msgid "Category typing errors\n"
-msgstr "Typing errors:\n"
-
-#: ../judoshiai/db-validate.c
-msgid "Typing errors:\n"
-msgstr "Typing errors:\n"
-
-#: ../judoshiai/db-validate.c
-msgid "UTF-8 errors"
-msgstr "UTF-8 errors"
-
-#: ../judoshiai/db-validate.c
-msgid "Extra spaces"
-msgstr "רווחים מיותרים"
-
-#: ../judoshiai/db-validate.c
-msgid "Possible duplicate competitors:\n"
-msgstr "Possible duplicate competitors:\n"
-
-#: ../judoshiai/db-validate.c
-msgid "Possible duplicate club names:\n"
-msgstr "Possible duplicate club names:\n"
-
-#: ../judoshiai/db-validate.c
-msgid "Suspicious weights:\n"
-msgstr "Suspicious weights:\n"
-
-#: ../judoshiai/db-validate.c ../judoshiai/another-shiai.c
-#: ../judoshiai/competitors.c
-msgid "Reg. Category"
-msgstr "קטגוריה רגילה"
-
-#: ../judoshiai/db-validate.c ../judoshiai/another-shiai.c
-#: ../judoshiai/competitors.c ../judoshiai/httpd.c
-msgid "Weight"
-msgstr "משקל"
-
-#: ../judoshiai/db-validate.c
-msgid "Corrupted competitor data:\n"
-msgstr "שגיאה בנתוני ספורטאי\n"
-
-#: ../judoshiai/db-validate.c
-msgid "Corrupted category data:\n"
-msgstr "שגיאה בנתוני קטגוריה\n"
-
-#: ../judoshiai/db-validate.c
-msgid "warnings"
-msgstr "אזהרות"
-
-#: ../judoshiai/menuacts.c ../judoshiai/another-shiai.c ../judoshiai/menus.c
-#: ../judoshiai/main.c
-msgid "Tournament"
-msgstr "תחרות"
-
-#: ../judoshiai/menuacts.c
-msgid "Tournament from the net"
-msgstr "תחרות מהרשת"
-
-#: ../judoshiai/menuacts.c
-msgid "Contests"
-msgstr "קרבות"
-
-#: ../judoshiai/menuacts.c
-msgid "Select sheet font"
-msgstr "בחר גופן לדף"
-
-#: ../judoshiai/menuacts.c
-msgid "Picture Files"
-msgstr "קובץ תמונות"
-
-#: ../judoshiai/menuacts.c
-msgid "Print Headers"
-msgstr "הדפס כותרות"
-
-#: ../judoshiai/menuacts.c ../judoshiai/another-shiai.c
-msgid "Tournaments"
-msgstr "תחרויות"
-
-#: ../judoshiai/menuacts.c
-msgid "Add competitors"
-msgstr "הוסף מתחרים"
-
-#: ../judoshiai/menuacts.c
-msgid "Clean up duplicates and update reg. categories"
-msgstr "הסר כפילויות ועדכן קטגוריות רגילות"
-
-#: ../judoshiai/menuacts.c
-msgid "Weighed only"
-msgstr " שקולים בלבד"
-
-#: ../judoshiai/menuacts.c
-msgid "With weights"
-msgstr "עם משקלים"
-
-#: ../judoshiai/menuacts.c
-msgid "competitors added and updated"
-msgstr "מתחרים הוספו ועודכנו"
-
-#: ../judoshiai/menuacts.c
-msgid "competitors already existed"
-msgstr "מתחרים כבר קיימים"
-
-#: ../judoshiai/menuacts.c
-msgid "competitors added unchanged"
-msgstr "מתחרים הוספו ללא שינוי"
-
-#: ../judoshiai/menuacts.c
-msgid "Copy Weights"
-msgstr "העתק משקלים"
-
-#: ../judoshiai/menuacts.c
-msgid "weights updated"
-msgstr "משקלים עודכנו"
-
-#: ../judoshiai/menuacts.c
-msgid "Do Backup"
-msgstr "בצע גיבוי"
-
-#: ../judoshiai/menuacts.c
-msgid "CANNOT OPEN BACKUP FILE"
-msgstr "לא יכול לפתוח קובץ גיבוי"
-
-#: ../judoshiai/print.c ../judoinfo/main.c ../judojudogi/main.c
-#: ../judoproxy/main.c
-msgid "Save file"
-msgstr "שמור קובץ"
-
-#: ../judoshiai/print.c
-msgid "Landscape"
-msgstr "לאורך"
-
-#: ../judoshiai/print.c
-msgid "Line"
-msgstr "שורה"
-
-#: ../judoshiai/print.c
-msgid "Syntax error"
-msgstr "טעות כתיב"
-
-#: ../judoshiai/print.c ../judoshiai/menus.c
-msgid "Print Schedule"
-msgstr "הדפס תכנית"
-
-#: ../judoshiai/print.c
-msgid "Print To:"
-msgstr "הדפס ל:"
-
-#: ../judoshiai/print.c
-msgid "Printer"
-msgstr "מדפסת"
-
-#: ../judoshiai/print.c
-msgid "PDF"
-msgstr "PDF"
-
-#: ../judoshiai/print.c
-msgid "Resolution (min):"
-msgstr "Resolution (min):"
-
-#: ../judoshiai/print.c
-msgid "Compressed timeline"
-msgstr "זמן מרוכז"
-
-#: ../judoshiai/print.c ../judoshiai/match-graph.c ../judoshiai/write-results.c
-#: ../judoshiai/httpd.c
-msgid "Matches"
-msgstr "קרבות"
-
-#: ../judoshiai/print.c
-msgid "Match File"
-msgstr "קובץ קרבות"
-
-#: ../judoshiai/print.c
-msgid "Print Not Started Categories"
-msgstr "הדפס קטגוריות שלא התחילו"
-
-#: ../judoshiai/print.c
-msgid "Print Started Categories"
-msgstr "הדפס קטגוריות שהתחילו"
-
-#: ../judoshiai/print.c
-msgid "Print Finished Categories"
-msgstr "הדפס קטגוריות שהסתיימו"
-
-#: ../judoshiai/print.c
-msgid "Print Unmatched"
-msgstr "הדפס שלא שובצו"
-
-#: ../judoshiai/print.c
-msgid "Print Result"
-msgstr "הדפס תוצאות"
-
-#: ../judoshiai/print.c
-msgid "Print IWYKS"
-msgstr "הדפס ניקוד"
-
-#: ../judoshiai/print.c
-msgid "Print Comment"
-msgstr "הדפס הערות"
-
-#: ../judoshiai/print.c ../judoshiai/menus.c
-msgid "Print Accreditation Cards"
-msgstr "הדפס כרטיסי רישום"
-
-#: ../judoshiai/print.c ../judoshiai/set-categories.c
-msgid "Layout:"
-msgstr "תצורה"
-
-#: ../judoshiai/print.c ../judoshiai/match-data.c
-msgid "Default"
-msgstr "ברירת מחדל"
-
-#: ../judoshiai/print.c
-msgid "Template"
-msgstr "תבנית"
-
-#: ../judoshiai/print.c
-msgid "One Card Per Page"
-msgstr "כרטיס אחד לכל דף"
-
-#: ../judoshiai/another-shiai.c
-msgid "Competitor already exists!"
-msgstr "המתחרה כבר קיים!"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-#: ../judoshiai/drawing.c
-msgid "Competitor"
-msgstr "מתחרה"
-
-#: ../judoshiai/another-shiai.c
-msgid "copied"
-msgstr "מועתק"
-
-#: ../judoshiai/another-shiai.c
-msgid "Category already exists!"
-msgstr "קטגוריה כבר קיימת!"
-
-#: ../judoshiai/another-shiai.c
-msgid "has been copied with competitors and matches"
-msgstr "הועתק עם קטגוריות וקרבות"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Last Name"
-msgstr "שם משפחה"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "First Name"
-msgstr "שם פרטי"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Year of Birth"
-msgstr "שנת לידה"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Grade"
-msgstr "דרגה"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Id"
-msgstr "תז"
-
-#: ../judoshiai/db.c
-msgid "Cannot handle: Database created with newer JudoShiai version."
-msgstr "לא יכול לטפל: מסד הנתונים נוצר בגרסה מתקדמת יותר של תחרות"
-
-#: ../judoshiai/db.c
-msgid "Database tables updated."
-msgstr "טבלאות מסד נתונים עודכנו."
-
-#: ../judoshiai/match-data.c
-msgid "Best of 3"
-msgstr "הטוב מ- 3"
-
-#: ../judoshiai/match-data.c
-msgid "One match"
-msgstr "קרב בודד"
-
-#: ../judoshiai/match-data.c
-msgid "Pool"
-msgstr "בית"
-
-#: ../judoshiai/match-data.c
-msgid "Double Pool"
-msgstr "Tuplapooli"
-
-#: ../judoshiai/match-data.c
-msgid "Quad Pool"
-msgstr "חלוקה ל- 4 בתים ורבע גמר"
-
-#: ../judoshiai/match-data.c
-msgid "Double Pool 2"
-msgstr "בית כפול 2"
-
-#: ../judoshiai/match-data.c
-msgid "Double Pool 3"
-msgstr "שני בתי ליגות ובית גמר"
-
-#: ../judoshiai/match-data.c
-msgid "Custom"
-msgstr "מותאם אישית"
-
-#: ../judoshiai/match-data.c
-msgid "IJF Qrt Final Rep"
-msgstr "רפסג רבע בינלאומי"
-
-#: ../judoshiai/match-data.c
-msgid "UKR Dbl Repchg"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "FIN Dbl Repchg"
-msgstr " רפסג כפול פיני"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Dubb återkv"
-msgstr "רפסג כפול שוודי"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Dir återkv"
-msgstr "הזדמנות שנייה שוודית"
-
-#: ../judoshiai/match-data.c
-msgid "EST D klass"
-msgstr "נוק אאוט כפול אסטוני"
-
-#: ../judoshiai/match-data.c
-msgid "No Repechg"
-msgstr "Ei keräilyjä"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Enkelt återkv"
-msgstr "SWE Lyhyet ker."
-
-#: ../judoshiai/match-data.c
-msgid "ESP Dbl Lost"
-msgstr "הפסד כפול ספרדי"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Dbl Rep"
-msgstr "ESP Ransk."
-
-#: ../judoshiai/match-data.c
-msgid "ESP Simple Rep"
-msgstr "רפסג רגיל ספרדי"
-
-#: ../judoshiai/match-data.c
-msgid "Modified Dbl Elim"
-msgstr "הזדמנות כפולה- ארד בודד"
-
-#: ../judoshiai/match-data.c
-msgid "FIN Dbl Repchg One Bronze"
-msgstr "רפסג כפול ארד בודד"
-
-#: ../judoshiai/match-data.c
-msgid "Double Lost"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "GBR Knock Out"
-msgstr "GBR Ranskalainen"
-
-#: ../judoshiai/match-data.c
-msgid "DEN Dbl Elim"
-msgstr "הזדמנות כפולה דנית"
-
-#: ../judoshiai/match-data.c
-msgid "EST D klass 1 brz"
-msgstr "EST Pitkä ker. 1 pronssi"
-
-#: ../judoshiai/match-data.c
-#, fuzzy
-msgid "GER Repchg"
-msgstr "Ei keräilyjä"
-
-#: ../judoshiai/match-data.c
-msgid "IJF Quarter Final Repechage"
-msgstr "רפסג רבע"
-
-#: ../judoshiai/match-data.c
-msgid "UKR Double Repechage"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "FIN Double Repechage"
-msgstr "רפסג כפול פיני"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Double Repechage"
-msgstr "רפסג כפול שוודי"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Direct Repechage"
-msgstr "נוק אאוט כפול שוודי"
-
-#: ../judoshiai/match-data.c
-msgid "EST Double Elimination"
-msgstr "נוק אאוט כפול אסטוני"
-
-#: ../judoshiai/match-data.c
-msgid "Single Elimination"
-msgstr "מנצחים בלבד"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Single Repechage"
-msgstr "רפסג בודד שבדי"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Double Lost"
-msgstr "הזדמנות כפולה ספרדי- שיטה אולימפית מעל 16"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Double Repechage"
-msgstr "ESP Ranskalainen"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Simple Repechage"
-msgstr "רפסג רגיל ספרדי"
-
-#: ../judoshiai/match-data.c
-msgid "Modified Double Elimination"
-msgstr "הזדמנות כפולה- ארד בודד"
-
-#: ../judoshiai/match-data.c
-msgid "FIN Double Repechage One Bronze"
-msgstr "רפסג כפול ארד בודד"
-
-#: ../judoshiai/match-data.c
-msgid "DEN Double Elimination"
-msgstr "הזדמנות כפולה דנית"
-
-#: ../judoshiai/match-data.c
-msgid "EST Double Elim One Bronze"
-msgstr "הזדמנות כפולה ארד אחד אסטונית"
-
-#: ../judoshiai/match-data.c
-msgid "Customized"
-msgstr "מותאם אישית"
-
-#: ../judoshiai/match-data.c
-#, fuzzy
-msgid "GER Double Repechage"
-msgstr "רפסג כפול שוודי"
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-msgid "already exists!"
-msgstr "קיים כבר!"
-
-#: ../judoshiai/competitors.c ../judoshiai/popup-menu.c
-msgid "Remove drawing first"
-msgstr "הסר הגרלה תחילה"
-
-#: ../judoshiai/competitors.c ../judoshiai/menus.c
-msgid "Competitors"
-msgstr "מתחרים"
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-#: ../judoshiai/import.c
-#, fuzzy
-msgid "Last Name:"
-msgstr "שם משפחה"
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-#: ../judoshiai/import.c
-#, fuzzy
-msgid "First Name:"
-msgstr "שם פרטי"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-#, fuzzy
-msgid "Year of Birth:"
-msgstr "שנת לידה"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-#, fuzzy
-msgid "Grade:"
-msgstr "דרגה"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-#, fuzzy
-msgid "Club:"
-msgstr "אגודה"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Country:"
-msgstr "מדינה"
-
-#: ../judoshiai/competitors.c
-#, fuzzy
-msgid "Reg. Category:"
-msgstr "קטגוריה רגילה"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c ../judoweight/main.c
-msgid "Category:"
-msgstr "קטגוריה"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c ../judoweight/main.c
-#, fuzzy
-msgid "Weight:"
-msgstr "משקל"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Seeding:"
-msgstr "דירוגים"
-
-#: ../judoshiai/competitors.c
-msgid "No seeding"
-msgstr "ללא מדורג"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Club Seeding:"
-msgstr "דירוג אגודה"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Id:"
-msgstr "תז"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Coach Id:"
-msgstr "קוד מאמן"
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-msgid "Gender:"
-msgstr "מין"
-
-#: ../judoshiai/competitors.c
-msgid "Male"
-msgstr "זכר"
-
-#: ../judoshiai/competitors.c
-msgid "Female"
-msgstr "נקבה"
-
-#: ../judoshiai/competitors.c ../judoweight/main.c
-msgid "Control:"
-msgstr "בקרה"
-
-#: ../judoshiai/competitors.c ../judoweight/main.c ../judojudogi/main.c
-msgid "NOK"
-msgstr "לא תקין"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Comment:"
-msgstr "הערה"
-
-#: ../judoshiai/competitors.c
-#, fuzzy
-msgid "Hide name:"
-msgstr "שם דרגות"
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-msgid "Team:"
-msgstr "קבוצה:"
-
-#: ../judoshiai/competitors.c
-msgid "System:"
-msgstr "שיטה"
-
-#: ../judoshiai/competitors.c
-msgid "Tatami:"
-msgstr "זירה:"
-
-#: ../judoshiai/competitors.c
-msgid "Group:"
-msgstr "קבוצה"
-
-#: ../judoshiai/competitors.c
-msgid "Create default members:"
-msgstr "צור חברים ברירת מחדל:"
-
-#: ../judoshiai/competitors.c
-msgid "Coach"
-msgstr "מאמן"
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-msgid "Team"
-msgstr "קבוצה"
-
-#: ../judoshiai/competitors.c
-msgid "Seeding"
-msgstr "דירוג"
-
-#: ../judoshiai/competitors.c
-msgid "Club Seeding"
-msgstr "דירו אגודה"
-
-#: ../judoshiai/competitors.c
-msgid "Empty categories removed"
-msgstr "קטגוריות ריקות הוסרו"
-
-#: ../judoshiai/competitors.c
-msgid "Unweighted competitors removed"
-msgstr "ספורטאים שלא נשקלו הוסרו"
-
-#: ../judoshiai/competitors.c
-msgid "Matches exist. Undo the drawing first."
-msgstr "קרבות קיימים. בטל הגרלה ראשית"
-
-#: ../judoshiai/competitors.c
-msgid "Competitors removed"
-msgstr "מתחרים הוסרו"
-
-#: ../judoshiai/competitors.c
-msgid "Bar code search"
-msgstr "חיפוש בר קוד"
-
-#: ../judoshiai/competitors.c
-msgid "Type the barcode:"
-msgstr "הקלד הבר קוד"
-
-#: ../judoshiai/gdpr.c
-msgid "General Data Protection Regulation"
-msgstr ""
-
-#: ../judoshiai/gdpr.c
-msgid "Hide category if age less than"
-msgstr ""
-
-#: ../judoshiai/gdpr.c
-msgid "Hide name if age less than"
-msgstr ""
-
-#: ../judoshiai/log.c
-msgid "Class"
-msgstr "רמה"
-
-#: ../judoshiai/log.c
-msgid "Message"
-msgstr "הודעה"
-
-#: ../judoshiai/log.c
-msgid "Log"
-msgstr "לוג"
-
-#: ../judoshiai/db-competitors.c
-msgid "Weights do not match"
-msgstr "משקלים אינם תואמים"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Finnish"
-msgstr "Tulostus suomeksi"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Swedish"
-msgstr "Tulostus ruotsiksi"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in English"
-msgstr "Tulostus englanniksi"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Spanish"
-msgstr "Tulostus espanjaksi"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Estonian"
-msgstr "Tulostus viroksi"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Ukrainian"
-msgstr "Tulostus ukrainaksi"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Norwegian"
-msgstr "Tulostus norjaksi"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Icelandic"
-msgstr "Results in Icelandic"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Polish"
-msgstr "Results in Polish"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Slovak"
-msgstr "Results in Slovak"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Dutch"
-msgstr "Results in Dutch"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in German"
-msgstr "Results in German"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Russian"
-msgstr "Results in Russian"
-
-#: ../judoshiai/match-graph.c ../judoinfo/main.c
-msgid "Prev. winner:"
-msgstr "מנצח קודם"
-
-#: ../judoshiai/match-graph.c
-#, c-format
-msgid "Delayed"
-msgstr "מעוכב"
-
-#: ../judoshiai/match-graph.c
-msgid "Remove delay"
-msgstr "הסר עיכוב"
-
-#: ../judoshiai/match-graph.c
-msgid "Freeze match order"
-msgstr "הקפא סדר קרבות"
-
-#: ../judoshiai/match-graph.c ../judoshiai/category-graph.c
-msgid "Unfreeze exported"
-msgstr "הסר הקפאה ממיוצאים"
-
-#: ../judoshiai/match-graph.c ../judoshiai/category-graph.c
-msgid "Unfreeze imported"
-msgstr "הסר הקפאה ממיובאים"
-
-#: ../judoshiai/match-graph.c ../judoshiai/category-graph.c
-msgid "Unfreeze this"
-msgstr "הסר הקפאה"
-
-#: ../judoshiai/match-graph.c ../judoshiai/category-graph.c
-#: ../judoshiai/popup-menu.c
-msgid "Show Sheet"
-msgstr "הצג דף"
-
-#: ../judoshiai/sql-dialog.c
-msgid "Basic Scripts"
-msgstr "Basic Scripts"
-
-#: ../judoshiai/sql-dialog.c
-msgid "SVG+Lisp"
-msgstr ""
-
-#: ../judoshiai/sql-dialog.c
-msgid "Select Script"
-msgstr "Select Script"
-
-#: ../judoshiai/sql-dialog.c
-msgid "No script available"
-msgstr "No script available"
-
-#: ../judoshiai/sql-dialog.c
-msgid "SQL"
-msgstr "SQL"
-
-#: ../judoshiai/sql-dialog.c
-msgid "Run Script"
-msgstr "Run Script"
-
-#: ../judoshiai/sql-dialog.c
-msgid "Repeat Script"
-msgstr "Repeat Script"
-
-#: ../judoshiai/custom-category.c
-msgid "Messages"
-msgstr "הודעות"
-
-#: ../judoshiai/drawing.c
-msgid "Drawing not finished!"
-msgstr "הגרלה טרם הסתיימה!"
-
-#: ../judoshiai/drawing.c
-msgid "Matches matched in category"
-msgstr "קרבות הוגרלו בקטגוריה"
-
-#: ../judoshiai/drawing.c
-msgid "Clear the results first"
-msgstr "מחק התוצאות תחילה"
-
-#: ../judoshiai/drawing.c
-msgid "Move the competitors"
-msgstr "הסר המתחרים"
-
-#: ../judoshiai/drawing.c
-msgid "Next"
+msgid "Match"
 msgstr "הבא"
 
-#: ../judoshiai/drawing.c
-msgid "Rest"
-msgstr "נשאר"
+msgid "Contest"
+msgstr "קרב"
 
-#: ../judoshiai/drawing.c
-msgid "Number"
-msgstr "מספר"
+msgid "Preferences"
+msgstr "מאפיינים"
 
-#: ../judoshiai/drawing.c
-msgid "Select first a competitor and then a number."
-msgstr "בחר תחילה מתחרה ואז מספר"
+msgid "Help"
+msgstr "עזרה"
 
-#: ../judoshiai/drawing.c
-msgid "All the categories has been drawn"
-msgstr "כל הקטגוריות כבר הוגרלו"
+msgid "Quit"
+msgstr "יציאה"
 
-#: ../judoshiai/category-graph.c
-msgid "Unlocated"
-msgstr "לא הוצב"
+msgid "Red background"
+msgstr "רקע אדום"
 
-#: ../judoshiai/category-graph.c ../judoshiai/set-categories.c
-#: ../judoshiai/menus.c ../judoshiai/httpd.c
-msgid "Categories"
-msgstr "קטגוריות"
-
-#: ../judoshiai/category-graph.c ../judoshiai/popup-menu.c
-msgid "Move Matches"
-msgstr "הזז קרבות"
-
-#: ../judoshiai/set-categories.c
-msgid "Reset to Defaults"
-msgstr "אפס לברירת מחדל"
-
-#: ../judoshiai/set-categories.c
-msgid "Men"
-msgstr "גברים"
-
-#: ../judoshiai/set-categories.c
-msgid "Women"
-msgstr "נשים"
-
-#: ../judoshiai/set-categories.c
-msgid "Yes"
-msgstr ""
-
-#: ../judoshiai/set-categories.c
-msgid "No"
-msgstr ""
-
-#: ../judoshiai/set-categories.c
-msgid "Highest age:"
-msgstr "גיל גבוה"
-
-#: ../judoshiai/set-categories.c
-msgid "Age text:"
-msgstr "טקסט גילאים"
-
-#: ../judoshiai/set-categories.c
-msgid "Match time:"
-msgstr "זמן קרב"
-
-#: ../judoshiai/set-categories.c
-msgid "Rest time:"
-msgstr "זמן מנוחה"
-
-#: ../judoshiai/set-categories.c
-msgid "Golden Score:"
-msgstr "ניקוד זהב"
-
-#: ../judoshiai/set-categories.c
-msgid "Pin times (IWYK):"
-msgstr "זמן ריתוק"
-
-#: ../judoshiai/set-categories.c
-msgid "Rep. time:"
-msgstr "זמן רפסג:"
-
-#: ../judoshiai/set-categories.c
-msgid "Highest weight (g):"
-msgstr "משקל גבוה בגרמים"
-
-#: ../judoshiai/set-categories.c
-msgid "Weight text:"
-msgstr "טקסט משקל"
-
-#: ../judoshiai/set-categories.c
-msgid "Copy"
-msgstr ""
-
-#: ../judoshiai/medal-matches.c
-msgid "Move Medal Matches"
-msgstr "הזז קרבות על מדליה"
-
-#: ../judoshiai/medal-matches.c
-msgid "Move match "
-msgstr "הזז קרב"
-
-#: ../judoshiai/medal-matches.c
-msgid "to tatami and/or"
-msgstr "לזירה ו/או"
-
-#: ../judoshiai/medal-matches.c
-msgid " delay"
-msgstr "עכב"
-
-#: ../judoshiai/medal-matches.c ../common/common.c
-msgid "Final"
-msgstr "גמר"
-
-#: ../judoshiai/medal-matches.c
-msgid "Bronze1"
-msgstr "ארד 1"
-
-#: ../judoshiai/medal-matches.c
-msgid "Bronze2"
-msgstr "ארד 2"
-
-#: ../judoshiai/medal-matches.c
-msgid "Pool's last"
-msgstr "אחרון בבית"
-
-#: ../judoshiai/medal-matches.c
-msgid "No move"
-msgstr "ללא תזוזה"
-
-#: ../judoshiai/menus.c
-msgid "Drawing"
-msgstr "הגרלות"
-
-#: ../judoshiai/menus.c
-msgid "Results"
-msgstr "תוצאות"
-
-#: ../judoshiai/menus.c
-msgid "Judotimer"
-msgstr "לוח התוצאות"
-
-#: ../judoshiai/menus.c
-msgid "New Tournament"
-msgstr "תחרות חדשה"
-
-#: ../judoshiai/menus.c
-msgid "Open Tournament"
-msgstr "פתח תחרות קיימת"
-
-#: ../judoshiai/menus.c
-msgid "Open Tournament from Net"
-msgstr "פתח תחרות מרשת"
-
-#: ../judoshiai/menus.c
-msgid "Tournament Backup"
-msgstr "גיבוי תחרות"
-
-#: ../judoshiai/menus.c
-msgid "Validate Database"
-msgstr "בדוק תקינות מסד נתונים"
-
-#: ../judoshiai/menus.c
-msgid "Load Custom Systems"
-msgstr "טען שיטות מותאמות"
-
-#: ../judoshiai/menus.c
-msgid "SQL Dialog"
-msgstr "SQL Dialog"
-
-#: ../judoshiai/menus.c
-msgid "New Competitor"
-msgstr "מתחרה חדש"
-
-#: ../judoshiai/menus.c
-msgid "Search Competitor"
-msgstr "חפש מתחרה"
-
-#: ../judoshiai/menus.c
-msgid "Select From Another Shiai"
-msgstr "בחר מקובץ תחרות אחר"
-
-#: ../judoshiai/menus.c
-msgid "Add From a Text File"
-msgstr "הוסף מקובץ טקסט"
-
-#: ../judoshiai/menus.c
-msgid "Add All From Another Shiai"
-msgstr "הוסף הכל מקובץ תחרות אחר"
-
-#: ../judoshiai/menus.c
-msgid "Update Weights From Another Shiai"
-msgstr "עדכן משקל מקוץ תחרות אחר"
-
-#: ../judoshiai/menus.c
-msgid "Remove Unweighted"
-msgstr "הסר לא נשקלים"
-
-#: ../judoshiai/menus.c
-msgid "Restore Removed"
-msgstr "שחזר שהוסרו"
-
-#: ../judoshiai/menus.c
-msgid "Bar Code Search"
-msgstr "חיפוש ברקוד"
-
-#: ../judoshiai/menus.c
-msgid "Print Weight Notes"
-msgstr "הדפס הערות שקילה"
-
-#: ../judoshiai/menus.c
-msgid "New Category"
-msgstr "קטגוריה חדשה"
-
-#: ../judoshiai/menus.c
-msgid "Remove Empty"
-msgstr "הסר ריקים"
-
-#: ../judoshiai/menus.c
-msgid "Create Categories"
-msgstr "צור קטגוריות"
-
-#: ../judoshiai/menus.c
-msgid "Print All"
-msgstr "הדפס הכל"
-
-#: ../judoshiai/menus.c
-msgid "Print All (PDF)"
-msgstr "הדפס הכל לקובץ"
-
-#: ../judoshiai/menus.c
-msgid "Print Matches (CSV)"
-msgstr "הדפס קרבות לאקסל"
-
-#: ../judoshiai/menus.c
-msgid "Place To"
-msgstr "הצב ל"
-
-#: ../judoshiai/menus.c
-msgid "Tatamis"
-msgstr "זירות"
-
-#: ../judoshiai/menus.c
-msgid "Draw All Categories"
-msgstr "הגרל את כל הקטגוריות"
-
-#: ../judoshiai/menus.c
-msgid "Print All (Web And PDF)"
-msgstr "הדפס הכל ( למסמך ולרשת)"
-
-#: ../judoshiai/menus.c
-msgid "Print Schedule to Printer"
-msgstr "הדפס תכנית למדפסת"
-
-#: ../judoshiai/menus.c
-msgid "Print Schedule to PDF"
-msgstr "הדפס תכנית לקובץ"
-
-#: ../judoshiai/menus.c ../judoshiai/ftp.c
-msgid "Copy to Server"
-msgstr "העתק לשרת"
-
-#: ../judoshiai/menus.c
-msgid "Control Tatami"
-msgstr "בקרת זירה"
-
-#: ../judoshiai/menus.c
-msgid "Communication Node"
+msgid "Communication node"
 msgstr "רכיב תקשורת"
 
-#: ../judoshiai/menus.c
-msgid "Own IP Addresses"
-msgstr "כתובת שרת עצמית"
+msgid "Own IP addresses"
+msgstr " כתובת שרת עצמית"
 
-#: ../judoshiai/menus.c
-msgid "Show Attached Connections"
-msgstr "הצג חיבורים קימים"
+msgid "Manual"
+msgstr "ידני"
 
-#: ../judoshiai/menus.c
-msgid "Automatic Sheet Update"
-msgstr "עדכון דף אוטומטי"
+msgid "About"
+msgstr "אודות"
 
-#: ../judoshiai/menus.c
-msgid "Club Name Only"
-msgstr "שם מועדון בלבד"
-
-#: ../judoshiai/menus.c
-msgid "Country Name Only"
-msgstr "שם מדינה בלבד"
-
-#: ../judoshiai/menus.c
-msgid "Both Club and Country"
-msgstr "אגודה ומדינה"
-
-#: ../judoshiai/menus.c
-msgid "Abbreviations in Sheets"
-msgstr "ראשי תיבות בדפים"
-
-#: ../judoshiai/menus.c
-msgid "Weights Visible in Pool Sheets"
-msgstr "הצג משקלים בדף ליגה"
-
-#: ../judoshiai/menus.c
-msgid "Sheet Font"
-msgstr "גופן דף"
-
-#: ../judoshiai/menus.c ../judoinfo/menus.c ../judoweight/menus.c
-msgid "SVG Templates"
-msgstr "SVG-mallineet"
-
-#: ../judoshiai/menus.c ../judoshiai/set-password.c ../judoshiai/httpd.c
-#: ../judoweight/menus.c ../judoweight/main.c
-msgid "Password"
-msgstr "סיסמא"
-
-#: ../judoshiai/menus.c
-msgid "Language Selection"
-msgstr "בחירת שפה"
-
-#: ../judoshiai/menus.c
-msgid "New Team"
-msgstr "קבוצה חדשה"
-
-#: ../judoshiai/menus.c
-msgid "New Team Category"
-msgstr "קטגוריה קבוצתית חדשה"
-
-#: ../judoshiai/menus.c
-msgid "GDPR"
-msgstr ""
-
-#: ../judoshiai/menus.c
-msgid "Communication"
-msgstr "תקשורת"
-
-#: ../judoshiai/menus.c
-msgid "Club Text Selection"
-msgstr "בחירת טקסט אגודה"
-
-#: ../judoshiai/menus.c
-msgid "Sheet Layout"
-msgstr "תצורת דף"
-
-#: ../judoshiai/menus.c
-msgid "Weights Visible"
-msgstr "משקלים נראים"
-
-#: ../judoshiai/menus.c
-msgid "Grade Visible"
-msgstr "דרגה נראית"
-
-#: ../judoshiai/menus.c
-msgid "Name Format"
-msgstr "תצורת שם"
-
-#: ../judoshiai/menus.c
-msgid "Surname Name, Country/Club"
-msgstr "שם משפחה פרטי, מדינה/ אגודה"
-
-#: ../judoshiai/menus.c
-msgid "Country/Club,  Surname Name"
-msgstr "מדינה/ אגודה, משפחה פרטי"
-
-#: ../judoshiai/menus.c
-msgid "Pool Style 2"
-msgstr "סגנון בתים 2"
-
-#: ../judoshiai/menus.c
-msgid "Use Belt Colors"
-msgstr "השתמש בצבע חגורות"
-
-#: ../judoshiai/menus.c
-msgid "Mirror Tatami Order"
-msgstr "סדר מזרנים ראי"
-
-#: ../judoshiai/menus.c
-msgid "Automatic Match Delay"
-msgstr "עיכוב קרב אוטומטי"
-
-#: ../judoshiai/menus.c
-msgid "Print Logo"
-msgstr "הדפס לוגו"
-
-#: ../judoshiai/menus.c ../judoweight/menus.c
-msgid "Scale Serial Interface..."
-msgstr "ממשק חיבור משקל..."
-
-#: ../judoshiai/menus.c
-msgid "Medal Matches..."
-msgstr "קרבות מדליות..."
-
-#: ../judoshiai/main.c
-msgid "Communication error"
-msgstr "טעות תקשורת"
-
-#: ../judoshiai/main.c
-msgid "Cannot open"
-msgstr "לא יכול לפתוח"
-
-#: ../judoshiai/main.c
-msgid "Is there another JudoShiai program running?"
-msgstr "האם יש קובץ נוסף שרץ?"
-
-#: ../judoshiai/main.c
-msgid "Yes, another JudoShiai program is running"
-msgstr "כן, קובץ נוסף פתוח"
-
-#: ../judoshiai/main.c
-msgid ""
-"No, this the only JudoShiai program. \n"
-"Purge erroneous lock file."
-msgstr "לא, זה הקובץ הפתוח היחיד"
-
-#: ../judoshiai/main.c
-msgid ""
-"Communication is blocked! \n"
-"You can still use the program to create categories etc."
-msgstr "התקשורת חסומה, ניתן עדיין להשתמש בתוכנה ליצירת קטגוריות וכו"
-
-#: ../judoshiai/ftp.c
-msgid "Server URL"
-msgstr "Server URL"
-
-#: ../judoshiai/ftp.c
-msgid "Proxy User:"
-msgstr "Proxy User:"
-
-#: ../judoshiai/ftp.c
-msgid "Proxy Password:"
-msgstr "Proxy Password:"
-
-#: ../judoshiai/util.c
-msgid "Which one is correct?"
-msgstr "איזה הוא הנכון?"
-
-#: ../judoshiai/util.c
-msgid "Own database"
-msgstr "מסד נתונים עצמי"
-
-#: ../judoshiai/util.c
-msgid "Foreign database"
-msgstr "מסד נתונים זר"
-
-#: ../judoshiai/util.c
-msgid "Do not change"
-msgstr "אל תשנה"
-
-#: ../judoshiai/util.c
-msgid "Stop synchronization"
-msgstr "הפסק סינכרון"
-
-#: ../judoshiai/util.c
-msgid "NOTE"
-msgstr "הערה"
-
-#: ../judoshiai/util.c
-msgid "is not a valid ASCII string!"
-msgstr "לא נתמך!"
-
-#: ../judoshiai/categories.c
-msgid "Cannot move"
-msgstr "לא יכול להזיז"
-
-#: ../judoshiai/categories.c
-msgid "Category drawn"
-msgstr "קטגוריה הוגרלה"
-
-#: ../judoshiai/categories.c
-msgid "All the categories located to the tatamis"
-msgstr "כל הקטגוריות הוצבו לזירות"
-
-#: ../judoshiai/import.c
-msgid "Not used"
-msgstr "לא בשימוש"
-
-#: ../judoshiai/import.c
-msgid "Column"
-msgstr "עמודה"
-
-#: ../judoshiai/import.c
-msgid "Import from file"
-msgstr "יבא מקובץ"
-
-#: ../judoshiai/import.c
-msgid "Sex:"
-msgstr "מין"
-
-#: ../judoshiai/import.c
-msgid "Girl Text:"
-msgstr "טקסט לנקבה:"
-
-#: ../judoshiai/import.c
-msgid "Column Separator:"
-msgstr "מפריד עמודות"
-
-#: ../judoshiai/import.c
-msgid "competitors added"
-msgstr "מתחרים הוספו"
-
-#: ../judoshiai/import.c
-msgid "errors"
-msgstr "שגיאות"
-
-#: ../judoshiai/import.c
-msgid "competitors existed already"
-msgstr "מתחרים היו קיימים כבר"
-
-#: ../judoshiai/import.c
-msgid "syntax errors"
-msgstr "טעויות תחביר"
-
-#: ../judoshiai/write-results.c
-msgid "Automatic Web Page Update"
-msgstr "עדכון רשת אוטומטית"
-
-#: ../judoshiai/write-results.c
-msgid "Create Statistics"
-msgstr "צור סטטיסטיקה"
-
-#: ../judoshiai/write-results.c
-msgid "Print SVG"
-msgstr "Print SVG"
-
-#: ../judoshiai/popup-menu.c
-msgid "Matches matched. Clear the results first."
-msgstr "הקרבות קויימו, מחק התוצאות תחילה"
-
-#: ../judoshiai/popup-menu.c ../judoshiai/httpd.c
-msgid "Select a tatami"
-msgstr "בחר זירה"
-
-#: ../judoshiai/popup-menu.c
-msgid "Random Weigh-In"
-msgstr ""
-
-#: ../judoshiai/popup-menu.c
-#, fuzzy
-msgid "Select"
-msgstr "בחר גופן"
-
-#: ../judoshiai/popup-menu.c
-#, fuzzy
-msgid "competitors from"
-msgstr "מתחרים הוסרו"
-
-#: ../judoshiai/popup-menu.c
-#, fuzzy
-msgid "each selected category"
-msgstr "קרבות הוגרלו בקטגוריה"
-
-#: ../judoshiai/popup-menu.c
-#, fuzzy
-msgid "all selected categories"
-msgstr "צור קטגוריות"
-
-#: ../judoshiai/popup-menu.c
-msgid "already exists"
-msgstr "כבר קיים"
-
-#: ../judoshiai/popup-menu.c
-msgid "Move Competitors to Category..."
-msgstr "העבר מתחרים לקטגוריה"
-
-#: ../judoshiai/popup-menu.c
-msgid "Move Competitors Here"
-msgstr "העבר מתחרים לכאן"
-
-#: ../judoshiai/popup-menu.c
-msgid "Compose Unofficial Category"
-msgstr "הכן קטגוריה לא רשמית"
-
-#: ../judoshiai/popup-menu.c
-msgid "Draw Selected"
-msgstr "הגרל בחירה"
-
-#: ../judoshiai/popup-menu.c
-msgid "Draw and Print Selected"
-msgstr "הגרל והדפס בחירה"
-
-#: ../judoshiai/popup-menu.c
-msgid "Draw Manually"
-msgstr "הגרל ידנית"
-
-#: ../judoshiai/popup-menu.c
-msgid "Remove Drawing"
-msgstr "הסר הגרלה"
-
-#: ../judoshiai/popup-menu.c
-msgid "Edit Drawing"
-msgstr "ערוך הגרלה"
-
-#: ../judoshiai/popup-menu.c
-msgid "Copy Competitors"
-msgstr "העתק מתחרים"
-
-#: ../judoshiai/popup-menu.c
-msgid "Remove Competitors"
-msgstr "הסר מתחרים"
-
-#: ../judoshiai/popup-menu.c
-msgid "Print Selected Sheets (Printer)"
-msgstr "הדפס בחירה למדפסת"
-
-#: ../judoshiai/popup-menu.c
-msgid "Print Selected Sheets (PDF)"
-msgstr "הדפס בחירה לקובץ"
-
-#: ../judoshiai/popup-menu.c
-msgid "Print Selected Accreditation Cards"
-msgstr "הדפס בחירת כרטיסי רישום"
-
-#: ../judoshiai/popup-menu.c
-msgid "Print Selected Accreditation Cards To Default Printer"
-msgstr "הדפס אקרדיטציות נבחרות למדפסת ברירת המחדל"
-
-#: ../judoshiai/popup-menu.c
-msgid "Move Matches..."
-msgstr "הזז קרבות..."
-
-#: ../judoshiai/popup-menu.c
-msgid "Random Weigh-In..."
-msgstr ""
-
-#: ../judoshiai/svg.c
-msgid "Use SVG Templates"
-msgstr "Use SVG Templates"
-
-#: ../judoshiai/search.c
-msgid "Search"
-msgstr "חפש"
-
-#: ../judoshiai/httpd.c
-msgid "Sheet"
-msgstr "דף"
-
-#: ../judoshiai/httpd.c
-msgid "Previous winner"
-msgstr "מנצח קודם"
-
-#: ../judoshiai/httpd.c
-msgid "Cancel the match"
-msgstr "בטל הקרב"
-
-#: ../judoshiai/httpd.c
-msgid "Password accepted.<br>"
-msgstr "Password accepted.<br>"
-
-#: ../judoshiai/httpd.c
-msgid "User"
-msgstr "משתמש"
-
-#: ../judoshiai/httpd.c
-msgid "Back"
-msgstr "חזרה"
-
-#: ../judoshiai/httpd.c
-msgid "Wrong password"
-msgstr "סיסמא שגויה"
-
-#: ../judoshiai/httpd.c
-msgid "Logout"
-msgstr "צא החוצה"
-
-#: ../judoshiai/httpd.c
-msgid "Login"
-msgstr "כנס והירשם"
-
-#: ../judoshiai/httpd.c
-msgid "No rights to give results"
-msgstr "אין הרשאה להציג תוצאות"
-
-#: ../judoshiai/httpd.c
-msgid "No competitor found!"
-msgstr "לא נמצא מתחרה!"
-
-#: ../judoshiai/httpd.c
-msgid "Add"
-msgstr "הוסף"
-
-#: ../judoshiai/httpd.c
-msgid "Name"
-msgstr "שם"
-
-#: ../judoshiai/httpd.c
-msgid "Reg.Cat"
-msgstr "קטגוריה רגילה"
-
-#: ../judoshiai/httpd.c
-msgid "ID"
-msgstr "תז"
-
-#: ../judoshiai/httpd.c
-msgid "Index"
-msgstr "אינדקס"
-
-#: ../judoinfo/menus.c
-msgid "About JudoInfo"
-msgstr "About JudoInfo"
-
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Normal display"
-msgstr "תצוגה רגילה"
-
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Small display"
-msgstr "תצוגה קטנה"
-
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Horizontal display"
-msgstr "לאורך"
-
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Mirror tatami order"
-msgstr "סדר מזרנים ראי"
-
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Write to file"
-msgstr "כתוב לקובץ"
-
-#: ../judoinfo/menus.c
-msgid "Show bracket"
-msgstr "Show bracket"
-
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Show Tatami"
-msgstr "הצג מזרן"
-
-#: ../judoinfo/main.c ../judojudogi/main.c
-msgid "Category starts"
-msgstr "קטגוריה מתחילה"
-
-#: ../judoinfo/main.c
-msgid "Tatami"
-msgstr "זירה"
-
-#: ../common/common.c
-msgid "Round"
-msgstr "סיבוב"
-
-#: ../common/common.c
-msgid "Round Robin"
-msgstr "ליגה"
-
-#: ../common/common.c
-msgid "Repechage"
-msgstr "רפסג'"
-
-#: ../common/common.c
-msgid "Semifinal"
-msgstr "עלייה לגמר"
-
-#: ../common/common.c
-msgid "Bronze"
-msgstr "ארד"
-
-#: ../common/ip.c
 msgid "Address of the communication node"
 msgstr "כתובת רכיב תקשורת"
 
-#: ../common/ip.c
 msgid "IP address:"
 msgstr "כתובת שרת"
 
-#: ../common/ip.c
-msgid "Multicast"
-msgstr ""
+msgid "(Connection OK)"
+msgstr "תקשורת תקינה"
 
-#: ../common/auto-update.c
-msgid "Update"
-msgstr ""
+msgid "(Connection broken)"
+msgstr "תקשורת שבורה"
 
-#: ../common/auto-update.c
-msgid "New version:"
-msgstr ""
+msgid "Contest duration automatically from JudoShiai program"
+msgstr "זמן הקרב ישירות ממזכירות"
 
-#: ../common/auto-update.c
-msgid "Current version:"
-msgstr ""
+msgid "Fight:"
+msgstr "קרב"
 
-#: ../common/auto-update.c
-msgid "Update to new version?"
-msgstr ""
+msgid "Match duration: automatic"
+msgstr "משך ההתמודדות: אוטומטית"
 
-#: ../common/serial.c
+msgid "Match duration: 2 min E-juniors"
+msgstr "משך ההתמודדות 2 דקות צעירים"
+
+msgid "Match duration: 2 min"
+msgstr "משך קרב: 2 דקות"
+
+msgid "Match duration: 3 min"
+msgstr "משך קרב: 3 דקות"
+
+msgid "Match duration: 4 min"
+msgstr "משך קרב: 4 דקות"
+
+msgid "Match duration: 5 min"
+msgstr "משך קרב: 5 דקות"
+
+msgid "Contest duration: automatic"
+msgstr "משך קרב: אוטומטי"
+
+msgid "Contest duration: 2 min (short pin times)"
+msgstr "משך קרב: 2 דקות (ריתוק קצר)"
+
+msgid "Contest duration: 2 min"
+msgstr "משך קרב: 2 דקות"
+
+msgid "Contest duration: 3 min"
+msgstr "משך קרב: 3 דקות"
+
+msgid "Contest duration: 4 min"
+msgstr "משך קרב: 4 דקות"
+
+msgid "Contest duration: 5 min"
+msgstr "משך קרב: 5 דקות"
+
+msgid "Hantei: blue wins"
+msgstr "הנטיי: כחול מנצח"
+
+msgid "Hantei: white wins"
+msgstr "הנטיי: לבן מנצח"
+
+msgid "Contest area not chosen"
+msgstr "לא נבחה זירת התמודדות"
+
+msgid "Contest area 1"
+msgstr "זירה 1"
+
+msgid "Contest area 2"
+msgstr "זירה 2"
+
+msgid "Contest area 3"
+msgstr "זירה 3"
+
+msgid "Contest area 4"
+msgstr "זירה 4"
+
+msgid "Contest area 5"
+msgstr "זירה 5"
+
+msgid "Contest area 6"
+msgstr "זירה 6"
+
+msgid "Contest area 7"
+msgstr "זירה 7"
+
+msgid "Contest area 8"
+msgstr "זירה 8"
+
+msgid "Increment time"
+msgstr "העלאת זמן"
+
+msgid "Decrement time"
+msgstr "הורדת זמן"
+
+msgid "View clocks only"
+msgstr "צפה בשעונים בלבד"
+
+msgid "Increment pin time"
+msgstr "זמן ריתוק עולה"
+
+msgid "Decrement pin time"
+msgstr "זמן ריתוק יורד" 
+
+msgid "Points going to blue"
+msgstr "ניקוד לטובת כחול"
+
+msgid "Points going to white"
+msgstr "ניקוד לטובת לבן"
+
+msgid "About Judotimer"
+msgstr "אודות שעון תחרות"
+
+msgid "Full screen mode"
+msgstr "מוד מסך מלא"
+
+msgid "Normal operation"
+msgstr "הפעלה רגילה"
+
+msgid "Master mode"
+msgstr "מסך ראשי"
+
+msgid "Slave mode"
+msgstr "מסך עוקב"
+
+msgid "Undo!"
+msgstr "בטל"
+
+msgid "Set clocks"
+msgstr "הגדר שעונים"
+
+msgid "Clock:"
+msgstr "שעון"
+
+msgid "Hansoku-make to blue"
+msgstr "הנסוקומקה לכחול"
+
+msgid "Hansoku-make to white"
+msgstr "הנסוקומקה ללבן"
+
+msgid "Clear selection"
+msgstr "בטל בחירה" 
+
+msgid "Display layout 1"
+msgstr "תצוגה 1"
+
+msgid "Display layout 2"
+msgstr "תצוגה 2"
+
+msgid "Display layout 3"
+msgstr "תצוגה 3"
+
+msgid "Display layout 4"
+msgstr "תצוגה 4"
+
+msgid "Display layout 5"
+msgstr "תצוגה 5"
+
+msgid "Quick guide"
+msgstr "מדריך מהיר"
+
+msgid "Advertise"
+msgstr "פרסומות"
+
+msgid "Run Advertisements"
+msgstr "הרץ פרסומות"
+
+msgid "Competitors"
+msgstr "מתחרים"
+
+msgid "Categories"
+msgstr "קטגוריות"
+
+msgid "Drawing"
+msgstr "הגרלות"
+
+msgid "Results"
+msgstr "תוצאות"
+
+msgid "Judotimer"
+msgstr "לוח התוצאות"
+
+msgid "New Tournament"
+msgstr "תחרות חדשה"
+
+msgid "Open Tournament"
+msgstr "פתח תחרות קיימת"
+
+msgid "Open Tournament from Net"
+msgstr "פתח תחרות מרשת"
+
+msgid "Properties"
+msgstr "מאפיינים"
+
+msgid "New Competitor"
+msgstr "מתחרה חדש"
+
+msgid "Search Competitor"
+msgstr "חפש מתחרה"
+
+msgid "Select From Another Shiai"
+msgstr "בחר מקובץ תחרות אחר"
+
+msgid "Add From a Text File"
+msgstr "הוסף מקובץ טקסט"
+
+msgid "Add All From Another Shiai"
+msgstr "הוסף הכל מקובץ תחרות אחר"
+
+msgid "Remove Unweighted"
+msgstr "הסר לא נשקלים"
+
+msgid "Restore Removed"
+msgstr "שחזר שהוסרו"
+
+msgid "Bar Code Search"
+msgstr "חיפוש ברקוד"
+
+msgid "Print Weight Notes"
+msgstr "הדפס הערות שקילה"
+
+msgid "New Category"
+msgstr "קטגוריה חדשה"
+
+msgid "Remove Empty"
+msgstr "הסר ריקים"
+
+msgid "Create Categories"
+msgstr "צור קטגוריות"
+
+msgid "Print All"
+msgstr "הדפס הכל"
+
+msgid "Place To"
+msgstr "הצב ל"
+
+msgid "Tatamis"
+msgstr "זירות" 
+
+msgid "Draw All Categories"
+msgstr "הגרל את כל הקטגוריות"
+
+msgid "Print All (Web And PDF)"
+msgstr "הדפס הכל ( למסמך ולרשת)"
+
+msgid "Print Schedule to Printer"
+msgstr "הדפס תכנית למדפסת"
+
+msgid "Print Schedule to PDF"
+msgstr "הדפס תכנית לקובץ"
+
+msgid "Print Schedule"
+msgstr "הדפס תכנית"
+
+msgid "Control Tatami"
+msgstr "בקרת זירה"
+
+msgid "Communication Node"
+msgstr "רכיב תקשורת"
+
+msgid "Own IP Addresses"
+msgstr "כתובת שרת עצמית"
+
+msgid "Show Attached Connections"
+msgstr "הצג חיבורים קימים"
+
+msgid "Automatic Sheet Update"
+msgstr "עדכון דף אוטומטי"
+
+msgid "Automatic Web Page Update"
+msgstr "עדכון רשת אוטומטית"
+
+msgid "Results in Finnish"
+msgstr "Tulostus suomeksi"
+
+msgid "Results in Swedish"
+msgstr "Tulostus ruotsiksi"
+
+msgid "Results in English"
+msgstr "Tulostus englanniksi"
+
+msgid "Results in Spanish"
+msgstr "Tulostus espanjaksi"
+
+msgid "Results in Estonian"
+msgstr "Tulostus viroksi"
+
+msgid "Results in Ukrainian"
+msgstr "Tulostus ukrainaksi"
+
+msgid "Results in Norwegian"
+msgstr "Tulostus norjaksi"
+
+msgid "Weights Visible in Pool Sheets"
+msgstr "הצג משקלים בדף ליגה"
+
+msgid "Sheet Font"
+msgstr "גופן דף"
+
+msgid "Password"
+msgstr "סיסמא"
+
+msgid "Password:"
+msgstr "סיסמא"
+
+msgid "Competitor already exists!"
+msgstr "המתחרה כבר קיים!"
+
+msgid "Competitor"
+msgstr "מתחרה"
+
+msgid "copied"
+msgstr "מועתק"
+
+msgid "Category already exists!"
+msgstr "קטגוריה כבר קיימת!"
+
+msgid "Category"
+msgstr "קטגוריה"
+
+msgid "has been copied with competitors and matches"
+msgstr "הועתק עם קטגוריות וקרבות"
+
+msgid "First Name"
+msgstr "שם פרטי"
+
+msgid "Year of Birth"
+msgstr "שנת לידה"
+
+msgid "Grade"
+msgstr "דרגה"
+
+msgid "Club"
+msgstr "אגודה"
+
+msgid "Reg. Category"
+msgstr "קטגוריה רגילה"
+
+msgid "Weight"
+msgstr "משקל"
+
+msgid "Drawing not finished!"
+msgstr "הגרלה טרם הסתיימה!"
+
+msgid "Matches matched in category"
+msgstr "קרבות הוגרלו בקטגוריה"
+
+msgid "Clear the results first"
+msgstr "מחק התוצאות תחילה"
+
+msgid "Move the competitors"
+msgstr "הסר המתחרים"
+
+msgid "Number"
+msgstr "מספר"
+
+msgid "Select first a competitor and then a number."
+msgstr "בחר תחילה מתחרה ואז מספר"
+
+msgid "All the categories has been drawn"
+msgstr "כל הקטגוריות כבר הוגרלו"
+
+msgid "Choose a directory"
+msgstr "בחר נתיב"
+
+msgid "Category drawn"
+msgstr "קטגוריה הוגרלה"
+
+msgid "All the categories located to the tatamis"
+msgstr "כל הקטגוריות הוצבו לזירות"
+
+msgid "Unlocated"
+msgstr "לא הוצב"
+
+msgid "Connections to this node"
+msgstr "חיבורים לחיבור זה"
+
+msgid "already exists!"
+msgstr "קיים כבר!"
+
+msgid "Group"
+msgstr "קבוצה"
+
+msgid "Group:"
+msgstr "קבוצה"
+
+msgid "Last Name"
+msgstr "שם משפחה"
+
+msgid "Category:"
+msgstr "קטגוריה"
+
+msgid "No seeding"
+msgstr "ללא מדורג"
+
+msgid "Empty categories removed"
+msgstr "קטגוריות ריקות הוסרו"
+
+msgid "Unweighted competitors removed"
+msgstr "ספורטאים שלא נשקלו הוסרו"
+
+msgid "Matches exist. Undo the drawing first."
+msgstr "קרבות קיימים. בטל הגרלה ראשית"
+
+msgid "Competitors removed"
+msgstr "מתחרים הוסרו"
+
+msgid "Type the barcode:"
+msgstr "הקלד הבר קוד"
+
+msgid "Bar code search"
+msgstr "חיפוש בר קוד"
+
+msgid "Matches"
+msgstr "קרבות"
+
+msgid "Contests"
+msgstr "קרבות"
+
+msgid "Sheet"
+msgstr "דף"
+
+msgid "Previous winner"
+msgstr "מנצח קודם"
+
+msgid "Cancel the match"
+msgstr "בטל הקרב"
+
+msgid "Select a tatami"
+msgstr "בחר זירה"
+
+msgid "Password accepted.<br>"
+msgstr "Password accepted.<br>"
+
+msgid "User"
+msgstr "משתמש"
+
+msgid "Back"
+msgstr "חזרה"
+
+msgid "Wrong password"
+msgstr "סיסמא שגויה"
+
+msgid "Logout"
+msgstr "צא החוצה"
+
+msgid "Login"
+msgstr "כנס והירשם"
+
+msgid "No rights to give results"
+msgstr "אין הרשאה להציג תוצאות"
+
+msgid "Not used"
+msgstr "לא בשימוש"
+
+msgid "Column"
+msgstr "עמודה"
+
+msgid "Import from file"
+msgstr "יבא מקובץ"
+
+msgid "Sex:"
+msgstr "מין"
+
+msgid "Girl Text:"
+msgstr "טקסט לנקבה:"
+
+msgid "Column Separator:"
+msgstr "מפריד עמודות"
+
+msgid "competitors added"
+msgstr "מתחרים הוספו"
+
+msgid "errors"
+msgstr "שגיאות"
+
+msgid "competitors existed already"
+msgstr "מתחרים היו קיימים כבר"
+
+msgid "Time"
+msgstr "זמן"
+
+msgid "Class"
+msgstr "רמה"
+
+msgid "Message"
+msgstr "הודעה"
+
+msgid "Log"
+msgstr "לוג"
+
+msgid "Is there another JudoShiai program running?"
+msgstr "האם יש קובץ נוסף שרץ?"
+
+msgid "Yes, another JudoShiai program is running"
+msgstr ""
+"כן, קובץ נוסף פתוח"
+
+msgid ""
+"No, this the only JudoShiai program. \n"
+"Purge erroneous lock file."
+msgstr ""
+"לא, זה הקובץ הפתוח היחיד"
+
+msgid ""
+"Communication is blocked! \n"
+"You can still use the program to create categories etc."
+msgstr ""
+"התקשורת חסומה, ניתן עדיין להשתמש בתוכנה ליצירת קטגוריות וכו"
+msgid "Pool"
+msgstr "בית"
+
+msgid "Next match"
+msgstr "קרב הבא"
+
+msgid "Preparing"
+msgstr "מתכונן"
+
+msgid "Preparing:"
+msgstr "מתכונן"
+
+msgid "Delay the match"
+msgstr "דחה הקרב"
+
+msgid "Matches matched. Clear the results first."
+msgstr "הקרבות קויימו, מחק התוצאות תחילה"
+
+msgid "canceled"
+msgstr "מבוטל"
+
+msgid "changed"
+msgstr "השתנה"
+
+msgid "points"
+msgstr" נקודות" 
+
+msgid "Expand All"
+msgstr "הרחב הכל"
+
+msgid "Collapse All"
+msgstr "כווץ הכל"
+
+msgid "Remove comment"
+msgstr "הסר הערה"
+
+msgid "Blue"
+msgstr "כחול"
+
+msgid "White"
+msgstr "לבן"
+
+msgid "Comment"
+msgstr "הערה"
+
+msgid "Points"
+msgstr "נקודות"
+
+msgid "Prev. winner:"
+msgstr "מנצח קודם"
+
+msgid "Delayed"
+msgstr "מעוכב"
+
+msgid "Remove delay"
+msgstr "הסר עיכוב"
+
+msgid "Date:"
+msgstr "תאריך"
+
+msgid "Place:"
+msgstr "מיקום"
+
+msgid "Start time:"
+msgstr "זמן התחלה"
+
+msgid "Tournament from the net"
+msgstr "תחרות מהרשת"
+
+msgid "Select sheet font"
+msgstr "בחר גופן לדף"
+
+msgid "Tournament"
+msgstr "תחרות"
+
+msgid "Tournament:"
+msgstr "תחרות"
+
+msgid "Tournaments"
+msgstr "תחרויות"
+
+msgid "Competitors:"
+msgstr "מתחרים"
+
+msgid "Add competitors"
+msgstr "הוסף מתחרים"
+
+msgid "Clean up duplicates and update reg. categories"
+msgstr "הסר כפילויות ועדכן קטגוריות רגילות"
+
+msgid "competitors added and updated"
+msgstr "מתחרים הוספו ועודכנו"
+
+msgid "competitors already existed"
+msgstr "מתחרים כבר קיימים"
+
+msgid "competitors added unchanged"
+msgstr "מתחרים הוספו ללא שינוי"
+
+msgid "Remove drawing first"
+msgstr "הסר הגרלה תחילה"
+
+msgid "already exists"
+msgstr "כבר קיים"
+
+msgid "Move Competitors to Category..."
+msgstr "העבר מתחרים לקטגוריה"
+
+msgid "Move Competitors Here"
+msgstr "העבר מתחרים לכאן"
+
+msgid "Compose Unofficial Category"
+msgstr "הכן קטגוריה לא רשמית"
+
+msgid "Draw Manually"
+msgstr "הגרל ידנית"
+
+msgid "Remove Drawing"
+msgstr "הסר הגרלה"
+
+msgid "Copy Competitors"
+msgstr "העתק מתחרים"
+
+msgid "Remove Competitors"
+msgstr "הסר מתחרים"
+
+msgid "Show Sheet"
+msgstr "הצג דף"
+
+msgid "Search"
+msgstr "חפש"
+
+msgid "----- Men -----"
+msgstr" -----גברים-----" 
+
+msgid "----- Women -----"
+msgstr "--------נשים -------" 
+
+msgid "Men"
+msgstr "גברים"
+
+msgid "Women"
+msgstr "נשים"
+
+msgid "Highest age:"
+msgstr "גיל גבוה"
+
+msgid "Age text:"
+msgstr "טקסט גילאים"
+
+msgid "Match time:"
+msgstr "זמן קרב"
+
+msgid "Rest time:"
+msgstr "זמן מנוחה" 
+
+msgid "Pin times (IWYK):"
+msgstr "זמן ריתוק"
+
+msgid "Highest weight (g):"
+msgstr "משקל גבוה בגרמים"
+
+msgid "Weight text:"
+msgstr "טקסט משקל"
+
+msgid "Save file"
+msgstr "שמור קובץ"
+
+msgid "Which one is correct?"
+msgstr "איזה הוא הנכון?"
+
+msgid "Own database"
+msgstr "מסד נתונים עצמי"
+
+msgid "Foreign database"
+msgstr "מסד נתונים זר"
+
+msgid "Do not change"
+msgstr "אל תשנה"
+
+msgid "Stop synchronization"
+msgstr "הפסק סינכרון"
+
+msgid "Number of tatamis:"
+msgstr "מספר זירות"
+
+msgid "Sheets"
+msgstr "דפים"
+
+msgid "Category starts"
+msgstr "קטגוריה מתחילה"
+
+msgid "Gold medal match"
+msgstr "גמר"
+
+msgid "Bronze match A"
+msgstr "קרב על ארד 1"
+
+msgid "Bronze match B"
+msgstr "קרב על ארד 2"
+
+msgid "Semifinal"
+msgstr "עלייה לגמר"
+
+msgid "Semifinal A"
+msgstr "עלייה לגמר 1"
+
+msgid "Semifinal B"
+msgstr "עלייה לגמר 2"
+
+msgid "Show Tatami"
+msgstr "הצג מזרן"
+
+msgid "Start New Match?"
+msgstr "התחל קרב חדש?"
+
+msgid "Hansokumake to blue"
+msgstr "הנסוקומקה כחול"
+
+msgid "Hansokumake to white"
+msgstr "הנסוקומקה לבן"
+
+msgid "Golden Score"
+msgstr "ניקוד זהב"
+
+msgid "Start Golden Score?"
+msgstr "התחל ניקוד זהב?"
+
+msgid "Hantei"
+msgstr "הנטיי"
+
+msgid "Blue wins"
+msgstr " כחול מנצח"
+
+msgid "White wins"
+msgstr "לבן מנצח" 
+
+msgid "REST TIME"
+msgstr "זמן מנוחה"
+
+msgid "Seeding:"
+msgstr "דירוגים"
+
+msgid "Freeze match order"
+msgstr "הקפא סדר קרבות"
+
+msgid "Unfreeze exported"
+msgstr "הסר הקפאה ממיוצאים"
+
+msgid "Unfreeze imported"
+msgstr "הסר הקפאה ממיובאים"
+
+msgid "Unfreeze this"
+msgstr "הסר הקפאה"
+
+msgid "SQL Dialog"
+msgstr "SQL Dialog"
+
+
+msgid "Print All (PDF)"
+msgstr "הדפס הכל לקובץ"
+
+msgid "Golden Score:"
+msgstr "ניקוד זהב"
+
+msgid "SQL"
+msgstr "SQL"
+
+msgid "About JudoInfo"
+msgstr "About JudoInfo"
+
+msgid "Next"
+msgstr "הבא"
+
+msgid "Rest"
+msgstr "נשאר"
+
+msgid "Do Backup"
+msgstr "בצע גיבוי"
+
+msgid "CANNOT OPEN BACKUP FILE"
+msgstr "לא יכול לפתוח קובץ גיבוי"
+
+msgid "Tournament Backup"
+msgstr "גיבוי תחרות" 
+
+msgid "Small display"
+msgstr "תצוגה קטנה"
+
+msgid "Draw Selected"
+msgstr "הגרל בחירה"
+
+msgid "Draw and Print Selected"
+msgstr "הגרל והדפס בחירה"
+
+msgid "Print Selected Sheets (Printer)"
+msgstr "הדפס בחירה למדפסת"
+
+msgid "Print Selected Sheets (PDF)"
+msgstr "הדפס בחירה לקובץ"
+
+msgid "Advertisement"
+msgstr "פרסומת"
+
+msgid "Tournament properties"
+msgstr "מאפייני תחרות"
+
+msgid "Print Matches (CSV)"
+msgstr "הדפס קרבות לאקסל"
+
+msgid "Match File"
+msgstr "קובץ קרבות"
+
+msgid "Print Not Started Categories"
+msgstr "הדפס קטגוריות שלא התחילו"
+
+msgid "Print Started Categories"
+msgstr "הדפס קטגוריות שהתחילו"
+
+msgid "Print Finished Categories"
+msgstr "הדפס קטגוריות שהסתיימו"
+
+msgid "Print Result"
+msgstr "הדפס תוצאות"
+
+msgid "Print IWYKS"
+msgstr "הדפס ניקוד"
+
+msgid "Print Comment"
+msgstr "הדפס הערות"
+
+msgid "Create Statistics"
+msgstr "צור סטטיסטיקה"
+
+msgid "NOTE"
+msgstr "הערה"
+
+msgid "is not a valid ASCII string!"
+msgstr "לא נתמך!"
+
+msgid "No koka"
+msgstr "אין קוקא"
+
+msgid "Leave points for GS"
+msgstr "השאר ניקוד לניקוד זהב"
+
+msgid "Automatic Match Delay"
+msgstr "עיכוב קרב אוטומטי"
+
+msgid "Cannot move"
+msgstr "לא יכול להזיז"
+
+msgid "Mirror Tatami Order"
+msgstr "סדר מזרנים ראי"
+
+msgid "Mirror tatami order"
+msgstr "סדר מזרנים ראי"
+
+msgid "Country"
+msgstr "מדינה" 
+
+msgid "Id"
+msgstr "תז"
+
+msgid "Country:"
+msgstr "מדינה"
+
+msgid "Id:"
+msgstr "תז"
+
+msgid "System:"
+msgstr "שיטה"
+
+msgid "Default"
+msgstr "ברירת מחדל"
+
+msgid "FIN Double Repechage"
+msgstr "רפסג כפול פיני" 
+
+msgid "SWE Double Repechage"
+msgstr "רפסג כפול שוודי"
+
+msgid "SWE Direct Repechage"
+msgstr "נוק אאוט כפול שוודי"
+
+msgid "EST Double Elimination"
+msgstr "נוק אאוט כפול אסטוני"
+
+msgid "Single Elimination"
+msgstr "מנצחים בלבד"
+
+msgid "SWE Single Repechage"
+msgstr "רפסג בודד שבדי"
+
+msgid "Club Name Only"
+msgstr "שם מועדון בלבד"
+
+msgid "Country Name Only"
+msgstr "שם מדינה בלבד"
+
+msgid "Both Club and Country"
+msgstr "אגודה ומדינה"
+
+msgid "International System"
+msgstr "שיטה בינלאומית"
+
+msgid "Finnish System"
+msgstr "שיטה פינית"
+
+msgid "Swedish System"
+msgstr "שיטה שבדית"
+
+msgid "Estonian System"
+msgstr "שיטה אסטונית"
+
+msgid "Reset to Defaults"
+msgstr "אפס לברירת מחדל"
+
+msgid "View Log"
+msgstr "צפה בלוג"
+
+msgid "Double Pool"
+msgstr "Tuplapooli"
+
+msgid "Cannot handle: Database created with newer JudoShiai version."
+msgstr "לא יכול לטפל: מסד הנתונים נוצר בגרסה מתקדמת יותר של תחרות" 
+
+msgid "Database tables updated."
+msgstr "טבלאות מסד נתונים עודכנו."
+
+msgid "Cannot open"
+msgstr "לא יכול לפתוח"
+
+msgid "Abbreviations in Sheets"
+msgstr "ראשי תיבות בדפים"
+
+msgid "Display layout"
+msgstr "תצוגה"
+
+msgid "Contest area"
+msgstr "אזור תחרות"
+
+msgid "Set time"
+msgstr "הגדר זמן"
+
+msgid "Sound"
+msgstr "קול"
+
+msgid "Choose a file"
+msgstr "בחר קובץ"
+
+msgid "Sound Files"
+msgstr "קובצי קול"
+
+msgid "All Files"
+msgstr "כל הקבצים"
+
+msgid "Best of 3"
+msgstr "הטוב מ- 3" 
+
+msgid "One match"
+msgstr "קרב בודד"
+
+msgid "Quad Pool"
+msgstr "חלוקה ל- 4 בתים ורבע גמר"
+
+msgid "IJF Qrt Final Rep"
+msgstr "רפסג רבע בינלאומי"
+
+msgid "FIN Dbl Repchg"
+msgstr  " רפסג כפול פיני" 
+
+msgid "SWE Dubb återkv"
+msgstr "רפסג כפול שוודי" 
+
+msgid "SWE Dir återkv"
+msgstr "הזדמנות שנייה שוודית" 
+
+msgid "EST D klass"
+msgstr "נוק אאוט כפול אסטוני"
+
+msgid "No Repechg"
+msgstr "Ei keräilyjä"
+
+msgid "SWE Enkelt återkv"
+msgstr "SWE Lyhyet ker."
+
+msgid "ESP Dbl Lost"
+msgstr "הפסד כפול ספרדי"
+
+msgid "ESP Dbl Rep"
+msgstr "ESP Ransk."
+
+msgid "ESP Simple Rep"
+msgstr "רפסג רגיל ספרדי"
+
+msgid "ESP Double Lost"
+msgstr "הזדמנות כפולה ספרדי- שיטה אולימפית מעל 16"
+
+msgid "ESP Double Repechage"
+msgstr "ESP Ranskalainen"
+
+msgid "ESP Simple Repechage"
+msgstr "רפסג רגיל ספרדי"
+
+msgid "IJF Quarter Final Repechage"
+msgstr "רפסג רבע"
+
+msgid "Picture Files"
+msgstr "קובץ תמונות"
+
+msgid "Print Headers"
+msgstr "הדפס כותרות"
+
+msgid "Language Selection"
+msgstr "בחירת שפה"
+
+msgid "Spanish System"
+msgstr "שיטה ספרדית"
+
+msgid "Communication"
+msgstr "תקשורת"
+
+msgid "Club Text Selection"
+msgstr "בחירת טקסט אגודה"
+
+msgid "Print Logo"
+msgstr "הדפס לוגו"
+
+msgid "Sheet Layout"
+msgstr "תצורת דף"
+
+msgid "Weights Visible"
+msgstr "משקלים נראים"
+
+msgid "Grade Visible"
+msgstr "דרגה נראית"
+
+msgid "Line"
+msgstr "שורה"
+
+msgid "Syntax error"
+msgstr "טעות כתיב"
+
+msgid "Stop clock on Ippon"
+msgstr "עצור שעון באיפון"
+
+msgid "Switch sides"
+msgstr "החלף צדדים"
+
+msgid "Display customized layout"
+msgstr "הצג תצוגה מאופיינת אישית"
+
+msgid "No competitor found!"
+msgstr "לא נמצא מתחרה!"
+
+msgid "Modified Dbl Elim"
+msgstr "הזדמנות כפולה- ארד בודד"
+
+msgid "FIN Dbl Repchg One Bronze"
+msgstr "רפסג כפול ארד בודד"
+
+msgid "Modified Double Elimination"
+msgstr "הזדמנות כפולה- ארד בודד"
+
+msgid "FIN Double Repechage One Bronze"
+msgstr "רפסג כפול ארד בודד"
+
+msgid "Silver medal match"
+msgstr "קרב על מדליית כסף"
+
+msgid "Pool Style 2"
+msgstr "סגנון בתים 2"
+
+msgid "Use Belt Colors"
+msgstr "השתמש בצבע חגורות"
+
+msgid "Print Unmatched"
+msgstr "הדפס שלא שובצו"
+
+msgid "White first"
+msgstr "לבן תחילה"
+
+msgid "Show"
+msgstr "הצג"
+
+msgid "Show Deleted"
+msgstr "הצג מחוקים"
+
+msgid "Add"
+msgstr "הוסף"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "White first:"
+msgstr "לבן תחילה"
+
 msgid "Serial Communication"
 msgstr "תקשורת טורית"
 
-#: ../common/serial.c ../judoweight/menus.c
 msgid "In Use"
 msgstr "בשימוש"
 
-#: ../common/serial.c
 msgid "Device"
 msgstr "מכשיר"
 
-#: ../common/serial.c
 msgid "Baudrate"
 msgstr "Baudrate"
 
-#: ../common/serial.c
+msgid "Basic Scripts"
+msgstr "Basic Scripts"
+
+msgid "Select Script"
+msgstr "Select Script"
+
+msgid "No script available"
+msgstr "No script available"
+
+msgid "Run Script"
+msgstr "Run Script"
+
+msgid "Repeat Script"
+msgstr "Repeat Script"
+
+msgid "Double Pool 2"
+msgstr "בית כפול 2"
+
+msgid "Write to file"
+msgstr "כתוב לקובץ"
+
+msgid "Confirm New Match"
+msgstr "אשר קרב חדש"
+
+msgid "Contest area 9"
+msgstr "זירה 9"
+
+msgid "Contest area 10"
+msgstr "זירה 10"
+
+msgid "Move Medal Matches"
+msgstr "הזז קרבות על מדליה"
+
+msgid "Move match "
+msgstr "הזז קרב"
+
+msgid "to tatami and/or"
+msgstr "לזירה ו/או"
+
+msgid " delay"
+msgstr "עכב"
+
+msgid "Final"
+msgstr "גמר"
+
+msgid "Bronze"
+msgstr "ארד"
+
+msgid "Bronze1"
+msgstr "ארד 1"
+
+msgid "Bronze2"
+msgstr "ארד 2"
+
+msgid "Pool's last"
+msgstr "אחרון בבית" 
+
+msgid "No move"
+msgstr "ללא תזוזה" 
+
+msgid "Print Accreditation Cards"
+msgstr "הדפס כרטיסי רישום"
+
+msgid "Name Format"
+msgstr "תצורת שם"
+
+msgid "Name Surname, Country/Club"
+msgstr " שם משפחה פרטי, מדינה/ אגודה"
+
+msgid "Surname, Name, Country/Club"
+msgstr "שפ פרטי משפחה, מדינה/ אגודה"
+
+msgid "Country/Club  Surname, Name"
+msgstr "מדינה/ אגודה שם פרטי שם משפחה"
+
+msgid "Medal Matches..."
+msgstr "קרבות מדליות..."
+
+msgid "Print Selected Accreditation Cards"
+msgstr "הדפס בחירת כרטיסי רישום"
+
+msgid "Layout:"
+msgstr "תצורה"
+
+msgid "Print To:"
+msgstr "הדפס ל:"
+
+msgid "Template"
+msgstr "תבנית"
+
+msgid "Printer"
+msgstr "מדפסת"
+
+msgid "PDF"
+msgstr "PDF"
+
+msgid "One Card Per Page"
+msgstr "כרטיס אחד לכל דף"
+
+msgid "Normal display"
+msgstr "תצוגה רגילה"
+
+msgid "Horizontal display"
+msgstr "לאורך"
+
+msgid "White has a judogi problem."
+msgstr "בעיית חליפה ללבן"
+
+msgid "Blue has a judogi problem."
+msgstr "בעיית חליפה לכחול"
+
+msgid "Show Competitors"
+msgstr "הצג  מתחרים"
+
+msgid "Show competitors"
+msgstr "הצג  מתחרים"
+
+msgid "Name format"
+msgstr "תצורת זמן" 
+
+msgid "Country  Surname, Name"
+msgstr "מדינה שם פרטי משפחה"
+
+msgid "Club  Surname, Name"
+msgstr "אגודה שם פרטי משפחה"
+
+msgid "Country Surname"
+msgstr "מדינה שם"
+
+msgid "Club Surname"
+msgstr "אגודה שם"
+
+msgid "Surname, Name"
+msgstr "שם משפחה, פרטי"
+
+msgid "Surname"
+msgstr "שם משפחה"
+
+msgid "WINNER"
+msgstr "מנמח"
+
+msgid "Cancel"
+msgstr "בטל" 
+
+msgid "Club Seeding:"
+msgstr "דירוג אגודה"
+
+msgid "Gender:"
+msgstr "מין"
+
+msgid "Male"
+msgstr "זכר" 
+
+msgid "Female"
+msgstr "נקבה" 
+
+msgid "Control:"
+msgstr "בקרה"
+
+msgid "NOK"
+msgstr "לא תקין"
+
+msgid "Seeding"
+msgstr "דירוג"
+
+msgid "Club Seeding"
+msgstr "דירו אגודה" 
+
+msgid "Database Validation"
+msgstr "בדיקת תקינות מסד נתונים"
+
+msgid "Duplicate seedings:\n"
+msgstr "Duplicate seedings:\n"
+
+msgid "seeding"
+msgstr "דירוג"
+
+msgid "defined"
+msgstr "מוגדר"
+
+msgid "times"
+msgstr"זמנים" 
+
+msgid "Duplicate club seedings:\n"
+msgstr "Duplicate club seedings:\n"
+
+msgid "Missing category definitions:\n"
+msgstr "Missing category definitions:\n"
+
+msgid "is not"
+msgstr "לא" 
+
+msgid "Typing errors:\n"
+msgstr "Typing errors:\n"
+
+msgid "UTF-8 errors"
+msgstr "UTF-8 errors"
+
+msgid "Extra spaces"
+msgstr "רווחים מיותרים"
+
+msgid "Possible duplicate competitors:\n"
+msgstr "Possible duplicate competitors:\n"
+
+msgid "Possible duplicate club names:\n"
+msgstr "Possible duplicate club names:\n"
+
+
+msgid "Suspicious weights:\n"
+msgstr "Suspicious weights:\n"
+
+msgid "warnings"
+msgstr "אזהרות" 
+
+msgid "Weighed only"
+msgstr " שקולים בלבד" 
+
+msgid "With weights"
+msgstr "עם משקלים"
+
+msgid "Validate Database"
+msgstr "בדוק תקינות מסד נתונים" 
+
+msgid "Results in Icelandic"
+msgstr "Results in Icelandic"
+
+
+msgid "Surname Name, Country/Club"
+msgstr "שם משפחה פרטי, מדינה/ אגודה" 
+
+msgid "Country/Club,  Surname Name"
+msgstr "מדינה/ אגודה, משפחה פרטי" 
+
+msgid "Scale Serial Interface..."
+msgstr "ממשק חיבור משקל..."
+
 msgid "Type"
 msgstr "סוג"
 
-#: ../judoweight/menus.c
-msgid "About JudoWeight"
-msgstr "About JudoWeight"
-
-#: ../judoweight/menus.c
-#, fuzzy
-msgid "Scale Correction"
-msgstr "תקשורת טורית"
-
-#: ../judoweight/menus.c
-msgid "Real"
-msgstr ""
-
-#: ../judoweight/menus.c
-#, fuzzy
-msgid "Display"
-msgstr "תצוגה"
-
-#: ../judoweight/menus.c
-#, fuzzy
-msgid "Error"
-msgstr "שגיאות"
-
-#: ../judoweight/menus.c
-msgid "ERROR"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "Scale Correction Table..."
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "No manual edit"
-msgstr "אין עריכה ידנית"
-
-#: ../judoweight/menus.c
-msgid "Automatic send"
-msgstr "שליחה אוטומטית"
-
-#: ../judoweight/menus.c
-msgid "Print label"
-msgstr "הדפס תווית"
-
-#: ../judoweight/menus.c
-msgid "No margins"
-msgstr "ללא שוליים"
-
-#: ../judoweight/menus.c
-msgid "Fit page"
-msgstr "התאם לדף"
-
-#: ../judoweight/main.c
-msgid "WARNING: NO CONTROL"
-msgstr "אזהרה: אין שליטה"
-
-#: ../judoweight/main.c ../judojudogi/main.c
 msgid "ID:"
 msgstr "תז:"
 
-#: ../judoweight/main.c
 msgid "Name:"
 msgstr "שם:"
 
-#: ../judoweight/main.c
-msgid "Corrected:"
-msgstr ""
+msgid "About JudoWeight"
+msgstr "About JudoWeight"
 
-#: ../judoweight/main.c
-msgid "Confirm:"
-msgstr "אשר"
-
-#: ../judoweight/main.c
-msgid "New Password:"
-msgstr "סיסמא חדשה:"
-
-#: ../judoweight/main.c
-msgid "Old Password:"
-msgstr "סיסמא ישנה"
-
-#: ../judoweight/main.c
-msgid "Wrong password!"
-msgstr "סיסמא שגויה!"
-
-#: ../judojudogi/menus.c
-msgid "About JudoJudogi"
-msgstr "About JudoJudogi"
-
-#: ../judojudogi/main.c
 msgid "No match soon! Please wait for a while."
 msgstr "אין קרב בקרוב, נא המתן"
 
-#: ../judoproxy/menus.c
-#, fuzzy
-msgid "About JudoProxy"
-msgstr "About JudoInfo"
+msgid "About JudoJudogi"
+msgstr "About JudoJudogi"
 
-#: ../judoproxy/main.c
-msgid "Camera"
+msgid "Norwegian System"
+msgstr "Norwegian System"
+msgid "Confirm:"
+msgstr "אשר"
+
+msgid "- - -"
+msgstr "- - -"
+
+msgid "syntax errors"
+msgstr "טעויות תחביר"
+
+msgid "Rep. time:"
+msgstr "זמן רפסג:"
+
+msgid "Landscape"
+msgstr "לאורך"
+
+msgid "Resolution (min):"
+msgstr "Resolution (min):"
+
+msgid "Compressed timeline"
+msgstr "זמן מרוכז"
+
+msgid "Select font"
+msgstr "בחר גופן"
+
+msgid "Font"
+msgstr "גופן"
+
+msgid "Communication error"
+msgstr "טעות תקשורת"
+
+msgid "Double Lost"
 msgstr ""
 
-#: ../judoproxy/main.c
-#, fuzzy
-msgid "JudoTimer"
-msgstr "לוח התוצאות"
+msgid "Replay Video"
+msgstr "Näytä video uusintana"
 
-#: ../judoproxy/main.c
-msgid "Reload"
+msgid "Video server"
+msgstr "Videopalvelin"
+
+msgid "Video server URL"
+msgstr "Videopalvelimen URL"
+
+msgid "User:"
+msgstr "Käyttäjä:"
+
+msgid "Proxy:"
+msgstr "Välityspalvelin:"
+
+msgid "Show Video"
+msgstr "Näytä video"
+
+msgid "GBR Knock Out"
+msgstr "GBR Ranskalainen"
+
+msgid "SVG Templates"
+msgstr "SVG-mallineet"
+
+msgid "General"
+msgstr "Yleiset asetukset"
+
+msgid "Reset to"
+msgstr "שחזר"
+
+msgid "Initialize"
+msgstr "Initialize"
+
+msgid "Players"
+msgstr "שחקנים"
+
+msgid "Max age"
+msgstr "גיל מירבי"
+
+msgid "Min"
+msgstr "מינ." 
+
+msgid "Max"
+msgstr "מקס'"
+
+msgid "System"
+msgstr "שיטה"
+
+msgid "Default systems"
+msgstr "שיטות ברירת מחדל" 
+
+msgid "Use SVG Templates"
+msgstr "Use SVG Templates"
+
+
+msgid "Seeded to fixed places:"
+msgstr "מדורגים למקומות קבועים:"
+
+msgid "Double Pool 2 with carried forward points:"
+msgstr "Double Pool 2 with carried forward points:"
+
+msgid "Two pool bronzes:"
+msgstr "Two pool bronzes:"
+
+msgid "Resolve 3-way ties by weights:"
+msgstr "פתור נצחון ליגה לפי משקל"
+
+msgid "Coach Id:"
+msgstr "קוד מאמן"
+
+msgid "Comment:"
+msgstr "הערה"
+
+msgid "Best two out of three matches:"
+msgstr "הטוב משלוש"
+
+msgid ""
+"Medal will be awarded \n"
+"only if a contest was won:"
+msgstr ""
+"הענקת מדליה רק עם ניצח קרב"
+
+msgid "Pool settings"
+msgstr "הגדרות ליגה"
+
+msgid "Statistics"
+msgstr "סטטיסטיקה"
+
+msgid "Grade names"
+msgstr "שם דרגות"
+
+msgid "Coach"
+msgstr "מאמן"
+
+msgid "Weights do not match"
+msgstr "משקלים אינם תואמים"
+
+msgid "Copy Weights"
+msgstr "העתק משקלים"
+
+msgid "weights updated"
+msgstr "משקלים עודכנו"
+
+msgid "Update Weights From Another Shiai"
+msgstr "עדכן משקל מקוץ תחרות אחר"
+
+msgid "Weighted:"
+msgstr "נשקלו:"
+
+msgid "Print SVG"
+msgstr "Print SVG"
+
+msgid "Short pin times"
+msgstr "זמן ריתוק קצר"
+
+msgid "No Limit"
+msgstr"ללא הגבלה" 
+
+msgid "Corrupted competitor data:\n"
+msgstr "שגיאה בנתוני ספורטאי\n"
+
+msgid "Corrupted category data:\n"
+msgstr "שגיאה בנתוני קטגוריה\n"
+
+msgid "Server URL"
+msgstr "Server URL"
+
+msgid "Copy to Server"
+msgstr "העתק לשרת"
+
+msgid "Proxy User:"
+msgstr "Proxy User:"
+
+msgid "Proxy Password:"
+msgstr "Proxy Password:"
+
+msgid "DEN Dbl Elim"
+msgstr "הזדמנות כפולה דנית"
+
+msgid "EST D klass 1 brz"
+msgstr "EST Pitkä ker. 1 pronssi"
+
+msgid "DEN Double Elimination"
+msgstr "הזדמנות כפולה דנית"
+
+msgid "EST Double Elim One Bronze"
+msgstr "הזדמנות כפולה ארד אחד אסטונית"
+
+msgid "Remote address"
+msgstr "Remote address"
+
+
+msgid "Remote Control"
+msgstr "Remote Control"
+
+
+msgid "If equal score less shido wins"
+msgstr "עם ניקוד זהה פחות שידו מנצח" 
+
+msgid "Set score"
+msgstr "קבע ניקוד"
+
+msgid "Edit Drawing"
+msgstr "ערוך הגרלה"
+
+msgid "VLC control"
+msgstr "VLC control"
+
+msgid "X:"
+msgstr "X:"
+
+msgid "Y:"
+msgstr "Y:"
+
+msgid "Scale:"
+msgstr "משקל:"
+
+msgid "Name"
+msgstr "שם"
+
+msgid "Reg.Cat"
+msgstr "קטגוריה רגילה"
+
+msgid "ID"
+msgstr "תז"
+
+msgid "Index"
+msgstr "אינדקס"
+
+msgid "Results in Polish"
+msgstr "Results in Polish"
+
+msgid "Results in Slovak"
+msgstr "Results in Slovak"
+
+msgid "Results in Dutch"
+msgstr "Results in Dutch"
+
+msgid "Win in Golden Score gives 1 point"
+msgstr "מנצח בניקוד זהב מעניק נקודה אחת"
+
+msgid "WARNING: NO CONTROL"
+msgstr "אזהרה: אין שליטה"
+
+msgid "British System"
+msgstr "שיטהה בריטית"
+
+msgid "Australian System"
+msgstr "שיטה אוסטרלית"
+
+msgid "Danish System"
+msgstr "שיטה דנית"
+
+msgid "Polish System"
+msgstr "שיטה פולנית"
+
+msgid "Slovakian System"
+msgstr "שיטה סלובקית"
+
+msgid "Tatami"
+msgstr "זירה"
+
+msgid "Hikiwake"
+msgstr "היקיוואקה"
+
+msgid "Require judogi control"
+msgstr "דרוש בקרת חליפה"
+
+msgid "CTL"
 msgstr ""
 
-#~ msgid "Hansokumake to white"
-#~ msgstr "הנסוקומקה לבן"
+msgid "Show Flags"
+msgstr "הצג דגלים"
 
-#~ msgid "Hansokumake to blue"
-#~ msgstr "הנסוקומקה כחול"
+msgid "Show Initial of Name"
+msgstr "הצג ראשית שם"
 
-#~ msgid "Match duration: 2 min E-juniors"
-#~ msgstr "משך ההתמודדות 2 דקות צעירים"
+msgid "Flag size:"
+msgstr "גודל דגל"
 
-#~ msgid "Contest duration: automatic"
-#~ msgstr "משך קרב: אוטומטי"
+msgid "Name size:"
+msgstr "גודל שם:"
 
-#~ msgid "Contest duration: 2 min"
-#~ msgstr "משך קרב: 2 דקות"
+msgid "CONTROL"
+msgstr "בקרה"
 
-#~ msgid "Contest duration: 3 min"
-#~ msgstr "משך קרב: 3 דקות"
+msgid "THIS APPLICATION"
+msgstr "האפליקציה הנוכחית"
 
-#~ msgid "Contest duration: 4 min"
-#~ msgstr "משך קרב: 4 דקות"
+msgid "NOT CONNECTED"
+msgstr "ללא חיבור"
 
-#~ msgid "Contest duration: 5 min"
-#~ msgstr "משך קרב: 5 דקות"
+msgid "Team:"
+msgstr "קבוצה:"
 
-#~ msgid "Contest duration automatically from JudoShiai program"
-#~ msgstr "זמן הקרב ישירות ממזכירות"
+msgid "Tatami:"
+msgstr "זירה:"
 
-#~ msgid "Contest area 1"
-#~ msgstr "זירה 1"
+msgid "Create default members:"
+msgstr "צור חברים ברירת מחדל:"
 
-#~ msgid "Contest area 2"
-#~ msgstr "זירה 2"
+msgid "Team"
+msgstr "קבוצה"
 
-#~ msgid "Contest area 3"
-#~ msgstr "זירה 3"
+msgid "Messages"
+msgstr "הודעות" 
 
-#~ msgid "Contest area 4"
-#~ msgstr "זירה 4"
+msgid "Double Pool 3"
+msgstr "שני בתי ליגות ובית גמר"
 
-#~ msgid "Contest area 5"
-#~ msgstr "זירה 5"
+msgid "Custom"
+msgstr "מותאם אישית"
 
-#~ msgid "Contest area 6"
-#~ msgstr "זירה 6"
+msgid "UKR Dbl Repchg"
+msgstr ""
 
-#~ msgid "Contest area 7"
-#~ msgstr "זירה 7"
+msgid "UKR Double Repechage"
+msgstr ""
 
-#~ msgid "Contest area 8"
-#~ msgstr "זירה 8"
+msgid "Customized"
+msgstr "מותאם אישית"
 
-#~ msgid "Master mode"
-#~ msgstr "מסך ראשי"
+msgid "Load Custom Systems"
+msgstr "טען שיטות מותאמות"
 
-#~ msgid "----- Men -----"
-#~ msgstr " -----גברים-----"
+msgid "New Team"
+msgstr "קבוצה חדשה"
 
-#~ msgid "----- Women -----"
-#~ msgstr "--------נשים -------"
+msgid "New Team Category"
+msgstr"קטגוריה קבוצתית חדשה"
 
-#~ msgid "No koka"
-#~ msgstr "אין קוקא"
+msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr "הדפס אקרדיטציות נבחרות למדפסת ברירת המחדל"
 
-#~ msgid "Leave points for GS"
-#~ msgstr "השאר ניקוד לניקוד זהב"
+msgid "Results in German"
+msgstr "Results in German"
 
-#~ msgid "Show"
-#~ msgstr "הצג"
+msgid "Results in Russian"
+msgstr "Results in Russian"
 
-#~ msgid "Show Deleted"
-#~ msgstr "הצג מחוקים"
+msgid "Ukrainian System"
+msgstr "שיטה אוקראינית"
 
-#~ msgid "Contest area 9"
-#~ msgstr "זירה 9"
+msgid "Open file"
+msgstr "פתח קובץ"
 
-#~ msgid "Contest area 10"
-#~ msgstr "זירה 10"
+msgid "New Password:"
+msgstr "סיסמא חדשה:"
 
-#~ msgid "Short pin times"
-#~ msgstr "זמן ריתוק קצר"
+msgid "Old Password:"
+msgstr "סיסמא ישנה"
 
-#~ msgid "Remote address"
-#~ msgstr "Remote address"
+msgid "Wrong password!"
+msgstr "סיסמא שגויה!"
 
-#~ msgid "Remote Control"
-#~ msgstr "Remote Control"
+msgid "No manual edit"
+msgstr "אין עריכה ידנית"
 
-#~ msgid "If equal score less shido wins"
-#~ msgstr "עם ניקוד זהה פחות שידו מנצח"
+msgid "Automatic send"
+msgstr "שליחה אוטומטית"
+
+msgid "Print label"
+msgstr "הדפס תווית"
+
+msgid "No margins"
+msgstr"ללא שוליים"
+
+msgid "Fit page"
+msgstr "התאם לדף"
+
+msgid "No SOREMADE/IPPON texts"
+msgstr "ללא טקסט איפון/ סורהמדה"
+
+msgid "Custom layout file..."
+msgstr "Custom layout file..."
+
+msgid "Resolve 3-way ties by time:"
+msgstr "פתור שיוויון בליגה באמצעות זמן"
+
+msgid "Move Matches"
+msgstr "הזז קרבות" 
+
+msgid "Move Matches..."
+msgstr "הזז קרבות..."
+
+msgid "Use the first places only:"
+msgstr "השתמש במקומות הראשונים בלבד"
+
+msgid "Round"
+msgstr "סיבוב"
+
+msgid "Round Robin"
+msgstr "ליגה"
+
+msgid "Repechage"
+msgstr "רפסג'"
+
+msgid "Mix pool matches into rounds:"
+msgstr "ערבב קרבות ליגה לתוך הסיבובים"
+
+msgid "Use IJF points:"
+msgstr "השתמש בניקוד איגוד עולמי"
+
+msgid "Show bracket"
+msgstr "Show bracket"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-02 03:37+0200\n"
+"POT-Creation-Date: 2018-08-14 12:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -11,2751 +11,2073 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../judotimer/comm.c ../judotimer/menus.c ../judotimer/main.c
-#: ../judotimer/stopwatch.c
-msgid "Golden Score"
-msgstr "Zlaté skóre"
-
-#: ../judotimer/video.c
-msgid "Video server URL"
-msgstr "URL video serveru"
-
-#: ../judotimer/video.c ../judoshiai/ftp.c
-msgid "User:"
-msgstr "Uživatel"
-
-#: ../judotimer/video.c ../judoshiai/ftp.c ../judoshiai/set-password.c
-#: ../judoweight/main.c
-msgid "Password:"
-msgstr "Heslo:"
-
-#: ../judotimer/video.c ../judoshiai/ftp.c
-msgid "Proxy:"
-msgstr "Proxy:"
-
-#: ../judotimer/video.c ../judotimer/tvlogo.c ../common/ip.c
-msgid "(Connection OK)"
-msgstr "(Připojení OK)"
-
-#: ../judotimer/video.c ../judotimer/tvlogo.c ../common/ip.c
-msgid "(Connection broken)"
-msgstr "(Připojení přerušené)"
-
-#: ../judotimer/video.c ../judoproxy/video.c
-msgid "Show Video"
-msgstr "Ukaž video"
-
-#: ../judotimer/menus.c
-msgid "About Judotimer"
-msgstr "Info Judotimerist"
-
-#: ../judotimer/menus.c
-msgid "Set clocks"
-msgstr "Nastav čas"
-
-#: ../judotimer/menus.c
-msgid "Clock:"
-msgstr "Hodiny:"
-
-#: ../judotimer/menus.c ../judoshiai/matches.c ../judoshiai/httpd.c
-msgid "Match"
-msgstr "Zápas"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c ../judoshiai/import.c
-#: ../judoinfo/menus.c ../judoweight/menus.c ../judojudogi/menus.c
-#: ../judoproxy/menus.c
-msgid "Preferences"
-msgstr "Předvolby"
-
-#: ../judotimer/menus.c ../judoshiai/sql-dialog.c ../judoshiai/menus.c
-#: ../judoinfo/menus.c ../judoweight/menus.c ../judojudogi/menus.c
-#: ../judoproxy/menus.c
-msgid "Help"
-msgstr "Pomoc"
-
-#: ../judotimer/menus.c
-msgid "Undo!"
-msgstr "Zpět!"
-
-#: ../judotimer/menus.c
-msgid "Match duration: automatic"
-msgstr "DOba zápasu : automaticky"
-
-#: ../judotimer/menus.c
-#, fuzzy
-msgid "Match duration: 2 min (short pin times)"
-msgstr "Soutěž trvá: 2 min "
-
-#: ../judotimer/menus.c
-msgid "Match duration: 2 min"
-msgstr "Doba zápasu: 2 min"
-
-#: ../judotimer/menus.c
-msgid "Match duration: 3 min"
-msgstr "Doba zápasu: 3 min"
-
-#: ../judotimer/menus.c
-msgid "Match duration: 4 min"
-msgstr "Doba zápasu: 4 min"
-
-#: ../judotimer/menus.c
-msgid "Match duration: 5 min"
-msgstr "Doba zápasu: 5 min"
-
-#: ../judotimer/menus.c
-msgid "Hantei: blue wins"
-msgstr "Hantei: modrý vyhrál"
-
-#: ../judotimer/menus.c
-msgid "Hantei: white wins"
-msgstr "Hantei: bílý vyhrál"
-
-#: ../judotimer/menus.c ../judotimer/main.c
-msgid "Hansoku-make to blue"
-msgstr "Hansoku-make modrý"
-
-#: ../judotimer/menus.c ../judotimer/main.c
-msgid "Hansoku-make to white"
-msgstr "Hansoku-make bílý"
-
-#: ../judotimer/menus.c ../judotimer/main.c ../judotimer/stopwatch.c
-msgid "Hikiwake"
-msgstr ""
-
-#: ../judotimer/menus.c
-msgid "Clear selection"
-msgstr ""
-
-#: ../judotimer/menus.c
-msgid "View Log"
-msgstr "Zobraz log"
-
-#: ../judotimer/menus.c ../judotimer/show-ad.c
-msgid "Show Competitors"
-msgstr "Ukaž Závodníky"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
-#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "Quit"
-msgstr "Quit"
-
-#: ../judotimer/menus.c ../judoshiai/menuacts.c
-msgid "Contest"
-msgstr "Soutěž"
-
-#: ../judotimer/menus.c
-msgid "Switch sides"
-msgstr "Změnit strany"
-
-#: ../judotimer/menus.c
-msgid "Replay Video"
-msgstr "Přehraj video"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Red background"
-msgstr "Červené pozadí"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Full screen mode"
-msgstr "Na celou obrazpvku"
-
-#: ../judotimer/menus.c
-msgid "Stop clock on Ippon"
-msgstr "Zastav čas při Ipponu"
-
-#: ../judotimer/menus.c
-msgid "2017 Rules"
-msgstr ""
-
-#: ../judotimer/menus.c
-msgid "2018 Rules"
-msgstr ""
-
-#: ../judotimer/menus.c
-msgid "Confirm New Match"
-msgstr "Potvrď nový zápas"
-
-#: ../judotimer/menus.c
-msgid "View clocks only"
-msgstr "Zobraz poze hodiny"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "White first"
-msgstr "Bílý první"
-
-#: ../judotimer/menus.c
-msgid "No SOREMADE/IPPON texts"
-msgstr ""
-
-#: ../judotimer/menus.c
-msgid "Show competitors"
-msgstr "Ukaž závodníky"
-
-#: ../judotimer/menus.c
-msgid "Require judogi control"
-msgstr ""
-
-#: ../judotimer/menus.c
-msgid "Display layout"
-msgstr "Výstup display"
-
-#: ../judotimer/menus.c
-msgid "Display layout 1"
-msgstr "Display 1"
-
-#: ../judotimer/menus.c
-msgid "Display layout 2"
-msgstr "Display 2"
-
-#: ../judotimer/menus.c
-msgid "Display layout 3"
-msgstr "Display 3"
-
-#: ../judotimer/menus.c
-msgid "Display layout 4"
-msgstr "Display 4"
-
-#: ../judotimer/menus.c
-msgid "Display layout 5"
-msgstr "Display 5"
-
-#: ../judotimer/menus.c
-msgid "Display customized layout"
-msgstr "Zobraz vlstní rozložení"
-
-#: ../judotimer/menus.c
-msgid "Custom layout file..."
-msgstr ""
-
-#: ../judotimer/menus.c
-msgid "Name format"
-msgstr "Formát jména"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c
-msgid "Name Surname, Country/Club"
-msgstr "Jméno Příjmení, Zemé/Klub"
-
-#: ../judotimer/menus.c
-msgid "Surname, Name, Country/Club"
-msgstr "Jméno, Příjmení, Země/Klub"
-
-#: ../judotimer/menus.c
-msgid "Country/Club  Surname, Name"
-msgstr "Zemé/Klub Příjmení,Jméno"
-
-#: ../judotimer/menus.c
-msgid "Country  Surname, Name"
-msgstr "Země  Příjmení,Jméno"
-
-#: ../judotimer/menus.c
-msgid "Club  Surname, Name"
-msgstr "Klub  Příjmení, Jméno"
-
-#: ../judotimer/menus.c
-msgid "Country Surname"
-msgstr "Země Příjmení"
-
-#: ../judotimer/menus.c
-msgid "Club Surname"
-msgstr "Klub Příjmení"
-
-#: ../judotimer/menus.c
-msgid "Surname, Name"
-msgstr "Příjmení, Jméno"
-
-#: ../judotimer/menus.c ../judoshiai/httpd.c
-msgid "Surname"
-msgstr "Příjmení"
-
-#: ../judotimer/menus.c ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-#: ../judoshiai/httpd.c
-msgid "Country"
-msgstr "Země"
-
-#: ../judotimer/menus.c ../judoshiai/db-validate.c ../judoshiai/another-shiai.c
-#: ../judoshiai/competitors.c ../judoshiai/httpd.c
-msgid "Club"
-msgstr "Klub"
-
-#: ../judotimer/menus.c
-msgid "Contest area"
-msgstr "Tatami"
-
-#: ../judotimer/menus.c
-msgid "Contest area not chosen"
-msgstr "Tatami není vybrána"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../judoweight/menus.c
-#: ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "Communication node"
-msgstr "Komunikační uzel"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c ../common/ip.c
-#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "Own IP addresses"
-msgstr "Vlastní IP-adresa"
-
-#: ../judotimer/menus.c
-msgid "Video server"
-msgstr "Video server"
-
-#: ../judotimer/menus.c ../judoshiai/matches.c
-msgid "Set time"
-msgstr "Nastav čas"
-
-#: ../judotimer/menus.c
-msgid "Increment time"
-msgstr "Zvýšení času"
-
-#: ../judotimer/menus.c
-msgid "Decrement time"
-msgstr "Snížení času"
-
-#: ../judotimer/menus.c
-msgid "Increment pin time"
-msgstr "Zvýšení pin času"
-
-#: ../judotimer/menus.c
-msgid "Decrement pin time"
-msgstr "Snížení pin času"
-
-#: ../judotimer/menus.c
-msgid "Normal operation"
-msgstr "Normální operace"
-
-#: ../judotimer/menus.c
-msgid "Slave mode"
-msgstr "Slave mód"
-
-#: ../judotimer/menus.c
-msgid "Advertise"
-msgstr "Reklama"
-
-#: ../judotimer/menus.c
-msgid "Sound"
-msgstr "Zvuk"
-
-#: ../judotimer/menus.c ../judoinfo/menus.c
-msgid "Font"
-msgstr "Font"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
-#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "Manual"
-msgstr "Manuál"
-
-#: ../judotimer/menus.c
-msgid "Quick guide"
-msgstr "Stručný návod"
-
-#: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
-#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
-msgid "About"
-msgstr "O"
-
-#: ../judotimer/tvlogo.c
-msgid "VLC control"
-msgstr ""
-
-#: ../judotimer/tvlogo.c
-msgid "VLC port:"
-msgstr ""
-
-#: ../judotimer/tvlogo.c
-msgid "X:"
-msgstr ""
-
-#: ../judotimer/tvlogo.c
-msgid "Y:"
-msgstr ""
-
-#: ../judotimer/tvlogo.c
-msgid "Scale:"
-msgstr ""
-
-#: ../judotimer/show-ad.c
-msgid "CTL"
-msgstr ""
-
-#: ../judotimer/show-ad.c
-msgid "Advertisement"
-msgstr "Reklama"
-
-#: ../judotimer/show-ad.c ../judotimer/stopwatch.c ../judoshiai/db-validate.c
-#: ../judoshiai/competitors.c ../judoshiai/custom-category.c
-#: ../judoshiai/httpd.c ../judoweight/main.c ../judojudogi/main.c
-msgid "OK"
-msgstr "OK"
-
-#: ../judotimer/show-ad.c
-msgid "Show Flags"
-msgstr ""
-
-#: ../judotimer/show-ad.c
-msgid "Show Initial of Name"
-msgstr ""
-
-#: ../judotimer/show-ad.c
-msgid "Flag size:"
-msgstr ""
-
-#: ../judotimer/show-ad.c
-msgid "Name size:"
-msgstr ""
-
-#: ../judotimer/show-ad.c ../judoshiai/menuacts.c
-#: ../judoshiai/custom-category.c ../judoshiai/write-results.c
-#: ../judoshiai/svg.c
-msgid "Choose a directory"
-msgstr "Vyber adresář"
-
-#: ../judotimer/show-ad.c
-msgid "Run Advertisements"
-msgstr "Spustit reklamy"
-
-#: ../judotimer/main.c
-msgid "White has a judogi problem."
-msgstr "Bílý má problém s kimonem"
-
-#: ../judotimer/main.c
-msgid "Blue has a judogi problem."
-msgstr "Modrý má problém s kimonem"
-
-#: ../judotimer/main.c
-msgid "White won the voting"
-msgstr "Bílý vhrál hlasováním"
-
-#: ../judotimer/main.c
 msgid "Blue won the voting"
 msgstr "Modrý vyhrál hlasováním"
 
-#: ../judotimer/main.c ../judoshiai/matches.c
+msgid "White won the voting"
+msgstr "Bílý vhrál hlasováním"
+
 msgid "Match:"
 msgstr "Zápas:"
 
-#: ../judotimer/main.c
 msgid "Next:"
 msgstr "Další:"
 
-#: ../judotimer/main.c ../judoinfo/svg.c
-msgid "Open file"
-msgstr ""
+msgid "Match"
+msgstr "Zápas"
 
-#: ../judotimer/main.c
+msgid "Contest"
+msgstr "Soutěž"
+
+msgid "Preferences"
+msgstr "Předvolby"
+
+msgid "Help"
+msgstr "Pomoc"
+
+msgid "Quit"
+msgstr "Quit"
+
+msgid "Red background"
+msgstr "Červené pozadí"
+
+msgid "Communication node"
+msgstr "Komunikační uzel"
+
+msgid "Own IP addresses"
+msgstr "Vlastní IP-adresa"
+
+msgid "Manual"
+msgstr "Manuál"
+
+msgid "About"
+msgstr "O"
+
+msgid "Address of the communication node"
+msgstr "Adresa komunikačního kanálu"
+
+msgid "IP address:"
+msgstr "IP-adresa:"
+
+msgid "(Connection OK)"
+msgstr "(Připojení OK)"
+
+msgid "(Connection broken)"
+msgstr "(Připojení přerušené)"
+
+msgid "Change language to Finnish"
+msgstr "Změna jazyku na Finsky"
+
+msgid "Change language to Estonian"
+msgstr "Změna jazyku na Estonsky"
+
+msgid "Change language to English"
+msgstr "Změna jazyku na Anglicky"
+
+msgid "Contest duration automatically from JudoShiai program"
+msgstr "Soutěží se z programu JudoShiai"
+
 msgid "Fight:"
 msgstr "Zápas:"
 
-#: ../judotimer/main.c ../judoinfo/main.c
-msgid "Select font"
-msgstr "Výběr fontu"
+msgid "Match duration: automatic"
+msgstr "DOba zápasu : automaticky"
 
-#: ../judotimer/sound.c ../judoshiai/menuacts.c ../judoshiai/svg.c
-#: ../judoweight/svg.c
-msgid "Choose a file"
-msgstr "Vyber soubor"
+msgid "Match duration: 2 min E-juniors"
+msgstr "Doba zápasu : 2 min E-junioři"
 
-#: ../judotimer/sound.c
-msgid "Sound Files"
-msgstr "Zvukové soubory"
+msgid "Match duration: 2 min"
+msgstr "Doba zápasu: 2 min"
 
-#: ../judotimer/sound.c
-msgid "All Files"
-msgstr "Všechny soubory"
+msgid "Match duration: 3 min"
+msgstr "Doba zápasu: 3 min"
 
-#: ../judotimer/stopwatch.c
-msgid "Start Golden Score?"
-msgstr "Začít zlaté skóre?"
+msgid "Match duration: 4 min"
+msgstr "Doba zápasu: 4 min"
 
-#: ../judotimer/stopwatch.c
-msgid "No Limit"
-msgstr ""
+msgid "Match duration: 5 min"
+msgstr "Doba zápasu: 5 min"
 
-#: ../judotimer/stopwatch.c
-msgid "Hantei"
-msgstr "Hantei"
+msgid "Contest duration: automatic"
+msgstr "Soutěž trvá: automaticky"
 
-#: ../judotimer/stopwatch.c
-msgid "Blue wins"
-msgstr "Vítěz modrý"
+msgid "Contest duration: 2 min (short pin times)"
+msgstr "Soutěž trvá: 2 min "
 
-#: ../judotimer/stopwatch.c
-msgid "White wins"
-msgstr "Vítěz  bílý"
+msgid "Contest duration: 2 min"
+msgstr "Soutěž trvá: 2 min"
 
-#: ../judotimer/stopwatch.c
-msgid "WINNER"
-msgstr "Vítěz"
+msgid "Contest duration: 3 min"
+msgstr "Soutěž trvá: 3 min"
 
-#: ../judotimer/stopwatch.c
-msgid "Start New Match?"
-msgstr "Začít další zápas?"
+msgid "Contest duration: 4 min"
+msgstr "Soutěž trvá: 4 min"
 
-#: ../judotimer/stopwatch.c
-msgid "Cancel"
-msgstr "Konec"
+msgid "Contest duration: 5 min"
+msgstr "Soutěž trvá: 5 min"
 
-#: ../judotimer/stopwatch.c
-msgid "- - -"
-msgstr ""
+msgid "Hantei: blue wins"
+msgstr "Hantei: modrý vyhrál"
 
-#: ../judotimer/stopwatch.c
-msgid "CONTROL"
-msgstr ""
+msgid "Hantei: white wins"
+msgstr "Hantei: bílý vyhrál"
 
-#: ../judotimer/stopwatch.c
-msgid "REST TIME"
-msgstr "PŘESTÁVKA"
+msgid "Contest area not chosen"
+msgstr "Tatami není vybrána"
 
-#: ../judotimer/stopwatch.c
+msgid "Contest area 1"
+msgstr "Tatami 1"
+
+msgid "Contest area 2"
+msgstr "Tatami 2"
+
+msgid "Contest area 3"
+msgstr "Tatami 3"
+
+msgid "Contest area 4"
+msgstr "Tatami 4"
+
+msgid "Contest area 5"
+msgstr "Tatami 5"
+
+msgid "Contest area 6"
+msgstr "Tatami 6"
+
+msgid "Contest area 7"
+msgstr "Tatami 7"
+
+msgid "Contest area 8"
+msgstr "Tatami 8"
+
+msgid "Increment time"
+msgstr "Zvýšení času"
+
+msgid "Decrement time"
+msgstr "Snížení času"
+
+msgid "View clocks only"
+msgstr "Zobraz poze hodiny"
+
+msgid "Increment pin time"
+msgstr "Zvýšení pin času"
+
+msgid "Decrement pin time"
+msgstr "Snížení pin času"
+
 msgid "Points going to blue"
 msgstr "Body modrý"
 
-#: ../judotimer/stopwatch.c
 msgid "Points going to white"
 msgstr "Body bílý"
 
-#: ../judoshiai/properties.c
-msgid "Tournament:"
-msgstr "Turnaj:"
+msgid "About Judotimer"
+msgstr "Info Judotimerist"
 
-#: ../judoshiai/properties.c
-msgid "Date:"
-msgstr "Datum:"
+msgid "Full screen mode"
+msgstr "Na celou obrazpvku"
 
-#: ../judoshiai/properties.c
-msgid "Place:"
-msgstr "Místo:"
+msgid "Normal operation"
+msgstr "Normální operace"
 
-#: ../judoshiai/properties.c ../judoshiai/print.c
-msgid "Start time:"
-msgstr "Začátek:"
+msgid "Master mode"
+msgstr "Master mód"
 
-#: ../judoshiai/properties.c
-msgid "Number of tatamis:"
-msgstr "Počet tatami:"
+msgid "Slave mode"
+msgstr "Slave mód"
 
-#: ../judoshiai/properties.c
-msgid "White first:"
-msgstr "Bílý první :"
+msgid "Undo!"
+msgstr "Zpět!"
 
-#: ../judoshiai/properties.c
-msgid "Best two out of three matches:"
-msgstr ""
+msgid "Set clocks"
+msgstr "Nastav čas"
 
-#: ../judoshiai/properties.c
-msgid ""
-"Medal will be awarded \n"
-"only if a contest was won:"
-msgstr ""
+msgid "Clock:"
+msgstr "Hodiny:"
 
-#: ../judoshiai/properties.c
-msgid "Seeded to fixed places:"
-msgstr ""
+msgid "Year 2009 rules"
+msgstr "pravidla 2009"
 
-#: ../judoshiai/properties.c
-msgid "Use the first places only:"
-msgstr ""
+msgid "Short pin times"
+msgstr "Krátký čas"
 
-#: ../judoshiai/properties.c
-msgid "Win in Golden Score gives 1 point"
-msgstr ""
+msgid "Hansoku-make to blue"
+msgstr "Hansoku-make modrý"
 
-#: ../judoshiai/properties.c
-msgid "2017 Rules:"
-msgstr ""
+msgid "Hansoku-make to white"
+msgstr "Hansoku-make bílý"
 
-#: ../judoshiai/properties.c
-msgid "2018 Rules:"
-msgstr ""
+msgid "Zrušit Výběr"
+msgstr "Eemalda valik"
 
-#: ../judoshiai/properties.c
-msgid "Double Pool 2 with carried forward points:"
-msgstr ""
+msgid "Display layout 1"
+msgstr "Display 1"
 
-#: ../judoshiai/properties.c
-msgid "Two pool bronzes:"
-msgstr ""
+msgid "Display layout 2"
+msgstr "Display 2"
 
-#: ../judoshiai/properties.c
-msgid "Resolve 3-way ties by time:"
-msgstr ""
+msgid "Display layout 3"
+msgstr "Display 3"
 
-#: ../judoshiai/properties.c
-msgid "Resolve 3-way ties by weights:"
-msgstr ""
+msgid "Display layout 4"
+msgstr "Display 4"
 
-#: ../judoshiai/properties.c
-msgid "Mix pool matches into rounds:"
-msgstr ""
+msgid "Display layout 5"
+msgstr "Display 5"
 
-#: ../judoshiai/properties.c
-msgid "Use points 10/1/0:"
-msgstr ""
+msgid "Quick guide"
+msgstr "Stručný návod"
 
-#: ../judoshiai/properties.c
-msgid "Use points 100/10/1/½:"
-msgstr ""
+msgid "Advertise"
+msgstr "Reklama"
 
-#: ../judoshiai/properties.c
-msgid "Use points 10/7/1:"
-msgstr ""
+msgid "Run Advertisements"
+msgstr "Spustit reklamy"
 
-#: ../judoshiai/properties.c
-msgid "Use points 10/1/½:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Use points 10/3/1:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Use points 10/5/1:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Add extra match in teams points tie:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Only wins count, ignore match points:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid ""
-"The first team reaching the majority\n"
-"of wins is declared the winner.\n"
-"The remaining contests will not be fought:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid ""
-"The athletes in the drawn category will\n"
-"refight a golden score contest:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid ""
-"Draw for extra match is done from\n"
-"all categories regardless\n"
-"if the team has a player or not:"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "International System"
-msgstr "Mezinárodní systém"
-
-#: ../judoshiai/properties.c
-msgid "Finnish System"
-msgstr "Finský systém"
-
-#: ../judoshiai/properties.c
-msgid "Swedish System"
-msgstr "Švédský systém"
-
-#: ../judoshiai/properties.c
-msgid "Estonian System"
-msgstr "Estonský sytém"
-
-#: ../judoshiai/properties.c
-msgid "Spanish System"
-msgstr "Španělský systém"
-
-#: ../judoshiai/properties.c
-msgid "Norwegian System"
-msgstr "Norský systém"
-
-#: ../judoshiai/properties.c
-msgid "British System"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Australian System"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Danish System"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Polish System"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Slovakian System"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Ukrainian System"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "German System"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Tournament properties"
-msgstr "Nastavení turnaje"
-
-#: ../judoshiai/properties.c
-msgid "Competitors:"
-msgstr "Závodníci:"
-
-#: ../judoshiai/properties.c
-msgid "Weighted:"
-msgstr ""
-
-#: ../judoshiai/properties.c ../judoshiai/set-categories.c ../judoshiai/menus.c
-msgid "Properties"
-msgstr "Vlastnosti"
-
-#: ../judoshiai/properties.c
-msgid "Reset to"
-msgstr "Resetuj do"
-
-#: ../judoshiai/properties.c
-msgid "Players"
-msgstr "Hráči"
-
-#: ../judoshiai/properties.c
-msgid "Max age"
-msgstr "Max věk"
-
-#: ../judoshiai/properties.c
-msgid "Min"
-msgstr "Min"
-
-#: ../judoshiai/properties.c
-msgid "Max"
-msgstr "Max"
-
-#: ../judoshiai/properties.c
-msgid "System"
-msgstr "Systém"
-
-#: ../judoshiai/properties.c
-msgid "General"
-msgstr "Hlavní"
-
-#: ../judoshiai/properties.c
-msgid "Initialize"
-msgstr "Inicializuj"
-
-#: ../judoshiai/properties.c
-msgid "Rules"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Pool settings"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Team event"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Default systems"
-msgstr "Základní system"
-
-#: ../judoshiai/properties.c
-msgid "Grade names"
-msgstr ""
-
-#: ../judoshiai/properties.c
-msgid "Statistics"
-msgstr ""
-
-#: ../judoshiai/matches.c ../judoshiai/match-graph.c
-msgid "Next match"
-msgstr "Další zápas"
-
-#: ../judoshiai/matches.c ../judoshiai/match-graph.c
-msgid "Preparing"
-msgstr "Příprava"
-
-#: ../judoshiai/matches.c ../judoshiai/match-graph.c
-msgid "Delay the match"
-msgstr "Zpozdit zápas"
-
-#: ../judoshiai/matches.c
-msgid "canceled"
-msgstr "ukončeno"
-
-#: ../judoshiai/matches.c
-msgid "changed"
-msgstr "změněno"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Gold medal match"
-msgstr "Zápas o zlati"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Bronze match A"
-msgstr "Zápas o bronz A"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Bronze match B"
-msgstr "Zápas o bronz B"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Semifinal A"
-msgstr "Semifinále A"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
-msgid "Semifinal B"
-msgstr "Semifinále B"
-
-#: ../judoshiai/matches.c ../judoinfo/main.c ../common/common.c
-#: ../judojudogi/main.c
-msgid "Silver medal match"
-msgstr "Zápas o stříbro"
-
-#: ../judoshiai/matches.c
-msgid "Preparing:"
-msgstr "Příprava:"
-
-#: ../judoshiai/matches.c
-msgid "points"
-msgstr "body"
-
-#: ../judoshiai/matches.c ../judoshiai/popup-menu.c
-msgid "Expand All"
-msgstr "Rozbal vše"
-
-#: ../judoshiai/matches.c ../judoshiai/popup-menu.c
-msgid "Collapse All"
-msgstr "Zabal vše"
-
-#: ../judoshiai/matches.c
-msgid "Remove comment"
-msgstr "Odeber komentář"
-
-#: ../judoshiai/matches.c
-msgid "Set score"
-msgstr ""
-
-#: ../judoshiai/matches.c ../judoshiai/competitors.c
-msgid "Group"
-msgstr "Skupina"
-
-#: ../judoshiai/matches.c ../judoshiai/sheets.c ../judoshiai/db-validate.c
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Category"
-msgstr "Kategorie"
-
-#: ../judoshiai/matches.c
-msgid "White"
-msgstr "Bílý"
-
-#: ../judoshiai/matches.c
-msgid "Blue"
-msgstr "Modrý"
-
-#: ../judoshiai/matches.c
-msgid "Points"
-msgstr "Body"
-
-#: ../judoshiai/matches.c ../judoshiai/log.c
-msgid "Time"
-msgstr "Čas"
-
-#: ../judoshiai/matches.c
-msgid "Comment"
-msgstr "Komentář"
-
-#: ../judoshiai/sheets.c
-msgid "Sheets"
-msgstr "Tabulky"
-
-#: ../judoshiai/comm.c
-msgid "Connections to this node"
-msgstr "Propojení k tomuto kanálu"
-
-#: ../judoshiai/comm.c
-msgid "THIS APPLICATION"
-msgstr ""
-
-#: ../judoshiai/comm.c
-msgid "NOT CONNECTED"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Database Validation"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Duplicate seedings:\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "seeding"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "defined"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "times"
-msgstr "časy"
-
-#: ../judoshiai/db-validate.c
-msgid "Duplicate club seedings:\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Missing category definitions:\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "is not"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Category typing errors\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Typing errors:\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "UTF-8 errors"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Extra spaces"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Possible duplicate competitors:\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Possible duplicate club names:\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Suspicious weights:\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c ../judoshiai/another-shiai.c
-#: ../judoshiai/competitors.c
-msgid "Reg. Category"
-msgstr "Reg.kategorie"
-
-#: ../judoshiai/db-validate.c ../judoshiai/another-shiai.c
-#: ../judoshiai/competitors.c ../judoshiai/httpd.c
-msgid "Weight"
-msgstr "Váha"
-
-#: ../judoshiai/db-validate.c
-msgid "Corrupted competitor data:\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "Corrupted category data:\n"
-msgstr ""
-
-#: ../judoshiai/db-validate.c
-msgid "warnings"
-msgstr ""
-
-#: ../judoshiai/menuacts.c ../judoshiai/another-shiai.c ../judoshiai/menus.c
-#: ../judoshiai/main.c
-msgid "Tournament"
-msgstr "Turnaj"
-
-#: ../judoshiai/menuacts.c
-msgid "Tournament from the net"
-msgstr "Turnaj ze sítě"
-
-#: ../judoshiai/menuacts.c
-msgid "Contests"
-msgstr "Soutěže"
-
-#: ../judoshiai/menuacts.c
-msgid "Select sheet font"
-msgstr "Vyber font listu"
-
-#: ../judoshiai/menuacts.c
-msgid "Picture Files"
-msgstr "Soubory obrýzků"
-
-#: ../judoshiai/menuacts.c
-msgid "Print Headers"
-msgstr "Tiskni záhlaví"
-
-#: ../judoshiai/menuacts.c ../judoshiai/another-shiai.c
-msgid "Tournaments"
-msgstr "Turnaje"
-
-#: ../judoshiai/menuacts.c
-msgid "Add competitors"
-msgstr "Vložit závodníky"
-
-#: ../judoshiai/menuacts.c
-msgid "Clean up duplicates and update reg. categories"
-msgstr "Vyčisti zdvojené a updatuj kategorie"
-
-#: ../judoshiai/menuacts.c
-msgid "Weighed only"
-msgstr ""
-
-#: ../judoshiai/menuacts.c
-msgid "With weights"
-msgstr "s váhou"
-
-#: ../judoshiai/menuacts.c
-msgid "competitors added and updated"
-msgstr "závodníci vloženi a udatování"
-
-#: ../judoshiai/menuacts.c
-msgid "competitors already existed"
-msgstr "závodníci už existují"
-
-#: ../judoshiai/menuacts.c
-msgid "competitors added unchanged"
-msgstr "vložení závdníci nezměněni"
-
-#: ../judoshiai/menuacts.c
-msgid "Copy Weights"
-msgstr ""
-
-#: ../judoshiai/menuacts.c
-msgid "weights updated"
-msgstr ""
-
-#: ../judoshiai/menuacts.c
-msgid "Do Backup"
-msgstr "Záloha"
-
-#: ../judoshiai/menuacts.c
-msgid "CANNOT OPEN BACKUP FILE"
-msgstr "Nelze otevřít záložní soubor"
-
-#: ../judoshiai/print.c ../judoinfo/main.c ../judojudogi/main.c
-#: ../judoproxy/main.c
-msgid "Save file"
-msgstr "Ulož Soubor"
-
-#: ../judoshiai/print.c
-msgid "Landscape"
-msgstr "Landscape"
-
-#: ../judoshiai/print.c
-msgid "Line"
-msgstr "Linka"
-
-#: ../judoshiai/print.c
-msgid "Syntax error"
-msgstr "Syntax error"
-
-#: ../judoshiai/print.c ../judoshiai/menus.c
-msgid "Print Schedule"
-msgstr "Tiskni časový plán"
-
-#: ../judoshiai/print.c
-msgid "Print To:"
-msgstr "Tiskni do:"
-
-#: ../judoshiai/print.c
-msgid "Printer"
-msgstr "Tiskárna"
-
-#: ../judoshiai/print.c
-msgid "PDF"
-msgstr ""
-
-#: ../judoshiai/print.c
-msgid "Resolution (min):"
-msgstr "Řešení (min):"
-
-#: ../judoshiai/print.c
-msgid "Compressed timeline"
-msgstr "Stalčit čas"
-
-#: ../judoshiai/print.c ../judoshiai/match-graph.c ../judoshiai/write-results.c
-#: ../judoshiai/httpd.c
-msgid "Matches"
-msgstr "Zápas"
-
-#: ../judoshiai/print.c
-msgid "Match File"
-msgstr "Soubor zápasů"
-
-#: ../judoshiai/print.c
-msgid "Print Not Started Categories"
-msgstr "Tiskni nenastartované kategorie"
-
-#: ../judoshiai/print.c
-msgid "Print Started Categories"
-msgstr "Tiskni nastarované kategorie"
-
-#: ../judoshiai/print.c
-msgid "Print Finished Categories"
-msgstr "Tiskni ukončené kategorie"
-
-#: ../judoshiai/print.c
-msgid "Print Unmatched"
-msgstr "Tiskni bez zápasů"
-
-#: ../judoshiai/print.c
-msgid "Print Result"
-msgstr "Tiskni výsledky"
-
-#: ../judoshiai/print.c
-msgid "Print IWYKS"
-msgstr "Tiskni IWYKS"
-
-#: ../judoshiai/print.c
-msgid "Print Comment"
-msgstr "Tiskni komentář"
-
-#: ../judoshiai/print.c ../judoshiai/menus.c
-msgid "Print Accreditation Cards"
-msgstr "Tiskni akreditační karty"
-
-#: ../judoshiai/print.c ../judoshiai/set-categories.c
-msgid "Layout:"
-msgstr "Výstup"
-
-#: ../judoshiai/print.c ../judoshiai/match-data.c
-msgid "Default"
-msgstr "Default"
-
-#: ../judoshiai/print.c
-msgid "Template"
-msgstr "Šablona"
-
-#: ../judoshiai/print.c
-msgid "One Card Per Page"
-msgstr "Jednu kartu na stránku"
-
-#: ../judoshiai/another-shiai.c
-msgid "Competitor already exists!"
-msgstr "Soutěžící už existuje"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-#: ../judoshiai/drawing.c
-msgid "Competitor"
-msgstr "Soutěžící"
-
-#: ../judoshiai/another-shiai.c
-msgid "copied"
-msgstr "kopie"
-
-#: ../judoshiai/another-shiai.c
-msgid "Category already exists!"
-msgstr "Kategorie už existuje"
-
-#: ../judoshiai/another-shiai.c
-msgid "has been copied with competitors and matches"
-msgstr "bude zkopírován se závodníky a zápasy"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Last Name"
-msgstr "Příjmení"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "First Name"
-msgstr "Jméno"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Year of Birth"
-msgstr "Rok narození"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Grade"
-msgstr "Stupěň"
-
-#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-msgid "Id"
-msgstr "Id"
-
-#: ../judoshiai/db.c
-msgid "Cannot handle: Database created with newer JudoShiai version."
-msgstr "Nemůžu změnit: Databáze je vytvořena v novější verzi JudoShiai."
-
-#: ../judoshiai/db.c
-msgid "Database tables updated."
-msgstr "Databáze tabulek udatována"
-
-#: ../judoshiai/match-data.c
-msgid "Best of 3"
-msgstr "Nejlepší 3"
-
-#: ../judoshiai/match-data.c
-msgid "One match"
-msgstr "Jeden zápas"
-
-#: ../judoshiai/match-data.c
-msgid "Pool"
-msgstr "Pool"
-
-#: ../judoshiai/match-data.c
-msgid "Double Pool"
-msgstr "Double Pool"
-
-#: ../judoshiai/match-data.c
-msgid "Quad Pool"
-msgstr "Quad Pool"
-
-#: ../judoshiai/match-data.c
-msgid "Double Pool 2"
-msgstr "Double Pool 2"
-
-#: ../judoshiai/match-data.c
-msgid "Double Pool 3"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "Custom"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "IJF Qrt Final Rep"
-msgstr "IJF Qrt finále rep."
-
-#: ../judoshiai/match-data.c
-msgid "UKR Dbl Repchg"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "FIN Dbl Repchg"
-msgstr "FIN Dbl Repchg"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Dubb återkv"
-msgstr "SWE Dbl Repchg"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Dir återkv"
-msgstr "SWE dir Repchg"
-
-#: ../judoshiai/match-data.c
-msgid "EST D klass"
-msgstr "EST D "
-
-#: ../judoshiai/match-data.c
-msgid "No Repechg"
-msgstr "Bez oprav"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Enkelt återkv"
-msgstr "SWE jednoduché opravy"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Dbl Lost"
-msgstr "ESP Dbl prohra"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Dbl Rep"
-msgstr "ESP Dbl.opravy"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Simple Rep"
-msgstr "ESP Jednoduché opravy"
-
-#: ../judoshiai/match-data.c
-msgid "Modified Dbl Elim"
-msgstr "Upravená dv.elim"
-
-#: ../judoshiai/match-data.c
-msgid "FIN Dbl Repchg One Bronze"
-msgstr "FIN dv.opravy jedno 3."
-
-#: ../judoshiai/match-data.c
-msgid "Double Lost"
-msgstr "Dvojitá prohra"
-
-#: ../judoshiai/match-data.c
-msgid "GBR Knock Out"
-msgstr "GBR KO"
-
-#: ../judoshiai/match-data.c
-msgid "DEN Dbl Elim"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "EST D klass 1 brz"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "GER Repchg"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "IJF Quarter Final Repechage"
-msgstr "IJF Quarter Final opravy"
-
-#: ../judoshiai/match-data.c
-msgid "UKR Double Repechage"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "FIN Double Repechage"
-msgstr "FIN Dvojité opravy"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Double Repechage"
-msgstr "SWE Dvojité opravy"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Direct Repechage"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "EST Double Elimination"
-msgstr "EST Dvojitá eliminace"
-
-#: ../judoshiai/match-data.c
-msgid "Single Elimination"
-msgstr "Jednoduchá eliminace"
-
-#: ../judoshiai/match-data.c
-msgid "SWE Single Repechage"
-msgstr "SWE Jednoduché opravy"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Double Lost"
-msgstr "ESP Dvojitá prohra"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Double Repechage"
-msgstr "ESP Dvojité opravy"
-
-#: ../judoshiai/match-data.c
-msgid "ESP Simple Repechage"
-msgstr "ESP jednoduché opravy"
-
-#: ../judoshiai/match-data.c
-msgid "Modified Double Elimination"
-msgstr "Upravená dvojitá eliminace"
-
-#: ../judoshiai/match-data.c
-msgid "FIN Double Repechage One Bronze"
-msgstr "FIN dvojité opravy jedno 3."
-
-#: ../judoshiai/match-data.c
-msgid "DEN Double Elimination"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "EST Double Elim One Bronze"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "Customized"
-msgstr ""
-
-#: ../judoshiai/match-data.c
-msgid "GER Double Repechage"
-msgstr ""
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-msgid "already exists!"
-msgstr "již existuje!"
-
-#: ../judoshiai/competitors.c ../judoshiai/popup-menu.c
-msgid "Remove drawing first"
-msgstr "Odeber nejdřív losování"
-
-#: ../judoshiai/competitors.c ../judoshiai/menus.c
 msgid "Competitors"
 msgstr "Soutěžící"
 
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-#: ../judoshiai/import.c
-msgid "Last Name:"
-msgstr "Příjmení:"
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-#: ../judoshiai/import.c
-msgid "First Name:"
-msgstr "Jméno:"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Year of Birth:"
-msgstr "Rok narození:"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Grade:"
-msgstr "Stupeň:"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Club:"
-msgstr "Klub:"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Country:"
-msgstr "Země:"
-
-#: ../judoshiai/competitors.c
-msgid "Reg. Category:"
-msgstr "Reg. kategorie:"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c ../judoweight/main.c
-msgid "Category:"
-msgstr "Kategorie:"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c ../judoweight/main.c
-msgid "Weight:"
-msgstr "Váha:"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Seeding:"
-msgstr "Nasazení:"
-
-#: ../judoshiai/competitors.c
-msgid "No seeding"
-msgstr "Bez nasazení"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Club Seeding:"
-msgstr "Nasazení klubu"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Id:"
-msgstr "Id:"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Coach Id:"
-msgstr ""
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-msgid "Gender:"
-msgstr "Pohlaví"
-
-#: ../judoshiai/competitors.c
-msgid "Male"
-msgstr "Muž"
-
-#: ../judoshiai/competitors.c
-msgid "Female"
-msgstr "Žena"
-
-#: ../judoshiai/competitors.c ../judoweight/main.c
-msgid "Control:"
-msgstr "Kontrola"
-
-#: ../judoshiai/competitors.c ../judoweight/main.c ../judojudogi/main.c
-msgid "NOK"
-msgstr "NOK"
-
-#: ../judoshiai/competitors.c ../judoshiai/import.c
-msgid "Comment:"
-msgstr ""
-
-#: ../judoshiai/competitors.c
-msgid "Hide name:"
-msgstr ""
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-msgid "Team:"
-msgstr ""
-
-#: ../judoshiai/competitors.c
-msgid "System:"
-msgstr "System:"
-
-#: ../judoshiai/competitors.c
-msgid "Tatami:"
-msgstr ""
-
-#: ../judoshiai/competitors.c
-msgid "Group:"
-msgstr "Skupina:"
-
-#: ../judoshiai/competitors.c
-msgid "Create default members:"
-msgstr ""
-
-#: ../judoshiai/competitors.c
-msgid "Coach"
-msgstr ""
-
-#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
-msgid "Team"
-msgstr ""
-
-#: ../judoshiai/competitors.c
-msgid "Seeding"
-msgstr "Nasazení"
-
-#: ../judoshiai/competitors.c
-msgid "Club Seeding"
-msgstr "Nasezení klubu"
-
-#: ../judoshiai/competitors.c
-msgid "Empty categories removed"
-msgstr "Odstranit prázndé kategorie"
-
-#: ../judoshiai/competitors.c
-msgid "Unweighted competitors removed"
-msgstr "Odstranit nezvážené závodníky"
-
-#: ../judoshiai/competitors.c
-msgid "Matches exist. Undo the drawing first."
-msgstr "Zápas existuje.Odstraň nejdřív rozlosování."
-
-#: ../judoshiai/competitors.c
-msgid "Competitors removed"
-msgstr "Odstraň závodníky"
-
-#: ../judoshiai/competitors.c
-msgid "Bar code search"
-msgstr "Vyhledej čárový kód"
-
-#: ../judoshiai/competitors.c
-msgid "Type the barcode:"
-msgstr "Vlož čárový kód:"
-
-#: ../judoshiai/gdpr.c
-msgid "General Data Protection Regulation"
-msgstr ""
-
-#: ../judoshiai/gdpr.c
-msgid "Hide category if age less than"
-msgstr ""
-
-#: ../judoshiai/gdpr.c
-msgid "Hide name if age less than"
-msgstr ""
-
-#: ../judoshiai/log.c
-msgid "Class"
-msgstr "třída"
-
-#: ../judoshiai/log.c
-msgid "Message"
-msgstr "zpráva"
-
-#: ../judoshiai/log.c
-msgid "Log"
-msgstr "Log"
-
-#: ../judoshiai/db-competitors.c
-msgid "Weights do not match"
-msgstr ""
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Finnish"
-msgstr "Výsledky Finsky"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Swedish"
-msgstr "Výsledky Švédsky"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in English"
-msgstr "Výsledky Anglicky"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Spanish"
-msgstr "Výsledky Španělsky"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Estonian"
-msgstr "Výsledky Estonsky"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Ukrainian"
-msgstr "Výsledky ukrajinsky"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Norwegian"
-msgstr "Výsledky Norsky"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Icelandic"
-msgstr "Výsledky v islandštině"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Polish"
-msgstr ""
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Slovak"
-msgstr ""
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Dutch"
-msgstr ""
-
-#: ../judoshiai/print-texts.c
-msgid "Results in German"
-msgstr ""
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Russian"
-msgstr ""
-
-#: ../judoshiai/match-graph.c ../judoinfo/main.c
-msgid "Prev. winner:"
-msgstr "Před. vítěz:"
-
-#: ../judoshiai/match-graph.c
-#, c-format
-msgid "Delayed"
-msgstr "Zpožděný"
-
-#: ../judoshiai/match-graph.c
-msgid "Remove delay"
-msgstr "Odeber zpoždění"
-
-#: ../judoshiai/match-graph.c
-msgid "Freeze match order"
-msgstr "Zmrazit zápasový řád"
-
-#: ../judoshiai/match-graph.c ../judoshiai/category-graph.c
-msgid "Unfreeze exported"
-msgstr "Odmrazit exportované"
-
-#: ../judoshiai/match-graph.c ../judoshiai/category-graph.c
-msgid "Unfreeze imported"
-msgstr "Odmrazit importované"
-
-#: ../judoshiai/match-graph.c ../judoshiai/category-graph.c
-msgid "Unfreeze this"
-msgstr "Odmrazit toto"
-
-#: ../judoshiai/match-graph.c ../judoshiai/category-graph.c
-#: ../judoshiai/popup-menu.c
-msgid "Show Sheet"
-msgstr "Ukaž tabulku"
-
-#: ../judoshiai/sql-dialog.c
-msgid "Basic Scripts"
-msgstr "Základní skritp"
-
-#: ../judoshiai/sql-dialog.c
-msgid "SVG+Lisp"
-msgstr ""
-
-#: ../judoshiai/sql-dialog.c
-msgid "Select Script"
-msgstr "Výběr skriptu"
-
-#: ../judoshiai/sql-dialog.c
-msgid "No script available"
-msgstr "Nedostupný skript"
-
-#: ../judoshiai/sql-dialog.c
-msgid "SQL"
-msgstr "SQL"
-
-#: ../judoshiai/sql-dialog.c
-msgid "Run Script"
-msgstr "Spusť skript"
-
-#: ../judoshiai/sql-dialog.c
-msgid "Repeat Script"
-msgstr "Opakuj skript"
-
-#: ../judoshiai/custom-category.c
-msgid "Messages"
-msgstr ""
-
-#: ../judoshiai/drawing.c
-msgid "Drawing not finished!"
-msgstr "Losování není ukončeno"
-
-#: ../judoshiai/drawing.c
-msgid "Matches matched in category"
-msgstr "Zápasy zařazené v kategorii"
-
-#: ../judoshiai/drawing.c
-msgid "Clear the results first"
-msgstr "Vyčisti nejdřív výsledky"
-
-#: ../judoshiai/drawing.c
-msgid "Move the competitors"
-msgstr "Vlož závodníky"
-
-#: ../judoshiai/drawing.c
-msgid "Next"
-msgstr "Další"
-
-#: ../judoshiai/drawing.c
-msgid "Rest"
-msgstr "Zbytek"
-
-#: ../judoshiai/drawing.c
-msgid "Number"
-msgstr "Číslo"
-
-#: ../judoshiai/drawing.c
-msgid "Select first a competitor and then a number."
-msgstr "Vyber nejdřív závodníka a potom číslo."
-
-#: ../judoshiai/drawing.c
-msgid "All the categories has been drawn"
-msgstr "Všechny kategorie byly rozlosovány"
-
-#: ../judoshiai/category-graph.c
-msgid "Unlocated"
-msgstr "Neumístěno"
-
-#: ../judoshiai/category-graph.c ../judoshiai/set-categories.c
-#: ../judoshiai/menus.c ../judoshiai/httpd.c
 msgid "Categories"
 msgstr "Kategorie"
 
-#: ../judoshiai/category-graph.c ../judoshiai/popup-menu.c
-msgid "Move Matches"
-msgstr ""
-
-#: ../judoshiai/set-categories.c
-msgid "Reset to Defaults"
-msgstr "Nastav na výchozí"
-
-#: ../judoshiai/set-categories.c
-msgid "Men"
-msgstr "Muž"
-
-#: ../judoshiai/set-categories.c
-msgid "Women"
-msgstr "Žena"
-
-#: ../judoshiai/set-categories.c
-msgid "Yes"
-msgstr ""
-
-#: ../judoshiai/set-categories.c
-msgid "No"
-msgstr ""
-
-#: ../judoshiai/set-categories.c
-msgid "Highest age:"
-msgstr "Maximální věk:"
-
-#: ../judoshiai/set-categories.c
-msgid "Age text:"
-msgstr "Věková kategorie:"
-
-#: ../judoshiai/set-categories.c
-msgid "Match time:"
-msgstr "Čas zápasu:"
-
-#: ../judoshiai/set-categories.c
-msgid "Rest time:"
-msgstr "Přestávka:"
-
-#: ../judoshiai/set-categories.c
-msgid "Golden Score:"
-msgstr "Zlaté skóre:"
-
-#: ../judoshiai/set-categories.c
-msgid "Pin times (IWYK):"
-msgstr "Časy držení.(IWYK):"
-
-#: ../judoshiai/set-categories.c
-msgid "Rep. time:"
-msgstr ""
-
-#: ../judoshiai/set-categories.c
-msgid "Highest weight (g):"
-msgstr "Nejvyšší váha (g):"
-
-#: ../judoshiai/set-categories.c
-msgid "Weight text:"
-msgstr "Váha:"
-
-#: ../judoshiai/set-categories.c
-msgid "Copy"
-msgstr ""
-
-#: ../judoshiai/medal-matches.c
-msgid "Move Medal Matches"
-msgstr "Spusť medailové zápasy"
-
-#: ../judoshiai/medal-matches.c
-msgid "Move match "
-msgstr "Spusť zápas"
-
-#: ../judoshiai/medal-matches.c
-msgid "to tatami and/or"
-msgstr "na tatami a/nebo"
-
-#: ../judoshiai/medal-matches.c
-msgid " delay"
-msgstr "přestávka"
-
-#: ../judoshiai/medal-matches.c ../common/common.c
-msgid "Final"
-msgstr "Finále"
-
-#: ../judoshiai/medal-matches.c
-msgid "Bronze1"
-msgstr "Bronzový 1"
-
-#: ../judoshiai/medal-matches.c
-msgid "Bronze2"
-msgstr "Bronzový 2"
-
-#: ../judoshiai/medal-matches.c
-msgid "Pool's last"
-msgstr "Pool's last"
-
-#: ../judoshiai/medal-matches.c
-msgid "No move"
-msgstr ""
-
-#: ../judoshiai/menus.c
 msgid "Drawing"
 msgstr "Losování"
 
-#: ../judoshiai/menus.c
 msgid "Results"
 msgstr "Výsledky"
 
-#: ../judoshiai/menus.c
 msgid "Judotimer"
 msgstr "Judotimer"
 
-#: ../judoshiai/menus.c
 msgid "New Tournament"
 msgstr "Nový turnaj"
 
-#: ../judoshiai/menus.c
 msgid "Open Tournament"
 msgstr "Otevřít turnaj"
 
-#: ../judoshiai/menus.c
 msgid "Open Tournament from Net"
 msgstr "Otevřít turnaj z netu"
 
-#: ../judoshiai/menus.c
-msgid "Tournament Backup"
-msgstr "Záloha turnaje"
+msgid "Properties"
+msgstr "Vlastnosti"
 
-#: ../judoshiai/menus.c
-msgid "Validate Database"
-msgstr ""
-
-#: ../judoshiai/menus.c
-msgid "Load Custom Systems"
-msgstr ""
-
-#: ../judoshiai/menus.c
-msgid "SQL Dialog"
-msgstr "SQL-dialoog"
-
-#: ../judoshiai/menus.c
 msgid "New Competitor"
 msgstr "Nový závodník"
 
-#: ../judoshiai/menus.c
 msgid "Search Competitor"
 msgstr "Vyhledat závodníka"
 
-#: ../judoshiai/menus.c
 msgid "Select From Another Shiai"
 msgstr "Výběr z dalšího Shiai"
 
-#: ../judoshiai/menus.c
 msgid "Add From a Text File"
 msgstr "Přidat z textového souboru"
 
-#: ../judoshiai/menus.c
 msgid "Add All From Another Shiai"
 msgstr "Přidat vše z dalšího Shiai"
 
-#: ../judoshiai/menus.c
-msgid "Update Weights From Another Shiai"
-msgstr ""
+msgid "Add All with Weights"
+msgstr "Přidat vše s váhou"
 
-#: ../judoshiai/menus.c
 msgid "Remove Unweighted"
 msgstr "Odebrat nezvážené"
 
-#: ../judoshiai/menus.c
 msgid "Restore Removed"
 msgstr "Obnovit odebrané"
 
-#: ../judoshiai/menus.c
 msgid "Bar Code Search"
 msgstr "Vyhledat BAR kód"
 
-#: ../judoshiai/menus.c
 msgid "Print Weight Notes"
 msgstr "Vtiskout váhy"
 
-#: ../judoshiai/menus.c
 msgid "New Category"
 msgstr "Nová kategorie"
 
-#: ../judoshiai/menus.c
 msgid "Remove Empty"
 msgstr "Odebrat prázdné"
 
-#: ../judoshiai/menus.c
 msgid "Create Categories"
 msgstr "Vytvořit kategorie"
 
-#: ../judoshiai/menus.c
 msgid "Print All"
 msgstr "Vtisknout vše"
 
-#: ../judoshiai/menus.c
-msgid "Print All (PDF)"
-msgstr "Vytiskni vše (PDF)"
+msgid "Best of Three"
+msgstr "Nejlepší tři"
 
-#: ../judoshiai/menus.c
-msgid "Print Matches (CSV)"
-msgstr "Tiskni zápasy (CSV)"
-
-#: ../judoshiai/menus.c
 msgid "Place To"
 msgstr "Místo"
 
-#: ../judoshiai/menus.c
 msgid "Tatamis"
 msgstr "Tatami"
 
-#: ../judoshiai/menus.c
 msgid "Draw All Categories"
 msgstr "Losuj všechny kategorie"
 
-#: ../judoshiai/menus.c
 msgid "Print All (Web And PDF)"
 msgstr "Tiskni vše (Web a PDF)"
 
-#: ../judoshiai/menus.c
 msgid "Print Schedule to Printer"
 msgstr "Tiskni časový plán - tiskárna"
 
-#: ../judoshiai/menus.c
 msgid "Print Schedule to PDF"
 msgstr "Tiskni časový plán (PDF)"
 
-#: ../judoshiai/menus.c ../judoshiai/ftp.c
-msgid "Copy to Server"
-msgstr ""
+msgid "Print Schedule"
+msgstr "Tiskni časový plán"
 
-#: ../judoshiai/menus.c
 msgid "Control Tatami"
 msgstr "Kontrola tatami"
 
-#: ../judoshiai/menus.c
 msgid "Communication Node"
 msgstr "Komunikační kanál"
 
-#: ../judoshiai/menus.c
 msgid "Own IP Addresses"
 msgstr "Vlastní IP-adresa"
 
-#: ../judoshiai/menus.c
 msgid "Show Attached Connections"
 msgstr "Zobrazit příchozí spojení"
 
-#: ../judoshiai/menus.c
 msgid "Automatic Sheet Update"
 msgstr "Automatická aktualizace tabulky"
 
-#: ../judoshiai/menus.c
-msgid "Club Name Only"
-msgstr "Jen klub"
+msgid "Automatic Web Page Update"
+msgstr "Automatická aktualizace web"
 
-#: ../judoshiai/menus.c
-msgid "Country Name Only"
-msgstr "Jen země"
+msgid "Results in Finnish"
+msgstr "Výsledky Finsky"
 
-#: ../judoshiai/menus.c
-msgid "Both Club and Country"
-msgstr "Klub a země"
+msgid "Results in Swedish"
+msgstr "Výsledky Švédsky"
 
-#: ../judoshiai/menus.c
-msgid "Abbreviations in Sheets"
-msgstr "Zkratky v tabulkách"
+msgid "Results in English"
+msgstr "Výsledky Anglicky"
 
-#: ../judoshiai/menus.c
+msgid "Results in Spanish"
+msgstr "Výsledky Španělsky"
+
+msgid "Results in Estonian"
+msgstr "Výsledky Estonsky"
+
+msgid "Results in Ukrainian"
+msgstr "Výsledky ukrajinsky"
+
+msgid "Results in Czech"
+msgstr "Výsledky Česky"
+
 msgid "Weights Visible in Pool Sheets"
 msgstr "Hmotnosti viditelné v tabulkách"
 
-#: ../judoshiai/menus.c
 msgid "Sheet Font"
 msgstr "Font listu"
 
-#: ../judoshiai/menus.c ../judoinfo/menus.c ../judoweight/menus.c
-msgid "SVG Templates"
-msgstr "SVG šablony"
-
-#: ../judoshiai/menus.c ../judoshiai/set-password.c ../judoshiai/httpd.c
-#: ../judoweight/menus.c ../judoweight/main.c
 msgid "Password"
 msgstr "Heslo"
 
-#: ../judoshiai/menus.c
-msgid "Language Selection"
-msgstr "Výběr jazyka"
+msgid "Password:"
+msgstr "Heslo:"
 
-#: ../judoshiai/menus.c
-msgid "New Team"
-msgstr ""
+msgid "Competitor already exists!"
+msgstr "Soutěžící už existuje"
 
-#: ../judoshiai/menus.c
-msgid "New Team Category"
-msgstr ""
+msgid "Competitor"
+msgstr "Soutěžící"
 
-#: ../judoshiai/menus.c
-msgid "GDPR"
-msgstr ""
+msgid "copied"
+msgstr "kopie"
 
-#: ../judoshiai/menus.c
-msgid "Communication"
-msgstr "Komunikace"
+msgid "Category already exists!"
+msgstr "Kategorie už existuje"
 
-#: ../judoshiai/menus.c
-msgid "Club Text Selection"
-msgstr "Výber klubu"
+msgid "Category"
+msgstr "Kategorie"
 
-#: ../judoshiai/menus.c
-msgid "Sheet Layout"
-msgstr "Vzhled tabulek"
+msgid "has been copied with competitors and matches"
+msgstr "bude zkopírován se závodníky a zápasy"
 
-#: ../judoshiai/menus.c
-msgid "Weights Visible"
-msgstr "Váha viditelná"
+msgid "Last Name"
+msgstr "Příjmení"
 
-#: ../judoshiai/menus.c
-msgid "Grade Visible"
-msgstr "Stuneň viditelný"
+msgid "First Name"
+msgstr "Jméno"
 
-#: ../judoshiai/menus.c
-msgid "Name Format"
-msgstr "Formát Jména"
+msgid "Year of Birth"
+msgstr "Rok narození"
 
-#: ../judoshiai/menus.c
-msgid "Surname Name, Country/Club"
-msgstr ""
+msgid "Grade"
+msgstr "Stupěň"
 
-#: ../judoshiai/menus.c
-msgid "Country/Club,  Surname Name"
-msgstr ""
+msgid "Club"
+msgstr "Klub"
 
-#: ../judoshiai/menus.c
-msgid "Pool Style 2"
-msgstr "Pool Style 2"
+msgid "Reg. Category"
+msgstr "Reg.kategorie"
 
-#: ../judoshiai/menus.c
-msgid "Use Belt Colors"
-msgstr "Zobraz barvný pás"
+msgid "Weight"
+msgstr "Váha"
 
-#: ../judoshiai/menus.c
-msgid "Mirror Tatami Order"
-msgstr "Zrcadli tatami"
+msgid "Drawing not finished!"
+msgstr "Losování není ukončeno"
 
-#: ../judoshiai/menus.c
-msgid "Automatic Match Delay"
-msgstr "Autom. přestávka mezi zápasy"
+msgid "Matches matched in category"
+msgstr "Zápasy zařazené v kategorii"
 
-#: ../judoshiai/menus.c
-msgid "Print Logo"
-msgstr "Tiskni logo"
+msgid "Clear the results first"
+msgstr "Vyčisti nejdřív výsledky"
 
-#: ../judoshiai/menus.c ../judoweight/menus.c
-msgid "Scale Serial Interface..."
-msgstr ""
+msgid "Move the competitors"
+msgstr "Vlož závodníky"
 
-#: ../judoshiai/menus.c
-msgid "Medal Matches..."
-msgstr "Medailové zápasy..."
+msgid "Number"
+msgstr "Číslo"
 
-#: ../judoshiai/main.c
-msgid "Communication error"
-msgstr "Chyba komunikace"
+msgid "Select first a competitor and then a number."
+msgstr "Vyber nejdřív závodníka a potom číslo."
 
-#: ../judoshiai/main.c
-msgid "Cannot open"
-msgstr "Nelze otevřít"
+msgid "All the categories has been drawn"
+msgstr "Všechny kategorie byly rozlosovány"
 
-#: ../judoshiai/main.c
+msgid "Choose a directory"
+msgstr "Vyber adresář"
+
+msgid "Category drawn"
+msgstr "Losování kategorie"
+
+msgid "All the categories located to the tatamis"
+msgstr "Všechny kategorie byly umístěny na tatami"
+
+msgid "Unlocated"
+msgstr "Neumístěno"
+
+msgid "Connections to this node"
+msgstr "Propojení k tomuto kanálu"
+
+msgid "already exists!"
+msgstr "již existuje!"
+
+msgid "Group"
+msgstr "Skupina"
+
+msgid "Group:"
+msgstr "Skupina:"
+
+msgid "Last Name:"
+msgstr "Příjmení:"
+
+msgid "First Name:"
+msgstr "Jméno:"
+
+msgid "Year of Birth:"
+msgstr "Rok narození:"
+
+msgid "Grade:"
+msgstr "Stupeň:"
+
+msgid "Club:"
+msgstr "Klub:"
+
+msgid "Reg. Category:"
+msgstr "Reg. kategorie:"
+
+msgid "Weight:"
+msgstr "Váha:"
+
+msgid "Category:"
+msgstr "Kategorie:"
+
+msgid "No seeding"
+msgstr "Bez nasazení"
+
+msgid "Empty categories removed"
+msgstr "Odstranit prázndé kategorie"
+
+msgid "Unweighted competitors removed"
+msgstr "Odstranit nezvážené závodníky"
+
+msgid "Matches exist. Undo the drawing first."
+msgstr "Zápas existuje.Odstraň nejdřív rozlosování."
+
+msgid "Competitors removed"
+msgstr "Odstraň závodníky"
+
+msgid "Type the barcode:"
+msgstr "Vlož čárový kód:"
+
+msgid "Bar code search"
+msgstr "Vyhledej čárový kód"
+
+msgid "Matches"
+msgstr "Zápas"
+
+msgid "Contests"
+msgstr "Soutěže"
+
+msgid "Sheet"
+msgstr "List"
+
+msgid "Previous winner"
+msgstr "Předchozí vítěz"
+
+msgid "Cancel the match"
+msgstr "Ukonči zápas"
+
+msgid "Select a tatami"
+msgstr "vyber Tatami"
+
+msgid "Password accepted.<br>"
+msgstr "Heslo akceptováno.<br>"
+
+msgid "User"
+msgstr "Uživatel"
+
+msgid "Back"
+msgstr "Zpět"
+
+msgid "Wrong password"
+msgstr "Špatné heslo"
+
+msgid "Logout"
+msgstr "Odhlásit"
+
+msgid "Login"
+msgstr "Přihlásit"
+
+msgid "No rights to give results"
+msgstr "Bez oprávnění vkládat výsledky"
+
+msgid "Not used"
+msgstr "Nepoužité"
+
+msgid "Column"
+msgstr "Sloupec"
+
+msgid "Import from file"
+msgstr "Import ze souboru"
+
+msgid "Sex:"
+msgstr "Pohlaví:"
+
+msgid "Girl Text:"
+msgstr "Dívka:"
+
+msgid "Column Separator:"
+msgstr "Odělovač sloupců:"
+
+msgid "competitors added"
+msgstr "závodníci vloženi"
+
+msgid "errors"
+msgstr "chyba"
+
+msgid "competitors existed already"
+msgstr "závodníci už existují"
+
+msgid "Time"
+msgstr "Čas"
+
+msgid "Class"
+msgstr "třída"
+
+msgid "Message"
+msgstr "zpráva"
+
+msgid "Log"
+msgstr "Log"
+
 msgid "Is there another JudoShiai program running?"
 msgstr "Je spuštěn další JudoShiai ?"
 
-#: ../judoshiai/main.c
 msgid "Yes, another JudoShiai program is running"
 msgstr "Ano, další JudoShiai už běží"
 
-#: ../judoshiai/main.c
-msgid ""
-"No, this the only JudoShiai program. \n"
-"Purge erroneous lock file."
-msgstr ""
+msgid "No, this the only JudoShiai program. \n"
+msgstr "Ne, toto je jediný JudoShiai \n"
 
-#: ../judoshiai/main.c
 msgid ""
 "Communication is blocked! \n"
 "You can still use the program to create categories etc."
 msgstr ""
 "Kumunikace je blokovánaMůžete stále vytvářet kategorie v tomto programu např."
 
-#: ../judoshiai/ftp.c
-msgid "Server URL"
-msgstr ""
+msgid "Pool"
+msgstr "Pool"
 
-#: ../judoshiai/ftp.c
-msgid "Proxy User:"
-msgstr ""
+msgid "Double pool"
+msgstr "Double pool"
 
-#: ../judoshiai/ftp.c
-msgid "Proxy Password:"
-msgstr ""
+msgid "Double repechage"
+msgstr "Dvojité opravy"
 
-#: ../judoshiai/util.c
-msgid "Which one is correct?"
-msgstr "Který je správně?"
+msgid "Next match"
+msgstr "Další zápas"
 
-#: ../judoshiai/util.c
-msgid "Own database"
-msgstr "Vlastní databáze"
+msgid "Next contest"
+msgstr "Další soutěž"
 
-#: ../judoshiai/util.c
-msgid "Foreign database"
-msgstr "Zahraniční databáze"
+msgid "Preparing"
+msgstr "Příprava"
 
-#: ../judoshiai/util.c
-msgid "Do not change"
-msgstr "Neměnit"
+msgid "Preparing:"
+msgstr "Příprava:"
 
-#: ../judoshiai/util.c
-msgid "Stop synchronization"
-msgstr "Zastav synchronizaci"
+msgid "Delay the match"
+msgstr "Zpozdit zápas"
 
-#: ../judoshiai/util.c
-msgid "NOTE"
-msgstr "Poznámka"
-
-#: ../judoshiai/util.c
-msgid "is not a valid ASCII string!"
-msgstr "není správný ASCII-znak!"
-
-#: ../judoshiai/categories.c
-msgid "Cannot move"
-msgstr "Nemůžu vložit"
-
-#: ../judoshiai/categories.c
-msgid "Category drawn"
-msgstr "Losování kategorie"
-
-#: ../judoshiai/categories.c
-msgid "All the categories located to the tatamis"
-msgstr "Všechny kategorie byly umístěny na tatami"
-
-#: ../judoshiai/import.c
-msgid "Not used"
-msgstr "Nepoužité"
-
-#: ../judoshiai/import.c
-msgid "Column"
-msgstr "Sloupec"
-
-#: ../judoshiai/import.c
-msgid "Import from file"
-msgstr "Import ze souboru"
-
-#: ../judoshiai/import.c
-msgid "Sex:"
-msgstr "Pohlaví:"
-
-#: ../judoshiai/import.c
-msgid "Girl Text:"
-msgstr "Dívka:"
-
-#: ../judoshiai/import.c
-msgid "Column Separator:"
-msgstr "Odělovač sloupců:"
-
-#: ../judoshiai/import.c
-msgid "competitors added"
-msgstr "závodníci vloženi"
-
-#: ../judoshiai/import.c
-msgid "errors"
-msgstr "chyba"
-
-#: ../judoshiai/import.c
-msgid "competitors existed already"
-msgstr "závodníci už existují"
-
-#: ../judoshiai/import.c
-msgid "syntax errors"
-msgstr "syntax errors"
-
-#: ../judoshiai/write-results.c
-msgid "Automatic Web Page Update"
-msgstr "Automatická aktualizace web"
-
-#: ../judoshiai/write-results.c
-msgid "Create Statistics"
-msgstr "Vytvoř statistiku"
-
-#: ../judoshiai/write-results.c
-msgid "Print SVG"
-msgstr ""
-
-#: ../judoshiai/popup-menu.c
 msgid "Matches matched. Clear the results first."
 msgstr "Zápas je vložen. Vyčisti výsledky"
 
-#: ../judoshiai/popup-menu.c ../judoshiai/httpd.c
-msgid "Select a tatami"
-msgstr "vyber Tatami"
+msgid "canceled"
+msgstr "ukončeno"
 
-#: ../judoshiai/popup-menu.c
-msgid "Random Weigh-In"
-msgstr ""
+msgid "changed"
+msgstr "změněno"
 
-#: ../judoshiai/popup-menu.c
-msgid "Select"
-msgstr ""
+msgid "points"
+msgstr "body"
 
-#: ../judoshiai/popup-menu.c
-msgid "competitors from"
-msgstr ""
+msgid "Expand All"
+msgstr "Rozbal vše"
 
-#: ../judoshiai/popup-menu.c
-msgid "each selected category"
-msgstr ""
+msgid "Collapse All"
+msgstr "Zabal vše"
 
-#: ../judoshiai/popup-menu.c
-msgid "all selected categories"
-msgstr ""
+msgid "Remove comment"
+msgstr "Odeber komentář"
 
-#: ../judoshiai/popup-menu.c
+msgid "Blue"
+msgstr "Modrý"
+
+msgid "White"
+msgstr "Bílý"
+
+msgid "Comment"
+msgstr "Komentář"
+
+msgid "Points"
+msgstr "Body"
+
+msgid "Prev. winner:"
+msgstr "Před. vítěz:"
+
+msgid "Delayed"
+msgstr "Zpožděný"
+
+msgid "Remove delay"
+msgstr "Odeber zpoždění"
+
+msgid "Date:"
+msgstr "Datum:"
+
+msgid "Place:"
+msgstr "Místo:"
+
+msgid "Start time:"
+msgstr "Začátek:"
+
+msgid "Tournament from the net"
+msgstr "Turnaj ze sítě"
+
+msgid "Select sheet font"
+msgstr "Vyber font listu"
+
+msgid "Tournament"
+msgstr "Turnaj"
+
+msgid "Tournament:"
+msgstr "Turnaj:"
+
+msgid "Tournaments"
+msgstr "Turnaje"
+
+msgid "Competitors:"
+msgstr "Závodníci:"
+
+msgid "Weighed:"
+msgstr "Váha:"
+
+msgid "Add competitors"
+msgstr "Vložit závodníky"
+
+msgid "Clean up duplicates and update reg. categories"
+msgstr "Vyčisti zdvojené a updatuj kategorie"
+
+msgid "competitors added and updated"
+msgstr "závodníci vloženi a udatování"
+
+msgid "competitors already existed"
+msgstr "závodníci už existují"
+
+msgid "competitors added unchanged"
+msgstr "vložení závdníci nezměněni"
+
+msgid "Remove drawing first"
+msgstr "Odeber nejdřív losování"
+
 msgid "already exists"
 msgstr "už existuje"
 
-#: ../judoshiai/popup-menu.c
 msgid "Move Competitors to Category..."
 msgstr "Vlž závodníky do kategorií..."
 
-#: ../judoshiai/popup-menu.c
 msgid "Move Competitors Here"
 msgstr "Vlož závodníky zde"
 
-#: ../judoshiai/popup-menu.c
 msgid "Compose Unofficial Category"
 msgstr "Vytvoř neoficiální kategorie"
 
-#: ../judoshiai/popup-menu.c
-msgid "Draw Selected"
-msgstr "Losuj vybrané"
-
-#: ../judoshiai/popup-menu.c
-msgid "Draw and Print Selected"
-msgstr "Losuj a tiskni vybrané"
-
-#: ../judoshiai/popup-menu.c
 msgid "Draw Manually"
 msgstr "Manuální losování"
 
-#: ../judoshiai/popup-menu.c
 msgid "Remove Drawing"
 msgstr "Odebrat losování"
 
-#: ../judoshiai/popup-menu.c
-msgid "Edit Drawing"
-msgstr ""
-
-#: ../judoshiai/popup-menu.c
 msgid "Copy Competitors"
 msgstr "Kopírování závodníků"
 
-#: ../judoshiai/popup-menu.c
 msgid "Remove Competitors"
 msgstr "Odeber závodníky"
 
-#: ../judoshiai/popup-menu.c
-msgid "Print Selected Sheets (Printer)"
-msgstr "Tiskni vybrané tabulky (Tiskárna)"
+msgid "Show Sheet"
+msgstr "Ukaž tabulku"
 
-#: ../judoshiai/popup-menu.c
-msgid "Print Selected Sheets (PDF)"
-msgstr "Tiskni vybrané tabulky (PDF)"
-
-#: ../judoshiai/popup-menu.c
-msgid "Print Selected Accreditation Cards"
-msgstr "Tiskni vybrané akreditace"
-
-#: ../judoshiai/popup-menu.c
-msgid "Print Selected Accreditation Cards To Default Printer"
-msgstr ""
-
-#: ../judoshiai/popup-menu.c
-msgid "Move Matches..."
-msgstr ""
-
-#: ../judoshiai/popup-menu.c
-msgid "Random Weigh-In..."
-msgstr ""
-
-#: ../judoshiai/svg.c
-msgid "Use SVG Templates"
-msgstr "Použij SVG šablony"
-
-#: ../judoshiai/search.c
 msgid "Search"
 msgstr "Hledat"
 
-#: ../judoshiai/httpd.c
-msgid "Sheet"
-msgstr "List"
+msgid "----- Men -----"
+msgstr "----- Muž -----"
 
-#: ../judoshiai/httpd.c
-msgid "Previous winner"
-msgstr "Předchozí vítěz"
+msgid "----- Women -----"
+msgstr "----- Žena -----"
 
-#: ../judoshiai/httpd.c
-msgid "Cancel the match"
-msgstr "Ukonči zápas"
+msgid "Men"
+msgstr "Muž"
 
-#: ../judoshiai/httpd.c
-msgid "Password accepted.<br>"
-msgstr "Heslo akceptováno.<br>"
+msgid "Women"
+msgstr "Žena"
 
-#: ../judoshiai/httpd.c
-msgid "User"
-msgstr "Uživatel"
+msgid "Highest age:"
+msgstr "Maximální věk:"
 
-#: ../judoshiai/httpd.c
-msgid "Back"
-msgstr "Zpět"
+msgid "Age text:"
+msgstr "Věková kategorie:"
 
-#: ../judoshiai/httpd.c
-msgid "Wrong password"
-msgstr "Špatné heslo"
+msgid "Match time:"
+msgstr "Čas zápasu:"
 
-#: ../judoshiai/httpd.c
-msgid "Logout"
-msgstr "Odhlásit"
+msgid "Rest time:"
+msgstr "Přestávka:"
 
-#: ../judoshiai/httpd.c
-msgid "Login"
-msgstr "Přihlásit"
+msgid "Pin times (IWYK):"
+msgstr "Časy držení.(IWYK):"
 
-#: ../judoshiai/httpd.c
-msgid "No rights to give results"
-msgstr "Bez oprávnění vkládat výsledky"
+msgid "Highest weight (g):"
+msgstr "Nejvyšší váha (g):"
 
-#: ../judoshiai/httpd.c
-msgid "No competitor found!"
-msgstr "Nenalezen závodník"
+msgid "Weight text:"
+msgstr "Váha:"
 
-#: ../judoshiai/httpd.c
-msgid "Add"
-msgstr "Vlož"
+msgid "Save file"
+msgstr "Ulož Soubor"
 
-#: ../judoshiai/httpd.c
-msgid "Name"
-msgstr ""
+msgid "Which one is correct?"
+msgstr "Který je správně?"
 
-#: ../judoshiai/httpd.c
-msgid "Reg.Cat"
-msgstr ""
+msgid "Own database"
+msgstr "Vlastní databáze"
 
-#: ../judoshiai/httpd.c
-msgid "ID"
-msgstr ""
+msgid "Foreign database"
+msgstr "Zahraniční databáze"
 
-#: ../judoshiai/httpd.c
-msgid "Index"
-msgstr ""
+msgid "Do not change"
+msgstr "Neměnit"
 
-#: ../judoinfo/menus.c
-msgid "About JudoInfo"
-msgstr "O JudoInfo"
+msgid "Stop synchronization"
+msgstr "Zastav synchronizaci"
 
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Normal display"
-msgstr "Normální display"
+msgid "Number of tatamis:"
+msgstr "Počet tatami:"
 
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Small display"
-msgstr "Malý display"
+msgid "Sheets"
+msgstr "Tabulky"
 
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Horizontal display"
-msgstr "Horizontální display"
-
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Mirror tatami order"
-msgstr "Zrcadli tatami"
-
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Write to file"
-msgstr "Zapiš do souboru"
-
-#: ../judoinfo/menus.c
-msgid "Show bracket"
-msgstr ""
-
-#: ../judoinfo/menus.c ../judojudogi/menus.c
-msgid "Show Tatami"
-msgstr "Ukaž tatami"
-
-#: ../judoinfo/main.c ../judojudogi/main.c
 msgid "Category starts"
 msgstr "Start kategorie"
 
-#: ../judoinfo/main.c
-msgid "Tatami"
-msgstr ""
+msgid "Gold medal match"
+msgstr "Zápas o zlati"
 
-#: ../common/common.c
-msgid "Round"
-msgstr ""
+msgid "Bronze match A"
+msgstr "Zápas o bronz A"
 
-#: ../common/common.c
-msgid "Round Robin"
-msgstr ""
+msgid "Bronze match B"
+msgstr "Zápas o bronz B"
 
-#: ../common/common.c
-msgid "Repechage"
-msgstr ""
-
-#: ../common/common.c
 msgid "Semifinal"
 msgstr "Semifinále"
 
-#: ../common/common.c
-msgid "Bronze"
-msgstr "Bronzový"
+msgid "Semifinal A"
+msgstr "Semifinále A"
 
-#: ../common/ip.c
-msgid "Address of the communication node"
-msgstr "Adresa komunikačního kanálu"
+msgid "Semifinal B"
+msgstr "Semifinále B"
 
-#: ../common/ip.c
-msgid "IP address:"
-msgstr "IP-adresa:"
+msgid "Show Tatami"
+msgstr "Ukaž tatami"
 
-#: ../common/ip.c
-msgid "Multicast"
-msgstr ""
+msgid "Start New Match?"
+msgstr "Začít další zápas?"
 
-#: ../common/auto-update.c
-msgid "Update"
-msgstr ""
+msgid "Start New Contest?"
+msgstr "Začít novou soutěž?"
 
-#: ../common/auto-update.c
-msgid "New version:"
-msgstr ""
+msgid "Hansokumake to blue"
+msgstr "Hansoku-make modrý"
 
-#: ../common/auto-update.c
-msgid "Current version:"
-msgstr ""
+msgid "Hansokumake to white"
+msgstr "Hansoku-make červený"
 
-#: ../common/auto-update.c
-msgid "Update to new version?"
-msgstr ""
+msgid "Golden Score"
+msgstr "Zlaté skóre"
 
-#: ../common/serial.c
+msgid "Start Golden Score?"
+msgstr "Začít zlaté skóre?"
+
+msgid "Hantei"
+msgstr "Hantei"
+
+msgid "Blue wins"
+msgstr "Vítěz modrý"
+
+msgid "White wins"
+msgstr "Vítěz  bílý"
+
+msgid "REST TIME"
+msgstr "PŘESTÁVKA"
+
+msgid "Seeding:"
+msgstr "Nasazení:"
+
+msgid "1"
+msgstr "1"
+
+msgid "2"
+msgstr "2"
+
+msgid "3"
+msgstr "3"
+
+msgid "4"
+msgstr "4"
+
+msgid "Freeze match order"
+msgstr "Zmrazit zápasový řád"
+
+msgid "Unfreeze exported"
+msgstr "Odmrazit exportované"
+
+msgid "Unfreeze imported"
+msgstr "Odmrazit importované"
+
+msgid "Unfreeze this"
+msgstr "Odmrazit toto"
+
+msgid "SQL Dialog"
+msgstr "SQL-dialoog"
+
+msgid "Print All (PDF)"
+msgstr "Vytiskni vše (PDF)"
+
+msgid "Golden Score:"
+msgstr "Zlaté skóre:"
+
+msgid "SQL"
+msgstr "SQL"
+
+msgid "About JudoInfo"
+msgstr "O JudoInfo"
+
+msgid "Next"
+msgstr "Další"
+
+msgid "Rest"
+msgstr "Zbytek"
+
+msgid "Do Backup"
+msgstr "Záloha"
+
+msgid "CANNOT OPEN BACKUP FILE"
+msgstr "Nelze otevřít záložní soubor"
+
+msgid "Tournament Backup"
+msgstr "Záloha turnaje"
+
+msgid "Small display"
+msgstr "Malý display"
+
+msgid "Draw Selected"
+msgstr "Losuj vybrané"
+
+msgid "Draw and Print Selected"
+msgstr "Losuj a tiskni vybrané"
+
+msgid "Print Selected Sheets (Printer)"
+msgstr "Tiskni vybrané tabulky (Tiskárna)"
+
+msgid "Print Selected Sheets (PDF)"
+msgstr "Tiskni vybrané tabulky (PDF)"
+
+msgid "Advertisement"
+msgstr "Reklama"
+
+msgid "Tournament properties"
+msgstr "Nastavení turnaje"
+
+msgid "Print Matches (CSV)"
+msgstr "Tiskni zápasy (CSV)"
+
+msgid "Match File"
+msgstr "Soubor zápasů"
+
+msgid "Print Not Started Categories"
+msgstr "Tiskni nenastartované kategorie"
+
+msgid "Print Started Categories"
+msgstr "Tiskni nastarované kategorie"
+
+msgid "Print Finished Categories"
+msgstr "Tiskni ukončené kategorie"
+
+msgid "Print Result"
+msgstr "Tiskni výsledky"
+
+msgid "Print IWYKS"
+msgstr "Tiskni IWYKS"
+
+msgid "Print Comment"
+msgstr "Tiskni komentář"
+
+msgid "Create Statistics"
+msgstr "Vytvoř statistiku"
+
+msgid "NOTE"
+msgstr "Poznámka"
+
+msgid "is not a valid ASCII string!"
+msgstr "není správný ASCII-znak!"
+
+msgid "No koka"
+msgstr "BEZ koky"
+
+msgid "Leave points for GS"
+msgstr "Nevkládej body do DoublePool"
+
+msgid "Automatic Match Delay"
+msgstr "Autom. přestávka mezi zápasy"
+
+msgid "Cannot move"
+msgstr "Nemůžu vložit"
+
+msgid "Mirror Tatami Order"
+msgstr "Zrcadli tatami"
+
+msgid "Mirror tatami order"
+msgstr "Zrcadli tatami"
+
+msgid "Country"
+msgstr "Země"
+
+msgid "Id"
+msgstr "Id"
+
+msgid "Country:"
+msgstr "Země:"
+
+msgid "Id:"
+msgstr "Id:"
+
+msgid "System:"
+msgstr "System:"
+
+msgid "Default"
+msgstr "Default"
+
+msgid "FIN Double Repechage"
+msgstr "FIN Dvojité opravy"
+
+msgid "SWE Double Repechage"
+msgstr "SWE Dvojité opravy"
+
+msgid "SWE Double Elimination"
+msgstr "SWE Dvojitá eliminace"
+
+msgid "EST Double Elimination"
+msgstr "EST Dvojitá eliminace"
+
+msgid "Single Elimination"
+msgstr "Jednoduchá eliminace"
+
+msgid "SWE Single Repechage"
+msgstr "SWE Jednoduché opravy"
+
+msgid "Club Name Only"
+msgstr "Jen klub"
+
+msgid "Country Name Only"
+msgstr "Jen země"
+
+msgid "Both Club and Country"
+msgstr "Klub a země"
+
+msgid "International System"
+msgstr "Mezinárodní systém"
+
+msgid "Finnish System"
+msgstr "Finský systém"
+
+msgid "Swedish System"
+msgstr "Švédský systém"
+
+msgid "Estonian System"
+msgstr "Estonský sytém"
+
+msgid "Reset to Defaults"
+msgstr "Nastav na výchozí"
+
+msgid "View Log"
+msgstr "Zobraz log"
+
+msgid "Double Pool"
+msgstr "Double Pool"
+
+msgid "Cannot handle: Database created with newer JudoShiai version."
+msgstr "Nemůžu změnit: Databáze je vytvořena v novější verzi JudoShiai."
+
+msgid "Database tables updated."
+msgstr "Databáze tabulek udatována"
+
+msgid "Cannot open"
+msgstr "Nelze otevřít"
+
+msgid "Abbreviations in Sheets"
+msgstr "Zkratky v tabulkách"
+
+msgid "Display layout"
+msgstr "Výstup display"
+
+msgid "Contest area"
+msgstr "Tatami"
+
+msgid "Set time"
+msgstr "Nastav čas"
+
+msgid "Sound"
+msgstr "Zvuk"
+
+msgid "Change language to Spanish"
+msgstr "Změn jazyk na Španělsky"
+
+msgid "Choose a file"
+msgstr "Vyber soubor"
+
+msgid "Sound Files"
+msgstr "Zvukové soubory"
+
+msgid "All Files"
+msgstr "Všechny soubory"
+
+msgid "Best of 3"
+msgstr "Nejlepší 3"
+
+msgid "One match"
+msgstr "Jeden zápas"
+
+msgid "Quad Pool"
+msgstr "Quad Pool"
+
+msgid "IJF Qrt Final Rep"
+msgstr "IJF Qrt finále rep."
+
+msgid "Dbl Repchg"
+msgstr "Dbl Repchg"
+
+msgid "FIN Dbl Repchg"
+msgstr "FIN Dbl Repchg"
+
+msgid "SWE Dubb återkv"
+msgstr "SWE Dbl Repchg"
+
+msgid "SWE Dir återkv"
+msgstr "SWE dir Repchg"
+
+msgid "EST D klass"
+msgstr "EST D "
+
+msgid "No Repechg"
+msgstr "Bez oprav"
+
+msgid "SWE Enkelt återkv"
+msgstr "SWE jednoduché opravy"
+
+msgid "ESP Dbl Lost"
+msgstr "ESP Dbl prohra"
+
+msgid "ESP Dbl Rep/Bgn"
+msgstr "ESP Dbl opr/Bgn"
+
+msgid "ESP Dbl Rep"
+msgstr "ESP Dbl.opravy"
+
+msgid "ESP Simple Rep"
+msgstr "ESP Jednoduché opravy"
+
+msgid "ESP Double Lost"
+msgstr "ESP Dvojitá prohra"
+
+msgid "ESP Double Repechage"
+msgstr "ESP Dvojité opravy"
+
+msgid "ESP Simple Repechage"
+msgstr "ESP jednoduché opravy"
+
+msgid "Quadruple pool"
+msgstr "Quadruple pool"
+
+msgid "IJF Quarter Final Repechage"
+msgstr "IJF Quarter Final opravy"
+
+msgid "Picture Files"
+msgstr "Soubory obrýzků"
+
+msgid "Print Headers"
+msgstr "Tiskni záhlaví"
+
+msgid "Language Selection"
+msgstr "Výběr jazyka"
+
+msgid "Spanish System"
+msgstr "Španělský systém"
+
+msgid "Communication"
+msgstr "Komunikace"
+
+msgid "Club Text Selection"
+msgstr "Výber klubu"
+
+msgid "Print Logo"
+msgstr "Tiskni logo"
+
+msgid "Sheet Layout"
+msgstr "Vzhled tabulek"
+
+msgid "Weights Visible"
+msgstr "Váha viditelná"
+
+msgid "Grade Visible"
+msgstr "Stuneň viditelný"
+
+msgid "Print Competitors With Template"
+msgstr "tiskni závodníky se šablonou"
+
+msgid "Select template"
+msgstr "Výběr šablony"
+
+msgid "Line"
+msgstr "Linka"
+
+msgid "Syntax error"
+msgstr "Syntax error"
+
+msgid "Change language to Swedish"
+msgstr "Změn jazyk na Švédsky"
+
+msgid "Switch sides"
+msgstr "Změnit strany"
+
+msgid "Stop clock on Ippon"
+msgstr "Zastav čas při Ipponu"
+
+msgid "Display customized layout"
+msgstr "Zobraz vlstní rozložení"
+
+msgid "Change language to Ukrainan"
+msgstr "Změň jazyk na Ukrajinsky"
+
+msgid "No competitor found!"
+msgstr "Nenalezen závodník"
+
+msgid "Deleted Competitors"
+msgstr "Vymazání závodníci"
+
+msgid "Modified Dbl Elim"
+msgstr "Upravená dv.elim"
+
+msgid "FIN Dbl Repchg One Bronze"
+msgstr "FIN dv.opravy jedno 3."
+
+msgid "Modified Double Elimination"
+msgstr "Upravená dvojitá eliminace"
+
+msgid "FIN Double Repechage One Bronze"
+msgstr "FIN dvojité opravy jedno 3."
+
+msgid "Silver medal match"
+msgstr "Zápas o stříbro"
+
+msgid "Pool Style 2"
+msgstr "Pool Style 2"
+
+msgid "Use Belt Colors"
+msgstr "Zobraz barvný pás"
+
+msgid "Print Unmatched"
+msgstr "Tiskni bez zápasů"
+
+msgid "White first"
+msgstr "Bílý první"
+
+msgid "Show"
+msgstr "Ukaž"
+
+msgid "Show Deleted"
+msgstr "Ukaž smazané"
+
+msgid "Add"
+msgstr "Vlož"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "White first:"
+msgstr "Bílý první :"
+
+msgid "Scale Serial Interface"
+msgstr "Sériový port váhy"
+
 msgid "Serial Communication"
 msgstr "Sériová komunikace"
 
-#: ../common/serial.c ../judoweight/menus.c
 msgid "In Use"
 msgstr "In Use"
 
-#: ../common/serial.c
 msgid "Device"
 msgstr "Zařízení"
 
-#: ../common/serial.c
 msgid "Baudrate"
 msgstr "Přenosová rychlost"
 
-#: ../common/serial.c
+msgid "Basic Scripts"
+msgstr "Základní skritp"
+
+msgid "Select Script"
+msgstr "Výběr skriptu"
+
+msgid "No script available"
+msgstr "Nedostupný skript"
+
+msgid "Run Script"
+msgstr "Spusť skript"
+
+msgid "Repeat Script"
+msgstr "Opakuj skript"
+
+msgid "Double Pool 2"
+msgstr "Double Pool 2"
+
+msgid "Double pool 2"
+msgstr "Double Pool 2"
+
+msgid "Write to file"
+msgstr "Zapiš do souboru"
+
+msgid "Confirm New Match"
+msgstr "Potvrď nový zápas"
+
+msgid "Contest area 9"
+msgstr "Tatami 9"
+
+msgid "Contest area 10"
+msgstr "Tatami 10"
+
+msgid "Move Medal Matches"
+msgstr "Spusť medailové zápasy"
+
+msgid "Move match "
+msgstr "Spusť zápas"
+
+msgid "to tatami and/or"
+msgstr "na tatami a/nebo"
+
+msgid " delay"
+msgstr "přestávka"
+
+msgid "Final"
+msgstr "Finále"
+
+msgid "Bronze"
+msgstr "Bronzový"
+
+msgid "Bronze1"
+msgstr "Bronzový 1"
+
+msgid "Bronze2"
+msgstr "Bronzový 2"
+
+msgid "Pool's last"
+msgstr "Pool's last"
+
+msgid "No move"
+msgstr ""
+
+msgid "Print Accreditation Cards"
+msgstr "Tiskni akreditační karty"
+
+msgid "Name Format"
+msgstr "Formát Jména"
+
+msgid "Name Surname, Country/Club"
+msgstr "Jméno Příjmení, Zemé/Klub"
+
+msgid "Surname, Name, Country/Club"
+msgstr "Jméno, Příjmení, Země/Klub"
+
+msgid "Country/Club  Surname, Name"
+msgstr "Zemé/Klub Příjmení,Jméno"
+
+msgid "Medal Matches..."
+msgstr "Medailové zápasy..."
+
+msgid "Print Selected Accreditation Cards"
+msgstr "Tiskni vybrané akreditace"
+
+msgid "Layout:"
+msgstr "Výstup"
+
+msgid "Print To:"
+msgstr "Tiskni do:"
+
+msgid "Template"
+msgstr "Šablona"
+
+msgid "Printer"
+msgstr "Tiskárna"
+
+msgid "PDF"
+msgstr ""
+
+msgid "One Card Per Page"
+msgstr "Jednu kartu na stránku"
+
+msgid "Normal display"
+msgstr "Normální display"
+
+msgid "Horizontal display"
+msgstr "Horizontální display"
+
+msgid "White has a judogi problem."
+msgstr "Bílý má problém s kimonem"
+
+msgid "Blue has a judogi problem."
+msgstr "Modrý má problém s kimonem"
+
+msgid "Show Competitors"
+msgstr "Ukaž Závodníky"
+
+msgid "Show competitors"
+msgstr "Ukaž závodníky"
+
+msgid "Name format"
+msgstr "Formát jména"
+
+msgid "Country  Surname, Name"
+msgstr "Země  Příjmení,Jméno"
+
+msgid "Club  Surname, Name"
+msgstr "Klub  Příjmení, Jméno"
+
+msgid "Country Surname"
+msgstr "Země Příjmení"
+
+msgid "Club Surname"
+msgstr "Klub Příjmení"
+
+msgid "Surname, Name"
+msgstr "Příjmení, Jméno"
+
+msgid "Surname"
+msgstr "Příjmení"
+
+msgid "Change language to Icelandic"
+msgstr "Změn jazyk na Islandsky"
+
+msgid "Change language to Norwegian"
+msgstr "Změň jazyk na Norsky"
+
+msgid "WINNER"
+msgstr "Vítěz"
+
+msgid "Cancel"
+msgstr "Konec"
+
+msgid "Club Seeding:"
+msgstr "Nasazení klubu"
+
+msgid "Gender:"
+msgstr "Pohlaví"
+
+msgid "Male"
+msgstr "Muž"
+
+msgid "Female"
+msgstr "Žena"
+
+msgid "Control:"
+msgstr "Kontrola"
+
+msgid "NOK"
+msgstr "NOK"
+
+msgid "Seeding"
+msgstr "Nasazení"
+
+msgid "Club Seeding"
+msgstr "Nasezení klubu"
+
+msgid "Database Validation"
+msgstr ""
+
+msgid "Duplicate seedings:\n"
+msgstr ""
+
+msgid "seeding"
+msgstr ""
+
+msgid "defined"
+msgstr ""
+
+msgid "times"
+msgstr "časy"
+
+msgid "Duplicate club seedings:\n"
+msgstr ""
+
+msgid "Missing category definitions:\n"
+msgstr ""
+
+msgid "is not"
+msgstr ""
+
+msgid "Typing errors:\n"
+msgstr ""
+
+msgid "UTF-8 errors"
+msgstr ""
+
+msgid "Extra spaces"
+msgstr ""
+
+msgid "Possible duplicate competitors:\n"
+msgstr ""
+
+msgid "Possible duplicate club names:\n"
+msgstr ""
+
+msgid "Suspicious weights:\n"
+msgstr ""
+
+msgid "warnings"
+msgstr ""
+
+msgid "jen zvážené"
+msgstr ""
+
+msgid "With weights"
+msgstr "s váhou"
+
+msgid "Validate Database"
+msgstr ""
+
+msgid "Results in Icelandic"
+msgstr "Výsledky v islandštině"
+
+msgid "Surname Name, Country/Club"
+msgstr ""
+
+msgid "Country/Club,  Surname Name"
+msgstr ""
+
+msgid "Scale Serial Interface..."
+msgstr ""
+
 msgid "Type"
 msgstr ""
 
-#: ../judoweight/menus.c
-msgid "About JudoWeight"
-msgstr "O JudoWeight"
-
-#: ../judoweight/menus.c
-msgid "Scale Correction"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "Real"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "Display"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "Error"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "ERROR"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "Scale Correction Table..."
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "No manual edit"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "Automatic send"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "Print label"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "No margins"
-msgstr ""
-
-#: ../judoweight/menus.c
-msgid "Fit page"
-msgstr ""
-
-#: ../judoweight/main.c
-msgid "WARNING: NO CONTROL"
-msgstr ""
-
-#: ../judoweight/main.c ../judojudogi/main.c
 msgid "ID:"
 msgstr ""
 
-#: ../judoweight/main.c
 msgid "Name:"
 msgstr "Jméno:"
 
-#: ../judoweight/main.c
-msgid "Corrected:"
-msgstr ""
+msgid "About JudoWeight"
+msgstr "O JudoWeight"
 
-#: ../judoweight/main.c
-msgid "Confirm:"
-msgstr "Potvrď:"
-
-#: ../judoweight/main.c
-msgid "New Password:"
-msgstr ""
-
-#: ../judoweight/main.c
-msgid "Old Password:"
-msgstr ""
-
-#: ../judoweight/main.c
-msgid "Wrong password!"
-msgstr ""
-
-#: ../judojudogi/menus.c
-msgid "About JudoJudogi"
-msgstr "O JudoJudogi"
-
-#: ../judojudogi/main.c
 msgid "No match soon! Please wait for a while."
 msgstr "Žádný zápas! Prosím počkejte chvíli"
 
-#: ../judoproxy/menus.c
-#, fuzzy
-msgid "About JudoProxy"
-msgstr "O JudoInfo"
+msgid "About JudoJudogi"
+msgstr "O JudoJudogi"
 
-#: ../judoproxy/main.c
-msgid "Camera"
+msgid "Norwegian System"
+msgstr "Norský systém"
+
+msgid "Confirm:"
+msgstr "Potvrď:"
+
+msgid "- - -"
 msgstr ""
 
-#: ../judoproxy/main.c
-#, fuzzy
-msgid "JudoTimer"
-msgstr "Judotimer"
+msgid "syntax errors"
+msgstr "syntax errors"
 
-#: ../judoproxy/main.c
-msgid "Reload"
+msgid "Rep. time:"
 msgstr ""
 
-#~ msgid "Hansokumake to white"
-#~ msgstr "Hansoku-make červený"
+msgid "Results in Norwegian"
+msgstr "Výsledky Norsky"
 
-#~ msgid "Hansokumake to blue"
-#~ msgstr "Hansoku-make modrý"
+msgid "Landscape"
+msgstr "Landscape"
 
-#~ msgid "Match duration: 2 min E-juniors"
-#~ msgstr "Doba zápasu : 2 min E-junioři"
+msgid "Resolution (min):"
+msgstr "Řešení (min):"
 
-#~ msgid "Contest duration: automatic"
-#~ msgstr "Soutěž trvá: automaticky"
+msgid "Compressed timeline"
+msgstr "Stalčit čas"
 
-#~ msgid "Contest duration: 2 min"
-#~ msgstr "Soutěž trvá: 2 min"
+msgid "Select font"
+msgstr "Výběr fontu"
 
-#~ msgid "Contest duration: 3 min"
-#~ msgstr "Soutěž trvá: 3 min"
+msgid "Font"
+msgstr "Font"
 
-#~ msgid "Contest duration: 4 min"
-#~ msgstr "Soutěž trvá: 4 min"
+msgid "Communication error"
+msgstr "Chyba komunikace"
 
-#~ msgid "Contest duration: 5 min"
-#~ msgstr "Soutěž trvá: 5 min"
+msgid "Double Lost"
+msgstr "Dvojitá prohra"
 
-#~ msgid "Change language to Finnish"
-#~ msgstr "Změna jazyku na Finsky"
+msgid "Replay Video"
+msgstr "Přehraj video"
 
-#~ msgid "Change language to Estonian"
-#~ msgstr "Změna jazyku na Estonsky"
+msgid "Video server"
+msgstr "Video server"
 
-#~ msgid "Change language to English"
-#~ msgstr "Změna jazyku na Anglicky"
+msgid "Video server URL"
+msgstr "URL video serveru"
 
-#~ msgid "Contest duration automatically from JudoShiai program"
-#~ msgstr "Soutěží se z programu JudoShiai"
+msgid "User:"
+msgstr "Uživatel"
 
-#~ msgid "Contest area 1"
-#~ msgstr "Tatami 1"
+msgid "Proxy:"
+msgstr "Proxy:"
 
-#~ msgid "Contest area 2"
-#~ msgstr "Tatami 2"
+msgid "Show Video"
+msgstr "Ukaž video"
 
-#~ msgid "Contest area 3"
-#~ msgstr "Tatami 3"
+msgid "GBR Knock Out"
+msgstr "GBR KO"
 
-#~ msgid "Contest area 4"
-#~ msgstr "Tatami 4"
+msgid "SVG Templates"
+msgstr "SVG šablony"
 
-#~ msgid "Contest area 5"
-#~ msgstr "Tatami 5"
+msgid "Resolve 3-Way Ties by Weights"
+msgstr "Řešení 3-dle váhy"
 
-#~ msgid "Contest area 6"
-#~ msgstr "Tatami 6"
+msgid "General"
+msgstr "Hlavní"
 
-#~ msgid "Contest area 7"
-#~ msgstr "Tatami 7"
+msgid "Reset to"
+msgstr "Resetuj do"
 
-#~ msgid "Contest area 8"
-#~ msgstr "Tatami 8"
+msgid "Initialize"
+msgstr "Inicializuj"
 
-#~ msgid "Master mode"
-#~ msgstr "Master mód"
+msgid "Players"
+msgstr "Hráči"
 
-#~ msgid "Year 2009 rules"
-#~ msgstr "pravidla 2009"
+msgid "Max age"
+msgstr "Max věk"
 
-#~ msgid "Short pin times"
-#~ msgstr "Krátký čas"
+msgid "Min"
+msgstr "Min"
 
-#~ msgid "Zrušit Výběr"
-#~ msgstr "Eemalda valik"
+msgid "Max"
+msgstr "Max"
 
-#~ msgid "Add All with Weights"
-#~ msgstr "Přidat vše s váhou"
+msgid "System"
+msgstr "Systém"
 
-#~ msgid "Best of Three"
-#~ msgstr "Nejlepší tři"
+msgid "Default systems"
+msgstr "Základní system"
 
-#~ msgid "Results in Czech"
-#~ msgstr "Výsledky Česky"
+msgid "Use SVG Templates"
+msgstr "Použij SVG šablony"
 
-#~ msgid "No, this the only JudoShiai program. \n"
-#~ msgstr "Ne, toto je jediný JudoShiai \n"
+msgid "Best of three:"
+msgstr "Nejlepší z tří"
 
-#~ msgid "Double pool"
-#~ msgstr "Double pool"
+msgid "Win needed for a medal:"
+msgstr ""
 
-#~ msgid "Double repechage"
-#~ msgstr "Dvojité opravy"
+msgid "Seeded to fixed places:"
+msgstr ""
 
-#~ msgid "Next contest"
-#~ msgstr "Další soutěž"
+msgid "Double Pool 2 with carried forward points:"
+msgstr ""
 
-#~ msgid "Weighed:"
-#~ msgstr "Váha:"
+msgid "Two pool bronzes:"
+msgstr ""
 
-#~ msgid "----- Men -----"
-#~ msgstr "----- Muž -----"
+msgid "Resolve 3-way ties by weights:"
+msgstr ""
 
-#~ msgid "----- Women -----"
-#~ msgstr "----- Žena -----"
+msgid "Coach Id:"
+msgstr ""
 
-#~ msgid "Start New Contest?"
-#~ msgstr "Začít novou soutěž?"
+msgid "Comment:"
+msgstr ""
 
-#~ msgid "1"
-#~ msgstr "1"
+msgid "Best two out of three matches:"
+msgstr ""
 
-#~ msgid "2"
-#~ msgstr "2"
+msgid ""
+"Medal will be awarded \n"
+"only if a contest was won:"
+msgstr ""
 
-#~ msgid "3"
-#~ msgstr "3"
+msgid "Pool settings"
+msgstr ""
 
-#~ msgid "4"
-#~ msgstr "4"
+msgid "Statistics"
+msgstr ""
 
-#~ msgid "No koka"
-#~ msgstr "BEZ koky"
+msgid "Grade names"
+msgstr ""
 
-#~ msgid "Leave points for GS"
-#~ msgstr "Nevkládej body do DoublePool"
+msgid "Coach"
+msgstr ""
 
-#~ msgid "SWE Double Elimination"
-#~ msgstr "SWE Dvojitá eliminace"
+msgid "Weights do not match"
+msgstr ""
 
-#~ msgid "Change language to Spanish"
-#~ msgstr "Změn jazyk na Španělsky"
+msgid "Copy Weights"
+msgstr ""
 
-#~ msgid "Dbl Repchg"
-#~ msgstr "Dbl Repchg"
+msgid "weights updated"
+msgstr ""
 
-#~ msgid "ESP Dbl Rep/Bgn"
-#~ msgstr "ESP Dbl opr/Bgn"
+msgid "Update Weights From Another Shiai"
+msgstr ""
 
-#~ msgid "Quadruple pool"
-#~ msgstr "Quadruple pool"
+msgid "Weighted:"
+msgstr ""
 
-#~ msgid "Print Competitors With Template"
-#~ msgstr "tiskni závodníky se šablonou"
+msgid "Print SVG"
+msgstr ""
 
-#~ msgid "Select template"
-#~ msgstr "Výběr šablony"
+msgid "Hikiwake"
+msgstr ""
 
-#~ msgid "Change language to Swedish"
-#~ msgstr "Změn jazyk na Švédsky"
+msgid "Clear selection"
+msgstr ""
 
-#~ msgid "Change language to Ukrainan"
-#~ msgstr "Změň jazyk na Ukrajinsky"
+msgid "If equal score less shido wins"
+msgstr ""
 
-#~ msgid "Deleted Competitors"
-#~ msgstr "Vymazání závodníci"
+msgid "Require judogi control"
+msgstr ""
 
-#~ msgid "Show"
-#~ msgstr "Ukaž"
+msgid "VLC control"
+msgstr ""
 
-#~ msgid "Show Deleted"
-#~ msgstr "Ukaž smazané"
+msgid "CTL"
+msgstr ""
 
-#~ msgid "Scale Serial Interface"
-#~ msgstr "Sériový port váhy"
+msgid "Show Flags"
+msgstr ""
 
-#~ msgid "Double pool 2"
-#~ msgstr "Double Pool 2"
+msgid "Show Initial of Name"
+msgstr ""
 
-#~ msgid "Contest area 9"
-#~ msgstr "Tatami 9"
+msgid "Flag size:"
+msgstr ""
 
-#~ msgid "Contest area 10"
-#~ msgstr "Tatami 10"
+msgid "Name size:"
+msgstr ""
 
-#~ msgid "Change language to Icelandic"
-#~ msgstr "Změn jazyk na Islandsky"
+msgid "No Limit"
+msgstr ""
 
-#~ msgid "Change language to Norwegian"
-#~ msgstr "Změň jazyk na Norsky"
+msgid "CONTROL"
+msgstr ""
 
-#~ msgid "Resolve 3-Way Ties by Weights"
-#~ msgstr "Řešení 3-dle váhy"
+msgid "X:"
+msgstr ""
 
-#~ msgid "Best of three:"
-#~ msgstr "Nejlepší z tří"
+msgid "Y:"
+msgstr ""
+
+msgid "Scale:"
+msgstr ""
+
+msgid "THIS APPLICATION"
+msgstr ""
+
+msgid "NOT CONNECTED"
+msgstr ""
+
+msgid "Team:"
+msgstr ""
+
+msgid "Tatami:"
+msgstr ""
+
+msgid "Create default members:"
+msgstr ""
+
+msgid "Team"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Corrupted competitor data:\n"
+msgstr ""
+
+msgid "Corrupted category data:\n"
+msgstr ""
+
+msgid "Server URL"
+msgstr ""
+
+msgid "Copy to Server"
+msgstr ""
+
+msgid "Proxy User:"
+msgstr ""
+
+msgid "Proxy Password:"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Reg.Cat"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Index"
+msgstr ""
+
+msgid ""
+"No, this the only JudoShiai program. \n"
+"Purge erroneous lock file."
+msgstr ""
+
+msgid "Double Pool 3"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "UKR Dbl Repchg"
+msgstr ""
+
+msgid "DEN Dbl Elim"
+msgstr ""
+
+msgid "EST D klass 1 brz"
+msgstr ""
+
+msgid "UKR Double Repechage"
+msgstr ""
+
+msgid "SWE Direct Repechage"
+msgstr ""
+
+msgid "DEN Double Elimination"
+msgstr ""
+
+msgid "EST Double Elim One Bronze"
+msgstr ""
+
+msgid "Customized"
+msgstr ""
+
+msgid "Set score"
+msgstr ""
+
+msgid "Weighed only"
+msgstr ""
+
+msgid "Load Custom Systems"
+msgstr ""
+
+msgid "New Team"
+msgstr ""
+
+msgid "New Team Category"
+msgstr ""
+
+msgid "Edit Drawing"
+msgstr ""
+
+msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr ""
+
+msgid "Results in Polish"
+msgstr ""
+
+msgid "Results in Slovak"
+msgstr ""
+
+msgid "Results in Dutch"
+msgstr ""
+
+msgid "Results in German"
+msgstr ""
+
+msgid "Results in Russian"
+msgstr ""
+
+msgid "Win in Golden Score gives 1 point"
+msgstr ""
+
+msgid "British System"
+msgstr ""
+
+msgid "Australian System"
+msgstr ""
+
+msgid "Danish System"
+msgstr ""
+
+msgid "Polish System"
+msgstr ""
+
+msgid "Slovakian System"
+msgstr ""
+
+msgid "Ukrainian System"
+msgstr ""
+
+msgid "Tatami"
+msgstr ""
+
+msgid "Open file"
+msgstr ""
+
+msgid "WARNING: NO CONTROL"
+msgstr ""
+
+msgid "New Password:"
+msgstr ""
+
+msgid "Old Password:"
+msgstr ""
+
+msgid "Wrong password!"
+msgstr ""
+
+msgid "No manual edit"
+msgstr ""
+
+msgid "Automatic send"
+msgstr ""
+
+msgid "Print label"
+msgstr ""
+
+msgid "No margins"
+msgstr ""
+
+msgid "Fit page"
+msgstr ""
+
+msgid "No SOREMADE/IPPON texts"
+msgstr ""
+
+msgid "Custom layout file..."
+msgstr ""
+
+msgid "Resolve 3-way ties by time:"
+msgstr ""
+
+msgid "Move Matches"
+msgstr ""
+
+msgid "Match order from file"
+msgstr ""
+
+msgid "Match Order from File"
+msgstr ""
+
+msgid "Move Matches..."
+msgstr ""
+
+msgid "Use the first places only:"
+msgstr ""
+
+msgid "Round"
+msgstr ""
+
+msgid "Round Robin"
+msgstr ""
+
+msgid "Repechage"
+msgstr ""
+
+msgid "Mix pool matches into rounds:"
+msgstr ""
+
+msgid "Use IJF points:"
+msgstr ""
+
+msgid "Show bracket"
+msgstr ""
+
+msgid "2017 Rules"
+msgstr ""
+
+msgid "2018 Rules"
+msgstr ""
+
+msgid "Category typing errors\n"
+msgstr ""
+
+msgid "GER Repchg"
+msgstr ""
+
+msgid "GER Double Repechage"
+msgstr ""
+
+msgid "2017 Rules:"
+msgstr ""
+
+msgid "2018 Rules:"
+msgstr ""
+
+msgid "Use points 10/1/0:"
+msgstr ""
+
+msgid "Use points 100/10/1/½:"
+msgstr ""
+
+msgid "Use points 10/7/1:"
+msgstr ""
+
+msgid "Use points 10/1/½:"
+msgstr ""
+
+msgid "Use points 10/3/1:"
+msgstr ""
+
+msgid "Use points 10/5/1:"
+msgstr ""
+
+msgid "Add extra match in teams points tie:"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "SVG+Lisp"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "New version:"
+msgstr ""
+
+msgid "Current version:"
+msgstr ""
+
+msgid "Update to new version?"
+msgstr ""
+
+msgid "Corrected:"
+msgstr ""
+
+msgid "Scale Correction"
+msgstr ""
+
+msgid "Real"
+msgstr ""
+
+msgid "Display"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "ERROR"
+msgstr ""
+
+msgid "Scale Correction Table..."
+msgstr ""
+
+msgid "Hide name:"
+msgstr ""
+
+msgid "General Data Protection Regulation"
+msgstr ""
+
+msgid "Hide category if age less than"
+msgstr ""
+
+msgid "Hide name if age less than"
+msgstr ""
+
+msgid "GDPR"
+msgstr ""
+
+msgid "Random Weigh-In"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "competitors from"
+msgstr ""
+
+msgid "each category"
+msgstr ""
+
+msgid "all categories"
+msgstr ""
+
+msgid "Random Weigh-In..."
+msgstr ""
+
+msgid "IJF team event July 2018 rules:"
+msgstr ""
+
+msgid "German System"
+msgstr ""
+
+msgid "Multicast"
+msgstr ""
+
+msgid "each selected category"
+msgstr ""
+
+msgid "all selected categories"
+msgstr ""
