@@ -30,3 +30,7 @@ backup*
 *.patch
 a.out
 xx*
+/.settings/*
+/.project
+/.pydevproject
+/.cproject

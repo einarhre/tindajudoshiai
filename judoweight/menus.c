@@ -480,6 +480,8 @@ void set_preferences(void)
     initialize_calib();
 }
 
+extern gchar *menu_text_with_dots(gchar *text);
+
 gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param)
 {
     language = ptr_to_gint(param);
@@ -492,8 +494,8 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
 
     change_menu_label(node_ip,      _("Communication node"));
     change_menu_label(my_ip,        _("Own IP addresses"));
-    change_menu_label(preference_serial, _("Scale Serial Interface..."));
-    change_menu_label(preference_calibration, _("Scale Correction Table..."));
+    change_menu_label(preference_serial, menu_text_with_dots(_("Scale Serial Interface")));
+    change_menu_label(preference_calibration, menu_text_with_dots(_("Scale Correction Table")));
     change_menu_label(m_password_protected, _("No manual edit"));
     change_menu_label(m_automatic_send, _("Automatic send"));
     change_menu_label(password,     _("Password"));

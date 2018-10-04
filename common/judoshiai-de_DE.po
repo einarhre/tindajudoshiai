@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Schriftart auswählen"
 
 #: ../judotimer/menus.c
-msgid "About Judotimer"
-msgstr "Über Judotimer"
+msgid "About JudoTimer"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -231,7 +231,7 @@ msgstr "Layout aus Datei"
 
 #: ../judotimer/menus.c
 msgid "Custom Layout File"
-msgstr ""
+msgstr "Eigene Layout Datei"
 
 #: ../judotimer/menus.c
 msgid "Name format"
@@ -812,20 +812,20 @@ msgstr "Doppelte Setzplätze:"
 #: ../judoshiai/db-validate.c
 #, c-format
 msgid "Category %s: seeding %s defined %s times."
-msgstr ""
+msgstr "Klasse %s: Setzplatz %s %s mal vergeben."
 
 #: ../judoshiai/db-validate.c
 msgid "Duplicate club seedings:"
-msgstr ""
+msgstr "Doppelte Vereinssetzplätze:"
 
 #: ../judoshiai/db-validate.c
 #, c-format
 msgid "Club %s: seeding %s defined %s times."
-msgstr ""
+msgstr "Verein %s: Setzplatz %s %s mal vergeben."
 
 #: ../judoshiai/db-validate.c
 msgid "Missing category definitions:"
-msgstr ""
+msgstr "Fehlende Klassen definitionen:"
 
 #: ../judoshiai/db-validate.c
 #, c-format
@@ -834,11 +834,11 @@ msgstr "Klasse %s ist nicht definiert."
 
 #: ../judoshiai/db-validate.c
 msgid "Category typing errors:"
-msgstr ""
+msgstr "Klasse Schreibfehler:"
 
 #: ../judoshiai/db-validate.c
 msgid "Typing errors:"
-msgstr ""
+msgstr "Schreibfehler:"
 
 #: ../judoshiai/db-validate.c
 msgid "UTF-8 errors"
@@ -850,7 +850,7 @@ msgstr "Extra Leerzeichen"
 
 #: ../judoshiai/db-validate.c
 msgid "Possible duplicate competitors:"
-msgstr ""
+msgstr "Möglicherweise doppelte Kämpfer:"
 
 #: ../judoshiai/db-validate.c
 msgid "Possible duplicate club names:"
@@ -858,22 +858,22 @@ msgstr "Möglicherweise doppelte Vereinsnamen:"
 
 #: ../judoshiai/db-validate.c
 msgid "Suspicious weights:"
-msgstr ""
+msgstr "Verdächtige Gewichte:"
 
 #: ../judoshiai/db-validate.c
 msgid "Corrupted competitor data:"
-msgstr ""
+msgstr "Beschädigte Kämpfer Daten:"
 
 #: ../judoshiai/db-validate.c
 msgid "Corrupted category data:"
-msgstr ""
+msgstr "Beschädigte Klassen Daten:"
 
 #: ../judoshiai/db-validate.c
 #, c-format
 msgid "One warning."
 msgid_plural "%d warnings."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ein Problem gefunden."
+msgstr[1] "%d Probleme gefunden."
 
 #: ../judoshiai/db.c
 msgid "Cannot handle: Database created with newer JudoShiai version."
@@ -1059,7 +1059,7 @@ msgstr "Fehler"
 
 #: ../judoshiai/import.c
 msgid "competitors existed already"
-msgstr "Kämpfer bestehen bereits"
+msgstr "Kämpfer ist bereits vorhanden"
 
 #: ../judoshiai/import.c
 msgid "syntax errors"
@@ -1191,7 +1191,7 @@ msgstr "ESP Einfache Trostrunde"
 
 #: ../judoshiai/match-data.c
 msgid "Modified Dbl Elim"
-msgstr "Mod. Doppel-KO-System"
+msgstr "Modifiziertes Doppel-KO-System"
 
 #: ../judoshiai/match-data.c
 msgid "FIN Dbl Repchg One Bronze"
@@ -1267,7 +1267,7 @@ msgstr "ESP Einfache Trostrunde"
 
 #: ../judoshiai/match-data.c
 msgid "Modified Double Elimination"
-msgstr "Mod. Doppel-KO-System"
+msgstr "Modifiziertes Doppel-KO-System"
 
 #: ../judoshiai/match-data.c
 msgid "FIN Double Repechage One Bronze"
@@ -1283,7 +1283,7 @@ msgstr "EST Doppel-KO-System, einmal Bronze"
 
 #: ../judoshiai/match-data.c
 msgid "Customized"
-msgstr "Erstellt"
+msgstr "Angepasst"
 
 #: ../judoshiai/match-data.c
 msgid "GER Double Repechage"
@@ -1457,7 +1457,7 @@ msgstr "Doppelte löschen und Klassen aktualisieren"
 
 #: ../judoshiai/menuacts.c
 msgid "Weighed only"
-msgstr "nur gewogene"
+msgstr "nur Gewogene"
 
 #: ../judoshiai/menuacts.c
 msgid "With weights"
@@ -1469,7 +1469,7 @@ msgstr "Kämpfer hinzugefügt und aktualisiert"
 
 #: ../judoshiai/menuacts.c
 msgid "competitors already existed"
-msgstr "Kämpfer bestehen bereits"
+msgstr "Kämpfer waren bereits vorhanden"
 
 #: ../judoshiai/menuacts.c
 msgid "competitors added unchanged"
@@ -1481,7 +1481,7 @@ msgstr "Gewicht kopieren"
 
 #: ../judoshiai/menuacts.c
 msgid "weights updated"
-msgstr "Gewicht aktualisiert"
+msgstr "Gewichte aktualisiert"
 
 #: ../judoshiai/menuacts.c
 msgid "Do Backup"
@@ -1499,9 +1499,9 @@ msgstr "Auslosung"
 msgid "Results"
 msgstr "Ergebnisse"
 
-#: ../judoshiai/menus.c
-msgid "Judotimer"
-msgstr "Judotimer"
+#: ../judoshiai/menus.c ../judoproxy/main.c
+msgid "JudoTimer"
+msgstr "JudoTimer"
 
 #: ../judoshiai/menus.c
 msgid "New Tournament"
@@ -1746,9 +1746,9 @@ msgstr "Automatische Kampfverzögerung"
 msgid "Print Logo"
 msgstr "Drucke Logo"
 
-#: ../judoshiai/menus.c
+#: ../judoshiai/menus.c ../judoweight/menus.c
 msgid "Scale Serial Interface"
-msgstr ""
+msgstr "Serielle Schnittstelle zur Waage"
 
 #: ../judoshiai/popup-menu.c
 msgid "Matches matched. Clear the results first."
@@ -1779,8 +1779,8 @@ msgid "already exists"
 msgstr "besteht bereits"
 
 #: ../judoshiai/popup-menu.c
-msgid "Move Competitors to Category..."
-msgstr "Verschiebe Kämpfer in Klasse..."
+msgid "Move Competitors to Category"
+msgstr "Verschiebe Kämpfer in Klasse"
 
 #: ../judoshiai/popup-menu.c
 msgid "Move Competitors Here"
@@ -2528,12 +2528,8 @@ msgid "ERROR"
 msgstr "FEHLER"
 
 #: ../judoweight/menus.c
-msgid "Scale Serial Interface..."
-msgstr "Serielle Schnittstelle zur Waage..."
-
-#: ../judoweight/menus.c
-msgid "Scale Correction Table..."
-msgstr "Waagen-Korrekturtabelle..."
+msgid "Scale Correction Table"
+msgstr "Waagen-Korrekturtabelle"
 
 #: ../judoweight/menus.c
 msgid "No manual edit"
@@ -2568,16 +2564,27 @@ msgid "Camera"
 msgstr "Kamera"
 
 #: ../judoproxy/main.c
-msgid "JudoTimer"
-msgstr "JudoTimer"
-
-#: ../judoproxy/main.c
 msgid "Reload"
 msgstr "Neu Laden"
 
 #: ../judoproxy/menus.c
 msgid "About JudoProxy"
 msgstr "Über JudoProxy"
+
+#~ msgid "About Judotimer"
+#~ msgstr "Über Judotimer"
+
+#~ msgid "Judotimer"
+#~ msgstr "Judotimer"
+
+#~ msgid "Move Competitors to Category..."
+#~ msgstr "Verschiebe Kämpfer in Klasse..."
+
+#~ msgid "Scale Serial Interface..."
+#~ msgstr "Serielle Schnittstelle zur Waage..."
+
+#~ msgid "Scale Correction Table..."
+#~ msgstr "Waagen-Korrekturtabelle..."
 
 #~ msgid "Custom layout file..."
 #~ msgstr "Eigenes Layout aus Datei..."

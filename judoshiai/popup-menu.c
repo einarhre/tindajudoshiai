@@ -654,7 +654,7 @@ void view_popup_menu(GtkWidget *treeview,
     GtkTreeIter iter;
     gboolean ok;
 
-    menuitem = gtk_menu_item_new_with_label(_("Move Competitors to Category..."));
+    menuitem = gtk_menu_item_new_with_label(menu_text_with_dots(_("Move Competitors to Category")));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     submenu = gtk_menu_new();

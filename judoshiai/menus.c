@@ -106,7 +106,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     categories_menu_item  = gtk_menu_item_new_with_label (_("Categories"));
     drawing_menu_item     = gtk_menu_item_new_with_label (_("Drawing"));
     results_menu_item     = gtk_menu_item_new_with_label (_("Results"));
-    judotimer_menu_item   = gtk_menu_item_new_with_label (_("Judotimer"));
+    judotimer_menu_item   = gtk_menu_item_new_with_label (_("JudoTimer"));
     preferences_menu_item = gtk_menu_item_new_with_label (_("Preferences"));
     help_menu_item        = gtk_menu_item_new_with_label (_("Help"));
     lang_menu_item        = get_language_menu(window, change_language);
@@ -754,7 +754,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
 
     change_menu_label(drawing_menu_item    , _("Drawing"));
     change_menu_label(results_menu_item    , _("Results"));
-    change_menu_label(judotimer_menu_item  , _("Judotimer"));
+    change_menu_label(judotimer_menu_item  , _("JudoTimer"));
     change_menu_label(preferences_menu_item, _("Preferences"));
     change_menu_label(help_menu_item       , _("Help"));
 

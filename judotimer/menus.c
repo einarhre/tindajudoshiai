@@ -29,8 +29,8 @@ static void about_judotimer( GtkWidget *w,
     //GtkWidget *dialog;
 
     gtk_show_about_dialog (NULL,
-                           "name", "Judotimer",
-                           "title", _("About Judotimer"),
+                           "name", "JudoTimer",
+                           "title", _("About JudoTimer"),
                            "copyright", "Copyright 2006-2017 Hannu Jokinen",
                            "version", full_version(),
                            "website", "http://sourceforge.net/projects/judoshiai/",
