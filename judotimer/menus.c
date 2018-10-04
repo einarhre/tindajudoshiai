@@ -886,7 +886,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(layout_sel_5, _("View clocks only"));
     change_menu_label(layout_sel_6, _("Display layout 5"));
     change_menu_label(layout_sel_7, _("Display customized layout"));
-    change_menu_label(custom_file,  _("Custom layout file..."));
+    change_menu_label(custom_file, menu_text_with_dots(_("Custom Layout File")));
 
     change_menu_label(name_layout,   _("Name format"));
     change_menu_label(name_layouts[0], _("Name Surname, Country/Club"));

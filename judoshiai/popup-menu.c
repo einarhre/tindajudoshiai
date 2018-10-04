@@ -613,6 +613,8 @@ void show_category_window(GtkWidget *menuitem, gpointer userdata)
 	category_window(ptr_to_gint(userdata));
 }
 
+extern gchar *menu_text_with_dots(gchar *text);
+
 void view_popup_menu(GtkWidget *treeview,
                      GdkEventButton *event,
                      gpointer userdata,
@@ -770,13 +772,13 @@ void view_popup_menu(GtkWidget *treeview,
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
-    menuitem = gtk_menu_item_new_with_label(_("Move Matches..."));
+    menuitem = gtk_menu_item_new_with_label(menu_text_with_dots(_("Move Matches")));
     g_signal_connect(menuitem, "activate",
                      (GCallback) view_popup_menu_move_matches, userdata);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
-    menuitem = gtk_menu_item_new_with_label(_("Random Weigh-In..."));
+    menuitem = gtk_menu_item_new_with_label(menu_text_with_dots(_("Random Weigh-In")));
     g_signal_connect(menuitem, "activate",
                      (GCallback) view_popup_menu_random_weighin, userdata);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);

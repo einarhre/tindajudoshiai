@@ -230,7 +230,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     category_properties      = gtk_menu_item_new_with_label(_("Properties"));
 
     for (i = 0; i < NUM_TATAMIS; i++) {
-        SPRINTF(buf, "%s %d %s", _("Place To"), i+1, _("Tatamis"));
+        SPRINTF(buf, ngettext("Place to one Tatami","Place to %d Tatamis", i+1), i+1);
         category_to_tatamis[i] = gtk_menu_item_new_with_label(buf);
     }
 
@@ -738,6 +738,8 @@ void set_menu_active(void)
     SET_SENSITIVE(results_ftp                   , DB_OK && (current_directory != NULL));
 }
 
+extern gchar *menu_text_with_dots(gchar *text);
+
 gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param)
 {
     gint i;
@@ -789,7 +791,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(category_properties     , _("Properties"));
 
     for (i = 0; i < NUM_TATAMIS; i++) {
-        SPRINTF(buf, "%s %d %s", _("Place To"), i+1, _("Tatamis"));
+        SPRINTF(buf, ngettext("Place to one Tatami","Place to %d Tatamis", i+1) , i+1);
         change_menu_label(category_to_tatamis[i], buf);
     }
 
@@ -842,8 +844,8 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(preference_auto_arrange          , _("Automatic Match Delay"));
     change_menu_label(preference_use_logo              , _("Print Logo"));
 
-    change_menu_label(preference_serial                , _("Scale Serial Interface..."));
-    change_menu_label(preference_medal_matches         , _("Medal Matches..."));
+    change_menu_label(preference_serial                , menu_text_with_dots(_("Scale Serial Interface")));
+    change_menu_label(preference_medal_matches         , menu_text_with_dots(_("Move Medal Matches")));
 
     change_menu_label(help_manual, _("Manual"));
     change_menu_label(help_about , _("About"));
