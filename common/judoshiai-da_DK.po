@@ -32,13 +32,13 @@ msgstr "Hvid vandt afstemningen"
 msgid "Blue won the voting"
 msgstr "Blå vandt afstemningen"
 
-#: ../judotimer/main.c
-msgid "Hansokumake to white"
-msgstr "Hansokumake til hvid"
+#: ../judotimer/main.c ../judotimer/menus.c
+msgid "Hansoku-make to white"
+msgstr "Hansoku-make til hvid"
 
-#: ../judotimer/main.c
-msgid "Hansokumake to blue"
-msgstr "Hansokumake til blå"
+#: ../judotimer/main.c ../judotimer/menus.c
+msgid "Hansoku-make to blue"
+msgstr "Hansoku-make til blå"
 
 #: ../judotimer/main.c ../judotimer/menus.c ../judotimer/stopwatch.c
 msgid "Hikiwake"
@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Vælg skrifttype"
 
 #: ../judotimer/menus.c
-msgid "About Judotimer"
-msgstr "Om Judotimer"
+msgid "About JudoTimer"
+msgstr "Om JudoTimer"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -101,8 +101,8 @@ msgid "Match duration: automatic"
 msgstr "Kampvarighed: automatisk"
 
 #: ../judotimer/menus.c
-msgid "Match duration: 2 min E-juniors"
-msgstr "Kampvarighed: 2 min E-juniors"
+msgid "Match duration: 2 min (short pin times)"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "Match duration: 2 min"
@@ -129,14 +129,6 @@ msgid "Hantei: white wins"
 msgstr "Hantei: hvid vinder"
 
 #: ../judotimer/menus.c
-msgid "Hansoku-make to blue"
-msgstr "Hansoku-make til blå"
-
-#: ../judotimer/menus.c
-msgid "Hansoku-make to white"
-msgstr "Hansoku-make til hvid"
-
-#: ../judotimer/menus.c
 msgid "Clear selection"
 msgstr "Fjern markering"
 
@@ -156,30 +148,6 @@ msgstr "Afslut"
 #: ../judotimer/menus.c ../judoshiai/menuacts.c
 msgid "Contest"
 msgstr "Konkurrence"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: automatic"
-msgstr "Kampvarighed: automatisk"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 2 min (short pin times)"
-msgstr "Kampvarighed: 2 min (short pin times)"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 2 min"
-msgstr "Kampvarighed: 2 min"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 3 min"
-msgstr "Kampvarighed: 3 min"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 4 min"
-msgstr "Kampvarighed: 4 min"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 5 min"
-msgstr "Kampvarighed: 5 min"
 
 #: ../judotimer/menus.c
 msgid "Switch sides"
@@ -262,8 +230,8 @@ msgid "Display customized layout"
 msgstr "Vis tilpasset layout"
 
 #: ../judotimer/menus.c
-msgid "Custom layout file..."
-msgstr "Fil til tilpasset visning..."
+msgid "Custom Layout File"
+msgstr "Fil til tilpasset visning"
 
 #: ../judotimer/menus.c
 msgid "Name format"
@@ -311,7 +279,7 @@ msgid "Country"
 msgstr "Land"
 
 #: ../judotimer/menus.c ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-#: ../judoshiai/db-validate.c ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c
 msgid "Club"
 msgstr "Klub"
 
@@ -476,8 +444,8 @@ msgid "Cancel"
 msgstr "Afbryd"
 
 #: ../judotimer/stopwatch.c
-msgid "- - -"
-msgstr "- - -"
+msgid "GOLDEN SCORE"
+msgstr ""
 
 #: ../judotimer/stopwatch.c
 msgid "CONTROL"
@@ -498,6 +466,10 @@ msgstr "Point går til hvid"
 #: ../judotimer/tvlogo.c
 msgid "VLC control"
 msgstr "VLC kontrol"
+
+#: ../judotimer/tvlogo.c
+msgid "VLC port:"
+msgstr ""
 
 #: ../judotimer/tvlogo.c
 msgid "X:"
@@ -834,40 +806,39 @@ msgid "Database Validation"
 msgstr "Databasevalidering"
 
 #: ../judoshiai/db-validate.c
-msgid "Duplicate seedings:\n"
-msgstr "Duplerede seedninger:\n"
+msgid "Duplicate seedings:"
+msgstr "Duplerede seedninger:"
 
 #: ../judoshiai/db-validate.c
-msgid "seeding"
-msgstr "seedning"
+#, c-format
+msgid "Category %s: seeding %s defined %s times."
+msgstr ""
 
 #: ../judoshiai/db-validate.c
-msgid "defined"
-msgstr "defineret"
+msgid "Duplicate club seedings:"
+msgstr "Duplerede klub seedninger:"
 
 #: ../judoshiai/db-validate.c
-msgid "times"
-msgstr "gange"
+#, c-format
+msgid "Club %s: seeding %s defined %s times."
+msgstr ""
 
 #: ../judoshiai/db-validate.c
-msgid "Duplicate club seedings:\n"
-msgstr "Duplerede klub seedninger:\n"
+msgid "Missing category definitions:"
+msgstr "Manglende kategoridefinitioner:"
 
 #: ../judoshiai/db-validate.c
-msgid "Missing category definitions:\n"
-msgstr "Manglende kategoridefinitioner:\n"
+#, c-format
+msgid "Category %s is not defined."
+msgstr ""
 
 #: ../judoshiai/db-validate.c
-msgid "is not"
-msgstr "er ikke"
+msgid "Category typing errors:"
+msgstr "Skrivefejl i Kategori:"
 
 #: ../judoshiai/db-validate.c
-msgid "Category typing errors\n"
-msgstr "Skrivefejl i Kategori\n"
-
-#: ../judoshiai/db-validate.c
-msgid "Typing errors:\n"
-msgstr "Indtastningsfejl:\n"
+msgid "Typing errors:"
+msgstr "Indtastningsfejl:"
 
 #: ../judoshiai/db-validate.c
 msgid "UTF-8 errors"
@@ -878,28 +849,31 @@ msgid "Extra spaces"
 msgstr "Ekstra mellemrum"
 
 #: ../judoshiai/db-validate.c
-msgid "Possible duplicate competitors:\n"
-msgstr "Mulige dupletter for deltagere:\n"
+msgid "Possible duplicate competitors:"
+msgstr "Mulige dupletter for deltagere:"
 
 #: ../judoshiai/db-validate.c
-msgid "Possible duplicate club names:\n"
-msgstr "Mulige dupletter for klubnavne:\n"
+msgid "Possible duplicate club names:"
+msgstr "Mulige dupletter for klubnavne:"
 
 #: ../judoshiai/db-validate.c
-msgid "Suspicious weights:\n"
-msgstr "Mistænkelig vægte:\n"
+msgid "Suspicious weights:"
+msgstr "Mistænkelig vægte:"
 
 #: ../judoshiai/db-validate.c
-msgid "Corrupted competitor data:\n"
-msgstr "Beskadiget deltageredata:\n"
+msgid "Corrupted competitor data:"
+msgstr "Beskadiget deltageredata:"
 
 #: ../judoshiai/db-validate.c
-msgid "Corrupted category data:\n"
-msgstr "Beskadiget kategoridata:\n"
+msgid "Corrupted category data:"
+msgstr "Beskadiget kategoridata:"
 
 #: ../judoshiai/db-validate.c
-msgid "warnings"
-msgstr "advarsler"
+#, c-format
+msgid "One warning."
+msgid_plural "%d warnings."
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../judoshiai/db.c
 msgid "Cannot handle: Database created with newer JudoShiai version."
@@ -1417,21 +1391,21 @@ msgstr "Point"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: ../judoshiai/medal-matches.c
+#: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
 msgstr "Flyt Medaljekampe"
 
 #: ../judoshiai/medal-matches.c
-msgid "Move match "
+msgid "Move match"
 msgstr "Flyt kamp"
 
 #: ../judoshiai/medal-matches.c
-msgid "to tatami and/or"
-msgstr "til måtte og/eller"
+msgid "to tatami"
+msgstr "til måtte"
 
 #: ../judoshiai/medal-matches.c
-msgid " delay"
-msgstr " udsæt"
+msgid "delay"
+msgstr "udsæt"
 
 #: ../judoshiai/medal-matches.c ../common/common.c
 msgid "Final"
@@ -1525,9 +1499,9 @@ msgstr "Lodtrækning"
 msgid "Results"
 msgstr "Resultat"
 
-#: ../judoshiai/menus.c
-msgid "Judotimer"
-msgstr "Judotimer"
+#: ../judoshiai/menus.c ../judoproxy/main.c
+msgid "JudoTimer"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "New Tournament"
@@ -1626,12 +1600,11 @@ msgid "Print Matches (CSV)"
 msgstr "Udskriv Kampe (CSV)"
 
 #: ../judoshiai/menus.c
-msgid "Place To"
-msgstr "Flyt Til"
-
-#: ../judoshiai/menus.c
-msgid "Tatamis"
-msgstr "Måtter"
+#, c-format
+msgid "Place to one Tatami"
+msgid_plural "Place to %d Tatamis"
+msgstr[0] ""
+msgstr[1] "Flyt Til %d Måtter"
 
 #: ../judoshiai/menus.c
 msgid "Draw All Categories"
@@ -1774,12 +1747,8 @@ msgid "Print Logo"
 msgstr "Udskriv Logo"
 
 #: ../judoshiai/menus.c ../judoweight/menus.c
-msgid "Scale Serial Interface..."
-msgstr "Vægt Serielt Interface..."
-
-#: ../judoshiai/menus.c
-msgid "Medal Matches..."
-msgstr "Medaljekampe..."
+msgid "Scale Serial Interface"
+msgstr "Vægt Serielt Interface"
 
 #: ../judoshiai/popup-menu.c
 msgid "Matches matched. Clear the results first."
@@ -1810,8 +1779,8 @@ msgid "already exists"
 msgstr "eksisterer allerede"
 
 #: ../judoshiai/popup-menu.c
-msgid "Move Competitors to Category..."
-msgstr "Flyt Deltagere til Kategori..."
+msgid "Move Competitors to Category"
+msgstr "Flyt Deltagere til Kategori"
 
 #: ../judoshiai/popup-menu.c
 msgid "Move Competitors Here"
@@ -1864,14 +1833,6 @@ msgstr "Udskriv Valgte Akkrediteringskort"
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
 msgstr "Udskriv Valgte Akkrediteringskort Til Standardprinter"
-
-#: ../judoshiai/popup-menu.c
-msgid "Move Matches..."
-msgstr "Flyt Kampe..."
-
-#: ../judoshiai/popup-menu.c
-msgid "Random Weigh-In..."
-msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Finnish"
@@ -2559,8 +2520,8 @@ msgid "ERROR"
 msgstr "FEJL"
 
 #: ../judoweight/menus.c
-msgid "Scale Correction Table..."
-msgstr "Vægtkorrigeringstabel..."
+msgid "Scale Correction Table"
+msgstr "Vægtkorrigeringstabel"
 
 #: ../judoweight/menus.c
 msgid "No manual edit"
@@ -2595,16 +2556,126 @@ msgid "Camera"
 msgstr ""
 
 #: ../judoproxy/main.c
-msgid "JudoTimer"
-msgstr ""
-
-#: ../judoproxy/main.c
 msgid "Reload"
 msgstr ""
 
 #: ../judoproxy/menus.c
 msgid "About JudoProxy"
 msgstr ""
+
+#~ msgid "Hansokumake to white"
+#~ msgstr "Hansokumake til hvid"
+
+#~ msgid "Hansokumake to blue"
+#~ msgstr "Hansokumake til blå"
+
+#~ msgid "About Judotimer"
+#~ msgstr "Om Judotimer"
+
+#~ msgid "Match duration: 2 min E-juniors"
+#~ msgstr "Kampvarighed: 2 min E-juniors"
+
+#~ msgid "Contest duration: automatic"
+#~ msgstr "Kampvarighed: automatisk"
+
+#~ msgid "Contest duration: 2 min (short pin times)"
+#~ msgstr "Kampvarighed: 2 min (short pin times)"
+
+#~ msgid "Contest duration: 2 min"
+#~ msgstr "Kampvarighed: 2 min"
+
+#~ msgid "Contest duration: 3 min"
+#~ msgstr "Kampvarighed: 3 min"
+
+#~ msgid "Contest duration: 4 min"
+#~ msgstr "Kampvarighed: 4 min"
+
+#~ msgid "Contest duration: 5 min"
+#~ msgstr "Kampvarighed: 5 min"
+
+#~ msgid "Custom layout file..."
+#~ msgstr "Fil til tilpasset visning..."
+
+#~ msgid "- - -"
+#~ msgstr "- - -"
+
+#~ msgid "Duplicate seedings:\n"
+#~ msgstr "Duplerede seedninger:\n"
+
+#~ msgid "seeding"
+#~ msgstr "seedning"
+
+#~ msgid "defined"
+#~ msgstr "defineret"
+
+#~ msgid "times"
+#~ msgstr "gange"
+
+#~ msgid "Duplicate club seedings:\n"
+#~ msgstr "Duplerede klub seedninger:\n"
+
+#~ msgid "Missing category definitions:\n"
+#~ msgstr "Manglende kategoridefinitioner:\n"
+
+#~ msgid "is not"
+#~ msgstr "er ikke"
+
+#~ msgid "Category typing errors\n"
+#~ msgstr "Skrivefejl i Kategori\n"
+
+#~ msgid "Typing errors:\n"
+#~ msgstr "Indtastningsfejl:\n"
+
+#~ msgid "Possible duplicate competitors:\n"
+#~ msgstr "Mulige dupletter for deltagere:\n"
+
+#~ msgid "Possible duplicate club names:\n"
+#~ msgstr "Mulige dupletter for klubnavne:\n"
+
+#~ msgid "Suspicious weights:\n"
+#~ msgstr "Mistænkelig vægte:\n"
+
+#~ msgid "Corrupted competitor data:\n"
+#~ msgstr "Beskadiget deltageredata:\n"
+
+#~ msgid "Corrupted category data:\n"
+#~ msgstr "Beskadiget kategoridata:\n"
+
+#~ msgid "warnings"
+#~ msgstr "advarsler"
+
+#~ msgid "Move match "
+#~ msgstr "Flyt kamp"
+
+#~ msgid "to tatami and/or"
+#~ msgstr "til måtte og/eller"
+
+#~ msgid " delay"
+#~ msgstr " udsæt"
+
+#~ msgid "Judotimer"
+#~ msgstr "Judotimer"
+
+#~ msgid "Place To"
+#~ msgstr "Flyt Til"
+
+#~ msgid "Tatamis"
+#~ msgstr "Måtter"
+
+#~ msgid "Scale Serial Interface..."
+#~ msgstr "Vægt Serielt Interface..."
+
+#~ msgid "Medal Matches..."
+#~ msgstr "Medaljekampe..."
+
+#~ msgid "Move Competitors to Category..."
+#~ msgstr "Flyt Deltagere til Kategori..."
+
+#~ msgid "Move Matches..."
+#~ msgstr "Flyt Kampe..."
+
+#~ msgid "Scale Correction Table..."
+#~ msgstr "Vægtkorrigeringstabel..."
 
 #~ msgid "Contest area 1"
 #~ msgstr "Måtte 1"

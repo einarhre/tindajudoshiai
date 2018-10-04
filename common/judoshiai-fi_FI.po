@@ -32,12 +32,12 @@ msgstr "Valkoinen voitti äänestyksen"
 msgid "Blue won the voting"
 msgstr "Sininen voitti äänestyksen"
 
-#: ../judotimer/main.c
-msgid "Hansokumake to white"
+#: ../judotimer/main.c ../judotimer/menus.c
+msgid "Hansoku-make to white"
 msgstr "Hansoku-make valkoiselle"
 
-#: ../judotimer/main.c
-msgid "Hansokumake to blue"
+#: ../judotimer/main.c ../judotimer/menus.c
+msgid "Hansoku-make to blue"
 msgstr "Hansoku-make siniselle"
 
 #: ../judotimer/main.c ../judotimer/menus.c ../judotimer/stopwatch.c
@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Valitse kirjasin"
 
 #: ../judotimer/menus.c
-msgid "About Judotimer"
-msgstr "Tietoja Judotimerista"
+msgid "About JudoTimer"
+msgstr "Tietoja JudoTimerista"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -101,7 +101,7 @@ msgid "Match duration: automatic"
 msgstr "Otteluaika: automaattinen"
 
 #: ../judotimer/menus.c
-msgid "Match duration: 2 min E-juniors"
+msgid "Match duration: 2 min (short pin times)"
 msgstr "Otteluaika: 2 min E-junnut"
 
 #: ../judotimer/menus.c
@@ -129,14 +129,6 @@ msgid "Hantei: white wins"
 msgstr "Hantei: valkoinen voittaa"
 
 #: ../judotimer/menus.c
-msgid "Hansoku-make to blue"
-msgstr "Hansoku-make siniselle"
-
-#: ../judotimer/menus.c
-msgid "Hansoku-make to white"
-msgstr "Hansoku-make valkoiselle"
-
-#: ../judotimer/menus.c
 msgid "Clear selection"
 msgstr "Poista valinta"
 
@@ -156,30 +148,6 @@ msgstr "Lopeta"
 #: ../judotimer/menus.c ../judoshiai/menuacts.c
 msgid "Contest"
 msgstr "Ottelu"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: automatic"
-msgstr "Otteluaika: automaattinen"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 2 min (short pin times)"
-msgstr "Otteluaika: 2 min E-junnut"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 2 min"
-msgstr "Otteluaika: 2 min"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 3 min"
-msgstr "Otteluaika: 3 min"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 4 min"
-msgstr "Otteluaika: 4 min"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 5 min"
-msgstr "Otteluaika: 5 min"
 
 #: ../judotimer/menus.c
 msgid "Switch sides"
@@ -262,8 +230,8 @@ msgid "Display customized layout"
 msgstr "Näytön asettelu tiedostosta"
 
 #: ../judotimer/menus.c
-msgid "Custom layout file..."
-msgstr "Asettelutiedosto..."
+msgid "Custom Layout File"
+msgstr "Asettelutiedosto"
 
 #: ../judotimer/menus.c
 msgid "Name format"
@@ -311,7 +279,7 @@ msgid "Country"
 msgstr "Maa"
 
 #: ../judotimer/menus.c ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-#: ../judoshiai/db-validate.c ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c
 msgid "Club"
 msgstr "Seura"
 
@@ -476,7 +444,7 @@ msgid "Cancel"
 msgstr "Peru"
 
 #: ../judotimer/stopwatch.c
-msgid "- - -"
+msgid "GOLDEN SCORE"
 msgstr ""
 
 #: ../judotimer/stopwatch.c
@@ -498,6 +466,10 @@ msgstr "Pisteet menossa valkoiselle"
 #: ../judotimer/tvlogo.c
 msgid "VLC control"
 msgstr "VLC-ohjaus"
+
+#: ../judotimer/tvlogo.c
+msgid "VLC port:"
+msgstr ""
 
 #: ../judotimer/tvlogo.c
 msgid "X:"
@@ -834,40 +806,39 @@ msgid "Database Validation"
 msgstr "Tietokannan tarkistus"
 
 #: ../judoshiai/db-validate.c
-msgid "Duplicate seedings:\n"
-msgstr "Samoja sijoituksia sarjassa:\n"
+msgid "Duplicate seedings:"
+msgstr "Samoja sijoituksia sarjassa:"
 
 #: ../judoshiai/db-validate.c
-msgid "seeding"
-msgstr "sijoitus"
+#, c-format
+msgid "Category %s: seeding %s defined %s times."
+msgstr ""
 
 #: ../judoshiai/db-validate.c
-msgid "defined"
-msgstr "määritelty"
+msgid "Duplicate club seedings:"
+msgstr "Samoja sijoituksia seurassa:"
 
 #: ../judoshiai/db-validate.c
-msgid "times"
-msgstr "kertaa"
+#, c-format
+msgid "Club %s: seeding %s defined %s times."
+msgstr ""
 
 #: ../judoshiai/db-validate.c
-msgid "Duplicate club seedings:\n"
-msgstr "Samoja sijoituksia seurassa:\n"
+msgid "Missing category definitions:"
+msgstr "Puuttuvia sarjamäärittelyjä:"
 
 #: ../judoshiai/db-validate.c
-msgid "Missing category definitions:\n"
-msgstr "Puuttuvia sarjamäärittelyjä:\n"
+#, c-format
+msgid "Category %s is not defined."
+msgstr ""
 
 #: ../judoshiai/db-validate.c
-msgid "is not"
-msgstr "ei ole"
+msgid "Category typing errors:"
+msgstr "Kategoriassa kirjoitusvirheitä:"
 
 #: ../judoshiai/db-validate.c
-msgid "Category typing errors\n"
-msgstr "Kategoriassa kirjoitusvirheitä\n"
-
-#: ../judoshiai/db-validate.c
-msgid "Typing errors:\n"
-msgstr "Kirjoitusvirheitä:\n"
+msgid "Typing errors:"
+msgstr "Kirjoitusvirheitä:"
 
 #: ../judoshiai/db-validate.c
 msgid "UTF-8 errors"
@@ -878,28 +849,31 @@ msgid "Extra spaces"
 msgstr "Ylimääräisiä välilyöntejä"
 
 #: ../judoshiai/db-validate.c
-msgid "Possible duplicate competitors:\n"
-msgstr "Mahdollisesti samoja kilpailijoita:\n"
+msgid "Possible duplicate competitors:"
+msgstr "Mahdollisesti samoja kilpailijoita:"
 
 #: ../judoshiai/db-validate.c
-msgid "Possible duplicate club names:\n"
-msgstr "Mahdollisesti samoja seurojen nimiä:\n"
+msgid "Possible duplicate club names:"
+msgstr "Mahdollisesti samoja seurojen nimiä:"
 
 #: ../judoshiai/db-validate.c
-msgid "Suspicious weights:\n"
-msgstr "Epäilyttäviä painoja:\n"
+msgid "Suspicious weights:"
+msgstr "Epäilyttäviä painoja:"
 
 #: ../judoshiai/db-validate.c
-msgid "Corrupted competitor data:\n"
-msgstr "Virhe kilpailijadatassa:\n"
+msgid "Corrupted competitor data:"
+msgstr "Virhe kilpailijadatassa:"
 
 #: ../judoshiai/db-validate.c
-msgid "Corrupted category data:\n"
-msgstr "Virhe sarjadatassa:\n"
+msgid "Corrupted category data:"
+msgstr "Virhe sarjadatassa:"
 
 #: ../judoshiai/db-validate.c
-msgid "warnings"
-msgstr "varoitusta"
+#, c-format
+msgid "One warning."
+msgid_plural "%d warnings."
+msgstr[0] ""
+msgstr[1] "%d varoitusta"
 
 #: ../judoshiai/db.c
 msgid "Cannot handle: Database created with newer JudoShiai version."
@@ -1419,20 +1393,20 @@ msgstr "Pisteet"
 msgid "Comment"
 msgstr "Kommentti"
 
-#: ../judoshiai/medal-matches.c
+#: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
 msgstr "Siirrä mitaliottelut"
 
 #: ../judoshiai/medal-matches.c
-msgid "Move match "
+msgid "Move match"
 msgstr "Siirrä ottelu"
 
 #: ../judoshiai/medal-matches.c
-msgid "to tatami and/or"
-msgstr "matolle ja/tai"
+msgid "to tatami"
+msgstr "matolle"
 
 #: ../judoshiai/medal-matches.c
-msgid " delay"
+msgid "delay"
 msgstr "viivytä"
 
 #: ../judoshiai/medal-matches.c ../common/common.c
@@ -1529,9 +1503,9 @@ msgstr "Arvonta"
 msgid "Results"
 msgstr "Tulokset"
 
-#: ../judoshiai/menus.c
-msgid "Judotimer"
-msgstr "Judotimer"
+#: ../judoshiai/menus.c ../judoproxy/main.c
+msgid "JudoTimer"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "New Tournament"
@@ -1630,12 +1604,11 @@ msgid "Print Matches (CSV)"
 msgstr "Tulosta ottelut (CSV)"
 
 #: ../judoshiai/menus.c
-msgid "Place To"
-msgstr "Sijoita"
-
-#: ../judoshiai/menus.c
-msgid "Tatamis"
-msgstr "Tatamille"
+#, c-format
+msgid "Place to one Tatami"
+msgid_plural "Place to %d Tatamis"
+msgstr[0] ""
+msgstr[1] "Sijoita %d Tatamille"
 
 #: ../judoshiai/menus.c
 msgid "Draw All Categories"
@@ -1778,12 +1751,8 @@ msgid "Print Logo"
 msgstr "Tulosta logo"
 
 #: ../judoshiai/menus.c ../judoweight/menus.c
-msgid "Scale Serial Interface..."
-msgstr "Vaa'an liitäntä..."
-
-#: ../judoshiai/menus.c
-msgid "Medal Matches..."
-msgstr "Mitaliottelut..."
+msgid "Scale Serial Interface"
+msgstr "Vaa'an liitäntä"
 
 #: ../judoshiai/popup-menu.c
 msgid "Matches matched. Clear the results first."
@@ -1814,8 +1783,8 @@ msgid "already exists"
 msgstr "on jo olemassa"
 
 #: ../judoshiai/popup-menu.c
-msgid "Move Competitors to Category..."
-msgstr "Siirra kilpailijat sarjaan..."
+msgid "Move Competitors to Category"
+msgstr "Siirra kilpailijat sarjaan"
 
 #: ../judoshiai/popup-menu.c
 msgid "Move Competitors Here"
@@ -1868,14 +1837,6 @@ msgstr "Tulosta valitut akkreditointikortit"
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
 msgstr "Tulosta valitut akreditointikortit oletuskirjoittimelle"
-
-#: ../judoshiai/popup-menu.c
-msgid "Move Matches..."
-msgstr "Siirrä otteluita..."
-
-#: ../judoshiai/popup-menu.c
-msgid "Random Weigh-In..."
-msgstr "Kontrollipunnitus..."
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Finnish"
@@ -2563,7 +2524,7 @@ msgid "ERROR"
 msgstr "VIRHE"
 
 #: ../judoweight/menus.c
-msgid "Scale Correction Table..."
+msgid "Scale Correction Table"
 msgstr "Puntarin korjaustaulukko"
 
 #: ../judoweight/menus.c
@@ -2599,16 +2560,126 @@ msgid "Camera"
 msgstr ""
 
 #: ../judoproxy/main.c
-msgid "JudoTimer"
-msgstr ""
-
-#: ../judoproxy/main.c
 msgid "Reload"
 msgstr ""
 
 #: ../judoproxy/menus.c
 msgid "About JudoProxy"
 msgstr ""
+
+#~ msgid "Hansokumake to white"
+#~ msgstr "Hansoku-make valkoiselle"
+
+#~ msgid "Hansokumake to blue"
+#~ msgstr "Hansoku-make siniselle"
+
+#~ msgid "About Judotimer"
+#~ msgstr "Tietoja Judotimerista"
+
+#~ msgid "Match duration: 2 min E-juniors"
+#~ msgstr "Otteluaika: 2 min E-junnut"
+
+#~ msgid "Contest duration: automatic"
+#~ msgstr "Otteluaika: automaattinen"
+
+#~ msgid "Contest duration: 2 min (short pin times)"
+#~ msgstr "Otteluaika: 2 min E-junnut"
+
+#~ msgid "Contest duration: 2 min"
+#~ msgstr "Otteluaika: 2 min"
+
+#~ msgid "Contest duration: 3 min"
+#~ msgstr "Otteluaika: 3 min"
+
+#~ msgid "Contest duration: 4 min"
+#~ msgstr "Otteluaika: 4 min"
+
+#~ msgid "Contest duration: 5 min"
+#~ msgstr "Otteluaika: 5 min"
+
+#~ msgid "Custom layout file..."
+#~ msgstr "Asettelutiedosto..."
+
+#~ msgid "Duplicate seedings:\n"
+#~ msgstr "Samoja sijoituksia sarjassa:\n"
+
+#~ msgid "seeding"
+#~ msgstr "sijoitus"
+
+#~ msgid "defined"
+#~ msgstr "määritelty"
+
+#~ msgid "times"
+#~ msgstr "kertaa"
+
+#~ msgid "Duplicate club seedings:\n"
+#~ msgstr "Samoja sijoituksia seurassa:\n"
+
+#~ msgid "Missing category definitions:\n"
+#~ msgstr "Puuttuvia sarjamäärittelyjä:\n"
+
+#~ msgid "is not"
+#~ msgstr "ei ole"
+
+#~ msgid "Category typing errors\n"
+#~ msgstr "Kategoriassa kirjoitusvirheitä\n"
+
+#~ msgid "Typing errors:\n"
+#~ msgstr "Kirjoitusvirheitä:\n"
+
+#~ msgid "Possible duplicate competitors:\n"
+#~ msgstr "Mahdollisesti samoja kilpailijoita:\n"
+
+#~ msgid "Possible duplicate club names:\n"
+#~ msgstr "Mahdollisesti samoja seurojen nimiä:\n"
+
+#~ msgid "Suspicious weights:\n"
+#~ msgstr "Epäilyttäviä painoja:\n"
+
+#~ msgid "Corrupted competitor data:\n"
+#~ msgstr "Virhe kilpailijadatassa:\n"
+
+#~ msgid "Corrupted category data:\n"
+#~ msgstr "Virhe sarjadatassa:\n"
+
+#~ msgid "warnings"
+#~ msgstr "varoitusta"
+
+#~ msgid "Move match "
+#~ msgstr "Siirrä ottelu"
+
+#~ msgid "to tatami and/or"
+#~ msgstr "matolle ja/tai"
+
+#~ msgid " delay"
+#~ msgstr "viivytä"
+
+#~ msgid "Judotimer"
+#~ msgstr "Judotimer"
+
+#~ msgid "Place To"
+#~ msgstr "Sijoita"
+
+#~ msgid "Tatamis"
+#~ msgstr "Tatamille"
+
+#~ msgid "Scale Serial Interface..."
+#~ msgstr "Vaa'an liitäntä..."
+
+#~ msgid "Medal Matches..."
+#~ msgstr "Mitaliottelut..."
+
+#~ msgid "Move Competitors to Category..."
+#~ msgstr "Siirra kilpailijat sarjaan..."
+
+#~ msgid "Move Matches..."
+#~ msgstr "Siirrä otteluita..."
+
+#~ msgid "Random Weigh-In..."
+#~ msgstr "Kontrollipunnitus..."
+
+#~ msgid "Scale Correction Table..."
+#~ msgstr "Puntarin korjaustaulukko"
 
 #~ msgid "Contest duration automatically from JudoShiai program"
 #~ msgstr "Otteluaika automaattisesti JudoShiai-ohjelmalta"

@@ -32,13 +32,13 @@ msgstr "Biely vyhráva na hlasovanie HANTEI"
 msgid "Blue won the voting"
 msgstr "Modrý vyhráva na hlasovanie HANTEI"
 
-#: ../judotimer/main.c
-msgid "Hansokumake to white"
-msgstr "Hansoku-make pre Bieleho"
+#: ../judotimer/main.c ../judotimer/menus.c
+msgid "Hansoku-make to white"
+msgstr "Hansoku-make pre bieleho"
 
-#: ../judotimer/main.c
-msgid "Hansokumake to blue"
-msgstr "Hansoku-make pre Modrého"
+#: ../judotimer/main.c ../judotimer/menus.c
+msgid "Hansoku-make to blue"
+msgstr "Hansoku-make pre modrého"
 
 #: ../judotimer/main.c ../judotimer/menus.c ../judotimer/stopwatch.c
 msgid "Hikiwake"
@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Vybrať font"
 
 #: ../judotimer/menus.c
-msgid "About Judotimer"
-msgstr "O aplikácií Judotimer"
+msgid "About JudoTimer"
+msgstr "O aplikácií JudoTimer"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -101,7 +101,7 @@ msgid "Match duration: automatic"
 msgstr "Trvanie zápasu: automaticky"
 
 #: ../judotimer/menus.c
-msgid "Match duration: 2 min E-juniors"
+msgid "Match duration: 2 min (short pin times)"
 msgstr "Trvanie zápasu: 2 min (mini)"
 
 #: ../judotimer/menus.c
@@ -129,14 +129,6 @@ msgid "Hantei: white wins"
 msgstr "Hantei: Biely vyhráva"
 
 #: ../judotimer/menus.c
-msgid "Hansoku-make to blue"
-msgstr "Hansoku-make pre modrého"
-
-#: ../judotimer/menus.c
-msgid "Hansoku-make to white"
-msgstr "Hansoku-make pre bieleho"
-
-#: ../judotimer/menus.c
 msgid "Clear selection"
 msgstr "Zrušiť výber"
 
@@ -156,30 +148,6 @@ msgstr "Ukončiť"
 #: ../judotimer/menus.c ../judoshiai/menuacts.c
 msgid "Contest"
 msgstr "Súťaž"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: automatic"
-msgstr "Trvanie zápasu: automaticky"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 2 min (short pin times)"
-msgstr "Trvanie zápasu: 2 min (mini)"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 2 min"
-msgstr "Trvanie zápasu: 2 min"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 3 min"
-msgstr "Trvanie zápasu: 3 min"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 4 min"
-msgstr "Trvanie zápasu: 4 min"
-
-#: ../judotimer/menus.c
-msgid "Contest duration: 5 min"
-msgstr "Trvanie zápasu: 5 min"
 
 #: ../judotimer/menus.c
 msgid "Switch sides"
@@ -262,7 +230,7 @@ msgid "Display customized layout"
 msgstr "Vlastný formát Obrazovky"
 
 #: ../judotimer/menus.c
-msgid "Custom layout file..."
+msgid "Custom Layout File"
 msgstr "Vlastný súbor formátu"
 
 #: ../judotimer/menus.c
@@ -311,7 +279,7 @@ msgid "Country"
 msgstr "Krajina"
 
 #: ../judotimer/menus.c ../judoshiai/another-shiai.c ../judoshiai/competitors.c
-#: ../judoshiai/db-validate.c ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c
 msgid "Club"
 msgstr "Klub"
 
@@ -476,8 +444,8 @@ msgid "Cancel"
 msgstr "Zrušiť"
 
 #: ../judotimer/stopwatch.c
-msgid "- - -"
-msgstr "- - -"
+msgid "GOLDEN SCORE"
+msgstr ""
 
 #: ../judotimer/stopwatch.c
 msgid "CONTROL"
@@ -498,6 +466,10 @@ msgstr "Body pre bieleho"
 #: ../judotimer/tvlogo.c
 msgid "VLC control"
 msgstr "VLC ovládanie"
+
+#: ../judotimer/tvlogo.c
+msgid "VLC port:"
+msgstr ""
 
 #: ../judotimer/tvlogo.c
 msgid "X:"
@@ -834,40 +806,39 @@ msgid "Database Validation"
 msgstr "Databáza Kontrola Platnosti"
 
 #: ../judoshiai/db-validate.c
-msgid "Duplicate seedings:\n"
-msgstr "Duplicitné Nasadenie:\n"
+msgid "Duplicate seedings:"
+msgstr "Duplicitné Nasadenie:"
 
 #: ../judoshiai/db-validate.c
-msgid "seeding"
-msgstr "nasadenie"
-
-#: ../judoshiai/db-validate.c
-msgid "defined"
-msgstr "zadefinované"
-
-#: ../judoshiai/db-validate.c
-msgid "times"
-msgstr "krát"
-
-#: ../judoshiai/db-validate.c
-msgid "Duplicate club seedings:\n"
-msgstr "Zduplikované nasadenie klubov:\n"
-
-#: ../judoshiai/db-validate.c
-msgid "Missing category definitions:\n"
-msgstr "Chýbajúca definícia kategórie:\n"
-
-#: ../judoshiai/db-validate.c
-msgid "is not"
-msgstr "nie je"
-
-#: ../judoshiai/db-validate.c
-msgid "Category typing errors\n"
+#, c-format
+msgid "Category %s: seeding %s defined %s times."
 msgstr ""
 
 #: ../judoshiai/db-validate.c
-msgid "Typing errors:\n"
-msgstr "Pravopisné chyby:\n"
+msgid "Duplicate club seedings:"
+msgstr "Zduplikované nasadenie klubov:"
+
+#: ../judoshiai/db-validate.c
+#, c-format
+msgid "Club %s: seeding %s defined %s times."
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Missing category definitions:"
+msgstr "Chýbajúca definícia kategórie:"
+
+#: ../judoshiai/db-validate.c
+#, c-format
+msgid "Category %s is not defined."
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Category typing errors:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Typing errors:"
+msgstr "Pravopisné chyby:"
 
 #: ../judoshiai/db-validate.c
 msgid "UTF-8 errors"
@@ -878,28 +849,31 @@ msgid "Extra spaces"
 msgstr "Dodatočný odstup"
 
 #: ../judoshiai/db-validate.c
-msgid "Possible duplicate competitors:\n"
-msgstr "Možná duplicita pretekárov:\n"
+msgid "Possible duplicate competitors:"
+msgstr "Možná duplicita pretekárov:"
 
 #: ../judoshiai/db-validate.c
-msgid "Possible duplicate club names:\n"
-msgstr "Možná duplicita Názvu Klubov:\n"
+msgid "Possible duplicate club names:"
+msgstr "Možná duplicita Názvu Klubov:"
 
 #: ../judoshiai/db-validate.c
-msgid "Suspicious weights:\n"
-msgstr "Podozrivé Váhy:\n"
+msgid "Suspicious weights:"
+msgstr "Podozrivé Váhy:"
 
 #: ../judoshiai/db-validate.c
-msgid "Corrupted competitor data:\n"
-msgstr "Poškodené údaje pretekára:\n"
+msgid "Corrupted competitor data:"
+msgstr "Poškodené údaje pretekára:"
 
 #: ../judoshiai/db-validate.c
-msgid "Corrupted category data:\n"
-msgstr "Poškodené údaje kategórie:\n"
+msgid "Corrupted category data:"
+msgstr "Poškodené údaje kategórie:"
 
 #: ../judoshiai/db-validate.c
-msgid "warnings"
-msgstr "upozornenia"
+#, c-format
+msgid "One warning."
+msgid_plural "%d warnings."
+msgstr[0] ""
+msgstr[1] "%d upozornenia"
 
 #: ../judoshiai/db.c
 msgid "Cannot handle: Database created with newer JudoShiai version."
@@ -1417,21 +1391,21 @@ msgstr "Body"
 msgid "Comment"
 msgstr "Komentár"
 
-#: ../judoshiai/medal-matches.c
+#: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
 msgstr "Presunúť Medailové Zápasy"
 
 #: ../judoshiai/medal-matches.c
-msgid "Move match "
+msgid "Move match"
 msgstr "Presunúť zápas"
 
 #: ../judoshiai/medal-matches.c
-msgid "to tatami and/or"
-msgstr "na Tatami a/alebo"
+msgid "to tatami"
+msgstr "na Tatami"
 
 #: ../judoshiai/medal-matches.c
-msgid " delay"
-msgstr " odklad"
+msgid "delay"
+msgstr "odklad"
 
 #: ../judoshiai/medal-matches.c ../common/common.c
 msgid "Final"
@@ -1525,9 +1499,9 @@ msgstr "Losovanie"
 msgid "Results"
 msgstr "Výsledky"
 
-#: ../judoshiai/menus.c
-msgid "Judotimer"
-msgstr "Judotimer"
+#: ../judoshiai/menus.c ../judoproxy/main.c
+msgid "JudoTimer"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "New Tournament"
@@ -1626,12 +1600,11 @@ msgid "Print Matches (CSV)"
 msgstr "Tlač zápasov (CSV)"
 
 #: ../judoshiai/menus.c
-msgid "Place To"
-msgstr "Umiestniť pre"
-
-#: ../judoshiai/menus.c
-msgid "Tatamis"
-msgstr "Tatami"
+#, c-format
+msgid "Place to one Tatami"
+msgid_plural "Place to %d Tatamis"
+msgstr[0] ""
+msgstr[1] "Umiestniť pre %d Tatami"
 
 #: ../judoshiai/menus.c
 msgid "Draw All Categories"
@@ -1774,12 +1747,8 @@ msgid "Print Logo"
 msgstr "Tlačiť Logo"
 
 #: ../judoshiai/menus.c ../judoweight/menus.c
-msgid "Scale Serial Interface..."
-msgstr "Sériový port Váhy..."
-
-#: ../judoshiai/menus.c
-msgid "Medal Matches..."
-msgstr "Medailové Zápasy..."
+msgid "Scale Serial Interface"
+msgstr "Sériový port Váhy"
 
 #: ../judoshiai/popup-menu.c
 msgid "Matches matched. Clear the results first."
@@ -1810,8 +1779,8 @@ msgid "already exists"
 msgstr "už existuje"
 
 #: ../judoshiai/popup-menu.c
-msgid "Move Competitors to Category..."
-msgstr "Presuň pretekárov do kategórie..."
+msgid "Move Competitors to Category"
+msgstr "Presuň pretekárov do kategórie"
 
 #: ../judoshiai/popup-menu.c
 msgid "Move Competitors Here"
@@ -1864,14 +1833,6 @@ msgstr "Vytlačiť Vybrané Akreditačné Karty"
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
 msgstr "Vytlačiť vybrané akreditačné karty na predvolenej tlačiarni"
-
-#: ../judoshiai/popup-menu.c
-msgid "Move Matches..."
-msgstr "Presun zápasov..."
-
-#: ../judoshiai/popup-menu.c
-msgid "Random Weigh-In..."
-msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Finnish"
@@ -2559,7 +2520,7 @@ msgid "ERROR"
 msgstr ""
 
 #: ../judoweight/menus.c
-msgid "Scale Correction Table..."
+msgid "Scale Correction Table"
 msgstr ""
 
 #: ../judoweight/menus.c
@@ -2595,16 +2556,120 @@ msgid "Camera"
 msgstr ""
 
 #: ../judoproxy/main.c
-msgid "JudoTimer"
-msgstr ""
-
-#: ../judoproxy/main.c
 msgid "Reload"
 msgstr ""
 
 #: ../judoproxy/menus.c
 msgid "About JudoProxy"
 msgstr ""
+
+#~ msgid "Hansokumake to white"
+#~ msgstr "Hansoku-make pre Bieleho"
+
+#~ msgid "Hansokumake to blue"
+#~ msgstr "Hansoku-make pre Modrého"
+
+#~ msgid "About Judotimer"
+#~ msgstr "O aplikácií Judotimer"
+
+#~ msgid "Match duration: 2 min E-juniors"
+#~ msgstr "Trvanie zápasu: 2 min (mini)"
+
+#~ msgid "Contest duration: automatic"
+#~ msgstr "Trvanie zápasu: automaticky"
+
+#~ msgid "Contest duration: 2 min (short pin times)"
+#~ msgstr "Trvanie zápasu: 2 min (mini)"
+
+#~ msgid "Contest duration: 2 min"
+#~ msgstr "Trvanie zápasu: 2 min"
+
+#~ msgid "Contest duration: 3 min"
+#~ msgstr "Trvanie zápasu: 3 min"
+
+#~ msgid "Contest duration: 4 min"
+#~ msgstr "Trvanie zápasu: 4 min"
+
+#~ msgid "Contest duration: 5 min"
+#~ msgstr "Trvanie zápasu: 5 min"
+
+#~ msgid "Custom layout file..."
+#~ msgstr "Vlastný súbor formátu"
+
+#~ msgid "- - -"
+#~ msgstr "- - -"
+
+#~ msgid "Duplicate seedings:\n"
+#~ msgstr "Duplicitné Nasadenie:\n"
+
+#~ msgid "seeding"
+#~ msgstr "nasadenie"
+
+#~ msgid "defined"
+#~ msgstr "zadefinované"
+
+#~ msgid "times"
+#~ msgstr "krát"
+
+#~ msgid "Duplicate club seedings:\n"
+#~ msgstr "Zduplikované nasadenie klubov:\n"
+
+#~ msgid "Missing category definitions:\n"
+#~ msgstr "Chýbajúca definícia kategórie:\n"
+
+#~ msgid "is not"
+#~ msgstr "nie je"
+
+#~ msgid "Typing errors:\n"
+#~ msgstr "Pravopisné chyby:\n"
+
+#~ msgid "Possible duplicate competitors:\n"
+#~ msgstr "Možná duplicita pretekárov:\n"
+
+#~ msgid "Possible duplicate club names:\n"
+#~ msgstr "Možná duplicita Názvu Klubov:\n"
+
+#~ msgid "Suspicious weights:\n"
+#~ msgstr "Podozrivé Váhy:\n"
+
+#~ msgid "Corrupted competitor data:\n"
+#~ msgstr "Poškodené údaje pretekára:\n"
+
+#~ msgid "Corrupted category data:\n"
+#~ msgstr "Poškodené údaje kategórie:\n"
+
+#~ msgid "warnings"
+#~ msgstr "upozornenia"
+
+#~ msgid "Move match "
+#~ msgstr "Presunúť zápas"
+
+#~ msgid "to tatami and/or"
+#~ msgstr "na Tatami a/alebo"
+
+#~ msgid " delay"
+#~ msgstr " odklad"
+
+#~ msgid "Judotimer"
+#~ msgstr "Judotimer"
+
+#~ msgid "Place To"
+#~ msgstr "Umiestniť pre"
+
+#~ msgid "Tatamis"
+#~ msgstr "Tatami"
+
+#~ msgid "Scale Serial Interface..."
+#~ msgstr "Sériový port Váhy..."
+
+#~ msgid "Medal Matches..."
+#~ msgstr "Medailové Zápasy..."
+
+#~ msgid "Move Competitors to Category..."
+#~ msgstr "Presuň pretekárov do kategórie..."
+
+#~ msgid "Move Matches..."
+#~ msgstr "Presun zápasov..."
 
 #~ msgid "Tatami not chosen"
 #~ msgstr "Tatami nie je vybraná"
