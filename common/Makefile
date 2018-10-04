@@ -34,15 +34,15 @@ locale: $(mos)
 #produces the po template file wich will be the starting point for any new 
 #translation and is used to update existing po files.
 judoshiai.pot: $(csources)
-	#The --add-location=file option ensures that the context of a msgid is 
-	#visible to translators, but the line numbers are omited thus reducing the 
-	#amount of changes seen on po files.
+#The --add-location=file option ensures that the context of a msgid is 
+#visible to translators, but the line numbers are omited thus reducing the 
+#amount of changes seen on po files.
 	$(XGETTEXT) --from-code=UTF-8 --output=judoshiai.pot --language=C --keyword=_ --keyword=N_ --add-location=file \
 	--package-name=judoshiai --package-version=$(SHIAI_VER_NUM) --copyright-holder='Hannu Jokinen' --msgid-bugs-address=oh2ncp@kolumbus.fi \
 	$(csources)
-	#POT-Creation-Date will allways be updatet by msgmerge, we do not want to 
-	#have changed po files on every build, thus we delete this line in the po 
-	#template.
+#POT-Creation-Date will allways be updatet by msgmerge, we do not want to 
+#have changed po files on every build, thus we delete this line in the po 
+#template.
 	$(RM_POT_CREATION_DATE)
 
 .PHONY: clean merge locale
