@@ -235,6 +235,7 @@ void msg_received(struct message *input_msg)
             STRCPY_UTF8(msg.u.update_label.text, input_msg->u.next_match.blue_1);
             STRCPY_UTF8(msg.u.update_label.text2, input_msg->u.next_match.white_1);
             STRCPY_UTF8(msg.u.update_label.text3, input_msg->u.next_match.cat_1);
+            STRCPY_UTF8(msg.u.update_label.expose, input_msg->u.next_match.layout);
 
             /*write_tv_logo(&(msg.u.update_label));*/
 

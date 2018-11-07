@@ -178,4 +178,4 @@
 #  displayfont           string, example: Arial Bold Italic 12
 #106 stopippon=false
 #106 displayfont=Arial Bold Italic 12
-106 rules2017=true
+#106 rules2017=true
