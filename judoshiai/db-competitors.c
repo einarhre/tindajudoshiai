@@ -250,6 +250,8 @@ gint db_add_judoka(int num, struct judoka *j)
 {
     char buffer[1000];
 
+    if (num < 10) return -1;
+
     snprintf(buffer, sizeof(buffer), 
             "INSERT INTO competitors VALUES ("
             "%d, \"%s\", \"%s\", \"%d\", "
