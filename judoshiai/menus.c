@@ -71,7 +71,7 @@ static GtkWidget *menubar,
     *tournament_quit, *tournament_backup, *tournament_validation, *tournament_custom,
     *competitor_new, *competitor_search, *competitor_select_from_tournament, *competitor_add_from_text_file,
     *competitor_add_all_from_shiai, *competitor_update_weights, *competitor_remove_unweighted,
-    *competitor_restore_removed, *competitor_bar_code_search, *competitor_print_weigh_notes, *competitor_print_with_template,
+    *competitor_restore_removed, *competitor_delete_removed, *competitor_bar_code_search, *competitor_print_weigh_notes, *competitor_print_with_template,
     *category_new, *category_team_new, *category_team_event_new, *category_remove_empty, *category_create_official, 
     *category_print_all, *category_print_all_pdf, *category_print_matches,
     *category_properties, *category_to_tatamis[NUM_TATAMIS],
@@ -183,6 +183,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     competitor_update_weights       = gtk_menu_item_new_with_label(_("Update Weights From Another Shiai"));
     competitor_remove_unweighted    = gtk_menu_item_new_with_label(_("Remove Unweighted"));
     competitor_restore_removed      = gtk_menu_item_new_with_label(_("Restore Removed"));
+    competitor_delete_removed       = gtk_menu_item_new_with_label(_("Delete Removed"));
     competitor_bar_code_search      = gtk_menu_item_new_with_label(_("Bar Code Search"));
     competitor_print_weigh_notes    = gtk_menu_item_new_with_label(_("Print Weight Notes"));
     competitor_print_with_template  = gtk_menu_item_new_with_label("");
@@ -197,6 +198,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), gtk_separator_menu_item_new());
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_remove_unweighted);
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_restore_removed);
+    gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_delete_removed);
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), gtk_separator_menu_item_new());
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_bar_code_search);
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), gtk_separator_menu_item_new());
@@ -211,6 +213,8 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(competitor_update_weights),      "activate", G_CALLBACK(get_weights_from_old_competition), 0);
     g_signal_connect(G_OBJECT(competitor_remove_unweighted),   "activate", G_CALLBACK(remove_unweighed_competitors), 0);
     g_signal_connect(G_OBJECT(competitor_restore_removed),     "activate", G_CALLBACK(db_restore_removed_competitors), 0);
+    g_signal_connect(G_OBJECT(competitor_delete_removed),      "activate", G_CALLBACK(db_delete_removed_competitors), 0);
+	
     g_signal_connect(G_OBJECT(competitor_bar_code_search),     "activate", G_CALLBACK(barcode_search), 0);
     g_signal_connect(G_OBJECT(competitor_print_weigh_notes),   "activate", G_CALLBACK(print_weight_notes), NULL);
 
@@ -713,6 +717,7 @@ void set_menu_active(void)
     SET_SENSITIVE(competitor_update_weights      ,DB_OK);
     SET_SENSITIVE(competitor_remove_unweighted   , DB_OK);
     SET_SENSITIVE(competitor_restore_removed     , DB_OK);
+    SET_SENSITIVE(competitor_delete_removed      , DB_OK);
     SET_SENSITIVE(competitor_bar_code_search     , DB_OK);
     SET_SENSITIVE(competitor_print_weigh_notes   , DB_OK);
     //SET_SENSITIVE(competitor_print_with_template , DB_OK);
@@ -774,6 +779,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(competitor_update_weights      , _("Update Weights From Another Shiai"));
     change_menu_label(competitor_remove_unweighted   , _("Remove Unweighted"));
     change_menu_label(competitor_restore_removed     , _("Restore Removed"));
+    change_menu_label(competitor_delete_removed      , _("Delete Removed"));
     change_menu_label(competitor_bar_code_search     , _("Bar Code Search"));
     change_menu_label(competitor_print_weigh_notes   , _("Print Accreditation Cards"));
     //change_menu_label(competitor_print_with_template , _("Print Competitors With Template"));

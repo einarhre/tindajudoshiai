@@ -329,7 +329,7 @@ void db_create_default_teams(gint index)
 
         gint k;
         for (k = 0; k < num_weights; k++) {
-            j.index = current_index++;
+            j.index = comp_index_get_free();//current_index++;
             j.first = weighttexts[k];
             j.last = j1->last;
             j.category = j1->last;

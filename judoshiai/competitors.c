@@ -258,7 +258,7 @@ static void judoka_edited_callback(GtkWidget *widget,
         edited.last = g_utf8_strup(lastname, -1);
         g_free((void *)lastname);
 
-        edited.index = current_index++;
+        edited.index = comp_index_get_free();//current_index++;
 
         if ((edited.regcategory == NULL || edited.regcategory[0] == 0) &&
             edited.weight > 10000) {

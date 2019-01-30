@@ -85,7 +85,7 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
         return FALSE;
 
     memset(&j, 0, sizeof(j));
-    j.index = current_index++;
+    j.index = comp_index_get_free();//current_index++;
     j.visible = TRUE;
     j.category = "?";
     j.club = "";

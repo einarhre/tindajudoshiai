@@ -438,7 +438,7 @@ void row_activated(GtkTreeView        *treeview,
             goto out;
         }
 
-        j->index = current_index++;
+        j->index = comp_index_get_free();//current_index++;
         g_free((void *)j->category);
         j->category = g_strdup("?");
         db_add_judoka(j->index, j);
@@ -495,7 +495,7 @@ void row_activated(GtkTreeView        *treeview,
         while (ok) {
             struct judoka *j2 = get_data_by_iter_model(&tmp_iter, model);
             mapped->ixmap[mapped->ix_num].foreign = j2->index;
-            j2->index = current_index++;
+            j2->index = comp_index_get_free();//current_index++;
             mapped->ixmap[mapped->ix_num].our = j2->index;
             if (mapped->ix_num < NUM_IX_MAPPED-1)
                 mapped->ix_num++;

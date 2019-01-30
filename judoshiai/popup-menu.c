@@ -120,7 +120,7 @@ static void view_popup_menu_copy_judoka(GtkWidget *menuitem, gpointer userdata)
         if (j->category)
             g_free((void *)j->category);
 
-        j->index = current_index++;
+        j->index = comp_index_get_free();//current_index++;
         j->category = g_strdup("?");
         db_add_judoka(j->index, j);
         display_one_judoka(j);

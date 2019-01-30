@@ -38,6 +38,54 @@ static gint weights_updated;
 static gint competitor_list_next, competitor_list_count;
 static gint competitor_list[TOTAL_NUM_COMPETITORS];
 
+#define INDEX_LIST_LENGTH (TOTAL_NUM_COMPETITORS/64)
+#define INDEX_LIST_WIDTH  (64)
+#define INDEX_LIST_SHIFT  (6)
+#define INDEX_LIST_MASK   (0x3f)
+static guint64 index_list[INDEX_LIST_LENGTH];
+
+static void comp_index_clear(void)
+{
+    memset(&index_list, 0, sizeof(index_list));
+    index_list[0] = 0x3ff; // reserve the first 10
+}
+
+void comp_index_set(gint ix)
+{
+    gint i = ix >> INDEX_LIST_SHIFT;
+    guint64 m = ((guint64)1) << (ix & INDEX_LIST_MASK);
+
+    if (i >= INDEX_LIST_LENGTH) {
+	g_print("ERROR: MAX NUMBER OF COMPETITORS EXCEEDED!\n");
+	return;
+    }
+
+    index_list[i] |= m;
+}
+
+gint comp_index_get_free(void)
+{
+    gint i, j;
+    guint64 m = 1;
+    
+    for (i = 0; i < INDEX_LIST_LENGTH; i++) {
+	if (index_list[i] != 0xffffffffffffffff) {
+	    m = 1;
+	    for (j = 0; j < 64; j++) {
+		if ((index_list[i] & m) == 0) {
+		    gint ix = (i << INDEX_LIST_SHIFT) | j;
+		    index_list[i] |= m;
+		    return ix;
+		}
+		m = m << 1;
+	    }
+	}
+    }
+
+    g_print("ERROR: OUT OF COMPETITOR INDEXES!\n");
+    return 0;
+}
+
 static int db_callback(void *data, int argc, char **argv, char **azColName)
 {
     int i, flags = ptr_to_gint(data);
@@ -83,6 +131,8 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
     }
     //g_print("\n");
 
+    comp_index_set(j.index);
+    
     if (flags & ADD_DELETED_COMPETITORS) {
         if ((j.deleted & DELETED) && j.visible) {
             j.deleted &= ~DELETED;
@@ -98,7 +148,7 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
 
     if ((j.deleted & DELETED) || j.visible == 0) {
         if (j.visible && j.index >= current_index)
-            current_index = j.index + 1;
+	    current_index = j.index + 1;
         return 0;
     }
 
@@ -162,7 +212,7 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
             competitors_not_added++;
             return 0;
         }
-        j.index = current_index++;
+        j.index = comp_index_get_free();//current_index++;
         j.category = "?";
 
         if (flags & CLEANUP) {
@@ -273,6 +323,12 @@ void db_restore_removed_competitors(void)
             0);
 }
 
+void db_delete_removed_competitors(void)
+{
+    db_exec(db_name, "DELETE FROM competitors WHERE \"deleted\"&1", 
+            0, NULL);
+}
+
 void db_print_competitors(FILE *f)
 {
     print_file = f;
@@ -370,6 +426,8 @@ void db_print_competitors_by_club(FILE *f)
 void db_read_judokas(void)
 {
     char buffer[100];
+
+    comp_index_clear();
 
     sprintf(buffer, 
             "SELECT * FROM competitors");

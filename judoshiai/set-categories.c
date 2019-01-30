@@ -1795,7 +1795,7 @@ static void teams_dialog_callback(GtkWidget *widget,
 	j.last = name;
 	j.category = comps->eventname;
         j.visible = TRUE;
-        j.index = current_index++;
+        j.index = comp_index_get_free();//current_index++;
         db_add_judoka(j.index, &j);
 	gint ret = display_one_judoka(&j);
 	if (ret >= 0) {
@@ -1827,7 +1827,7 @@ static void teams_dialog_callback(GtkWidget *widget,
 
         gint k;
         for (k = 0; k < comps->numw; k++) {
-            j.index = current_index++;
+            j.index = comp_index_get_free();//current_index++;
             j.first = gtk_entry_get_text(GTK_ENTRY(comps->names[k].first));
             j.last = gtk_entry_get_text(GTK_ENTRY(comps->names[k].last));
             j.category = name;

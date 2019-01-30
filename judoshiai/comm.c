@@ -436,6 +436,7 @@ void msg_received(struct message *input_msg)
 		    j2.category = "?";
 		    db_update_judoka(j2.index, &j2);
 
+		    comp_index_set(j2.index);
 		    if (j2.index >= current_index)
 			current_index = j2.index + 1;
 
@@ -445,7 +446,7 @@ void msg_received(struct message *input_msg)
 		    //avl_set_competitor_status(j2.index, j2.deleted);
 		}
 	    } else { // add new competitor
-		j2.index = current_index++;
+		j2.index = comp_index_get_free();//current_index++;
 		j2.category = "?";
 		db_add_judoka(j2.index, &j2);
 		display_one_judoka(&j2);

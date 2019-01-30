@@ -30,7 +30,6 @@
 #define bindtextdomain(Domain,Directory) (Domain)
 #define bind_textdomain_codeset(Domain,Codeset) (Codeset)
 #endif /* ENABLE_NLS */
-
 #if GTK_CHECK_VERSION(2,10,0)
 #define PRINT_SUPPORTED
 #endif
@@ -995,6 +994,7 @@ extern void db_read_judokas(void);
 extern gint db_add_judoka(int num, struct judoka *j);
 extern void db_update_judoka(int num, struct judoka *j);
 extern void db_restore_removed_competitors(void);
+extern void db_delete_removed_competitors(void);
 
 extern void db_add_category(int num, struct judoka *j);
 extern void db_update_category(int num, struct judoka *j);
@@ -1080,6 +1080,9 @@ extern int db_write_blob(int key, const unsigned char *zBlob, int nBlob);
 extern int db_read_blob(int key, unsigned char **pzBlob, int *pnBlob);
 extern void db_delete_blob_line(int key);
 extern void db_free_blob(unsigned char *zBlob);
+
+extern void comp_index_set(gint ix);
+extern gint comp_index_get_free(void);
 
 /* categories */
 extern void create_categories(GtkWidget *w, gpointer   data);
