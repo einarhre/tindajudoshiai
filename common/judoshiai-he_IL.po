@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-25 13:22+0300\n"
+"POT-Creation-Date: 2019-01-03 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,7 +153,7 @@ msgid "Increment pin time"
 msgstr "זמן ריתוק עולה"
 
 msgid "Decrement pin time"
-msgstr "זמן ריתוק יורד" 
+msgstr "זמן ריתוק יורד"
 
 msgid "Points going to blue"
 msgstr "ניקוד לטובת כחול"
@@ -192,7 +192,7 @@ msgid "Hansoku-make to white"
 msgstr "הנסוקומקה ללבן"
 
 msgid "Clear selection"
-msgstr "בטל בחירה" 
+msgstr "בטל בחירה"
 
 msgid "Display layout 1"
 msgstr "תצוגה 1"
@@ -288,7 +288,7 @@ msgid "Place To"
 msgstr "הצב ל"
 
 msgid "Tatamis"
-msgstr "זירות" 
+msgstr "זירות"
 
 msgid "Draw All Categories"
 msgstr "הגרל את כל הקטגוריות"
@@ -546,20 +546,18 @@ msgid "Is there another JudoShiai program running?"
 msgstr "האם יש קובץ נוסף שרץ?"
 
 msgid "Yes, another JudoShiai program is running"
-msgstr ""
-"כן, קובץ נוסף פתוח"
+msgstr "כן, קובץ נוסף פתוח"
 
 msgid ""
 "No, this the only JudoShiai program. \n"
 "Purge erroneous lock file."
-msgstr ""
-"לא, זה הקובץ הפתוח היחיד"
+msgstr "לא, זה הקובץ הפתוח היחיד"
 
 msgid ""
 "Communication is blocked! \n"
 "You can still use the program to create categories etc."
-msgstr ""
-"התקשורת חסומה, ניתן עדיין להשתמש בתוכנה ליצירת קטגוריות וכו"
+msgstr "התקשורת חסומה, ניתן עדיין להשתמש בתוכנה ליצירת קטגוריות וכו"
+
 msgid "Pool"
 msgstr "בית"
 
@@ -585,7 +583,7 @@ msgid "changed"
 msgstr "השתנה"
 
 msgid "points"
-msgstr" נקודות" 
+msgstr " נקודות"
 
 msgid "Expand All"
 msgstr "הרחב הכל"
@@ -693,10 +691,10 @@ msgid "Search"
 msgstr "חפש"
 
 msgid "----- Men -----"
-msgstr" -----גברים-----" 
+msgstr " -----גברים-----"
 
 msgid "----- Women -----"
-msgstr "--------נשים -------" 
+msgstr "--------נשים -------"
 
 msgid "Men"
 msgstr "גברים"
@@ -714,7 +712,7 @@ msgid "Match time:"
 msgstr "זמן קרב"
 
 msgid "Rest time:"
-msgstr "זמן מנוחה" 
+msgstr "זמן מנוחה"
 
 msgid "Pin times (IWYK):"
 msgstr "זמן ריתוק"
@@ -795,7 +793,7 @@ msgid "Blue wins"
 msgstr " כחול מנצח"
 
 msgid "White wins"
-msgstr "לבן מנצח" 
+msgstr "לבן מנצח"
 
 msgid "REST TIME"
 msgstr "זמן מנוחה"
@@ -817,7 +815,6 @@ msgstr "הסר הקפאה"
 
 msgid "SQL Dialog"
 msgstr "SQL Dialog"
-
 
 msgid "Print All (PDF)"
 msgstr "הדפס הכל לקובץ"
@@ -844,7 +841,7 @@ msgid "CANNOT OPEN BACKUP FILE"
 msgstr "לא יכול לפתוח קובץ גיבוי"
 
 msgid "Tournament Backup"
-msgstr "גיבוי תחרות" 
+msgstr "גיבוי תחרות"
 
 msgid "Small display"
 msgstr "תצוגה קטנה"
@@ -919,7 +916,7 @@ msgid "Mirror tatami order"
 msgstr "סדר מזרנים ראי"
 
 msgid "Country"
-msgstr "מדינה" 
+msgstr "מדינה"
 
 msgid "Id"
 msgstr "תז"
@@ -937,7 +934,7 @@ msgid "Default"
 msgstr "ברירת מחדל"
 
 msgid "FIN Double Repechage"
-msgstr "רפסג כפול פיני" 
+msgstr "רפסג כפול פיני"
 
 msgid "SWE Double Repechage"
 msgstr "רפסג כפול שוודי"
@@ -985,7 +982,7 @@ msgid "Double Pool"
 msgstr "Tuplapooli"
 
 msgid "Cannot handle: Database created with newer JudoShiai version."
-msgstr "לא יכול לטפל: מסד הנתונים נוצר בגרסה מתקדמת יותר של תחרות" 
+msgstr "לא יכול לטפל: מסד הנתונים נוצר בגרסה מתקדמת יותר של תחרות"
 
 msgid "Database tables updated."
 msgstr "טבלאות מסד נתונים עודכנו."
@@ -1018,7 +1015,7 @@ msgid "All Files"
 msgstr "כל הקבצים"
 
 msgid "Best of 3"
-msgstr "הטוב מ- 3" 
+msgstr "הטוב מ- 3"
 
 msgid "One match"
 msgstr "קרב בודד"
@@ -1030,13 +1027,13 @@ msgid "IJF Qrt Final Rep"
 msgstr "רפסג רבע בינלאומי"
 
 msgid "FIN Dbl Repchg"
-msgstr  " רפסג כפול פיני" 
+msgstr " רפסג כפול פיני"
 
 msgid "SWE Dubb återkv"
-msgstr "רפסג כפול שוודי" 
+msgstr "רפסג כפול שוודי"
 
 msgid "SWE Dir återkv"
-msgstr "הזדמנות שנייה שוודית" 
+msgstr "הזדמנות שנייה שוודית"
 
 msgid "EST D klass"
 msgstr "נוק אאוט כפול אסטוני"
@@ -1225,10 +1222,10 @@ msgid "Bronze2"
 msgstr "ארד 2"
 
 msgid "Pool's last"
-msgstr "אחרון בבית" 
+msgstr "אחרון בבית"
 
 msgid "No move"
-msgstr "ללא תזוזה" 
+msgstr "ללא תזוזה"
 
 msgid "Print Accreditation Cards"
 msgstr "הדפס כרטיסי רישום"
@@ -1288,7 +1285,7 @@ msgid "Show competitors"
 msgstr "הצג  מתחרים"
 
 msgid "Name format"
-msgstr "תצורת זמן" 
+msgstr "תצורת זמן"
 
 msgid "Country  Surname, Name"
 msgstr "מדינה שם פרטי משפחה"
@@ -1312,7 +1309,7 @@ msgid "WINNER"
 msgstr "מנמח"
 
 msgid "Cancel"
-msgstr "בטל" 
+msgstr "בטל"
 
 msgid "Club Seeding:"
 msgstr "דירוג אגודה"
@@ -1321,10 +1318,10 @@ msgid "Gender:"
 msgstr "מין"
 
 msgid "Male"
-msgstr "זכר" 
+msgstr "זכר"
 
 msgid "Female"
-msgstr "נקבה" 
+msgstr "נקבה"
 
 msgid "Control:"
 msgstr "בקרה"
@@ -1336,7 +1333,7 @@ msgid "Seeding"
 msgstr "דירוג"
 
 msgid "Club Seeding"
-msgstr "דירו אגודה" 
+msgstr "דירו אגודה"
 
 msgid "Database Validation"
 msgstr "בדיקת תקינות מסד נתונים"
@@ -1351,7 +1348,7 @@ msgid "defined"
 msgstr "מוגדר"
 
 msgid "times"
-msgstr"זמנים" 
+msgstr "זמנים"
 
 msgid "Duplicate club seedings:\n"
 msgstr "Duplicate club seedings:\n"
@@ -1360,7 +1357,7 @@ msgid "Missing category definitions:\n"
 msgstr "Missing category definitions:\n"
 
 msgid "is not"
-msgstr "לא" 
+msgstr "לא"
 
 msgid "Typing errors:\n"
 msgstr "Typing errors:\n"
@@ -1377,31 +1374,29 @@ msgstr "Possible duplicate competitors:\n"
 msgid "Possible duplicate club names:\n"
 msgstr "Possible duplicate club names:\n"
 
-
 msgid "Suspicious weights:\n"
 msgstr "Suspicious weights:\n"
 
 msgid "warnings"
-msgstr "אזהרות" 
+msgstr "אזהרות"
 
 msgid "Weighed only"
-msgstr " שקולים בלבד" 
+msgstr " שקולים בלבד"
 
 msgid "With weights"
 msgstr "עם משקלים"
 
 msgid "Validate Database"
-msgstr "בדוק תקינות מסד נתונים" 
+msgstr "בדוק תקינות מסד נתונים"
 
 msgid "Results in Icelandic"
 msgstr "Results in Icelandic"
 
-
 msgid "Surname Name, Country/Club"
-msgstr "שם משפחה פרטי, מדינה/ אגודה" 
+msgstr "שם משפחה פרטי, מדינה/ אגודה"
 
 msgid "Country/Club,  Surname Name"
-msgstr "מדינה/ אגודה, משפחה פרטי" 
+msgstr "מדינה/ אגודה, משפחה פרטי"
 
 msgid "Scale Serial Interface..."
 msgstr "ממשק חיבור משקל..."
@@ -1426,6 +1421,7 @@ msgstr "About JudoJudogi"
 
 msgid "Norwegian System"
 msgstr "Norwegian System"
+
 msgid "Confirm:"
 msgstr "אשר"
 
@@ -1499,7 +1495,7 @@ msgid "Max age"
 msgstr "גיל מירבי"
 
 msgid "Min"
-msgstr "מינ." 
+msgstr "מינ."
 
 msgid "Max"
 msgstr "מקס'"
@@ -1508,11 +1504,10 @@ msgid "System"
 msgstr "שיטה"
 
 msgid "Default systems"
-msgstr "שיטות ברירת מחדל" 
+msgstr "שיטות ברירת מחדל"
 
 msgid "Use SVG Templates"
 msgstr "Use SVG Templates"
-
 
 msgid "Seeded to fixed places:"
 msgstr "מדורגים למקומות קבועים:"
@@ -1538,8 +1533,7 @@ msgstr "הטוב משלוש"
 msgid ""
 "Medal will be awarded \n"
 "only if a contest was won:"
-msgstr ""
-"הענקת מדליה רק עם ניצח קרב"
+msgstr "הענקת מדליה רק עם ניצח קרב"
 
 msgid "Pool settings"
 msgstr "הגדרות ליגה"
@@ -1575,7 +1569,7 @@ msgid "Short pin times"
 msgstr "זמן ריתוק קצר"
 
 msgid "No Limit"
-msgstr"ללא הגבלה" 
+msgstr "ללא הגבלה"
 
 msgid "Corrupted competitor data:\n"
 msgstr "שגיאה בנתוני ספורטאי\n"
@@ -1610,13 +1604,11 @@ msgstr "הזדמנות כפולה ארד אחד אסטונית"
 msgid "Remote address"
 msgstr "Remote address"
 
-
 msgid "Remote Control"
 msgstr "Remote Control"
 
-
 msgid "If equal score less shido wins"
-msgstr "עם ניקוד זהה פחות שידו מנצח" 
+msgstr "עם ניקוד זהה פחות שידו מנצח"
 
 msgid "Set score"
 msgstr "קבע ניקוד"
@@ -1724,7 +1716,7 @@ msgid "Team"
 msgstr "קבוצה"
 
 msgid "Messages"
-msgstr "הודעות" 
+msgstr "הודעות"
 
 msgid "Double Pool 3"
 msgstr "שני בתי ליגות ובית גמר"
@@ -1748,7 +1740,7 @@ msgid "New Team"
 msgstr "קבוצה חדשה"
 
 msgid "New Team Category"
-msgstr"קטגוריה קבוצתית חדשה"
+msgstr "קטגוריה קבוצתית חדשה"
 
 msgid "Print Selected Accreditation Cards To Default Printer"
 msgstr "הדפס אקרדיטציות נבחרות למדפסת ברירת המחדל"
@@ -1784,7 +1776,7 @@ msgid "Print label"
 msgstr "הדפס תווית"
 
 msgid "No margins"
-msgstr"ללא שוליים"
+msgstr "ללא שוליים"
 
 msgid "Fit page"
 msgstr "התאם לדף"
@@ -1799,7 +1791,7 @@ msgid "Resolve 3-way ties by time:"
 msgstr "פתור שיוויון בליגה באמצעות זמן"
 
 msgid "Move Matches"
-msgstr "הזז קרבות" 
+msgstr "הזז קרבות"
 
 msgid "Move Matches..."
 msgstr "הזז קרבות..."
@@ -1824,3 +1816,176 @@ msgstr "השתמש בניקוד איגוד עולמי"
 
 msgid "Show bracket"
 msgstr "Show bracket"
+
+msgid "2017 Rules"
+msgstr ""
+
+msgid "2018 Rules"
+msgstr ""
+
+msgid "Last Name:"
+msgstr ""
+
+msgid "First Name:"
+msgstr ""
+
+msgid "Year of Birth:"
+msgstr ""
+
+msgid "Grade:"
+msgstr ""
+
+msgid "Club:"
+msgstr ""
+
+msgid "Reg. Category:"
+msgstr ""
+
+msgid "Weight:"
+msgstr ""
+
+msgid "Hide name:"
+msgstr ""
+
+msgid "Category typing errors\n"
+msgstr ""
+
+msgid "General Data Protection Regulation"
+msgstr ""
+
+msgid "Hide category if age less than"
+msgstr ""
+
+msgid "Hide name if age less than"
+msgstr ""
+
+msgid "GER Repchg"
+msgstr ""
+
+msgid "GER Double Repechage"
+msgstr ""
+
+msgid "GDPR"
+msgstr ""
+
+msgid "Random Weigh-In"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "competitors from"
+msgstr ""
+
+msgid "each selected category"
+msgstr ""
+
+msgid "all selected categories"
+msgstr ""
+
+msgid "Random Weigh-In..."
+msgstr ""
+
+msgid "2017 Rules:"
+msgstr ""
+
+msgid "2018 Rules:"
+msgstr ""
+
+msgid "Use points 10/1/0:"
+msgstr ""
+
+msgid "Use points 100/10/1/½:"
+msgstr ""
+
+msgid "Use points 10/7/1:"
+msgstr ""
+
+msgid "Use points 10/1/½:"
+msgstr ""
+
+msgid "Use points 10/3/1:"
+msgstr ""
+
+msgid "Use points 10/5/1:"
+msgstr ""
+
+msgid "Add extra match in teams points tie:"
+msgstr ""
+
+msgid "Only wins count, ignore match points:"
+msgstr ""
+
+msgid ""
+"The first team reaching the majority\n"
+"of wins is declared the winner.\n"
+"The remaining contests will not be fought:"
+msgstr ""
+
+msgid ""
+"The athletes in the drawn category will\n"
+"refight a golden score contest:"
+msgstr ""
+
+msgid ""
+"Draw for extra match is done from\n"
+"all categories regardless\n"
+"if the team has a player or not:"
+msgstr ""
+
+msgid "German System"
+msgstr ""
+
+msgid "Rules"
+msgstr ""
+
+msgid "Team event"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "SVG+Lisp"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "New version:"
+msgstr ""
+
+msgid "Current version:"
+msgstr ""
+
+msgid "Update to new version?"
+msgstr ""
+
+msgid "Multicast"
+msgstr ""
+
+msgid "Corrected:"
+msgstr ""
+
+msgid "Scale Correction"
+msgstr ""
+
+msgid "Real"
+msgstr ""
+
+msgid "Display"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "ERROR"
+msgstr ""
+
+msgid "Scale Correction Table..."
+msgstr ""

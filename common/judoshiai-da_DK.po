@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-14 12:17+0300\n"
+"POT-Creation-Date: 2019-01-03 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -654,7 +654,7 @@ msgid "Next"
 msgstr "Næste"
 
 msgid "Rest"
-msgstr "Hvil"
+msgstr "Resterende"
 
 msgid "Number"
 msgstr "Nummer"
@@ -1436,7 +1436,7 @@ msgid ""
 "Medal will be awarded \n"
 "only if a contest was won:"
 msgstr ""
-"Medlje tildeles kun \n"
+"Medalje tildeles kun \n"
 "hvis en kamp er vundet:"
 
 msgid "Seeded to fixed places:"
@@ -1761,7 +1761,7 @@ msgid "Customized"
 msgstr "Tilpasset"
 
 msgid "Load Custom Systems"
-msgstr "Indlæd Tilpassede Systemer"
+msgstr "Indlæs Tilpassede Systemer"
 
 msgid "New Team"
 msgstr "Nyt Hold"
@@ -1926,7 +1926,7 @@ msgid "Real"
 msgstr "Real"
 
 msgid "Display"
-msgstr "Display"
+msgstr "Visning"
 
 msgid "Error"
 msgstr "Fejl"
@@ -1938,49 +1938,83 @@ msgid "Scale Correction Table..."
 msgstr "Vægtkorrigeringstabel..."
 
 msgid "Hide name:"
-msgstr ""
+msgstr "Skjul navn"
 
 msgid "General Data Protection Regulation"
-msgstr ""
+msgstr "General Data Protection Regulation"
 
 msgid "Hide category if age less than"
-msgstr ""
+msgstr "Skjul kategori hvis alder er mindre end"
 
 msgid "Hide name if age less than"
-msgstr ""
+msgstr "Skjul navn hvis alder er mindre end"
 
 msgid "GDPR"
-msgstr ""
+msgstr "GDPR"
 
 msgid "Random Weigh-In"
-msgstr ""
+msgstr "Tilfældig indvejning"
 
 msgid "Select"
-msgstr ""
+msgstr "Vælg"
 
 msgid "competitors from"
-msgstr ""
+msgstr "deltagere fra"
 
 msgid "each category"
-msgstr ""
+msgstr "hver kategori"
 
 msgid "all categories"
-msgstr ""
+msgstr "alle kategorier"
 
 msgid "Random Weigh-In..."
-msgstr ""
+msgstr "Tilfældig indvejning..."
 
 msgid "IJF team event July 2018 rules:"
-msgstr ""
+msgstr "IJF team even Juli 2018 regler:"
 
 msgid "German System"
-msgstr ""
+msgstr "Tysk System"
 
 msgid "Multicast"
-msgstr ""
+msgstr "Multicast"
 
 msgid "each selected category"
-msgstr ""
+msgstr "hver valgte kategori"
 
 msgid "all selected categories"
+msgstr "alle valgte kategorier"
+
+msgid "Only wins count, ignore match points:"
+msgstr "Kun sejre tæller, ignorer kamppoint:"
+
+msgid ""
+"The first team reaching the majority\n"
+"of wins is declared the winner.\n"
+"The remaining contests will not be fought:"
 msgstr ""
+"Det første hold som opnår overvægt\n"
+"af sejre erklæres som vinder.\n"
+"De resterende kampe vil ikke blive kæmpet:"
+
+msgid ""
+"The athletes in the drawn category will\n"
+"refight a golden score contest:"
+msgstr ""
+"Deltagerne i den udtrukne kategori skal\n"
+"kæmpe igen i golden score:"
+
+msgid ""
+"Draw for extra match is done from\n"
+"all categories regardless\n"
+"if the team has a player or not:"
+msgstr ""
+"Udtrækning af ekstra kamp foretages ud fra\n"
+"alle kategorier uanset\n"
+"om holdet har en deltager eller ej:"
+
+msgid "Rules"
+msgstr "Regler"
+
+msgid "Team event"
+msgstr "Team event"
