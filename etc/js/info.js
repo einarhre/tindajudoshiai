@@ -264,41 +264,39 @@ function draw_match(tatami, pos) {
     var m = match_list[tatami-1][pos];
     var ndata;
 
-    if (m.category) {
-	ndata = name_data[m.category];
-	if (ndata) {
+    ndata = name_data[m.category];
+    if (ndata) {
+	if (m.category) {
 	    $("#"+mk_id("cat", tatami, pos)).text(ndata.last +" #"+ m.number);
+	    $("#"+mk_id("rnd", tatami, pos)).text(round_to_str(m.round));
 	} else {
-	    $("#"+mk_id("cat", tatami, pos)).text("?");
+            $("#"+mk_id("cat", tatami, pos)).text(ndata.last);
+            $("#"+mk_id("rnd", tatami, pos)).text(ndata.last);
 	}
+    } else {
+	$("#"+mk_id("cat", tatami, pos)).text("?");
     }
 
-    if (m.blue) {
-	ndata = name_data[m.blue];
-	if (ndata) {
-	    $("#"+mk_id("bfirst", tatami, pos)).text(ndata.first);
-	    $("#"+mk_id("blast", tatami, pos)).text(ndata.last);
-	    $("#"+mk_id("bclub", tatami, pos)).text(ndata.club);
-	} else {
-	    $("#"+mk_id("blast", tatami, pos)).text("?");
-	}
+    ndata = name_data[m.blue];
+    if (ndata) {
+	$("#"+mk_id("bfirst", tatami, pos)).text(ndata.first);
+	$("#"+mk_id("blast", tatami, pos)).text(ndata.last);
+	$("#"+mk_id("bclub", tatami, pos)).text(ndata.club);
+    } else {
+	$("#"+mk_id("blast", tatami, pos)).text("?");
     }
 
     if (pos == 0)
 	return;
 
-    if (m.white) {
-	ndata = name_data[m.white];
-	if (ndata) {
-	    $("#"+mk_id("wfirst", tatami, pos)).text(ndata.first);
-	    $("#"+mk_id("wlast", tatami, pos)).text(ndata .last);
-	    $("#"+mk_id("wclub", tatami, pos)).text(ndata.club);
-	} else {
-	    $("#"+mk_id("wlast", tatami, pos)).text("?");
-	}
+    ndata = name_data[m.white];
+    if (ndata) {
+	$("#"+mk_id("wfirst", tatami, pos)).text(ndata.first);
+	$("#"+mk_id("wlast", tatami, pos)).text(ndata .last);
+	$("#"+mk_id("wclub", tatami, pos)).text(ndata.club);
+    } else {
+	$("#"+mk_id("wlast", tatami, pos)).text("?");
     }
-
-    $("#"+mk_id("rnd", tatami, pos)).text(round_to_str(m.round));
 }
 
 var last_cat = 0;
