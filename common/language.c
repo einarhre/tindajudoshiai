@@ -47,16 +47,16 @@ static GtkWidget *lang_menu, *flags[NUM_LANGS];
 static const gchar *flags_files[NUM_LANGS] = {
     "finland.png", "sweden.png", "uk.png", "spain.png", "estonia.png", "ukraine.png", "iceland.png", 
     "norway.png", "poland.png", "slovakia.png", "netherlands.png", "czech.png", "germany.png",
-    "russia.png", "denmark.png", "israel.png"
+    "russia.png", "denmark.png", "israel.png", "france.png"
 };
 
 static const gchar *lang_names[NUM_LANGS] = {
-    "fi", "sv", "en", "es", "et", "uk", "is", "nb", "pl", "sk", "nl", "cs", "de", "ru", "da", "he"
+    "fi", "sv", "en", "es", "et", "uk", "is", "nb", "pl", "sk", "nl", "cs", "de", "ru", "da", "he", "fr"
 };
 
 static const gchar *lang_names_in_own_language[NUM_LANGS] = {
     "Suomi", "Svensk", "English", "Español", "Eesti", "Українська", "Íslenska", "Norsk", "Polski",
-    "Slovenčina", "Nederlands", "Čeština", "Deutsch", "Русский язык", "Dansk", "עברית"
+    "Slovenčina", "Nederlands", "Čeština", "Deutsch", "Русский язык", "Dansk", "עברית", "Français"
 };
 
 static GtkWidget *get_picture(const gchar *name)
@@ -107,11 +107,7 @@ static gboolean lang_dialog(GtkWidget *eventbox, GdkEventButton *event, void *pa
 {
     struct button_data *data = g_malloc(sizeof(*data));
     GtkWidget *dialog;
-#if (GTKVER == 3)
     GtkWidget *table = gtk_grid_new();
-#else
-    GtkWidget *table = gtk_table_new((NUM_LANGS+1)/2, 4, TRUE);
-#endif
     gint i;
 
     //gtk_table_set_row_spacings(table, 5);
@@ -129,24 +125,13 @@ static gboolean lang_dialog(GtkWidget *eventbox, GdkEventButton *event, void *pa
         gtk_button_set_image(GTK_BUTTON(button), get_picture(flags_files[i])/*flags[i]*/);
         gtk_button_set_image_position(GTK_BUTTON(button), GTK_POS_LEFT);
         //gtk_button_set_alignment(GTK_BUTTON(button), 0.0, 0.5); XXXXXX
-#if (GTKVER == 3)
         gtk_grid_attach(GTK_GRID(table), button, col, row, 1, 1);
         g_signal_connect(G_OBJECT(button), "clicked",
                          G_CALLBACK(lang_dialog_cb), data);
-#else
-        gtk_table_attach_defaults(GTK_TABLE(table), button, 
-                                  col, col+1, row, row+1);
-        gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                           GTK_SIGNAL_FUNC(lang_dialog_cb), data);
-#endif
     }
 
-#if (GTKVER == 3)
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
  		      table, TRUE, TRUE, 0);
-#else
-    gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), table);
-#endif
     gtk_widget_show_all(dialog);
 
     return TRUE;
@@ -182,7 +167,7 @@ const gchar *timer_help_file_names[NUM_LANGS] = {
     "judotimer-fi.pdf", "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-es.pdf", "judotimer-en.pdf",
     "judotimer-uk.pdf", "judotimer-en.pdf", "judotimer-nb.pdf", "judotimer-en.pdf", "judotimer-en.pdf",
     "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-en.pdf", "judotimer-en.pdf",
-    "judotimer-en.pdf"
+    "judotimer-en.pdf", "judotimer-en.pdf"
 };
 
 static const gchar *help_file_names[NUM_LANGS] = {
@@ -202,6 +187,7 @@ static const gchar *help_file_names[NUM_LANGS] = {
     "judoshiai-en.pdf", // ru
     "judoshiai-en.pdf"  // da
     "judoshiai-en.pdf"  // he
+    "judoshiai-fr.pdf"  // fr
 };
 
 #ifdef WIN32
