@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2017 by Hannu Jokinen
+ * Copyright (C) 2006-2019 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -44,7 +44,7 @@ static void about_judoproxy( GtkWidget *w,
     gtk_show_about_dialog (NULL,
                            "name", "JudoProxy",
                            "title", _("About JudoProxy"),
-                           "copyright", "Copyright 2006-2017 Hannu Jokinen",
+                           "copyright", "Copyright 2006-2019 Hannu Jokinen",
                            "version", SHIAI_VERSION,
                            "website", "http://sourceforge.net/projects/judoshiai/",
                            NULL);

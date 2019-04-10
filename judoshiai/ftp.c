@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2017 by Hannu Jokinen
+ * Copyright (C) 2006-2019 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
