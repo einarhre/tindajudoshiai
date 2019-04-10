@@ -32,6 +32,13 @@ guint french_matches_blue[64] = {
 };
 guint french_matches_white_offset[NUM_FRENCH] = {4, 8, 16, 32, 64};
 guint french_mul[NUM_FRENCH] = {16, 8, 4, 2, 1};
+guint french_matches_gbr[64] = {
+    1, 64, 32, 33, 16, 49, 17, 48, 8, 57, 25, 40, 9, 56, 24, 41,
+    4, 61, 29, 36, 13, 52, 20, 45, 5, 60, 28, 37, 12, 53, 21, 44,
+    2, 63, 31, 34, 15, 50, 18, 47, 7, 58, 26, 39, 10, 55, 23, 42,
+    3, 62, 30, 35, 14, 51, 19, 46, 6, 59, 27, 38, 11, 54, 22, 43
+};
+guint french_mul_gbr[NUM_FRENCH] = {8, 4, 2, 1};
 
 #define MAX_MATES 100000
 
@@ -600,11 +607,16 @@ static gint get_competitor_group(gint comp, struct mdata *mdata)
 // return competitor's number based on position
 gint get_drawed_number(gint pos, gint sys)
 {
-    if (sys >= 0 && (pos&1))
-        return french_matches_blue[(pos-1)/2 * french_mul[sys]];
-    else if (sys >= 0 && (pos&1) == 0)
-        return french_matches_blue[(pos-1)/2 * french_mul[sys]]
-            + french_matches_white_offset[sys];
+    if (draw_system == DRAW_BRITISH && sys >= 0 && sys <= 2) {
+	return french_matches_gbr[(pos-1) * french_mul_gbr[sys]];
+    }
+    if (sys >= 0) {
+	if (pos & 1)
+	    return french_matches_blue[(pos-1)/2 * french_mul[sys]];
+	else
+	    return french_matches_blue[(pos-1)/2 * french_mul[sys]]
+		+ french_matches_white_offset[sys];
+    }
     return pos;
 }
 
@@ -873,16 +885,26 @@ static gboolean draw_one_comp(struct mdata *mdata)
     } else if (mdata->mfrench_sys >= 0) { // french
         if (prop_get_int_val_cat(PROP_SEEDED_TO_FIXED_PLACES, mdata->mcategory_ix) &&
             mdata->mcomp[comp].seeded > 0 && mdata->mcomp[comp].seeded <= NUM_SEEDED) {
-            gint x;
-            switch (mdata->mcomp[comp].seeded) {
-            case 1: case 5: x = 0; break;
-            case 2: case 6: x = 2; break;
-            case 3: case 7: x = 1; break;
-            case 4: case 8: x = 3; break;
-            }
-            found = mdata->mpositions*(x)/4 +
-                ((mdata->mcomp[comp].seeded > 4) ? mdata->mpositions/8 + 1 : 1);
-
+	    if (draw_system == DRAW_BRITISH) {
+		gint i;
+		for (i = 1; i <= mdata->mpositions; i++) {
+		    if (get_drawed_number(i, mdata->mfrench_sys) == mdata->mcomp[comp].seeded) {
+			found = i;
+			break;
+		    }
+		}
+	    } else {
+		gint x;
+		switch (mdata->mcomp[comp].seeded) {
+		case 1: case 5: x = 0; break;
+		case 2: case 6: x = 2; break;
+		case 3: case 7: x = 1; break;
+		case 4: case 8: x = 3; break;
+		}
+		found = mdata->mpositions*(x)/4 +
+		    ((mdata->mcomp[comp].seeded > 4) ? mdata->mpositions/8 + 1 : 1);
+	    }
+	    
             if (mdata->mpos[found].judoka)
                 found = 0;
         }
