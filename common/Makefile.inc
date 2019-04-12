@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=2.8.1
+SHIAI_VER_NUM=2.9-pre
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 
 ifndef JS_BUILD_DIR
@@ -68,6 +68,7 @@ ifeq ($(OS),Windows_NT)
     SOUNDDIR=$(WIN32_DIR)/mpg123
     RSVGDIR=$(WIN32_DIR)/rsvg
     CURLDIR=$(WIN32_DIR)/curl
+    SSH2DIR=$(WIN32_DIR)/ssh2
     WEBKITDIR=$(WIN32_DIR)/webkitgtk
     SOAPDIR=$(WIN32_DIR)/soup
     RESHACKER=$(WIN32_DIR)/bin/ResHacker.exe
@@ -112,6 +113,7 @@ else
         SOUNDDIR=$(WIN32_DIR)/mpg123
         RSVGDIR=$(WIN32_DIR)/rsvg
         CURLDIR=$(WIN32_DIR)/curl
+        SSH2DIR=$(WIN32_DIR)/ssh2
         WEBKITDIR=$(WIN32_DIR)/webkitgtk
         SOAPDIR=$(WIN32_DIR)/soup
 
@@ -185,6 +187,7 @@ ifeq ($(OS),Windows_NT)
     -I$(WIN32DIR)/w32api/include \
     -I$(RSVGDIR)/include/librsvg-2.0 \
     -I$(CURLDIR)/include \
+    -I$(SSH2DIR)/include \
     -I../common -mms-bitfields \
     -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S) \
     -DENABLE_NLS \
@@ -203,7 +206,7 @@ ifeq ($(OS),Windows_NT)
     -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 \
     -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lcairo \
     -lcroco-0.6-3 -lrsvg-2-2 -lxml2-2 \
-    -L$(CURLDIR)/bin -lcurl \
+    -L$(CURLDIR)/bin -lcurl -L$(SSH2DIR)/bin -lssh2-1 \
     -L$(WIN32DIR)/w32api/lib -lws2_32 -mwindows
     # To add console out:
     # -mconsole
@@ -237,6 +240,7 @@ else
                  -I/opt/win32/w32api/include \
                  -I/opt/win32/rsvg/include/librsvg-2.0 \
                  -I/opt/win32/curl/include \
+                 -I/opt/win32/ssh2/include \
                  -I../common -mms-bitfields \
                  -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S) \
                  -DENABLE_NLS \
@@ -251,6 +255,7 @@ else
              -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lcairo \
              -lcroco-0.6-3 -lrsvg-2-2 -lxml2-2 \
              -L/opt/win32/curl/bin -lcurl \
+             -L/opt/win32/ssh2/bin -lssh2-1 \
              -L/opt/win32/w32api/lib -lws2_32 -mwindows
              # To add console out:
              # -mconsole
@@ -292,7 +297,7 @@ else
                 -I$(DEVELDIR)/include -I../common -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S)
 
         LIBS=$(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0) \
-             $(shell curl-config --libs) -ldl
+             $(shell curl-config --libs) -lssh2 -ldl
 
         OBJS += $(OBJDIR)/binreloc.o
 

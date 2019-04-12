@@ -27,7 +27,7 @@ ifeq ($(TOOL),MXE)
     DLLS += libpangoft2-1.0-0.dll libpangowin32-1.0-0.dll libpcre-1.dll
     DLLS += libpixman-1-0.dll libpng16-16.dll librsvg-2-2.dll
     DLLS += libssh2-1.dll libtiff-5.dll libunistring-2.dll
-    DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll
+    DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll libwebp-7.dll
 
     ifeq ($(TARGETOS),WIN32)
         DLLS += libgpg-error-0.dll libgcc_s_sjlj-1.dll
@@ -119,6 +119,7 @@ else
 	    cp $(SOUNDDIR)/bin/*.dll $(RELDIR)/bin/
 	    cp $(RSVGDIR)/bin/*.dll $(RELDIR)/bin/
 	    cp $(CURLDIR)/bin/*.dll $(RELDIR)/bin/
+	    cp $(SSH2DIR)/bin/*.dll $(RELDIR)/bin/
             ifeq ($(JUDOPROXY),YES)
 		cp $(WEBKITDIR)/bin/*.dll $(RELDIR)/bin/
 		cp $(SOAPDIR)/bin/*.dll $(RELDIR)/bin/
