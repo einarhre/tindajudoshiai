@@ -55,14 +55,14 @@ td.categorylinksonly, td.categorylinksleft, td.categorylinksright {
 }
 
 table.resultslink, table.competitorslink, table.categorieshdr, table.nextmatcheslink,
-table.statisticslink, table.medalslink {
+table.statisticslink, table.medalslink, table.extralink {
     font-family: Verdana, Arial;
     background-color: #c8d7e6;
     width: 200px;
     margin-top: 4px;
 }
 td.resultslink, td.competitorslink, td.categorieshdr, td.nextmatcheslink,
-td.statisticslink, td.medalslink {
+td.statisticslink, td.medalslink, td.extralink {
     font-family: Verdana;
     font-size: 14px;
     font-weight: normal;

@@ -21,6 +21,10 @@ gboolean create_statistics = FALSE;
 static gint saved_competitors[TOTAL_NUM_COMPETITORS];
 static gint saved_competitor_cnt = 0;
 
+#define NUM_EXTRA_LINKS 2
+static struct {
+    gchar *name, *href;
+} extra_links[NUM_EXTRA_LINKS];
 
 static void write_result(FILE *f, gint num, struct judoka *j)
 {
@@ -205,10 +209,28 @@ static gint make_left_frame(FILE *f)
 {
     GtkTreeIter iter;
     gboolean ok;
-    gint num_cats = 0;
+    gint num_cats = 0, i;
 
+    fprintf(f, "<td valign=\"top\">\r\n");
+
+    if (extra_links[0].name && extra_links[0].name[0] &&
+	extra_links[0].href && extra_links[0].href[0]) {
+	fprintf(f, "<table class=\"extralink\">");
+
+	for (i = 0; i < NUM_EXTRA_LINKS; i++) {
+	    if (extra_links[i].name && extra_links[i].name[0] &&
+		extra_links[i].href && extra_links[i].href[0]) {
+		fprintf(f,
+			"<tr><td class=\"extralink\"><a href=\"%s\">%s</a></td></tr>",
+			extra_links[i].href, extra_links[i].name);
+		
+	    }
+	}
+	fprintf(f, "</table>\r\n");
+    }
+    
     fprintf(f,
-            "<td valign=\"top\"><table class=\"resultslink\"><tr><td class=\"resultslink\">"
+	    "<table class=\"resultslink\"><tr><td class=\"resultslink\">"
             "<a href=\"index.html\">%s</a></td></tr></table>\r\n", _T(results));
     fprintf(f,
             "<table class=\"competitorslink\"><tr><td class=\"competitorslink\">"
@@ -1698,10 +1720,15 @@ void make_next_matches_html(gboolean frame)
 
 int get_output_directory(void)
 {
-    GtkWidget *dialog, *auto_update, *statistics, *vbox, *svg = NULL;
+    GtkWidget *dialog, *auto_update, *statistics, *vbox, *svg = NULL, *tmp;
     gchar *name;
     GError *error = NULL;
-
+    gint row = 0, i;
+    gchar buf[64];
+    struct {
+	GtkWidget *name, *href;
+    } extras[NUM_EXTRA_LINKS];
+    
     dialog = gtk_file_chooser_dialog_new(_("Choose a directory"),
                                          GTK_WINDOW(main_window),
                                          GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
@@ -1709,34 +1736,66 @@ int get_output_directory(void)
                                          GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                                          NULL);
 
-#if (GTKVER == 3)
     vbox = gtk_grid_new();
-#else
-    vbox = gtk_vbox_new(FALSE, 1);
-#endif
-    gtk_widget_show(vbox);
     auto_update = gtk_check_button_new_with_label(_("Automatic Web Page Update"));
-    gtk_widget_show(auto_update);
     statistics = gtk_check_button_new_with_label(_("Create Statistics"));
-    gtk_widget_show(statistics);
     if (svg_in_use()) {
         svg = gtk_check_button_new_with_label(_("Print SVG"));
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(svg),
                                      g_key_file_get_boolean(keyfile, "preferences", "printsvg", &error));
-        gtk_widget_show(svg);
     }
-#if (GTKVER == 3)
-    gtk_grid_attach_next_to(GTK_GRID(vbox), statistics, NULL, GTK_POS_BOTTOM, 1, 1);
-    gtk_grid_attach_next_to(GTK_GRID(vbox), auto_update, NULL, GTK_POS_BOTTOM, 1, 1);
+    gtk_grid_attach(GTK_GRID(vbox), statistics, 0, row++, 2, 1);
+    gtk_grid_attach(GTK_GRID(vbox), auto_update, 0, row++, 2, 1);
     if (svg)
-        gtk_grid_attach_next_to(GTK_GRID(vbox), svg, NULL, GTK_POS_BOTTOM, 1, 1);
-#else
-    gtk_box_pack_start(GTK_BOX(vbox), statistics, FALSE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), auto_update, FALSE, TRUE, 0);
-    if (svg)
-        gtk_box_pack_start(GTK_BOX(vbox), svg, FALSE, TRUE, 0);
-#endif
+        gtk_grid_attach(GTK_GRID(vbox), svg, 0, row++, 2, 1);
 
+    snprintf(buf, sizeof(buf), "<b>%s:</b>", _("Extra Links"));
+    tmp = gtk_label_new(NULL);
+    gtk_label_set_markup(GTK_LABEL(tmp), buf);
+    gtk_grid_attach(GTK_GRID(vbox), tmp, 0, row, 1, 1);
+
+    snprintf(buf, sizeof(buf), "<b>%s</b>", _("Name"));
+    tmp = gtk_label_new(NULL);
+    gtk_label_set_markup(GTK_LABEL(tmp), buf);
+    gtk_grid_attach(GTK_GRID(vbox), tmp, 1, row, 1, 1);
+
+    snprintf(buf, sizeof(buf), "<b>%s</b>", _("Link"));
+    tmp = gtk_label_new(NULL);
+    gtk_label_set_markup(GTK_LABEL(tmp), buf);
+    gtk_grid_attach(GTK_GRID(vbox), tmp, 2, row++, 1, 1);
+
+    gtk_grid_attach(GTK_GRID(vbox), gtk_label_new(_("(Example)")), 3, row, 1, 1);
+    tmp = gtk_entry_new();
+    gtk_entry_set_text(GTK_ENTRY(tmp), "Current time");
+    gtk_editable_set_editable(GTK_EDITABLE(tmp), FALSE);
+    gtk_grid_attach(GTK_GRID(vbox), tmp, 1, row, 1, 1);
+
+    tmp = gtk_entry_new();
+    gtk_entry_set_text(GTK_ENTRY(tmp), "https://time.is/");
+    gtk_editable_set_editable(GTK_EDITABLE(tmp), FALSE);
+    gtk_grid_attach(GTK_GRID(vbox), tmp, 2, row++, 1, 1);
+    
+    for (i = 0; i < NUM_EXTRA_LINKS; i++) {
+	if (!extra_links[i].name) {
+	    snprintf(buf, sizeof(buf), "extralinkname%d", i);
+	    extra_links[i].name = g_key_file_get_string(keyfile, "preferences", buf, NULL);
+	}
+	if (!extra_links[i].href) {
+	    snprintf(buf, sizeof(buf), "extralinkhref%d", i);
+	    extra_links[i].href = g_key_file_get_string(keyfile, "preferences", buf, NULL);
+	}
+
+	extras[i].name = gtk_entry_new();
+	extras[i].href = gtk_entry_new();
+	if (extra_links[i].name)
+	    gtk_entry_set_text(GTK_ENTRY(extras[i].name), extra_links[i].name);
+	if (extra_links[i].href)
+	    gtk_entry_set_text(GTK_ENTRY(extras[i].href), extra_links[i].href);
+	gtk_grid_attach(GTK_GRID(vbox), extras[i].name, 1, row, 1, 1);
+	gtk_grid_attach(GTK_GRID(vbox), extras[i].href, 2, row++, 1, 1);
+    }    
+
+    gtk_widget_show_all(vbox);
     gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
 
     if (strlen(current_directory) > 1) {
@@ -1770,8 +1829,25 @@ int get_output_directory(void)
         print_svg = FALSE;
 
     g_key_file_set_boolean(keyfile, "preferences", "printsvg", print_svg);
-    gtk_widget_destroy(dialog);
 
+    for (i = 0; i < NUM_EXTRA_LINKS; i++) {
+	const gchar *t; 
+	g_free(extra_links[i].name);
+	g_free(extra_links[i].href);
+	extra_links[i].name = NULL;
+	extra_links[i].href = NULL;
+	t = gtk_entry_get_text(GTK_ENTRY(extras[i].name));
+	if (t) extra_links[i].name = strdup(t);
+	t = gtk_entry_get_text(GTK_ENTRY(extras[i].href));
+	if (t) extra_links[i].href = strdup(t);
+
+	snprintf(buf, sizeof(buf), "extralinkname%d", i);
+	g_key_file_set_string(keyfile, "preferences", buf, extra_links[i].name ? extra_links[i].name : "");
+	snprintf(buf, sizeof(buf), "extralinkhref%d", i);
+	g_key_file_set_string(keyfile, "preferences", buf, extra_links[i].href ? extra_links[i].href : "");
+    }
+    
+    gtk_widget_destroy(dialog);
     return 0;
 }
 
