@@ -31,6 +31,23 @@
 #     winners 1 2 3
 #   Positions 1-7 are valid. Note! You must print the results first, since that
 #   saves the position information to the database!
+# - There are a couple of basic printing orders:
+#   1. If medal winners are printed the order is by category and position.
+#   2. Otherwise order is by country, club, last name, and first name.
+#   If any other order is wanted it can be set by the keyword "order".
+#   After the "order" list all the table column names that are used for sorting.
+#   Optionally insert word "asc" or "desc" for ascending or descending sort order.
+#   Asc and desc can be before any column name and it affects till the next asc or desc.
+#   Available database table column names are:
+#     index, last, first, club, country, regcategory, category, weight,
+#     birthyear, belt, id, coachid, seeding, clubseeding, comment.
+#   Examples:
+#     Sort by category, last name and first name in ascending order:
+#       order category last first
+#     Sort by category, last name and first name all in descending order:
+#       order desc category last first
+#     Sort by category in descending order and then last name and first name in ascending order:
+#       order desc category asc last first
 #
 # Attribute lines describe how the text should look like. Their values are valid
 # until replaced by another attribute line:
@@ -107,6 +124,9 @@
 # %WEIGHTTEXT%        Text "Weight" in selected language.
 # %WINPOS%            Competitor's position in Arabic numerals (1-7). Note! You must print the results first!
 # %WINPOSR%           Competitor's position in Roman numerals (I-VII).
+# %COMPETITION%       Name of the tournament.
+# %DATE%              Date as in the properties.
+# %PLACE%             Place as in the properties.
 #
 # Picture file name can also contain the special strings. The following line inserts
 # the flag of the competitor's country rotated 45 degrees:

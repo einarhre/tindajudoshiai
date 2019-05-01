@@ -561,6 +561,7 @@ static gint num_wn_texts = 0;
 static gdouble note_w, note_h;
 static gdouble border;
 static gchar *background;
+static gchar *order;
 
 #define X_MM(_a) (_a*pd->paper_width/pd->paper_width_mm)
 #define Y_MM(_a) (_a*pd->paper_height/pd->paper_height_mm)
@@ -581,6 +582,33 @@ static gchar *get_token(gchar *text)
 
     return p;
 }
+
+static gboolean word_in_list(gchar *word, const gchar **list)
+{
+    gint i;
+    for (i = 0; list[i]; i++) {
+	if (!g_strcmp0(word, list[i]))
+	    return TRUE;
+    }
+    g_print("Cannot find word '%s'\n", word);
+    return FALSE;
+}
+
+static gboolean words_in_list(gchar **words, const gchar **list)
+{
+    gint i;
+    for (i = 0; words[i]; i++) {
+	if (!word_in_list(words[i], list))
+	    return FALSE;
+    }
+    return TRUE;
+}
+
+static const gchar *order_words[] = {
+    "index", "last", "first", "club", "country", "regcategory", "category", "weight",
+    "birthyear", "belt", "id", "coachid", "seeding", "clubseeding", "comment",
+    "asc", "desc", "", NULL
+};
 
 static gint print_winners = 0;
 
@@ -610,6 +638,8 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
     border = 1.0;
     g_free(background);
     background = NULL;
+    g_free(order);
+    order = NULL;
 
     // initialize text table
     while (wn_texts_default[t].font) {
@@ -772,6 +802,40 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
                     print_winners |= 1 << atoi(p);
                     p = get_token(p);
                 }
+            } else if (strncmp(p1, "order ", 6) == 0) {
+		gboolean asc = TRUE;
+		gchar buf[256];
+		gint i = 0, n = 0, k = 0;
+		
+                p = p1;
+                NEXT_TOKEN;
+                g_free(order);
+		order = NULL;
+
+		gchar **list = g_strsplit(p, " ", -1);
+
+		if (words_in_list(list, order_words)) {
+		    for (i = 0; list[i]; i++) {
+			if (!list[i][0])
+			    continue;
+
+			if (!g_strcmp0(list[i], "asc"))
+			    asc = TRUE;
+			else if (!g_strcmp0(list[i], "desc"))
+			    asc = FALSE;
+			else {
+			    n += g_snprintf(buf+n, sizeof(buf)-n, "%s\"%s\" %s",
+					    k == 0 ? "" : ", ",
+					    list[i], asc ? "asc" : "desc");
+			    k++;
+			}
+		    }
+		    order = g_strdup(buf);
+		} else {
+		    show_message("%s: Error on line %d", templatefile, linenum);
+		}
+		g_strfreev(list);
+		g_print("order='%s'\n", order);
             } else { // error
                 ok = FALSE;
                 break;
@@ -791,41 +855,44 @@ static gint find_print_judokas(gchar *where_string)
 {
     gint row, numrows;
     gchar request[256];
-
+    const gchar *ord = order;
+    
     num_selected_judokas = 0;
 
-    if (club_text == CLUB_TEXT_CLUB)
+    if (!ord) {
+	if (club_text == CLUB_TEXT_CLUB)
+	    ord = "\"club\",\"last\",\"first\" asc";
+	else if (club_text == CLUB_TEXT_COUNTRY)
+	    ord = "\"country\",\"last\",\"first\" asc";
+	else
+	    ord = "\"country\",\"club\",\"last\",\"first\" asc";
+    }
+
+    if (print_winners)
         snprintf(request, sizeof(request),
-                 "select \"index\" from competitors "
-                 "where \"deleted\"&1=0 %s "
-                 "order by \"club\",\"last\",\"first\" asc",
-                 where_string ? where_string : "");
-    else if (club_text == CLUB_TEXT_COUNTRY)
-        snprintf(request, sizeof(request),
-                 "select \"index\" from competitors "
-                 "where \"deleted\"&1=0 %s "
-                 "order by \"country\",\"last\",\"first\" asc",
-                 where_string ? where_string : "");
-    else if (print_winners)
-        snprintf(request, sizeof(request),
-                 "select \"index\" from competitors "
-                 "where \"deleted\"&1=0 %s "
-                 "order by \"category\",\"last\",\"first\" asc",
-                 where_string ? where_string : "");
+		 "select pos1,pos2,pos3,pos4,pos5,pos6,pos7,pos8 from categories order by category asc");
     else
         snprintf(request, sizeof(request),
                  "select \"index\" from competitors "
                  "where \"deleted\"&1=0 %s "
-                 "order by \"country\",\"club\",\"last\",\"first\" asc",
-                 where_string ? where_string : "");
+                 "order by %s",
+                 where_string ? where_string : "", ord);
 
     numrows = db_get_table(request);
     if (numrows < 0)
         return numrows;
 
     for (row = 0; row < numrows && row < TOTAL_NUM_COMPETITORS; row++) {
-        gchar *ix = db_get_data(row, "index");
-        selected_judokas[num_selected_judokas++] = atoi(ix);
+	if (print_winners) {
+	    gint col;
+	    for (col = 0; col < 8; col++) {
+		const gchar *d = db_get_row_col_data(row, col);
+		if (d) selected_judokas[num_selected_judokas++] = atoi(d);
+	    }
+	} else {
+	    gchar *ix = db_get_data(row, "index");
+	    selected_judokas[num_selected_judokas++] = atoi(ix);
+	}
     }
 
     db_close_table();
@@ -1089,6 +1156,12 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
                             d += sprintf(buf + d, "%s", roman_numbers[winpos]);
                     } else if (IS_STR("%WINCAT%"))
                           d += sprintf(buf + d, "%s", catdata ? catdata->category : "");
+                    else if (IS_STR("%COMPETITION%"))
+			  d += sprintf(buf + d, "%s", prop_get_str_val(PROP_NAME));
+                    else if (IS_STR("%DATE%"))
+			  d += sprintf(buf + d, "%s", prop_get_str_val(PROP_DATE));
+                    else if (IS_STR("%PLACE%"))
+			  d += sprintf(buf + d, "%s", prop_get_str_val(PROP_PLACE));
 
                     k += len;
                 }
