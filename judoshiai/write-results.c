@@ -15,6 +15,7 @@
 #include "language.h"
 
 void write_results(FILE *f);
+static void write_extra_link_files(void);
 
 gboolean create_statistics = FALSE;
 
@@ -22,8 +23,11 @@ static gint saved_competitors[TOTAL_NUM_COMPETITORS];
 static gint saved_competitor_cnt = 0;
 
 #define NUM_EXTRA_LINKS 2
+#define EXTRA_EMBED     1
+#define EXTRA_NEW_WIN   2
 static struct {
     gchar *name, *href;
+    gint flags;
 } extra_links[NUM_EXTRA_LINKS];
 
 static void write_result(FILE *f, gint num, struct judoka *j)
@@ -220,9 +224,13 @@ static gint make_left_frame(FILE *f)
 	for (i = 0; i < NUM_EXTRA_LINKS; i++) {
 	    if (extra_links[i].name && extra_links[i].name[0] &&
 		extra_links[i].href && extra_links[i].href[0]) {
+		gchar buf[32];
+		snprintf(buf, sizeof(buf), "extralink%d.html", i);
 		fprintf(f,
-			"<tr><td class=\"extralink\"><a href=\"%s\">%s</a></td></tr>",
-			extra_links[i].href, extra_links[i].name);
+			"<tr><td class=\"extralink\"><a href=\"%s\" %s>%s</a></td></tr>",
+			(extra_links[i].flags & EXTRA_EMBED) ? buf : extra_links[i].href,
+			(extra_links[i].flags & EXTRA_NEW_WIN) ? "target=\"_blank\"" : "",
+			extra_links[i].name);
 		
 	    }
 	}
@@ -1251,6 +1259,7 @@ static gboolean make_png_all_bg(gpointer user_data)
         f = NULL;
         num_cats = gtk_tree_model_iter_n_children(current_model, NULL);
         make_png_all_state = MAKE_PNG_STATE_INDEX_HTML_1;
+	write_extra_link_files();
         return TRUE;
 
         /*
@@ -1726,7 +1735,7 @@ int get_output_directory(void)
     gint row = 0, i;
     gchar buf[64];
     struct {
-	GtkWidget *name, *href;
+	GtkWidget *name, *href, *embed, *newwin;
     } extras[NUM_EXTRA_LINKS];
     
     dialog = gtk_file_chooser_dialog_new(_("Choose a directory"),
@@ -1779,6 +1788,8 @@ int get_output_directory(void)
 	if (!extra_links[i].name) {
 	    snprintf(buf, sizeof(buf), "extralinkname%d", i);
 	    extra_links[i].name = g_key_file_get_string(keyfile, "preferences", buf, NULL);
+	    snprintf(buf, sizeof(buf), "extralinkflags%d", i);
+	    extra_links[i].flags = g_key_file_get_integer(keyfile, "preferences", buf, &error);
 	}
 	if (!extra_links[i].href) {
 	    snprintf(buf, sizeof(buf), "extralinkhref%d", i);
@@ -1787,12 +1798,21 @@ int get_output_directory(void)
 
 	extras[i].name = gtk_entry_new();
 	extras[i].href = gtk_entry_new();
+	extras[i].embed = gtk_check_button_new_with_label(_("Embed"));
+	extras[i].newwin = gtk_check_button_new_with_label(_("New Window"));
+
 	if (extra_links[i].name)
 	    gtk_entry_set_text(GTK_ENTRY(extras[i].name), extra_links[i].name);
 	if (extra_links[i].href)
 	    gtk_entry_set_text(GTK_ENTRY(extras[i].href), extra_links[i].href);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(extras[i].embed), extra_links[i].flags & EXTRA_EMBED);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(extras[i].newwin), extra_links[i].flags & EXTRA_NEW_WIN);
+	    
 	gtk_grid_attach(GTK_GRID(vbox), extras[i].name, 1, row, 1, 1);
-	gtk_grid_attach(GTK_GRID(vbox), extras[i].href, 2, row++, 1, 1);
+	gtk_grid_attach(GTK_GRID(vbox), extras[i].href, 2, row, 1, 1);
+	gtk_grid_attach(GTK_GRID(vbox), extras[i].embed, 3, row, 1, 1);
+	gtk_grid_attach(GTK_GRID(vbox), extras[i].newwin, 4, row, 1, 1);
+	row++;
     }    
 
     gtk_widget_show_all(vbox);
@@ -1841,10 +1861,18 @@ int get_output_directory(void)
 	t = gtk_entry_get_text(GTK_ENTRY(extras[i].href));
 	if (t) extra_links[i].href = strdup(t);
 
+	extra_links[i].flags = 0;
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(extras[i].embed)))
+	    extra_links[i].flags |= EXTRA_EMBED;
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(extras[i].newwin)))
+	    extra_links[i].flags |= EXTRA_NEW_WIN;
+
 	snprintf(buf, sizeof(buf), "extralinkname%d", i);
 	g_key_file_set_string(keyfile, "preferences", buf, extra_links[i].name ? extra_links[i].name : "");
 	snprintf(buf, sizeof(buf), "extralinkhref%d", i);
 	g_key_file_set_string(keyfile, "preferences", buf, extra_links[i].href ? extra_links[i].href : "");
+	snprintf(buf, sizeof(buf), "extralinkflags%d", i);
+	g_key_file_set_integer(keyfile, "preferences", buf, extra_links[i].flags);
     }
     
     gtk_widget_destroy(dialog);
@@ -1868,4 +1896,23 @@ gchar *txt2hex(const gchar *txt)
     if (sel >= 4)
         sel = 0;
     return ret;
+}
+
+static void write_extra_link_files(void)
+{
+    gint i;
+    gchar buf[32];
+    
+    for (i = 0; i < NUM_EXTRA_LINKS; i++) {
+	snprintf(buf, sizeof(buf), "extralink%d.html", i);
+	FILE *f = open_write(buf);
+	if (!f) return;
+
+	make_top_frame(f);
+        make_left_frame(f);
+        fprintf(f, "<td valign=\"top\"><embed src=\"%s\" style=\"width:640; height:900\"></td>\r\n", extra_links[i].href);
+	make_bottom_frame(f);
+
+	fclose(f);
+    }
 }
