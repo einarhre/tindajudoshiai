@@ -45,11 +45,17 @@ GtkWindow *bcdialog = NULL;
 
 gchar *belts[NUM_BELTS] = {0};
 
-gchar *belts_defaults[] = {
+const gchar *belts_defaults[] = {
     "?", "6.kyu", "5.kyu", "4.kyu", "3.kyu", "2.kyu", "1.kyu",
     "1.dan", "2.dan", "3.dan", "4.dan", "5.dan", "6.dan", "7.dan", "8.dan", "9.dan",
     "5.mon", "4.mon", "3.mon", "2.mon", "1.mon", "9.kyu", "8.kyu", "7.kyu",
     0
+};
+
+const gchar *competitor_column_names[NUM_COMP_COLS] = {
+    N_("Last Name"), N_("First Name"), N_("Comment"), N_("Comment"), N_("Comment"), N_("Year of Birth"),
+    N_("Grade"), N_("Club"), N_("Country"), N_("Reg. Category"), N_("Weight"), N_("Id"), N_("Seeding"),
+    N_("Club Seeding")
 };
 
 struct judoka_widget {
@@ -73,7 +79,7 @@ struct judoka_widget {
     GtkWidget *realcategory;
     GtkWidget *gender;
     GtkWidget *judogi;
-    GtkWidget *comment;
+    GtkWidget *comment[NUM_COMMENT_COLS];
     GtkWidget *coachid;
     GtkWidget *do_not_show; // GDPR
 };
@@ -81,7 +87,9 @@ struct judoka_widget {
 GtkWidget *weight_entry = NULL;
 
 static gboolean      editing_ongoing = FALSE;
-static GtkWidget     *competitor_label = NULL;
+static GtkWidget    *competitor_label = NULL;
+gint show_columns = 0xffe3;
+static GtkTreeViewColumn *columns[16];
 
 static void display_competitor(gint indx);
 static gboolean foreach_select_coach(GtkTreeModel *model,
@@ -98,6 +106,64 @@ static gboolean set_weight_on_button_pressed(GtkWidget *treeview,
                                              GdkEventButton *event,
                                              gpointer userdata);
 
+
+void toggle_col_visible(GtkWidget *menu_item, gpointer data)
+{
+    gint i;
+
+    if (menu_item) {
+	gint col = ptr_to_gint(data);
+	gboolean yes = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
+	if (yes)
+	    show_columns |= (1 << col);
+	else
+	    show_columns &= ~(1 << col);
+	g_key_file_set_integer(keyfile, "preferences", "showcolumns", show_columns);
+    }
+
+    for (i = NUM_COMP_COLS-1; i >= 0; i--) {
+	if (columns[i]) {
+	    gtk_tree_view_column_set_visible(columns[i], show_columns & (1 << i));
+	    if (!menu_item && data)
+		gtk_tree_view_move_column_after(GTK_TREE_VIEW(current_view), columns[i], NULL);
+	}
+    }
+}
+
+void save_comp_col_order(void)
+{
+    gint i, j;
+    gint n[NUM_COMP_COLS];
+    GtkTreeViewColumn *c[NUM_COMP_COLS];
+
+    for (i = 0; i < NUM_COMP_COLS; i++)
+	c[i] = gtk_tree_view_get_column(GTK_TREE_VIEW(current_view), i);
+    
+    for (i = 0; i < NUM_COMP_COLS; i++) {
+	for (j = 0; j < NUM_COMP_COLS; j++) {
+	    if (columns[i] == c[j]) {
+		n[j] = i;
+		g_print("in pos %d is col %d\n", j, i);
+		break;
+	    }
+	}
+    }
+
+    g_key_file_set_integer_list(keyfile, "preferences", "ordercompcol", n, NUM_COMP_COLS);
+}
+
+void restore_comp_col_order(void)
+{
+    gint i;
+    GError *error;
+    gsize len;
+    gint *n = g_key_file_get_integer_list(keyfile, "preferences", "ordercompcol", &len, &error);
+    if (!n) return;
+
+    for (i = NUM_COMP_COLS-1; i >= 0; i--) {
+	gtk_tree_view_move_column_after(GTK_TREE_VIEW(current_view), columns[n[i]], NULL);
+    }
+}
 
 static void judoka_edited_callback(GtkWidget *widget,
 				   GdkEvent *event,
@@ -204,8 +270,16 @@ static void judoka_edited_callback(GtkWidget *widget,
                                                        (GTK_COMBO_BOX(judoka_tmp->system)),
 						       (guint *)(&system.table));
 
-    if (judoka_tmp->comment)
-        edited.comment = g_strdup(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment)));
+    if (gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[0]))[0] == 0 &&
+	gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[1]))[0] == 0 &&
+	gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[2]))[0] == 0)
+	edited.comment = g_strdup("");
+    else
+	edited.comment = g_strjoin("#~",
+				   gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[0])),
+				   gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[1])),
+				   gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[2])),
+				   NULL);
 
     if (judoka_tmp->coachid)
         edited.coachid = g_strdup(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->coachid)));
@@ -439,19 +513,11 @@ static GtkWidget *set_entry(GtkWidget *table, int row,
     GtkWidget *tmp;
 
     tmp = gtk_label_new(text);
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(table), tmp, 0, row, 1, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), tmp, 0, 1, row, row+1);
-#endif
     tmp = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(tmp), 30);
     gtk_entry_set_text(GTK_ENTRY(tmp), deftxt ? deftxt : "");
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(table), tmp, 1, row, 1, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), tmp, 1, 2, row, row+1);
-#endif
     SET_ACCESS_NAME(tmp, text);
 
     return tmp;
@@ -807,8 +873,21 @@ void view_on_row_activated(GtkTreeView        *treeview,
 #endif
         row++;
 
-        judoka_tmp->comment = set_entry(table, row++, _("Comment:"), comment);
-        gtk_entry_set_max_length(GTK_ENTRY(judoka_tmp->comment), 100);
+	gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Comment:")), 0, row, 1, 1);
+	gchar **list = g_strsplit(comment, "#~", NUM_COMMENT_COLS);
+	ok = TRUE;
+	
+	for (i = 0; i < NUM_COMMENT_COLS; i++) {
+	    if (ok && !list[i]) ok = FALSE;
+	    tmp = gtk_entry_new();
+	    gtk_entry_set_max_length(GTK_ENTRY(tmp), 100);
+	    gtk_entry_set_text(GTK_ENTRY(tmp), ok ? list[i] : "");
+	    gtk_grid_attach(GTK_GRID(table), tmp, 1, row, 1, 1);
+	    judoka_tmp->comment[i] = tmp; 
+	    row++;
+	}
+
+	g_strfreev(list);
 
         tmp = gtk_label_new(_("Hide name:"));
         gtk_grid_attach(GTK_GRID(table), tmp, 0, row, 1, 1);
@@ -1286,6 +1365,37 @@ void first_name_cell_data_func (GtkTreeViewColumn *col,
     g_free(first);
 }
 
+void comment_cell_data_func (GtkTreeViewColumn *col,
+			     GtkCellRenderer   *renderer,
+			     GtkTreeModel      *model,
+			     GtkTreeIter       *iter,
+			     gpointer           user_data)
+{
+    gboolean visible, ok = TRUE;
+    gchar *comment = NULL;
+    gint i, num = ptr_to_gint(user_data);
+    
+    if (num < 0 || num >= 3)
+	return;
+    
+    gtk_tree_model_get(model, iter,
+                       COL_COMMENT, &comment,
+                       COL_VISIBLE, &visible,
+		       -1);
+
+    gchar **list = g_strsplit(comment, "#~", NUM_COMMENT_COLS);
+    for (i = 0; i < num; i++)
+	if (!list[i]) {
+	    ok = FALSE;
+	    break;
+	}
+
+    //g_object_set(renderer, "cell-background", "White", "cell-background-set", TRUE, NULL);
+    g_object_set(renderer, "text", (ok && list[num]) ? list[num] : "", NULL);
+    g_strfreev(list);
+    g_free(comment);
+}
+
 void birthyear_cell_data_func (GtkTreeViewColumn *col,
                                GtkCellRenderer   *renderer,
                                GtkTreeModel      *model,
@@ -1558,6 +1668,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 50);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
     /* --- Column first name --- */
 
@@ -1577,7 +1688,28 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
+    /* --- Column comment --- */
+
+    gint i;
+    for (i = 0; i < NUM_COMMENT_COLS; i++) {
+	renderer = gtk_cell_renderer_text_new();
+	g_object_set (renderer, "xalign", 0.0, NULL);
+	col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+								  -1, _("Comment"),
+								  renderer, "text",
+								  COL_COMMENT,
+								  NULL);
+	col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
+	gtk_tree_view_column_set_cell_data_func(col, renderer, comment_cell_data_func, gint_to_ptr(i), NULL);
+	gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
+	gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
+	gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+	//gtk_tree_view_column_set_visible(col, show_columns & (1 << i));
+	columns[col_offset-1] = col;
+    }
+    
     /* --- Column birthyear name --- */
 
     renderer = gtk_cell_renderer_text_new();
@@ -1596,6 +1728,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
     /* --- Column belt --- */
 
@@ -1613,6 +1746,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
     /* --- Column club --- */
 
@@ -1631,6 +1765,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
     /* --- Column country --- */
 
@@ -1649,6 +1784,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
     /* --- Column regcategory --- */
 
@@ -1667,6 +1803,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
     /* --- Column weight --- */
 
@@ -1684,6 +1821,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
     /* --- Column id --- */
 
@@ -1699,6 +1837,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
   /* --- Column seeding --- */
 
@@ -1716,6 +1855,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
   /* --- Column clubseeding --- */
 
@@ -1733,9 +1873,13 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);
     gtk_tree_view_column_set_min_width (GTK_TREE_VIEW_COLUMN(col), 2);
     gtk_tree_view_column_set_reorderable(GTK_TREE_VIEW_COLUMN(col), TRUE);
+    columns[col_offset-1] = col;
 
     /*****/
 
+    toggle_col_visible(NULL, NULL);
+    restore_comp_col_order();
+    
     model = create_and_fill_model();
     gtk_tree_view_set_model(GTK_TREE_VIEW(view), model);
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);

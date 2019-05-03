@@ -1,4 +1,4 @@
-Jack,Taylor,Stonehaven Judo Club,GBR,m,0,0,1991,1d,74
+Jack,Taylor,Stonehaven Judo Club,GBR,m,0,0,1991,1d,74,Payments ok,Check weight,Judogi ok
 Thomas,Brown,Cambridge Judo,GBR,m,0,0,1994,2k,61
 Oliver,Wilson,Barnet Judo,GBR,m,0,0,1995,2k,58
 Maja,Johansson,Oxelösunds JK,SWE,f,1,1,1995,2k,43
@@ -9,7 +9,7 @@ Elsa,Svensson,Kristinehamns JK,SWE,f,0,0,1995,2k,42
 Alice,Pettersson,Borlänge JC,SWE,f,0,0,1991,1d,61
 Alva,Bengtsson,Borås JK,SWE,f,0,0,1994,2k,56
 Linnea,Carlsson,Oxelösunds JK,SWE,f,0,3,1991,1d,60
-Wilma,Gustavsson,Kristinehamns JK,SWE,f,0,0,1995,2k,46
+Wilma,Gustavsson,Kristinehamns JK,SWE,f,0,0,1995,2k,46,Payments ok,Check weight,Judogi ok
 Klara,Lindgren,Borlänge JC,SWE,f,0,0,1993,1k,54
 Lucas,Nilsson,Borås JK,SWE,m,2,1,1994,2k,47
 Oscar,Eriksson,Oxelösunds JK,SWE,m,0,4,1995,2k,48
@@ -17,32 +17,32 @@ William,Larsson,Kristinehamns JK,SWE,m,0,0,1992,1k,56
 Elias,Persson,Borlänge JC,SWE,m,0,0,1990,1d,67
 Hugo,Gustafsson,Borås JK,SWE,m,0,0,1993,1k,66
 Alexander,Jonsson,Oxelösunds JK,SWE,m,0,0,1995,2k,53
-Erik,Jansson,Kristinehamns JK,SWE,m,0,0,1994,2k,48
+Erik,Jansson,Kristinehamns JK,SWE,m,0,0,1994,2k,48,Payments ok,,Judogi ok
 Isak,Hansson,Borlänge JC,SWE,m,0,0,1991,1d,56
 Filip,Jönsson,Borås JK,SWE,m,0,2,1992,1k,75
 Emil,Petersson,SPIF,SWE,m,0,0,1995,2k,64
 Viktor,Lindberg,Oxelösunds JK,SWE,m,0,0,1993,1k,63
 Thea,ANDERSEN,Bergen Judo Klubb,NOR,f,0,0,1995,2k,42
-Tea,BERG,Hamar Judoklubb,NOR,f,0,0,1994,2k,47
+Tea,BERG,Hamar Judoklubb,NOR,f,0,0,1994,2k,47,Payments ok,Check weight,
 Emma,CHRISTENSEN,Judo Klubb Stord,NOR,f,0,0,1990,1d,51
 Sara,ERIKSEN,Namsos Judo Club,NOR,f,0,0,1992,1k,50
 Julie,HANSEN,Bergen Judo Klubb,NOR,f,0,0,1993,1k,60
 Ida,IVERSEN,Oslo Judo Klubb,NOR,f,0,0,1994,2k,44
-Hanna,JOHANSEN,Judo Klubb Stord,NOR,f,0,0,1995,2k,50
-Nora,KRISTIANSEN,Hamar Judoklubb,NOR,f,0,0,1989,1d,58
-Ingrid,LARSEN,Namsos Judo Club,NOR,f,0,0,1990,1d,60
+Hanna,JOHANSEN,Judo Klubb Stord,NOR,f,0,0,1995,2k,50,Payments ok,,Judogi ok
+Nora,KRISTIANSEN,Hamar Judoklubb,NOR,f,0,0,1989,1d,58,,,Judogi ok
+Ingrid,LARSEN,Namsos Judo Club,NOR,f,0,0,1990,1d,60,,,Judogi ok
 Jonas,DAHL,Oslo Judo Klubb,NOR,m,0,0,1994,2k,49
 Mathias,FREDRIKSEN,Bergen Judo Klubb,NOR,m,0,0,1993,1k,66
-Matias,GUNDERSEN,Hamar Judoklubb,NOR,m,0,0,1995,2k,56
+Matias,GUNDERSEN,Hamar Judoklubb,NOR,m,0,0,1995,2k,56,Payments ok,
 Alexander,HALVORSEN,Namsos Judo Club,NOR,m,0,0,1992,1k,59
 Aleksander,JENSEN,Judo Klubb Stord,NOR,m,0,0,1990,1d,69
 Andreas,NILSEN,Oslo Judo Klubb,NOR,m,0,0,1994,2k,71
 Elias,PETTERSEN,Bergen Judo Klubb,NOR,m,0,0,1991,1d,79
-Kristian,SVENDSEN,Hamar Judoklubb,NOR,m,0,0,1993,1k,61
+Kristian,SVENDSEN,Hamar Judoklubb,NOR,m,0,0,1993,1k,61,Payments ok,Check weight,
 Christian,AMUNDSEN,Judo Klubb Stord,NOR,m,0,0,1995,2k,56
 Emma,Virtanen,Finndai,FIN,f,0,0,1994,2k,44
 Ella,Nieminen,Iisalmen Judoseura,FIN,f,0,0,1992,1k,53
-Sara,Mäkelä,Kokkolan Budo,FIN,f,0,0,1989,1d,64
+Sara,Mäkelä,Kokkolan Budo,FIN,f,0,0,1989,1d,64,Payments ok,
 Venla,Laine,Nummelan Judo,FIN,f,0,0,1993,1k,61
 Siiri,Heikkinen,Raision Ryhti,FIN,f,0,0,1995,2k,51
 Aino,Mäenpää,Nummelan Judo,FIN,f,0,0,1994,2k,47
@@ -57,7 +57,7 @@ Elias,Koskinen,Finndai,FIN,m,3,2,1993,1k,67
 Aleksi,Järvinen,Iisalmen Judoseura,FIN,m,0,0,1994,2k,58
 Joona,Uusitalo,Kokkolan Budo,FIN,m,0,0,1990,1d,63
 Lauri,Järvenpää,Raision Ryhti,FIN,m,0,0,1995,2k,51
-Leevi,Välimäki,Nummelan Judo,FIN,m,0,0,1991,1d,65
+Leevi,Välimäki,Nummelan Judo,FIN,m,0,0,1991,1d,65,Payments ok,
 Matias,Keskitalo,Kokkolan Budo,FIN,m,0,0,1992,1k,70
 Rasmus,Alatalo,Finndai,FIN,m,0,3,1993,1k,57
 Grace,Smith,Cambridge Judo,GBR,f,0,0,1994,2k,43
@@ -78,7 +78,7 @@ William,Green,Walderslade Judo Club,GBR,m,0,0,1994,2k,67
 James,Wood,Cambridge Judo,GBR,m,0,0,1993,1k,59
 Alfie,Clarke,Barnet Judo,GBR,m,0,0,1995,2k,51
 Hanna,Müller,Judoclub Horb,GER,f,0,0,1991,1d,56
-Leoni,Schneider,Judo-Club Passau,GER,f,0,0,1994,2k,60
+Leoni,Schneider,Judo-Club Passau,GER,f,0,0,1994,2k,60,Payments ok,
 Lena,Meyer,TSV Ellgau,GER,f,0,0,1993,1k,57
 Anna,Schulz,SV Darmstadt 98,GER,f,0,0,1995,2k,48
 Lea,Becker,TuS Holle,GER,f,0,0,1992,1k,52

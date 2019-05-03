@@ -28,20 +28,14 @@ extern void font_dialog(GtkWidget *w, gpointer data);
 extern void set_lang(gpointer data, guint action, GtkWidget *w);
 extern void set_club_text(gpointer data, guint action, GtkWidget *w);
 extern void set_club_abbr(GtkWidget *menu_item, gpointer data);
-extern void toggle_automatic_sheet_update(gpointer callback_data, 
-					  guint callback_action, GtkWidget *menu_item);
-extern void toggle_automatic_web_page_update(gpointer callback_data, 
-                                             guint callback_action, GtkWidget *menu_item);
-extern void toggle_weights_in_sheets(gpointer callback_data, 
-                                     guint callback_action, GtkWidget *menu_item);
-extern void toggle_grade_visible(gpointer callback_data, 
-                                 guint callback_action, GtkWidget *menu_item);
-extern void toggle_name_layout(gpointer callback_data, 
-                               guint callback_action, GtkWidget *menu_item);
-extern void toggle_pool_style(gpointer callback_data, 
-                              guint callback_action, GtkWidget *menu_item);
-extern void toggle_belt_colors(gpointer callback_data, 
-                               guint callback_action, GtkWidget *menu_item);
+extern void toggle_automatic_sheet_update(GtkWidget *menu_item, gpointer data);
+extern void toggle_automatic_web_page_update(GtkWidget *menu_item, gpointer data);
+extern void toggle_weights_in_sheets(GtkWidget *menu_item, gpointer data);
+extern void toggle_grade_visible(GtkWidget *menu_item, gpointer data);
+extern void toggle_name_layout(GtkWidget *menu_item, gpointer data);
+extern void toggle_pool_style(GtkWidget *menu_item, gpointer data);
+extern void toggle_belt_colors(GtkWidget *menu_item, gpointer data);
+extern void toggle_col_visible(GtkWidget *menu_item, gpointer data);
 extern void get_from_old_competition(GtkWidget *w, gpointer data);
 extern void get_weights_from_old_competition(GtkWidget *w, gpointer data);
 extern void start_help(GtkWidget *w, gpointer data);
@@ -83,6 +77,7 @@ static GtkWidget *menubar,
     *preference_weights_to_pool_sheets, 
     *preference_grade_visible, *preference_name_layout, *preference_name_layout_0, *preference_name_layout_1, *preference_name_layout_2, 
     *preference_layout, *preference_pool_style, *preference_belt_colors,
+    *preference_columns, *preference_show_defaults, *preference_show_col[NUM_COMP_COLS],
     *preference_sheet_font, *preference_svg, *preference_password, *judotimer_control[NUM_TATAMIS],
     *preference_mirror, *preference_auto_arrange, *preference_club_text,
     *preference_club_text_club, *preference_club_text_country, *preference_club_text_both,
@@ -91,6 +86,18 @@ static GtkWidget *menubar,
     *help_manual, *help_about;
 
 static GSList *lang_group = NULL, *club_group = NULL;
+
+void set_col_defaults(GtkWidget *menu_item, gpointer data)
+{
+    gint i;
+    show_columns = 0xffe3;
+    
+    for (i = 0; i < NUM_COMP_COLS; i++) {
+	gboolean new_state = show_columns & (1 << i);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_show_col[i]), new_state);
+    }
+    toggle_col_visible(NULL, gint_to_ptr(1));
+}
 
 GtkWidget *get_menubar_menu(GtkWidget  *window)
 {
@@ -407,6 +414,21 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), gtk_separator_menu_item_new());
 
+    preference_columns = gtk_menu_item_new_with_label("");
+    submenu = gtk_menu_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_columns);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(preference_columns), submenu);
+
+    preference_show_defaults = gtk_menu_item_new_with_label("");
+    gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_show_defaults);
+
+    for (i = 0; i < NUM_COMP_COLS; i++) {
+	preference_show_col[i] = gtk_check_menu_item_new_with_label("");
+	gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_show_col[i]);
+    }
+    
+    gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), gtk_separator_menu_item_new());
+
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_auto_sheet_update);
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_mirror);
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_auto_arrange);
@@ -445,6 +467,11 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(preference_sheet_font),             "activate", G_CALLBACK(font_dialog), 0);
     g_signal_connect(G_OBJECT(preference_svg),                    "activate", G_CALLBACK(select_svg_dir), 0);
 
+    g_signal_connect(G_OBJECT(preference_show_defaults),          "activate", G_CALLBACK(set_col_defaults), NULL);
+    for (i = 0; i < NUM_COMP_COLS; i++)
+	g_signal_connect(G_OBJECT(preference_show_col[i]),        "activate",
+			 G_CALLBACK(toggle_col_visible), gint_to_ptr(i));
+    
     g_signal_connect(G_OBJECT(preference_password),               "activate", G_CALLBACK(set_webpassword_dialog), 0);
     g_signal_connect(G_OBJECT(preference_mirror),                 "activate", G_CALLBACK(toggle_mirror), 0);
     g_signal_connect(G_OBJECT(preference_auto_arrange),           "activate", G_CALLBACK(toggle_auto_arrange), 0);
@@ -524,6 +551,16 @@ void set_preferences(void)
     error = NULL;
     if (g_key_file_get_boolean(keyfile, "preferences", "beltcolors", &error)) {
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_belt_colors), TRUE);
+    }
+
+    error = NULL;
+    x1 = g_key_file_get_integer(keyfile, "preferences", "showcolumns", &error);
+    if (!error) {
+	show_columns = x1;
+	for (i = 0; i < NUM_COMP_COLS; i++) {
+	    if (show_columns & (1 << i))
+		gtk_menu_item_activate(GTK_MENU_ITEM(preference_show_col[i]));
+	}
     }
 
     error = NULL;
@@ -848,6 +885,11 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(preference_auto_arrange          , _("Automatic Match Delay"));
     change_menu_label(preference_use_logo              , _("Print Logo"));
 
+    change_menu_label(preference_columns               , _("Show"));
+    change_menu_label(preference_show_defaults         , _("Reset to Defaults"));
+    for (i = 0; i < NUM_COMP_COLS; i++)
+	change_menu_label(preference_show_col[i]       , _(competitor_column_names[i]));
+    
     change_menu_label(preference_serial                , _("Scale Serial Interface..."));
     change_menu_label(preference_medal_matches         , _("Medal Matches..."));
 

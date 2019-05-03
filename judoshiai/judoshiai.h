@@ -465,6 +465,8 @@ enum button_responses {
 #define CLUB_TEXT_ADDRESS      8
 #define CLUB_TEXT_NO_CLUB     16
 
+#define NUM_COMMENT_COLS 3
+
 enum {
     NAME_LAYOUT_N_S_C = 0,
     NAME_LAYOUT_S_N_C,
@@ -832,7 +834,7 @@ extern GtkWidget     *main_window;
 extern gint           my_address;
 extern GdkCursor     *wait_cursor;
 
-extern gchar *belts_defaults[];
+extern const gchar *belts_defaults[];
 extern gchar *belts[NUM_BELTS];
 
 extern const guint pools[11][32][2];
@@ -857,12 +859,7 @@ extern gboolean one_bronze(gint table, gint sys);
 extern FILE *result_file;
 extern GKeyFile *keyfile;
 
-#if (GTKVER == 3)
 extern GtkEntryCompletion *club_completer;
-#else
-extern GCompletion *club_completer;
-#endif
-
 extern struct message hello_message;
 
 extern gboolean automatic_sheet_update;
@@ -887,7 +884,11 @@ extern gint match_crc[NUM_TATAMIS+1];
 
 extern gint cat_opts[NUM_CAT_OPTS];
 
-gint num_custom_brackets;
+extern gint num_custom_brackets;
+extern gint show_columns;
+
+#define NUM_COMP_COLS 14
+extern const gchar *competitor_column_names[NUM_COMP_COLS];
 
 /** Functions */
 
@@ -936,6 +937,7 @@ extern void belt_cell_data_func (GtkTreeViewColumn *col, GtkCellRenderer *render
 extern gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param);
 extern void set_menu_active(void);
 extern void change_competitor_names(gint cat, gint num, gint comp1, gint comp2);
+extern void save_comp_col_order(void);
 
 
 /* utils */

@@ -391,11 +391,7 @@ void toggle_pool_style(GtkWidget *menu_item, gpointer data)
 
 void toggle_belt_colors(GtkWidget *menu_item, gpointer data)
 {
-#if (GTKVER == 3)
     belt_colors = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
-#else
-    belt_colors = GTK_CHECK_MENU_ITEM(menu_item)->active;
-#endif
     g_key_file_set_boolean(keyfile, "preferences", "beltcolors", pool_style);
 }
 

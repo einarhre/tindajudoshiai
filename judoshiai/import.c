@@ -28,7 +28,9 @@ enum {
     TXT_SEEDING,
     TXT_CLUBSEEDING,
     TXT_GENDER,
-    TXT_COMMENT,
+    TXT_COMMENT1,
+    TXT_COMMENT2,
+    TXT_COMMENT3,
     TXT_GIRLSTR,
     TXT_SEPARATOR,
     NUM_TXTS
@@ -160,13 +162,25 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
     if (valid_data(TXT_CLUBSEEDING, tokens, num_cols, d))
         j.clubseeding = atoi(tokens[d->columns[TXT_CLUBSEEDING] - 1]);
 
-    if (valid_data(TXT_COMMENT, tokens, num_cols, d))
-        j.comment = tokens[d->columns[TXT_COMMENT] - 1];
+    gchar *comments[NUM_COMMENT_COLS];
 
+    if (valid_data(TXT_COMMENT1, tokens, num_cols, d)) comments[0] = tokens[d->columns[TXT_COMMENT1] - 1];
+    else comments[0] = "";
+    if (valid_data(TXT_COMMENT2, tokens, num_cols, d)) comments[1] = tokens[d->columns[TXT_COMMENT2] - 1];
+    else comments[1] = "";
+    if (valid_data(TXT_COMMENT2, tokens, num_cols, d)) comments[2] = tokens[d->columns[TXT_COMMENT3] - 1];
+    else comments[2] = "";
+
+    if (comments[0][0] || comments[1][0] || comments[2][0])
+	j.comment = g_strjoin("#~", comments[0], comments[1], comments[2], NULL);
+    else
+	j.comment = g_strdup("");
+    
     GtkTreeIter iter;
     if (find_iter_name_2(&iter, j.last, j.first, j.club, j.regcategory)) {
         d->comp_exists++;
         shiai_log(0, 0, "Competitor exists: %s %s, %s %s", j.last, j.first, j.country, j.club);
+	g_free((gpointer)j.comment);
         g_free(lastname);
         g_free(newcat);
         return FALSE;
@@ -178,6 +192,7 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
     else {
         d->comp_syntax++;
         shiai_log(0, 0, "Syntax error: %s %s, %s %s", j.last, j.first, j.country, j.club);
+	g_free((gpointer)j.comment);
         g_free(lastname);
         g_free(newcat);
         return FALSE;
@@ -185,6 +200,7 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
     //update_competitors_categories(j.index);
     //matches_refresh();
 
+    g_free((gpointer)j.comment);
     g_free(lastname);
     g_free(newcat);
     return TRUE;
@@ -267,7 +283,7 @@ static void import_txt(gchar *fname, gboolean test, struct i_text *d)
         }
 
         if (test) {
-            for (i = 0; i <= TXT_COMMENT; i++) {
+            for (i = 0; i <= TXT_COMMENT3; i++) {
                 print_item(i, tokens, num_cols, d);
             }
         } else {
@@ -486,7 +502,9 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     get_preferences_int("importtxtcolgender", &data->columns[TXT_GENDER]);
     get_preferences_int("importtxtcolseeding",&data->columns[TXT_SEEDING]);
     get_preferences_int("importtxtcolclubseeding",&data->columns[TXT_CLUBSEEDING]);
-    get_preferences_int("importtxtcolcomment",&data->columns[TXT_COMMENT]);
+    get_preferences_int("importtxtcolcomment",&data->columns[TXT_COMMENT1]);
+    get_preferences_int("importtxtcolcomment2",&data->columns[TXT_COMMENT2]);
+    get_preferences_int("importtxtcolcomment3",&data->columns[TXT_COMMENT3]);
     get_preferences_str("importtxtgirlstr",    data->girlstr);
     get_preferences_str("importtxtseparator",  data->separator);
     if (data->separator[0] == 0)
@@ -533,9 +551,11 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     data->fields[TXT_SEEDING]   = set_col_entry (table,10, _("Seeding:"),          data->columns[TXT_SEEDING],data);
     data->fields[TXT_CLUBSEEDING] = set_col_entry (table,11, _("Club Seeding:"),   data->columns[TXT_CLUBSEEDING],data);
     data->fields[TXT_GENDER]    = set_col_entry (table,12, _("Sex:"),              data->columns[TXT_GENDER], data);
-    data->fields[TXT_COMMENT]   = set_col_entry (table,13, _("Comment:"),          data->columns[TXT_COMMENT],data);
-    data->fields[TXT_GIRLSTR]   = set_text_entry(table,14, _("Girl Text:"),        data->girlstr,             data);
-    data->fields[TXT_SEPARATOR] = set_text_entry(table,15, _("Column Separator:"), data->separator,           data);
+    data->fields[TXT_COMMENT1]   = set_col_entry (table,13, _("Comment:"),          data->columns[TXT_COMMENT1],data);
+    data->fields[TXT_COMMENT2]   = set_col_entry (table,14, _("Comment:"),          data->columns[TXT_COMMENT2],data);
+    data->fields[TXT_COMMENT3]   = set_col_entry (table,15, _("Comment:"),          data->columns[TXT_COMMENT3],data);
+    data->fields[TXT_GIRLSTR]   = set_text_entry(table,16, _("Girl Text:"),        data->girlstr,             data);
+    data->fields[TXT_SEPARATOR] = set_text_entry(table,17, _("Column Separator:"), data->separator,           data);
 
     gtk_widget_show_all(dialog);
 
@@ -564,7 +584,9 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
         set_preferences_int("importtxtcolclubseeding",data->columns[TXT_CLUBSEEDING]);
         set_preferences_str("importtxtgirlstr",   data->girlstr);
         set_preferences_str("importtxtseparator", data->separator);
-        set_preferences_int("importtxtcolcomment",data->columns[TXT_COMMENT]);
+        set_preferences_int("importtxtcolcomment",data->columns[TXT_COMMENT1]);
+        set_preferences_int("importtxtcolcomment2",data->columns[TXT_COMMENT2]);
+        set_preferences_int("importtxtcolcomment3",data->columns[TXT_COMMENT3]);
     }
 
     gtk_widget_destroy(dialog);

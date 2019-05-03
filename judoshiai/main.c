@@ -91,6 +91,8 @@ void destroy( GtkWidget *widget,
 {
     gint x, y, w, h;
 
+    save_comp_col_order();
+
     print_stat();
 
     if (first_instance && lockfile) {
