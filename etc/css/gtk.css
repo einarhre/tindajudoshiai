@@ -61,7 +61,7 @@ background-clip: padding-box;
 -WnckTasklist-fade-overlay-rect: 0;
 }
 */
-
+/*
 GtkTreeView row:nth-child(even) {
     background-color: #eee;
 }
@@ -73,6 +73,7 @@ GtkTreeView row:nth-child(odd) {
 GtkTreeView row:selected {
     background-color: #000;
 }
+*/
 
 GtkMenuItem {
     padding-top: 4px;
