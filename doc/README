@@ -21,6 +21,43 @@ NOTE for Windows:
 
 ==============================================
 RELEASE NOTE
+VERSION 2.9
+
+Common
+------
++ French language added.
+
+JudoShiai
+---------
++ Three comment fields for competitor data.
++ Competitor tab can show the comment columns.
++ Competitor tab columns visibility is selectable. Positions can be changed by dragging and dropping.
+  Visible columns and their position is remembered. Select visible columns here:
+  Preferences -> Show
++ Accredication card template has new features (see User Guide):
+  - Set printing order by keyword "order".
+  - New keywords for competition name, date, and place.
++ Customizable extra links for results page. Can be used for example for last minute info.
++ New protocols for online results: SFTP and SCP. These seem to work better that FTP.
++ British seeding order (and competitor numbering) added.
+
+==============================================
+RELEASE NOTE
+VERSION 2.9-REDIS (experimental)
+
+Common
+------
+ + In addition to normal release 2.9 there is an experimental release that supports Redis.
+   Communication chapter in User Guide explains more.
+
+ JudoServer
+ ----------
+ + New application that is used with experimental Redis.
+ + Competitors can be edited and added by many people. JudoShiai does not need to be running.
+ + Web based JudoInfo.
+
+==============================================
+RELEASE NOTE
 VERSION 2.8
 
 Common
