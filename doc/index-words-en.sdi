@@ -1,0 +1,65 @@
+accreditation;accreditation card;;;0;0
+announcer;announcer;;;0;0
+auto-update;auto-update;;;0;0
+backup;backup;;;0;0
+bar code;bar code;;;0;0
+basic;basic;;;0;0
+basic;BASIC;;;0;0
+bracket;bracket;;;0;0
+category;category;;;0;0
+category creation;category creation;;;0;0
+clock;clock;;;0;0
+communication;communication;;;0;0
+competition area;area;competition;;0;0
+competition system;system;competition;;0;0
+competitor;competitor;;;0;0
+accreditation card customization;accreditation card;customize;;0;0
+customized cards;accreditation card;customize;;0;0
+timer-custom.txt;JudoTimer display;customize;;0;0
+JudoTimer display layout customization;JudoTimer display;customize;;0;0
+Customize the web pages;web pages;customize;;0;0
+database;database;;;0;0
+drawing;drawing;;;0;0
+Draw Algorithm;algorithm;drawing;;0;0
+fight;match;;;0;0
+hansoku-make;hansoku-make;;;0;0
+import;import;;;0;0
+incremental search;incremental search;;;0;0
+judogi control;judogi control;;;0;0
+judoinfo;JudoInfo;;;0;0
+judojudogi;JudoJudogi;;;0;0
+judoshiai;JudoShiai;;;0;0
+judotimer;JudoTimer;;;0;0
+judoweight;JudoWeight;;;0;0
+language;language;;;0;0
+license;license;;;0;0
+lisp;LISP;;;0;0
+match;match;;;0;0
+medal match;medal match;;;0;0
+name completion;name completion;;;0;0
+network;network;;;0;0
+next match;next match;;;0;0
+osaekomi;osaekomi;;;0;0
+point;point;;;0;0
+redis;Redis;;;0;0
+rest time;rest time;;;0;0
+result;result;;;0;0
+score;score;;;0;0
+sheet;sheet;;;0;0
+sonomama;sonomama;;;0;0
+sourceforge;sourceforge;;;0;0
+sqlite;sqlite;;;0;0
+stream;video;;;0;0
+svg;SVG;;;0;0
+svg template;template;svg;;0;0
+team event;team event;;;0;0
+tournament;tournament;;;0;0
+video;video;;;0;0
+vlc;VLC;;;0;0
+web browser;web browser;;;0;0
+web server;web server;;;0;0
+weigh-in note;accreditation card;;;0;0
+yoshi;yoshi;;;0;0
+video server;video server;;;0;0
+video server setup;setup;video server;;0;0
+Score Legends;Score Legends;;;0;0
