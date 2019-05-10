@@ -143,7 +143,6 @@ void save_comp_col_order(void)
 	for (j = 0; j < NUM_COMP_COLS; j++) {
 	    if (columns[i] == c[j]) {
 		n[j] = i;
-		g_print("in pos %d is col %d\n", j, i);
 		break;
 	    }
 	}
