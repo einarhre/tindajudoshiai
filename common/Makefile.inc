@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=2.9-pre
+SHIAI_VER_NUM=2.9
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 
 ifndef JS_BUILD_DIR
@@ -14,9 +14,20 @@ GTKVER=3
 OBJS=
 WARNINGS = -Wall -Wshadow
 JUDOPROXY=NO
+JUDOHTTPD=NO
 TOOL=NORMAL
 MXEDIR=/home/$(USER)/mxe/usr
 TGTEXT_S="\"?\""
+
+ifneq ("$(wildcard /opt/win32)","")
+    WIN32_BASE=/opt/win32
+else
+    WIN32_BASE=../../../win32
+endif
+
+ifneq ("$(wildcard $(CURDIR)/judohttpd)","")
+    JUDOHTTPD=YES
+endif
 
 ### Target executable type ###
 ifeq ($(TARGETOS),WIN32)
@@ -85,19 +96,19 @@ else
         SUFF=.exe
         ZIP=.zip
         RESHACKER=wine "C:\\bin\\ResHacker.exe"
-        INNOSETUP=wine "/opt/win32/Inno Setup 5/ISCC.exe"
+        INNOSETUP=wine "$(WIN32_BASE)/Inno Setup 5/ISCC.exe"
         LIBREOFFICE=libreoffice
     endif
 
     ifeq ($(TARGETOS),WINXP)
     ### Cross compilation (host=Linux, target=WindowsXP) ###
 
-        WINDRES=wine "/opt/win32/MinGW/bin/windres.exe"
+        WINDRES=wine "$(WIN32_BASE)/MinGW/bin/windres.exe"
         OBJDIR=obj-winxp
         RELEASEDIR=$(JS_BUILD_DIR)/release-winxp
 
         ifndef WIN32_DIR
-            WIN32_DIR=/opt/win32
+            WIN32_DIR=$(WIN32_BASE)
         endif
 
         NEWCC := $(shell command -v i686-w64-mingw32-gcc 2> /dev/null)
@@ -237,10 +248,10 @@ else
                  -I$(DEVELDIR)/include/libpng14   \
                  -I$(DEVELDIR)/include/cairo \
                  -I$(DEVELDIR)/include/gdk-pixbuf-2.0 \
-                 -I/opt/win32/w32api/include \
-                 -I/opt/win32/rsvg/include/librsvg-2.0 \
-                 -I/opt/win32/curl/include \
-                 -I/opt/win32/ssh2/include \
+                 -I$(WIN32_BASE)/w32api/include \
+                 -I$(WIN32_BASE)/rsvg/include/librsvg-2.0 \
+                 -I$(WIN32_BASE)/curl/include \
+                 -I$(WIN32_BASE)/ssh2/include \
                  -I../common -mms-bitfields \
                  -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S) \
                  -DENABLE_NLS \
@@ -254,9 +265,9 @@ else
              -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 \
              -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lcairo \
              -lcroco-0.6-3 -lrsvg-2-2 -lxml2-2 \
-             -L/opt/win32/curl/bin -lcurl \
-             -L/opt/win32/ssh2/bin -lssh2-1 \
-             -L/opt/win32/w32api/lib -lws2_32 -mwindows
+             -L$(WIN32_BASE)/curl/bin -lcurl \
+             -L$(WIN32_BASE)/ssh2/bin -lssh2-1 \
+             -L$(WIN32_BASE)/w32api/lib -lws2_32 -mwindows
              # To add console out:
              # -mconsole
 

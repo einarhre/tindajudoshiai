@@ -7,6 +7,7 @@ JUDOWEIGHTFILE=$(JS_BUILD_DIR)/judoweight/$(OBJDIR)/judoweight$(SUFF)
 JUDOJUDOGIFILE=$(JS_BUILD_DIR)/judojudogi/$(OBJDIR)/judojudogi$(SUFF)
 JUDOPROXYFILE=$(JS_BUILD_DIR)/judoproxy/$(OBJDIR)/judoproxy$(SUFF)
 AUTOUPDATEFILE=$(JS_BUILD_DIR)/auto-update/$(OBJDIR)/auto-update$(SUFF)
+JUDOHTTPDFILE=$(JS_BUILD_DIR)/judohttpd/$(OBJDIR)/judohttpd$(SUFF)
 
 RELFILE=$(RELDIR)/bin/judoshiai$(SUFF)
 RUNDIR=$(DEVELDIR)
@@ -36,13 +37,20 @@ ifeq ($(TOOL),MXE)
     endif
 endif
 
+$(info --- MAKE VARIABLES: ---)
+$(info Environment:             $(OS))
+$(info Target operating system: $(TARGETOS))
+$(info Suffix text:             $(TGTEXT))
+$(info Target architecture:     $(TGT))
+$(info Work directory:          $(CURDIR))
+$(info Build JudoHttpd:         $(JUDOHTTPD))
+$(info Build JudoProxy:         $(JUDOPROXY))
+$(info Used tool for Windowns:  $(TOOL))
+$(info MXE directory:           $(MXEDIR))
+$(info WIN32 base directory:    $(WIN32_BASE))
+$(info -----------------------)
 
 all:
-	@echo "---------------------------"
-	@echo "Environment: $(OS)"
-	@echo "Target: $(TARGETOS)"
-	@echo "Common target: $(TGT)"
-	@echo "Current dir: $(CURDIR)"
 	@echo "---------------------------"
 	@echo "Create release directories"
 	@echo "---------------------------"
@@ -85,6 +93,9 @@ all:
 	make -C judojudogi
 	make -C serial
 	make -C auto-update
+ifeq ($(JUDOHTTPD),YES)
+	make -C judohttpd
+endif
 ifeq ($(JUDOPROXY),YES)
 	make -C judoproxy
 endif
@@ -98,6 +109,9 @@ endif
 	cp $(JUDOWEIGHTFILE) $(RELDIR)/bin/
 	cp $(JUDOJUDOGIFILE) $(RELDIR)/bin/
 	cp $(AUTOUPDATEFILE) $(RELDIR)/bin/
+ifeq ($(JUDOHTTPD),YES)
+	cp $(JUDOHTTPDFILE) $(RELDIR)/bin/
+endif
 ifeq ($(JUDOPROXY),YES)
 	cp $(JUDOPROXYFILE) $(RELDIR)/bin/
 endif
@@ -197,7 +211,6 @@ endif
 	@echo "To make a Debian package run (Linux only)"
 	@echo "  sudo -E JS_BUILD_DIR=$(JS_BUILD_DIR) make debian"
 
-
 setup:
 ifeq ($(TGT),WIN32)
 	sed "s/AppVerName=.*/AppVerName=Shiai $(SHIAI_VER_NUM)/" etc/judoshiai.iss >judoshiai1.iss
@@ -237,6 +250,11 @@ install:
 	ln -sf /usr/lib/judoshiai/bin/judoweight /usr/bin/judoweight
 	ln -sf /usr/lib/judoshiai/bin/judojudogi /usr/bin/judojudogi
 	ln -sf /usr/lib/judoshiai/bin/judoproxy /usr/bin/judoproxy
+ifeq ($(JUDOHTTPD),YES)
+	ln -sf /usr/lib/judoshiai/bin/judohttpd /usr/bin/judohttpd
+	cp gnome/judohttpd.desktop /usr/share/applications/
+	cp etc/png/judohttpd.png /usr/share/pixmaps/
+endif
 	cp gnome/judoshiai.desktop /usr/share/applications/
 	cp gnome/judotimer.desktop /usr/share/applications/
 	cp gnome/judoinfo.desktop /usr/share/applications/
@@ -272,4 +290,8 @@ clean:
 	make -C judoweight clean
 	make -C judojudogi clean
 	make -C judoproxy clean
+ifeq ($(JUDOHTTPD),YES)
+	make -C judohttpd clean
+endif
 	rm -rf $(RELEASEDIR)
+

@@ -50,7 +50,7 @@ Common
  + In addition to normal release 2.9 there is an experimental release that supports Redis.
    Communication chapter in User Guide explains more.
 
- JudoServer
+ JudoHttpd
  ----------
  + New application that is used with experimental Redis.
  + Competitors can be edited and added by many people. JudoShiai does not need to be running.
