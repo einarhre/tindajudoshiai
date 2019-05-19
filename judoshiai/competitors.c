@@ -269,9 +269,13 @@ static void judoka_edited_callback(GtkWidget *widget,
                                                        (GTK_COMBO_BOX(judoka_tmp->system)),
 						       (guint *)(&system.table));
 
-    if (gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[0]))[0] == 0 &&
-	gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[1]))[0] == 0 &&
-	gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[2]))[0] == 0)
+    if (judoka_tmp->comment[0] == NULL ||
+	judoka_tmp->comment[1] == NULL ||
+	judoka_tmp->comment[2] == NULL)
+	edited.comment = g_strdup("");
+    else if (gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[0]))[0] == 0 &&
+	     gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[1]))[0] == 0 &&
+	     gtk_entry_get_text(GTK_ENTRY(judoka_tmp->comment[2]))[0] == 0)
 	edited.comment = g_strdup("");
     else
 	edited.comment = g_strjoin("#~",
