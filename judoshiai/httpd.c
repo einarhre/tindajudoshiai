@@ -1988,7 +1988,7 @@ gpointer conn_thread(gpointer arg)
 		    time_t start = time(NULL);
 		    while (!g_atomic_int_get(&connections[i].resp.ready) &&
 			   time(NULL) < start + 20) {
-			usleep(50000);
+			g_usleep(50000);
 		    }
 		    if (time(NULL) >= start + 20)
 			g_print("NO REPLY IN TIME conn=%d\n", i);

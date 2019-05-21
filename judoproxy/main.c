@@ -431,6 +431,7 @@ int main( int   argc,
     gboolean   run_flag = TRUE;   /* used as exit flag for threads */
     int i;
 
+    (void)gth;
     putenv("UBUNTU_MENUPROXY=");
 
     //init_trees();
@@ -576,7 +577,6 @@ int main( int   argc,
     progress_bar = gtk_progress_bar_new();
     gtk_grid_attach_next_to(GTK_GRID(main_vbox), progress_bar, NULL, GTK_POS_BOTTOM, 1, 1);
 
-    GtkWidget *w = GTK_WIDGET(gtk_scrolled_window_new(NULL, NULL));
 #ifdef WEBKIT
 #ifdef VIDEO
     web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());

@@ -179,7 +179,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
     y_pos = BOX_HEIGHT;
 
     for (i = 0; i < NUM_TATAMIS; i++) {
-        gchar buf[30];
+        gchar buf[128];
         gint k;
 
         if (!show_tatami[i])
@@ -197,7 +197,6 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
 
         for (k = 1; k <= num_lines; k++) {
             struct match *m = &match_list[i][k];
-            gchar buf[20];
             gdouble e = (k == 0) ? colwidth/2 : 0.0;
 			
             if (m->number >= 1000)

@@ -70,7 +70,7 @@ gboolean   run_flag = TRUE;   /* used as exit flag for threads */
 void close_all(void)
 {
     run_flag = FALSE;
-    usleep(1000000);
+    g_usleep(1000000);
 }
 
 int main( int   argc,
@@ -127,7 +127,7 @@ int main( int   argc,
     atexit(close_all);
 
     while (1) {
-	usleep(1000000);
+	g_usleep(1000000);
 	if (demo) {
 	    struct message msg;
 	    memset(&msg, 0, sizeof(msg));

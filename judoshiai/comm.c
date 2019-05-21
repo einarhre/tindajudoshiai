@@ -981,7 +981,7 @@ gpointer node_thread(gpointer args)
             alen = sizeof(caller);
             if ((tmp_fd = accept(node_fd, (struct sockaddr *)&caller, &alen)) < 0) {
                 perror("serv accept");
-		usleep(1000000);
+		g_usleep(1000000);
                 continue;
             }
 #if 0
@@ -1017,7 +1017,7 @@ gpointer node_thread(gpointer args)
             if ((tmp_fd = accept(websock_fd, (struct sockaddr *)&caller, &alen)) < 0) {
                 perror("websock accept");
 		g_print("websock=%d tmpfd=%d\n", (int)websock_fd, (int)tmp_fd);
-		usleep(1000000);
+		g_usleep(1000000);
                 continue;
             }
 
@@ -1163,7 +1163,7 @@ gpointer server_thread(gpointer args)
         alen = sizeof(caller);
         if ((tmp_fd = accept(serv_fd, (struct sockaddr *)&caller, &alen)) < 0) {
             perror("serv accept 2");
-	    usleep(1000000);
+	    g_usleep(1000000);
             continue;
         }
 
@@ -1402,7 +1402,7 @@ static gint read_all_files(SOCKET s, const gchar *subdirname, gint sendnow, gint
 			    length -= n;
 			    if (n == 0) {
 				g_print("slow down\n");
-				usleep(100000);
+				g_usleep(100000);
 			    }
 			}
 		    }
@@ -1463,7 +1463,7 @@ gpointer auto_update_thread(gpointer args)
         alen = sizeof(caller);
         if ((tmp_fd = accept(serv_fd, (struct sockaddr *)&caller, &alen)) < 0) {
             perror("auto-update accept");
-	    usleep(1000000);
+	    g_usleep(1000000);
             continue;
         }
 
@@ -1517,7 +1517,7 @@ gpointer get_file_thread(gpointer args)
         alen = sizeof(caller);
         if ((tmp_fd = accept(serv_fd, (struct sockaddr *)&caller, &alen)) < 0) {
             perror("get-file accept");
-	    usleep(1000000);
+	    g_usleep(1000000);
             continue;
         }
 

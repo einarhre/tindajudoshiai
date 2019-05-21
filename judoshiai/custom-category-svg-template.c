@@ -79,9 +79,9 @@ static char *competitor_style  = "font-size:10px;font-family:Arial;fill:#000000"
 static char *competitor_name_1 = "hm1-first-s-last-s-club";
 static char *competitor_name_2 = "hm1-last";
 static FILE *fout;
-static double res_line = 16.0, x_init = 200.0;
+static double res_line_g = 16.0, x_init = 200.0;
 static double x_shift = 100.0, y_shift = 60.0;
-static struct custom_data cd;
+static struct custom_data cd_g;
 static double start_x = 20.0, start_y = 80.0, max_x = 0, max_y = 0;
 static double rr_num_w = 25.0, rr_name_w = 120.0, rr_club_w = 90.0, rr_res_w = 50;
 
@@ -249,8 +249,8 @@ static int draw_bestof3(struct custom_data *cd, best_of_three_bare_t *b3,
 {
     int i;
     double tot_w = 7*rr_num_w + rr_name_w + rr_club_w;
-    double tot_h = 3*res_line;
-    double sx = x, sy = y + res_line;
+    double tot_h = 3*res_line_g;
+    double sx = x, sy = y + res_line_g;
 
     space->next_x = sx + tot_w;
     space->next_y = sy + tot_h + 20.0;
@@ -266,44 +266,44 @@ static int draw_bestof3(struct custom_data *cd, best_of_three_bare_t *b3,
     fprintf(fout, "<path d='"
             "M %.2f %.2f l 0,%.2f"
             "' style='fill:none;stroke:black;stroke-width:1' />\n",
-            sx + rr_num_w, sy + res_line, 2*res_line);
+            sx + rr_num_w, sy + res_line_g, 2*res_line_g);
     fprintf(fout, "<path d='"
             "M %.2f %.2f l 0,%.2f"
             "' style='fill:none;stroke:black;stroke-width:1' />\n",
-            sx + rr_num_w + rr_name_w, sy + res_line, 2*res_line);
+            sx + rr_num_w + rr_name_w, sy + res_line_g, 2*res_line_g);
     for (i = 0; i < 6; i++)
         fprintf(fout, "<path d='"
                 "M %.2f %.2f l 0,%.2f"
                 "' style='fill:none;stroke:black;stroke-width:1' />\n",
                 sx + rr_num_w + rr_name_w + rr_club_w + i*rr_num_w,
-                sy + res_line, 2*res_line);
+                sy + res_line_g, 2*res_line_g);
     // horisontal lines
     for (i = 0; i < 2; i++)
         fprintf(fout, "<path d='"
                 "M %.2f %.2f l %.2f,0"
                 "' style='fill:none;stroke:black;stroke-width:1' />\n",
-                sx, sy + (i+1)*res_line, tot_w);
+                sx, sy + (i+1)*res_line_g, tot_w);
     // header texts
     fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
             "text-anchor:middle;text-align:center'>%%t0</text>\n",
             sx+tot_w/2, sy-4.0, competitor_style);
     fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
             "text-anchor:middle;text-align:center'>#</text>\n",
-            sx+rr_num_w/2, sy+res_line-4.0, competitor_style);
+            sx+rr_num_w/2, sy+res_line_g-4.0, competitor_style);
     fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
             "text-anchor:middle;text-align:center'>%%t6</text>\n",
-            sx+rr_num_w+rr_name_w/2, sy+res_line-4.0, competitor_style);
+            sx+rr_num_w+rr_name_w/2, sy+res_line_g-4.0, competitor_style);
     fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
             "text-anchor:middle;text-align:center'>%%t8</text>\n",
-            sx+rr_num_w+rr_name_w+rr_club_w/2, sy+res_line-4.0, competitor_style);
+            sx+rr_num_w+rr_name_w+rr_club_w/2, sy+res_line_g-4.0, competitor_style);
     for (i = 0; i < 3; i++) {
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
                 "text-anchor:middle;text-align:center'>1</text>\n",
-                sx+rr_num_w+rr_name_w+rr_club_w+2*i*rr_num_w+rr_num_w/2, sy+res_line-4.0,
+                sx+rr_num_w+rr_name_w+rr_club_w+2*i*rr_num_w+rr_num_w/2, sy+res_line_g-4.0,
                 competitor_style);
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
                 "text-anchor:middle;text-align:center'>2</text>\n",
-                sx+rr_num_w+rr_name_w+rr_club_w+(2*i+1)*rr_num_w+rr_num_w/2, sy+res_line-4.0,
+                sx+rr_num_w+rr_name_w+rr_club_w+(2*i+1)*rr_num_w+rr_num_w/2, sy+res_line_g-4.0,
                 competitor_style);
     }
 
@@ -316,15 +316,15 @@ static int draw_bestof3(struct custom_data *cd, best_of_three_bare_t *b3,
     for (i = 0; i < 2; i++) {
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                 "text-anchor:middle;text-align:center'>%d</text>\n",
-                sx + rr_num_w/2.0, sy + (i + 2)*res_line - 4.0,
+                sx + rr_num_w/2.0, sy + (i + 2)*res_line_g - 4.0,
                 competitor_style,
                 c[i]->type == COMP_TYPE_COMPETITOR ? c[i]->num : i+1);
 
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%m%d-%d-first-s-last</text>\n",
-                sx + rr_num_w + 6.0, sy + (i + 2)*res_line - 4.0,
+                sx + rr_num_w + 6.0, sy + (i + 2)*res_line_g - 4.0,
                 competitor_style, match_num, i+1);
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%m%d-%d-club</text>\n",
-                sx + rr_num_w + rr_name_w + 6.0, sy + (i + 2)*res_line - 4.0,
+                sx + rr_num_w + rr_name_w + 6.0, sy + (i + 2)*res_line_g - 4.0,
                 competitor_style, match_num, i+1);
 
         // points
@@ -334,7 +334,7 @@ static int draw_bestof3(struct custom_data *cd, best_of_three_bare_t *b3,
         for (j = 0; j < 3; j++) {
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%m%dp%d</text>\n",
-                    x1 + (2*j+1-i)*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0,
+                    x1 + (2*j+1-i)*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0,
                     competitor_style, b3->matches[j], i+1);
         }
     }
@@ -352,38 +352,38 @@ static int draw_bestof3(struct custom_data *cd, best_of_three_bare_t *b3,
             tot_w, tot_h, tot_w, tot_h);
     // vertical lines
     double win_cols[] = {sx, rr_num_w, rr_num_w, rr_num_w, 0};
-    draw_verical_lines(win_cols, sy + res_line, 2*res_line);
+    draw_verical_lines(win_cols, sy + res_line_g, 2*res_line_g);
     // horisontal lines
     for (i = 0; i < 2; i++)
         fprintf(fout, "<path d='"
                 "M %.2f %.2f l %.2f,0"
                 "' style='fill:none;stroke:black;stroke-width:1' />\n",
-                sx, sy + (i+1)*res_line, tot_w);
+                sx, sy + (i+1)*res_line_g, tot_w);
     // header texts
     char *win_hdr_texts[] = {NULL, "Wins", "Pts", "%t22", NULL};
-    draw_header_texts(win_cols, sy+res_line-4.0, win_hdr_texts);
+    draw_header_texts(win_cols, sy+res_line_g-4.0, win_hdr_texts);
     // points
     for (i = 0; i < 2; i++) {
         if (c[i]->type == COMP_TYPE_COMPETITOR) {
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c%dw</text>\n",
-                    sx + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, c[i]->num);
+                    sx + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, c[i]->num);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c%dp</text>\n",
-                    sx + rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, c[i]->num);
+                    sx + rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, c[i]->num);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c%dr</text>\n",
-                    sx + 2*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, c[i]->num);
+                    sx + 2*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, c[i]->num);
         } else {
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c-%s-%dw</text>\n",
-                    sx + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, b3->name, i+1);
+                    sx + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, b3->name, i+1);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c-%s-%dp</text>\n",
-                    sx + rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, b3->name, i+1);
+                    sx + rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, b3->name, i+1);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c-%s-%dr</text>\n",
-                    sx + 2*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, b3->name, i+1);
+                    sx + 2*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, b3->name, i+1);
         }
     }
 
@@ -391,7 +391,7 @@ static int draw_bestof3(struct custom_data *cd, best_of_three_bare_t *b3,
     sx = x;
     sy = sy + tot_h + 20.0;
     tot_w = rr_num_w*3 + rr_name_w*2 + rr_res_w*2;
-    tot_h = 4*res_line;
+    tot_h = 4*res_line_g;
     space->next_x = MAX(space->next_x, sx + tot_w);
     space->next_y = sy + tot_h + 20.0;
 
@@ -403,45 +403,45 @@ static int draw_bestof3(struct custom_data *cd, best_of_three_bare_t *b3,
             tot_w, tot_h, tot_w, tot_h);
     // vertical lines
     double match_cols[] = {sx, rr_num_w, rr_name_w, rr_num_w, rr_num_w, rr_name_w, rr_res_w, rr_res_w, 0};
-    draw_verical_lines(match_cols, sy + res_line, 3*res_line);
+    draw_verical_lines(match_cols, sy + res_line_g, 3*res_line_g);
     // horizontal lines
     for (i = 0; i < 3; i++)
         fprintf(fout, "<path d='"
                 "M %.2f %.2f l %.2f,0"
                 "' style='fill:none;stroke:black;stroke-width:1' />\n",
-                sx, sy + (i+1)*res_line, tot_w);
+                sx, sy + (i+1)*res_line_g, tot_w);
     // header texts
     char *match_hdr_texts[] = {NULL, "%t14", "%t16", "", "", "%t15", "%t17", "%t19", NULL};
-    draw_header_texts(match_cols, sy+res_line-4.0, match_hdr_texts);
+    draw_header_texts(match_cols, sy+res_line_g-4.0, match_hdr_texts);
     // matches
     for (i = 0; i < 3; i++) {
-        int match_num = b3->matches[i];
+        match_num = b3->matches[i];
 
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                 "text-anchor:middle;text-align:center'>%d</text>\n",
-                sx+rr_num_w/2.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+rr_num_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num);
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%m%d-1-first-s-last</text>\n",
-                sx+rr_num_w+6.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+rr_num_w+6.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num);
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%m%d-2-first-s-last</text>\n",
-                sx+rr_num_w*3+rr_name_w+6.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+rr_num_w*3+rr_name_w+6.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num);
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                 "text-anchor:middle;text-align:center'>1</text>\n",
-                sx+rr_num_w+rr_name_w+rr_num_w/2.0, sy+(i+2)*res_line-4.0, competitor_style);
+                sx+rr_num_w+rr_name_w+rr_num_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style);
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                 "text-anchor:middle;text-align:center'>2</text>\n",
-                sx+2*rr_num_w+rr_name_w+rr_num_w/2.0, sy+(i+2)*res_line-4.0, competitor_style);
+                sx+2*rr_num_w+rr_name_w+rr_num_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style);
         // match result
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                 "text-anchor:middle;text-align:center'>%%m%dp1 - %%m%dp2</text>\n",
-                sx+3*rr_num_w+2*rr_name_w+rr_res_w/2.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+3*rr_num_w+2*rr_name_w+rr_res_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num, match_num);
         // time
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                 "text-anchor:middle;text-align:center'>%%m%dtime</text>\n",
-                sx+3*rr_num_w+2*rr_name_w+rr_res_w+rr_res_w/2.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+3*rr_num_w+2*rr_name_w+rr_res_w+rr_res_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num);
     }
 
@@ -475,8 +475,8 @@ static int draw_round_robin(struct custom_data *cd, struct round_robin_bare *rr,
 {
     int i;
     double tot_w = rr_num_w + rr_name_w + rr_club_w + rr->num_competitors*rr_num_w;
-    double tot_h = (rr->num_competitors+1)*res_line;
-    double sx = x, sy = y + res_line;
+    double tot_h = (rr->num_competitors+1)*res_line_g;
+    double sx = x, sy = y + res_line_g;
 
     space->next_x = sx + tot_w;
     space->next_y = sy + tot_h + 20.0;
@@ -492,64 +492,64 @@ static int draw_round_robin(struct custom_data *cd, struct round_robin_bare *rr,
     fprintf(fout, "<path d='"
             "M %.2f %.2f l 0,%.2f"
             "' style='fill:none;stroke:black;stroke-width:1' />\n",
-            sx + rr_num_w, sy + res_line, rr->num_competitors*res_line);
+            sx + rr_num_w, sy + res_line_g, rr->num_competitors*res_line_g);
     fprintf(fout, "<path d='"
             "M %.2f %.2f l 0,%.2f"
             "' style='fill:none;stroke:black;stroke-width:1' />\n",
-            sx + rr_num_w + rr_name_w, sy + res_line, rr->num_competitors*res_line);
+            sx + rr_num_w + rr_name_w, sy + res_line_g, rr->num_competitors*res_line_g);
     for (i = 0; i < rr->num_competitors; i++)
         fprintf(fout, "<path d='"
                 "M %.2f %.2f l 0,%.2f"
                 "' style='fill:none;stroke:black;stroke-width:1' />\n",
                 sx + rr_num_w + rr_name_w + rr_club_w + i*rr_num_w,
-                sy + res_line, rr->num_competitors*res_line);
+                sy + res_line_g, rr->num_competitors*res_line_g);
     // horisontal lines
     for (i = 0; i < rr->num_competitors; i++)
         fprintf(fout, "<path d='"
                 "M %.2f %.2f l %.2f,0"
                 "' style='fill:none;stroke:black;stroke-width:1' />\n",
-                sx, sy + (i+1)*res_line, tot_w);
+                sx, sy + (i+1)*res_line_g, tot_w);
     // header texts
     fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
             "text-anchor:middle;text-align:center'>%%t0</text>\n",
             sx+tot_w/2, sy-4.0, competitor_style);
     fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
             "text-anchor:middle;text-align:center'>#</text>\n",
-            sx+rr_num_w/2, sy+res_line-4.0, competitor_style);
+            sx+rr_num_w/2, sy+res_line_g-4.0, competitor_style);
     fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
             "text-anchor:middle;text-align:center'>%%t6</text>\n",
-            sx+rr_num_w+rr_name_w/2, sy+res_line-4.0, competitor_style);
+            sx+rr_num_w+rr_name_w/2, sy+res_line_g-4.0, competitor_style);
     fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
             "text-anchor:middle;text-align:center'>%%t8</text>\n",
-            sx+rr_num_w+rr_name_w+rr_club_w/2, sy+res_line-4.0, competitor_style);
+            sx+rr_num_w+rr_name_w+rr_club_w/2, sy+res_line_g-4.0, competitor_style);
     for (i = 0; i < rr->num_competitors; i++)
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
                 "text-anchor:middle;text-align:center'>%d</text>\n",
-                sx+rr_num_w+rr_name_w+rr_club_w+i*rr_num_w+rr_num_w/2, sy+res_line-4.0,
+                sx+rr_num_w+rr_name_w+rr_club_w+i*rr_num_w+rr_num_w/2, sy+res_line_g-4.0,
                 competitor_style, i+1);
     // competitors
     for (i = 0; i < rr->num_competitors; i++) {
         if (rr->competitors[i].type == COMP_TYPE_COMPETITOR) {
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                     "text-anchor:middle;text-align:center'>%d</text>\n",
-                    sx + rr_num_w/2.0, sy + (i + 2)*res_line - 4.0,
+                    sx + rr_num_w/2.0, sy + (i + 2)*res_line_g - 4.0,
                     competitor_style, rr->competitors[i].num);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%c%dfirst-s-last</text>\n",
-                    sx + rr_num_w + 6.0, sy + (i + 2)*res_line - 4.0,
+                    sx + rr_num_w + 6.0, sy + (i + 2)*res_line_g - 4.0,
                     competitor_style, rr->competitors[i].num);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%c%dclub</text>\n",
-                    sx + rr_num_w + rr_name_w + 6.0, sy + (i + 2)*res_line - 4.0,
+                    sx + rr_num_w + rr_name_w + 6.0, sy + (i + 2)*res_line_g - 4.0,
                     competitor_style, rr->competitors[i].num);
         } else {
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                     "text-anchor:middle;text-align:center'>%d</text>\n",
-                    sx + rr_num_w/2.0, sy + (i + 2)*res_line - 4.0,
+                    sx + rr_num_w/2.0, sy + (i + 2)*res_line_g - 4.0,
                     competitor_style, i+1);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%c-%s-%dfirst-s-last</text>\n",
-                    sx + rr_num_w + 6.0, sy + (i + 2)*res_line - 4.0,
+                    sx + rr_num_w + 6.0, sy + (i + 2)*res_line_g - 4.0,
                     competitor_style, rr->name, i+1);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%c-%s-%dclub</text>\n",
-                    sx + rr_num_w + rr_name_w + 6.0, sy + (i + 2)*res_line - 4.0,
+                    sx + rr_num_w + rr_name_w + 6.0, sy + (i + 2)*res_line_g - 4.0,
                     competitor_style, rr->name, i+1);
         }
         // points
@@ -563,7 +563,7 @@ static int draw_round_robin(struct custom_data *cd, struct round_robin_bare *rr,
             if (mnum) {
                 fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                         "%%m%dp%d</text>\n",
-                        x1 + j*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0,
+                        x1 + j*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0,
                         competitor_style, mnum > 0 ? mnum : -mnum, mnum > 0 ? 1 : 2);
             }
 
@@ -583,38 +583,38 @@ static int draw_round_robin(struct custom_data *cd, struct round_robin_bare *rr,
             tot_w, tot_h, tot_w, tot_h);
     // vertical lines
     double win_cols[] = {sx, rr_num_w, rr_num_w, rr_num_w, 0};
-    draw_verical_lines(win_cols, sy + res_line, rr->num_competitors*res_line);
+    draw_verical_lines(win_cols, sy + res_line_g, rr->num_competitors*res_line_g);
     // horisontal lines
     for (i = 0; i < rr->num_competitors; i++)
         fprintf(fout, "<path d='"
                 "M %.2f %.2f l %.2f,0"
                 "' style='fill:none;stroke:black;stroke-width:1' />\n",
-                sx, sy + (i+1)*res_line, tot_w);
+                sx, sy + (i+1)*res_line_g, tot_w);
     // header texts
     char *win_hdr_texts[] = {NULL, "Wins", "Pts", "%t22", NULL};
-    draw_header_texts(win_cols, sy+res_line-4.0, win_hdr_texts);
+    draw_header_texts(win_cols, sy+res_line_g-4.0, win_hdr_texts);
     // points
     for (i = 0; i < rr->num_competitors; i++) {
         if (rr->competitors[i].type == COMP_TYPE_COMPETITOR) {
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c%dw</text>\n",
-                    sx + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, rr->competitors[i].num);
+                    sx + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, rr->competitors[i].num);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c%dp</text>\n",
-                    sx + rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, rr->competitors[i].num);
+                    sx + rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, rr->competitors[i].num);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c%dr</text>\n",
-                    sx + 2*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, rr->competitors[i].num);
+                    sx + 2*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, rr->competitors[i].num);
         } else {
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c-%s-%dw</text>\n",
-                    sx + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, rr->name, i+1);
+                    sx + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, rr->name, i+1);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c-%s-%dp</text>\n",
-                    sx + rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, rr->name, i+1);
+                    sx + rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, rr->name, i+1);
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>"
                     "%%c-%s-%dr</text>\n",
-                    sx + 2*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line - 4.0, competitor_style, rr->name, i+1);
+                    sx + 2*rr_num_w + rr_num_w/2, sy + (i + 2)*res_line_g - 4.0, competitor_style, rr->name, i+1);
         }
     }
 
@@ -622,7 +622,7 @@ static int draw_round_robin(struct custom_data *cd, struct round_robin_bare *rr,
     sx = x;
     sy = sy + tot_h + 20.0;
     tot_w = rr_num_w*3 + rr_name_w*2 + rr_res_w*2;
-    tot_h = (rr->num_rr_matches + 1)*res_line;
+    tot_h = (rr->num_rr_matches + 1)*res_line_g;
     space->next_x = MAX(space->next_x, sx + tot_w);
     space->next_y = sy + tot_h + 20.0;
 
@@ -634,16 +634,16 @@ static int draw_round_robin(struct custom_data *cd, struct round_robin_bare *rr,
             tot_w, tot_h, tot_w, tot_h);
     // vertical lines
     double match_cols[] = {sx, rr_num_w, rr_name_w, rr_num_w, rr_num_w, rr_name_w, rr_res_w, rr_res_w, 0};
-    draw_verical_lines(match_cols, sy + res_line, rr->num_rr_matches*res_line);
+    draw_verical_lines(match_cols, sy + res_line_g, rr->num_rr_matches*res_line_g);
     // horizontal lines
     for (i = 0; i < rr->num_rr_matches; i++)
         fprintf(fout, "<path d='"
                 "M %.2f %.2f l %.2f,0"
                 "' style='fill:none;stroke:black;stroke-width:1' />\n",
-                sx, sy + (i+1)*res_line, tot_w);
+                sx, sy + (i+1)*res_line_g, tot_w);
     // header texts
     char *match_hdr_texts[] = {NULL, "%t14", "%t16", "", "", "%t15", "%t17", "%t19", NULL};
-    draw_header_texts(match_cols, sy+res_line-4.0, match_hdr_texts);
+    draw_header_texts(match_cols, sy+res_line_g-4.0, match_hdr_texts);
     // matches
     for (i = 0; i < rr->num_rr_matches; i++) {
         int match_num = rr->rr_matches[i];
@@ -652,13 +652,13 @@ static int draw_round_robin(struct custom_data *cd, struct round_robin_bare *rr,
 
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                 "text-anchor:middle;text-align:center'>%d</text>\n",
-                sx+rr_num_w/2.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+rr_num_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num);
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%m%d-1-first-s-last</text>\n",
-                sx+rr_num_w+6.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+rr_num_w+6.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num);
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%m%d-2-first-s-last</text>\n",
-                sx+rr_num_w*3+rr_name_w+6.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+rr_num_w*3+rr_name_w+6.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num);
         // find competitor numbers
         int j, comp1 = -1, comp2 = -1;
@@ -670,25 +670,25 @@ static int draw_round_robin(struct custom_data *cd, struct round_robin_bare *rr,
         if (comp1 >= 0)
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                     "text-anchor:middle;text-align:center'>%d</text>\n",
-                    sx+rr_num_w+rr_name_w+rr_num_w/2.0, sy+(i+2)*res_line-4.0, competitor_style,
+                    sx+rr_num_w+rr_name_w+rr_num_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                     (rr->competitors[comp1].type == COMP_TYPE_COMPETITOR) ?
                     rr->competitors[comp1].num : i+1);
         if (comp2 >= 0)
             fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                     "text-anchor:middle;text-align:center'>%d</text>\n",
-                    sx+2*rr_num_w+rr_name_w+rr_num_w/2.0, sy+(i+2)*res_line-4.0, competitor_style,
+                    sx+2*rr_num_w+rr_name_w+rr_num_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                     (rr->competitors[comp2].type == COMP_TYPE_COMPETITOR) ?
                     rr->competitors[comp2].num : i+1);
 
         // match result
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                 "text-anchor:middle;text-align:center'>%%m%dp1 - %%m%dp2</text>\n",
-                sx+3*rr_num_w+2*rr_name_w+rr_res_w/2.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+3*rr_num_w+2*rr_name_w+rr_res_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num, match_num);
         // time
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;"
                 "text-anchor:middle;text-align:center'>%%m%dtime</text>\n",
-                sx+3*rr_num_w+2*rr_name_w+rr_res_w+rr_res_w/2.0, sy+(i+2)*res_line-4.0, competitor_style,
+                sx+3*rr_num_w+2*rr_name_w+rr_res_w+rr_res_w/2.0, sy+(i+2)*res_line_g-4.0, competitor_style,
                 match_num);
     }
 
@@ -704,7 +704,7 @@ int make_svg_file(int argc, char *argv[])
 
     if (argc < 2) return 1;
 
-    memset(&cd, 0, sizeof(cd));
+    memset(&cd_g, 0, sizeof(cd_g));
     memset(&match_flags, 0, sizeof(match_flags));
     x_shift = 100.0;
     y_shift = 80.0;
@@ -733,7 +733,7 @@ int make_svg_file(int argc, char *argv[])
         return 1;
     }
 
-    char *msg = read_custom_category(argv[1], &cd);
+    char *msg = read_custom_category(argv[1], &cd_g);
     if (msg) {
         fprintf(stderr, "%s\n", msg);
         return 1;
@@ -743,26 +743,26 @@ int make_svg_file(int argc, char *argv[])
     fprintf(fout, "%s", svg_page_header_text);
 
     // best of three
-    for (i = 0; i < cd.num_best_of_three_pairs; i++) {
-        draw_bestof3(&cd, &cd.best_of_three_pairs[i], start_x, start_y, &space);
+    for (i = 0; i < cd_g.num_best_of_three_pairs; i++) {
+        draw_bestof3(&cd_g, &cd_g.best_of_three_pairs[i], start_x, start_y, &space);
         max_x = MAX(max_x, space.next_x);
         start_y = space.next_y;
     }
 
     // round robin
-    for (i = 0; i < cd.num_round_robin_pools; i++) {
-        draw_round_robin(&cd, &cd.round_robin_pools[i], start_x, start_y, &space);
+    for (i = 0; i < cd_g.num_round_robin_pools; i++) {
+        draw_round_robin(&cd_g, &cd_g.round_robin_pools[i], start_x, start_y, &space);
         max_x = MAX(max_x, space.next_x);
         start_y = space.next_y;
     }
 
     // matches
-    for (i = 0; i < cd.num_positions; i++) {
+    for (i = 0; i < cd_g.num_positions; i++) {
         competitor_bare_t c;
-        c.type = cd.positions[i].type;
-        c.num = cd.positions[i].match;
-        c.pos = cd.positions[i].pos;
-        draw_comp(&cd, &c, start_x, start_y, &space);
+        c.type = cd_g.positions[i].type;
+        c.num = cd_g.positions[i].match;
+        c.pos = cd_g.positions[i].pos;
+        draw_comp(&cd_g, &c, start_x, start_y, &space);
         start_y = space.next_y;
         max_x = MAX(max_x, space.next_x);
     }
@@ -783,12 +783,12 @@ int make_svg_file(int argc, char *argv[])
             res_x + (res_w - res_col1_w)/2.0, y - 4.0, competitor_style);
     y += res_line;
 
-    for (i = 0; i < cd.num_positions; i++) {
+    for (i = 0; i < cd_g.num_positions; i++) {
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s'>%%r%dhm2-first-s-last-s-club</text>\n",
                 res_x + 30.0, y - 4.0, competitor_style, i+1);
         fprintf(fout, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>%d</text>\n",
                 res_x + 12.0, y - 4.0, competitor_style,
-                cd.positions[i].real_contest_pos ? cd.positions[i].real_contest_pos : i+1);
+                cd_g.positions[i].real_contest_pos ? cd_g.positions[i].real_contest_pos : i+1);
 
         y += res_line;
     }
@@ -800,17 +800,17 @@ int make_svg_file(int argc, char *argv[])
             "l %.2f,0 l 0,%.2f l -%.2f,0 l 0,-%.2f' "
             "style='fill:none;stroke:black;stroke-width:2' />\n",
             res_x, start_y,
-            res_w, (cd.num_positions + 1)*res_line,
-            res_w, (cd.num_positions + 1)*res_line);
+            res_w, (cd_g.num_positions + 1)*res_line,
+            res_w, (cd_g.num_positions + 1)*res_line);
 
     fprintf(fout, "<path "
             "d='M %.2f,%.2f l 0,%.2f' "
             "style='fill:none;stroke:black;stroke-width:1' />\n",
-            res_x + res_col1_w, start_y + res_line, cd.num_positions*res_line);
+            res_x + res_col1_w, start_y + res_line, cd_g.num_positions*res_line);
 
     start_y += res_line;
 
-    for (i = 0; i < cd.num_positions; i++) {
+    for (i = 0; i < cd_g.num_positions; i++) {
         fprintf(fout, "<path "
                 "d='M %.2f,%.2f "
                 "l %.2f,0' "
@@ -819,7 +819,7 @@ int make_svg_file(int argc, char *argv[])
                 res_w);
     }
 
-    max_y = start_y + cd.num_positions*res_line;
+    max_y = start_y + cd_g.num_positions*res_line;
 
     fprintf(fout, "%s", svg_end);
 

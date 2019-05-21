@@ -385,7 +385,7 @@ int put_using_ftp(const char *fullname, const char *fname)
     CURL *curl;
     CURLcode res;
     FILE *hd_src;
-    struct stat file_info;
+    GStatBuf file_info;
     curl_off_t fsize;
     gchar *u;
 
@@ -457,7 +457,7 @@ int put_using_ftp(const char *fullname, const char *fname)
 	if (res != CURLE_OK) {
 	    xfer_nok++;
 	    snprintf(progr_pros, sizeof(progr_pros), "%s", curl_easy_strerror(res));
-	    usleep(2000000);
+	    g_usleep(2000000);
 	} else xfer_ok++;
 
 	/* clean up the FTP commands list */
@@ -530,7 +530,7 @@ int put_using_post(const char *fullname, const char *fname)
 	if (res != CURLE_OK) {
 	    xfer_nok++;
 	    snprintf(progr_pros, sizeof(progr_pros), "%s", curl_easy_strerror(res));
-	    usleep(2000000);
+	    g_usleep(2000000);
 	} else xfer_ok++;
 
 	/* always cleanup */
@@ -552,7 +552,7 @@ int put_using_put(const char *fullname, const char *fname)
     CURL *curl;
     CURLcode res;
     FILE * hd_src;
-    struct stat file_info;
+    GStatBuf file_info;
     gchar *u;
 
     /* get the file size of the local file */
@@ -608,7 +608,7 @@ int put_using_put(const char *fullname, const char *fname)
 	if (res != CURLE_OK) {
 	    xfer_nok++;
 	    snprintf(progr_pros, sizeof(progr_pros), "%s", curl_easy_strerror(res));
-	    usleep(2000000);
+	    g_usleep(2000000);
 	} else xfer_ok++;
 
 	/* always cleanup */
@@ -630,8 +630,7 @@ int put_using_sftp(const char *fullname, const char *fname)
     LIBSSH2_SFTP_HANDLE *sftp_handle = NULL;
     LIBSSH2_CHANNEL *channel = NULL;
     struct stat fileinfo;
-    unsigned long hostaddr;
-    int i, rc;
+    int rc;
     struct sockaddr_in sin;
     FILE *local = NULL;
     char mem[1024*100];
@@ -647,7 +646,6 @@ int put_using_sftp(const char *fullname, const char *fname)
     if (!session) {
 	struct addrinfo hints, *res, *res0;
 	int error;
-	char host[NI_MAXHOST];
 
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_INET;     /* IPv4, IPv6, or anything */
@@ -862,7 +860,7 @@ gpointer ftp_thread(gpointer args)
 		time_t copy_start = time(NULL);
                 const gchar *fname = g_dir_read_name(dir);
                 while (fname && !ftp_update) {
-                    struct stat statbuf;
+                    GStatBuf statbuf;
                     gchar *fullname = g_build_filename(current_directory, fname, NULL);
                     if (!g_stat(fullname, &statbuf)) {
                         if (statbuf.st_mtime >= last_copy &&

@@ -1,3 +1,4 @@
+/*
 * {
     background-color: #ddd;
     color: #000;
@@ -7,7 +8,6 @@
     background-color: transparent;
 }
 
-/*
 GtkDrawingArea {
     background-color: transparent;
 }
@@ -24,7 +24,6 @@ GtkMenuBar {
     background-color: #000;
     color: #fff;
 }
-*/
 
 GtkMenuItem {
     padding-top: 4px;
@@ -34,3 +33,4 @@ GtkMenuItem {
 GtkMenuItem selected {
    background-color: #000;
 }
+*/

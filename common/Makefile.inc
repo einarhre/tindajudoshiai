@@ -22,7 +22,7 @@ TGTEXT_S="\"?\""
 ifneq ("$(wildcard /opt/win32)","")
     WIN32_BASE=/opt/win32
 else
-    WIN32_BASE=../../../win32
+    WIN32_BASE=$(HOME)/Dropbox/judoshiai-dev/win32
 endif
 
 ifneq ("$(wildcard $(CURDIR)/judohttpd)","")

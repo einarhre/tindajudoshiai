@@ -1152,11 +1152,11 @@ void set_comment_text(gchar *txt)
     if (golden_score && (txt == NULL || txt[0] == 0))
         txt = _("Golden Score");
 
-        set_text(MY_LABEL(comment), txt);
-	expose_label(NULL, comment);
+    set_text(MY_LABEL(comment), txt);
+    expose_label(NULL, comment);
 
-	if (big_dialog)
-		show_big();
+    if (big_dialog)
+	show_big();
 }
 
 void voting_result(GtkWidget *w,
@@ -1304,7 +1304,9 @@ void reset_display(gint key)
 
 static void expose_label(cairo_t *c, gint w)
 {
+#ifndef USE_PANGO
     cairo_text_extents_t extents;
+#endif
     gdouble x, y, x1, y1, wi, he;
     gboolean delc = FALSE;
     gboolean two_lines = labels[w].text2 && labels[w].text2[0];
@@ -1419,7 +1421,12 @@ static void expose_label(cairo_t *c, gint w)
 
     if (two_lines == FALSE &&
         labels[w].wrap &&
-        extents.width > W(labels[w].w)) {
+#ifdef USE_PANGO
+	iwidth > W(labels[w].w)
+#else
+        extents.width > W(labels[w].w)
+#endif
+	) {
         // needs two lines
         SNPRINTF_UTF8(buf1, "%s", labels[w].text);
         gchar *p = strrchr(buf1, '-');
@@ -2098,11 +2105,16 @@ int main( int   argc,
     GThread   *gth = NULL;         /* thread id */
     gboolean   run_flag = TRUE;   /* used as exit flag for threads */
     gint i;
+    gboolean set_transparent = FALSE;
 
 #ifdef WIN32
     if (argc >= 2 && !strcmp(argv[1], "-console")) {
 	AllocConsole();
 	freopen("CON", "w", stdout);
+    }
+#else
+    if (argc >= 2 && !strcmp(argv[1], "-transparent")) {
+	set_transparent = TRUE;
     }
 #endif
 
@@ -2239,27 +2251,22 @@ int main( int   argc,
 #endif
 
 #ifndef WIN32
-    GdkScreen *screen = gtk_widget_get_screen(window);
-    GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
+    if (set_transparent) {
+	GdkScreen *screen = gtk_widget_get_screen(window);
+	GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
 
-    if (!visual) {
-        g_print("Screen does not support alpha channels!\n");
-        judotimer_log("Screen does not support alpha channels!\n");
-	visual = gdk_screen_get_system_visual(screen);
-    } else {
-	g_print("Screen supports alpha channels\n");
-	judotimer_log("Screen supports alpha channels\n");
-	gtk_widget_set_app_paintable(window, TRUE);
-	gtk_widget_set_visual(window, visual);
-#if 0
-	GdkRGBA bg = {0.8, 0.8, 0.8, 1.0};
-	gtk_widget_override_background_color(menubar, GTK_STATE_FLAG_NORMAL, &bg);
-	GdkRGBA tbg = {0.0, 0.0, 0.0, 0.0};
-	gtk_widget_override_background_color(window, GTK_STATE_FLAG_NORMAL, &tbg);
-#endif
+	if (!visual) {
+	    g_print("Screen does not support alpha channels!\n");
+	    judotimer_log("Screen does not support alpha channels!\n");
+	    visual = gdk_screen_get_system_visual(screen);
+	} else {
+	    g_print("Screen supports alpha channels\n");
+	    judotimer_log("Screen supports alpha channels\n");
+	    gtk_widget_set_app_paintable(window, TRUE);
+	    gtk_widget_set_visual(window, visual);
+	}
     }
 #endif
-
     gtk_widget_set_events(darea, gtk_widget_get_events(darea) |
                           GDK_BUTTON_PRESS_MASK |
                           GDK_BUTTON_RELEASE_MASK |

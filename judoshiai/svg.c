@@ -503,7 +503,7 @@ gint paint_svg(struct paint_data *pd)
 
     if (write_cb) {
 	extern const gchar *svg_start;
-	write_cb(closure, svg_start, strlen(svg_start));
+	write_cb(closure, (const guchar *)svg_start, strlen(svg_start));
     }
 
     svgdata = svg_data[found].data;
