@@ -136,8 +136,10 @@ void save_comp_col_order(void)
     gint n[NUM_COMP_COLS];
     GtkTreeViewColumn *c[NUM_COMP_COLS];
 
-    for (i = 0; i < NUM_COMP_COLS; i++)
+    for (i = 0; i < NUM_COMP_COLS; i++) {
 	c[i] = gtk_tree_view_get_column(GTK_TREE_VIEW(current_view), i);
+	n[i] = i;
+    }
     
     for (i = 0; i < NUM_COMP_COLS; i++) {
 	for (j = 0; j < NUM_COMP_COLS; j++) {
@@ -157,9 +159,11 @@ void restore_comp_col_order(void)
     GError *error;
     gsize len;
     gint *n = g_key_file_get_integer_list(keyfile, "preferences", "ordercompcol", &len, &error);
-    if (!n) return;
 
-    for (i = NUM_COMP_COLS-1; i >= 0; i--) {
+    if (!n) return;
+    if (len != NUM_COMP_COLS) return;
+    
+    for (i = NUM_COMP_COLS-1; i >= 0 && n[i] >= 0 && n[i] < NUM_COMP_COLS; i--) {
 	gtk_tree_view_move_column_after(GTK_TREE_VIEW(current_view), columns[n[i]], NULL);
     }
 }
