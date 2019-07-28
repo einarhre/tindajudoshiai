@@ -882,7 +882,7 @@ void view_on_row_activated(GtkTreeView        *treeview,
 
 	gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Comment:")), 0, row, 1, 1);
 	gchar **list = g_strsplit(comment, "#~", NUM_COMMENT_COLS);
-	ok = TRUE;
+	ok = list != NULL;
 	
 	for (i = 0; i < NUM_COMMENT_COLS; i++) {
 	    if (ok && !list[i]) ok = FALSE;
