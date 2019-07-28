@@ -31,9 +31,9 @@ ifeq ($(TOOL),MXE)
     DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll libwebp-7.dll
 
     ifeq ($(TARGETOS),WIN32)
-        DLLS += libgpg-error-0.dll libgcc_s_sjlj-1.dll
+        DLLS += libgpg-error-0.dll libgcc_s_sjlj-1.dll libcrypto-1_1.dll
     else
-        DLLS += libgpg-error6-0.dll libgcc_s_seh-1.dll
+        DLLS += libgpg-error6-0.dll libgcc_s_seh-1.dll libcrypto-1_1-x64.dll
     endif
 endif
 
