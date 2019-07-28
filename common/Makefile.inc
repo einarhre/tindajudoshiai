@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=2.9
+SHIAI_VER_NUM=2.9.2
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 
 ifndef JS_BUILD_DIR
@@ -26,7 +26,7 @@ else
 endif
 
 ifneq ("$(wildcard $(CURDIR)/judohttpd)","")
-    JUDOHTTPD=YES
+    JUDOHTTPD=NO
 endif
 
 ### Target executable type ###
@@ -214,7 +214,7 @@ ifeq ($(OS),Windows_NT)
     LIBS=-L$(DEVELDIR)/lib $(DEVELDIR)/lib/glib-2.0.lib -L$(RSVGDIR)/bin \
     -L$(DEVELDIR)/bin \
     -lgtk-win32-$(GTKVER).0 -lgdk-win32-$(GTKVER).0 -latk-1.0 -lgio-2.0 -lgdk_pixbuf-2.0 \
-    -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 \
+    -lpangowin32-1.0 -lusp10 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 \
     -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lcairo \
     -lcroco-0.6-3 -lrsvg-2-2 -lxml2-2 \
     -L$(CURLDIR)/bin -lcurl -L$(SSH2DIR)/bin -lssh2-1 \
@@ -262,7 +262,7 @@ else
         LIBS=-L$(DEVELDIR)/lib $(DEVELDIR)/lib/glib-2.0.lib -L$(RSVGDIR)/bin \
              -L$(DEVELDIR)/bin \
              -lgtk-win32-$(GTKVER).0 -lgdk-win32-$(GTKVER).0 -latk-1.0 -lgio-2.0 -lgdk_pixbuf-2.0 \
-             -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 \
+             -lpangowin32-1.0 -lusp10 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lgobject-2.0 \
              -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -lcairo \
              -lcroco-0.6-3 -lrsvg-2-2 -lxml2-2 \
              -L$(WIN32_BASE)/curl/bin -lcurl \
@@ -293,8 +293,8 @@ else
                  -DUSE_PANGO \
                  -Wno-deprecated-declarations
 
-        LIBS=$(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0) \
-             $(shell $(DEVELDIR)/bin/curl-config --libs) -lws2_32 -mwindows
+        LIBS= -lusp10 $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0) \
+              $(shell $(DEVELDIR)/bin/curl-config --libs) -lws2_32 -mwindows
 
     else
     ### Linux ###

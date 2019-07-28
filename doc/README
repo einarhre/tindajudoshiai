@@ -21,6 +21,15 @@ NOTE for Windows:
 
 ==============================================
 RELEASE NOTE
+VERSION 2.9.1, 2.9.2
+
+Common
+------
++ Bug fixes.
++ Problems with Win7 & JudoShiai-Win64. Win32 works.
+
+==============================================
+RELEASE NOTE
 VERSION 2.9
 
 Common
