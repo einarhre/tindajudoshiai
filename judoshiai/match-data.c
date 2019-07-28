@@ -1983,7 +1983,7 @@ gchar *get_system_description(gint index, gint competitors)
         case TABLE_SWE_DIREKT_AATERKVAL: return _("SWE Dir återkv");
         case TABLE_EST_D_KLASS: return _("EST D klass");
         case TABLE_NO_REPECHAGE: return _("No Repechg");
-        case TABLE_SWE_ENKELT_AATERKVAL: return _("SWE Enkelt återkv");
+        case TABLE_SWE_ENKELT_AATERKVAL: return (draw_system == DRAW_BRITISH) ? _("GBR Simple Repchg") : _("SWE Enkelt återkv");
         case TABLE_ESP_DOBLE_PERDIDA: return _("ESP Dbl Lost");
             /*case TABLE_ESP_REPESCA_DOBLE_INICIO: return _("ESP Dbl Rep/Bgn");*/
         case TABLE_ESP_REPESCA_DOBLE: return _("ESP Dbl Rep");
@@ -2024,7 +2024,7 @@ static gchar *get_system_name(gint num)
     case CAT_SYSTEM_DIREKT_AATERKVAL: return _("SWE Direct Repechage");
     case CAT_SYSTEM_EST_D_KLASS: return _("EST Double Elimination");
     case CAT_SYSTEM_NO_REPECHAGE: return _("Single Elimination");
-    case CAT_SYSTEM_ENKELT_AATERKVAL: return _("SWE Single Repechage");
+    case CAT_SYSTEM_ENKELT_AATERKVAL: return (draw_system == DRAW_BRITISH) ? _("GBR Simple Repechage") : _("SWE Single Repechage");
     case CAT_ESP_DOBLE_PERDIDA: return _("ESP Double Lost");
         /*case CAT_ESP_REPESCA_DOBLE_INICIO: return _("ESP Double Repechage from Beginning");*/
     case CAT_ESP_REPESCA_DOBLE: return _("ESP Double Repechage");
