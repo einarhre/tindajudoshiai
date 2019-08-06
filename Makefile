@@ -73,6 +73,7 @@ all:
 	mkdir -p $(RELDIR)/share/locale/da/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/he/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/fr/LC_MESSAGES
+	mkdir -p $(RELDIR)/share/locale/fa/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/en_GB/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/themes
 	mkdir -p $(RELDIR)/share/icons
@@ -159,6 +160,7 @@ endif
 	cp -r $(RUNDIR)/share/locale/da $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/he $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/fr $(RELDIR)/share/locale/
+	cp -r $(RUNDIR)/share/locale/fa $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/en_GB $(RELDIR)/share/locale/
 	cp -r share/themes $(RELDIR)/share/
 	cp -r share/icons $(RELDIR)/share/
@@ -192,6 +194,7 @@ endif
 	cp common/judoshiai-da_DK.mo $(RELDIR)/share/locale/da/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-he_IL.mo $(RELDIR)/share/locale/he/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-fr_FR.mo $(RELDIR)/share/locale/fr/LC_MESSAGES/judoshiai.mo
+	cp common/judoshiai-fa_IR.mo $(RELDIR)/share/locale/fa/LC_MESSAGES/judoshiai.mo
 	@echo "---------------------------"
 	@echo "Copy other files"
 	@echo "---------------------------"
