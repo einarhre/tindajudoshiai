@@ -1,0 +1,99 @@
+### First line is the menu text
+نتایج به فارسی
+### 1: Competitors
+ورزشکاران
+### 2: Competitors A (for double and quadruple pools)
+ورزشکاران الف
+### 3: Competitors B
+ورزشکاران  ب
+### 4: Competitors C
+ورزشکاران  ج
+### 5: Competitors D
+ورزشکاران د
+### 6: # (= short text for "Number", like "Nr")
+#
+### 7: Name
+نام
+### 8: Grade (belt grade, 1. dan, 3. kyu etc)
+کمربند
+### 9: Club
+باشگاه
+### 10: Matches
+دیدار ها
+### 11: Matches A
+مسابقه های الف
+### 12: Matches B
+مسابقه های ب
+### 13: Matches C
+مسابقه های ج
+### 14: Matches D
+مسابقه های د
+### 15: Match
+مسابقه
+### 16: Blue
+آبی
+### 17: White
+سفید
+### 18: Result (result of one fight)
+نتیجه
+### 19: Results (all the results of the tournament)
+نتایج
+### 20: Time (fight time)
+زمان
+### 21: Wins (number of wins)
+برد ها
+### 22: Pts (short text for points)
+امتیاز
+### 23: Pos (short text for position = winner, second, bronze)
+مقام
+### 24: Previous winner
+برنده قبلی
+### 25: Next (competitors who have the next fight)
+بعدی
+### 26: Weight:
+وزن:
+### 27: PRELIMINARY SCHEDULE
+PRELIMINARY SCHEDULE
+### 28: weighin-notes.pdf (file name)
+weighin-notes.pdf
+### 29: schedule.pdf (file name)
+jadavel.pdf
+### 30: categories.pdf (file name)
+rade haye vazni.pdf
+### 31: Category
+دسته بندی
+### 32: Next fights (for a list of fights)
+مسابقه بعدی
+### 33: Categories
+رده های وزنی
+### 34: Statistics
+آمار
+### 35: Medals
+مدال ها
+### 36: Total
+مجموع
+### 37: Country
+کشور
+### 38: Not drawn
+قرعه کشی نشده
+### 39: Finished
+پایان یافته
+### 40: Match ongoing
+مسابقه در حال انجام
+### 41: Started (category has started)
+شروع شده
+### 42: Drawing ready
+قرعه کشی آماده شد
+### 43: Coach
+مربی
+### 44: Surname
+نام خانوادگی
+### 45: Status
+وضعیت
+### 46: Display
+نمایش
+### 47: "Match after n matches" divided in two parts
+###     Match after ("Match after" n matches)
+مسابقه بعدی
+### 48: matches (Match after n "matches")
+دیدار ها
