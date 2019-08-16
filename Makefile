@@ -21,23 +21,25 @@ ifeq ($(TOOL),MXE)
     DLLS += libgdk_pixbuf-2.0-0.dll libgio-2.0-0.dll libglib-2.0-0.dll
     DLLS += libgmodule-2.0-0.dll libgmp-10.dll libgnutls-30.dll
     DLLS += libgobject-2.0-0.dll libgthread-2.0-0.dll
-    DLLS += libgtk-3-0.dll libharfbuzz-0.dll libhogweed-4.dll
+    DLLS += libgtk-3-0.dll libharfbuzz-0.dll libhogweed-4.dll libhogweed-5.dll
     DLLS += libiconv-2.dll libidn2-0.dll libintl-8.dll
     DLLS += libjpeg-9.dll liblzma-5.dll libmpg123-0.dll
-    DLLS += libnettle-6.dll libpango-1.0-0.dll libpangocairo-1.0-0.dll
+    DLLS += libnettle-6.dll libnettle-7.dll libpango-1.0-0.dll libpangocairo-1.0-0.dll
     DLLS += libpangoft2-1.0-0.dll libpangowin32-1.0-0.dll libpcre-1.dll
     DLLS += libpixman-1-0.dll libpng16-16.dll librsvg-2-2.dll
     DLLS += libssh2-1.dll libtiff-5.dll libunistring-2.dll
     DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll libwebp-7.dll
+    DLLS += libgpg-error-0.dll libtasn1-6.dll
 
     ifeq ($(TARGETOS),WIN32)
-        DLLS += libgpg-error-0.dll libgcc_s_sjlj-1.dll libcrypto-1_1.dll
+        DLLS += libgcc_s_sjlj-1.dll libcrypto-1_1.dll
     else
         DLLS += libgpg-error6-0.dll libgcc_s_seh-1.dll libcrypto-1_1-x64.dll
     endif
 endif
 
 $(info --- MAKE VARIABLES: ---)
+$(info User:                    $(USER))
 $(info Environment:             $(OS))
 $(info Target operating system: $(TARGETOS))
 $(info Suffix text:             $(TGTEXT))
@@ -279,9 +281,10 @@ endif
 
 debian:
 	cp gnome/*-pak .
-	checkinstall -D --install=no --pkgname=judoshiai --pkgversion=$(SHIAI_VER_NUM) \
+	checkinstall -y -D --install=no --pkgname=judoshiai --pkgversion=$(SHIAI_VER_NUM) \
 	--maintainer=oh2ncp@kolumbus.fi --nodoc \
 	--requires libao4,libatk1.0-0,libcairo2,libcurl3,libgdk-pixbuf2.0-0,libgtk-3-0,libpango-1.0-0,librsvg2-2
+	chown $(USER):$(USER) *.deb
 	mv *.deb $(RELDIR)/
 	rm description-pak postinstall-pak postremove-pak
 
