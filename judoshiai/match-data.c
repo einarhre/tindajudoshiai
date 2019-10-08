@@ -3126,6 +3126,9 @@ gint num_matches_left(gint index, gint competitors)
     struct category_data *cat = avl_get_category(index);
     struct compsys systm = get_system_for_category(index, competitors);
 
+    if (systm.system == 0 || competitors == 0)
+    	return 0;
+
     if (cat && (cat->match_status & REAL_MATCH_EXISTS)) {
         if ((cat->match_status & MATCH_UNMATCHED) == 0)
             return 0;
