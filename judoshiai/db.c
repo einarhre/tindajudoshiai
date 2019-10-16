@@ -221,7 +221,8 @@ static int db_info_cb(void *data, int argc, char **argv, char **azColName)
 }
 
 static gboolean tatami_exists, number_exists, country_exists,
-    id_exists, numcomp_exists, seeding_exists, comp_comment_exists, match_date_exists;
+    id_exists, numcomp_exists, seeding_exists, comp_comment_exists, match_date_exists,
+    color_exists;
 
 static int db_callback_tables(void *data, int argc, char **argv, char **azColName)
 {
@@ -242,6 +243,8 @@ static int db_callback_tables(void *data, int argc, char **argv, char **azColNam
                 id_exists = TRUE;
             if (strstr(argv[i], "categories") && strstr(argv[i], "numcomp"))
                 numcomp_exists = TRUE;
+            if (strstr(argv[i], "categories") && strstr(argv[i], "color"))
+                color_exists = TRUE;
             if (strstr(argv[i], "competitors") && strstr(argv[i], "seeding"))
                 seeding_exists = TRUE;
             if (strstr(argv[i], "competitors") && strstr(argv[i], "comment"))
@@ -291,7 +294,7 @@ gint db_init(const char *dbname)
     sqlite3_close(db);
 
     if (compcols   > 17 ||
-        catcols    > 17 ||
+        catcols    > 18 ||
         matchcols  > 15 ||
         infocols   > 2  ||
         catdefcols > 14) {
@@ -328,7 +331,8 @@ gint db_init(const char *dbname)
     read_cat_definitions();
 
     tatami_exists = number_exists = country_exists = id_exists =
-        numcomp_exists = seeding_exists = comp_comment_exists = match_date_exists = FALSE;
+        numcomp_exists = seeding_exists = comp_comment_exists = match_date_exists =
+	color_exists = FALSE;
 
     db_exec(db_name,
             "SELECT sql FROM sqlite_master",
@@ -380,6 +384,12 @@ gint db_init(const char *dbname)
         db_exec(db_name, "ALTER TABLE categories ADD \"pos8\" INTEGER", NULL, NULL);
     }
 
+    if (!color_exists) {
+        g_print("color does not exist, add one\n");
+        db_exec(db_name, "ALTER TABLE categories ADD \"color\" TEXT", NULL, NULL);
+        db_exec(db_name, "UPDATE categories SET \"color\"=\"rgb(255,255,255)\" ", NULL, NULL);
+    }
+    
     if (!comp_comment_exists) {
         g_print("comment does not exist, add one\n");
         db_exec(db_name, "ALTER TABLE competitors ADD \"comment\" TEXT", NULL, NULL);
@@ -432,7 +442,8 @@ void db_new(const char *dbname)
         "\"deleted\" INTEGER, \"group\" INTEGER, \"system\" INTEGER, "
         "\"numcomp\" INTEGER, \"table\" INTEGER, \"wishsys\" INTEGER, "
         "\"pos1\" INTEGER, \"pos2\" INTEGER, \"pos3\" INTEGER, \"pos4\" INTEGER, "
-        "\"pos5\" INTEGER, \"pos6\" INTEGER, \"pos7\" INTEGER, \"pos8\" INTEGER,"
+        "\"pos5\" INTEGER, \"pos6\" INTEGER, \"pos7\" INTEGER, \"pos8\" INTEGER, "
+	"\"color\" TEXT, "
         "UNIQUE(\"index\"))";
     char *cmd4 = "CREATE TABLE matches ("
         "\"category\" INTEGER, \"number\" INTEGER,"

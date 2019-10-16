@@ -77,11 +77,20 @@ static GtkWidget *match_graph_label = NULL;
 static gboolean pending_timeout = FALSE;
 
 gboolean mirror_display = FALSE;
+gboolean show_colors = FALSE;
 
 static struct win_collection {
     GtkWidget *scrolled_window;
     GtkWidget *darea;
 } wincoll;
+
+void toggle_show_colors(GtkWidget *menu_item, gpointer data)
+{
+    show_colors = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
+    g_key_file_set_boolean(keyfile, "preferences", "showcolors", show_colors);
+    draw_match_graph();
+    refresh_window();
+}
 
 void draw_match_graph(void)
 {
@@ -261,14 +270,18 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
 
             if ((catdata->match_status & MATCH_UNMATCHED) == 0)
                 continue;
-
+#define BGCOLOR cairo_set_source_rgb(c, catdata->color.red, catdata->color.green, catdata->color.blue)
+	    
             cairo_save(c);
-            if (m->forcednumber)
+
+	    if (show_colors)
+                BGCOLOR;
+            else if (m->forcednumber)
                 cairo_set_source_rgb(c, 1.0, 1.0, 0.6);
             else if (m->forcedtatami)
                 cairo_set_source_rgb(c, 1.0, 1.0, 0.9);
-            else
-                cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
+	    else
+		cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
 
             if (i)
                 cairo_rectangle(c, left, y_pos, colwidth, 4*BOX_HEIGHT);
@@ -313,7 +326,8 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
 	    //const gchar *txt = round_name(catdata, m->number);
 	    const gchar *txt = round_to_str(m->round);
             //gchar *txt = get_match_number_text(m->category, m->number);
-            if ((txt && txt[0]) || m->forcedtatami || i == 0) {
+
+	    if ((txt && txt[0]) || m->forcedtatami || i == 0) {
 		buf[0] = 0;
                 cairo_move_to(c, left+5+colwidth/2, y_pos+extents.height);
                 if (i == 0) {
@@ -367,12 +381,14 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                             cairo_set_source_rgb(c, 0.5, 0.5, 1.0);
                         else
                             cairo_set_source_rgb(c, 1.0, 0.5, 0.5);
-                    } else if (m->forcednumber)
+                    } else if (show_colors)
+			BGCOLOR;
+		    else if (m->forcednumber)
                         cairo_set_source_rgb(c, 1.0, 1.0, 0.6);
                     else if (m->forcedtatami)
                         cairo_set_source_rgb(c, 1.0, 1.0, 0.9);
-                    else
-                        cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
+		    else
+			cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
 
                     cairo_rectangle(c, left, y_pos+BOX_HEIGHT, colwidth/2, 3*BOX_HEIGHT);
                     cairo_fill(c);
@@ -417,16 +433,25 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                             cairo_set_source_rgb(c, 0.5, 0.5, 1.0);
                         else
                             cairo_set_source_rgb(c, 1.0, 0.5, 0.5);
-                    } else if (m->forcednumber)
+                    } else if (show_colors) {
+			BGCOLOR;			
+		    } else if (m->forcednumber)
                         cairo_set_source_rgb(c, 1.0, 1.0, 0.6);
                     else if (m->forcedtatami)
                         cairo_set_source_rgb(c, 1.0, 1.0, 0.9);
-                    else
-                        cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
+		    else
+			cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
 
                     cairo_rectangle(c, left+colwidth/2, y_pos+BOX_HEIGHT, colwidth/2, 3*BOX_HEIGHT);
                     cairo_fill(c);
 
+		    if (txt && txt[0] && show_colors) {
+			GdkRGBA *rgba = round_to_color(m->round);
+			cairo_set_source_rgb(c, rgba->red, rgba->green, rgba->blue);
+			cairo_rectangle(c, left+colwidth*7/8, y_pos+BOX_HEIGHT, colwidth/8, 3*BOX_HEIGHT);
+			cairo_fill(c);
+		    }
+		    
                     cairo_set_source_rgb(c, 0, 0, 0);
 
 #ifdef USE_PANGO
@@ -459,7 +484,13 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                     cairo_show_text(c, get_club_text(j, 0));
 #endif
                     free_judoka(j);
-                }
+                } else if (txt && txt[0] && show_colors) {
+		    GdkRGBA *rgba = round_to_color(m->round);
+		    cairo_set_source_rgb(c, rgba->red, rgba->green, rgba->blue);
+		    cairo_rectangle(c, left+colwidth*7/8, y_pos+BOX_HEIGHT, colwidth/8, 3*BOX_HEIGHT);
+		    cairo_fill(c);
+                    cairo_set_source_rgb(c, 0, 0, 0);
+		}
             }
 
             point_click_areas[num_rectangles].category = m->category;

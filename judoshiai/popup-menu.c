@@ -464,6 +464,65 @@ void view_popup_menu_random_weighin(GtkWidget *menuitem, gpointer userdata)
     gtk_widget_destroy(dialog);
 }
 
+static void color_dialog_response(GtkDialog *dialog, gint response)
+{
+    GdkRGBA color;
+    gchar *buf;
+
+    switch (response) {
+    case GTK_RESPONSE_OK:
+	gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
+	buf = gdk_rgba_to_string(&color);
+
+	gboolean ok;
+	GtkTreeIter iter;
+	GtkTreeSelection *selection =
+	    gtk_tree_view_get_selection(GTK_TREE_VIEW(current_view));
+
+	ok = gtk_tree_model_get_iter_first(current_model, &iter);
+	while (ok) {
+	    if (gtk_tree_selection_iter_is_selected(selection, &iter)) {
+		gint index;
+		gboolean visible;
+		
+		gtk_tree_model_get(current_model, &iter,
+				   COL_INDEX, &index,
+				   COL_VISIBLE, &visible,
+				   -1);
+		
+		if (!visible) {
+		    gtk_tree_store_set(GTK_TREE_STORE(current_model), &iter,
+				       COL_CLUB, buf,
+				       -1);
+		    db_set_category_color(index, buf);
+		}
+	    } // if is selected
+	    ok = gtk_tree_model_iter_next(current_model, &iter);
+	} // while ok
+
+	g_free(buf);
+	break;
+    default:
+	g_print ("response = %d\n", response);
+	break;
+    }
+
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+
+    draw_match_graph();
+}
+
+void view_popup_menu_color(GtkWidget *menuitem, gpointer userdata)
+{
+    GtkWidget *dialog;
+    GtkWidget *table = gtk_grid_new(), *num_w;
+    GtkWidget *from_all, *from_each;
+
+    dialog = gtk_color_chooser_dialog_new(_("Select a color"), NULL);
+    g_signal_connect(dialog, "response", G_CALLBACK (color_dialog_response), NULL);
+    gtk_widget_show_all(dialog);
+}
+
 static void change_display(GtkWidget *menuitem, gpointer userdata)
 {
     if (userdata)
@@ -779,6 +838,12 @@ void view_popup_menu(GtkWidget *treeview,
     menuitem = gtk_menu_item_new_with_label(_("Random Weigh-In..."));
     g_signal_connect(menuitem, "activate",
                      (GCallback) view_popup_menu_random_weighin, userdata);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
+    menuitem = gtk_menu_item_new_with_label(_("Color..."));
+    g_signal_connect(menuitem, "activate",
+                     (GCallback) view_popup_menu_color, userdata);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     gtk_widget_show_all(menu);

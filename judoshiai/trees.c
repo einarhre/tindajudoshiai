@@ -183,7 +183,7 @@ void set_category_to_queue(struct category_data *data)
 }
 
 void avl_set_category(gint index, const gchar *category, gint tatami, 
-                      gint group, struct compsys system, gint deleted)
+                      gint group, struct compsys system, gint deleted, const gchar *color)
 {
     struct category_data *data;
     void *data1;
@@ -193,7 +193,8 @@ void avl_set_category(gint index, const gchar *category, gint tatami,
 
     data = g_malloc(sizeof(*data));
     memset(data, 0, sizeof(*data));
-        
+    data->color.red = data->color.green = data->color.blue = data->color.alpha = 1.0;
+    
     data->index = index;
     strncpy(data->category, category, sizeof(data->category)-1);
     data->tatami = tatami;
@@ -201,7 +202,8 @@ void avl_set_category(gint index, const gchar *category, gint tatami,
     data->system = system;
     data->rest_time = get_category_rest_time(category);
     data->deleted = deleted;
-
+    gdk_rgba_parse(&data->color, color);
+    
     if (avl_get_by_key(categories_tree, data, &data1) == 0) {
         /* data exists */
         avl_delete(categories_tree, data, free_avl_key);
@@ -209,6 +211,18 @@ void avl_set_category(gint index, const gchar *category, gint tatami,
     avl_insert(categories_tree, data);
 
     set_category_to_queue(data);
+}
+
+void avl_set_category_color(gint index, const gchar *color)
+{
+    struct category_data data, *data1;
+
+    if (!categories_tree)
+        return;
+
+    data.index = index;
+    if (avl_get_by_key(categories_tree, &data, (void **)&data1) == 0)
+	gdk_rgba_parse(&data1->color, color);
 }
 
 struct name_status {

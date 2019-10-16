@@ -136,9 +136,14 @@ void save_comp_col_order(void)
     gint n[NUM_COMP_COLS];
     GtkTreeViewColumn *c[NUM_COMP_COLS];
 
+    if (!current_view)
+	return;
+    
     for (i = 0; i < NUM_COMP_COLS; i++) {
 	c[i] = gtk_tree_view_get_column(GTK_TREE_VIEW(current_view), i);
 	n[i] = i;
+        if (c[i] == NULL)
+            return;
     }
     
     for (i = 0; i < NUM_COMP_COLS; i++) {
@@ -1503,6 +1508,41 @@ void belt_cell_data_func (GtkTreeViewColumn *col,
     g_object_set(renderer, "text", buf, NULL);
 }
 
+void club_cell_data_func (GtkTreeViewColumn *col,
+                          GtkCellRenderer   *renderer,
+                          GtkTreeModel      *model,
+                          GtkTreeIter       *iter,
+                          gpointer           user_data)
+{
+    gboolean visible;
+    gchar *club = NULL;
+    
+    gtk_tree_model_get(model, iter, COL_CLUB, &club, COL_VISIBLE, &visible, -1);
+
+    if (visible) {
+	g_object_set(renderer,
+		     "cell-background-set", FALSE,
+		     NULL);
+	g_object_set(renderer, "text", club, NULL);
+    } else {
+	GdkRGBA rgba;
+	
+	if (show_colors && gdk_rgba_parse(&rgba, club)) {
+	    g_object_set(renderer,
+			 "cell-background-rgba", &rgba,
+			 "cell-background-set", TRUE,
+			 NULL);
+	} else {
+	    g_object_set(renderer,
+			 "cell-background-set", FALSE,
+			 NULL);
+	}
+	g_object_set(renderer, "text", "", NULL);
+    }
+
+    g_free(club);
+}
+
 void seeding_cell_data_func (GtkTreeViewColumn *col,
                              GtkCellRenderer   *renderer,
                              GtkTreeModel      *model,
@@ -1763,10 +1803,11 @@ static GtkWidget *create_view_and_model(void)
                                                               -1, _("Club"),
                                                               renderer, "text",
                                                               COL_CLUB,
-                                                              "visible",
-                                                              COL_VISIBLE,
+                                                              /*"visible",
+								COL_VISIBLE,*/
                                                               NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
+    gtk_tree_view_column_set_cell_data_func(col, renderer, club_cell_data_func, NULL, NULL);
     //gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (col), TRUE);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_CLUB);
     gtk_tree_view_column_set_resizable (GTK_TREE_VIEW_COLUMN(col), TRUE);

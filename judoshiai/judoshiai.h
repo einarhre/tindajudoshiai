@@ -533,6 +533,7 @@ enum properties {
     PROP_TEAM_EVENT_SKIP_UNNECESSARY_MATCHES,
     PROP_TEAM_EVENT_EXTRA_MATCH_GOLDEN_SCORE,
     PROP_TEAM_EVENT_DRAW_IF_ONE_COMP_MISSING,
+    PROP_COLORS,
     NUM_PROPERTIES
 };
 
@@ -712,6 +713,7 @@ struct category_data {
     gboolean deleted;
     gboolean tie;
     gboolean extra_competitors;
+    GdkRGBA color;
     struct category_data *prev, *next;
 };
 
@@ -1051,6 +1053,7 @@ extern gboolean db_event_matches_update(guint category, struct match *last, gint
 extern void db_print_category_matches(struct category_data *catdata, FILE *f);
 extern void db_change_competitor(gint category, gint number, gboolean is_blue, gint index);
 extern void db_print_category_to_pdf_comments(gint catix, gchar *filename);
+extern void db_set_category_color(gint category, const gchar *color);
 
 
 extern void db_synchronize(char *name_2);
@@ -1088,6 +1091,7 @@ extern gint comp_index_get_free(void);
 
 /* categories */
 extern void create_categories(GtkWidget *w, gpointer   data);
+extern void colorize_categories(GtkWidget *w, gpointer   data);
 extern void create_best_categories(GtkWidget *w, gpointer   data);
 extern void toggle_w_belt(gpointer callback_data,
                           guint callback_action, GtkWidget *menu_item);
@@ -1265,7 +1269,8 @@ extern void set_category_graph_page(GtkWidget *notebook);
 extern void init_trees(void);
 extern struct category_data *avl_get_category(gint index);
 extern void avl_set_category(gint index, const gchar *category, gint tatami,
-                             gint group, struct compsys system, gint deleted);
+                             gint group, struct compsys system, gint deleted, const gchar *color);
+extern void avl_set_category_color(gint index, const gchar *color);
 extern void avl_set_category_rest_times(void);
 extern gint avl_get_category_status_by_name(const gchar *name);
 extern void set_category_to_queue(struct category_data *data);
@@ -1292,6 +1297,8 @@ extern void club_name_set(const gchar *club,
 extern struct club_name_data *club_name_get(const gchar *club);
 
 /* match_graph */
+extern gboolean show_colors;
+
 extern void draw_match_graph(void);
 extern void set_match_graph_page(GtkWidget *notebook);
 extern void set_graph_rest_time(gint tatami, time_t rest_end, gint flags);
@@ -1394,6 +1401,8 @@ extern void props_save_to_db(void);
 extern gint props_get_default_wishsys(gint age, gint competitors, guint *table);
 extern gint props_get_grade(gchar *b);
 extern void prop_set_val(gint n, const gchar *dbval, gint intval);
+extern GdkRGBA *round_to_color(gint round);
+extern GdkRGBA *category_to_color(gint num);
 
 /* ftp */
 extern gpointer ftp_thread(gpointer args);

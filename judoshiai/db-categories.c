@@ -67,6 +67,8 @@ static int db_callback_categories(void *data, int argc, char **argv, char **azCo
             positions[6] = my_atoi(argv[i]);
         else if (IS(pos8))
             positions[7] = my_atoi(argv[i]);
+        else if (IS(color))
+            jud.club = argv[i];
     }
     //g_print("\n");
 
@@ -81,9 +83,11 @@ static int db_callback_categories(void *data, int argc, char **argv, char **azCo
     if (flags & DB_GET_SYSTEM)
         return 0;
 
+    const gchar *color = (jud.club && jud.club[0]) ? jud.club : "rgb(255,255,255)";
+    jud.club = color;
     display_one_judoka(&jud);
 
-    avl_set_category(jud.index, jud.last, jud.belt, jud.birthyear, category_system, jud.deleted);
+    avl_set_category(jud.index, jud.last, jud.belt, jud.birthyear, category_system, jud.deleted, color);
 
     return 0;
 }
@@ -91,6 +95,7 @@ static int db_callback_categories(void *data, int argc, char **argv, char **azCo
 void db_add_category(int num, struct judoka *j)
 {
     struct compsys cs;
+    const gchar *color = (j->club && j->club[0]) ? j->club : "rgb(255,255,255)";
     BZERO(cs);
 
     if (num < 10000) {
@@ -100,10 +105,10 @@ void db_add_category(int num, struct judoka *j)
     db_exec_str(NULL, db_callback_categories, 
             "INSERT INTO categories VALUES ("
             "%d, \"%s\", %d, %d, %d, 0, 0, 0, 0, "
-            "0, 0, 0, 0, 0, 0, 0, 0)", 
-                num, j->last, j->belt, j->deleted, j->birthyear);
-
-    avl_set_category(num, j->last, j->belt, j->birthyear, cs, j->deleted);
+            "0, 0, 0, 0, 0, 0, 0, 0, \"%s\")", 
+                num, j->last, j->belt, j->deleted, j->birthyear, color);
+		
+    avl_set_category(num, j->last, j->belt, j->birthyear, cs, j->deleted, color);
 }
 
 void db_update_category(int num, struct judoka *j)
@@ -236,6 +241,15 @@ gint db_get_competitors_position(gint competitor, gint *catindex)
         }
 
     return 0;
+}
+
+void db_set_category_color(gint category, const gchar *color)
+{
+    db_exec_str(NULL, NULL,
+                "UPDATE categories SET "
+                "\"color\"=\"%s\" WHERE \"index\"=%d",
+                color, category);
+    avl_set_category_color(category, color);
 }
 
 #define NUM_TEAM_MEMBERS 32

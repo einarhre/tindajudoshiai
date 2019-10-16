@@ -53,6 +53,7 @@ extern void serial_set_type(gint type);
 extern void print_weight_notes(GtkWidget *menuitem, gpointer userdata);
 extern void ftp_to_server(GtkWidget *w, gpointer data);
 extern void select_custom_dir(GtkWidget *menu_item, gpointer data);
+extern void toggle_show_colors(GtkWidget *menu_item, gpointer data);
 
 static GtkWidget *menubar, 
     *tournament_menu_item, *competitors_menu_item, 
@@ -66,7 +67,8 @@ static GtkWidget *menubar,
     *competitor_new, *competitor_search, *competitor_select_from_tournament, *competitor_add_from_text_file,
     *competitor_add_all_from_shiai, *competitor_update_weights, *competitor_remove_unweighted,
     *competitor_restore_removed, *competitor_delete_removed, *competitor_bar_code_search, *competitor_print_weigh_notes, *competitor_print_with_template,
-    *category_new, *category_team_new, *category_team_event_new, *category_remove_empty, *category_create_official, 
+    *category_new, *category_team_new, *category_team_event_new, *category_remove_empty, *category_create_official,
+    *category_colorize, *category_show_colors,
     *category_print_all, *category_print_all_pdf, *category_print_matches,
     *category_properties, *category_to_tatamis[NUM_TATAMIS],
     *draw_all_categories, 
@@ -235,6 +237,8 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     category_team_new        = gtk_menu_item_new_with_label("");
     category_remove_empty    = gtk_menu_item_new_with_label(_("Remove Empty"));
     category_create_official = gtk_menu_item_new_with_label(_("Create Categories"));
+    category_colorize        = gtk_menu_item_new_with_label(_("Init Colors"));
+    category_show_colors     = gtk_check_menu_item_new_with_label(_("Show Colors"));
     category_print_all       = gtk_menu_item_new_with_label(_("Print All"));
     category_print_all_pdf   = gtk_menu_item_new_with_label(_("Print All (PDF)"));
     category_print_matches   = gtk_menu_item_new_with_label(_("Print Matches (CSV)"));
@@ -252,6 +256,9 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     gtk_menu_shell_append(GTK_MENU_SHELL(categories_menu), category_remove_empty);
     gtk_menu_shell_append(GTK_MENU_SHELL(categories_menu), category_create_official);
     gtk_menu_shell_append(GTK_MENU_SHELL(categories_menu), gtk_separator_menu_item_new());
+    gtk_menu_shell_append(GTK_MENU_SHELL(categories_menu), category_colorize);
+    gtk_menu_shell_append(GTK_MENU_SHELL(categories_menu), category_show_colors);
+    gtk_menu_shell_append(GTK_MENU_SHELL(categories_menu), gtk_separator_menu_item_new());
     gtk_menu_shell_append(GTK_MENU_SHELL(categories_menu), category_print_all);
     gtk_menu_shell_append(GTK_MENU_SHELL(categories_menu), category_print_all_pdf);
     gtk_menu_shell_append(GTK_MENU_SHELL(categories_menu), category_print_matches);
@@ -266,6 +273,8 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(category_team_event_new),  "activate", G_CALLBACK(new_regcategory), (gpointer)2);
     g_signal_connect(G_OBJECT(category_remove_empty),    "activate", G_CALLBACK(remove_empty_regcategories), 0);
     g_signal_connect(G_OBJECT(category_create_official), "activate", G_CALLBACK(create_categories), 0);
+    g_signal_connect(G_OBJECT(category_colorize)       , "activate", G_CALLBACK(colorize_categories), 0);
+    g_signal_connect(G_OBJECT(category_show_colors)    , "activate", G_CALLBACK(toggle_show_colors), 0);
     g_signal_connect(G_OBJECT(category_print_all),       "activate", G_CALLBACK(print_doc), 
                      (gpointer)(PRINT_ALL_CATEGORIES | PRINT_TO_PRINTER));
     g_signal_connect(G_OBJECT(category_print_all_pdf),   "activate", G_CALLBACK(print_doc), 
@@ -725,6 +734,11 @@ void set_preferences(void)
         gdpr_cat_age = x1;
     else
         gdpr_cat_age = 0;
+
+    error = NULL;
+    if (g_key_file_get_boolean(keyfile, "preferences", "showcolors", &error)) {
+        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(category_show_colors), TRUE);
+    }
 }
 
 static void change_menu_label(GtkWidget *item, const gchar *new_text)
@@ -764,6 +778,8 @@ void set_menu_active(void)
     SET_SENSITIVE(category_team_event_new , DB_OK);
     SET_SENSITIVE(category_remove_empty   , DB_OK);
     SET_SENSITIVE(category_create_official, DB_OK);
+    SET_SENSITIVE(category_colorize       , DB_OK);
+    SET_SENSITIVE(category_show_colors    , DB_OK);
     SET_SENSITIVE(category_print_all      , DB_OK);
     SET_SENSITIVE(category_print_all_pdf  , DB_OK);
     SET_SENSITIVE(category_print_matches  , DB_OK);
@@ -826,6 +842,8 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(category_team_event_new , _("New Team Category"));
     change_menu_label(category_remove_empty   , _("Remove Empty"));
     change_menu_label(category_create_official, _("Create Categories"));
+    change_menu_label(category_colorize       , _("Init Colors"));
+    change_menu_label(category_show_colors    , _("Show Colors"));
     change_menu_label(category_print_all      , _("Print All"));
     change_menu_label(category_print_all_pdf  , _("Print All (PDF)"));
     change_menu_label(category_print_matches  , _("Print Matches (CSV)"));

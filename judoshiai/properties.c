@@ -15,6 +15,7 @@
 
 #include "sqlite3.h"
 #include "judoshiai.h"
+#include "common-utils.h"
 
 #define NUM_DEFAULT_CATS 6
 #define NUM_TBLS 4
@@ -35,6 +36,54 @@ struct {
 } catwidgets[NUM_DEFAULT_CATS];
 
 static GtkWidget *belt_widgets[NUM_BELTS];
+
+#define NUM_COLORS 42
+//#define NUM_COLOR_PALETTE 24
+//#define NUM_COLOR_ROUND 16
+
+static const gint color_list_hex[NUM_COLORS] = {
+    0xffd3b6, 0xdcedc1, 0xffaaa5, 0xa8e6cf, 0xff8b94, 0x90d4d8, 0xf4a4b4, // 0...6
+    0xffecb4, 0x89dfc4, 0xfff0db, 0xa4d68c, 0xe4f2f8, 0xb3dd9f, 0xd49e8d, // 7...13
+    0xbcbebb, 0xded1bd, 0xffe1b4, 0xdfc9f2, 0xffd2d0, 0xbbc6ee, 0xf4a3af, // 14...20
+    0xdaf2d4, 0xf4bcab, 0xd7e3be, 0xf4d6a8, 0xc9e3da, 0xe7975c, 0xffd194, // 21...27
+    0xfec8c8, 0xcadeef, 0xffe7e7, 0x9bd4e4, 0xddd6d5, 0x39ace7, 0x8C7853, // 28...34
+    0xE6E8FA, 0xCFB53B, 0xffaaa5, 0xa8e6cf, 0xff8b94, 0x90d4d8, 0xf4a4b4  // 35...41
+};
+static GdkRGBA color_list_rgba[NUM_COLORS];
+static GtkColorButton *color_list_w[NUM_COLORS];
+
+enum {
+    COLOR_TABLE_CATEGORIES = 0,
+    COLOR_TABLE_ROUND,
+    COLOR_TABLE_REPECHAGE,
+    COLOR_TABLE_ROUND_ROBIN,
+    COLOR_TABLE_SEMIFINAL,
+    COLOR_TABLE_BRONZE,
+    COLOR_TABLE_SILVER,
+    COLOR_TABLE_FINAL
+};
+
+struct color_table {
+    const gchar *name;
+    gint start;
+    gint len;
+} color_tables[] = {
+    {"Categories",   0, 16},
+    {"Round",       16,  8},
+    {"Repechage",   24,  1},	
+    {"Round Robin", 32,  1},
+    {"Semifinal",   33,  1},	
+    {"Bronze",      34,  1},	
+    {"Silver",      35,  1},	
+    {"Final",       36,  1},	
+    {NULL, 0, 0}
+};
+
+
+//static GdkRGBA color_palette[NUM_COLOR_PALETTE];
+//static GdkRGBA color_round[NUM_COLOR_ROUND];
+
+
 
 #define CAT_OPT_YES 1
 #define CAT_OPT_NO  2
@@ -316,6 +365,12 @@ static struct property {
         .type = PROP_TYPE_CHECK,
         .table = 2,
     },
+    {
+        .name = "Colors",
+        .label = "",
+        .type = PROP_TYPE_TEXT,
+        .row = -1, .col = -1,
+    },
 };
 
 static void set_properties_button(GtkWidget *checkbox, gpointer arg)
@@ -509,6 +564,18 @@ void init_property(gchar *prop, gchar *val)
                 g_strfreev(b);
             }
 
+            if (i == PROP_COLORS) {
+                gint k;
+                gchar **c = g_strsplit(val, ";", NUM_COLORS);
+                for (k = 0; k < NUM_COLORS && c[k]; k++) {
+		    gint a = atoi(c[k]);
+		    if (a == 0) a = 0x00ffffff;
+		    color_dec_to_rgba(a, &color_list_rgba[k]);
+		}
+                g_strfreev(c);
+                g_print("init prop: %s\n", props[i].value);
+            }
+
             return;
         } // if strcmp
 
@@ -543,12 +610,16 @@ static void values_to_widgets(void)
     for (i = 0; i < NUM_BELTS; i++) {
         gtk_entry_set_text(GTK_ENTRY(belt_widgets[i]), belts[i] ? belts[i] : "");
     }
+
+    for (i = 0; i < NUM_COLORS; i++) {
+        gtk_color_button_set_rgba(color_list_w[i], &color_list_rgba[i]);
+    }
 }
 
 static void widgets_to_values(void)
 {
-    gint i;
-    gchar buf[512];
+    gint i, n;
+    gchar buf[1024];
 
     for (i = 0; i < NUM_PROPERTIES; i++)
         widget_to_value(i);
@@ -583,6 +654,15 @@ static void widgets_to_values(void)
     }
     prop_set_val(PROP_GRADE_NAMES, buf, 0);
     //gtk_entry_set_text(GTK_ENTRY(props[PROP_GRADE_NAMES].w), buf);
+
+    buf[0] = 0;
+    n = 0;
+    for (i = 0; i < NUM_COLORS; i++) {
+	gtk_color_button_get_rgba(GTK_COLOR_BUTTON(color_list_w[i]), &color_list_rgba[i]);
+	n += snprintf(buf+n, sizeof(buf)-n, "%d;", color_rgba_to_dec(&color_list_rgba[i]));
+    }
+    prop_set_val(PROP_COLORS, buf, 0);
+    
 }
 
 void props_save_one(gint prop)
@@ -607,11 +687,28 @@ void reset_props(GtkWidget *button, void *data)
     reset_props_1(button, data, FALSE);
 }
 
+void reset_colors(GtkWidget *button, void *data)
+{
+    gchar buf[1024];
+    gint i, n = 0;
+
+    buf[0] = 0;
+    for (i = 0; i < NUM_COLORS; i++) {
+        color_dec_to_rgba(color_list_hex[i], &color_list_rgba[i]);
+	n += snprintf(buf+n, sizeof(buf)-n, "%d;", color_list_hex[i]);
+
+        if (color_list_w[i])
+            gtk_color_button_set_rgba(color_list_w[i], &color_list_rgba[i]);
+    }
+
+    prop_set_val(PROP_COLORS, buf, 0);
+}
+
 void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
 {
     gint i;
     GtkComboBox *combo = data;
-    gchar buf[512];
+    gchar buf[1024];
 
     if (combo)
         draw_system = gtk_combo_box_get_active(combo);
@@ -750,6 +847,10 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
         prop_set_val(PROP_GRADE_NAMES, buf, 0);
     }
 
+    if (if_unset==FALSE || props[PROP_COLORS].value[0]==0) {
+        reset_colors(button, data);
+    }
+    
     g_key_file_set_integer(keyfile, "preferences", "drawsystem", draw_system);
     refresh_window();
 }
@@ -781,6 +882,7 @@ void open_properties(GtkWidget *w, gpointer data)
     GtkWidget *table3 = gtk_grid_new();
     GtkWidget *table5 = gtk_grid_new();
     GtkWidget *table6 = gtk_grid_new();
+    GtkWidget *table7 = gtk_grid_new();
 
     GtkWidget *tables[NUM_TBLS];
     gint       num_comp, num_weighted;
@@ -883,6 +985,10 @@ void open_properties(GtkWidget *w, gpointer data)
         belt_widgets[i] = tmp;
     }
 
+    for (i = 0; i < NUM_COLORS; i++) {
+        color_list_w[i] = GTK_COLOR_BUTTON(gtk_color_button_new());
+    }
+    
     values_to_widgets();
 
     // table6 -- statistics
@@ -924,6 +1030,27 @@ void open_properties(GtkWidget *w, gpointer data)
     gtk_grid_attach(GTK_GRID(table3), gtk_label_new(_("Max")),     2, 2, 1, 1);
     gtk_grid_attach(GTK_GRID(table3), gtk_label_new(_("System")),  3, 2, 1, 1);
 
+    // table7
+    // colors
+    tmp = gtk_button_new_with_label(_("Initialize"));
+    gtk_grid_attach(GTK_GRID(table7), tmp, 1, 0, 1, 1);
+    g_signal_connect(G_OBJECT(tmp), "clicked", G_CALLBACK(reset_colors), NULL);
+    
+    gint t = 0, c = 0, r = 1;
+    for (t = 0; color_tables[t].name; t++) {
+	c = 0;
+	gtk_grid_attach(GTK_GRID(table7), gtk_label_new(_(color_tables[t].name)), 0, r, 1, 1);
+	r++;
+	for (i = color_tables[t].start; i < color_tables[t].start+color_tables[t].len; i++) {
+	    gtk_grid_attach(GTK_GRID(table7), GTK_WIDGET(color_list_w[i]), c+1, r, 1, 1);
+	    if (++c >= 8) {
+		c = 0;
+		r++;
+	    }
+	}
+	r++;
+    }
+
     gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), tables[0], gtk_label_new(_("General")));
     gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), table2,    gtk_label_new(_("Initialize")));
     gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), tables[3], gtk_label_new(_("Rules")));
@@ -932,6 +1059,7 @@ void open_properties(GtkWidget *w, gpointer data)
     gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), table3,    gtk_label_new(_("Default systems")));
     gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), table5,    gtk_label_new(_("Grade names")));
     gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), table6,    gtk_label_new(_("Statistics")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(prop_notebook), table7,    gtk_label_new(_("Color")));
 
     GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_widget_set_size_request(scrolled_window, FRAME_WIDTH, FRAME_HEIGHT);
@@ -1027,4 +1155,42 @@ gint props_get_grade(gchar *b)
     }
 
     return 0;
+}
+
+GdkRGBA *category_to_color(gint num)
+{
+    struct color_table *t;
+
+    t = &color_tables[COLOR_TABLE_CATEGORIES];
+    return &color_list_rgba[t->start + num % t->len];
+}
+
+GdkRGBA *round_to_color(gint round)
+{
+    struct color_table *t;
+    
+    switch (round & ROUND_TYPE_MASK) {
+    case 0:
+	t = &color_tables[COLOR_TABLE_ROUND];
+	return &color_list_rgba[t->start + (round & ROUND_MASK) % t->len];
+    case ROUND_ROBIN:
+	t = &color_tables[COLOR_TABLE_ROUND_ROBIN];
+	return &color_list_rgba[t->start];
+    case ROUND_REPECHAGE:
+	t = &color_tables[COLOR_TABLE_REPECHAGE];
+	return &color_list_rgba[t->start];
+    case ROUND_SEMIFINAL:
+	t = &color_tables[COLOR_TABLE_SEMIFINAL];
+	return &color_list_rgba[t->start];
+    case ROUND_BRONZE:
+	t = &color_tables[COLOR_TABLE_BRONZE];
+	return &color_list_rgba[t->start];
+    case ROUND_SILVER:
+	t = &color_tables[COLOR_TABLE_SILVER];
+	return &color_list_rgba[t->start];
+    case ROUND_FINAL:
+	t = &color_tables[COLOR_TABLE_FINAL];
+	return &color_list_rgba[t->start];
+    }
+    return NULL;
 }

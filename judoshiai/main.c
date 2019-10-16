@@ -633,28 +633,7 @@ gint application_type(void)
 
 void refresh_window(void)
 {
-    GtkWidget *widget;
-    GdkRegion *region;
-    widget = GTK_WIDGET(main_window);
-#if (GTKVER == 3)
-    if (gtk_widget_get_window(widget)) {
-        cairo_rectangle_int_t r;
-        r.x = 0;
-        r.y = 0;
-        r.width = gtk_widget_get_allocated_width(widget);
-        r.height = gtk_widget_get_allocated_height(widget);
-        region = cairo_region_create_rectangle(&r);
-        gdk_window_invalidate_region(gtk_widget_get_window(widget), region, TRUE);
-        gdk_window_process_updates(gtk_widget_get_window(widget), TRUE);
-        cairo_region_destroy(region);
-    }
-#else
-    if (widget->window) {
-        region = gdk_drawable_get_clip_region(widget->window);
-        gdk_window_invalidate_region(widget->window, region, TRUE);
-        gdk_window_process_updates(widget->window, TRUE);
-    }
-#endif
+    gtk_widget_queue_draw(current_view);
 }
 
 /*** profiling stuff ***/

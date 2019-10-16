@@ -15,7 +15,8 @@
 
 
 static gint set_category(GtkTreeIter *iter, guint index, 
-                         const gchar *category, guint tatami, guint group, gint deleted)
+                         const gchar *category, guint tatami, guint group, gint deleted,
+			 const gchar *color)
 {
     struct judoka j;
 
@@ -33,7 +34,7 @@ static gint set_category(GtkTreeIter *iter, guint index,
     j.last = category;
     j.first = "";
     j.birthyear = group;
-    j.club = "";
+    j.club = (color && color[0]) ? color : "rgb(255,255,255)";
     j.country = "";
     j.regcategory = "";
     j.belt = tatami;
@@ -68,7 +69,7 @@ gint display_one_judoka(struct judoka *j)
         }
 
         return set_category(&parent, j->index, (gchar *)j->last, 
-                            j->belt, j->birthyear, j->deleted);
+                            j->belt, j->birthyear, j->deleted, j->club);
     }
 
     if (find_iter(&iter, j->index)) {
@@ -80,7 +81,7 @@ gint display_one_judoka(struct judoka *j)
             if (j->category)
                 ret = set_category(&parent, 0, 
                                    (gchar *)j->category, 
-                                   0, 0, 0);
+                                   0, 0, 0, NULL);
         } 
 
         parent_data = get_data_by_iter(&parent);
@@ -88,7 +89,7 @@ gint display_one_judoka(struct judoka *j)
         if (j->category && strcmp(parent_data->last, j->category)) {
             /* category has changed */
             gtk_tree_store_remove((GtkTreeStore *)current_model, &iter);
-            ret = set_category(&parent, 0, (gchar *)j->category, 0, 0, 0);
+            ret = set_category(&parent, 0, (gchar *)j->category, 0, 0, 0, NULL);
             gtk_tree_store_append((GtkTreeStore *)current_model, 
                                   &iter, &parent);
             put_data_by_iter(j, &iter);
@@ -100,7 +101,7 @@ gint display_one_judoka(struct judoka *j)
         free_judoka(parent_data);
     } else {
         /* new judoka */
-        ret = set_category(&parent, 0, (gchar *)j->category, 0, 0, 0);
+        ret = set_category(&parent, 0, (gchar *)j->category, 0, 0, 0, NULL);
 
         gtk_tree_store_append((GtkTreeStore *)current_model, 
                               &child, &parent);

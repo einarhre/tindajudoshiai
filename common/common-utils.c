@@ -172,6 +172,22 @@ void get_text_extents(cairo_t *cr, gchar *txt, PangoFontDescription *desc, gdoub
     g_object_unref(layout);
 }
 
+void color_dec_to_rgba(gint dec, GdkRGBA *rgba)
+{
+    rgba->red   = ((dec >> 16) & 0xff)/255.0;
+    rgba->green = ((dec >> 8) & 0xff)/255.0;
+    rgba->blue  = (dec & 0xff)/255.0;
+    rgba->alpha = 1.0;
+}
+
+gint color_rgba_to_dec(GdkRGBA *rgba)
+{
+    return
+	((int)(rgba->red*255) << 16) +
+	((int)(rgba->green*255) << 8) +
+	(int)(rgba->blue*255);
+}
+
 #if defined(__WIN32__) || defined(WIN32)
 
 void print_trace(void)

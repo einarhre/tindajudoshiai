@@ -145,6 +145,41 @@ void create_categories(GtkWidget *w, gpointer data)
     progress_show(0.0, "");
 }
 
+void colorize_categories(GtkWidget *w, gpointer data)
+{
+    gboolean ok;
+    GtkTreeIter iter;
+    gchar buf[64];
+    gint cnt = 0;
+    
+    ok = gtk_tree_model_get_iter_first(current_model, &iter);
+    while (ok) {
+	gint index;
+	gboolean visible;
+		
+	gtk_tree_model_get(current_model, &iter,
+			   COL_INDEX, &index,
+			   COL_VISIBLE, &visible,
+			   -1);
+		
+	if (!visible) {
+	    GdkRGBA *rgba = category_to_color(cnt++);
+
+	    snprintf(buf, sizeof(buf), "rgb(%d,%d,%d)",
+		     (int)(rgba->red*255), (int)(rgba->green*255), (int)(rgba->blue*255));
+
+	    gtk_tree_store_set(GTK_TREE_STORE(current_model), &iter,
+			       COL_CLUB, buf,
+			       -1);
+	    db_set_category_color(index, buf);
+	}
+
+	ok = gtk_tree_model_iter_next(current_model, &iter);
+    } // while ok
+
+    draw_match_graph();
+}
+
 void view_popup_menu_draw_category(GtkWidget *menuitem, gpointer userdata)
 {
     gint n, num_selected = 0;
