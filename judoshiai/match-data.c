@@ -2126,6 +2126,7 @@ void set_cat_system_menu(GtkWidget *combobox, gint wish, guint table)
 gboolean system_is_french(gint sys)
 {
     switch (sys) {
+    case 0:
     case SYSTEM_POOL:
     case SYSTEM_DPOOL:
     case SYSTEM_QPOOL:

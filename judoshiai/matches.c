@@ -679,8 +679,9 @@ gint num_matches(gint sys, gint num_judokas)
         return num_matches_table_d[num_judokas];
     else if (sys == SYSTEM_QPOOL)
         return num_matches_table_q[num_judokas];
-    else
+    else if (sys == SYSTEM_POOL)
         return num_matches_table[num_judokas];
+    return 0;
 }
 
 void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean final_pool)

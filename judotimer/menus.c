@@ -624,7 +624,6 @@ void set_preferences(void)
     set_preferences_keyfile(keyfile, TRUE);
 }
 
-
 #define SET_CHECKBOX(_w, _yes) do {					\
 	if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(_w))) {	\
 	    if (!(_yes)) gtk_menu_item_activate(GTK_MENU_ITEM(_w));	\
@@ -696,7 +695,7 @@ void set_preferences_keyfile(GKeyFile *key_file, gboolean defaults)
 
     error = NULL;
     i = g_key_file_get_integer(key_file, "preferences", "namelayout", &error);
-    if (!error)
+    if (!error && i >= 1 && i < NUM_NAME_LAYOUTS)
         gtk_menu_item_activate(GTK_MENU_ITEM(name_layouts[i]));
     else if (defaults)
         gtk_menu_item_activate(GTK_MENU_ITEM(name_layouts[0]));
@@ -714,9 +713,11 @@ void set_preferences_keyfile(GKeyFile *key_file, gboolean defaults)
     i = g_key_file_get_integer(key_file, "preferences", "language", &error);
     if (!error) {
         language = i;
+	if (language < 0 || language >= NUM_LANGS)
+	    language = LANG_EN;
 	if (!defaults) change_language(NULL, NULL, gint_to_ptr(language));
     } else if (defaults)
-        language = LANG_FI;
+        language = LANG_EN;
 
     error = NULL;
     d = g_key_file_get_double(key_file, "preferences", "flagsize", &error);
@@ -803,6 +804,7 @@ void set_preferences_keyfile(GKeyFile *key_file, gboolean defaults)
 	    case 5: gtk_menu_item_activate(GTK_MENU_ITEM(layout_sel_5)); break;
 	    case 6: gtk_menu_item_activate(GTK_MENU_ITEM(layout_sel_6)); break;
 	    case 7: gtk_menu_item_activate(GTK_MENU_ITEM(layout_sel_7)); break;
+	    default: gtk_menu_item_activate(GTK_MENU_ITEM(layout_sel_6)); break;
 	    }
 	} else {
 	    gtk_menu_item_activate(GTK_MENU_ITEM(layout_sel_6));
