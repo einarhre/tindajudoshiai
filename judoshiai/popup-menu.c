@@ -515,8 +515,7 @@ static void color_dialog_response(GtkDialog *dialog, gint response)
 void view_popup_menu_color(GtkWidget *menuitem, gpointer userdata)
 {
     GtkWidget *dialog;
-    GtkWidget *table = gtk_grid_new(), *num_w;
-    GtkWidget *from_all, *from_each;
+    GtkWidget *table = gtk_grid_new();
 
     dialog = gtk_color_chooser_dialog_new(_("Select a color"), NULL);
     g_signal_connect(dialog, "response", G_CALLBACK (color_dialog_response), NULL);

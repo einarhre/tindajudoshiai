@@ -520,7 +520,7 @@ static int block(void)
     }
 
     if (accept(b3)) {
-        char buf[64];
+        char buf[300];
         match_t *m[3];
         int i;
         checkval((num_best_of_three_pairs < NUM_BEST_OF_3_PAIRS),
