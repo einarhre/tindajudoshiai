@@ -633,7 +633,8 @@ gint application_type(void)
 
 void refresh_window(void)
 {
-    gtk_widget_queue_draw(current_view);
+    if (current_view)
+	gtk_widget_queue_draw(current_view);
 }
 
 /*** profiling stuff ***/
