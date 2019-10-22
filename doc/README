@@ -21,6 +21,24 @@ NOTE for Windows:
 
 ==============================================
 RELEASE NOTE
+VERSION 3.0
+
+NOTE: This version adds a color column to the categories table.
+You cannot use the updated databases with older JudoShiai versions!
+It is recommended to use a copy of an older database before opening it.
+
+Common
+------
++ Farsi language added.
++ Bug fixes.
+
+JudoShiai
+---------
++ GBR version updated.
++ Categories can be colorized for easier observation.
+
+==============================================
+RELEASE NOTE
 VERSION 2.9.1, 2.9.2
 
 Common
