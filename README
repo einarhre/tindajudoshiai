@@ -17,7 +17,7 @@ software installation. "apt-get install" fetches and installs software packages.
 
 Install the basic development tools:
 
-$ sudo apt-get install build-essential libgtk-3-dev bison flex checkinstall
+$ sudo apt-get install build-essential libgtk-3-dev bison flex
 
 You probably already have "build-essential" (compiler, linker). "gnome-devel"
 contains everything needed for GTK+ graphical user interface development. 
@@ -31,6 +31,11 @@ For judoproxy:
 
 $ sudo apt-get install libavcodec-dev libavformat-dev libavresample-dev libavutil-dev libswscale-dev
 $ sudo apt-get install liblzma-dev libxml2-dev
+
+Debian package creation requires Ruby and fpm:
+
+$ sudo apt-get -y install ruby ruby-dev rubygems
+$ sudo -E gem install fpm
 
 JudoShiai is under GIT in Sourceforge:
 
@@ -52,9 +57,13 @@ $ make
 
 Make a Debian package
 
-$ sudo make debian
+$ make debian
 
 You can find the result in judoshiai-code/release-linux.
+
+There are three version for Windows:
+- WinXP runs everywhere, but is slow.
+- Win32 and Win64 are fast, but do not run in WinXP.
 
 Cross compilation for Windows requires more software:
 
@@ -66,7 +75,7 @@ $ sudo apt-get install wine
 
 There exist still lots of required libraries and run time DLL's that are not in
 any package. Many DLL's have incompatible versions around and finding the correct one 
-may take time. To make life easier you can fetch a ready made set of Windows software.
+may take time. To make life easier you can fetch a ready made set of Windows XP software.
 Get it using command line or your favorite browser:
 
 $ wget http://judoshiai.sourceforge.net/win32-gtk3.tgz
@@ -75,17 +84,31 @@ Extract it under the /opt directory:
 
 $ sudo tar xvzf win32-gtk3.tgz -C /opt
 
+Win32 and Win64 use MXE:
+
+git clone https://github.com/mxe/mxe.git
+$ cd ~/mxe
+$ make MXE_TARGETS='i686-w64-mingw32.shared x86_64-w64-mingw32.shared' gtk3 curl librsvg libao mpg123
+
+Compilation will take time.
+
 Start cross compilation:
 
+$ make TARGETOS=WINXP
 $ make TARGETOS=WIN32
+$ make TARGETOS=WIN64
 
 Make a package:
 
+$ make setup TARGETOS=WINXP
 $ make setup TARGETOS=WIN32
+$ make setup TARGETOS=WIN64
 
-Result will be in judoshiai-code/release-win32 directory.
+Results will be in judoshiai-code/release-win{xp,32,64} directories.
 Clean everything with commands
 
 $ make clean
 and
+$ make clean TARGETOS=WINXP
 $ make clean TARGETOS=WIN32
+$ make clean TARGETOS=WIN64
