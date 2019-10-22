@@ -50,6 +50,11 @@ $(info Build JudoProxy:         $(JUDOPROXY))
 $(info Used tool for Windowns:  $(TOOL))
 $(info MXE directory:           $(MXEDIR))
 $(info WIN32 base directory:    $(WIN32_BASE))
+$(info Development directory:   $(DEVELDIR))
+$(info Build directory:         $(JS_BUILD_DIR))
+$(info Object directory:        $(OBJ_DIR))
+$(info Release directory:       $(RELEASEDIR))
+$(info WIN32 base directory:    $(WIN32_BASE))
 $(info -----------------------)
 
 all:
@@ -76,15 +81,8 @@ all:
 	mkdir -p $(RELDIR)/share/locale/he/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/fr/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/fa/LC_MESSAGES
-	mkdir -p $(RELDIR)/share/locale/en_GB/LC_MESSAGES
-	mkdir -p $(RELDIR)/share/themes
-	mkdir -p $(RELDIR)/share/icons
-	mkdir -p $(RELDIR)/lib
 	mkdir -p $(RELDIR)/doc
 	mkdir -p $(RELDIR)/licenses
-	mkdir -p $(RELDIR)/etc/www/js
-	mkdir -p $(RELDIR)/etc/www/css
-	mkdir -p $(RELDIR)/etc/bin
 	@echo "---------------------------"
 	@echo "Run make in subdirectories"
 	@echo "---------------------------"
@@ -280,10 +278,59 @@ endif
 	cp gnome/judoshiai.menu /usr/share/menu/judoshiai
 
 debian:
+	rm -rf $(RELEASEDIR)/pkg
+	mkdir -p $(RELEASEDIR)/pkg/usr/bin
+	mkdir -p $(RELEASEDIR)/pkg/usr/lib
+	mkdir -p $(RELEASEDIR)/pkg/usr/lib/mime/packages
+	mkdir -p $(RELEASEDIR)/pkg/usr/share/applications
+	mkdir -p $(RELEASEDIR)/pkg/usr/share/application-registry
+	mkdir -p $(RELEASEDIR)/pkg/usr/share/menu
+	mkdir -p $(RELEASEDIR)/pkg/usr/share/mime
+	mkdir -p $(RELEASEDIR)/pkg/usr/share/mime-info
+	mkdir -p $(RELEASEDIR)/pkg/usr/share/mime/packages
+	mkdir -p $(RELEASEDIR)/pkg/usr/share/pixmaps
+	cp -a $(RELEASEDIR)/judoshiai $(RELEASEDIR)/pkg/usr/lib/
+	ln -sf /usr/lib/judoshiai/programs/judoshiai $(RELEASEDIR)/pkg/usr/bin/judoshiai
+	ln -sf /usr/lib/judoshiai/programs/judotimer $(RELEASEDIR)/pkg/usr/bin/judotimer
+	ln -sf /usr/lib/judoshiai/programs/judoinfo $(RELEASEDIR)/pkg/usr/bin/judoinfo
+	ln -sf /usr/lib/judoshiai/programs/judoweight $(RELEASEDIR)/pkg/usr/bin/judoweight
+	ln -sf /usr/lib/judoshiai/programs/judojudogi $(RELEASEDIR)/pkg/usr/bin/judojudogi
+	ln -sf /usr/lib/judoshiai/programs/judoproxy $(RELEASEDIR)/pkg/usr/bin/judoproxy
+	cp gnome/judoshiai.desktop $(RELEASEDIR)/pkg/usr/share/applications/
+	cp gnome/judotimer.desktop $(RELEASEDIR)/pkg/usr/share/applications/
+	cp gnome/judoinfo.desktop $(RELEASEDIR)/pkg/usr/share/applications/
+	cp gnome/judoweight.desktop $(RELEASEDIR)/pkg/usr/share/applications/
+	cp gnome/judojudogi.desktop $(RELEASEDIR)/pkg/usr/share/applications/
+	cp gnome/judoproxy.desktop $(RELEASEDIR)/pkg/usr/share/applications/
+	cp etc/png/judoshiai.png $(RELEASEDIR)/pkg/usr/share/pixmaps/
+	cp etc/png/judotimer.png $(RELEASEDIR)/pkg/usr/share/pixmaps/
+	cp etc/png/judoinfo.png $(RELEASEDIR)/pkg/usr/share/pixmaps/
+	cp etc/png/judoweight.png $(RELEASEDIR)/pkg/usr/share/pixmaps/
+	cp etc/png/judojudogi.png $(RELEASEDIR)/pkg/usr/share/pixmaps/
+	cp etc/png/judoproxy.png $(RELEASEDIR)/pkg/usr/share/pixmaps/
+	cp gnome/judoshiai.mime $(RELEASEDIR)/pkg/usr/share/mime-info/
+	cp gnome/judoshiai.keys $(RELEASEDIR)/pkg/usr/share/mime-info/
+	cp gnome/judoshiai.applications $(RELEASEDIR)/pkg/usr/share/application-registry/
+	cp gnome/judoshiai.packages $(RELEASEDIR)/pkg/usr/lib/mime/packages/judoshiai
+	cp gnome/judoshiai.xml $(RELEASEDIR)/pkg/usr/share/mime/packages/
+	cp gnome/judoshiai.menu $(RELEASEDIR)/pkg/usr/share/menu/judoshiai
+ifeq ($(JUDOHTTPD),YES)
+	ln -sf /usr/lib/judoshiai/programs/judohttpd $(RELEASEDIR)/pkg/usr/bin/judohttpd
+	cp gnome/judohttpd.desktop $(RELEASEDIR)/pkg/usr/share/applications/
+	cp etc/png/judohttpd.png $(RELEASEDIR)/pkg/usr/share/pixmaps/
+endif
+	mv $(RELEASEDIR)/pkg/usr/lib/judoshiai/bin $(RELEASEDIR)/pkg/usr/lib/judoshiai/programs
+	fpm -s dir -t deb -C $(RELEASEDIR)/pkg --name judoshiai --version $(SHIAI_VER_NUM) --iteration 1 \
+	-d libao4 -d libatk1.0-0 -d libcairo2 -d libcurl4 -d libgdk-pixbuf2.0-0 -d libgtk-3-0 \
+	-d libpango-1.0-0 -d librsvg2-2 -d libssh2-1 \
+	--description "JudoShiai Package" --deb-no-default-config-files
+	mv *.deb $(RELEASEDIR)/
+
+debian_old:
 	cp gnome/*-pak .
 	checkinstall -y -D --install=no --pkgname=judoshiai --pkgversion=$(SHIAI_VER_NUM) \
 	--maintainer=oh2ncp@kolumbus.fi --nodoc \
-	--requires libao4,libatk1.0-0,libcairo2,libcurl3,libgdk-pixbuf2.0-0,libgtk-3-0,libpango-1.0-0,librsvg2-2
+	--requires libao4,libatk1.0-0,libcairo2,libcurl4,libgdk-pixbuf2.0-0,libgtk-3-0,libpango-1.0-0,librsvg2-2,libssh2-1
 	chown $(USER):$(USER) *.deb
 	mv *.deb $(RELDIR)/
 	rm description-pak postinstall-pak postremove-pak

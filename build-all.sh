@@ -12,4 +12,4 @@ make TARGETOS=WIN64       2>&1 | tee -a $LOG
 make setup TARGETOS=WINXP 2>&1 | tee -a $LOG
 make setup TARGETOS=WIN32 2>&1 | tee -a $LOG
 make setup TARGETOS=WIN64 2>&1 | tee -a $LOG
-sudo -E JS_BUILD_DIR=/home/hjokinen/js-build make debian 2>&1 | tee -a $LOG
+make debian               2>&1 | tee -a $LOG
