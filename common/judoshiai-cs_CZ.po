@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: oh2ncp@kolumbus.fi\n"
 "POT-Creation-Date: 2019-01-03 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Výběr fontu"
 
 #: ../judotimer/menus.c
-msgid "About JudoTimer"
-msgstr "Info JudoTimerist"
+msgid "About Judotimer"
+msgstr "Info Judotimerist"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -631,6 +631,18 @@ msgstr ""
 msgid "NOT CONNECTED"
 msgstr ""
 
+#: ../judoshiai/competitors.c ../judoshiai/matches.c
+msgid "Comment"
+msgstr "Komentář"
+
+#: ../judoshiai/competitors.c
+msgid "Seeding"
+msgstr "Nasazení"
+
+#: ../judoshiai/competitors.c
+msgid "Club Seeding"
+msgstr "Nasezení klubu"
+
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "již existuje!"
@@ -760,14 +772,6 @@ msgstr ""
 #: ../judoshiai/competitors.c ../judoshiai/matches.c
 msgid "Group"
 msgstr "Skupina"
-
-#: ../judoshiai/competitors.c
-msgid "Seeding"
-msgstr "Nasazení"
-
-#: ../judoshiai/competitors.c
-msgid "Club Seeding"
-msgstr "Nasezení klubu"
 
 #: ../judoshiai/competitors.c
 msgid "Empty categories removed"
@@ -1009,7 +1013,7 @@ msgstr "Nenalezen závodník"
 msgid "Add"
 msgstr "Vlož"
 
-#: ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c ../judoshiai/write-results.c
 msgid "Name"
 msgstr ""
 
@@ -1171,6 +1175,10 @@ msgid "No Repechg"
 msgstr "Bez oprav"
 
 #: ../judoshiai/match-data.c
+msgid "GBR Simple Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
 msgid "SWE Enkelt återkv"
 msgstr "SWE jednoduché opravy"
 
@@ -1245,6 +1253,10 @@ msgstr "EST Dvojitá eliminace"
 #: ../judoshiai/match-data.c
 msgid "Single Elimination"
 msgstr "Jednoduchá eliminace"
+
+#: ../judoshiai/match-data.c
+msgid "GBR Simple Repechage"
+msgstr ""
 
 #: ../judoshiai/match-data.c
 msgid "SWE Single Repechage"
@@ -1383,10 +1395,6 @@ msgstr "Modrý"
 #: ../judoshiai/matches.c
 msgid "Points"
 msgstr "Body"
-
-#: ../judoshiai/matches.c
-msgid "Comment"
-msgstr "Komentář"
 
 #: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
@@ -1565,6 +1573,10 @@ msgid "Restore Removed"
 msgstr "Obnovit odebrané"
 
 #: ../judoshiai/menus.c
+msgid "Delete Removed"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Bar Code Search"
 msgstr "Vyhledat BAR kód"
 
@@ -1583,6 +1595,14 @@ msgstr "Odebrat prázdné"
 #: ../judoshiai/menus.c
 msgid "Create Categories"
 msgstr "Vytvořit kategorie"
+
+#: ../judoshiai/menus.c
+msgid "Init Colors"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Show Colors"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Print All"
@@ -1743,6 +1763,22 @@ msgstr "Autom. přestávka mezi zápasy"
 msgid "Print Logo"
 msgstr "Tiskni logo"
 
+#: ../judoshiai/menus.c
+msgid "Show"
+msgstr "Ukaž"
+
+#: ../judoshiai/menus.c ../judoshiai/set-categories.c
+msgid "Reset to Defaults"
+msgstr "Nastav na výchozí"
+
+#: ../judoshiai/menus.c
+msgid "Scale Serial Interface..."
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Medal Matches..."
+msgstr "Medailové zápasy..."
+
 #: ../judoshiai/menus.c ../judoweight/menus.c
 msgid "Scale Serial Interface"
 msgstr "Sériový port váhy"
@@ -1769,6 +1805,10 @@ msgstr ""
 
 #: ../judoshiai/popup-menu.c
 msgid "all selected categories"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Select a color"
 msgstr ""
 
 #: ../judoshiai/popup-menu.c
@@ -1829,6 +1869,10 @@ msgstr "Tiskni vybrané akreditace"
 
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Color..."
 msgstr ""
 
 #: ../judoshiai/print-texts.c
@@ -2179,12 +2223,12 @@ msgid "System"
 msgstr "Systém"
 
 #: ../judoshiai/properties.c
-msgid "General"
-msgstr "Hlavní"
-
-#: ../judoshiai/properties.c
 msgid "Initialize"
 msgstr "Inicializuj"
+
+#: ../judoshiai/properties.c
+msgid "General"
+msgstr "Hlavní"
 
 #: ../judoshiai/properties.c
 msgid "Rules"
@@ -2210,13 +2254,13 @@ msgstr ""
 msgid "Statistics"
 msgstr ""
 
+#: ../judoshiai/properties.c
+msgid "Color"
+msgstr ""
+
 #: ../judoshiai/search.c
 msgid "Search"
 msgstr "Hledat"
-
-#: ../judoshiai/set-categories.c
-msgid "Reset to Defaults"
-msgstr "Nastav na výchozí"
 
 #: ../judoshiai/set-categories.c
 msgid "Men"
@@ -2348,6 +2392,26 @@ msgstr "Vytvoř statistiku"
 
 #: ../judoshiai/write-results.c
 msgid "Print SVG"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Extra Links"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Link"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "(Example)"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Embed"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "New Window"
 msgstr ""
 
 #: ../judoinfo/main.c ../judojudogi/main.c
@@ -2558,14 +2622,14 @@ msgstr ""
 msgid "About JudoProxy"
 msgstr ""
 
+#~ msgid "About JudoTimer"
+#~ msgstr "Info JudoTimerist"
+
 #~ msgid "Hansokumake to white"
 #~ msgstr "Hansoku-make červený"
 
 #~ msgid "Hansokumake to blue"
 #~ msgstr "Hansoku-make modrý"
-
-#~ msgid "About Judotimer"
-#~ msgstr "Info Judotimerist"
 
 #~ msgid "Match duration: 2 min E-juniors"
 #~ msgstr "Doba zápasu : 2 min E-junioři"
@@ -2608,9 +2672,6 @@ msgstr ""
 
 #~ msgid "Tatamis"
 #~ msgstr "Tatami"
-
-#~ msgid "Medal Matches..."
-#~ msgstr "Medailové zápasy..."
 
 #~ msgid "Move Competitors to Category..."
 #~ msgstr "Vlž závodníky do kategorií..."
@@ -2743,9 +2804,6 @@ msgstr ""
 
 #~ msgid "Deleted Competitors"
 #~ msgstr "Vymazání závodníci"
-
-#~ msgid "Show"
-#~ msgstr "Ukaž"
 
 #~ msgid "Show Deleted"
 #~ msgstr "Ukaž smazané"

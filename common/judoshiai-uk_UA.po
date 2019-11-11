@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Вибрати шрифт"
 
 #: ../judotimer/menus.c
-msgid "About JudoTimer"
-msgstr "Про JudoTimer"
+msgid "About Judotimer"
+msgstr "Про Judotimer"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -631,6 +631,18 @@ msgstr ""
 msgid "NOT CONNECTED"
 msgstr ""
 
+#: ../judoshiai/competitors.c ../judoshiai/matches.c
+msgid "Comment"
+msgstr "Коментар"
+
+#: ../judoshiai/competitors.c
+msgid "Seeding"
+msgstr "Посів"
+
+#: ../judoshiai/competitors.c
+msgid "Club Seeding"
+msgstr "Посів команди"
+
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "вже існує!"
@@ -760,14 +772,6 @@ msgstr ""
 #: ../judoshiai/competitors.c ../judoshiai/matches.c
 msgid "Group"
 msgstr "Група"
-
-#: ../judoshiai/competitors.c
-msgid "Seeding"
-msgstr "Посів"
-
-#: ../judoshiai/competitors.c
-msgid "Club Seeding"
-msgstr "Посів команди"
 
 #: ../judoshiai/competitors.c
 msgid "Empty categories removed"
@@ -1009,7 +1013,7 @@ msgstr "Учасника не знайдено"
 msgid "Add"
 msgstr "Додайти"
 
-#: ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c ../judoshiai/write-results.c
 msgid "Name"
 msgstr "Назва"
 
@@ -1174,6 +1178,10 @@ msgid "No Repechg"
 msgstr "Без утішення"
 
 #: ../judoshiai/match-data.c
+msgid "GBR Simple Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
 msgid "SWE Enkelt återkv"
 msgstr "SWE Enkelt återkv"
 
@@ -1248,6 +1256,10 @@ msgstr "EST Double Elimination"
 #: ../judoshiai/match-data.c
 msgid "Single Elimination"
 msgstr "Вибування"
+
+#: ../judoshiai/match-data.c
+msgid "GBR Simple Repechage"
+msgstr ""
 
 #: ../judoshiai/match-data.c
 msgid "SWE Single Repechage"
@@ -1386,10 +1398,6 @@ msgstr "Синій"
 #: ../judoshiai/matches.c
 msgid "Points"
 msgstr "Оцінка"
-
-#: ../judoshiai/matches.c
-msgid "Comment"
-msgstr "Коментар"
 
 #: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
@@ -1568,6 +1576,10 @@ msgid "Restore Removed"
 msgstr "Відновити видалене"
 
 #: ../judoshiai/menus.c
+msgid "Delete Removed"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Bar Code Search"
 msgstr "Пошук по штрих-коду"
 
@@ -1586,6 +1598,14 @@ msgstr "Видалити порожні"
 #: ../judoshiai/menus.c
 msgid "Create Categories"
 msgstr "Опрацювати категорії"
+
+#: ../judoshiai/menus.c
+msgid "Init Colors"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Show Colors"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Print All"
@@ -1746,6 +1766,22 @@ msgstr "Автоматична затримка"
 msgid "Print Logo"
 msgstr "Друкувати логотип"
 
+#: ../judoshiai/menus.c
+msgid "Show"
+msgstr "Показати"
+
+#: ../judoshiai/menus.c ../judoshiai/set-categories.c
+msgid "Reset to Defaults"
+msgstr "Відновити значення за замовчуванням"
+
+#: ../judoshiai/menus.c
+msgid "Scale Serial Interface..."
+msgstr "Параметри мережі..."
+
+#: ../judoshiai/menus.c
+msgid "Medal Matches..."
+msgstr "Призові сутички..."
+
 #: ../judoshiai/menus.c ../judoweight/menus.c
 msgid "Scale Serial Interface"
 msgstr "Параметри мережі"
@@ -1772,6 +1808,10 @@ msgstr ""
 
 #: ../judoshiai/popup-menu.c
 msgid "all selected categories"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Select a color"
 msgstr ""
 
 #: ../judoshiai/popup-menu.c
@@ -1832,6 +1872,10 @@ msgstr "Друк вибраних карток акредитації"
 
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Color..."
 msgstr ""
 
 #: ../judoshiai/print-texts.c
@@ -2184,12 +2228,12 @@ msgid "System"
 msgstr "Система"
 
 #: ../judoshiai/properties.c
-msgid "General"
-msgstr "Загальні положення"
-
-#: ../judoshiai/properties.c
 msgid "Initialize"
 msgstr "Ініціалізувати"
+
+#: ../judoshiai/properties.c
+msgid "General"
+msgstr "Загальні положення"
 
 #: ../judoshiai/properties.c
 msgid "Rules"
@@ -2215,13 +2259,13 @@ msgstr "Ступені (Кю/Розряд)"
 msgid "Statistics"
 msgstr "Статистика"
 
+#: ../judoshiai/properties.c
+msgid "Color"
+msgstr ""
+
 #: ../judoshiai/search.c
 msgid "Search"
 msgstr "Пошук"
-
-#: ../judoshiai/set-categories.c
-msgid "Reset to Defaults"
-msgstr "Відновити значення за замовчуванням"
 
 #: ../judoshiai/set-categories.c
 msgid "Men"
@@ -2354,6 +2398,26 @@ msgstr "Створити статистику"
 #: ../judoshiai/write-results.c
 msgid "Print SVG"
 msgstr "Друкувати SVG"
+
+#: ../judoshiai/write-results.c
+msgid "Extra Links"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Link"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "(Example)"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Embed"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "New Window"
+msgstr ""
 
 #: ../judoinfo/main.c ../judojudogi/main.c
 msgid "Category starts"
@@ -2563,14 +2627,14 @@ msgstr ""
 msgid "About JudoProxy"
 msgstr ""
 
+#~ msgid "About JudoTimer"
+#~ msgstr "Про JudoTimer"
+
 #~ msgid "Hansokumake to white"
 #~ msgstr "ХАНСОКУ-МАКЕ білому"
 
 #~ msgid "Hansokumake to blue"
 #~ msgstr "ХАНСОКУ-МАКЕ синьому"
-
-#~ msgid "About Judotimer"
-#~ msgstr "Про Judotimer"
 
 #~ msgid "Match duration: 2 min E-juniors"
 #~ msgstr "Тривалість - 2 хв, утримння - 15 сек"
@@ -2656,12 +2720,6 @@ msgstr ""
 #~ msgid "Tatamis"
 #~ msgstr "Татамі"
 
-#~ msgid "Scale Serial Interface..."
-#~ msgstr "Параметри мережі..."
-
-#~ msgid "Medal Matches..."
-#~ msgstr "Призові сутички..."
-
 #~ msgid "Move Competitors to Category..."
 #~ msgstr "Перемістити учасників у категорію ..."
 
@@ -2709,9 +2767,6 @@ msgstr ""
 
 #~ msgid "Short pin times"
 #~ msgstr "Коротке утримання"
-
-#~ msgid "Show"
-#~ msgstr "Показати"
 
 #~ msgid "Show Deleted"
 #~ msgstr "Показати видалення"

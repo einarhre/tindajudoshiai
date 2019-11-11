@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: oh2ncp@kolumbus.fi\n"
 "POT-Creation-Date: 2016-10-25 13:22+0300\n"
 "PO-Revision-Date: 2019-06-10 12:04+ZONE\n"
 "Last-Translator: reza chegini & hosein chegini <rezach91@gmail.com>\n"
@@ -11,189 +11,1103 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "(Connection OK)"
-msgstr "(اتصال برقرار است)"
+#: ../judotimer/comm.c ../judotimer/main.c ../judotimer/menus.c
+#: ../judotimer/stopwatch.c
+msgid "Golden Score"
+msgstr "وقت طلایی"
 
-msgid "(Connection broken)"
-msgstr "(خطا در اتصال)"
+#: ../judotimer/main.c
+msgid "White has a judogi problem."
+msgstr " لباس جودو سفید مشکل دارد"
 
-msgid "----- Men -----"
-msgstr "----- آقایان -----"
+#: ../judotimer/main.c
+msgid "Blue has a judogi problem."
+msgstr "لباس جودو آبی مشکل دارد"
 
-msgid "----- Women -----"
-msgstr "----- بانوان -----"
+#: ../judotimer/main.c
+msgid "White won the voting"
+msgstr "سفید برنده پرچم"
 
-msgid "Men"
-msgstr "آقایان"
-
-msgid "Women"
-msgstr "بانوان"
-
-msgid "Abbreviations in Sheets"
-msgstr "خلاصه ها در جدول"
-
-msgid "About"
-msgstr "درباره"
-
-msgid "About JudoInfo"
-msgstr "درباره جودو اینفو"
-
-msgid "About Judotimer"
-msgstr "درباره جودو تایمر"
-
-msgid "Add All From Another Shiai"
-msgstr "اضافه کردن همه از شیایی دیگر"
-
-msgid "Add From a Text File"
-msgstr "افزودن از یک فایل تکست"
-
-msgid "Add competitors"
-msgstr "اضافه کردن ورزشکاران"
-
-msgid "Address of the communication node"
-msgstr "آدرس های نقطه اتصال"
-
-msgid "Advertise"
-msgstr "تبلیغ"
-
-msgid "Advertisement"
-msgstr "تبلیغات"
-
-msgid "Age text:"
-msgstr "عنوان رده سنی:"
-
-msgid "All Files"
-msgstr "همه فایل ها"
-
-msgid "All the categories has been drawn"
-msgstr "همه اوزان قرعه کشی شدند"
-
-msgid "All the categories located to the tatamis"
-msgstr "همه اوزان دارای تاتامی است"
-
-msgid "Automatic Match Delay"
-msgstr "تاخیر خودکار در مسابقه"
-
-msgid "Automatic Sheet Update"
-msgstr "به روزرسانی خودکار جدول"
-
-msgid "Automatic Web Page Update"
-msgstr "بروزرسانی خودکار صفحه وب"
-
-msgid "Back"
-msgstr "بازگشت"
-
-msgid "Bar Code Search"
-msgstr "جستجو از طریق بارکد"
-
-msgid "Bar code search"
-msgstr "جستجو از طریق بارکد"
-
-msgid "Best of 3"
-msgstr "بهترین از 3 مسابقه"
-
-msgid "Blue"
-msgstr "آبی"
-
-msgid "Blue wins"
-msgstr "آبی برنده شد"
-
+#: ../judotimer/main.c
 msgid "Blue won the voting"
 msgstr "آبی برنده پرچم"
 
-msgid "Both Club and Country"
-msgstr "هم باشگاه هم کشور"
+#: ../judotimer/main.c ../judotimer/menus.c
+msgid "Hansoku-make to white"
+msgstr "هانسوکوماکه به سفید"
 
-msgid "Bronze match A"
-msgstr "برنز 1"
+#: ../judotimer/main.c ../judotimer/menus.c
+msgid "Hansoku-make to blue"
+msgstr "هانسوکوماکه به آبی"
 
-msgid "Bronze match B"
-msgstr "برنز 2"
+#: ../judotimer/main.c ../judotimer/menus.c ../judotimer/stopwatch.c
+msgid "Hikiwake"
+msgstr "نساوی"
 
-msgid "CANNOT OPEN BACKUP FILE"
-msgstr "فایل پشتیبان باز نمیشود"
+#: ../judotimer/main.c ../judoshiai/matches.c
+msgid "Match:"
+msgstr "مسابقه:"
 
-msgid "Cancel the match"
-msgstr "لغو مسابقه"
+#: ../judotimer/main.c
+msgid "Next:"
+msgstr "بعد:"
 
-msgid "Cannot handle: Database created with newer JudoShiai version."
-msgstr "غیر قابل شناسایی:دیتابیس توسط نسخه جدیدتر برنامه ساخته شده است"
+#: ../judotimer/main.c ../judoinfo/svg.c
+msgid "Open file"
+msgstr "باز کردن فایل"
 
-msgid "Cannot move"
-msgstr "قابل جا به جایی نیست"
+#: ../judotimer/main.c
+msgid "Fight:"
+msgstr "مسابقه:"
 
-msgid "Cannot open"
-msgstr "قابل باز کردن نیست"
+#: ../judotimer/main.c ../judoinfo/main.c
+msgid "Select font"
+msgstr "انتخاب فونت"
 
-msgid "Categories"
-msgstr "دسته بندی ها"
+#: ../judotimer/menus.c
+msgid "About Judotimer"
+msgstr "درباره جودو تایمر"
 
-msgid "Category"
-msgstr "دسته بندی"
+#: ../judotimer/menus.c
+msgid "Set clocks"
+msgstr "تنظیم زمان"
 
-msgid "Category already exists!"
-msgstr "دسته بندی از قبل موجود است"
-
-msgid "Category drawn"
-msgstr "قرعه کشی شده"
-
-msgid "Category starts"
-msgstr "شروع دسته بندی"
-
-msgid "Category:"
-msgstr "دسته بندی:"
-
-msgid "Choose a directory"
-msgstr "انتخاب یک مسیر"
-
-msgid "Choose a file"
-msgstr "انتخاب یک فایل"
-
-msgid "Class"
-msgstr "کلاس"
-
-msgid "Clean up duplicates and update reg. categories"
-msgstr "پاک کردن تکراری ها و به روزرسانی رده های وزنی"
-
-msgid "Clear selection"
-msgstr "پاک کردن انتخاب شده ها"
-
-msgid "Clear the results first"
-msgstr "ابتدا نتایج را پاک کنید"
-
+#: ../judotimer/menus.c
 msgid "Clock:"
 msgstr "زمان:"
 
+#: ../judotimer/menus.c ../judoshiai/httpd.c ../judoshiai/matches.c
+msgid "Match"
+msgstr "مسابقه"
+
+#: ../judotimer/menus.c ../judoshiai/import.c ../judoshiai/menus.c
+#: ../judoinfo/menus.c ../judoweight/menus.c ../judojudogi/menus.c
+#: ../judoproxy/menus.c
+msgid "Preferences"
+msgstr "تنظیمات"
+
+#: ../judotimer/menus.c ../judoshiai/menus.c ../judoshiai/sql-dialog.c
+#: ../judoinfo/menus.c ../judoweight/menus.c ../judojudogi/menus.c
+#: ../judoproxy/menus.c
+msgid "Help"
+msgstr "راهنما"
+
+#: ../judotimer/menus.c
+msgid "Undo!"
+msgstr "یک قدم به عقب"
+
+#: ../judotimer/menus.c
+msgid "Match duration: automatic"
+msgstr "مدت مسابقه خودکار"
+
+#: ../judotimer/menus.c
+msgid "Match duration: 2 min (short pin times)"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "Match duration: 2 min"
+msgstr "مدت مسابقه 2 دقیقه"
+
+#: ../judotimer/menus.c
+msgid "Match duration: 3 min"
+msgstr "مدت مسابقه 3 دقیقه"
+
+#: ../judotimer/menus.c
+msgid "Match duration: 4 min"
+msgstr "مدت مسابقه: 4 دقیقه"
+
+#: ../judotimer/menus.c
+msgid "Match duration: 5 min"
+msgstr "مدت مسابقه 5 دقیقه"
+
+#: ../judotimer/menus.c
+msgid "Hantei: blue wins"
+msgstr "پرچم:برنده آبی"
+
+#: ../judotimer/menus.c
+msgid "Hantei: white wins"
+msgstr "پرچم:برنده سفید"
+
+#: ../judotimer/menus.c
+msgid "Clear selection"
+msgstr "پاک کردن انتخاب شده ها"
+
+#: ../judotimer/menus.c
+msgid "View Log"
+msgstr "مشاهده لاگ"
+
+#: ../judotimer/menus.c ../judotimer/show-ad.c
+msgid "Show Competitors"
+msgstr "نمایش ورزشکاران"
+
+#: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
+#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
+msgid "Quit"
+msgstr "خروج"
+
+#: ../judotimer/menus.c ../judoshiai/menuacts.c
+msgid "Contest"
+msgstr "تاتامی"
+
+#: ../judotimer/menus.c
+msgid "Switch sides"
+msgstr "تعویض رنگ لباس"
+
+#: ../judotimer/menus.c
+msgid "Replay Video"
+msgstr "بازپخش فیلم"
+
+#: ../judotimer/menus.c ../judoinfo/menus.c ../judojudogi/menus.c
+msgid "Red background"
+msgstr "پس زمینه قرمز"
+
+#: ../judotimer/menus.c ../judoinfo/menus.c ../judojudogi/menus.c
+msgid "Full screen mode"
+msgstr "حالت تمام صفحه"
+
+#: ../judotimer/menus.c
+msgid "Stop clock on Ippon"
+msgstr "توقف زمان بعد از ایپون"
+
+#: ../judotimer/menus.c
+msgid "2017 Rules"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "2018 Rules"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "Confirm New Match"
+msgstr "تایید دیدار جدید"
+
+#: ../judotimer/menus.c
+msgid "View clocks only"
+msgstr "فقط نمایش تایمر ها"
+
+#: ../judotimer/menus.c ../judoinfo/menus.c ../judojudogi/menus.c
+msgid "White first"
+msgstr "اول سفید:"
+
+#: ../judotimer/menus.c
+msgid "No SOREMADE/IPPON texts"
+msgstr "عدم نمایش نوشته سورمده/ایپون"
+
+#: ../judotimer/menus.c
+msgid "Show competitors"
+msgstr "نمایش ورزشکاران"
+
+#: ../judotimer/menus.c
+msgid "Require judogi control"
+msgstr "الزام چک لباس"
+
+#: ../judotimer/menus.c
+msgid "Display layout"
+msgstr "قالب نمایش"
+
+#: ../judotimer/menus.c
+msgid "Display layout 1"
+msgstr "نمونه 1"
+
+#: ../judotimer/menus.c
+msgid "Display layout 2"
+msgstr "نمونه 2"
+
+#: ../judotimer/menus.c
+msgid "Display layout 3"
+msgstr "نمونه 3"
+
+#: ../judotimer/menus.c
+msgid "Display layout 4"
+msgstr "نمونه 4"
+
+#: ../judotimer/menus.c
+msgid "Display layout 5"
+msgstr "نمونه 5"
+
+#: ../judotimer/menus.c
+msgid "Display customized layout"
+msgstr "نمایش پوسته شخصی سازی شده"
+
+#: ../judotimer/menus.c
+msgid "Custom Layout File"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "Name format"
+msgstr "چیدمان اسم"
+
+#: ../judotimer/menus.c ../judoshiai/menus.c
+msgid "Name Surname, Country/Club"
+msgstr "نام نام خانوادگی, کشور/باشگاه"
+
+#: ../judotimer/menus.c
+msgid "Surname, Name, Country/Club"
+msgstr "نام خانوادگی, نام, کشور/باشگاه"
+
+#: ../judotimer/menus.c
+msgid "Country/Club  Surname, Name"
+msgstr "کشور/باشگاه نام خانوادگی, نام"
+
+#: ../judotimer/menus.c
+msgid "Country  Surname, Name"
+msgstr "کشور نام خانوادگی, نام"
+
+#: ../judotimer/menus.c
+msgid "Club  Surname, Name"
+msgstr "باشگاه نام خانوادگی, نام"
+
+#: ../judotimer/menus.c
+msgid "Country Surname"
+msgstr "کشور نام خانوادگی"
+
+#: ../judotimer/menus.c
+msgid "Club Surname"
+msgstr "نام باشگاه"
+
+#: ../judotimer/menus.c
+msgid "Surname, Name"
+msgstr "نام خانوادگی, نام"
+
+#: ../judotimer/menus.c ../judoshiai/httpd.c
+msgid "Surname"
+msgstr "نام خانوادگی"
+
+#: ../judotimer/menus.c ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+#: ../judoshiai/httpd.c
+msgid "Country"
+msgstr "کشور"
+
+#: ../judotimer/menus.c ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+#: ../judoshiai/httpd.c
 msgid "Club"
 msgstr "باشگاه"
 
-msgid "Club Name Only"
-msgstr "فقط نام باشگاه"
+#: ../judotimer/menus.c
+msgid "Contest area"
+msgstr "تاتامی"
 
-msgid "Club Text Selection"
-msgstr "انتخاب نام باشگاه"
+#: ../judotimer/menus.c
+msgid "Contest area not chosen"
+msgstr "تاتامی انتخاب نشده است"
 
-msgid "Club:"
-msgstr "باشگاه:"
+#: ../judotimer/menus.c ../judoinfo/menus.c ../judoweight/menus.c
+#: ../judojudogi/menus.c ../judoproxy/menus.c
+msgid "Communication node"
+msgstr "نقطه اتصال"
 
-msgid "Collapse All"
-msgstr "بستن همه"
+#: ../judotimer/menus.c ../judoinfo/menus.c ../common/ip.c
+#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
+msgid "Own IP addresses"
+msgstr "آی پی آدرس این دستگاه"
 
-msgid "Column"
-msgstr "ستون"
+#: ../judotimer/menus.c
+msgid "Video server"
+msgstr "ویدئو سرور"
 
-msgid "Column Separator:"
-msgstr "جدا کننده ستون:"
+#: ../judotimer/menus.c ../judoshiai/matches.c
+msgid "Set time"
+msgstr "تنظیم زمان"
 
+#: ../judotimer/menus.c
+msgid "Increment time"
+msgstr "افزایش زمان"
+
+#: ../judotimer/menus.c
+msgid "Decrement time"
+msgstr "کاهش زمان"
+
+#: ../judotimer/menus.c
+msgid "Increment pin time"
+msgstr "افزایش زمان اوسای کومی"
+
+#: ../judotimer/menus.c
+msgid "Decrement pin time"
+msgstr "کاهش زمان اوسای کومی"
+
+#: ../judotimer/menus.c
+msgid "Normal operation"
+msgstr "عملکرد عادی"
+
+#: ../judotimer/menus.c
+msgid "Slave mode"
+msgstr "حالت مشتری"
+
+#: ../judotimer/menus.c
+msgid "Advertise"
+msgstr "تبلیغ"
+
+#: ../judotimer/menus.c
+msgid "Sound"
+msgstr "صدا"
+
+#: ../judotimer/menus.c ../judoinfo/menus.c
+msgid "Font"
+msgstr "فونت"
+
+#: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
+#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
+msgid "Manual"
+msgstr "دستی"
+
+#: ../judotimer/menus.c
+msgid "Quick guide"
+msgstr "راهنمایی سریع"
+
+#: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
+#: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
+msgid "About"
+msgstr "درباره"
+
+#: ../judotimer/show-ad.c
+msgid "CTL"
+msgstr ""
+
+#: ../judotimer/show-ad.c
+msgid "Advertisement"
+msgstr "تبلیغات"
+
+#: ../judotimer/show-ad.c ../judotimer/stopwatch.c ../judoshiai/competitors.c
+#: ../judoshiai/custom-category.c ../judoshiai/db-validate.c
+#: ../judoshiai/httpd.c ../judoweight/main.c ../judojudogi/main.c
+msgid "OK"
+msgstr "تایید"
+
+#: ../judotimer/show-ad.c
+msgid "Show Flags"
+msgstr "نمایش پرچم ها"
+
+#: ../judotimer/show-ad.c
+msgid "Show Initial of Name"
+msgstr ""
+
+#: ../judotimer/show-ad.c
+msgid "Flag size:"
+msgstr "اندازه پرچم"
+
+#: ../judotimer/show-ad.c
+msgid "Name size:"
+msgstr "اندازه نام"
+
+#: ../judotimer/show-ad.c ../judoshiai/custom-category.c
+#: ../judoshiai/menuacts.c ../judoshiai/svg.c ../judoshiai/write-results.c
+msgid "Choose a directory"
+msgstr "انتخاب یک مسیر"
+
+#: ../judotimer/show-ad.c
+msgid "Run Advertisements"
+msgstr "اجرای تبلیغات"
+
+#: ../judotimer/sound.c ../judoshiai/menuacts.c ../judoshiai/svg.c
+#: ../judoweight/svg.c
+msgid "Choose a file"
+msgstr "انتخاب یک فایل"
+
+#: ../judotimer/sound.c
+msgid "Sound Files"
+msgstr "پوشه صداها"
+
+#: ../judotimer/sound.c
+msgid "All Files"
+msgstr "همه فایل ها"
+
+#: ../judotimer/stopwatch.c
+msgid "Start Golden Score?"
+msgstr "وقت طلایی شروع شود؟"
+
+#: ../judotimer/stopwatch.c
+msgid "No Limit"
+msgstr "بدون محدودیت"
+
+#: ../judotimer/stopwatch.c
+msgid "Hantei"
+msgstr "پرچم"
+
+#: ../judotimer/stopwatch.c
+msgid "Blue wins"
+msgstr "آبی برنده شد"
+
+#: ../judotimer/stopwatch.c
+msgid "White wins"
+msgstr "سفید برنده شد"
+
+#: ../judotimer/stopwatch.c
+msgid "WINNER"
+msgstr "برنده"
+
+#: ../judotimer/stopwatch.c
+msgid "Start New Match?"
+msgstr "مسابقه بعدی شروع شود؟"
+
+#: ../judotimer/stopwatch.c
+msgid "Cancel"
+msgstr "لغو"
+
+#: ../judotimer/stopwatch.c
+msgid "GOLDEN SCORE"
+msgstr ""
+
+#: ../judotimer/stopwatch.c
+msgid "CONTROL"
+msgstr "کنترل"
+
+#: ../judotimer/stopwatch.c
+msgid "REST TIME"
+msgstr "زمان استراحت"
+
+#: ../judotimer/stopwatch.c
+msgid "Points going to blue"
+msgstr "امتیاز به آبی"
+
+#: ../judotimer/stopwatch.c
+msgid "Points going to white"
+msgstr "امتیاز به سفید"
+
+#: ../judotimer/tvlogo.c
+msgid "VLC control"
+msgstr "VLC کنترل"
+
+#: ../judotimer/tvlogo.c
+msgid "VLC port:"
+msgstr ""
+
+#: ../judotimer/tvlogo.c
+msgid "X:"
+msgstr "X:"
+
+#: ../judotimer/tvlogo.c
+msgid "Y:"
+msgstr "Y:"
+
+#: ../judotimer/tvlogo.c
+msgid "Scale:"
+msgstr "ترازو:"
+
+#: ../judotimer/tvlogo.c ../judotimer/video.c ../common/ip.c
+msgid "(Connection OK)"
+msgstr "(اتصال برقرار است)"
+
+#: ../judotimer/tvlogo.c ../judotimer/video.c ../common/ip.c
+msgid "(Connection broken)"
+msgstr "(خطا در اتصال)"
+
+#: ../judotimer/video.c
+msgid "Video server URL"
+msgstr "آدرس ویدئو سرور"
+
+#: ../judotimer/video.c ../judoshiai/ftp.c
+msgid "User:"
+msgstr "کاربر:"
+
+#: ../judotimer/video.c ../judoshiai/ftp.c ../judoshiai/set-password.c
+#: ../judoweight/main.c
+msgid "Password:"
+msgstr "رمز عبور:"
+
+#: ../judotimer/video.c ../judoshiai/ftp.c
+msgid "Proxy:"
+msgstr "پروکسی"
+
+#: ../judotimer/video.c ../judoproxy/video.c
+msgid "Show Video"
+msgstr "نمایش ویدئو"
+
+#: ../judoshiai/another-shiai.c
+msgid "Competitor already exists!"
+msgstr "ورزشکار تکراری!"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+#: ../judoshiai/drawing.c
+msgid "Competitor"
+msgstr "ورزشکار"
+
+#: ../judoshiai/another-shiai.c
+msgid "copied"
+msgstr "کپی شد"
+
+#: ../judoshiai/another-shiai.c
+msgid "Category already exists!"
+msgstr "دسته بندی از قبل موجود است"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+#: ../judoshiai/db-validate.c ../judoshiai/matches.c ../judoshiai/sheets.c
+msgid "Category"
+msgstr "دسته بندی"
+
+#: ../judoshiai/another-shiai.c
+msgid "has been copied with competitors and matches"
+msgstr "به همراه ورزشکاران و مسابقات کپی شد"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+msgid "Last Name"
+msgstr "نام خانوادگی"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+msgid "First Name"
+msgstr "نام"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+msgid "Year of Birth"
+msgstr "سال تولد"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+msgid "Grade"
+msgstr "درجه"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+#: ../judoshiai/db-validate.c
+msgid "Reg. Category"
+msgstr "دسته بندی"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+#: ../judoshiai/db-validate.c ../judoshiai/httpd.c
+msgid "Weight"
+msgstr "وزن"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/competitors.c
+msgid "Id"
+msgstr "آی دی"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/menuacts.c
+msgid "Tournaments"
+msgstr "مسابقات"
+
+#: ../judoshiai/another-shiai.c ../judoshiai/main.c ../judoshiai/menuacts.c
+#: ../judoshiai/menus.c
+msgid "Tournament"
+msgstr "مسابقات"
+
+#: ../judoshiai/categories.c
+msgid "Cannot move"
+msgstr "قابل جا به جایی نیست"
+
+#: ../judoshiai/categories.c
+msgid "Category drawn"
+msgstr "قرعه کشی شده"
+
+#: ../judoshiai/categories.c
+msgid "All the categories located to the tatamis"
+msgstr "همه اوزان دارای تاتامی است"
+
+#: ../judoshiai/category-graph.c
+msgid "Unlocated"
+msgstr "اختصاص داده نشده"
+
+#: ../judoshiai/category-graph.c ../judoshiai/httpd.c ../judoshiai/menus.c
+#: ../judoshiai/set-categories.c
+msgid "Categories"
+msgstr "دسته بندی ها"
+
+#: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+msgid "Unfreeze exported"
+msgstr "منتقل شده ها را از انجماد خارج کن"
+
+#: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+msgid "Unfreeze imported"
+msgstr "وارد شده ها را از انجماد خارج کن"
+
+#: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+msgid "Unfreeze this"
+msgstr "از انجماد خارج کن"
+
+#: ../judoshiai/category-graph.c ../judoshiai/popup-menu.c
+msgid "Move Matches"
+msgstr "انتقال مسابقه ها"
+
+#: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/popup-menu.c
+msgid "Show Sheet"
+msgstr "نمایش جدول"
+
+#: ../judoshiai/comm.c
+msgid "Connections to this node"
+msgstr "اتصالات به این نقطه اتصال"
+
+#: ../judoshiai/comm.c
+msgid "THIS APPLICATION"
+msgstr "این برنامه"
+
+#: ../judoshiai/comm.c
+msgid "NOT CONNECTED"
+msgstr "اتصال برقرار نیست"
+
+#: ../judoshiai/competitors.c ../judoshiai/matches.c
 msgid "Comment"
 msgstr "توضیح"
 
-msgid "Communication"
-msgstr "ارتباط"
+#: ../judoshiai/competitors.c
+msgid "Seeding"
+msgstr "سیدبندی"
 
-msgid "Communication Node"
-msgstr "نقطه اتصال"
+#: ../judoshiai/competitors.c
+msgid "Club Seeding"
+msgstr "سیدبندی باشگاه"
 
+#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
+msgid "already exists!"
+msgstr "از قبل وحود دارد"
+
+#: ../judoshiai/competitors.c ../judoshiai/popup-menu.c
+msgid "Remove drawing first"
+msgstr "ابتدا قرعه ها را پاک کنید"
+
+#: ../judoshiai/competitors.c ../judoshiai/menus.c
+msgid "Competitors"
+msgstr "ورزشکاران"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+#: ../judoshiai/set-categories.c
+msgid "Last Name:"
+msgstr "نام خانوادگی:"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+#: ../judoshiai/set-categories.c
+msgid "First Name:"
+msgstr "نام خانوادگی:"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+msgid "Year of Birth:"
+msgstr "سال تولد "
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+msgid "Grade:"
+msgstr "درجه کمربند:"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+msgid "Club:"
+msgstr "باشگاه:"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+msgid "Country:"
+msgstr "کشور:"
+
+#: ../judoshiai/competitors.c
+msgid "Reg. Category:"
+msgstr "دسته بندی:"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c ../judoweight/main.c
+msgid "Category:"
+msgstr "دسته بندی:"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c ../judoweight/main.c
+msgid "Weight:"
+msgstr "وزن:"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+msgid "Seeding:"
+msgstr "سید"
+
+#: ../judoshiai/competitors.c
+msgid "No seeding"
+msgstr "بدون سید بندی"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+msgid "Club Seeding:"
+msgstr "سید باشگاه:"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+msgid "Id:"
+msgstr "آی دی:"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+msgid "Coach Id:"
+msgstr "آیدی مربی"
+
+#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
+msgid "Gender:"
+msgstr "جنسیت:"
+
+#: ../judoshiai/competitors.c
+msgid "Male"
+msgstr "آقا"
+
+#: ../judoshiai/competitors.c
+msgid "Female"
+msgstr "خانم"
+
+#: ../judoshiai/competitors.c ../judoweight/main.c
+msgid "Control:"
+msgstr "کنترل:"
+
+#: ../judoshiai/competitors.c ../judoweight/main.c ../judojudogi/main.c
+msgid "NOK"
+msgstr "عدم تایید"
+
+#: ../judoshiai/competitors.c ../judoshiai/import.c
+msgid "Comment:"
+msgstr "توضیح:"
+
+#: ../judoshiai/competitors.c
+msgid "Hide name:"
+msgstr ""
+
+#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
+msgid "Team:"
+msgstr "تیم"
+
+#: ../judoshiai/competitors.c
+msgid "System:"
+msgstr "سیستم:"
+
+#: ../judoshiai/competitors.c
+msgid "Tatami:"
+msgstr "تاتامی"
+
+#: ../judoshiai/competitors.c
+msgid "Group:"
+msgstr "گروه:"
+
+#: ../judoshiai/competitors.c
+msgid "Create default members:"
+msgstr ""
+
+#: ../judoshiai/competitors.c
+msgid "Coach"
+msgstr "مربی"
+
+#: ../judoshiai/competitors.c ../judoshiai/set-categories.c
+msgid "Team"
+msgstr "تیم"
+
+#: ../judoshiai/competitors.c ../judoshiai/matches.c
+msgid "Group"
+msgstr "گروه"
+
+#: ../judoshiai/competitors.c
+msgid "Empty categories removed"
+msgstr "رده های وزنی خالی حذف گردید"
+
+#: ../judoshiai/competitors.c
+msgid "Unweighted competitors removed"
+msgstr "ورزشکاران بدون وزن حذف شدند"
+
+#: ../judoshiai/competitors.c
+msgid "Matches exist. Undo the drawing first."
+msgstr "مسابقه از قبل موجود است.ابتدا قرعه کشی را حذف کنید"
+
+#: ../judoshiai/competitors.c
+msgid "Competitors removed"
+msgstr "ورزشکاران پاک شدند"
+
+#: ../judoshiai/competitors.c
+msgid "Bar code search"
+msgstr "جستجو از طریق بارکد"
+
+#: ../judoshiai/competitors.c
+msgid "Type the barcode:"
+msgstr "بارکد را بنویسید:"
+
+#: ../judoshiai/custom-category.c
+msgid "Messages"
+msgstr "پیغام ها"
+
+#: ../judoshiai/db-competitors.c
+msgid "Weights do not match"
+msgstr "وزن ها مطابقت ندارند"
+
+#: ../judoshiai/db-validate.c
+msgid "Database Validation"
+msgstr "اعتبارسنجی دیتابیس"
+
+#: ../judoshiai/db-validate.c
+msgid "Duplicate seedings:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+#, c-format
+msgid "Category %s: seeding %s defined %s times."
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Duplicate club seedings:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+#, c-format
+msgid "Club %s: seeding %s defined %s times."
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Missing category definitions:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+#, c-format
+msgid "Category %s is not defined."
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Category typing errors:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Typing errors:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "UTF-8 errors"
+msgstr "ارور UTF-8"
+
+#: ../judoshiai/db-validate.c
+msgid "Extra spaces"
+msgstr "فضاهای اضافه"
+
+#: ../judoshiai/db-validate.c
+msgid "Possible duplicate competitors:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Possible duplicate club names:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Suspicious weights:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Corrupted competitor data:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+msgid "Corrupted category data:"
+msgstr ""
+
+#: ../judoshiai/db-validate.c
+#, c-format
+msgid "One warning."
+msgid_plural "%d warnings."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../judoshiai/db.c
+msgid "Cannot handle: Database created with newer JudoShiai version."
+msgstr "غیر قابل شناسایی:دیتابیس توسط نسخه جدیدتر برنامه ساخته شده است"
+
+#: ../judoshiai/db.c
+msgid "Database tables updated."
+msgstr "جدول دیتابیس به روزرسانی شد."
+
+#: ../judoshiai/drawing.c
+msgid "Drawing not finished!"
+msgstr "قرعه بندی تمام نشده است"
+
+#: ../judoshiai/drawing.c
+msgid "Matches matched in category"
+msgstr "نتیجه مسابقه ثبت شده است"
+
+#: ../judoshiai/drawing.c
+msgid "Clear the results first"
+msgstr "ابتدا نتایج را پاک کنید"
+
+#: ../judoshiai/drawing.c
+msgid "Move the competitors"
+msgstr "انتقال ورزشکاران"
+
+#: ../judoshiai/drawing.c
+msgid "Next"
+msgstr "بعدی"
+
+#: ../judoshiai/drawing.c
+msgid "Rest"
+msgstr "استراحت"
+
+#: ../judoshiai/drawing.c
+msgid "Number"
+msgstr "شماره"
+
+#: ../judoshiai/drawing.c
+msgid "Select first a competitor and then a number."
+msgstr "ابتدا یک ورزشکار و سپس یک شماره را انتخاب کنید"
+
+#: ../judoshiai/drawing.c
+msgid "All the categories has been drawn"
+msgstr "همه اوزان قرعه کشی شدند"
+
+#: ../judoshiai/ftp.c
+msgid "Server URL"
+msgstr "آدرس سرور"
+
+#: ../judoshiai/ftp.c ../judoshiai/menus.c
+msgid "Copy to Server"
+msgstr "رونوشت به سرور"
+
+#: ../judoshiai/ftp.c
+msgid "Proxy User:"
+msgstr "نام کاربری پروکسی"
+
+#: ../judoshiai/ftp.c
+msgid "Proxy Password:"
+msgstr "رمز عبور پروکسی"
+
+#: ../judoshiai/gdpr.c
+msgid "General Data Protection Regulation"
+msgstr ""
+
+#: ../judoshiai/gdpr.c
+msgid "Hide category if age less than"
+msgstr ""
+
+#: ../judoshiai/gdpr.c
+msgid "Hide name if age less than"
+msgstr ""
+
+#: ../judoshiai/httpd.c ../judoshiai/match-graph.c ../judoshiai/print.c
+#: ../judoshiai/write-results.c
+msgid "Matches"
+msgstr "مسابقات"
+
+#: ../judoshiai/httpd.c
+msgid "Sheet"
+msgstr "جدول"
+
+#: ../judoshiai/httpd.c
+msgid "Previous winner"
+msgstr "برنده قبلی"
+
+#: ../judoshiai/httpd.c
+msgid "Cancel the match"
+msgstr "لغو مسابقه"
+
+#: ../judoshiai/httpd.c ../judoshiai/popup-menu.c
+msgid "Select a tatami"
+msgstr "انتخاب یک تاتامی"
+
+#: ../judoshiai/httpd.c
+msgid "Password accepted.<br>"
+msgstr "رمز عبور تایید شد.<br>"
+
+#: ../judoshiai/httpd.c
+msgid "User"
+msgstr "کاربر"
+
+#: ../judoshiai/httpd.c ../judoshiai/menus.c ../judoshiai/set-password.c
+#: ../judoweight/main.c ../judoweight/menus.c
+msgid "Password"
+msgstr "رمز عبور"
+
+#: ../judoshiai/httpd.c
+msgid "Back"
+msgstr "بازگشت"
+
+#: ../judoshiai/httpd.c
+msgid "Wrong password"
+msgstr "رمز عبور اشتباه است"
+
+#: ../judoshiai/httpd.c
+msgid "Logout"
+msgstr "خروج"
+
+#: ../judoshiai/httpd.c
+msgid "Login"
+msgstr "ورود"
+
+#: ../judoshiai/httpd.c
+msgid "No rights to give results"
+msgstr "شما اجازه تغییر نتیجه را ندارید!"
+
+#: ../judoshiai/httpd.c
+msgid "No competitor found!"
+msgstr "ورزشکاری یافت نشد"
+
+#: ../judoshiai/httpd.c
+msgid "Add"
+msgstr "اضافه کردن"
+
+#: ../judoshiai/httpd.c ../judoshiai/write-results.c
+msgid "Name"
+msgstr "نام"
+
+#: ../judoshiai/httpd.c
+msgid "Reg.Cat"
+msgstr "رده وزنی"
+
+#: ../judoshiai/httpd.c
+msgid "ID"
+msgstr "آیدی"
+
+#: ../judoshiai/httpd.c
+msgid "Index"
+msgstr "فهرست"
+
+#: ../judoshiai/import.c
+msgid "Not used"
+msgstr "بدون استفاده"
+
+#: ../judoshiai/import.c
+msgid "Column"
+msgstr "ستون"
+
+#: ../judoshiai/import.c
+msgid "Import from file"
+msgstr "وارد کردن از فایل"
+
+#: ../judoshiai/import.c
+msgid "Sex:"
+msgstr "جنسیت:"
+
+#: ../judoshiai/import.c
+msgid "Girl Text:"
+msgstr "نماد بانوان: ..."
+
+#: ../judoshiai/import.c
+msgid "Column Separator:"
+msgstr "جدا کننده ستون:"
+
+#: ../judoshiai/import.c
+msgid "competitors added"
+msgstr "ورزشکاران اضافه شدند"
+
+#: ../judoshiai/import.c
+msgid "errors"
+msgstr "خطاها"
+
+#: ../judoshiai/import.c
+msgid "competitors existed already"
+msgstr "ورزشکاران از قبل موجود بودند"
+
+#: ../judoshiai/import.c
+msgid "syntax errors"
+msgstr "خطای ناشناخته"
+
+#: ../judoshiai/log.c ../judoshiai/matches.c
+msgid "Time"
+msgstr "زمان"
+
+#: ../judoshiai/log.c
+msgid "Class"
+msgstr "کلاس"
+
+#: ../judoshiai/log.c
+msgid "Message"
+msgstr "پیام"
+
+#: ../judoshiai/log.c
+msgid "Log"
+msgstr "لاگ"
+
+#: ../judoshiai/main.c
+msgid "Communication error"
+msgstr "خطای ارتباط"
+
+#: ../judoshiai/main.c
+msgid "Cannot open"
+msgstr "قابل باز کردن نیست"
+
+#: ../judoshiai/main.c
+msgid "Is there another JudoShiai program running?"
+msgstr "آیا یک جودو شیایی دیگر در حال اجراست؟"
+
+#: ../judoshiai/main.c
+msgid "Yes, another JudoShiai program is running"
+msgstr "بله،جودو شیایی دیگری در حال اجراست"
+
+#: ../judoshiai/main.c
+msgid ""
+"No, this the only JudoShiai program. \n"
+"Purge erroneous lock file."
+msgstr " نه این تنها برنامه جودوشیایی در حال اجراست"
+
+#: ../judoshiai/main.c
 msgid ""
 "Communication is blocked! \n"
 "You can still use the program to create categories etc."
@@ -201,1359 +1115,929 @@ msgstr ""
 "اتصال مسدود شد!\n"
 "شما همچنان میتوانید با برنامه سایر دسته بندی ها را اضافه کنید."
 
-msgid "Communication node"
-msgstr "نقطه اتصال"
-
-msgid "Competitor"
-msgstr "ورزشکار"
-
-msgid "Competitor already exists!"
-msgstr "ورزشکار تکراری!"
-
-msgid "Competitors"
-msgstr "ورزشکاران"
-
-msgid "Competitors removed"
-msgstr "ورزشکاران پاک شدند"
-
-msgid "Competitors:"
-msgstr "ورزشکاران:"
-
-msgid "Compose Unofficial Category"
-msgstr "ادغام رده های وزنی غیر رسمی"
-
-msgid "Connections to this node"
-msgstr "اتصالات به این نقطه اتصال"
-
-msgid "Contest"
-msgstr "تاتامی"
-
-msgid "Contest area"
-msgstr "تاتامی"
-
-msgid "Contest area 1"
-msgstr "تاتامی شماره 1"
-
-msgid "Contest area 2"
-msgstr "تاتامی شماره 2"
-
-msgid "Contest area 3"
-msgstr "تاتامی شماره 3"
-
-msgid "Contest area 4"
-msgstr "تاتامی شماره 4"
-
-msgid "Contest area 5"
-msgstr "تاتامی شماره 5"
-
-msgid "Contest area 6"
-msgstr "تاتامی شماره 6"
-
-msgid "Contest area 7"
-msgstr "تاتامی شماره 7"
-
-msgid "Contest area 8"
-msgstr "تاتامی شماره 8"
-
-msgid "Contest area not chosen"
-msgstr "تاتامی انتخاب نشده است"
-
-msgid "Contest duration automatically from JudoShiai program"
-msgstr "زمان مسابقه به صورت خودکار از طریق جودوشیایی دریافت گردد"
-
-msgid "Contest duration: 2 min"
-msgstr "زمان مسابقه: 2دقیقه"
-
-msgid "Contest duration: 2 min (short pin times)"
-msgstr "زمان مسابقه: 2دقیقه (اوسای کومی15 ثانیه ای)"
-
-msgid "Contest duration: 3 min"
-msgstr "زمان مسابقه: 3دقیقه"
-
-msgid "Contest duration: 4 min"
-msgstr "زمان مسابقه  4دقیقه"
-
-msgid "Contest duration: 5 min"
-msgstr "زمان مسابقه: 5دقیقه"
-
-msgid "Contest duration: automatic"
-msgstr "زمان مسابقه: خودکار"
-
-msgid "Contests"
-msgstr "مسابقات"
-
-msgid "Control Tatami"
-msgstr "کنترل تاتامی"
-
-msgid "Copy Competitors"
-msgstr "رونوشت از ورزشکاران"
-
-msgid "Country"
-msgstr "کشور"
-
-msgid "Country Name Only"
-msgstr "فقط نام کشور"
-
-msgid "Country:"
-msgstr "کشور:"
-
-msgid "Create Categories"
-msgstr "دسته بندی اوزان"
-
-msgid "Create Statistics"
-msgstr "ایجاد آمار و ارقام"
-
-msgid "Database tables updated."
-msgstr "جدول دیتابیس به روزرسانی شد."
-
-msgid "Date:"
-msgstr "تاریخ:"
-
-msgid "Decrement pin time"
-msgstr "کاهش زمان اوسای کومی"
-
-msgid "Decrement time"
-msgstr "کاهش زمان"
-
-msgid "Default"
-msgstr "پیش فرض"
-
-msgid "Delay the match"
-msgstr "تاخیر در دیدار"
-
-msgid "Delayed"
-msgstr "با تاخیر"
-
-msgid "Display layout"
-msgstr "قالب نمایش"
-
-msgid "Display layout 1"
-msgstr "نمونه 1"
-
-msgid "Display layout 2"
-msgstr "نمونه 2"
-
-msgid "Display layout 3"
-msgstr "نمونه 3"
-
-msgid "Display layout 4"
-msgstr "نمونه 4"
-
-msgid "Display layout 5"
-msgstr "نمونه 5"
-
-msgid "Do Backup"
-msgstr "نسخه پشتیبان بگیر"
-
-msgid "Do not change"
-msgstr "تغییر ندهید"
-
-msgid "Double Pool"
-msgstr "Double Pool"
-
-msgid "Draw All Categories"
-msgstr "قرعه کشی همه دسته ها"
-
-msgid "Draw Manually"
-msgstr "قرعه دستی"
-
-msgid "Draw Selected"
-msgstr "قرعه انتخاب شده ها"
-
-msgid "Draw and Print Selected"
-msgstr "قرعه کشی و چاپ انتخاب شده ها"
-
-msgid "Drawing"
-msgstr "در حال قرعه بندی"
-
-msgid "Drawing not finished!"
-msgstr "قرعه بندی تمام نشده است"
-
-msgid "ESP Dbl Lost"
-msgstr "ESP Dbl Lost"
-
-msgid "ESP Dbl Rep"
-msgstr "ESP Dbl Rep"
-
-msgid "ESP Double Lost"
-msgstr "ESP Double Lost"
-
-msgid "ESP Double Repechage"
-msgstr "ESP Double Repechage"
-
-msgid "ESP Simple Rep"
-msgstr "ESP Simple Rep"
-
-msgid "ESP Simple Repechage"
-msgstr "ESP Simple Repechage"
-
-msgid "EST D klass"
-msgstr "EST D "
-
-msgid "EST Double Elimination"
-msgstr "EST Double Elimination"
-
-msgid "Empty categories removed"
-msgstr "رده های وزنی خالی حذف گردید"
-
-msgid "Estonian System"
-msgstr "Estonian System"
-
-msgid "Expand All"
-msgstr "بازکردن همه"
-
-msgid "FIN Dbl Repchg"
-msgstr "FIN Dbl Repchg"
-
-msgid "FIN Double Repechage"
-msgstr "FIN Double Repechage"
-
-msgid "Fight:"
-msgstr "مسابقه:"
-
-msgid "Finnish System"
-msgstr "Finnish System"
-
-msgid "First Name"
-msgstr "نام"
-
-msgid "First Name:"
-msgstr "نام خانوادگی:"
-
-msgid "Foreign database"
-msgstr "دیتابیس خارجی"
-
-msgid "Freeze match order"
-msgstr "نگه داشتن ترتیب مسابقه"
-
-msgid "Full screen mode"
-msgstr "حالت تمام صفحه"
-
-msgid "Girl Text:"
-msgstr "نماد بانوان: ..."
-
-msgid "Gold medal match"
-msgstr "مسابقه مدال طلا"
-
-msgid "Golden Score"
-msgstr "وقت طلایی"
-
-msgid "Golden Sc-ore:"
-msgstr "وقت طلایی:"
-
-msgid "Grade"
-msgstr "درجه"
-
-msgid "Grade Visible"
-msgstr "نمایش درجه کمربند"
-
-msgid "Grade:"
-msgstr "درجه کمربند:"
-
-msgid "Group"
-msgstr "گروه"
-
-msgid "Group:"
-msgstr "گروه:"
-
-msgid "Hansoku-make to blue"
-msgstr "هانسوکوماکه به آبی"
-
-msgid "Hansoku-make to white"
-msgstr "هانسوکوماکه به سفید"
-
-msgid "Hansokumake to blue"
-msgstr "هانسوکوماکه به آبی"
-
-msgid "Hansokumake to white"
-msgstr "هانسوکوماکه به سفید"
-
-msgid "Hantei"
-msgstr "پرچم"
-
-msgid "Hantei: blue wins"
-msgstr "پرچم:برنده آبی"
-
-msgid "Hantei: white wins"
-msgstr "پرچم:برنده سفید"
-
-msgid "Help"
-msgstr "راهنما"
-
-msgid "Highest age:"
-msgstr "بیشترین سن:"
-
-msgid "Highest weight (g):"
-msgstr "بیشترین وزن (گ):"
-
-msgid "IJF Qrt Final Rep"
-msgstr "جدول استاندارد جهانی"
-
-msgid "IJF Quarter Final Repechage"
-msgstr "جدول استاندارد جهانی "
-
-msgid "IP address:"
-msgstr "آی پی آدرس:"
-
-msgid "Id"
-msgstr "آی دی"
-
-msgid "Id:"
-msgstr "آی دی:"
-
-msgid "Import from file"
-msgstr "وارد کردن از فایل"
-
-msgid "Increment pin time"
-msgstr "افزایش زمان اوسای کومی"
-
-msgid "Increment time"
-msgstr "افزایش زمان"
-
-msgid "International System"
-msgstr "سیستم بین المللی"
-
-msgid "Is there another JudoShiai program running?"
-msgstr "آیا یک جودو شیایی دیگر در حال اجراست؟"
-
-msgid "Judotimer"
-msgstr "جودو تایمر"
-
-msgid "Language Selection"
-msgstr "انتخاب زبان"
-
-msgid "Last Name"
-msgstr "نام خانوادگی"
-
-msgid "Last Name:"
-msgstr "نام خانوادگی:"
-
-msgid "Leave points for GS"
-msgstr "Залишити оцінки при ГС"
-
-msgid "Line"
-msgstr "خط"
-
-msgid "Log"
-msgstr "لاگ"
-
-msgid "Login"
-msgstr "ورود"
-
-msgid "Logout"
-msgstr "خروج"
-
-msgid "Manual"
-msgstr "دستی"
-
-msgid "Master mode"
-msgstr "حالت حرفه ای"
-
-msgid "Match"
-msgstr "مسابقه"
-
-msgid "Match File"
-msgstr "فایل مسابقه"
-
-msgid "Match duration: 2 min"
-msgstr "مدت مسابقه 2 دقیقه"
-
-msgid "Match duration: 2 min E-juniors"
-msgstr "مدت مسابقه 2 دقیقه, اوسای کومی15 ثانیه"
-
-msgid "Match duration: 3 min"
-msgstr "مدت مسابقه 3 دقیقه"
-
-msgid "Match duration: 4 min"
-msgstr "مدت مسابقه: 4 دقیقه"
-
-msgid "Match duration: 5 min"
-msgstr "مدت مسابقه 5 دقیقه"
-
-msgid "Match duration: automatic"
-msgstr "مدت مسابقه خودکار"
-
-msgid "Match time:"
-msgstr "مدت مسابقه:"
-
-msgid "Match:"
-msgstr "مسابقه:"
-
-msgid "Matches"
-msgstr "مسابقات"
-
-msgid "Matches exist. Undo the drawing first."
-msgstr "مسابقه از قبل موجود است.ابتدا قرعه کشی را حذف کنید"
-
-msgid "Matches matched in category"
-msgstr "نتیجه مسابقه ثبت شده است"
-
-msgid "Matches matched. Clear the results first."
-msgstr "مسابقه انجام شده است.ابتدا نتیجه را حذف کنید"
-
-msgid "Message"
-msgstr "پیام"
-
-msgid "Mirror Tatami Order"
-msgstr "دستور بازگشت از تاتامی"
-
-msgid "Mirror tatami order"
-msgstr "دستور بازگشت از تاتامی"
-
-msgid "Move Competitors Here"
-msgstr "انتقال ورزشکاران به اینجا"
-
-msgid "Move Competitors to Category..."
-msgstr "انتقال ورزشکاران به وزن ..."
-
-msgid "Move the competitors"
-msgstr "انتقال ورزشکاران"
-
-msgid "NOTE"
-msgstr "یادداشت"
-
-msgid "New Category"
-msgstr "دسته بندی جدید"
-
-msgid "New Competitor"
-msgstr "ورزشکار جدید"
-
-msgid "New Tournament"
-msgstr "مسابقات جدید"
-
-msgid "Next"
-msgstr "بعدی"
-
-msgid "Next match"
-msgstr "مسابقه بعدی"
-
-msgid "Next:"
-msgstr "بعد:"
-
-msgid "No Repechg"
-msgstr "بدون شانس مجدد"
-
-msgid "No koka"
-msgstr "بدون \"کوکا\""
-
-msgid "No rights to give results"
-msgstr "شما اجازه تغییر نتیجه را ندارید!"
-
-msgid "No seeding"
-msgstr "بدون سید بندی"
-
-msgid ""
-"No, this the only JudoShiai program. \n"
-"Purge erroneous lock file."
-msgstr ""
-" نه این تنها برنامه جودوشیایی در حال اجراست"
-
-msgid "Normal operation"
-msgstr "عملکرد عادی"
-
-msgid "Not used"
-msgstr "بدون استفاده"
-
-msgid "Number"
-msgstr "شماره"
-
-msgid "Number of tatamis:"
-msgstr "تاتامی شماره:"
-
+#: ../judoshiai/match-data.c
+msgid "Best of 3"
+msgstr "بهترین از 3 مسابقه"
+
+#: ../judoshiai/match-data.c
 msgid "One match"
 msgstr "تک مسابقه"
 
-msgid "Open Tournament"
-msgstr "باز کردن مسابقات"
-
-msgid "Open Tournament from Net"
-msgstr "بازکردن مسابقات از طریق اینترنت"
-
-msgid "Own IP Addresses"
-msgstr "آی پی آدرس این دستگاه"
-
-msgid "Own IP addresses"
-msgstr "آی پی آدرس این دستگاه"
-
-msgid "Own database"
-msgstr "دیتابیس برنامه"
-
-msgid "Password"
-msgstr "رمز عبور"
-
-msgid "Password accepted.<br>"
-msgstr "رمز عبور تایید شد.<br>"
-
-msgid "Password:"
-msgstr "رمز عبور:"
-
-msgid "Picture Files"
-msgstr "فایلهای عکس"
-
-msgid "Pin times (IWYK):"
-msgstr "زمان اوسای کومی (IWYK):"
-
-msgid "Place To"
-msgstr "جانمایی به"
-
-msgid "Place:"
-msgstr "مکان:"
-
-msgid "Points"
-msgstr "امتیازات"
-
-msgid "Points going to blue"
-msgstr "امتیاز به آبی"
-
-msgid "Points going to white"
-msgstr "امتیاز به سفید"
-
+#: ../judoshiai/match-data.c
 msgid "Pool"
 msgstr "pool "
 
-msgid "Preferences"
-msgstr "تنظیمات"
+#: ../judoshiai/match-data.c
+msgid "Double Pool"
+msgstr "Double Pool"
 
-msgid "Preparing"
-msgstr "آماده سازی"
-
-msgid "Preparing:"
-msgstr "در حال آماده سازی:"
-
-msgid "Prev. winner:"
-msgstr "برنده قبلی:"
-
-msgid "Previous winner"
-msgstr "برنده قبلی"
-
-msgid "Print All"
-msgstr "چاپ همه"
-
-msgid "Print All (PDF)"
-msgstr "چاپ همه (PDF)"
-
-msgid "Print All (Web And PDF)"
-msgstr "چاپ همه (Web و PDF)"
-
-msgid "Print Comment"
-msgstr "چاپ توضیحات"
-
-msgid "Print Finished Categories"
-msgstr "چاپ دسته های پایان یافته"
-
-msgid "Print Headers"
-msgstr "چاپ سربرگ ها"
-
-msgid "Print IWYKS"
-msgstr "چاپ امتیازات (IWYS)"
-
-msgid "Print Logo"
-msgstr "چاپ لوگو"
-
-msgid "Print Matches (CSV)"
-msgstr "چاپ مسابقات (csv)"
-
-msgid "Print Not Started Categories"
-msgstr "مسابقات آغاز نشده را چاپ کن"
-
-msgid "Print Result"
-msgstr "چاپ نتیجه"
-
-msgid "Print Schedule to PDF"
-msgstr "چاپ زمان بندی شده به صورت پی دی اف"
-
-msgid "Print Schedule to Printer"
-msgstr "چاپ زمان بندی شده از پرینتر"
-
-msgid "Print Schedule"
-msgstr "چاپ زمان بندی شده"
-
-msgid "Print Selected Sheets (PDF)"
-msgstr "چاپ جدول های انتخاب شده به صورت پی دی اف"
-
-msgid "Print Selected Sheets (Printer)"
-msgstr "چاپ جدول های انتخاب شده از پرینتر"
-
-msgid "Print Started Categories"
-msgstr "چاپ اوزان شروع شده"
-
-msgid "Print Unmatched"
-msgstr "چاپ مسابقه داده نشده"
-
-msgid "Print Weight Notes"
-msgstr "چاپ یادداشت وزن"
-
-msgid "Properties"
-msgstr "تنظیمات"
-
+#: ../judoshiai/match-data.c
 msgid "Quad Pool"
 msgstr "Quad Pool"
 
-msgid "Quick guide"
-msgstr "راهنمایی سریع"
-
-msgid "Quit"
-msgstr "خروج"
-
-msgid "REST TIME"
-msgstr "زمان استراحت"
-
-msgid "Red background"
-msgstr "پس زمینه قرمز"
-
-msgid "Reg. Category"
-msgstr "دسته بندی"
-
-msgid "Reg. Category:"
-msgstr "دسته بندی:"
-
-msgid "Remove Competitors"
-msgstr "حذف ورزشکاران"
-
-msgid "Remove Drawing"
-msgstr "حذف قرعه کشی شده ها"
-
-msgid "Remove Empty"
-msgstr "حذف خالی "
-
-msgid "Remove Unweighted"
-msgstr "حذف بدون وزن ها"
-
-msgid "Remove comment"
-msgstr "حذف توضیحات"
-
-msgid "Remove delay"
-msgstr "حذف معوقات"
-
-msgid "Remove drawing first"
-msgstr "ابتدا قرعه ها را پاک کنید"
-
-msgid "Reset to Defaults"
-msgstr "بازنشانی پیش فرض"
-
-msgid "Rest"
-msgstr "استراحت"
-
-msgid "Rest time:"
-msgstr "زمان استراحت:"
-
-msgid "Restore Removed"
-msgstr "بازگردانی حذف شده ها"
-
-msgid "Results"
-msgstr "نتایج"
-
-msgid "Results in Finnish"
-msgstr "Results in Finnish"
-
-msgid "Results in Swedish"
-msgstr "Results in Swedish"
-
-msgid "Results in English"
-msgstr "Results in English"
-
-msgid "Results in Spanish"
-msgstr "Results in Spanish"
-
-msgid "Results in Estonian"
-msgstr "Results in Estonian"
-
-msgid "Results in Ukrainian"
-msgstr "Results in Ukrainian"
-
-msgid "Run Advertisements"
-msgstr "اجرای تبلیغات"
-
-msgid "SQL"
-msgstr "اس کیو ال"
-
-msgid "SQL Dialog"
-msgstr "SQL Dialog"
-
-msgid "SWE Dir återkv"
-msgstr "SWE Dir återkv"
-
-msgid "SWE Double Repechage"
-msgstr "SWE Double Repechage"
-
-msgid "SWE Dubb återkv"
-msgstr "SWE Dubb återkv"
-
-msgid "SWE Enkelt återkv"
-msgstr "SWE Enkelt återkv"
-
-msgid "SWE Single Repechage"
-msgstr "SWE Single Repechage"
-
-msgid "Save file"
-msgstr "ذخیره فایل"
-
-msgid "Search"
-msgstr "جستجو"
-
-msgid "Search Competitor"
-msgstr "جستجوی ورزشکار"
-
-msgid "Seeding:"
-msgstr "سید"
-
-msgid "Select From Another Shiai"
-msgstr "انتخاب از شیایی دیگر"
-
-msgid "Select a tatami"
-msgstr "انتخاب یک تاتامی"
-
-msgid "Select first a competitor and then a number."
-msgstr "ابتدا یک ورزشکار و سپس یک شماره را انتخاب کنید"
-
-msgid "Select sheet font"
-msgstr "فونت جدول را انتخاب کنید"
-
-msgid "Semifinal"
-msgstr "نیمه نهایی"
-
-msgid "Semifinal A"
-msgstr "نیمه نهایی 1"
-
-msgid "Semifinal B"
-msgstr "نیمه نهایی 2"
-
-msgid "Set clocks"
-msgstr "تنظیم زمان"
-
-msgid "Set time"
-msgstr "تنظیم زمان"
-
-msgid "Sex:"
-msgstr "جنسیت:"
-
-msgid "Sheet"
-msgstr "جدول"
-
-msgid "Sheet Font"
-msgstr "فونت جدول"
-
-msgid "Sheet Layout"
-msgstr "ظاهر جدول"
-
-msgid "Sheets"
-msgstr "جداول"
-
-msgid "Short pin times"
-msgstr "اوسای کومی کوتاه"
-
-msgid "Show Attached Connections"
-msgstr "نمایش اتصالات"
-
-msgid "Show Sheet"
-msgstr "نمایش جدول"
-
-msgid "Show Tatami"
-msgstr "نمایش تاتامی"
-
-msgid "Single Elimination"
-msgstr "تک حذفی"
-
-msgid "Slave mode"
-msgstr "حالت مشتری"
-
-msgid "Small display"
-msgstr "صفحه نمایش کوچک"
-
-msgid "Sound"
-msgstr "صدا"
-
-msgid "Sound Files"
-msgstr "پوشه صداها"
-
-msgid "Spanish System"
-msgstr "سیستم اسپانیایی"
-
-msgid "Start Golden Score?"
-msgstr "وقت طلایی شروع شود؟"
-
-msgid "Start New Match?"
-msgstr "مسابقه بعدی شروع شود؟"
-
-msgid "Start time:"
-msgstr "زمان شروع:"
-
-msgid "Stop clock on Ippon"
-msgstr "توقف زمان بعد از ایپون"
-
-msgid "Stop synchronization"
-msgstr "توقف همگام سازی"
-
-msgid "Swedish System"
-msgstr "Swedish System"
-
-msgid "Syntax error"
-msgstr "خطای ناشناخته"
-
-msgid "System:"
-msgstr "سیستم:"
-
-msgid "Tatamis"
-msgstr "تاتامی ها"
-
-msgid "Time"
-msgstr "زمان"
-
-msgid "Tournament"
-msgstr "مسابقات"
-
-msgid "Tournament Backup"
-msgstr "پشتیبان گیری از مسابقات"
-
-msgid "Tournament from the net"
-msgstr "مسابقات از اینترنت"
-
-msgid "Tournament properties"
-msgstr "تنظیمات مسابقه"
-
-msgid "Tournament:"
-msgstr "مسابقه:"
-
-msgid "Tournaments"
-msgstr "مسابقات"
-
-msgid "Type the barcode:"
-msgstr "بارکد را بنویسید:"
-
-msgid "Undo!"
-msgstr "یک قدم به عقب"
-
-msgid "Unfreeze exported"
-msgstr "منتقل شده ها را از انجماد خارج کن"
-
-msgid "Unfreeze imported"
-msgstr "وارد شده ها را از انجماد خارج کن"
-
-msgid "Unfreeze this"
-msgstr "از انجماد خارج کن"
-
-msgid "Unlocated"
-msgstr "اختصاص داده نشده"
-
-msgid "Unweighted competitors removed"
-msgstr "ورزشکاران بدون وزن حذف شدند"
-
-msgid "User"
-msgstr "کاربر"
-
-msgid "View Log"
-msgstr "مشاهده لاگ"
-
-msgid "View clocks only"
-msgstr "فقط نمایش تایمر ها"
-
-msgid "Weight"
-msgstr "وزن"
-
-msgid "Weight text:"
-msgstr "متن وزن:"
-
-msgid "Weight:"
-msgstr "وزن:"
-
-msgid "Weights Visible"
-msgstr "نمایش اوزان"
-
-msgid "Weights Visible in Pool Sheets"
-msgstr "نمایش وزن در جدول دوره ای"
-
-msgid "Which one is correct?"
-msgstr "کدام یک صحیح است؟"
-
-msgid "White"
-msgstr "سفید"
-
-msgid "White wins"
-msgstr "سفید برنده شد"
-
-msgid "White won the voting"
-msgstr "سفید برنده پرچم"
-
-msgid "Wrong password"
-msgstr "رمز عبور اشتباه است"
-
-msgid "Year of Birth"
-msgstr "سال تولد"
-
-msgid "Year of Birth:"
-msgstr "سال تولد "
-
-msgid "Yes, another JudoShiai program is running"
-msgstr "بله،جودو شیایی دیگری در حال اجراست"
-
-msgid "already exists"
-msgstr "از قبل وجود دارد"
-
-msgid "already exists!"
-msgstr "از قبل وحود دارد"
-
-msgid "canceled"
-msgstr "لغو شده"
-
-msgid "changed"
-msgstr "تغییر کرده "
-
-msgid "competitors added"
-msgstr "ورزشکاران اضافه شدند"
-
-msgid "competitors added and updated"
-msgstr "ورزشکاران اضافه و بروزرسانی شدند"
-
-msgid "competitors added unchanged"
-msgstr "ورزشکاران بدون تغییر اضافه شدند"
-
-msgid "competitors already existed"
-msgstr "ورزشکار از قبل موجود بود"
-
-msgid "competitors existed already"
-msgstr "ورزشکاران از قبل موجود بودند"
-
-msgid "copied"
-msgstr "کپی شد"
-
-msgid "errors"
-msgstr "خطاها"
-
-msgid "has been copied with competitors and matches"
-msgstr "به همراه ورزشکاران و مسابقات کپی شد"
-
-msgid "is not a valid ASCII string!"
-msgstr "کاراکترهای ASCII قابل قبول نیست!"
-
-msgid "points"
-msgstr "امتیازات"
-
-msgid "Switch sides"
-msgstr "تعویض رنگ لباس"
-
-msgid "Display customized layout"
-msgstr "نمایش پوسته شخصی سازی شده"
-
-msgid "No competitor found!"
-msgstr "ورزشکاری یافت نشد"
-
-msgid "Modified Dbl Elim"
-msgstr "Modified Dbl Elim"
-
-msgid "FIN Dbl Repchg One Bronze"
-msgstr "FIN Dbl Repchg One Bronze"
-
-msgid "Modified Double Elimination"
-msgstr "Modified Double Elimination"
-
-msgid "FIN Double Repechage One Bronze"
-msgstr "FIN Double Repechage One Bronze"
-
-msgid "Silver medal match"
-msgstr "مسابقه کسب مدال نقره"
-
-msgid "Pool Style 2"
-msgstr "Pool Style 2"
-
-msgid "Use Belt Colors"
-msgstr "استفاده از رنگ کمربند"
-
-msgid "White first"
-msgstr "اول سفید:"
-
-msgid "Show"
-msgstr "نمایش"
-
-msgid "Show Deleted"
-msgstr "نمایش حذف شده ها"
-
-msgid "Add"
-msgstr "اضافه کردن"
-
-msgid "OK"
-msgstr "تایید"
-
-msgid "White first:"
-msgstr "اول سفید:"
-
-msgid "Serial Communication"
-msgstr "Serial Communication"
-
-msgid "In Use"
-msgstr "در حال استفاده"
-
-msgid "Device"
-msgstr "دستگاه"
-
-msgid "Baudrate"
-msgstr "سرعت"
-
-msgid "Basic Scripts"
-msgstr "اسکریپت های پایه"
-
-msgid "Select Script"
-msgstr "انتخاب اسکریپت"
-
-msgid "No script available"
-msgstr "هیچ اسکرپتی موجود نیست"
-
-msgid "Run Script"
-msgstr "اجرای اسکریپت"
-
-msgid "Repeat Script"
-msgstr "تکرار اسکرپت"
-
+#: ../judoshiai/match-data.c
 msgid "Double Pool 2"
 msgstr "Double Pool 2"
 
-msgid "Write to file"
-msgstr "نوشتن روی فایل"
-
-msgid "Confirm New Match"
-msgstr "تایید دیدار جدید"
-
-msgid "Contest area 9"
-msgstr "تاتامی 9"
-
-msgid "Contest area 10"
-msgstr "تاتامی 10"
-
-msgid "Move Medal Matches"
-msgstr "انتقال مسابقات کسب مدال"
-
-msgid "Move match "
-msgstr "انتقال مسابقه"
-
-msgid "to tatami and/or"
-msgstr "به تاتامی و/یا"
-
-msgid " delay"
-msgstr "با تاخیر"
-
-msgid "Final"
-msgstr "فینال"
-
-msgid "Bronze"
-msgstr "برنز"
-
-msgid "Bronze1"
-msgstr "برنز 1"
-
-msgid "Bronze2"
-msgstr "برنز 2"
-
-msgid "Pool's last"
-msgstr "Pool's last"
-
-msgid "No move"
-msgstr "بدون تغییر"
-
-msgid "Print Accreditation Cards"
-msgstr "چاپ آیدی کارت"
-
-msgid "Name Format"
-msgstr "چیدمان اسم"
-
-msgid "Name Surname, Country/Club"
-msgstr "نام نام خانوادگی, کشور/باشگاه"
-
-msgid "Surname, Name, Country/Club"
-msgstr "نام خانوادگی, نام, کشور/باشگاه"
-
-msgid "Country/Club  Surname, Name"
-msgstr "کشور/باشگاه نام خانوادگی, نام"
-
-msgid "Medal Matches..."
-msgstr "مسابقه کسب مدال..."
-
-msgid "Print Selected Accreditation Cards"
-msgstr "چاپ آیدی کارت های انتخاب شده"
-
-msgid "Layout:"
-msgstr "پوسته::"
-
-msgid "Print To:"
-msgstr "چاپ در:"
-
-msgid "Template"
-msgstr "قالب"
-
-msgid "Printer"
-msgstr "چاپگر"
-
-msgid "PDF"
-msgstr "PDF"
-
-msgid "One Card Per Page"
-msgstr "یک کارت در هر صفحه"
-
-msgid "Normal display"
-msgstr "نمایش عادی"
-
-msgid "Horizontal display"
-msgstr "نمایش افقی"
-
-msgid "White has a judogi problem."
-msgstr " لباس جودو سفید مشکل دارد"
-
-msgid "Blue has a judogi problem."
-msgstr "لباس جودو آبی مشکل دارد"
-
-msgid "Show Competitors"
-msgstr "نمایش ورزشکاران"
-
-msgid "Show competitors"
-msgstr "نمایش ورزشکاران"
-
-msgid "Name format"
-msgstr "چیدمان اسم"
-
-msgid "Country  Surname, Name"
-msgstr "کشور نام خانوادگی, نام"
-
-msgid "Club  Surname, Name"
-msgstr "باشگاه نام خانوادگی, نام"
-
-msgid "Country Surname"
-msgstr "کشور نام خانوادگی"
-
-msgid "Club Surname"
-msgstr "نام باشگاه"
-
-msgid "Surname, Name"
-msgstr "نام خانوادگی, نام"
-
-msgid "Surname"
-msgstr "نام خانوادگی"
-
-msgid "WINNER"
-msgstr "برنده"
-
-msgid "Cancel"
-msgstr "لغو"
-
-msgid "Club Seeding:"
-msgstr "سید باشگاه:"
-
-msgid "Gender:"
-msgstr "جنسیت:"
-
-msgid "Male"
-msgstr "آقا"
-
-msgid "Female"
-msgstr "خانم"
-
-msgid "Control:"
-msgstr "کنترل:"
-
-msgid "NOK"
-msgstr "عدم تایید"
-
-msgid "Seeding"
-msgstr "سیدبندی"
-
-msgid "Club Seeding"
-msgstr "سیدبندی باشگاه"
-
-msgid "Database Validation"
-msgstr "اعتبارسنجی دیتابیس"
-
-msgid "Duplicate seedings:\n"
-msgstr "سیدبندی تکراری:\n"
-
-msgid "seeding"
-msgstr "سیدبندی"
-
-msgid "defined"
-msgstr "تعریف"
-
-msgid "times"
-msgstr "دفعات"
-
-msgid "Duplicate club seedings:\n"
-msgstr "سید بندی تکراری باشگاه:\n"
-
-msgid "Missing category definitions:\n"
-msgstr "مسیر دسته بندی گم شده:\n"
-
-msgid "is not"
-msgstr "نیست"
-
-msgid "Typing errors:\n"
-msgstr "نوشتن خطاها:\n"
-
-msgid "UTF-8 errors"
-msgstr "ارور UTF-8"
-
-msgid "Extra spaces"
-msgstr "فضاهای اضافه"
-
-msgid "Possible duplicate competitors:\n"
-msgstr "تکراری های ممکن ورزشکاران:\n"
-
-msgid "Possible duplicate club names:\n"
-msgstr "نام های ممکن تکراری باشگاه:\n"
-
-msgid "Suspicious weights:\n"
-msgstr "وزن های مشکوک:\n"
-
-msgid "warnings"
-msgstr "اخطار ها"
-
-msgid "Weighed only"
-msgstr "فقط دارای وزن"
-
-msgid "With weights"
-msgstr "با اوزان"
-
-msgid "Validate Database"
-msgstr "اعتبار سنجی دیتابیس"
-
-msgid "Results in Icelandic"
-msgstr "Results in Icelandic"
-
-msgid "Surname Name, Country/Club"
-msgstr "نام خانوادگی, کشور/باشگاه"
-
-msgid "Country/Club,  Surname Name"
-msgstr "کشور/باشگاه, نام خانوادگی "
-
-msgid "Scale Serial Interface..."
-msgstr "رابط سریال ترازو..."
-
-msgid "Type"
-msgstr "بنویسید"
-
-msgid "ID:"
-msgstr "آیدی:"
-
-msgid "Name:"
-msgstr "نام:"
-
-msgid "About JudoWeight"
-msgstr "درباره JudoWeight"
-
-msgid "No match soon! Please wait for a while."
-msgstr "فعلا مسابقه ای نیست!چند لحظه صبر کنید"
-
-msgid "About JudoJudogi"
-msgstr "درباره JudoJudogi"
-
-msgid "Norwegian System"
-msgstr "Norwegian System"
-
-msgid "Confirm:"
-msgstr "تایید:"
-
-msgid "- - -"
-msgstr "- - -"
-
-msgid "syntax errors"
-msgstr "خطای ناشناخته"
-
-msgid "Rep. time:"
-msgstr "زمان استراحت:"
-
-msgid "Results in Norwegian"
-msgstr "Results in Norwegian"
-
-msgid "Landscape"
-msgstr "حالت افقی"
-
-msgid "Resolution (min):"
-msgstr "جداسازی (دقیقه):"
-
-msgid "Compressed timeline"
-msgstr "جدول زمانی فشرده"
-
-msgid "Select font"
-msgstr "انتخاب فونت"
-
-msgid "Font"
-msgstr "فونت"
-
-msgid "Communication error"
-msgstr "خطای ارتباط"
-
+#: ../judoshiai/match-data.c
+msgid "Double Pool 3"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "Custom"
+msgstr "سفارشی"
+
+#: ../judoshiai/match-data.c
+msgid "IJF Qrt Final Rep"
+msgstr "جدول استاندارد جهانی"
+
+#: ../judoshiai/match-data.c
+msgid "UKR Dbl Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "FIN Dbl Repchg"
+msgstr "FIN Dbl Repchg"
+
+#: ../judoshiai/match-data.c
+msgid "SWE Dubb återkv"
+msgstr "SWE Dubb återkv"
+
+#: ../judoshiai/match-data.c
+msgid "SWE Dir återkv"
+msgstr "SWE Dir återkv"
+
+#: ../judoshiai/match-data.c
+msgid "EST D klass"
+msgstr "EST D "
+
+#: ../judoshiai/match-data.c
+msgid "No Repechg"
+msgstr "بدون شانس مجدد"
+
+#: ../judoshiai/match-data.c
+msgid "GBR Simple Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "SWE Enkelt återkv"
+msgstr "SWE Enkelt återkv"
+
+#: ../judoshiai/match-data.c
+msgid "ESP Dbl Lost"
+msgstr "ESP Dbl Lost"
+
+#: ../judoshiai/match-data.c
+msgid "ESP Dbl Rep"
+msgstr "ESP Dbl Rep"
+
+#: ../judoshiai/match-data.c
+msgid "ESP Simple Rep"
+msgstr "ESP Simple Rep"
+
+#: ../judoshiai/match-data.c
+msgid "Modified Dbl Elim"
+msgstr "Modified Dbl Elim"
+
+#: ../judoshiai/match-data.c
+msgid "FIN Dbl Repchg One Bronze"
+msgstr "FIN Dbl Repchg One Bronze"
+
+#: ../judoshiai/match-data.c
 msgid "Double Lost"
 msgstr "Double Lost"
 
-msgid "Replay Video"
-msgstr "بازپخش فیلم"
-
-msgid "Video server"
-msgstr "ویدئو سرور"
-
-msgid "Video server URL"
-msgstr "آدرس ویدئو سرور"
-
-msgid "User:"
-msgstr "کاربر:"
-
-msgid "Proxy:"
-msgstr "پروکسی"
-
-msgid "Show Video"
-msgstr "نمایش ویدئو"
-
+#: ../judoshiai/match-data.c
 msgid "GBR Knock Out"
 msgstr "GBR Knock Out"
 
+#: ../judoshiai/match-data.c
+msgid "DEN Dbl Elim"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "EST D klass 1 brz"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "GER Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "IJF Quarter Final Repechage"
+msgstr "جدول استاندارد جهانی "
+
+#: ../judoshiai/match-data.c ../judoshiai/print.c
+msgid "Default"
+msgstr "پیش فرض"
+
+#: ../judoshiai/match-data.c
+msgid "UKR Double Repechage"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "FIN Double Repechage"
+msgstr "FIN Double Repechage"
+
+#: ../judoshiai/match-data.c
+msgid "SWE Double Repechage"
+msgstr "SWE Double Repechage"
+
+#: ../judoshiai/match-data.c
+msgid "SWE Direct Repechage"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "EST Double Elimination"
+msgstr "EST Double Elimination"
+
+#: ../judoshiai/match-data.c
+msgid "Single Elimination"
+msgstr "تک حذفی"
+
+#: ../judoshiai/match-data.c
+msgid "GBR Simple Repechage"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "SWE Single Repechage"
+msgstr "SWE Single Repechage"
+
+#: ../judoshiai/match-data.c
+msgid "ESP Double Lost"
+msgstr "ESP Double Lost"
+
+#: ../judoshiai/match-data.c
+msgid "ESP Double Repechage"
+msgstr "ESP Double Repechage"
+
+#: ../judoshiai/match-data.c
+msgid "ESP Simple Repechage"
+msgstr "ESP Simple Repechage"
+
+#: ../judoshiai/match-data.c
+msgid "Modified Double Elimination"
+msgstr "Modified Double Elimination"
+
+#: ../judoshiai/match-data.c
+msgid "FIN Double Repechage One Bronze"
+msgstr "FIN Double Repechage One Bronze"
+
+#: ../judoshiai/match-data.c
+msgid "DEN Double Elimination"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "EST Double Elim One Bronze"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "Customized"
+msgstr "سفارشی شده"
+
+#: ../judoshiai/match-data.c
+msgid "GER Double Repechage"
+msgstr ""
+
+#: ../judoshiai/match-graph.c ../judoinfo/main.c
+msgid "Prev. winner:"
+msgstr "برنده قبلی:"
+
+#: ../judoshiai/match-graph.c
+#, c-format
+msgid "Delayed"
+msgstr "با تاخیر"
+
+#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+msgid "Next match"
+msgstr "مسابقه بعدی"
+
+#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+msgid "Preparing"
+msgstr "آماده سازی"
+
+#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+msgid "Delay the match"
+msgstr "تاخیر در دیدار"
+
+#: ../judoshiai/match-graph.c
+msgid "Remove delay"
+msgstr "حذف معوقات"
+
+#: ../judoshiai/match-graph.c
+msgid "Freeze match order"
+msgstr "نگه داشتن ترتیب مسابقه"
+
+#: ../judoshiai/matches.c
+msgid "canceled"
+msgstr "لغو شده"
+
+#: ../judoshiai/matches.c
+msgid "changed"
+msgstr "تغییر کرده "
+
+#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
+msgid "Gold medal match"
+msgstr "مسابقه مدال طلا"
+
+#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
+msgid "Bronze match A"
+msgstr "برنز 1"
+
+#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
+msgid "Bronze match B"
+msgstr "برنز 2"
+
+#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
+msgid "Semifinal A"
+msgstr "نیمه نهایی 1"
+
+#: ../judoshiai/matches.c ../judoinfo/main.c ../judojudogi/main.c
+msgid "Semifinal B"
+msgstr "نیمه نهایی 2"
+
+#: ../judoshiai/matches.c ../judoinfo/main.c ../common/common.c
+#: ../judojudogi/main.c
+msgid "Silver medal match"
+msgstr "مسابقه کسب مدال نقره"
+
+#: ../judoshiai/matches.c
+msgid "Preparing:"
+msgstr "در حال آماده سازی:"
+
+#: ../judoshiai/matches.c
+msgid "points"
+msgstr "امتیازات"
+
+#: ../judoshiai/matches.c ../judoshiai/popup-menu.c
+msgid "Expand All"
+msgstr "بازکردن همه"
+
+#: ../judoshiai/matches.c ../judoshiai/popup-menu.c
+msgid "Collapse All"
+msgstr "بستن همه"
+
+#: ../judoshiai/matches.c
+msgid "Remove comment"
+msgstr "حذف توضیحات"
+
+#: ../judoshiai/matches.c
+msgid "Set score"
+msgstr "تنظیم امتیاز"
+
+#: ../judoshiai/matches.c
+msgid "White"
+msgstr "سفید"
+
+#: ../judoshiai/matches.c
+msgid "Blue"
+msgstr "آبی"
+
+#: ../judoshiai/matches.c
+msgid "Points"
+msgstr "امتیازات"
+
+#: ../judoshiai/medal-matches.c ../judoshiai/menus.c
+msgid "Move Medal Matches"
+msgstr "انتقال مسابقات کسب مدال"
+
+#: ../judoshiai/medal-matches.c
+msgid "Move match"
+msgstr ""
+
+#: ../judoshiai/medal-matches.c
+msgid "to tatami"
+msgstr ""
+
+#: ../judoshiai/medal-matches.c
+msgid "delay"
+msgstr ""
+
+#: ../judoshiai/medal-matches.c ../common/common.c
+msgid "Final"
+msgstr "فینال"
+
+#: ../judoshiai/medal-matches.c
+msgid "Bronze1"
+msgstr "برنز 1"
+
+#: ../judoshiai/medal-matches.c
+msgid "Bronze2"
+msgstr "برنز 2"
+
+#: ../judoshiai/medal-matches.c
+msgid "Pool's last"
+msgstr "Pool's last"
+
+#: ../judoshiai/medal-matches.c
+msgid "No move"
+msgstr "بدون تغییر"
+
+#: ../judoshiai/menuacts.c
+msgid "Tournament from the net"
+msgstr "مسابقات از اینترنت"
+
+#: ../judoshiai/menuacts.c
+msgid "Contests"
+msgstr "مسابقات"
+
+#: ../judoshiai/menuacts.c
+msgid "Select sheet font"
+msgstr "فونت جدول را انتخاب کنید"
+
+#: ../judoshiai/menuacts.c
+msgid "Picture Files"
+msgstr "فایلهای عکس"
+
+#: ../judoshiai/menuacts.c
+msgid "Print Headers"
+msgstr "چاپ سربرگ ها"
+
+#: ../judoshiai/menuacts.c
+msgid "Add competitors"
+msgstr "اضافه کردن ورزشکاران"
+
+#: ../judoshiai/menuacts.c
+msgid "Clean up duplicates and update reg. categories"
+msgstr "پاک کردن تکراری ها و به روزرسانی رده های وزنی"
+
+#: ../judoshiai/menuacts.c
+msgid "Weighed only"
+msgstr "فقط دارای وزن"
+
+#: ../judoshiai/menuacts.c
+msgid "With weights"
+msgstr "با اوزان"
+
+#: ../judoshiai/menuacts.c
+msgid "competitors added and updated"
+msgstr "ورزشکاران اضافه و بروزرسانی شدند"
+
+#: ../judoshiai/menuacts.c
+msgid "competitors already existed"
+msgstr "ورزشکار از قبل موجود بود"
+
+#: ../judoshiai/menuacts.c
+msgid "competitors added unchanged"
+msgstr "ورزشکاران بدون تغییر اضافه شدند"
+
+#: ../judoshiai/menuacts.c
+msgid "Copy Weights"
+msgstr "رونوشت از وزن ها"
+
+#: ../judoshiai/menuacts.c
+msgid "weights updated"
+msgstr "اوزان بروزرسانی شد"
+
+#: ../judoshiai/menuacts.c
+msgid "Do Backup"
+msgstr "نسخه پشتیبان بگیر"
+
+#: ../judoshiai/menuacts.c
+msgid "CANNOT OPEN BACKUP FILE"
+msgstr "فایل پشتیبان باز نمیشود"
+
+#: ../judoshiai/menus.c
+msgid "Drawing"
+msgstr "در حال قرعه بندی"
+
+#: ../judoshiai/menus.c
+msgid "Results"
+msgstr "نتایج"
+
+#: ../judoshiai/menus.c ../judoproxy/main.c
+msgid "JudoTimer"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "New Tournament"
+msgstr "مسابقات جدید"
+
+#: ../judoshiai/menus.c
+msgid "Open Tournament"
+msgstr "باز کردن مسابقات"
+
+#: ../judoshiai/menus.c
+msgid "Open Tournament from Net"
+msgstr "بازکردن مسابقات از طریق اینترنت"
+
+#: ../judoshiai/menus.c ../judoshiai/properties.c ../judoshiai/set-categories.c
+msgid "Properties"
+msgstr "تنظیمات"
+
+#: ../judoshiai/menus.c
+msgid "Tournament Backup"
+msgstr "پشتیبان گیری از مسابقات"
+
+#: ../judoshiai/menus.c
+msgid "Validate Database"
+msgstr "اعتبار سنجی دیتابیس"
+
+#: ../judoshiai/menus.c
+msgid "Load Custom Systems"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "SQL Dialog"
+msgstr "SQL Dialog"
+
+#: ../judoshiai/menus.c
+msgid "New Competitor"
+msgstr "ورزشکار جدید"
+
+#: ../judoshiai/menus.c
+msgid "Search Competitor"
+msgstr "جستجوی ورزشکار"
+
+#: ../judoshiai/menus.c
+msgid "Select From Another Shiai"
+msgstr "انتخاب از شیایی دیگر"
+
+#: ../judoshiai/menus.c
+msgid "Add From a Text File"
+msgstr "افزودن از یک فایل تکست"
+
+#: ../judoshiai/menus.c
+msgid "Add All From Another Shiai"
+msgstr "اضافه کردن همه از شیایی دیگر"
+
+#: ../judoshiai/menus.c
+msgid "Update Weights From Another Shiai"
+msgstr "به روز رسانی وزن ها از شیایی دیگر"
+
+#: ../judoshiai/menus.c
+msgid "Remove Unweighted"
+msgstr "حذف بدون وزن ها"
+
+#: ../judoshiai/menus.c
+msgid "Restore Removed"
+msgstr "بازگردانی حذف شده ها"
+
+#: ../judoshiai/menus.c
+msgid "Delete Removed"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Bar Code Search"
+msgstr "جستجو از طریق بارکد"
+
+#: ../judoshiai/menus.c
+msgid "Print Weight Notes"
+msgstr "چاپ یادداشت وزن"
+
+#: ../judoshiai/menus.c
+msgid "New Category"
+msgstr "دسته بندی جدید"
+
+#: ../judoshiai/menus.c
+msgid "Remove Empty"
+msgstr "حذف خالی "
+
+#: ../judoshiai/menus.c
+msgid "Create Categories"
+msgstr "دسته بندی اوزان"
+
+#: ../judoshiai/menus.c
+msgid "Init Colors"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Show Colors"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Print All"
+msgstr "چاپ همه"
+
+#: ../judoshiai/menus.c
+msgid "Print All (PDF)"
+msgstr "چاپ همه (PDF)"
+
+#: ../judoshiai/menus.c
+msgid "Print Matches (CSV)"
+msgstr "چاپ مسابقات (csv)"
+
+#: ../judoshiai/menus.c
+#, c-format
+msgid "Place to one Tatami"
+msgid_plural "Place to %d Tatamis"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../judoshiai/menus.c
+msgid "Draw All Categories"
+msgstr "قرعه کشی همه دسته ها"
+
+#: ../judoshiai/menus.c
+msgid "Print All (Web And PDF)"
+msgstr "چاپ همه (Web و PDF)"
+
+#: ../judoshiai/menus.c
+msgid "Print Schedule to Printer"
+msgstr "چاپ زمان بندی شده از پرینتر"
+
+#: ../judoshiai/menus.c
+msgid "Print Schedule to PDF"
+msgstr "چاپ زمان بندی شده به صورت پی دی اف"
+
+#: ../judoshiai/menus.c
+msgid "Control Tatami"
+msgstr "کنترل تاتامی"
+
+#: ../judoshiai/menus.c
+msgid "Communication Node"
+msgstr "نقطه اتصال"
+
+#: ../judoshiai/menus.c
+msgid "Own IP Addresses"
+msgstr "آی پی آدرس این دستگاه"
+
+#: ../judoshiai/menus.c
+msgid "Show Attached Connections"
+msgstr "نمایش اتصالات"
+
+#: ../judoshiai/menus.c
+msgid "Automatic Sheet Update"
+msgstr "به روزرسانی خودکار جدول"
+
+#: ../judoshiai/menus.c
+msgid "Club Name Only"
+msgstr "فقط نام باشگاه"
+
+#: ../judoshiai/menus.c
+msgid "Country Name Only"
+msgstr "فقط نام کشور"
+
+#: ../judoshiai/menus.c
+msgid "Both Club and Country"
+msgstr "هم باشگاه هم کشور"
+
+#: ../judoshiai/menus.c
+msgid "Abbreviations in Sheets"
+msgstr "خلاصه ها در جدول"
+
+#: ../judoshiai/menus.c
+msgid "Weights Visible in Pool Sheets"
+msgstr "نمایش وزن در جدول دوره ای"
+
+#: ../judoshiai/menus.c
+msgid "Sheet Font"
+msgstr "فونت جدول"
+
+#: ../judoshiai/menus.c ../judoinfo/menus.c ../judoweight/menus.c
 msgid "SVG Templates"
 msgstr "قالب اس.وی.جی"
 
-msgid "General"
-msgstr "عمومی"
+#: ../judoshiai/menus.c
+msgid "Language Selection"
+msgstr "انتخاب زبان"
 
-msgid "Reset to"
-msgstr "بازنشانی"
+#: ../judoshiai/menus.c ../judoshiai/print.c
+msgid "Print Accreditation Cards"
+msgstr "چاپ آیدی کارت"
 
-msgid "Initialize"
-msgstr "شروع کردن"
+#: ../judoshiai/menus.c
+msgid "New Team"
+msgstr "تیم جدید"
 
-msgid "Players"
-msgstr "بازیکنان"
+#: ../judoshiai/menus.c
+msgid "New Team Category"
+msgstr "دسته بندی تیمی جدید"
 
-msgid "Max age"
-msgstr "حداکثر سن"
+#: ../judoshiai/menus.c ../judoshiai/print.c
+msgid "Print Schedule"
+msgstr "چاپ زمان بندی شده"
 
-msgid "Min"
-msgstr "حداقل"
+#: ../judoshiai/menus.c
+msgid "GDPR"
+msgstr ""
 
-msgid "Max"
-msgstr "حداکثر"
+#: ../judoshiai/menus.c
+msgid "Communication"
+msgstr "ارتباط"
 
-msgid "System"
-msgstr "سیستم"
+#: ../judoshiai/menus.c
+msgid "Club Text Selection"
+msgstr "انتخاب نام باشگاه"
 
-msgid "Default systems"
-msgstr "سیستم پیش فرض"
+#: ../judoshiai/menus.c
+msgid "Sheet Layout"
+msgstr "ظاهر جدول"
 
-msgid "Use SVG Templates"
-msgstr "اصتفاده از قالب های اس.وی.جی"
+#: ../judoshiai/menus.c
+msgid "Weights Visible"
+msgstr "نمایش اوزان"
 
-msgid "Seeded to fixed places:"
-msgstr "اعمال سید بندی"
+#: ../judoshiai/menus.c
+msgid "Grade Visible"
+msgstr "نمایش درجه کمربند"
 
-msgid "Double Pool 2 with carried forward points:"
-msgstr "Double Pool 2 with carried forward points:"
+#: ../judoshiai/menus.c
+msgid "Name Format"
+msgstr "چیدمان اسم"
 
-msgid "Two pool bronzes:"
-msgstr "Two pool bronzes:"
+#: ../judoshiai/menus.c
+msgid "Surname Name, Country/Club"
+msgstr "نام خانوادگی, کشور/باشگاه"
 
-msgid "Resolve 3-way ties by weights:"
-msgstr "Resolve 3-way ties by weights:"
+#: ../judoshiai/menus.c
+msgid "Country/Club,  Surname Name"
+msgstr "کشور/باشگاه, نام خانوادگی "
 
-msgid "Coach Id:"
-msgstr "آیدی مربی"
+#: ../judoshiai/menus.c
+msgid "Pool Style 2"
+msgstr "Pool Style 2"
 
-msgid "Comment:"
-msgstr "توضیح:"
+#: ../judoshiai/menus.c
+msgid "Use Belt Colors"
+msgstr "استفاده از رنگ کمربند"
 
+#: ../judoshiai/menus.c
+msgid "Mirror Tatami Order"
+msgstr "دستور بازگشت از تاتامی"
+
+#: ../judoshiai/menus.c
+msgid "Automatic Match Delay"
+msgstr "تاخیر خودکار در مسابقه"
+
+#: ../judoshiai/menus.c
+msgid "Print Logo"
+msgstr "چاپ لوگو"
+
+#: ../judoshiai/menus.c
+msgid "Show"
+msgstr "نمایش"
+
+#: ../judoshiai/menus.c ../judoshiai/set-categories.c
+msgid "Reset to Defaults"
+msgstr "بازنشانی پیش فرض"
+
+#: ../judoshiai/menus.c
+msgid "Scale Serial Interface..."
+msgstr "رابط سریال ترازو..."
+
+#: ../judoshiai/menus.c
+msgid "Medal Matches..."
+msgstr "مسابقه کسب مدال..."
+
+#: ../judoshiai/menus.c ../judoweight/menus.c
+msgid "Scale Serial Interface"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Matches matched. Clear the results first."
+msgstr "مسابقه انجام شده است.ابتدا نتیجه را حذف کنید"
+
+#: ../judoshiai/popup-menu.c
+msgid "Random Weigh-In"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Select"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "competitors from"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "each selected category"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "all selected categories"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Select a color"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "already exists"
+msgstr "از قبل وجود دارد"
+
+#: ../judoshiai/popup-menu.c
+msgid "Move Competitors to Category"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Move Competitors Here"
+msgstr "انتقال ورزشکاران به اینجا"
+
+#: ../judoshiai/popup-menu.c
+msgid "Compose Unofficial Category"
+msgstr "ادغام رده های وزنی غیر رسمی"
+
+#: ../judoshiai/popup-menu.c
+msgid "Draw Selected"
+msgstr "قرعه انتخاب شده ها"
+
+#: ../judoshiai/popup-menu.c
+msgid "Draw and Print Selected"
+msgstr "قرعه کشی و چاپ انتخاب شده ها"
+
+#: ../judoshiai/popup-menu.c
+msgid "Draw Manually"
+msgstr "قرعه دستی"
+
+#: ../judoshiai/popup-menu.c
+msgid "Remove Drawing"
+msgstr "حذف قرعه کشی شده ها"
+
+#: ../judoshiai/popup-menu.c
+msgid "Edit Drawing"
+msgstr "ادیت قرعه کشی"
+
+#: ../judoshiai/popup-menu.c
+msgid "Copy Competitors"
+msgstr "رونوشت از ورزشکاران"
+
+#: ../judoshiai/popup-menu.c
+msgid "Remove Competitors"
+msgstr "حذف ورزشکاران"
+
+#: ../judoshiai/popup-menu.c
+msgid "Print Selected Sheets (Printer)"
+msgstr "چاپ جدول های انتخاب شده از پرینتر"
+
+#: ../judoshiai/popup-menu.c
+msgid "Print Selected Sheets (PDF)"
+msgstr "چاپ جدول های انتخاب شده به صورت پی دی اف"
+
+#: ../judoshiai/popup-menu.c
+msgid "Print Selected Accreditation Cards"
+msgstr "چاپ آیدی کارت های انتخاب شده"
+
+#: ../judoshiai/popup-menu.c
+msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr "چاپ آیدی کارت های انتخاب شده با پرینتر پیش فرض"
+
+#: ../judoshiai/popup-menu.c
+msgid "Color..."
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Finnish"
+msgstr "Results in Finnish"
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Swedish"
+msgstr "Results in Swedish"
+
+#: ../judoshiai/print-texts.c
+msgid "Results in English"
+msgstr "Results in English"
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Spanish"
+msgstr "Results in Spanish"
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Estonian"
+msgstr "Results in Estonian"
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Ukrainian"
+msgstr "Results in Ukrainian"
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Norwegian"
+msgstr "Results in Norwegian"
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Icelandic"
+msgstr "Results in Icelandic"
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Polish"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Slovak"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Dutch"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in German"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Russian"
+msgstr ""
+
+#: ../judoshiai/print.c ../judoinfo/main.c ../judojudogi/main.c
+#: ../judoproxy/main.c
+msgid "Save file"
+msgstr "ذخیره فایل"
+
+#: ../judoshiai/print.c
+msgid "Landscape"
+msgstr "حالت افقی"
+
+#: ../judoshiai/print.c
+msgid "Line"
+msgstr "خط"
+
+#: ../judoshiai/print.c
+msgid "Syntax error"
+msgstr "خطای ناشناخته"
+
+#: ../judoshiai/print.c
+msgid "Print To:"
+msgstr "چاپ در:"
+
+#: ../judoshiai/print.c
+msgid "Printer"
+msgstr "چاپگر"
+
+#: ../judoshiai/print.c
+msgid "PDF"
+msgstr "PDF"
+
+#: ../judoshiai/print.c ../judoshiai/properties.c
+msgid "Start time:"
+msgstr "زمان شروع:"
+
+#: ../judoshiai/print.c
+msgid "Resolution (min):"
+msgstr "جداسازی (دقیقه):"
+
+#: ../judoshiai/print.c
+msgid "Compressed timeline"
+msgstr "جدول زمانی فشرده"
+
+#: ../judoshiai/print.c
+msgid "Match File"
+msgstr "فایل مسابقه"
+
+#: ../judoshiai/print.c
+msgid "Print Not Started Categories"
+msgstr "مسابقات آغاز نشده را چاپ کن"
+
+#: ../judoshiai/print.c
+msgid "Print Started Categories"
+msgstr "چاپ اوزان شروع شده"
+
+#: ../judoshiai/print.c
+msgid "Print Finished Categories"
+msgstr "چاپ دسته های پایان یافته"
+
+#: ../judoshiai/print.c
+msgid "Print Unmatched"
+msgstr "چاپ مسابقه داده نشده"
+
+#: ../judoshiai/print.c
+msgid "Print Result"
+msgstr "چاپ نتیجه"
+
+#: ../judoshiai/print.c
+msgid "Print IWYKS"
+msgstr "چاپ امتیازات (IWYS)"
+
+#: ../judoshiai/print.c
+msgid "Print Comment"
+msgstr "چاپ توضیحات"
+
+#: ../judoshiai/print.c ../judoshiai/set-categories.c
+msgid "Layout:"
+msgstr "پوسته::"
+
+#: ../judoshiai/print.c
+msgid "Template"
+msgstr "قالب"
+
+#: ../judoshiai/print.c
+msgid "One Card Per Page"
+msgstr "یک کارت در هر صفحه"
+
+#: ../judoshiai/properties.c
+msgid "Tournament:"
+msgstr "مسابقه:"
+
+#: ../judoshiai/properties.c
+msgid "Date:"
+msgstr "تاریخ:"
+
+#: ../judoshiai/properties.c
+msgid "Place:"
+msgstr "مکان:"
+
+#: ../judoshiai/properties.c
+msgid "Number of tatamis:"
+msgstr "تاتامی شماره:"
+
+#: ../judoshiai/properties.c
+msgid "White first:"
+msgstr "اول سفید:"
+
+#: ../judoshiai/properties.c
 msgid "Best two out of three matches:"
 msgstr "بهترین دو تا از سه مسابقه"
 
+#: ../judoshiai/properties.c
 msgid ""
 "Medal will be awarded \n"
 "only if a contest was won:"
@@ -1561,290 +2045,750 @@ msgstr ""
 "اگر مسابقه را برنده شود \n"
 "مدال تعلق میگیرد"
 
-msgid "Pool settings"
-msgstr "تنظیم جدول دوره ای"
-
-msgid "Statistics"
-msgstr "آمار"
-
-msgid "Grade names"
-msgstr "نام درجه کمربند"
-
-msgid "Coach"
-msgstr "مربی"
-
-msgid "Weights do not match"
-msgstr "وزن ها مطابقت ندارند"
-
-msgid "Copy Weights"
-msgstr "رونوشت از وزن ها"
-
-msgid "weights updated"
-msgstr "اوزان بروزرسانی شد"
-
-msgid "Update Weights From Another Shiai"
-msgstr "به روز رسانی وزن ها از شیایی دیگر"
-
-msgid "Weighted:"
-msgstr "وزن کشی شده:"
-
-msgid "Print SVG"
-msgstr "چاپ اس.وی.جی"
-
-msgid "If equal score less shido wins"
-msgstr "برای رتبه بندی برابر، شیدو را مقایسه کنید"
-
-msgid "No Limit"
-msgstr "بدون محدودیت"
-
-msgid "Corrupted competitor data:\n"
-msgstr "داده های ورزشکار خراب است:\n"
-
-msgid "Corrupted category data:\n"
-msgstr "داده های ورزشکار خراب است:\n"
-
-msgid "Server URL"
-msgstr "آدرس سرور"
-
-msgid "Copy to Server"
-msgstr "رونوشت به سرور"
-
-msgid "Proxy User:"
-msgstr "نام کاربری پروکسی"
-
-msgid "Proxy Password:"
-msgstr "رمز عبور پروکسی"
-
-msgid "DEN Dbl Elim"
-msgstr ""
-
-msgid "EST D klass 1 brz"
-msgstr ""
-
-msgid "SWE Direct Repechage"
-msgstr ""
-
-msgid "DEN Double Elimination"
-msgstr ""
-
-msgid "EST Double Elim One Bronze"
-msgstr ""
-
-msgid "Set score"
-msgstr "تنظیم امتیاز"
-
-msgid "Edit Drawing"
-msgstr "ادیت قرعه کشی"
-
-msgid "Remote address"
-msgstr "آدرس ریموت"
-
-msgid "Remote Control"
-msgstr "کنترل"
-
-msgid "VLC control"
-msgstr "VLC کنترل"
-
-msgid "X:"
-msgstr "X:"
-
-msgid "Y:"
-msgstr "Y:"
-
-msgid "Scale:"
-msgstr "ترازو:"
-
-msgid "Name"
-msgstr "نام"
-
-msgid "Reg.Cat"
-msgstr "رده وزنی"
-
-msgid "ID"
-msgstr "آیدی"
-
-msgid "Index"
-msgstr "فهرست"
-
-msgid "Results in Polish"
-msgstr ""
-
-msgid "Results in Slovak"
-msgstr ""
-
-msgid "Results in Dutch"
-msgstr ""
-
-msgid "Win in Golden Score gives 1 point"
-msgstr "برنده شدن در تایم طلایی با 1 امتیاز"
-
-msgid "WARNING: NO CONTROL"
-msgstr "اخطار: کنترل نشده است"
-
-msgid "British System"
-msgstr ""
-
-msgid "Australian System"
-msgstr ""
-
-msgid "Danish System"
-msgstr ""
-
-msgid "Polish System"
-msgstr ""
-
-msgid "Slovakian System"
-msgstr ""
-
-msgid "Tatami"
-msgstr "تاتامی"
-
-msgid "Hikiwake"
-msgstr "نساوی"
-
-msgid "Require judogi control"
-msgstr "الزام چک لباس"
-
-msgid "CTL"
-msgstr ""
-
-msgid "Show Flags"
-msgstr "نمایش پرچم ها"
-
-msgid "Show Initial of Name"
-msgstr ""
-
-msgid "Flag size:"
-msgstr "اندازه پرچم"
-
-msgid "Name size:"
-msgstr "اندازه نام"
-
-msgid "CONTROL"
-msgstr "کنترل"
-
-msgid "THIS APPLICATION"
-msgstr "این برنامه"
-
-msgid "NOT CONNECTED"
-msgstr "اتصال برقرار نیست"
-
-msgid "Team:"
-msgstr "تیم"
-
-msgid "Tatami:"
-msgstr "تاتامی"
-
-msgid "Create default members:"
-msgstr ""
-
-msgid "Team"
-msgstr "تیم"
-
-msgid "Messages"
-msgstr "پیغام ها"
-
-msgid "Double Pool 3"
-msgstr ""
-
-msgid "Custom"
-msgstr "سفارشی"
-
-msgid "UKR Dbl Repchg"
-msgstr ""
-
-msgid "UKR Double Repechage"
-msgstr ""
-
-msgid "Customized"
-msgstr "سفارشی شده"
-
-msgid "Load Custom Systems"
-msgstr ""
-
-msgid "New Team"
-msgstr "تیم جدید"
-
-msgid "New Team Category"
-msgstr "دسته بندی تیمی جدید"
-
-msgid "Print Selected Accreditation Cards To Default Printer"
-msgstr "چاپ آیدی کارت های انتخاب شده با پرینتر پیش فرض"
-
-msgid "Results in German"
-msgstr ""
-
-msgid "Results in Russian"
-msgstr ""
-
-msgid "Ukrainian System"
-msgstr ""
-
-msgid "Open file"
-msgstr "باز کردن فایل"
-
-msgid "New Password:"
-msgstr "رمزعبور جدید"
-
-msgid "Old Password:"
-msgstr "رمزعبور قدیمی"
-
-msgid "Wrong password!"
-msgstr "رمزعبور اشتباه است"
-
-msgid "No manual edit"
-msgstr "بدون ادیت دستی"
-
-msgid "Automatic send"
-msgstr "ارسال خودکار"
-
-msgid "Print label"
-msgstr "چاپ برچسب"
-
-msgid "No margins"
-msgstr "بدون حاشیه"
-
-msgid "Fit page"
-msgstr "تمام صفحه"
-
-msgid "No SOREMADE/IPPON texts"
-msgstr "عدم نمایش نوشته سورمده/ایپون"
-
-msgid "Custom layout file..."
-msgstr "فایل پوسته سفارشی "
-
-msgid "Resolve 3-way ties by time:"
-msgstr ""
-
-msgid "Move Matches"
-msgstr "انتقال مسابقه ها"
-
-msgid "Match order from file"
-msgstr ""
-
-msgid "Match Order from File"
-msgstr ""
-
-msgid "Move Matches..."
-msgstr "انتقال مسابقه ها ..."
-
+#: ../judoshiai/properties.c
+msgid "Seeded to fixed places:"
+msgstr "اعمال سید بندی"
+
+#: ../judoshiai/properties.c
 msgid "Use the first places only:"
 msgstr ""
 
-msgid "Round"
-msgstr "دور"
+#: ../judoshiai/properties.c
+msgid "Win in Golden Score gives 1 point"
+msgstr "برنده شدن در تایم طلایی با 1 امتیاز"
 
-msgid "Round Robin"
-msgstr "مسابقه دوره ای"
+#: ../judoshiai/properties.c
+msgid "2017 Rules:"
+msgstr ""
 
-msgid "Repechage"
-msgstr "شانس مجدد"
+#: ../judoshiai/properties.c
+msgid "2018 Rules:"
+msgstr ""
 
+#: ../judoshiai/properties.c
+msgid "Double Pool 2 with carried forward points:"
+msgstr "Double Pool 2 with carried forward points:"
+
+#: ../judoshiai/properties.c
+msgid "Two pool bronzes:"
+msgstr "Two pool bronzes:"
+
+#: ../judoshiai/properties.c
+msgid "Resolve 3-way ties by time:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Resolve 3-way ties by weights:"
+msgstr "Resolve 3-way ties by weights:"
+
+#: ../judoshiai/properties.c
 msgid "Mix pool matches into rounds:"
 msgstr ""
 
-msgid "Use IJF points:"
-msgstr "استفاده از امتیازات فدراسیون جهانی"
+#: ../judoshiai/properties.c
+msgid "Use points 10/1/0:"
+msgstr ""
 
+#: ../judoshiai/properties.c
+msgid "Use points 100/10/1/½:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Use points 10/7/1:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Use points 10/1/½:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Use points 10/3/1:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Use points 10/5/1:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Add extra match in teams points tie:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Only wins count, ignore match points:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid ""
+"The first team reaching the majority\n"
+"of wins is declared the winner.\n"
+"The remaining contests will not be fought:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid ""
+"The athletes in the drawn category will\n"
+"refight a golden score contest:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid ""
+"Draw for extra match is done from\n"
+"all categories regardless\n"
+"if the team has a player or not:"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "International System"
+msgstr "سیستم بین المللی"
+
+#: ../judoshiai/properties.c
+msgid "Finnish System"
+msgstr "Finnish System"
+
+#: ../judoshiai/properties.c
+msgid "Swedish System"
+msgstr "Swedish System"
+
+#: ../judoshiai/properties.c
+msgid "Estonian System"
+msgstr "Estonian System"
+
+#: ../judoshiai/properties.c
+msgid "Spanish System"
+msgstr "سیستم اسپانیایی"
+
+#: ../judoshiai/properties.c
+msgid "Norwegian System"
+msgstr "Norwegian System"
+
+#: ../judoshiai/properties.c
+msgid "British System"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Australian System"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Danish System"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Polish System"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Slovakian System"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Ukrainian System"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "German System"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Tournament properties"
+msgstr "تنظیمات مسابقه"
+
+#: ../judoshiai/properties.c
+msgid "Competitors:"
+msgstr "ورزشکاران:"
+
+#: ../judoshiai/properties.c
+msgid "Weighted:"
+msgstr "وزن کشی شده:"
+
+#: ../judoshiai/properties.c
+msgid "Reset to"
+msgstr "بازنشانی"
+
+#: ../judoshiai/properties.c
+msgid "Players"
+msgstr "بازیکنان"
+
+#: ../judoshiai/properties.c
+msgid "Max age"
+msgstr "حداکثر سن"
+
+#: ../judoshiai/properties.c
+msgid "Min"
+msgstr "حداقل"
+
+#: ../judoshiai/properties.c
+msgid "Max"
+msgstr "حداکثر"
+
+#: ../judoshiai/properties.c
+msgid "System"
+msgstr "سیستم"
+
+#: ../judoshiai/properties.c
+msgid "Initialize"
+msgstr "شروع کردن"
+
+#: ../judoshiai/properties.c
+msgid "General"
+msgstr "عمومی"
+
+#: ../judoshiai/properties.c
+msgid "Rules"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Pool settings"
+msgstr "تنظیم جدول دوره ای"
+
+#: ../judoshiai/properties.c
+msgid "Team event"
+msgstr ""
+
+#: ../judoshiai/properties.c
+msgid "Default systems"
+msgstr "سیستم پیش فرض"
+
+#: ../judoshiai/properties.c
+msgid "Grade names"
+msgstr "نام درجه کمربند"
+
+#: ../judoshiai/properties.c
+msgid "Statistics"
+msgstr "آمار"
+
+#: ../judoshiai/properties.c
+msgid "Color"
+msgstr ""
+
+#: ../judoshiai/search.c
+msgid "Search"
+msgstr "جستجو"
+
+#: ../judoshiai/set-categories.c
+msgid "Men"
+msgstr "آقایان"
+
+#: ../judoshiai/set-categories.c
+msgid "Women"
+msgstr "بانوان"
+
+#: ../judoshiai/set-categories.c
+msgid "Yes"
+msgstr ""
+
+#: ../judoshiai/set-categories.c
+msgid "No"
+msgstr ""
+
+#: ../judoshiai/set-categories.c
+msgid "Highest age:"
+msgstr "بیشترین سن:"
+
+#: ../judoshiai/set-categories.c
+msgid "Age text:"
+msgstr "عنوان رده سنی:"
+
+#: ../judoshiai/set-categories.c
+msgid "Match time:"
+msgstr "مدت مسابقه:"
+
+#: ../judoshiai/set-categories.c
+msgid "Rest time:"
+msgstr "زمان استراحت:"
+
+#: ../judoshiai/set-categories.c
+msgid "Golden Score:"
+msgstr ""
+
+#: ../judoshiai/set-categories.c
+msgid "Pin times (IWYK):"
+msgstr "زمان اوسای کومی (IWYK):"
+
+#: ../judoshiai/set-categories.c
+msgid "Rep. time:"
+msgstr "زمان استراحت:"
+
+#: ../judoshiai/set-categories.c
+msgid "Highest weight (g):"
+msgstr "بیشترین وزن (گ):"
+
+#: ../judoshiai/set-categories.c
+msgid "Weight text:"
+msgstr "متن وزن:"
+
+#: ../judoshiai/set-categories.c
+msgid "Copy"
+msgstr ""
+
+#: ../judoshiai/sheets.c
+msgid "Sheets"
+msgstr "جداول"
+
+#: ../judoshiai/sql-dialog.c
+msgid "Basic Scripts"
+msgstr "اسکریپت های پایه"
+
+#: ../judoshiai/sql-dialog.c
+msgid "SVG+Lisp"
+msgstr ""
+
+#: ../judoshiai/sql-dialog.c
+msgid "Select Script"
+msgstr "انتخاب اسکریپت"
+
+#: ../judoshiai/sql-dialog.c
+msgid "No script available"
+msgstr "هیچ اسکرپتی موجود نیست"
+
+#: ../judoshiai/sql-dialog.c
+msgid "SQL"
+msgstr "اس کیو ال"
+
+#: ../judoshiai/sql-dialog.c
+msgid "Run Script"
+msgstr "اجرای اسکریپت"
+
+#: ../judoshiai/sql-dialog.c
+msgid "Repeat Script"
+msgstr "تکرار اسکرپت"
+
+#: ../judoshiai/svg.c
+msgid "Use SVG Templates"
+msgstr "اصتفاده از قالب های اس.وی.جی"
+
+#: ../judoshiai/util.c
+msgid "Which one is correct?"
+msgstr "کدام یک صحیح است؟"
+
+#: ../judoshiai/util.c
+msgid "Own database"
+msgstr "دیتابیس برنامه"
+
+#: ../judoshiai/util.c
+msgid "Foreign database"
+msgstr "دیتابیس خارجی"
+
+#: ../judoshiai/util.c
+msgid "Do not change"
+msgstr "تغییر ندهید"
+
+#: ../judoshiai/util.c
+msgid "Stop synchronization"
+msgstr "توقف همگام سازی"
+
+#: ../judoshiai/util.c
+msgid "NOTE"
+msgstr "یادداشت"
+
+#: ../judoshiai/util.c
+msgid "is not a valid ASCII string!"
+msgstr "کاراکترهای ASCII قابل قبول نیست!"
+
+#: ../judoshiai/write-results.c
+msgid "Automatic Web Page Update"
+msgstr "بروزرسانی خودکار صفحه وب"
+
+#: ../judoshiai/write-results.c
+msgid "Create Statistics"
+msgstr "ایجاد آمار و ارقام"
+
+#: ../judoshiai/write-results.c
+msgid "Print SVG"
+msgstr "چاپ اس.وی.جی"
+
+#: ../judoshiai/write-results.c
+msgid "Extra Links"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Link"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "(Example)"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Embed"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "New Window"
+msgstr ""
+
+#: ../judoinfo/main.c ../judojudogi/main.c
+msgid "Category starts"
+msgstr "شروع دسته بندی"
+
+#: ../judoinfo/main.c
+msgid "Tatami"
+msgstr "تاتامی"
+
+#: ../judoinfo/menus.c
+msgid "About JudoInfo"
+msgstr "درباره جودو اینفو"
+
+#: ../judoinfo/menus.c ../judojudogi/menus.c
+msgid "Normal display"
+msgstr "نمایش عادی"
+
+#: ../judoinfo/menus.c ../judojudogi/menus.c
+msgid "Small display"
+msgstr "صفحه نمایش کوچک"
+
+#: ../judoinfo/menus.c ../judojudogi/menus.c
+msgid "Horizontal display"
+msgstr "نمایش افقی"
+
+#: ../judoinfo/menus.c ../judojudogi/menus.c
+msgid "Mirror tatami order"
+msgstr "دستور بازگشت از تاتامی"
+
+#: ../judoinfo/menus.c ../judojudogi/menus.c
+msgid "Write to file"
+msgstr "نوشتن روی فایل"
+
+#: ../judoinfo/menus.c
 msgid "Show bracket"
 msgstr "نمایش شاخه ها"
+
+#: ../judoinfo/menus.c ../judojudogi/menus.c
+msgid "Show Tatami"
+msgstr "نمایش تاتامی"
+
+#: ../common/auto-update.c
+msgid "Update"
+msgstr ""
+
+#: ../common/auto-update.c
+msgid "New version:"
+msgstr ""
+
+#: ../common/auto-update.c
+msgid "Current version:"
+msgstr ""
+
+#: ../common/auto-update.c
+msgid "Update to new version?"
+msgstr ""
+
+#: ../common/common.c
+msgid "Round"
+msgstr "دور"
+
+#: ../common/common.c
+msgid "Round Robin"
+msgstr "مسابقه دوره ای"
+
+#: ../common/common.c
+msgid "Repechage"
+msgstr "شانس مجدد"
+
+#: ../common/common.c
+msgid "Semifinal"
+msgstr "نیمه نهایی"
+
+#: ../common/common.c
+msgid "Bronze"
+msgstr "برنز"
+
+#: ../common/ip.c
+msgid "Address of the communication node"
+msgstr "آدرس های نقطه اتصال"
+
+#: ../common/ip.c
+msgid "IP address:"
+msgstr "آی پی آدرس:"
+
+#: ../common/ip.c
+msgid "Multicast"
+msgstr ""
+
+#: ../common/serial.c
+msgid "Serial Communication"
+msgstr "Serial Communication"
+
+#: ../common/serial.c ../judoweight/menus.c
+msgid "In Use"
+msgstr "در حال استفاده"
+
+#: ../common/serial.c
+msgid "Device"
+msgstr "دستگاه"
+
+#: ../common/serial.c
+msgid "Baudrate"
+msgstr "سرعت"
+
+#: ../common/serial.c
+msgid "Type"
+msgstr "بنویسید"
+
+#: ../judoweight/main.c
+msgid "WARNING: NO CONTROL"
+msgstr "اخطار: کنترل نشده است"
+
+#: ../judoweight/main.c ../judojudogi/main.c
+msgid "ID:"
+msgstr "آیدی:"
+
+#: ../judoweight/main.c
+msgid "Name:"
+msgstr "نام:"
+
+#: ../judoweight/main.c
+msgid "Corrected:"
+msgstr ""
+
+#: ../judoweight/main.c
+msgid "Confirm:"
+msgstr "تایید:"
+
+#: ../judoweight/main.c
+msgid "New Password:"
+msgstr "رمزعبور جدید"
+
+#: ../judoweight/main.c
+msgid "Old Password:"
+msgstr "رمزعبور قدیمی"
+
+#: ../judoweight/main.c
+msgid "Wrong password!"
+msgstr "رمزعبور اشتباه است"
+
+#: ../judoweight/menus.c
+msgid "About JudoWeight"
+msgstr "درباره JudoWeight"
+
+#: ../judoweight/menus.c
+msgid "Scale Correction"
+msgstr ""
+
+#: ../judoweight/menus.c
+msgid "Real"
+msgstr ""
+
+#: ../judoweight/menus.c
+msgid "Display"
+msgstr ""
+
+#: ../judoweight/menus.c
+msgid "Error"
+msgstr ""
+
+#: ../judoweight/menus.c
+msgid "ERROR"
+msgstr ""
+
+#: ../judoweight/menus.c
+msgid "Scale Correction Table"
+msgstr ""
+
+#: ../judoweight/menus.c
+msgid "No manual edit"
+msgstr "بدون ادیت دستی"
+
+#: ../judoweight/menus.c
+msgid "Automatic send"
+msgstr "ارسال خودکار"
+
+#: ../judoweight/menus.c
+msgid "Print label"
+msgstr "چاپ برچسب"
+
+#: ../judoweight/menus.c
+msgid "No margins"
+msgstr "بدون حاشیه"
+
+#: ../judoweight/menus.c
+msgid "Fit page"
+msgstr "تمام صفحه"
+
+#: ../judojudogi/main.c
+msgid "No match soon! Please wait for a while."
+msgstr "فعلا مسابقه ای نیست!چند لحظه صبر کنید"
+
+#: ../judojudogi/menus.c
+msgid "About JudoJudogi"
+msgstr "درباره JudoJudogi"
+
+#: ../judoproxy/main.c
+msgid "Camera"
+msgstr ""
+
+#: ../judoproxy/main.c
+msgid "Reload"
+msgstr ""
+
+#: ../judoproxy/menus.c
+msgid "About JudoProxy"
+msgstr ""
+
+#~ msgid "----- Men -----"
+#~ msgstr "----- آقایان -----"
+
+#~ msgid "----- Women -----"
+#~ msgstr "----- بانوان -----"
+
+#~ msgid "Contest area 1"
+#~ msgstr "تاتامی شماره 1"
+
+#~ msgid "Contest area 2"
+#~ msgstr "تاتامی شماره 2"
+
+#~ msgid "Contest area 3"
+#~ msgstr "تاتامی شماره 3"
+
+#~ msgid "Contest area 4"
+#~ msgstr "تاتامی شماره 4"
+
+#~ msgid "Contest area 5"
+#~ msgstr "تاتامی شماره 5"
+
+#~ msgid "Contest area 6"
+#~ msgstr "تاتامی شماره 6"
+
+#~ msgid "Contest area 7"
+#~ msgstr "تاتامی شماره 7"
+
+#~ msgid "Contest area 8"
+#~ msgstr "تاتامی شماره 8"
+
+#~ msgid "Contest duration automatically from JudoShiai program"
+#~ msgstr "زمان مسابقه به صورت خودکار از طریق جودوشیایی دریافت گردد"
+
+#~ msgid "Contest duration: 2 min"
+#~ msgstr "زمان مسابقه: 2دقیقه"
+
+#~ msgid "Contest duration: 2 min (short pin times)"
+#~ msgstr "زمان مسابقه: 2دقیقه (اوسای کومی15 ثانیه ای)"
+
+#~ msgid "Contest duration: 3 min"
+#~ msgstr "زمان مسابقه: 3دقیقه"
+
+#~ msgid "Contest duration: 4 min"
+#~ msgstr "زمان مسابقه  4دقیقه"
+
+#~ msgid "Contest duration: 5 min"
+#~ msgstr "زمان مسابقه: 5دقیقه"
+
+#~ msgid "Contest duration: automatic"
+#~ msgstr "زمان مسابقه: خودکار"
+
+#~ msgid "Golden Sc-ore:"
+#~ msgstr "وقت طلایی:"
+
+#~ msgid "Hansokumake to blue"
+#~ msgstr "هانسوکوماکه به آبی"
+
+#~ msgid "Hansokumake to white"
+#~ msgstr "هانسوکوماکه به سفید"
+
+#~ msgid "Judotimer"
+#~ msgstr "جودو تایمر"
+
+#~ msgid "Leave points for GS"
+#~ msgstr "Залишити оцінки при ГС"
+
+#~ msgid "Master mode"
+#~ msgstr "حالت حرفه ای"
+
+#~ msgid "Match duration: 2 min E-juniors"
+#~ msgstr "مدت مسابقه 2 دقیقه, اوسای کومی15 ثانیه"
+
+#~ msgid "Move Competitors to Category..."
+#~ msgstr "انتقال ورزشکاران به وزن ..."
+
+#~ msgid "No koka"
+#~ msgstr "بدون \"کوکا\""
+
+#~ msgid "Place To"
+#~ msgstr "جانمایی به"
+
+#~ msgid "Short pin times"
+#~ msgstr "اوسای کومی کوتاه"
+
+#~ msgid "Tatamis"
+#~ msgstr "تاتامی ها"
+
+#~ msgid "Show Deleted"
+#~ msgstr "نمایش حذف شده ها"
+
+#~ msgid "Contest area 9"
+#~ msgstr "تاتامی 9"
+
+#~ msgid "Contest area 10"
+#~ msgstr "تاتامی 10"
+
+#~ msgid "Move match "
+#~ msgstr "انتقال مسابقه"
+
+#~ msgid "to tatami and/or"
+#~ msgstr "به تاتامی و/یا"
+
+#~ msgid " delay"
+#~ msgstr "با تاخیر"
+
+#~ msgid "Duplicate seedings:\n"
+#~ msgstr "سیدبندی تکراری:\n"
+
+#~ msgid "seeding"
+#~ msgstr "سیدبندی"
+
+#~ msgid "defined"
+#~ msgstr "تعریف"
+
+#~ msgid "times"
+#~ msgstr "دفعات"
+
+#~ msgid "Duplicate club seedings:\n"
+#~ msgstr "سید بندی تکراری باشگاه:\n"
+
+#~ msgid "Missing category definitions:\n"
+#~ msgstr "مسیر دسته بندی گم شده:\n"
+
+#~ msgid "is not"
+#~ msgstr "نیست"
+
+#~ msgid "Typing errors:\n"
+#~ msgstr "نوشتن خطاها:\n"
+
+#~ msgid "Possible duplicate competitors:\n"
+#~ msgstr "تکراری های ممکن ورزشکاران:\n"
+
+#~ msgid "Possible duplicate club names:\n"
+#~ msgstr "نام های ممکن تکراری باشگاه:\n"
+
+#~ msgid "Suspicious weights:\n"
+#~ msgstr "وزن های مشکوک:\n"
+
+#~ msgid "warnings"
+#~ msgstr "اخطار ها"
+
+#~ msgid "- - -"
+#~ msgstr "- - -"
+
+#~ msgid "If equal score less shido wins"
+#~ msgstr "برای رتبه بندی برابر، شیدو را مقایسه کنید"
+
+#~ msgid "Corrupted competitor data:\n"
+#~ msgstr "داده های ورزشکار خراب است:\n"
+
+#~ msgid "Corrupted category data:\n"
+#~ msgstr "داده های ورزشکار خراب است:\n"
+
+#~ msgid "Remote address"
+#~ msgstr "آدرس ریموت"
+
+#~ msgid "Remote Control"
+#~ msgstr "کنترل"
+
+#~ msgid "Custom layout file..."
+#~ msgstr "فایل پوسته سفارشی "
+
+#~ msgid "Move Matches..."
+#~ msgstr "انتقال مسابقه ها ..."
+
+#~ msgid "Use IJF points:"
+#~ msgstr "استفاده از امتیازات فدراسیون جهانی"

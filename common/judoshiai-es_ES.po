@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: oh2ncp@kolumbus.fi\n"
 "POT-Creation-Date: 2019-01-03 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Seleccionar un tipo de letra"
 
 #: ../judotimer/menus.c
-msgid "About JudoTimer"
-msgstr "Acerca de JudoTimer"
+msgid "About Judotimer"
+msgstr "Acerca de Judotimer"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -631,6 +631,18 @@ msgstr ""
 msgid "NOT CONNECTED"
 msgstr ""
 
+#: ../judoshiai/competitors.c ../judoshiai/matches.c
+msgid "Comment"
+msgstr "Comentario"
+
+#: ../judoshiai/competitors.c
+msgid "Seeding"
+msgstr "Cabeza de Serie"
+
+#: ../judoshiai/competitors.c
+msgid "Club Seeding"
+msgstr "Club Cabeza de Serie"
+
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "¡Ya exite!"
@@ -760,14 +772,6 @@ msgstr ""
 #: ../judoshiai/competitors.c ../judoshiai/matches.c
 msgid "Group"
 msgstr "Grupo"
-
-#: ../judoshiai/competitors.c
-msgid "Seeding"
-msgstr "Cabeza de Serie"
-
-#: ../judoshiai/competitors.c
-msgid "Club Seeding"
-msgstr "Club Cabeza de Serie"
 
 #: ../judoshiai/competitors.c
 msgid "Empty categories removed"
@@ -1011,7 +1015,7 @@ msgstr "¡Competidor no encontrado!"
 msgid "Add"
 msgstr "Añadir"
 
-#: ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c ../judoshiai/write-results.c
 msgid "Name"
 msgstr ""
 
@@ -1176,6 +1180,10 @@ msgid "No Repechg"
 msgstr "ESP Sin repesca"
 
 #: ../judoshiai/match-data.c
+msgid "GBR Simple Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
 msgid "SWE Enkelt återkv"
 msgstr "SWE. Rep simple"
 
@@ -1250,6 +1258,10 @@ msgstr "EST Eliminatoria doble"
 #: ../judoshiai/match-data.c
 msgid "Single Elimination"
 msgstr "ESP Eliminatoria sin repesca"
+
+#: ../judoshiai/match-data.c
+msgid "GBR Simple Repechage"
+msgstr ""
 
 #: ../judoshiai/match-data.c
 msgid "SWE Single Repechage"
@@ -1388,10 +1400,6 @@ msgstr "Azul"
 #: ../judoshiai/matches.c
 msgid "Points"
 msgstr "Puntos"
-
-#: ../judoshiai/matches.c
-msgid "Comment"
-msgstr "Comentario"
 
 #: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
@@ -1570,6 +1578,10 @@ msgid "Restore Removed"
 msgstr "Restaurar eliminados"
 
 #: ../judoshiai/menus.c
+msgid "Delete Removed"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Bar Code Search"
 msgstr "Búsqueda por código de barras"
 
@@ -1588,6 +1600,14 @@ msgstr "Eliminar vacias"
 #: ../judoshiai/menus.c
 msgid "Create Categories"
 msgstr "Crear categorias"
+
+#: ../judoshiai/menus.c
+msgid "Init Colors"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Show Colors"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Print All"
@@ -1748,6 +1768,22 @@ msgstr "Retraso automático de combates"
 msgid "Print Logo"
 msgstr "Imprimir logo"
 
+#: ../judoshiai/menus.c
+msgid "Show"
+msgstr "Mostrar"
+
+#: ../judoshiai/menus.c ../judoshiai/set-categories.c
+msgid "Reset to Defaults"
+msgstr "Resetear a valores por defecto"
+
+#: ../judoshiai/menus.c
+msgid "Scale Serial Interface..."
+msgstr "Interface de serie para la báscula..."
+
+#: ../judoshiai/menus.c
+msgid "Medal Matches..."
+msgstr "Combates de Medallas..."
+
 #: ../judoshiai/menus.c ../judoweight/menus.c
 msgid "Scale Serial Interface"
 msgstr "Interface de serie para la báscula"
@@ -1774,6 +1810,10 @@ msgstr ""
 
 #: ../judoshiai/popup-menu.c
 msgid "all selected categories"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Select a color"
 msgstr ""
 
 #: ../judoshiai/popup-menu.c
@@ -1834,6 +1874,10 @@ msgstr "Imprimir Tarjetas Acreditación Seleccionadas"
 
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Color..."
 msgstr ""
 
 #: ../judoshiai/print-texts.c
@@ -2186,12 +2230,12 @@ msgid "System"
 msgstr "Sistema"
 
 #: ../judoshiai/properties.c
-msgid "General"
-msgstr "General"
-
-#: ../judoshiai/properties.c
 msgid "Initialize"
 msgstr "Inicializar"
+
+#: ../judoshiai/properties.c
+msgid "General"
+msgstr "General"
 
 #: ../judoshiai/properties.c
 msgid "Rules"
@@ -2217,13 +2261,13 @@ msgstr "Nombre de los grados"
 msgid "Statistics"
 msgstr "Estadísticas:"
 
+#: ../judoshiai/properties.c
+msgid "Color"
+msgstr ""
+
 #: ../judoshiai/search.c
 msgid "Search"
 msgstr "Buscar"
-
-#: ../judoshiai/set-categories.c
-msgid "Reset to Defaults"
-msgstr "Resetear a valores por defecto"
 
 #: ../judoshiai/set-categories.c
 msgid "Men"
@@ -2356,6 +2400,26 @@ msgstr "Crear estadísticaas"
 #: ../judoshiai/write-results.c
 msgid "Print SVG"
 msgstr "Imprimir SVG"
+
+#: ../judoshiai/write-results.c
+msgid "Extra Links"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Link"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "(Example)"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Embed"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "New Window"
+msgstr ""
 
 #: ../judoinfo/main.c ../judojudogi/main.c
 msgid "Category starts"
@@ -2565,14 +2629,14 @@ msgstr ""
 msgid "About JudoProxy"
 msgstr ""
 
+#~ msgid "About JudoTimer"
+#~ msgstr "Acerca de JudoTimer"
+
 #~ msgid "Hansokumake to white"
 #~ msgstr "Hansoku-make Blanco"
 
 #~ msgid "Hansokumake to blue"
 #~ msgstr "Hansoku-make Azul"
-
-#~ msgid "About Judotimer"
-#~ msgstr "Acerca de Judotimer"
 
 #~ msgid "Match duration: 2 min E-juniors"
 #~ msgstr "Duración del combate: 2 min E-junior"
@@ -2652,12 +2716,6 @@ msgstr ""
 #~ msgid "Tatamis"
 #~ msgstr "Tatamis"
 
-#~ msgid "Scale Serial Interface..."
-#~ msgstr "Interface de serie para la báscula..."
-
-#~ msgid "Medal Matches..."
-#~ msgstr "Combates de Medallas..."
-
 #~ msgid "Move Competitors to Category..."
 #~ msgstr "Mover competidores a la categoria..."
 
@@ -2702,9 +2760,6 @@ msgstr ""
 
 #~ msgid "Leave points for GS"
 #~ msgstr "Mantener puntos en GS"
-
-#~ msgid "Show"
-#~ msgstr "Mostrar"
 
 #~ msgid "Show Deleted"
 #~ msgstr "Mostrar Borrados"

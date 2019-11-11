@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: oh2ncp@kolumbus.fi\n"
 "POT-Creation-Date: 2019-01-03 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Valitse kirjasin"
 
 #: ../judotimer/menus.c
-msgid "About JudoTimer"
-msgstr "Tietoja JudoTimerista"
+msgid "About Judotimer"
+msgstr "Tietoja Judotimerista"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -631,6 +631,18 @@ msgstr "TÄMÄ OHJELMA"
 msgid "NOT CONNECTED"
 msgstr "EI YHTEYTTÄ"
 
+#: ../judoshiai/competitors.c ../judoshiai/matches.c
+msgid "Comment"
+msgstr "Kommentti"
+
+#: ../judoshiai/competitors.c
+msgid "Seeding"
+msgstr "Sijoitus"
+
+#: ../judoshiai/competitors.c
+msgid "Club Seeding"
+msgstr "Sijoitus seurassa"
+
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "on jo olemassa!"
@@ -760,14 +772,6 @@ msgstr "Joukkue"
 #: ../judoshiai/competitors.c ../judoshiai/matches.c
 msgid "Group"
 msgstr "Ryhmä"
-
-#: ../judoshiai/competitors.c
-msgid "Seeding"
-msgstr "Sijoitus"
-
-#: ../judoshiai/competitors.c
-msgid "Club Seeding"
-msgstr "Sijoitus seurassa"
 
 #: ../judoshiai/competitors.c
 msgid "Empty categories removed"
@@ -1009,7 +1013,7 @@ msgstr "Kilpailijaa ei löytynyt!"
 msgid "Add"
 msgstr "Lisää"
 
-#: ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c ../judoshiai/write-results.c
 msgid "Name"
 msgstr "Nimi"
 
@@ -1176,6 +1180,10 @@ msgid "No Repechg"
 msgstr "Ei keräilyjä"
 
 #: ../judoshiai/match-data.c
+msgid "GBR Simple Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
 msgid "SWE Enkelt återkv"
 msgstr "SWE Lyhyet ker."
 
@@ -1250,6 +1258,10 @@ msgstr "EST Pitkä keräily"
 #: ../judoshiai/match-data.c
 msgid "Single Elimination"
 msgstr "Ei keräilyjä"
+
+#: ../judoshiai/match-data.c
+msgid "GBR Simple Repechage"
+msgstr ""
 
 #: ../judoshiai/match-data.c
 msgid "SWE Single Repechage"
@@ -1388,10 +1400,6 @@ msgstr "Sininen"
 #: ../judoshiai/matches.c
 msgid "Points"
 msgstr "Pisteet"
-
-#: ../judoshiai/matches.c
-msgid "Comment"
-msgstr "Kommentti"
 
 #: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
@@ -1572,6 +1580,10 @@ msgid "Restore Removed"
 msgstr "Palauta poistetut"
 
 #: ../judoshiai/menus.c
+msgid "Delete Removed"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Bar Code Search"
 msgstr "Viivakoodihaku"
 
@@ -1590,6 +1602,14 @@ msgstr "Poista tyhjät"
 #: ../judoshiai/menus.c
 msgid "Create Categories"
 msgstr "Muodosta viralliset sarjat"
+
+#: ../judoshiai/menus.c
+msgid "Init Colors"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Show Colors"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Print All"
@@ -1750,6 +1770,22 @@ msgstr "Autom. viivytys"
 msgid "Print Logo"
 msgstr "Tulosta logo"
 
+#: ../judoshiai/menus.c
+msgid "Show"
+msgstr "Näytä"
+
+#: ../judoshiai/menus.c ../judoshiai/set-categories.c
+msgid "Reset to Defaults"
+msgstr "Palauta oletusarvot"
+
+#: ../judoshiai/menus.c
+msgid "Scale Serial Interface..."
+msgstr "Vaa'an liitäntä..."
+
+#: ../judoshiai/menus.c
+msgid "Medal Matches..."
+msgstr "Mitaliottelut..."
+
 #: ../judoshiai/menus.c ../judoweight/menus.c
 msgid "Scale Serial Interface"
 msgstr "Vaa'an liitäntä"
@@ -1777,6 +1813,10 @@ msgstr "jokaisesta valitusta sarjasta"
 #: ../judoshiai/popup-menu.c
 msgid "all selected categories"
 msgstr "kaikista valituista sarjoista"
+
+#: ../judoshiai/popup-menu.c
+msgid "Select a color"
+msgstr ""
 
 #: ../judoshiai/popup-menu.c
 msgid "already exists"
@@ -1837,6 +1877,10 @@ msgstr "Tulosta valitut akkreditointikortit"
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
 msgstr "Tulosta valitut akreditointikortit oletuskirjoittimelle"
+
+#: ../judoshiai/popup-menu.c
+msgid "Color..."
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Finnish"
@@ -2188,12 +2232,12 @@ msgid "System"
 msgstr "Järjestelmä"
 
 #: ../judoshiai/properties.c
-msgid "General"
-msgstr "Yleiset asetukset"
-
-#: ../judoshiai/properties.c
 msgid "Initialize"
 msgstr "Alusta"
+
+#: ../judoshiai/properties.c
+msgid "General"
+msgstr "Yleiset asetukset"
 
 #: ../judoshiai/properties.c
 msgid "Rules"
@@ -2219,13 +2263,13 @@ msgstr "Vyöarvojen nimet"
 msgid "Statistics"
 msgstr "Tilastot"
 
+#: ../judoshiai/properties.c
+msgid "Color"
+msgstr ""
+
 #: ../judoshiai/search.c
 msgid "Search"
 msgstr "Etsi"
-
-#: ../judoshiai/set-categories.c
-msgid "Reset to Defaults"
-msgstr "Palauta oletusarvot"
 
 #: ../judoshiai/set-categories.c
 msgid "Men"
@@ -2358,6 +2402,26 @@ msgstr "Tee tilastot"
 #: ../judoshiai/write-results.c
 msgid "Print SVG"
 msgstr "Tulosta SVG"
+
+#: ../judoshiai/write-results.c
+msgid "Extra Links"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Link"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "(Example)"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Embed"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "New Window"
+msgstr ""
 
 #: ../judoinfo/main.c ../judojudogi/main.c
 msgid "Category starts"
@@ -2567,14 +2631,14 @@ msgstr ""
 msgid "About JudoProxy"
 msgstr ""
 
+#~ msgid "About JudoTimer"
+#~ msgstr "Tietoja JudoTimerista"
+
 #~ msgid "Hansokumake to white"
 #~ msgstr "Hansoku-make valkoiselle"
 
 #~ msgid "Hansokumake to blue"
 #~ msgstr "Hansoku-make siniselle"
-
-#~ msgid "About Judotimer"
-#~ msgstr "Tietoja Judotimerista"
 
 #~ msgid "Match duration: 2 min E-juniors"
 #~ msgstr "Otteluaika: 2 min E-junnut"
@@ -2663,12 +2727,6 @@ msgstr ""
 #~ msgid "Tatamis"
 #~ msgstr "Tatamille"
 
-#~ msgid "Scale Serial Interface..."
-#~ msgstr "Vaa'an liitäntä..."
-
-#~ msgid "Medal Matches..."
-#~ msgstr "Mitaliottelut..."
-
 #~ msgid "Move Competitors to Category..."
 #~ msgstr "Siirra kilpailijat sarjaan..."
 
@@ -2722,9 +2780,6 @@ msgstr ""
 
 #~ msgid "Leave points for GS"
 #~ msgstr "Jätä pisteet tauluun"
-
-#~ msgid "Show"
-#~ msgstr "Näytä"
 
 #~ msgid "Show Deleted"
 #~ msgstr "Näytä poistetut"

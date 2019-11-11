@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: oh2ncp@kolumbus.fi\n"
 "POT-Creation-Date: 2019-01-03 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -65,7 +65,7 @@ msgid "Select font"
 msgstr "Välj typsnitt"
 
 #: ../judotimer/menus.c
-msgid "About JudoTimer"
+msgid "About Judotimer"
 msgstr "Om Judotimer"
 
 #: ../judotimer/menus.c
@@ -631,6 +631,18 @@ msgstr ""
 msgid "NOT CONNECTED"
 msgstr ""
 
+#: ../judoshiai/competitors.c ../judoshiai/matches.c
+msgid "Comment"
+msgstr "Kommentär"
+
+#: ../judoshiai/competitors.c
+msgid "Seeding"
+msgstr "Seedning"
+
+#: ../judoshiai/competitors.c
+msgid "Club Seeding"
+msgstr "Klubb seedning"
+
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "finns redan!"
@@ -760,14 +772,6 @@ msgstr ""
 #: ../judoshiai/competitors.c ../judoshiai/matches.c
 msgid "Group"
 msgstr "Grupp"
-
-#: ../judoshiai/competitors.c
-msgid "Seeding"
-msgstr "Seedning"
-
-#: ../judoshiai/competitors.c
-msgid "Club Seeding"
-msgstr "Klubb seedning"
 
 #: ../judoshiai/competitors.c
 msgid "Empty categories removed"
@@ -1009,7 +1013,7 @@ msgstr "Inga tävlande hittas!"
 msgid "Add"
 msgstr "Lägga till"
 
-#: ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c ../judoshiai/write-results.c
 msgid "Name"
 msgstr "Namn"
 
@@ -1174,6 +1178,10 @@ msgid "No Repechg"
 msgstr ""
 
 #: ../judoshiai/match-data.c
+msgid "GBR Simple Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
 msgid "SWE Enkelt återkv"
 msgstr ""
 
@@ -1247,6 +1255,10 @@ msgstr ""
 
 #: ../judoshiai/match-data.c
 msgid "Single Elimination"
+msgstr ""
+
+#: ../judoshiai/match-data.c
+msgid "GBR Simple Repechage"
 msgstr ""
 
 #: ../judoshiai/match-data.c
@@ -1386,10 +1398,6 @@ msgstr "Blå"
 #: ../judoshiai/matches.c
 msgid "Points"
 msgstr "Poäng"
-
-#: ../judoshiai/matches.c
-msgid "Comment"
-msgstr "Kommentär"
 
 #: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
@@ -1568,6 +1576,10 @@ msgid "Restore Removed"
 msgstr "Återställa borttagen"
 
 #: ../judoshiai/menus.c
+msgid "Delete Removed"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Bar Code Search"
 msgstr "Sök på streckkod"
 
@@ -1586,6 +1598,14 @@ msgstr "Ta bort tomma"
 #: ../judoshiai/menus.c
 msgid "Create Categories"
 msgstr "Skapa kategorier"
+
+#: ../judoshiai/menus.c
+msgid "Init Colors"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Show Colors"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Print All"
@@ -1746,6 +1766,22 @@ msgstr "Automatisk matchförsening"
 msgid "Print Logo"
 msgstr "Skriv ut logo"
 
+#: ../judoshiai/menus.c
+msgid "Show"
+msgstr "Visa"
+
+#: ../judoshiai/menus.c ../judoshiai/set-categories.c
+msgid "Reset to Defaults"
+msgstr "Återställ standard"
+
+#: ../judoshiai/menus.c
+msgid "Scale Serial Interface..."
+msgstr "Vikt vågs-anslutning"
+
+#: ../judoshiai/menus.c
+msgid "Medal Matches..."
+msgstr "Medaljmatcher"
+
 #: ../judoshiai/menus.c ../judoweight/menus.c
 msgid "Scale Serial Interface"
 msgstr "Vikt vågs-anslutning"
@@ -1772,6 +1808,10 @@ msgstr ""
 
 #: ../judoshiai/popup-menu.c
 msgid "all selected categories"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Select a color"
 msgstr ""
 
 #: ../judoshiai/popup-menu.c
@@ -1832,6 +1872,10 @@ msgstr "Skriv ut valda ackrediteringskort"
 
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Color..."
 msgstr ""
 
 #: ../judoshiai/print-texts.c
@@ -2184,12 +2228,12 @@ msgid "System"
 msgstr "System"
 
 #: ../judoshiai/properties.c
-msgid "General"
-msgstr "Allmänt"
-
-#: ../judoshiai/properties.c
 msgid "Initialize"
 msgstr "Initiera"
+
+#: ../judoshiai/properties.c
+msgid "General"
+msgstr "Allmänt"
 
 #: ../judoshiai/properties.c
 msgid "Rules"
@@ -2215,13 +2259,13 @@ msgstr "Grad namnen"
 msgid "Statistics"
 msgstr "Statistik"
 
+#: ../judoshiai/properties.c
+msgid "Color"
+msgstr ""
+
 #: ../judoshiai/search.c
 msgid "Search"
 msgstr "Sök"
-
-#: ../judoshiai/set-categories.c
-msgid "Reset to Defaults"
-msgstr "Återställ standard"
 
 #: ../judoshiai/set-categories.c
 msgid "Men"
@@ -2354,6 +2398,26 @@ msgstr "Skapa statistik"
 #: ../judoshiai/write-results.c
 msgid "Print SVG"
 msgstr "Skriv ut SVG"
+
+#: ../judoshiai/write-results.c
+msgid "Extra Links"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Link"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "(Example)"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Embed"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "New Window"
+msgstr ""
 
 #: ../judoinfo/main.c ../judojudogi/main.c
 msgid "Category starts"
@@ -2563,14 +2627,14 @@ msgstr ""
 msgid "About JudoProxy"
 msgstr ""
 
+#~ msgid "About JudoTimer"
+#~ msgstr "Om Judotimer"
+
 #~ msgid "Hansokumake to white"
 #~ msgstr "Hansoku-make till vit"
 
 #~ msgid "Hansokumake to blue"
 #~ msgstr "Hansoku-make till blå"
-
-#~ msgid "About Judotimer"
-#~ msgstr "Om Judotimer"
 
 #~ msgid "Match duration: 2 min E-juniors"
 #~ msgstr "Matchtid: 2 min U11"
@@ -2659,12 +2723,6 @@ msgstr ""
 #~ msgid "Tatamis"
 #~ msgstr "Matchområden"
 
-#~ msgid "Scale Serial Interface..."
-#~ msgstr "Vikt vågs-anslutning"
-
-#~ msgid "Medal Matches..."
-#~ msgstr "Medaljmatcher"
-
 #~ msgid "Move Competitors to Category..."
 #~ msgstr "Flytta tävlande till kategori..."
 
@@ -2715,9 +2773,6 @@ msgstr ""
 
 #~ msgid "If equal score less shido wins"
 #~ msgstr "Om lika poängen minst antal Shido vinner"
-
-#~ msgid "Show"
-#~ msgstr "Visa"
 
 #~ msgid "Show Deleted"
 #~ msgstr "Visa borttagna"

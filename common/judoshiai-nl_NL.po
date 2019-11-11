@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: oh2ncp@kolumbus.fi\n"
 "POT-Creation-Date: 2019-01-03 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Selecteer lettertype"
 
 #: ../judotimer/menus.c
-msgid "About JudoTimer"
-msgstr "Over JudoTimer"
+msgid "About Judotimer"
+msgstr "Over Judotimer"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -631,6 +631,18 @@ msgstr "DEZE TOEPASSING"
 msgid "NOT CONNECTED"
 msgstr "NIET VERBONDEN"
 
+#: ../judoshiai/competitors.c ../judoshiai/matches.c
+msgid "Comment"
+msgstr "Commentaar"
+
+#: ../judoshiai/competitors.c
+msgid "Seeding"
+msgstr "Geplaatst"
+
+#: ../judoshiai/competitors.c
+msgid "Club Seeding"
+msgstr "Vereniging geplaatst"
+
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "bestaat al!"
@@ -760,14 +772,6 @@ msgstr "Team"
 #: ../judoshiai/competitors.c ../judoshiai/matches.c
 msgid "Group"
 msgstr "Groep"
-
-#: ../judoshiai/competitors.c
-msgid "Seeding"
-msgstr "Geplaatst"
-
-#: ../judoshiai/competitors.c
-msgid "Club Seeding"
-msgstr "Vereniging geplaatst"
 
 #: ../judoshiai/competitors.c
 msgid "Empty categories removed"
@@ -1010,7 +1014,7 @@ msgstr "Geen deelnemer gevonden"
 msgid "Add"
 msgstr "Voeg toe"
 
-#: ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c ../judoshiai/write-results.c
 msgid "Name"
 msgstr "Naam"
 
@@ -1176,6 +1180,10 @@ msgid "No Repechg"
 msgstr "Geen Herkansing"
 
 #: ../judoshiai/match-data.c
+msgid "GBR Simple Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
 msgid "SWE Enkelt återkv"
 msgstr "SWE Enkelvoud. her"
 
@@ -1250,6 +1258,10 @@ msgstr "EST Dubbele Eliminatie"
 #: ../judoshiai/match-data.c
 msgid "Single Elimination"
 msgstr "Enkele Eliminatie"
+
+#: ../judoshiai/match-data.c
+msgid "GBR Simple Repechage"
+msgstr ""
 
 #: ../judoshiai/match-data.c
 msgid "SWE Single Repechage"
@@ -1388,10 +1400,6 @@ msgstr "Blauw"
 #: ../judoshiai/matches.c
 msgid "Points"
 msgstr "Punten"
-
-#: ../judoshiai/matches.c
-msgid "Comment"
-msgstr "Commentaar"
 
 #: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
@@ -1570,6 +1578,10 @@ msgid "Restore Removed"
 msgstr "Herstel verwijderd"
 
 #: ../judoshiai/menus.c
+msgid "Delete Removed"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Bar Code Search"
 msgstr "Zoeken op barcode"
 
@@ -1588,6 +1600,14 @@ msgstr "Verwijder lege"
 #: ../judoshiai/menus.c
 msgid "Create Categories"
 msgstr "Maak Categorieën"
+
+#: ../judoshiai/menus.c
+msgid "Init Colors"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Show Colors"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Print All"
@@ -1748,6 +1768,22 @@ msgstr "Automatische Wedstrijd Uitstel"
 msgid "Print Logo"
 msgstr "Logo Afdrukken"
 
+#: ../judoshiai/menus.c
+msgid "Show"
+msgstr "Weergeven"
+
+#: ../judoshiai/menus.c ../judoshiai/set-categories.c
+msgid "Reset to Defaults"
+msgstr "Herstel naar standaard instellingen"
+
+#: ../judoshiai/menus.c
+msgid "Scale Serial Interface..."
+msgstr "Weegschaal seriële verbinding..."
+
+#: ../judoshiai/menus.c
+msgid "Medal Matches..."
+msgstr "Medaille wedstrijden..."
+
 #: ../judoshiai/menus.c ../judoweight/menus.c
 msgid "Scale Serial Interface"
 msgstr "Weegschaal seriële verbinding"
@@ -1774,6 +1810,10 @@ msgstr ""
 
 #: ../judoshiai/popup-menu.c
 msgid "all selected categories"
+msgstr ""
+
+#: ../judoshiai/popup-menu.c
+msgid "Select a color"
 msgstr ""
 
 #: ../judoshiai/popup-menu.c
@@ -1835,6 +1875,10 @@ msgstr "Geselecteerde Deelnemerskaarten Afdrukken"
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
 msgstr "Geselecteerde Deelnemerskaarten Afdrukken Naar Standaard Printer"
+
+#: ../judoshiai/popup-menu.c
+msgid "Color..."
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Finnish"
@@ -2186,12 +2230,12 @@ msgid "System"
 msgstr "Systeem"
 
 #: ../judoshiai/properties.c
-msgid "General"
-msgstr "Algemeen"
-
-#: ../judoshiai/properties.c
 msgid "Initialize"
 msgstr "Initialiseren"
+
+#: ../judoshiai/properties.c
+msgid "General"
+msgstr "Algemeen"
 
 #: ../judoshiai/properties.c
 msgid "Rules"
@@ -2217,13 +2261,13 @@ msgstr "Graad namen"
 msgid "Statistics"
 msgstr "Statistieken"
 
+#: ../judoshiai/properties.c
+msgid "Color"
+msgstr ""
+
 #: ../judoshiai/search.c
 msgid "Search"
 msgstr "Zoeken"
-
-#: ../judoshiai/set-categories.c
-msgid "Reset to Defaults"
-msgstr "Herstel naar standaard instellingen"
 
 #: ../judoshiai/set-categories.c
 msgid "Men"
@@ -2356,6 +2400,26 @@ msgstr "Creeër statistieken"
 #: ../judoshiai/write-results.c
 msgid "Print SVG"
 msgstr "SVG Afdrukken"
+
+#: ../judoshiai/write-results.c
+msgid "Extra Links"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Link"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "(Example)"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Embed"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "New Window"
+msgstr ""
 
 #: ../judoinfo/main.c ../judojudogi/main.c
 msgid "Category starts"
@@ -2565,14 +2629,14 @@ msgstr ""
 msgid "About JudoProxy"
 msgstr ""
 
+#~ msgid "About JudoTimer"
+#~ msgstr "Over JudoTimer"
+
 #~ msgid "Hansokumake to white"
 #~ msgstr "Hansokumake voor wit"
 
 #~ msgid "Hansokumake to blue"
 #~ msgstr "Hansokumake voor blauw"
-
-#~ msgid "About Judotimer"
-#~ msgstr "Over Judotimer"
 
 #~ msgid "Match duration: 2 min E-juniors"
 #~ msgstr "Wedstrijd duur: 2 min E-junioren"
@@ -2661,12 +2725,6 @@ msgstr ""
 #~ msgid "Tatamis"
 #~ msgstr "Matten (Tatamis)"
 
-#~ msgid "Scale Serial Interface..."
-#~ msgstr "Weegschaal seriële verbinding..."
-
-#~ msgid "Medal Matches..."
-#~ msgstr "Medaille wedstrijden..."
-
 #~ msgid "Move Competitors to Category..."
 #~ msgstr "Deelnemers verplaatsen naar categorie..."
 
@@ -2714,9 +2772,6 @@ msgstr ""
 
 #~ msgid "Leave points for GS"
 #~ msgstr "Laat punten staan voor GS"
-
-#~ msgid "Show"
-#~ msgstr "Weergeven"
 
 #~ msgid "Show Deleted"
 #~ msgstr "Verwijderde Weergeven"

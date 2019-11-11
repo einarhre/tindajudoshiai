@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Schriftart auswählen"
 
 #: ../judotimer/menus.c
-msgid "About JudoTimer"
-msgstr ""
+msgid "About Judotimer"
+msgstr "Über Judotimer"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -631,6 +631,18 @@ msgstr "DIESE ANWENDUNG"
 msgid "NOT CONNECTED"
 msgstr "NICHT VERBUNDEN"
 
+#: ../judoshiai/competitors.c ../judoshiai/matches.c
+msgid "Comment"
+msgstr "Kommentar"
+
+#: ../judoshiai/competitors.c
+msgid "Seeding"
+msgstr "Setzplatz"
+
+#: ../judoshiai/competitors.c
+msgid "Club Seeding"
+msgstr "Vereinssetzplatz"
+
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "besteht bereits!"
@@ -760,14 +772,6 @@ msgstr "Mannschaft"
 #: ../judoshiai/competitors.c ../judoshiai/matches.c
 msgid "Group"
 msgstr "Gruppe"
-
-#: ../judoshiai/competitors.c
-msgid "Seeding"
-msgstr "Setzplatz"
-
-#: ../judoshiai/competitors.c
-msgid "Club Seeding"
-msgstr "Vereinssetzplatz"
 
 #: ../judoshiai/competitors.c
 msgid "Empty categories removed"
@@ -1009,7 +1013,7 @@ msgstr "Kein Kämpfer gefunden!"
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: ../judoshiai/httpd.c
+#: ../judoshiai/httpd.c ../judoshiai/write-results.c
 msgid "Name"
 msgstr "Name"
 
@@ -1174,6 +1178,10 @@ msgid "No Repechg"
 msgstr "Ohne Trostrunde"
 
 #: ../judoshiai/match-data.c
+msgid "GBR Simple Repchg"
+msgstr ""
+
+#: ../judoshiai/match-data.c
 msgid "SWE Enkelt återkv"
 msgstr ""
 
@@ -1248,6 +1256,10 @@ msgstr "EST Doppel-KO-System"
 #: ../judoshiai/match-data.c
 msgid "Single Elimination"
 msgstr "Einfaches KO-System"
+
+#: ../judoshiai/match-data.c
+msgid "GBR Simple Repechage"
+msgstr ""
 
 #: ../judoshiai/match-data.c
 msgid "SWE Single Repechage"
@@ -1386,10 +1398,6 @@ msgstr "Blau"
 #: ../judoshiai/matches.c
 msgid "Points"
 msgstr "Punkte"
-
-#: ../judoshiai/matches.c
-msgid "Comment"
-msgstr "Kommentar"
 
 #: ../judoshiai/medal-matches.c ../judoshiai/menus.c
 msgid "Move Medal Matches"
@@ -1568,6 +1576,10 @@ msgid "Restore Removed"
 msgstr "Gelöschte wiederherstellen"
 
 #: ../judoshiai/menus.c
+msgid "Delete Removed"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Bar Code Search"
 msgstr "Barcodesuche"
 
@@ -1586,6 +1598,14 @@ msgstr "Leere Klassen löschen"
 #: ../judoshiai/menus.c
 msgid "Create Categories"
 msgstr "Klassen erstellen"
+
+#: ../judoshiai/menus.c
+msgid "Init Colors"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Show Colors"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Print All"
@@ -1746,6 +1766,22 @@ msgstr "Automatische Kampfverzögerung"
 msgid "Print Logo"
 msgstr "Drucke Logo"
 
+#: ../judoshiai/menus.c
+msgid "Show"
+msgstr "Zeige"
+
+#: ../judoshiai/menus.c ../judoshiai/set-categories.c
+msgid "Reset to Defaults"
+msgstr "Auf Standard zurücksetzen"
+
+#: ../judoshiai/menus.c
+msgid "Scale Serial Interface..."
+msgstr "Serielle Schnittstelle zur Waage..."
+
+#: ../judoshiai/menus.c
+msgid "Medal Matches..."
+msgstr "Medaillenkämpfe..."
+
 #: ../judoshiai/menus.c ../judoweight/menus.c
 msgid "Scale Serial Interface"
 msgstr "Serielle Schnittstelle zur Waage"
@@ -1773,6 +1809,10 @@ msgstr "jeder ausgewählten Klasse."
 #: ../judoshiai/popup-menu.c
 msgid "all selected categories"
 msgstr "allen gewählten Klassen."
+
+#: ../judoshiai/popup-menu.c
+msgid "Select a color"
+msgstr ""
 
 #: ../judoshiai/popup-menu.c
 msgid "already exists"
@@ -1833,6 +1873,10 @@ msgstr "Druck für Auswahl ID-/Wiegekarten/Urkunden"
 #: ../judoshiai/popup-menu.c
 msgid "Print Selected Accreditation Cards To Default Printer"
 msgstr "Drucke ausgewählte Akkreditierungskarten auf Standarddrucker"
+
+#: ../judoshiai/popup-menu.c
+msgid "Color..."
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Finnish"
@@ -2192,12 +2236,12 @@ msgid "System"
 msgstr "System"
 
 #: ../judoshiai/properties.c
-msgid "General"
-msgstr "Allgemein"
-
-#: ../judoshiai/properties.c
 msgid "Initialize"
 msgstr "Initialisieren"
+
+#: ../judoshiai/properties.c
+msgid "General"
+msgstr "Allgemein"
 
 #: ../judoshiai/properties.c
 msgid "Rules"
@@ -2223,13 +2267,13 @@ msgstr "Graduierungen"
 msgid "Statistics"
 msgstr "Statistik"
 
+#: ../judoshiai/properties.c
+msgid "Color"
+msgstr ""
+
 #: ../judoshiai/search.c
 msgid "Search"
 msgstr "Suche"
-
-#: ../judoshiai/set-categories.c
-msgid "Reset to Defaults"
-msgstr "Auf Standard zurücksetzen"
 
 #: ../judoshiai/set-categories.c
 msgid "Men"
@@ -2362,6 +2406,26 @@ msgstr "Statistik erzeugen"
 #: ../judoshiai/write-results.c
 msgid "Print SVG"
 msgstr "SVG drucken"
+
+#: ../judoshiai/write-results.c
+msgid "Extra Links"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Link"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "(Example)"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "Embed"
+msgstr ""
+
+#: ../judoshiai/write-results.c
+msgid "New Window"
+msgstr ""
 
 #: ../judoinfo/main.c ../judojudogi/main.c
 msgid "Category starts"
@@ -2571,26 +2635,17 @@ msgstr "Neu Laden"
 msgid "About JudoProxy"
 msgstr "Über JudoProxy"
 
-#~ msgid "About Judotimer"
-#~ msgstr "Über Judotimer"
-
 #~ msgid "Judotimer"
 #~ msgstr "Judotimer"
 
 #~ msgid "Move Competitors to Category..."
 #~ msgstr "Verschiebe Kämpfer in Klasse..."
 
-#~ msgid "Scale Serial Interface..."
-#~ msgstr "Serielle Schnittstelle zur Waage..."
-
 #~ msgid "Scale Correction Table..."
 #~ msgstr "Waagen-Korrekturtabelle..."
 
 #~ msgid "Custom layout file..."
 #~ msgstr "Eigenes Layout aus Datei..."
-
-#~ msgid "Medal Matches..."
-#~ msgstr "Medaillenkämpfe..."
 
 #~ msgid "Move Matches..."
 #~ msgstr "Medaillenkämpfe verzögern..."
@@ -2723,9 +2778,6 @@ msgstr "Über JudoProxy"
 
 #~ msgid "If equal score less shido wins"
 #~ msgstr "Bei gleicher Punktzahl - Sieg mit weniger Shidos"
-
-#~ msgid "Show"
-#~ msgstr "Zeige"
 
 #~ msgid "Show Deleted"
 #~ msgstr "Zeige gelöschte"
