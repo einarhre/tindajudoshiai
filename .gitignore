@@ -1,5 +1,6 @@
 .gdbinit
 common/*.mo
+common/judoshiai.pot
 doc/*.pdf
 judoshiai/obj-*
 judotimer/obj-*
@@ -29,3 +30,7 @@ backup*
 *.patch
 a.out
 xx*
+/.settings/*
+/.project
+/.pydevproject
+/.cproject

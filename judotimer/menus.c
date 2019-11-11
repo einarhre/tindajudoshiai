@@ -358,7 +358,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 #endif
     /* Create the Contest menu content. */
     match0 = gtk_menu_item_new_with_label(_("Match duration: automatic"));
-    match1 = gtk_menu_item_new_with_label(_("Match duration: 2 min E-juniors"));
+    match1 = gtk_menu_item_new_with_label(_("Match duration: 2 min (short pin times)"));
     match2 = gtk_menu_item_new_with_label(_("Match duration: 2 min"));
     match3 = gtk_menu_item_new_with_label(_("Match duration: 3 min"));
     match4 = gtk_menu_item_new_with_label(_("Match duration: 4 min"));
@@ -435,7 +435,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     whitefirst      = gtk_check_menu_item_new_with_label("White first");
     no_texts        = gtk_check_menu_item_new_with_label("");
     showcomp        = gtk_menu_item_new_with_label("");
-    clock_only      = gtk_check_menu_item_new_with_label("View only clocks");
+    clock_only      = gtk_check_menu_item_new_with_label("View clocks only");
     layout_sel_1    = gtk_radio_menu_item_new_with_label(NULL, "");
     layout_sel_2    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)layout_sel_1, "");
     layout_sel_3    = gtk_radio_menu_item_new_with_label_from_widget((GtkRadioMenuItem *)layout_sel_1, "");
@@ -846,12 +846,12 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(help,         _("Help"));
     change_menu_label(undo,         _("Undo!"));
 
-    change_menu_label(match0, _("Contest duration: automatic"));
-    change_menu_label(match1, _("Contest duration: 2 min (short pin times)"));
-    change_menu_label(match2, _("Contest duration: 2 min"));
-    change_menu_label(match3, _("Contest duration: 3 min"));
-    change_menu_label(match4, _("Contest duration: 4 min"));
-    change_menu_label(match5, _("Contest duration: 5 min"));
+    change_menu_label(match0, _("Match duration: automatic"));
+    change_menu_label(match1, _("Match duration: 2 min (short pin times)"));
+    change_menu_label(match2, _("Match duration: 2 min"));
+    change_menu_label(match3, _("Match duration: 3 min"));
+    change_menu_label(match4, _("Match duration: 4 min"));
+    change_menu_label(match5, _("Match duration: 5 min"));
     change_menu_label(gs,     menu_text_with_dots(_("Golden Score")));
 
     set_menu_white_first( white_first );
@@ -888,7 +888,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(layout_sel_5, _("View clocks only"));
     change_menu_label(layout_sel_6, _("Display layout 5"));
     change_menu_label(layout_sel_7, _("Display customized layout"));
-    change_menu_label(custom_file,  _("Custom layout file..."));
+    change_menu_label(custom_file, menu_text_with_dots(_("Custom Layout File")));
 
     change_menu_label(name_layout,   _("Name format"));
     change_menu_label(name_layouts[0], _("Name Surname, Country/Club"));

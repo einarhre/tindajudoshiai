@@ -77,6 +77,8 @@ void db_validation(GtkWidget *w, gpointer data)
     gint warnings = 0;
     GtkTextBuffer *buffer;
     GtkWidget *vbox, *result, *ok;
+	gchar txt[256];
+	gchar _txt[256];
     GtkWindow *window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_title(GTK_WINDOW(window), _("Database Validation"));
     gtk_widget_set_size_request(GTK_WIDGET(window), SIZEX, SIZEY);
@@ -149,17 +151,16 @@ void db_validation(GtkWidget *w, gpointer data)
                         "group by category,seeding having seeding>0 and count(*)>1");
 
     if (rows > 0) {
-        insert_tag(buffer, _("Duplicate seedings:\n"), "bold", 1);
+    	g_snprintf(txt, "%s\n",sizeof txt,_("Duplicate seedings:"));
+        insert_tag(buffer, txt, "bold", 1);
         for (row = 0; row < rows; row++) {
             gchar *cat = db_get_data(row, "category");
             gchar *sed = db_get_data(row, "seeding");
             gchar *cnt = db_get_data(row, "count(*)");
-            gchar *txt = g_strdup_printf("  %s %s: %s %s %s %s %s.\n", 
-                                         _("Category"), cat,
-                                         _("seeding"), sed, _("defined"), cnt, _("times"));
+            g_snprintf(_txt,sizeof _txt,_("Category %s: seeding %s defined %s times."), cat, sed, cnt);
+            g_snprintf(txt,sizeof txt,"  %s\n", _txt);
 
             gtk_text_buffer_insert_at_cursor(buffer, txt, -1);
-            g_free(txt);
             warnings++;
         }
     }
@@ -172,17 +173,16 @@ void db_validation(GtkWidget *w, gpointer data)
                         "group by club,clubseeding having clubseeding>0 and count(*)>1");
 
     if (rows > 0) {
-        insert_tag(buffer, _("Duplicate club seedings:\n"), "bold", 1);
+    	g_snprintf(txt, sizeof txt, "%s\n",_("Duplicate club seedings:"));
+        insert_tag(buffer, txt, "bold", 1);
         for (row = 0; row < rows; row++) {
             gchar *club = db_get_data(row, "club");
             gchar *sed = db_get_data(row, "clubseeding");
             gchar *cnt = db_get_data(row, "count(*)");
-            gchar *txt = g_strdup_printf("  %s %s: %s %s %s %s %s.\n", 
-                                         _("Club"), club,
-                                         _("seeding"), sed, _("defined"), cnt, _("times"));
+            g_snprintf(_txt, sizeof _txt,_("Club %s: seeding %s defined %s times."), club, sed, cnt);
+            g_snprintf(txt, sizeof txt,"  %s\n", _txt);
 
             gtk_text_buffer_insert_at_cursor(buffer, txt, -1);
-            g_free(txt);
             warnings++;
         }
     }
@@ -195,14 +195,14 @@ void db_validation(GtkWidget *w, gpointer data)
                         "where categories.category=wclass)");
 
     if (rows > 0) {
-        insert_tag(buffer, _("Missing category definitions:\n"), "bold", 1);
+    	g_snprintf(txt, sizeof txt, "%s\n",_("Missing category definitions:"));
+        insert_tag(buffer, txt, "bold", 1);
         for (row = 0; row < rows; row++) {
             gchar *cat = db_get_data(row, "category");
-            gchar *txt = g_strdup_printf("  %s %s %s %s.\n", 
-                                         _("Category"), cat, _("is not"), _("defined"));
+            g_snprintf(_txt,sizeof _txt,_("Category %s is not defined."), cat);
+            g_snprintf(txt,sizeof txt,"  %s\n", _txt);
 
             gtk_text_buffer_insert_at_cursor(buffer, txt, -1);
-            g_free(txt);
             warnings++;
         }
     }
@@ -221,7 +221,8 @@ void db_validation(GtkWidget *w, gpointer data)
                 if (val) {
                     warnings++;
                     if (!hdr_printed) {
-                        insert_tag(buffer, _("Category typing errors\n"), "bold", 1);
+                        g_snprintf(txt, sizeof txt, "%s\n", _("Category typing errors:"));
+        				insert_tag(buffer, txt, "bold", 1);
                         hdr_printed = TRUE;
                     }
 		}
@@ -244,15 +245,15 @@ void db_validation(GtkWidget *w, gpointer data)
                 if (val) {
                     warnings++;
                     if (!hdr_printed) {
-                        insert_tag(buffer, _("Typing errors:\n"), "bold", 1);
+                        g_snprintf(txt, sizeof txt, "%s\n", _("Typing errors:"));
+        				insert_tag(buffer, txt, "bold", 1);
                         hdr_printed = TRUE;
                     }
+                    g_snprintf(txt, sizeof txt, "  %s (%s): ",
+                            val == VALIDATE_ERR_UTF8 ? _("UTF-8 errors") : _("Extra spaces"),
+                            db_get_row_col_data(-1, col));
 
-                    gchar *txt = g_strdup_printf("  %s (%s): ",
-                                                 val == VALIDATE_ERR_UTF8 ? _("UTF-8 errors") : _("Extra spaces"), 
-                                                 db_get_row_col_data(-1, col));
                     gtk_text_buffer_insert_at_cursor(buffer, txt, -1);
-                    g_free(txt);
 
                     col = 0;
                     while ((word = db_get_row_col_data(row, col))) {
@@ -285,20 +286,20 @@ void db_validation(GtkWidget *w, gpointer data)
                 gchar *first2 = db_get_data(row2, "first");
                 if (possibly_same_strings(last, last2) &&
                     possibly_same_strings(first, first2)) {
-                    gchar *cat = db_get_data(row, "category");
-                    gchar *cat2 = db_get_data(row2, "category");
-                    gchar *txt = g_strdup_printf("  * %s: '%s' '%s'\n    %s: '%s' '%s'\n", 
-                                                 cat, last, first, cat2, last2, first2);
                     if (!hdr_printed) {
-                        insert_tag(buffer, _("Possible duplicate competitors:\n"), "bold", 1);
+                        g_snprintf(txt, "%s\n",sizeof txt,_("Possible duplicate competitors:"));
+        				insert_tag(buffer, txt, "bold", 1);
                         hdr_printed = TRUE;
                     }
+                    gchar *cat = db_get_data(row, "category");
+                    gchar *cat2 = db_get_data(row2, "category");
+                    g_snprintf(txt,256,"  * %s: '%s' '%s'\n    %s: '%s' '%s'\n",
+                                                 cat, last, first, cat2, last2, first2);
                     if (cat && cat[0] != '?' && cat2 && cat2[0] != '?' && 
                         strcmp(cat, cat2) == 0)
                         insert_tag(buffer, txt, "red", 2);
                     else
                         gtk_text_buffer_insert_at_cursor(buffer, txt, -1);
-                    g_free(txt);
                     warnings++;
                 }
             }
@@ -318,13 +319,13 @@ void db_validation(GtkWidget *w, gpointer data)
             for (row2 = row+1; row2 < rows; row2++) {
                 gchar *club2 = db_get_data(row2, "club");
                 if (possibly_same_strings(club, club2)) {
-                    gchar *txt = g_strdup_printf("  '%s' = '%s'?\n", club, club2);
                     if (!hdr_printed) {
-                        insert_tag(buffer, _("Possible duplicate club names:\n"), "bold", 1);
+                        g_snprintf(txt, sizeof txt, "%s\n",_("Possible duplicate club names:"));
+        				insert_tag(buffer, txt, "bold", 1);
                         hdr_printed = TRUE;
                     }
+                	g_snprintf(txt, sizeof txt, "  '%s' = '%s'?\n", club, club2);
                     gtk_text_buffer_insert_at_cursor(buffer, txt, -1);
-                    g_free(txt);
                     warnings++;
                 }
             }
@@ -347,19 +348,19 @@ void db_validation(GtkWidget *w, gpointer data)
                         "      weight<getweight(category)-10000))) order by last, first");
 
     if (rows > 0) {
-        insert_tag(buffer, _("Suspicious weights:\n"), "bold", 1);
+        g_snprintf(txt, sizeof txt, "%s\n",_("Suspicious weights:"));
+		insert_tag(buffer, txt, "bold", 1);
         for (row = 0; row < rows; row++) {
             gchar *cat = db_get_data(row, "category");
             gchar *rcat = db_get_data(row, "regcategory");
             gchar *last = db_get_data(row, "last");
             gchar *first = db_get_data(row, "first");
             gint   weight = atoi(db_get_data(row, "weight"));
-            gchar *txt = g_strdup_printf("  %s %s:  %s=%s  %s=%s  %s=%d.%02d kg\n", 
+            g_snprintf(txt, sizeof txt,"  %s %s:  %s=%s  %s=%s  %s=%d.%02d kg\n",
                                          last, first, _("Category"), cat, _("Reg. Category"), rcat, 
                                          _("Weight"), weight/1000, (weight%1000)/10);
 
             gtk_text_buffer_insert_at_cursor(buffer, txt, -1);
-            g_free(txt);
             warnings++;
         }
     }
@@ -372,15 +373,15 @@ void db_validation(GtkWidget *w, gpointer data)
                         "\"clubseeding\"<0");
 
     if (rows > 0) {
-        insert_tag(buffer, _("Corrupted competitor data:\n"), "bold", 1);
+        g_snprintf(txt, sizeof txt, "%s\n",_("Corrupted competitor data:"));
+		insert_tag(buffer, txt, "bold", 1);
         for (row = 0; row < rows; row++) {
             gchar *club = db_get_data(row, "club");
             gchar *first = db_get_data(row, "first");
             gchar *last = db_get_data(row, "last");
-            gchar *txt = g_strdup_printf("  %s, %s (%s).\n", last, first, club );
+            g_snprintf(txt, sizeof txt, "  %s, %s (%s).\n", last, first, club );
 
             gtk_text_buffer_insert_at_cursor(buffer, txt, -1);
-            g_free(txt);
             warnings++;
         }
     }
@@ -395,13 +396,13 @@ void db_validation(GtkWidget *w, gpointer data)
                         "\"pos5\"<0 or \"pos6\"<0 or \"pos7\"<0 or \"pos8\"<0");
 
     if (rows > 0) {
-        insert_tag(buffer, _("Corrupted category data:\n"), "bold", 1);
+        g_snprintf(txt, sizeof txt, "%s\n",_("Corrupted category data:"));
+		insert_tag(buffer, txt, "bold", 1);
         for (row = 0; row < rows; row++) {
             gchar *cat = db_get_data(row, "category");
-            gchar *txt = g_strdup_printf("  %s.\n", cat);
+            g_snprintf(txt, sizeof txt, "  %s.\n", cat);
 
             gtk_text_buffer_insert_at_cursor(buffer, txt, -1);
-            g_free(txt);
             warnings++;
         }
     }
@@ -409,9 +410,9 @@ void db_validation(GtkWidget *w, gpointer data)
         db_close_table();
 
 
-    gchar *txt = g_strdup_printf("\n* %d %s. *\n", warnings, _("warnings")); 
+    g_snprintf(_txt, sizeof _txt, ngettext("One warning.","%d warnings.",warnings), warnings);
+    g_snprintf(txt, sizeof txt, "\n* %s *\n", _txt);
     insert_tag(buffer, txt, "bold", 1);
-    g_free(txt);
 }
 
 

@@ -115,7 +115,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     categories_menu_item  = gtk_menu_item_new_with_label (_("Categories"));
     drawing_menu_item     = gtk_menu_item_new_with_label (_("Drawing"));
     results_menu_item     = gtk_menu_item_new_with_label (_("Results"));
-    judotimer_menu_item   = gtk_menu_item_new_with_label (_("Judotimer"));
+    judotimer_menu_item   = gtk_menu_item_new_with_label (_("JudoTimer"));
     preferences_menu_item = gtk_menu_item_new_with_label (_("Preferences"));
     help_menu_item        = gtk_menu_item_new_with_label (_("Help"));
     lang_menu_item        = get_language_menu(window, change_language);
@@ -245,7 +245,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     category_properties      = gtk_menu_item_new_with_label(_("Properties"));
 
     for (i = 0; i < NUM_TATAMIS; i++) {
-        SPRINTF(buf, "%s %d %s", _("Place To"), i+1, _("Tatamis"));
+        SPRINTF(buf, ngettext("Place to one Tatami","Place to %d Tatamis", i+1), i+1);
         category_to_tatamis[i] = gtk_menu_item_new_with_label(buf);
     }
 
@@ -796,6 +796,8 @@ void set_menu_active(void)
     SET_SENSITIVE(results_ftp                   , DB_OK && (current_directory != NULL));
 }
 
+extern gchar *menu_text_with_dots(gchar *text);
+
 gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param)
 {
     gint i;
@@ -810,7 +812,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
 
     change_menu_label(drawing_menu_item    , _("Drawing"));
     change_menu_label(results_menu_item    , _("Results"));
-    change_menu_label(judotimer_menu_item  , _("Judotimer"));
+    change_menu_label(judotimer_menu_item  , _("JudoTimer"));
     change_menu_label(preferences_menu_item, _("Preferences"));
     change_menu_label(help_menu_item       , _("Help"));
 
@@ -850,7 +852,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(category_properties     , _("Properties"));
 
     for (i = 0; i < NUM_TATAMIS; i++) {
-        SPRINTF(buf, "%s %d %s", _("Place To"), i+1, _("Tatamis"));
+        SPRINTF(buf, ngettext("Place to one Tatami","Place to %d Tatamis", i+1) , i+1);
         change_menu_label(category_to_tatamis[i], buf);
     }
 
@@ -910,6 +912,9 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     
     change_menu_label(preference_serial                , _("Scale Serial Interface..."));
     change_menu_label(preference_medal_matches         , _("Medal Matches..."));
+
+    change_menu_label(preference_serial                , menu_text_with_dots(_("Scale Serial Interface")));
+    change_menu_label(preference_medal_matches         , menu_text_with_dots(_("Move Medal Matches")));
 
     change_menu_label(help_manual, _("Manual"));
     change_menu_label(help_about , _("About"));
