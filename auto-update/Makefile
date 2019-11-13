@@ -54,6 +54,7 @@ $(OBJDIR)/sha1.o: ../common/sha1.c
 
 install:
 ifeq ($(TGT),WIN32)
+	mkdir -p $(RELDIR)/etc/bin/
 	cp  $(OBJDIR)/$(REM_INST)*.exe $(RELDIR)/etc/bin/
 endif
 
