@@ -151,7 +151,7 @@ void db_validation(GtkWidget *w, gpointer data)
                         "group by category,seeding having seeding>0 and count(*)>1");
 
     if (rows > 0) {
-    	g_snprintf(txt, "%s\n",sizeof txt,_("Duplicate seedings:"));
+    	g_snprintf(txt, sizeof(txt),_("Duplicate seedings:"));
         insert_tag(buffer, txt, "bold", 1);
         for (row = 0; row < rows; row++) {
             gchar *cat = db_get_data(row, "category");
@@ -287,7 +287,7 @@ void db_validation(GtkWidget *w, gpointer data)
                 if (possibly_same_strings(last, last2) &&
                     possibly_same_strings(first, first2)) {
                     if (!hdr_printed) {
-                        g_snprintf(txt, "%s\n",sizeof txt,_("Possible duplicate competitors:"));
+                        g_snprintf(txt, sizeof txt, _("Possible duplicate competitors:"));
         				insert_tag(buffer, txt, "bold", 1);
                         hdr_printed = TRUE;
                     }
