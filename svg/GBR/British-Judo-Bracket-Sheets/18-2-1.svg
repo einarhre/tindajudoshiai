@@ -19,7 +19,7 @@
    viewBox="0 0 1052.3622 744.09448"
    enable-background="new 0 0 805.889 441.867"
    xml:space="preserve"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="18-2-1.svg"><metadata
    id="metadata3497"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
@@ -37,9 +37,9 @@
    inkscape:window-height="1017"
    id="namedview3493"
    showgrid="false"
-   inkscape:zoom="2.3400706"
-   inkscape:cx="843.42723"
-   inkscape:cy="644.84662"
+   inkscape:zoom="1.1700353"
+   inkscape:cx="443.41384"
+   inkscape:cy="372.27275"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
@@ -61,7 +61,7 @@
    width="85.421844"
    height="28.253262"
    id="rect3247"
-   style="fill:#00ccff" /><rect
+   style="fill:#00d7ff" /><rect
    x="108.33049"
    y="277.46887"
    width="269.18915"
@@ -73,7 +73,7 @@
    width="85.421844"
    height="28.253262"
    id="rect3251"
-   style="fill:#00ccff" /><rect
+   style="fill:#00d7ff" /><rect
    x="23.222544"
    y="333.37027"
    width="85.421844"
@@ -91,7 +91,7 @@
    width="85.421844"
    height="28.254526"
    id="rect3257"
-   style="fill:#00ccff" /><rect
+   style="fill:#00d7ff" /><rect
    x="108.33049"
    y="417.22244"
    width="269.18915"
@@ -103,7 +103,7 @@
    width="85.421844"
    height="28.254526"
    id="rect3261"
-   style="fill:#00ccff" /><rect
+   style="fill:#00d7ff" /><rect
    x="23.222544"
    y="473.12387"
    width="85.421844"
@@ -121,7 +121,7 @@
    width="85.421844"
    height="28.251997"
    id="rect3267"
-   style="fill:#00ccff" /><rect
+   style="fill:#00d7ff" /><rect
    x="108.33049"
    y="556.97736"
    width="269.18915"
@@ -133,13 +133,14 @@
    width="85.421844"
    height="28.251997"
    id="rect3271"
-   style="fill:#00ccff" /><text
+   style="fill:#00d7ff" /><text
    font-size="10"
    id="text3273"
    style="font-size:12.89410305px;line-height:0%;font-family:ArialMT"
    x="314.76953"
    y="257.76675"
    transform="scale(1.018585,0.98175411)">%t19:</text>
+
 
 
 
@@ -155,6 +156,7 @@
 
 
 
+
 <text
    font-size="10"
    id="text3277"
@@ -162,6 +164,7 @@
    x="314.76889"
    y="542.47083"
    transform="scale(1.018585,0.98175411)">%t19:</text>
+
 
 
 
@@ -177,6 +180,7 @@
 
 
 
+
 <text
    font-size="10"
    id="text3281"
@@ -184,6 +188,7 @@
    x="47.247856"
    y="335.85211"
    transform="scale(1.018585,0.98175411)">%t7</text>
+
 
 
 
@@ -199,6 +204,7 @@
 
 
 
+
 <text
    font-size="10"
    id="text3285"
@@ -206,6 +212,7 @@
    x="47.247215"
    y="478.20337"
    transform="scale(1.018585,0.98175411)">%t7</text>
+
 
 
 
@@ -221,6 +228,7 @@
 
 
 
+
 <text
    font-size="10"
    id="text3289"
@@ -228,6 +236,7 @@
    x="47.247215"
    y="278.91278"
    transform="scale(1.018585,0.98175411)">%t7</text>
+
 
 
 
@@ -460,6 +469,7 @@
 
 
 
+
 <text
    font-size="14"
    id="text3379"
@@ -467,6 +477,7 @@
    x="122.47913"
    y="87.927376"
    transform="scale(1.018585,0.98175411)">%i-catname</text>
+
 
 
 
@@ -482,6 +493,7 @@
 
 
 
+
 <text
    font-size="14"
    id="text3383"
@@ -489,6 +501,7 @@
    x="550.30615"
    y="59.192841"
    transform="scale(1.018585,0.98175411)">%i-place</text>
+
 
 
 
@@ -516,6 +529,7 @@
 
 
 
+
 <text
    font-size="7.366"
    id="text3393"
@@ -523,6 +537,7 @@
    x="749.12531"
    y="637.7843"
    transform="scale(1.018585,0.98175411)">1</text>
+
 
 
 
@@ -538,6 +553,7 @@
 
 
 
+
 <text
    font-size="7.366"
    id="text3397"
@@ -549,6 +565,7 @@
 
 
 
+
 <text
    font-size="7.366"
    id="text3399"
@@ -556,6 +573,7 @@
    x="763.6236"
    y="658.69446"
    transform="scale(1.018585,0.98175411)">%r2first-s-last-s-club</text>
+
 
 
 
@@ -576,6 +594,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3405"
@@ -583,6 +602,7 @@
    x="31.951849"
    y="215.99614"
    transform="scale(1.018585,0.98175411)">%m1-1-grd</text>
+
 
 
 
@@ -598,19 +618,21 @@
 
 
 
+
 <rect
    id="m1l-1"
    x="393.93021"
    y="203.80205"
    width="11.820365"
    height="11.392955"
-   style="fill:#ffffcc;stroke:#ffffcc;stroke-width:0.32235256" /><text
+   style="fill:#ffffcc;stroke:#ffffcc;stroke-width:0.32235256;opacity:0" /><text
    font-size="9"
    id="text3410"
    style="font-size:11.60469246px;line-height:0%;font-family:MyriadPro-Regular"
    x="398.77899"
    y="216.34607"
    transform="scale(1.018585,0.98175411)">%m1p1-1==0'LOSS'</text>
+
 
 
 
@@ -626,6 +648,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3414"
@@ -633,6 +656,7 @@
    x="542.15472"
    y="257.09607"
    transform="scale(1.018585,0.98175411)">%m1-winner-first-s-last</text>
+
 
 
 
@@ -648,6 +672,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3418"
@@ -655,6 +680,7 @@
    x="112.4594"
    y="300.01926"
    transform="scale(1.018585,0.98175411)">%m1-2-hm1-first-s-last</text>
+
 
 
 
@@ -670,19 +696,21 @@
 
 
 
+
 <rect
    id="m1l-2"
    x="393.93021"
    y="287.55795"
    width="11.820365"
    height="11.392955"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.32235256" /><text
+   style="fill:#00d7ff;stroke:#00d7ff;stroke-width:0.32235256;opacity:0" /><text
    font-size="9"
    id="text3423"
    style="font-size:11.60469246px;line-height:0%;font-family:MyriadPro-Regular"
    x="398.77899"
    y="300.63882"
    transform="scale(1.018585,0.98175411)">%m1p2-1==0'LOSS'</text>
+
 
 
 
@@ -698,6 +726,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3427"
@@ -705,6 +734,7 @@
    x="113.3188"
    y="358.26181"
    transform="scale(1.018585,0.98175411)">%m2-1-hm1-first-s-last</text>
+
 
 
 
@@ -720,6 +750,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3431"
@@ -731,19 +762,21 @@
 
 
 
+
 <rect
    id="m2l-1"
    x="393.93021"
    y="343.47205"
    width="11.820365"
    height="11.392955"
-   style="fill:#ffffcc;stroke:#ffffcc;stroke-width:0.32235256" /><text
+   style="fill:#ffffcc;stroke:#ffffcc;stroke-width:0.32235256;opacity:0" /><text
    font-size="9"
    id="text3434"
    style="font-size:11.60469246px;line-height:0%;font-family:MyriadPro-Regular"
    x="398.77899"
    y="358.61188"
    transform="scale(1.018585,0.98175411)">%m2p1-1==0'LOSS'</text>
+
 
 
 
@@ -759,6 +792,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3438"
@@ -766,6 +800,7 @@
    x="543.01477"
    y="399.36179"
    transform="scale(1.018585,0.98175411)">%m2-winner-first-s-last</text>
+
 
 
 
@@ -781,6 +816,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3442"
@@ -788,6 +824,7 @@
    x="113.3188"
    y="442.28244"
    transform="scale(1.018585,0.98175411)">%m2-2-hm1-first-s-last</text>
+
 
 
 
@@ -803,19 +840,21 @@
 
 
 
+
 <rect
    id="m2l-2"
    x="393.93021"
    y="427.22922"
    width="11.820365"
    height="11.392955"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.32235256" /><text
+   style="fill:#00d7ff;stroke:#00d7ff;stroke-width:0.32235256;opacity:0" /><text
    font-size="9"
    id="text3447"
    style="font-size:11.60469246px;line-height:0%;font-family:MyriadPro-Regular"
    x="398.77899"
    y="442.90463"
    transform="scale(1.018585,0.98175411)">%m2p2-1==0'LOSS'</text>
+
 
 
 
@@ -831,6 +870,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3451"
@@ -838,6 +878,7 @@
    x="111.60001"
    y="500.52631"
    transform="scale(1.018585,0.98175411)">%m3-1-hm1-first-s-last</text>
+
 
 
 
@@ -853,6 +894,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3455"
@@ -864,19 +906,21 @@
 
 
 
+
 <rect
    id="m3l-1"
    x="393.93021"
    y="483.14084"
    width="11.820365"
    height="11.392955"
-   style="fill:#ffffcc;stroke:#ffffcc;stroke-width:0.32235256" /><text
+   style="fill:#ffffcc;stroke:#ffffcc;stroke-width:0.32235256;opacity:0" /><text
    font-size="9"
    id="text3458"
    style="font-size:11.60469246px;line-height:0%;font-family:MyriadPro-Regular"
    x="398.77899"
    y="500.8764"
    transform="scale(1.018585,0.98175411)">%m3p1-1==0'LOSS'</text>
+
 
 
 
@@ -892,6 +936,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3462"
@@ -899,6 +944,7 @@
    x="541.29596"
    y="541.62628"
    transform="scale(1.018585,0.98175411)">%m3-winner-first-s-last</text>
+
 
 
 
@@ -914,6 +960,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3466"
@@ -921,6 +968,7 @@
    x="111.60001"
    y="584.54828"
    transform="scale(1.018585,0.98175411)">%m3-2-hm1-first-s-last</text>
+
 
 
 
@@ -936,19 +984,21 @@
 
 
 
+
 <rect
    id="m3l-2"
    x="393.93021"
    y="566.89679"
    width="11.820365"
    height="11.392955"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.32235256" /><text
+   style="fill:#00d7ff;stroke:#00d7ff;stroke-width:0.32235256;opacity:0" /><text
    font-size="9"
    id="text3471"
    style="font-size:11.60469246px;line-height:0%;font-family:MyriadPro-Regular"
    x="398.77899"
    y="585.16779"
    transform="scale(1.018585,0.98175411)">%m3p2-1==0'LOSS'</text>
+
 
 
 
@@ -964,6 +1014,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3475"
@@ -971,6 +1022,7 @@
    x="386.74432"
    y="257.51538"
    transform="scale(1.018585,0.98175411)">%m1time</text>
+
 
 
 
@@ -986,6 +1038,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3479"
@@ -993,6 +1046,7 @@
    x="385.88489"
    y="541.62628"
    transform="scale(1.018585,0.98175411)">%m3time</text>
+
 
 
 
@@ -1008,6 +1062,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3483"
@@ -1015,6 +1070,7 @@
    x="459.38129"
    y="358.61188"
    transform="scale(1.018585,0.98175411)">%m2s1-1</text>
+
 
 
 
@@ -1030,6 +1086,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3487"
@@ -1037,6 +1094,7 @@
    x="459.38129"
    y="300.63882"
    transform="scale(1.018585,0.98175411)">%m1s2-1</text>
+
 
 
 
@@ -1052,6 +1110,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3491"
@@ -1059,6 +1118,7 @@
    x="459.38129"
    y="585.16779"
    transform="scale(1.018585,0.98175411)">%m3s2-1</text>
+
 
 
 
@@ -1074,6 +1134,7 @@
      x="861.83765"
      id="tspan3788"
      sodipodi:role="line">LEGEND</tspan></text>
+
 
 
 
@@ -1153,6 +1214,7 @@
 
 
 
+
 <text
    id="text3830"
    y="278.93637"
@@ -1224,6 +1286,7 @@
      y="478.93637"
      x="1003.6375"
      sodipodi:role="line">1,10</tspan></text>
+
 
 
 
@@ -1303,6 +1366,7 @@
 
 
 
+
 <ellipse
    ry="4.9681702"
    rx="5.0362277"
@@ -1372,6 +1436,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
@@ -1383,6 +1448,7 @@
      x="517.05145"
      y="628.53723"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Referees</tspan></text>
+
 
 
 
@@ -1426,4 +1492,15 @@
    style="image-rendering:optimizeQuality"
    preserveAspectRatio="none"
    height="124"
-   width="100" /></svg>
+   width="100" /><text
+   xml:space="preserve"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:'Calibri, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1"
+   x="125.84911"
+   y="108.78794"
+   id="text7515"><tspan
+     sodipodi:role="line"
+     id="tspan7513"
+     x="125.84911"
+     y="108.78794"
+     style="stroke-width:1">%n Judoka</tspan></text>
+</svg>

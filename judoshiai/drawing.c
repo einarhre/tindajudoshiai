@@ -607,7 +607,7 @@ static gint get_competitor_group(gint comp, struct mdata *mdata)
 // return competitor's number based on position
 gint get_drawed_number(gint pos, gint sys)
 {
-    if (draw_system == DRAW_BRITISH && sys >= 0 && sys <= 2) {
+    if (draw_system == DRAW_BRITISH && sys >= 0 && sys <= 3) {
 	return french_matches_gbr[(pos-1) * french_mul_gbr[sys]];
     }
     if (sys >= 0) {

@@ -13,7 +13,7 @@
    version="1.1"
    id="Layer_1"
    sodipodi:docname="2-8-1.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    x="0px"
    y="0px"
    width="1052.363px"
@@ -37,9 +37,9 @@
    showgrid="false"
    pagecolor="#ffffff"
    guidetolerance="10"
-   inkscape:cy="546.85171"
+   inkscape:cy="406.46182"
    gridtolerance="10"
-   inkscape:cx="740.22952"
+   inkscape:cx="511.04302"
    objecttolerance="10"
    inkscape:zoom="1.424604"
    borderopacity="1"
@@ -96,7 +96,7 @@
    y="466.55414"
    width="56.712597"
    height="39.497822" /><rect
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    id="rect3547-4-5"
    x="301.45148"
    y="627.53967"
@@ -120,57 +120,57 @@
    y="506.91577"
    width="176.29254"
    height="39.1478" /><rect
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    id="rect3547-8-2"
    x="496.59341"
    y="627.53961"
    width="56.929535"
    height="40.072647" /><rect
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    id="rect3547-8-8"
    x="256.5267"
    y="668.25269"
    width="44.294445"
    height="39.370697" /><rect
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    id="rect3547-8"
    x="256.5267"
    y="506.80432"
    width="44.294445"
    height="40.072647" /><rect
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    id="rect3547-4"
    x="41.028206"
    y="668.25269"
    width="37.274952"
    height="39.370697" /><rect
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    id="rect3547"
    x="40.677238"
    y="506.83218"
    width="37.274952"
    height="39.721672" /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,-16.276065,129.07989)"
    id="polyline3531-48-0"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,-103.31781,13.960175)"
    id="polyline3531-48-4"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,-15.925089,60.639815)"
    id="polyline3531-48-17"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,70.414702,106.26652)"
    id="polyline3531-48-5"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,70.414703,83.453162)"
    id="polyline3531-48-1"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,70.6392,38.003108)"
    id="polyline3531-48"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polygon
@@ -216,11 +216,13 @@
 
 
 
+
 <text
    id="text67"
    transform="translate(42.7671,166.645)"
    font-size="11.4257"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT">%t8</text>
+
 
 
 
@@ -234,11 +236,13 @@
 
 
 
+
 <text
    id="text77"
    transform="translate(59.9097,211.2505)"
    font-size="11.4257"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT">3</text>
+
 
 
 
@@ -252,6 +256,7 @@
 
 
 
+
 <text
    id="text85"
    transform="translate(59.9097,256.9546)"
@@ -261,11 +266,13 @@
 
 
 
+
 <text
    id="text89"
    transform="translate(59.9097,279.8062)"
    font-size="11.4257"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT">9</text>
+
 
 
 
@@ -280,11 +287,13 @@
 
 
 
+
 <text
    id="text97"
    transform="translate(14.5088,327.5073)"
    font-size="11.4257"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT">%t35 %t21</text>
+
 
 
 
@@ -298,11 +307,13 @@
 
 
 
+
 <text
    id="text103"
    transform="translate(37.6826,371.4048)"
    font-size="11.4257"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT">%t22</text>
+
 
 
 
@@ -316,11 +327,13 @@
 
 
 
+
 <text
    id="text107"
    transform="translate(35.7881,124.8511)"
    font-size="11.4257"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT">%t6</text>
+
 
 
 
@@ -335,12 +348,14 @@
 
 
 
+
 <text
    id="text113"
    font-size="12.6284"
    x="213.1069"
    y="500.44681"
    style="font-size:12.62839985px;line-height:0%;font-family:ArialMT">%t19:</text>
+
 
 
 
@@ -355,6 +370,7 @@
 
 
 
+
 <text
    id="text117"
    transform="translate(82.5859,390.3999)"
@@ -364,11 +380,13 @@
 
 
 
+
 <text
    id="text119"
    transform="translate(435.4307,166.3481)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:ArialMT">%t19</text>
+
 
 
 
@@ -727,6 +745,7 @@
 
 
 
+
 <polygon
    id="polygon329"
    fill="#666666"
@@ -769,11 +788,13 @@
 
 
 
+
 <text
    id="text355"
    transform="matrix(0.9378,0,0,1,705.9556,644.4009)"
    font-size="13.7572"
    style="font-size:13.75720024px;line-height:0%;font-family:ArialMT">1</text>
+
 
 
 
@@ -787,11 +808,13 @@
 
 
 
+
 <text
    id="text359"
    transform="matrix(0.9378,0,0,1,705.9556,667.3345)"
    font-size="13.7572"
    style="font-size:13.75720024px;line-height:0%;font-family:ArialMT">2</text>
+
 
 
 
@@ -805,11 +828,13 @@
 
 
 
+
 <text
    id="text363"
    transform="matrix(0.9378,0,0,1,705.9556,690.1802)"
    font-size="13.7572"
    style="font-size:13.75720024px;line-height:0%;font-family:ArialMT">3</text>
+
 
 
 
@@ -823,6 +848,7 @@
 
 
 
+
 <text
    id="text367"
    transform="matrix(0.9378,0,0,1,705.9556,713.187)"
@@ -832,11 +858,13 @@
 
 
 
+
 <text
    id="text369"
    transform="matrix(0.8981,0,0,1,724.4565,713.0845)"
    font-size="13.7572"
    style="font-size:13.75720024px;line-height:0%;font-family:ArialMT">%r4first-s-last-s-club</text>
+
 
 
 
@@ -855,11 +883,13 @@
 
 
 
+
 <text
    id="text375"
    transform="translate(80.498,74.3247)"
    font-size="17.5395"
    style="font-size:17.53949928px;line-height:0%;font-family:Arial-BoldMT">%i-catname</text>
+
 
 
 
@@ -873,11 +903,13 @@
 
 
 
+
 <text
    id="text379"
    transform="matrix(1.0292,0,0,1,549.0532,51.9858)"
    font-size="17.0424"
    style="font-size:17.04240036px;line-height:0%;font-family:Arial-BoldMT">%i-place</text>
+
 
 
 
@@ -892,12 +924,14 @@
 
 
 
+
 <text
    id="text383"
    font-size="17.5896"
    x="726.81201"
    y="103.1812"
    style="font-size:17.58959961px;line-height:0%;font-family:Arial-BoldMT">POOL B</text>
+
 
 
 
@@ -911,11 +945,13 @@
 
 
 
+
 <text
    id="text389"
    transform="translate(83.3843,133.6011)"
    font-size="10.0226"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT">%c1last</text>
+
 
 
 
@@ -929,11 +965,13 @@
 
 
 
+
 <text
    id="text393"
    transform="translate(83.3843,165.9419)"
    font-size="7.5169"
    style="font-size:7.51690006px;line-height:0%;font-family:ArialMT">%c1club</text>
+
 
 
 
@@ -947,11 +985,13 @@
 
 
 
+
 <text
    id="text397"
    transform="translate(118.0459,325.9067)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%c1p</text>
+
 
 
 
@@ -965,11 +1005,13 @@
 
 
 
+
 <text
    id="text401"
    transform="translate(171.0815,119.8208)"
    font-size="10.0226"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT">%c2first</text>
+
 
 
 
@@ -983,11 +1025,13 @@
 
 
 
+
 <text
    id="text405"
    transform="translate(201.9849,150.6587)"
    font-size="10.0226"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT">%c2grd</text>
+
 
 
 
@@ -1001,11 +1045,13 @@
 
 
 
+
 <text
    id="text409"
    transform="translate(205.7432,347.77)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%c2w</text>
+
 
 
 
@@ -1019,11 +1065,13 @@
 
 
 
+
 <text
    id="text413"
    transform="translate(205.7432,370.3208)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%c2r</text>
+
 
 
 
@@ -1037,11 +1085,13 @@
 
 
 
+
 <text
    id="text417"
    transform="translate(257.5259,133.6011)"
    font-size="10.0226"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT">%c3last</text>
+
 
 
 
@@ -1055,11 +1105,13 @@
 
 
 
+
 <text
    id="text421"
    transform="translate(257.5259,165.9419)"
    font-size="7.5169"
    style="font-size:7.51690006px;line-height:0%;font-family:ArialMT">%c3club</text>
+
 
 
 
@@ -1073,11 +1125,13 @@
 
 
 
+
 <text
    id="text425"
    transform="translate(292.188,325.9067)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%c3p</text>
+
 
 
 
@@ -1091,11 +1145,13 @@
 
 
 
+
 <text
    id="text429"
    transform="translate(344.5972,119.8208)"
    font-size="10.0226"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT">%c4first</text>
+
 
 
 
@@ -1109,11 +1165,13 @@
 
 
 
+
 <text
    id="text433"
    transform="translate(375.5005,150.6587)"
    font-size="10.0226"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT">%c4grd</text>
+
 
 
 
@@ -1127,11 +1185,13 @@
 
 
 
+
 <text
    id="text437"
    transform="translate(379.2588,347.77)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%c4w</text>
+
 
 
 
@@ -1145,11 +1205,13 @@
 
 
 
+
 <text
    id="text441"
    transform="translate(379.2588,370.3208)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%c4r</text>
+
 
 
 
@@ -1163,11 +1225,13 @@
 
 
 
+
 <text
    id="text487"
    transform="translate(434.3931,211.5454)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%m3time</text>
+
 
 
 
@@ -1181,11 +1245,13 @@
 
 
 
+
 <text
    id="text493"
    transform="translate(434.3931,257.8999)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%m7time</text>
+
 
 
 
@@ -1199,11 +1265,13 @@
 
 
 
+
 <text
    id="text499"
    transform="translate(434.3931,303.6274)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%m11time</text>
+
 
 
 
@@ -1217,11 +1285,13 @@
 
 
 
+
 <text
    id="text505"
    transform="translate(257.354,390.3999)"
    font-size="8.7697"
    style="font-size:8.76970005px;line-height:0%;font-family:ArialMT">This pool</text>
+
 
 
 
@@ -1235,6 +1305,7 @@
 
 
 
+
 <rect
    id="m1l-1"
    x="105.549"
@@ -1243,11 +1314,13 @@
    stroke="#FFFFFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text516"
    transform="translate(118.0771,191.9038)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m1p1-1==0'LOSS'</text>
+
 
 
 
@@ -1260,11 +1333,13 @@
    stroke="#00CCFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text519"
    transform="translate(204.5215,191.9038)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m1p2-1==0'LOSS'</text>
+
 
 
 
@@ -1277,11 +1352,13 @@
    stroke="#FFFFFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text522"
    transform="translate(293.4717,215.7065)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m3p1-1==0'LOSS'</text>
+
 
 
 
@@ -1294,11 +1371,13 @@
    stroke="#00CCFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text525"
    transform="translate(376.1577,214.4546)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m3p2-1==0'LOSS'</text>
+
 
 
 
@@ -1311,11 +1390,13 @@
    stroke="#00CCFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text528"
    transform="translate(293.4717,238.2573)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m5p2-1==0'LOSS'</text>
+
 
 
 
@@ -1328,7 +1409,8 @@
    stroke="#00CCFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><rect
+   height="12.528"
+   style="opacity:0" /><rect
    id="m9l-2"
    x="363.63"
    y="272.337"
@@ -1336,12 +1418,14 @@
    stroke="#00CCFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text534"
    font-size="13"
    x="375.5433"
    y="283.35889"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m9p2-1==0'LOSS'</text>
+
 
 
 
@@ -1354,11 +1438,13 @@
    stroke="#00CCFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text537"
    transform="translate(293.4717,305.7896)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m11p2-1==0'LOSS'</text>
+
 
 
 
@@ -1371,11 +1457,13 @@
    stroke="#FFFFFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text549"
    transform="translate(118.0771,238.2573)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m5p1-1==0'LOSS'</text>
+
 
 
 
@@ -1388,11 +1476,13 @@
    stroke="#FFFFFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text552"
    transform="translate(204.5215,261.4351)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m7p1-1==0'LOSS'</text>
+
 
 
 
@@ -1405,11 +1495,13 @@
    stroke="#FFFFFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.528" /><text
+   height="12.528"
+   style="opacity:0" /><text
    id="text558"
    transform="translate(118.0771,284.6118)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m9p1-1==0'LOSS'</text>
+
 
 
 
@@ -1420,11 +1512,12 @@
    y="294.75101"
    width="12.527"
    height="12.527"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132;opacity:0" /><text
    id="text561"
    transform="translate(204.5215,306.0259)"
    font-size="13"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular">%m11p1-1==0'LOSS'</text>
+
 
 
 
@@ -1438,11 +1531,12 @@
    stroke-width="0.3132"
    width="12.528"
    height="12.529"
-   style="fill:#ffffcc;fill-opacity:1" /><text
+   style="fill:#ffffcc;fill-opacity:1;opacity:0" /><text
    id="text570"
    transform="translate(270.1953,451.4478)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:MyriadPro-Regular">%m13p1-1==0'LOSS'</text>
+
 
 
 
@@ -1456,11 +1550,13 @@
 
 
 
+
 <text
    id="text574"
    font-size="11.2754"
    transform="translate(43.0435,451.106)"
    style="font-size:11.27540016px;line-height:0%;font-family:ArialMT">%m13-1-grd</text>
+
 
 
 
@@ -1474,11 +1570,13 @@
 
 
 
+
 <text
    id="text578"
    transform="translate(258.9985,492.5942)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%m13time</text>
+
 
 
 
@@ -1491,11 +1589,13 @@
    stroke="#00CCFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.529" /><text
+   height="12.529"
+   style="opacity:0" /><text
    id="text581"
    transform="translate(270.1953,531.6821)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:MyriadPro-Regular">%m13p2-1==0'LOSS'</text>
+
 
 
 
@@ -1509,11 +1609,13 @@
 
 
 
+
 <text
    id="text585"
    transform="translate(43.0435,531.3423)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:ArialMT">%m13-2-grd</text>
+
 
 
 
@@ -1527,6 +1629,7 @@
 
 
 
+
 <rect
    id="m14l-1"
    x="257.668"
@@ -1536,11 +1639,12 @@
    stroke-width="0.3132"
    width="12.528"
    height="12.529"
-   style="fill:#ffffcc;fill-opacity:1" /><text
+   style="fill:#ffffcc;fill-opacity:1;opacity:0" /><text
    id="text590"
    transform="translate(270.1953,611.1831)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:MyriadPro-Regular">%m14p1-1==0'LOSS'</text>
+
 
 
 
@@ -1554,11 +1658,13 @@
 
 
 
+
 <text
    id="text594"
    transform="translate(43.6699,610.8403)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:ArialMT">%m14-1-grd</text>
+
 
 
 
@@ -1572,11 +1678,13 @@
 
 
 
+
 <text
    id="text598"
    transform="translate(259.625,651.0757)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%m14time</text>
+
 
 
 
@@ -1589,11 +1697,13 @@
    stroke="#00CCFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.529" /><text
+   height="12.529"
+   style="opacity:0" /><text
    id="text601"
    transform="translate(270.1953,691.4175)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:MyriadPro-Regular">%m14p2-1==0'LOSS'</text>
+
 
 
 
@@ -1607,11 +1717,13 @@
 
 
 
+
 <text
    id="text605"
    transform="translate(43.6699,691.0767)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:ArialMT">%m14-2-grd</text>
+
 
 
 
@@ -1625,6 +1737,7 @@
 
 
 
+
 <rect
    id="m15l-1"
    x="500.717"
@@ -1634,11 +1747,12 @@
    stroke-width="0.3132"
    width="12.527"
    height="12.527"
-   style="fill:#ffffcc;fill-opacity:1" /><text
+   style="fill:#ffffcc;fill-opacity:1;opacity:0" /><text
    id="text610"
    transform="translate(513.2427,492.1646)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:MyriadPro-Regular">%m15p1-1==0'LOSS'</text>
+
 
 
 
@@ -1652,11 +1766,13 @@
 
 
 
+
 <text
    id="text614"
    transform="translate(303.6304,491.8218)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:ArialMT">%m15-1-grd</text>
+
 
 
 
@@ -1670,11 +1786,13 @@
 
 
 
+
 <text
    id="text618"
    transform="translate(498.2871,572.1479)"
    font-size="13.3926"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT">%m15time</text>
+
 
 
 
@@ -1687,11 +1805,13 @@
    stroke="#00CCFF"
    stroke-width="0.3132"
    width="12.528"
-   height="12.527" /><text
+   height="12.527"
+   style="opacity:0" /><text
    id="text621"
    transform="translate(519.5068,651.3267)"
    font-size="11.2754"
    style="font-size:11.27540016px;line-height:0%;font-family:MyriadPro-Regular">%m15p2-1==0'LOSS'</text>
+
 
 
 
@@ -1705,6 +1825,7 @@
 
 
 
+
 <text
    id="text625"
    transform="translate(304.8828,650.9868)"
@@ -1714,11 +1835,13 @@
 
 
 
+
 <text
    id="text627"
    transform="translate(345.939,679.8208)"
    font-size="10.0226"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT">%m15-2-hm1-club</text>
+
 
 
 
@@ -1733,11 +1856,13 @@
 
 
 
+
 <text
    id="text631"
    transform="translate(605.9507,600.1841)"
    font-size="10.0226"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT">%m15-winner-club</text>
+
 
 
 
@@ -1751,11 +1876,13 @@
 
 
 
+
 <text
    id="text635"
    transform="translate(12.0054,454.5972)"
    font-size="17.5896"
    style="font-size:17.58959961px;line-height:0%;font-family:Arial-BoldMT">A1</text>
+
 
 
 
@@ -1769,6 +1896,7 @@
 
 
 
+
 <text
    id="text639"
    transform="translate(12.0054,533.5249)"
@@ -1778,11 +1906,13 @@
 
 
 
+
 <text
    id="text641"
    transform="translate(12.0054,613.7056)"
    font-size="17.5896"
    style="font-size:17.58959961px;line-height:0%;font-family:Arial-BoldMT">B1</text>
+
 
 
 
@@ -1804,6 +1934,7 @@
 
 
 
+
 <circle
    fill="#FFFFFF"
    stroke="#1D1D1B"
@@ -1817,6 +1948,7 @@
    style="font-size:12px;line-height:0%;font-family:MyriadPro-Regular"
    x="295.01138"
    y="590.64893">14</text>
+
 
 
 
@@ -1838,12 +1970,14 @@
 
 
 
+
 <text
    id="text315_6_"
    font-size="10.0078"
    x="305.62991"
    y="451.10599"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular">%m13-s1-1</text>
+
 
 
 
@@ -1858,12 +1992,14 @@
 
 
 
+
 <text
    id="text315_1_"
    font-size="10.0078"
    x="306.50049"
    y="611.18213"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular">%m14-s1-1</text>
+
 
 
 
@@ -1878,12 +2014,14 @@
 
 
 
+
 <text
    id="text315_2_"
    font-size="10.0078"
    x="558.81689"
    y="491.59421"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular">%m15-s1-1</text>
+
 
 
 
@@ -1898,11 +2036,13 @@
 
 
 
+
 <text
    id="text315_3_"
    transform="translate(103.8174,180.5068)"
    font-size="10.0078"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular">%m1-s1-1</text>
+
 
 
 
@@ -1916,11 +2056,13 @@
 
 
 
+
 <text
    id="text315_4_"
    transform="translate(279.9448,203.6851)"
    font-size="10.0078"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular">%m3-s1-1</text>
+
 
 
 
@@ -1934,11 +2076,13 @@
 
 
 
+
 <text
    id="text315_5_"
    transform="translate(103.9678,225.9106)"
    font-size="10.0078"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular">%m5-s1-1</text>
+
 
 
 
@@ -1952,11 +2096,13 @@
 
 
 
+
 <text
    id="text315_7_"
    transform="translate(194.2583,249.4131)"
    font-size="10.0078"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular">%m7-s1-1</text>
+
 
 
 
@@ -1970,11 +2116,13 @@
 
 
 
+
 <text
    id="text315_8_"
    transform="translate(104.4697,272.4673)"
    font-size="10.0078"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular">%m9-s1-1</text>
+
 
 
 
@@ -1988,11 +2136,13 @@
 
 
 
+
 <text
    id="text315_9_"
    transform="translate(194.2583,295.6025)"
    font-size="10.0078"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular">%m11-s1-1</text>
+
 
 
 
@@ -2006,28 +2156,29 @@
 
 
 
+
 <polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,486.83203,128.9163)"
    id="polyline3531-48-0-1"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,399.79029,13.796584)"
    id="polyline3531-48-4-4"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,487.18301,60.476223)"
    id="polyline3531-48-17-2"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,573.5228,106.10293)"
    id="polyline3531-48-5-3"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,573.5228,83.289573)"
    id="polyline3531-48-1-2"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polyline
-   style="fill:#00ccff"
+   style="fill:#00d7ff;fill-opacity:1"
    transform="matrix(0.85870064,0,0,0.73310121,573.7473,37.839513)"
    id="polyline3531-48-2"
    points="317.18,214.618 418.018,214.618 418.018,246.233 317.18,246.233 " /><polygon
@@ -2072,12 +2223,14 @@
 
 
 
+
 <text
    y="166.48141"
    x="545.87524"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT"
    id="text67-2"
    font-size="11.4257">%t8</text>
+
 
 
 
@@ -2092,12 +2245,14 @@
 
 
 
+
 <text
    y="211.08691"
    x="563.01782"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT"
    id="text77-9"
    font-size="11.4257">4</text>
+
 
 
 
@@ -2112,12 +2267,14 @@
 
 
 
+
 <text
    y="256.79102"
    x="563.01782"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT"
    id="text85-4"
    font-size="11.4257">8</text>
+
 
 
 
@@ -2132,12 +2289,14 @@
 
 
 
+
 <text
    y="302.49411"
    x="559.01782"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT"
    id="text93-1"
    font-size="11.4257">12</text>
+
 
 
 
@@ -2152,12 +2311,14 @@
 
 
 
+
 <text
    y="349.29492"
    x="517.61694"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT"
    id="text101-3"
    font-size="11.4257">%t35 %t20</text>
+
 
 
 
@@ -2172,12 +2333,14 @@
 
 
 
+
 <text
    y="393.19241"
    x="540.79071"
    style="font-size:11.42570019px;line-height:0%;font-family:ArialMT"
    id="text105-4"
    font-size="11.4257">%t21</text>
+
 
 
 
@@ -2192,6 +2355,7 @@
 
 
 
+
 <text
    y="390.2363"
    x="585.69403"
@@ -2202,12 +2366,14 @@
 
 
 
+
 <text
    y="166.18451"
    x="938.53882"
    style="font-size:11.27540016px;line-height:0%;font-family:ArialMT"
    id="text119-3"
    font-size="11.2754">%t19</text>
+
 
 
 
@@ -2436,12 +2602,14 @@
 
 
 
+
 <text
    y="133.43752"
    x="586.49243"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT"
    id="text389-8"
    font-size="10.0226">%c5last</text>
+
 
 
 
@@ -2456,12 +2624,14 @@
 
 
 
+
 <text
    y="165.77831"
    x="586.49243"
    style="font-size:7.51690006px;line-height:0%;font-family:ArialMT"
    id="text393-2"
    font-size="7.5169">%c5club</text>
+
 
 
 
@@ -2476,12 +2646,14 @@
 
 
 
+
 <text
    y="325.7431"
    x="621.15399"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT"
    id="text397-1"
    font-size="13.3926">%c5p</text>
+
 
 
 
@@ -2496,12 +2668,14 @@
 
 
 
+
 <text
    y="119.65721"
    x="674.18964"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT"
    id="text401-5"
    font-size="10.0226">%c6first</text>
+
 
 
 
@@ -2516,12 +2690,14 @@
 
 
 
+
 <text
    y="150.49512"
    x="705.09302"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT"
    id="text405-8"
    font-size="10.0226">%c6grd</text>
+
 
 
 
@@ -2536,12 +2712,14 @@
 
 
 
+
 <text
    y="347.60641"
    x="708.85132"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT"
    id="text409-0"
    font-size="13.3926">%c6w</text>
+
 
 
 
@@ -2556,12 +2734,14 @@
 
 
 
+
 <text
    y="370.1572"
    x="708.85132"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT"
    id="text413-6"
    font-size="13.3926">%c6r</text>
+
 
 
 
@@ -2576,12 +2756,14 @@
 
 
 
+
 <text
    y="133.43752"
    x="760.63403"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT"
    id="text417-6"
    font-size="10.0226">%c7last</text>
+
 
 
 
@@ -2596,12 +2778,14 @@
 
 
 
+
 <text
    y="165.77831"
    x="760.63403"
    style="font-size:7.51690006px;line-height:0%;font-family:ArialMT"
    id="text421-5"
    font-size="7.5169">%c7club</text>
+
 
 
 
@@ -2616,12 +2800,14 @@
 
 
 
+
 <text
    y="325.7431"
    x="795.29608"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT"
    id="text425-2"
    font-size="13.3926">%c7p</text>
+
 
 
 
@@ -2636,12 +2822,14 @@
 
 
 
+
 <text
    y="119.65721"
    x="847.70532"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT"
    id="text429-9"
    font-size="10.0226">%c8first</text>
+
 
 
 
@@ -2656,12 +2844,14 @@
 
 
 
+
 <text
    y="150.49512"
    x="878.60858"
    style="font-size:10.02260017px;line-height:0%;font-family:ArialMT"
    id="text433-3"
    font-size="10.0226">%c8grd</text>
+
 
 
 
@@ -2676,12 +2866,14 @@
 
 
 
+
 <text
    y="347.60641"
    x="882.36688"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT"
    id="text437-2"
    font-size="13.3926">%c8w</text>
+
 
 
 
@@ -2696,12 +2888,14 @@
 
 
 
+
 <text
    y="370.1572"
    x="882.36688"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT"
    id="text441-0"
    font-size="13.3926">%c8r</text>
+
 
 
 
@@ -2716,12 +2910,14 @@
 
 
 
+
 <text
    y="211.38181"
    x="937.50122"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT"
    id="text487-6"
    font-size="13.3926">%m4time</text>
+
 
 
 
@@ -2736,12 +2932,14 @@
 
 
 
+
 <text
    y="257.7363"
    x="937.50122"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT"
    id="text493-7"
    font-size="13.3926">%m8time</text>
+
 
 
 
@@ -2756,12 +2954,14 @@
 
 
 
+
 <text
    y="303.46381"
    x="937.50122"
    style="font-size:13.39260006px;line-height:0%;font-family:ArialMT"
    id="text499-4"
    font-size="13.3926">%m12time</text>
+
 
 
 
@@ -2776,12 +2976,14 @@
 
 
 
+
 <text
    y="390.2363"
    x="760.46216"
    style="font-size:8.76970005px;line-height:0%;font-family:ArialMT"
    id="text505-2"
    font-size="8.7697">This pool</text>
+
 
 
 
@@ -2796,8 +2998,9 @@
 
 
 
+
 <rect
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132"
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132;opacity:0"
    id="m2l-1"
    x="608.6571"
    y="181.71741"
@@ -2812,8 +3015,9 @@
 
 
 
+
 <rect
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132"
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132;opacity:0"
    id="m2l-2"
    x="695.10211"
    y="181.71741"
@@ -2828,8 +3032,9 @@
 
 
 
+
 <rect
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132"
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132;opacity:0"
    id="m4l-1"
    x="784.05212"
    y="203.52142"
@@ -2844,8 +3049,9 @@
 
 
 
+
 <rect
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132"
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132;opacity:0"
    id="m4l-2"
    x="866.7381"
    y="203.26843"
@@ -2860,8 +3066,9 @@
 
 
 
+
 <rect
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132"
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132;opacity:0"
    id="m6l-2"
    x="784.05212"
    y="226.07141"
@@ -2876,15 +3083,16 @@
 
 
 
+
 <rect
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132"
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132;opacity:0"
    id="m8l-2"
    x="866.7381"
    y="249.24939"
    width="12.528"
    height="12.528"
    inkscape:label="#m8l-2" /><rect
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132"
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132;opacity:0"
    id="m10l-2"
    x="866.7381"
    y="272.1734"
@@ -2899,8 +3107,9 @@
 
 
 
+
 <rect
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132"
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.3132;opacity:0"
    id="m12l-2"
    x="784.05212"
    y="294.60339"
@@ -2915,8 +3124,9 @@
 
 
 
+
 <rect
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132"
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132;opacity:0"
    id="m6l-1"
    x="608.6571"
    y="226.07141"
@@ -2931,8 +3141,9 @@
 
 
 
+
 <rect
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132"
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132;opacity:0"
    id="m8l-1"
    x="695.10211"
    y="249.24939"
@@ -2947,8 +3158,9 @@
 
 
 
+
 <rect
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132"
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132;opacity:0"
    id="m10l-1"
    x="608.6571"
    y="272.42639"
@@ -2963,18 +3175,20 @@
 
 
 
+
 <rect
    id="m12l-1"
    x="695.10211"
    y="294.5874"
    width="12.527"
    height="12.527"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.3132;opacity:0" /><text
    y="305.8623"
    x="707.62964"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular"
    id="text561-0"
    font-size="13">%m12p1-1==0'LOSS'</text>
+
 
 
 
@@ -2989,12 +3203,14 @@
 
 
 
+
 <text
    y="180.23682"
    x="697.36694"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular"
    id="text317_3_-8"
    font-size="10.0078">%m2-s2-1</text>
+
 
 
 
@@ -3009,12 +3225,14 @@
 
 
 
+
 <text
    y="203.52103"
    x="867.73853"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular"
    id="text317_4_-1"
    font-size="10.0078">%m4-s2-1</text>
+
 
 
 
@@ -3029,12 +3247,14 @@
 
 
 
+
 <text
    y="226.0722"
    x="783.05243"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular"
    id="text317_5_-5"
    font-size="10.0078">%m6-s2-1</text>
+
 
 
 
@@ -3049,12 +3269,14 @@
 
 
 
+
 <text
    y="249.24902"
    x="867.73804"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular"
    id="text317_7_-9"
    font-size="10.0078">%m8-s2-1</text>
+
 
 
 
@@ -3069,12 +3291,14 @@
 
 
 
+
 <text
    y="272.42581"
    x="866.73749"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular"
    id="text317_8_-7"
    font-size="10.0078">%m10-s2-1</text>
+
 
 
 
@@ -3089,12 +3313,14 @@
 
 
 
+
 <text
    y="295.58691"
    x="784.05188"
    style="font-size:10.0078001px;line-height:0%;font-family:MyriadPro-Regular"
    id="text317_9_-3"
    font-size="10.0078">%m12-s2-1</text>
+
 
 
 
@@ -3109,12 +3335,14 @@
 
 
 
+
 <text
    y="261.43509"
    x="375.5433"
    style="font-size:13px;line-height:0%;font-family:MyriadPro-Regular"
    id="text534-3-5-1"
    font-size="13">%m7p2-1==0'LOSS'</text>
+
 
 
 
@@ -3133,6 +3361,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
@@ -3144,6 +3373,7 @@
      x="851.4577"
      y="446.716"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Referees</tspan></text>
+
 
 
 
@@ -3187,4 +3417,15 @@
    style="image-rendering:optimizeQuality"
    preserveAspectRatio="none"
    height="124"
-   width="100" /></svg>
+   width="100" /><text
+   xml:space="preserve"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:'Calibri, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1"
+   x="81.211571"
+   y="93.072037"
+   id="text7515"><tspan
+     sodipodi:role="line"
+     id="tspan7513"
+     x="81.211571"
+     y="93.072037"
+     style="stroke-width:1">%n Judoka</tspan></text>
+</svg>

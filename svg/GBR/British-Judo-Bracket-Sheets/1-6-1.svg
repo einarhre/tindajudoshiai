@@ -19,7 +19,7 @@
    viewBox="0 0 1052.3622 744.09449"
    enable-background="new 0 0 842 595.219"
    xml:space="preserve"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="1-6-1.svg"><metadata
    id="metadata5530"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
@@ -38,8 +38,8 @@
    id="namedview5526"
    showgrid="false"
    inkscape:zoom="2.0000001"
-   inkscape:cx="800.76522"
-   inkscape:cy="654.65332"
+   inkscape:cx="257.51525"
+   inkscape:cy="594.65332"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
@@ -1051,7 +1051,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5256-1"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="460.701,174.743 460.73,152.903 195.65,152.558 195.621,174.397 "
    id="polygon3-1-3-1-7"
    style="fill:#666666"
@@ -1061,7 +1061,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184-1-2-7-4-2-8"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="195.65,152.558 195.621,174.397 460.701,174.743 460.73,152.903 "
    id="polygon3-4-8-4-7-2-4-3"
    style="fill:#666666"
@@ -1071,7 +1071,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184-1-2-7-4-2-3-1"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="460.73,152.903 195.65,152.558 195.621,174.397 460.701,174.743 "
    id="polygon3-1-3-1"
    style="fill:#666666"
@@ -1085,7 +1085,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184-1-2-7-4-2-3"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="195.65,152.558 195.621,174.397 460.701,174.743 460.73,152.903 "
    id="polygon3-1-3"
    style="fill:#666666"
@@ -1095,7 +1095,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184-1-2-7-4-2"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="460.701,174.743 460.73,152.903 195.65,152.558 195.621,174.397 "
    id="polygon3-1-5-3-1"
    style="fill:#666666"
@@ -1109,7 +1109,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184-1-2-7-4"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="195.621,174.397 460.701,174.743 460.73,152.903 195.65,152.558 "
    id="polygon3-4-6-9"
    style="fill:#666666"
@@ -1119,7 +1119,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184-1-2-7"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="460.73,152.903 195.65,152.558 195.621,174.397 460.701,174.743 "
    id="polygon3-4-8-4-7-1-5"
    style="fill:#666666"
@@ -1141,7 +1141,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5256"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="195.621,174.397 460.701,174.743 460.73,152.903 195.65,152.558 "
    id="polygon3-4-6"
    style="fill:#666666"
@@ -1167,7 +1167,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184-1-2"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="195.621,174.397 460.701,174.743 460.73,152.903 195.65,152.558 "
    id="polygon3-15-4"
    style="fill:#666666"
@@ -1181,7 +1181,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184-6"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="460.73,152.903 195.65,152.558 195.621,174.397 460.701,174.743 "
    id="polygon3-4-8-4-7"
    style="fill:#666666"
@@ -1195,7 +1195,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184-1"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="460.73,152.903 195.65,152.558 195.621,174.397 460.701,174.743 "
    id="polygon3-15"
    style="fill:#666666"
@@ -1205,7 +1205,7 @@
    width="111.48864"
    height="22.781599"
    id="rect5184-7"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="195.621,174.397 460.701,174.743 460.73,152.903 195.65,152.558 "
    id="polygon3-1"
    style="fill:#666666"
@@ -1223,7 +1223,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5184"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="460.73,152.903 195.65,152.558 195.621,174.397 460.701,174.743 "
    id="polygon3-4-8-4"
    style="fill:#666666"
@@ -1233,7 +1233,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5176-2"
-   style="fill:#00ccff;fill-opacity:1" /><polygon
+   style="fill:#00d7ff;fill-opacity:1" /><polygon
    points="460.73,152.903 195.65,152.558 195.621,174.397 460.701,174.743 "
    id="polygon3"
    style="fill:#666666"
@@ -1255,7 +1255,7 @@
    width="111.48864"
    height="23.488707"
    id="rect5176"
-   style="fill:#00ccff;fill-opacity:1" /><pattern
+   style="fill:#00d7ff;fill-opacity:1" /><pattern
    id="SVGID_65_"
    xlink:href="#Unnamed_Pattern_5"
    patternTransform="matrix(3.84 0 0 3.84 36.0283 724.3096)" /><pattern
@@ -1344,12 +1344,14 @@
 
 
 
+
 <text
    font-size="7.92"
    id="text5282"
    style="font-size:10.91728592px;line-height:0%;font-family:ArialMT;fill:#ffffff"
    x="897.01813"
    y="603.41656">\</text>
+
 
 
 
@@ -1964,12 +1966,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text311"
    style="font-size:13.28375816px;line-height:0%;font-family:Arial-BoldMT"
    x="761.19922"
    y="580.98926">%t22</text>
+
 
 
 
@@ -1986,12 +1990,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text315"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="767.47064"
    y="604.49969">1</text>
+
 
 
 
@@ -2008,12 +2014,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text319"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="767.47064"
    y="626.64264">2</text>
+
 
 
 
@@ -2030,12 +2038,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text323"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="767.47064"
    y="648.70062">3</text>
+
 
 
 
@@ -2052,12 +2062,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text327"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="767.47064"
    y="670.91754">4</text>
+
 
 
 
@@ -2074,6 +2086,7 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text331"
@@ -2085,12 +2098,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text333"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="798.56555"
    y="692.9621">%r5first-s-last-s-club</text>
+
 
 
 
@@ -2111,12 +2126,14 @@
 
 
 
+
 <text
    font-size="18"
    id="text251"
    style="font-size:22.36741447px;line-height:0%;font-family:Arial-BoldMT"
    x="66.668175"
    y="66.27829">%i-catname</text>
+
 
 
 
@@ -2133,6 +2150,7 @@
 
 
 
+
 <text
    font-size="18"
    id="text255"
@@ -2144,12 +2162,14 @@
 
 
 
+
 <text
    font-size="18"
    id="text257"
    style="font-size:22.36741447px;line-height:0%;font-family:Arial-BoldMT"
    x="556.26538"
    y="66.27829">%i-place</text>
+
 
 
 
@@ -2167,6 +2187,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2174,6 +2195,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="38.014832"
    y="156.77147">%t8</text>
+
 
 
 
@@ -2191,6 +2213,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2198,6 +2221,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="63.546173"
    y="199.10684">2</text>
+
 
 
 
@@ -2215,6 +2239,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2222,6 +2247,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="63.539558"
    y="249.08618">4</text>
+
 
 
 
@@ -2239,6 +2265,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2246,6 +2273,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="63.52813"
    y="293.06686">6</text>
+
 
 
 
@@ -2263,6 +2291,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2270,6 +2299,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="63.517601"
    y="339.05106">8</text>
+
 
 
 
@@ -2287,6 +2317,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2294,6 +2325,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="56.647499"
    y="385.02948">10</text>
+
 
 
 
@@ -2311,6 +2343,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2318,6 +2351,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="11.320646"
    y="548.0036">%t35 %t20</text>
+
 
 
 
@@ -2335,6 +2369,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2342,6 +2377,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="39.678337"
    y="591.24164">%t21</text>
+
 
 
 
@@ -2359,12 +2395,14 @@
 
 
 
+
 <text
    font-size="9"
    id="text445"
    style="font-size:11.18370724px;font-family:MyriadPro-Regular"
    x="24.116762"
    y="87.557892" />
+
 
 
 
@@ -2382,6 +2420,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="8.04"
@@ -2389,6 +2428,7 @@
    style="font-size:9.99078655px;line-height:0%;font-family:ArialMT"
    x="193.30272"
    y="589.65112">This Pool</text>
+
 
 
 
@@ -2406,6 +2446,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="8.04"
@@ -2413,6 +2454,7 @@
    style="font-size:9.99078655px;line-height:0%;font-family:ArialMT"
    x="416.74921"
    y="590.06769">This Pool</text>
+
 
 
 
@@ -2430,6 +2472,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="8.04"
@@ -2437,6 +2480,7 @@
    style="font-size:9.99078655px;line-height:0%;font-family:ArialMT"
    x="638.07251"
    y="589.07288">This Pool</text>
+
 
 
 
@@ -2454,6 +2498,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2461,6 +2506,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="56.708961"
    y="432.30716">12</text>
+
 
 
 
@@ -2478,6 +2524,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2490,6 +2537,7 @@
 
 
 
+
 <text
    transform="rotate(0.07448453)"
    font-size="9.96"
@@ -2497,6 +2545,7 @@
    style="font-size:12.37664604px;line-height:0%;font-family:ArialMT"
    x="56.798431"
    y="501.12869">15</text>
+
 
 
 
@@ -2517,6 +2566,7 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text333-7"
@@ -2524,6 +2574,7 @@
    x="798.56555"
    y="714.25482"
    inkscape:transform-center-x="32.5">%r6first-s-last-s-club</text>
+
 
 
 
@@ -2541,12 +2592,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text335"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="746.7132"
    y="174.93893">%m1time</text>
+
 
 
 
@@ -2563,12 +2616,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text339"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="746.7132"
    y="222.80426">%m3time</text>
+
 
 
 
@@ -2585,12 +2640,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text343"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="746.7132"
    y="268.61713">%m5time</text>
+
 
 
 
@@ -2607,12 +2664,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text347"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="746.7132"
    y="316.13931">%m7time</text>
+
 
 
 
@@ -2629,12 +2688,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text351"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="746.7132"
    y="361.66153">%m9time</text>
+
 
 
 
@@ -2651,12 +2712,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text345-7"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="746.74707"
    y="408.05109">%m11time</text>
+
 
 
 
@@ -2673,12 +2736,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text349-3"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="746.74707"
    y="454.86499">%m13time</text>
+
 
 
 
@@ -2695,12 +2760,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text353-9"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="746.74707"
    y="501.14578">%m15time</text>
+
 
 
 
@@ -2717,12 +2784,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text357"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="559.87958"
    y="524.09943">%c5p</text>
+
 
 
 
@@ -2739,12 +2808,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text421"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="111.22791"
    y="547.64886">%c1w</text>
+
 
 
 
@@ -2761,12 +2832,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text425"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="111.22791"
    y="568.77362">%c1r</text>
+
 
 
 
@@ -2783,12 +2856,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text429"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="223.06557"
    y="522.85681">%c2p</text>
+
 
 
 
@@ -2805,12 +2880,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text433"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="336.12314"
    y="547.64886">%c3w</text>
+
 
 
 
@@ -2827,12 +2904,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text437"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="336.12314"
    y="568.77362">%c3r</text>
+
 
 
 
@@ -2849,12 +2928,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text441"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="447.23352"
    y="524.09943">%c4p</text>
+
 
 
 
@@ -2871,12 +2952,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text355-8"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="669.25671"
    y="547.73462">%c6w</text>
+
 
 
 
@@ -2893,12 +2976,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text359-5"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="669.25671"
    y="568.85938">%c6r</text>
+
 
 
 
@@ -2915,12 +3000,14 @@
 
 
 
+
 <text
    font-size="7"
    id="text261"
    style="font-size:8.69843864px;line-height:0%;font-family:ArialMT"
    x="300.59058"
    y="151.71129">%c3club</text>
+
 
 
 
@@ -2937,12 +3024,14 @@
 
 
 
+
 <text
    font-size="7"
    id="text265"
    style="font-size:8.69843864px;line-height:0%;font-family:ArialMT"
    x="523.36523"
    y="151.71129">%c5club</text>
+
 
 
 
@@ -2959,12 +3048,14 @@
 
 
 
+
 <text
    font-size="9"
    id="text269"
    style="font-size:11.18370724px;line-height:0%;font-family:ArialMT"
    x="299.6647"
    y="101.2954">%c3first</text>
+
 
 
 
@@ -2981,12 +3072,14 @@
 
 
 
+
 <text
    font-size="9"
    id="text273"
    style="font-size:11.18370724px;line-height:0%;font-family:ArialMT"
    x="522.78192"
    y="101.2954">%c5first</text>
+
 
 
 
@@ -3003,12 +3096,14 @@
 
 
 
+
 <text
    font-size="9"
    id="text277"
    style="font-size:11.18370724px;line-height:0%;font-family:ArialMT"
    x="190.3129"
    y="116.207">%c2last</text>
+
 
 
 
@@ -3025,12 +3120,14 @@
 
 
 
+
 <text
    font-size="9"
    id="text281"
    style="font-size:11.18370724px;line-height:0%;font-family:ArialMT"
    x="412.37985"
    y="116.207">%c4last</text>
+
 
 
 
@@ -3047,12 +3144,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text285"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="108.15381"
    y="133.80266">%c1grd</text>
+
 
 
 
@@ -3069,12 +3168,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text289"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="330.69449"
    y="133.80266">%c3grd</text>
+
 
 
 
@@ -3091,12 +3192,14 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text293"
    style="font-size:13.28375816px;line-height:0%;font-family:ArialMT"
    x="552.24738"
    y="133.80266">%c5grd</text>
+
 
 
 
@@ -3113,12 +3216,14 @@
 
 
 
+
 <text
    font-size="7"
    id="text459"
    style="font-size:8.69843864px;line-height:0%;font-family:ArialMT"
    x="189.23857"
    y="151.71129">%c2club</text>
+
 
 
 
@@ -3135,12 +3240,14 @@
 
 
 
+
 <text
    font-size="9"
    id="text273-2"
    style="font-size:11.18370724px;line-height:0%;font-family:ArialMT"
    x="633.41699"
    y="101.2954">%c6first</text>
+
 
 
 
@@ -3157,6 +3264,7 @@
 
 
 
+
 <text
    font-size="10.69"
    id="text293-6"
@@ -3168,18 +3276,20 @@
 
 
 
+
 <rect
    id="m1l-1"
    x="95.946121"
    y="170.80733"
    width="12.426341"
    height="12.426341"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.31065851" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.31065851;opacity:0" /><text
    font-size="12"
    id="text362"
    style="font-size:13.97962093px;line-height:0%;font-family:MyriadPro-Regular"
    x="111.25443"
    y="180.55013">%m1p1-1==0'LOSS'</text>
+
 
 
 
@@ -3191,12 +3301,13 @@
    y="170.80733"
    width="12.426341"
    height="12.426341"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.31065851" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.31065851;opacity:0" /><text
    font-size="12"
    id="text365"
    style="font-size:13.97962093px;line-height:0%;font-family:MyriadPro-Regular"
    x="214.93665"
    y="180.55013">%m1p2-1==0'LOSS'</text>
+
 
 
 
@@ -3213,6 +3324,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text465"
@@ -3224,18 +3336,20 @@
 
 
 
+
 <rect
    id="m2l-1"
    x="323.36371"
    y="194.46426"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="337.38504"
    y="203.31744">%m2p1-1==0'LOSS'</text>
+
 
 
 
@@ -3247,12 +3361,13 @@
    y="194.46426"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="557.62781"
    y="203.31744">%m2p2-1==0'LOSS'</text>
+
 
 
 
@@ -3269,6 +3384,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469"
@@ -3280,18 +3396,20 @@
 
 
 
+
 <rect
    id="m3l-1"
    x="206.52678"
    y="217.57707"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="215.00107"
    y="226.43025">%m3p1-1==0'LOSS'</text>
+
 
 
 
@@ -3303,13 +3421,14 @@
    y="217.57707"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201"
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0"
    inkscape:label="#m3l-2" /><text
    font-size="12"
    id="text371-1"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="445.27878"
    y="226.43025">%m3p2-1==0'LOSS'</text>
+
 
 
 
@@ -3326,6 +3445,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8"
@@ -3337,18 +3457,20 @@
 
 
 
+
 <rect
    id="m4l-1"
    x="95.93235"
    y="240.91159"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-3"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="111.31885"
    y="249.76477">%m4p1-1==0'LOSS'</text>
+
 
 
 
@@ -3360,12 +3482,13 @@
    y="240.91159"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-4"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="676.77039"
    y="249.76477">%m4p2-1==0'LOSS'</text>
+
 
 
 
@@ -3382,6 +3505,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-0"
@@ -3393,18 +3517,20 @@
 
 
 
+
 <rect
    id="m5l-1"
    x="436.40799"
    y="264.24612"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-6"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="445.27878"
    y="273.0993">%m5p1-1==0'LOSS'</text>
+
 
 
 
@@ -3416,12 +3542,13 @@
    y="264.24612"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-8"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="557.62781"
    y="273.0993">%m5p2-1==0'LOSS'</text>
+
 
 
 
@@ -3438,6 +3565,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-9"
@@ -3449,18 +3577,20 @@
 
 
 
+
 <rect
    id="m6l-1"
    x="206.52678"
    y="287.58066"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-7"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="215.00107"
    y="296.43384">%m6p1-1==0'LOSS'</text>
+
 
 
 
@@ -3472,12 +3602,13 @@
    y="287.58066"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-82"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="337.38504"
    y="296.43384">%m6p2-1==0'LOSS'</text>
+
 
 
 
@@ -3494,6 +3625,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-1"
@@ -3505,18 +3637,20 @@
 
 
 
+
 <rect
    id="m7l-1"
    x="436.40799"
    y="310.91516"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-35"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="445.27878"
    y="319.76834">%m7p1-1==0'LOSS'</text>
+
 
 
 
@@ -3528,12 +3662,13 @@
    y="310.91516"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-9"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="676.77039"
    y="319.76834">%m7p2-1==0'LOSS'</text>
+
 
 
 
@@ -3550,6 +3685,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-4"
@@ -3561,18 +3697,20 @@
 
 
 
+
 <rect
    id="m8l-1"
    x="206.52678"
    y="333.75217"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-0"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="215.00107"
    y="342.60535">%m8p1-1==0'LOSS'</text>
+
 
 
 
@@ -3584,12 +3722,13 @@
    y="333.75217"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-7"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="557.62781"
    y="342.60535">%m8p2-1==0'LOSS'</text>
+
 
 
 
@@ -3606,6 +3745,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-6"
@@ -3617,18 +3757,20 @@
 
 
 
+
 <rect
    id="m9l-1"
    x="323.36371"
    y="356.87714"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-0-2"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="337.38504"
    y="365.73032">%m9p1-1==0'LOSS'</text>
+
 
 
 
@@ -3640,12 +3782,13 @@
    y="356.87714"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-7-9"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="445.27878"
    y="365.73032">%m9p2-1==0'LOSS'</text>
+
 
 
 
@@ -3662,6 +3805,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-6-3"
@@ -3673,18 +3817,20 @@
 
 
 
+
 <rect
    id="m10l-1"
    x="95.93235"
    y="379.71411"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-0-26"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="111.31885"
    y="388.56729">%m10p1-1==0'LOSS'</text>
+
 
 
 
@@ -3696,12 +3842,13 @@
    y="379.71411"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-7-1"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="557.62781"
    y="388.56729">%m10p2-1==0'LOSS'</text>
+
 
 
 
@@ -3718,6 +3865,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-6-5"
@@ -3729,18 +3877,20 @@
 
 
 
+
 <rect
    id="m11l-1"
    x="323.36371"
    y="403.04865"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-0-5"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="337.38504"
    y="411.90182">%m11p1-1==0'LOSS'</text>
+
 
 
 
@@ -3752,12 +3902,13 @@
    y="403.04865"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-7-12"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="676.77039"
    y="411.90182">%m11p2-1==0'LOSS'</text>
+
 
 
 
@@ -3774,6 +3925,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-6-0"
@@ -3785,18 +3937,20 @@
 
 
 
+
 <rect
    id="m12l-1"
    x="95.93235"
    y="426.17358"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-0-4"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="111.31885"
    y="435.02676">%m12p1-1==0'LOSS'</text>
+
 
 
 
@@ -3808,12 +3962,13 @@
    y="426.17358"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-7-0"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="445.27878"
    y="435.02676">%m12p2-1==0'LOSS'</text>
+
 
 
 
@@ -3830,6 +3985,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-6-7"
@@ -3841,18 +3997,20 @@
 
 
 
+
 <rect
    id="m13l-1"
    x="548.75702"
    y="449.50806"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-0-7"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="557.62781"
    y="458.36127">%m13p1-1==0'LOSS'</text>
+
 
 
 
@@ -3864,12 +4022,13 @@
    y="449.50806"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-7-3"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="676.77039"
    y="458.36127">%m13p2-1==0'LOSS'</text>
+
 
 
 
@@ -3886,6 +4045,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-6-59"
@@ -3897,18 +4057,20 @@
 
 
 
+
 <rect
    id="m14l-1"
    x="102.99128"
    y="472.84262"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-0-8"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="111.46555"
    y="481.69583">%m14p1-1==0'LOSS'</text>
+
 
 
 
@@ -3920,12 +4082,13 @@
    y="472.84262"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-7-8"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="336.06329"
    y="481.69583">%m14p2-1==0'LOSS'</text>
+
 
 
 
@@ -3942,6 +4105,7 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-6-6"
@@ -3953,18 +4117,20 @@
 
 
 
+
 <rect
    id="m15l-1"
    x="217.93236"
    y="495.67963"
    width="11.324804"
    height="11.324804"
-   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201" /><text
+   style="fill:#ffffff;stroke:#ffffff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text368-0-0-0"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="233.31885"
    y="504.53281">%m15p1-1==0'LOSS'</text>
+
 
 
 
@@ -3976,12 +4142,13 @@
    y="495.67963"
    width="11.324804"
    height="11.324804"
-   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201" /><text
+   style="fill:#00ccff;stroke:#00ccff;stroke-width:0.2831201;opacity:0" /><text
    font-size="12"
    id="text371-1-7-80"
    style="font-size:12.87100983px;line-height:0%;font-family:MyriadPro-Regular"
    x="682.09222"
    y="504.53281">%m15p2-1==0'LOSS'</text>
+
 
 
 
@@ -3998,12 +4165,14 @@
 
 
 
+
 <text
    font-size="8"
    id="text469-8-6-2"
    style="font-size:8.58067322px;line-height:0%;font-family:MyriadPro-Regular"
    x="674.58411"
    y="492.73438">%m15s2-1</text>
+
 
 
 
@@ -4022,6 +4191,7 @@
      x="840.7558"
      id="tspan3788"
      sodipodi:role="line">LEGEND</tspan></text>
+
 
 
 
@@ -4103,6 +4273,7 @@
 
 
 
+
 <text
    id="text3830"
    y="410.44135"
@@ -4174,6 +4345,7 @@
      y="610.44135"
      x="982.55566"
      sodipodi:role="line">1,10</tspan></text>
+
 
 
 
@@ -4255,6 +4427,7 @@
 
 
 
+
 <ellipse
    ry="4.9681702"
    rx="5.0362277"
@@ -4325,6 +4498,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;font-size:43.7518959px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.09379745"
@@ -4336,6 +4510,7 @@
      x="356.24814"
      y="900.66595"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.50075912px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:1.09379745">Referees</tspan></text>
+
 
 
 
@@ -4380,4 +4555,15 @@
    style="image-rendering:optimizeQuality"
    preserveAspectRatio="none"
    height="124"
-   width="100" /></svg>
+   width="100" /><text
+   xml:space="preserve"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:'Calibri, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1"
+   x="67.732994"
+   y="84.895294"
+   id="text7515"><tspan
+     sodipodi:role="line"
+     id="tspan7513"
+     x="67.732994"
+     y="84.895294"
+     style="stroke-width:1">%n Judoka</tspan></text>
+</svg>
