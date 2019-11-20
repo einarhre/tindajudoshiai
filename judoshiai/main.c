@@ -584,16 +584,19 @@ ok:
         g_print("Comm threads started\n");
     }
 
-    if (argc > 1 && argv[1][0] != '-') {
-        strncpy(database_name, argv[1], sizeof(database_name)-1);
-        strncpy(logfile_name,  argv[1], sizeof(logfile_name)-1);
-        gchar *p = strstr(logfile_name, ".shi");
-        if (p)
-            strcpy(p, ".log");
-        else
-            logfile_name[0] = 0;
-        open_shiai_display();
-        //valid_ascii_string(database_name);
+    gint i;
+    for (i = 1; i < argc; i++) {
+	if (argv[i][0] != '-') {
+	    strncpy(database_name, argv[i], sizeof(database_name)-1);
+	    strncpy(logfile_name,  argv[i], sizeof(logfile_name)-1);
+	    gchar *p = strstr(logfile_name, ".shi");
+	    if (p)
+		strcpy(p, ".log");
+	    else
+		logfile_name[0] = 0;
+	    open_shiai_display();
+	    break;
+	}
     }
 
     update_match_pages_visibility();

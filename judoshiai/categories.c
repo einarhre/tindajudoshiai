@@ -26,7 +26,6 @@ guint estim_num_matches[NUM_COMPETITORS+1] = {
     147 /* 128 */
 };//XXXXXTODO
 
-
 static gboolean for_each_row(GtkTreeModel *model,
                              GtkTreePath  *path,
                              GtkTreeIter  *iter,
@@ -74,7 +73,6 @@ void create_categories(GtkWidget *w, gpointer data)
 
             if (gtk_tree_model_get_iter(GTK_TREE_MODEL(current_model), &iter, path)) {
                 struct judoka *j = get_data_by_iter(&iter);
-                struct judoka e;
                 gint r;
 
                 if (j && j->visible && j->category && j->category[0] == '?'&& j->category[1] == 0) {
@@ -119,6 +117,8 @@ void create_categories(GtkWidget *w, gpointer data)
                     r = display_one_judoka(j);
                     if (r >= 0) {
                         /* new category */
+			struct judoka e;
+			memset(&e, 0, sizeof(e));
                         e.index = r;
                         e.last = j->category;
                         e.belt = 0;
