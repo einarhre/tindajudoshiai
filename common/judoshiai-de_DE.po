@@ -1577,7 +1577,7 @@ msgstr "Gelöschte wiederherstellen"
 
 #: ../judoshiai/menus.c
 msgid "Delete Removed"
-msgstr ""
+msgstr "Endgültig löschen"
 
 #: ../judoshiai/menus.c
 msgid "Bar Code Search"
@@ -1601,11 +1601,11 @@ msgstr "Klassen erstellen"
 
 #: ../judoshiai/menus.c
 msgid "Init Colors"
-msgstr ""
+msgstr "Farben zuweisen"
 
 #: ../judoshiai/menus.c
 msgid "Show Colors"
-msgstr ""
+msgstr "Farben anzeigen"
 
 #: ../judoshiai/menus.c
 msgid "Print All"
@@ -1812,7 +1812,7 @@ msgstr "allen gewählten Klassen."
 
 #: ../judoshiai/popup-menu.c
 msgid "Select a color"
-msgstr ""
+msgstr "Wähle eine Farbe"
 
 #: ../judoshiai/popup-menu.c
 msgid "already exists"
@@ -1876,7 +1876,7 @@ msgstr "Drucke ausgewählte Akkreditierungskarten auf Standarddrucker"
 
 #: ../judoshiai/popup-menu.c
 msgid "Color..."
-msgstr ""
+msgstr "Farbe..."
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Finnish"
@@ -2269,7 +2269,7 @@ msgstr "Statistik"
 
 #: ../judoshiai/properties.c
 msgid "Color"
-msgstr ""
+msgstr "Farbe"
 
 #: ../judoshiai/search.c
 msgid "Search"
@@ -2409,23 +2409,23 @@ msgstr "SVG drucken"
 
 #: ../judoshiai/write-results.c
 msgid "Extra Links"
-msgstr ""
+msgstr "Zusätzliche Hyperlinks"
 
 #: ../judoshiai/write-results.c
 msgid "Link"
-msgstr ""
+msgstr "Hyperlink"
 
 #: ../judoshiai/write-results.c
 msgid "(Example)"
-msgstr ""
+msgstr "(Beispiel)"
 
 #: ../judoshiai/write-results.c
 msgid "Embed"
-msgstr ""
+msgstr "Einbetten"
 
 #: ../judoshiai/write-results.c
 msgid "New Window"
-msgstr ""
+msgstr "Neues Fenster"
 
 #: ../judoinfo/main.c ../judojudogi/main.c
 msgid "Category starts"
