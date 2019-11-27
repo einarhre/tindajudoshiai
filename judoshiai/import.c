@@ -225,81 +225,108 @@ static gint file_is_utf8(gchar *fname)
     return 1;
 }
 
+// adjust BUFFER_SIZE to suit longest line
+#define BUFFER_SIZE 1024 * 1024
+#define NUM_FIELDS 20
+
+// char* array will point to fields
+char *pFields[NUM_FIELDS];
+
+static int loadValues(char *line, long lineno, struct i_text *d){
+    if(line == NULL)
+        return 0;
+
+    // chop of last char of input if it is a CR or LF (e.g.Windows file loading in Unix env.)
+    // can be removed if sure fgets has removed both CR and LF from end of line
+    if(*(line + strlen(line)-1) == '\r' || *(line + strlen(line)-1) == '\n')
+        *(line + strlen(line)-1) = '\0';
+    if(*(line + strlen(line)-1) == '\r' || *(line + strlen(line)-1 )== '\n')
+        *(line + strlen(line)-1) = '\0';
+
+    char *cptr = line;
+    int fld = 0;
+    int inquote = FALSE;
+    char ch;
+
+    pFields[fld]=cptr;
+    while((ch=*cptr) != '\0' && fld < NUM_FIELDS){
+        if(ch == '"') {
+            if(! inquote)
+                pFields[fld]=cptr+1;
+            else {
+                *cptr = '\0';               // zero out " and jump over it
+            }
+            inquote = ! inquote;
+        } else if(ch == d->separator[0] && ! inquote){
+            *cptr = '\0';                   // end of field, null terminate it
+            pFields[++fld]=cptr+1;
+        }
+        cptr++;
+    }
+    return fld;
+}
+
 static void import_txt(gchar *fname, gboolean test, struct i_text *d)
 {
-    gsize x;
-    gint num_cols = 0, i;
-    gchar **tokens, **p;
-    gchar line[256];
-    gboolean first_time = TRUE;
-    FILE *f = fopen(fname, "r");
-    if (!f)
-        return;
+    gint num_cols = 0;
+    gchar line [BUFFER_SIZE];
+    long lineno = 0L;
 
     if (d->separator[0] == 0)
+        return;
+
+    FILE *f = fopen(fname, "r");
+    if(f == NULL)
         return;
 
     d->errors = 0;
     d->comp_added = 0;
     d->comp_exists = 0;
 
-    while (fgets(line, sizeof(line), f)) {
+    while (!feof(f)) {
         gchar *utf = NULL;
-        gchar quote = 0;
-        gchar *p1 = strchr(line, '\r'), *p2;
-        if (p1)	*p1 = 0;
-        p1 = strchr(line, '\n');
-        if (p1)	*p1 = 0;
 
-        // remove quotes
-        quote = line[0];
-        if (quote == '"' || quote == '\'') {
-            p1 = p2 = line;
-            while (*p1) {
-                if (*p1 == quote)
-                    p1++;
-                else
-                    *p2++ = *p1++;
-            }
-            *p2 = 0;
-        }
+        // load line into static buffer
+        if(fgets(line, BUFFER_SIZE-1, f)==NULL)
+            break;
 
-        if (strlen(line) < 2)
+        // jump over empty lines
+        if(strlen(line) < 2)
             continue;
 
+        // convert encoding if required
         if (d->utf8 == FALSE)
-            utf = g_convert(line, -1, "UTF-8", "ISO-8859-1", NULL, &x, NULL);
+            utf = g_convert(line, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
 
-        if (first_time) {
+        // skip first line (headers)
+        if(++lineno==1) {
             gtk_label_set_text(GTK_LABEL(d->lineread), utf ? utf : line);
-            first_time = FALSE;
+            continue;
         }
 
-        num_cols = 0;
-
-        tokens = g_strsplit(utf ? utf : line, d->separator, 16);
-        for (p = tokens; *p; p++) {
-            num_cols++;
-        }
-
-        if (test) {
-            for (i = 0; i <= TXT_COMMENT3; i++) {
-                print_item(i, tokens, num_cols, d);
-            }
+        // set pFields array pointers to null-terminated string fields in line
+        if((num_cols = loadValues(utf ? utf : line,lineno,d))==0) {
+            d->errors++;
         } else {
-            if (add_competitor(tokens, num_cols, d))
-                d->comp_added++;
-            else
-                d->errors++;
+            // On return pFields array pointers point to loaded fields ready for load into DB or whatever
+            // Fields can be accessed via pFields, e.g.
+            if (test) {
+                for (int i = 0; i <= TXT_COMMENT3; i++) {
+                    print_item(i, pFields, num_cols, d);
+                }
+            } else {
+                if (add_competitor(pFields, num_cols, d))
+                    d->comp_added++;
+                else
+                    d->errors++;
+            }
+
+            g_free(utf);
+
+            if (test)
+                break;
         }
-
-        g_free(utf);
-        g_strfreev(tokens);
-
-        if (test)
-            break;
     }
-
     fclose(f);
 }
 
