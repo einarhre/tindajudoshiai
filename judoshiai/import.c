@@ -14,7 +14,7 @@
 #include "sqlite3.h"
 #include "judoshiai.h"
 
-enum {
+enum FIELDS{
     TXT_LAST = 0,
     TXT_FIRST,
     TXT_BIRTH,
@@ -31,16 +31,25 @@ enum {
     TXT_COMMENT1,
     TXT_COMMENT2,
     TXT_COMMENT3,
-    TXT_GIRLSTR,
-    TXT_SEPARATOR,
     NUM_TXTS
+};
+
+enum SETTINGS{
+    TXT_GIRLSTR = 0,
+    TXT_SEPARATOR,
+    TXT_QUOTE,
+    BOOL_UTF8,
+    BOOL_HASHEADER,
+    NUM_SETTINGS
 };
 
 struct i_text {
     GtkWidget *lineread;
     GtkWidget *fields[NUM_TXTS];
+    GtkWidget *setting_fields[NUM_SETTINGS];
     gchar *filename;
     gchar separator[8];
+    gchar quote[8];
     gchar girlstr[20];
     GtkWidget *labels[NUM_TXTS];
     gint columns[NUM_TXTS];
@@ -49,6 +58,7 @@ struct i_text {
     gint comp_exists;
     gint comp_syntax;
     gboolean utf8;
+    gboolean hasHeader;
 };
 
 #define MAX_NUM_COLUMNS 16
@@ -67,8 +77,10 @@ static gboolean valid_data(gint item, gchar **tokens, gint num_cols, struct i_te
 
 static gboolean print_item(gint item, gchar **tokens, gint num_cols, struct i_text *d)
 {
-    if (!valid_data(item, tokens, num_cols, d))
+    if (!valid_data(item, tokens, num_cols, d)){
+        gtk_label_set_text(GTK_LABEL(d->labels[item]), "");
         return FALSE;
+    }
 
     gtk_label_set_text(GTK_LABEL(d->labels[item]), tokens[d->columns[item] - 1]);
     //g_print("Item %d = %s\n", item, tokens[d->columns[item]-1]);
@@ -227,10 +239,9 @@ static gint file_is_utf8(gchar *fname)
 
 // adjust BUFFER_SIZE to suit longest line
 #define BUFFER_SIZE 1024 * 1024
-#define NUM_FIELDS 20
 
 // char* array will point to fields
-char *pFields[NUM_FIELDS];
+char *pFields[MAX_NUM_COLUMNS];
 
 static int loadValues(char *line, long lineno, struct i_text *d){
     if(line == NULL)
@@ -249,8 +260,8 @@ static int loadValues(char *line, long lineno, struct i_text *d){
     char ch;
 
     pFields[fld]=cptr;
-    while((ch=*cptr) != '\0' && fld < NUM_FIELDS){
-        if(ch == '"') {
+    while((ch=*cptr) != '\0' && fld < MAX_NUM_COLUMNS){
+        if(ch == d->quote[0]) {
             if(! inquote)
                 pFields[fld]=cptr+1;
             else {
@@ -263,7 +274,7 @@ static int loadValues(char *line, long lineno, struct i_text *d){
         }
         cptr++;
     }
-    return fld;
+    return fld+1;
 }
 
 static void import_txt(gchar *fname, gboolean test, struct i_text *d)
@@ -301,7 +312,8 @@ static void import_txt(gchar *fname, gboolean test, struct i_text *d)
         // skip first line (headers)
         if(++lineno==1) {
             gtk_label_set_text(GTK_LABEL(d->lineread), utf ? utf : line);
-            continue;
+            if (d->hasHeader)
+               continue;
         }
 
         // set pFields array pointers to null-terminated string fields in line
@@ -311,7 +323,7 @@ static void import_txt(gchar *fname, gboolean test, struct i_text *d)
             // On return pFields array pointers point to loaded fields ready for load into DB or whatever
             // Fields can be accessed via pFields, e.g.
             if (test) {
-                for (int i = 0; i <= TXT_COMMENT3; i++) {
+                for (int i = 0; i < NUM_TXTS; i++) {
                     print_item(i, pFields, num_cols, d);
                 }
             } else {
@@ -332,22 +344,22 @@ static void import_txt(gchar *fname, gboolean test, struct i_text *d)
 
 static void read_values(struct i_text *d)
 {
-    gint i;
-
-    strcpy(d->separator,
-           gtk_entry_get_text(GTK_ENTRY(d->fields[TXT_SEPARATOR])));
+    strncpy(d->separator,
+           gtk_entry_get_text(GTK_ENTRY(d->setting_fields[TXT_SEPARATOR])),sizeof(d->separator));
     if (d->separator[0] == '\\' && d->separator[1] == 't') {
         d->separator[0] = '\t';
         d->separator[1] = 0;
     }
 
-    for (i = 0; i < TXT_SEPARATOR; i++) {
-        if (i == TXT_GIRLSTR) {
-            strcpy(d->girlstr,
-                   gtk_entry_get_text(GTK_ENTRY(d->fields[TXT_GIRLSTR])));
-        } else {
-            d->columns[i] = gtk_combo_box_get_active(GTK_COMBO_BOX(d->fields[i]));
-        }
+    strncpy(d->quote, gtk_entry_get_text(GTK_ENTRY(d->setting_fields[TXT_QUOTE])),sizeof(d->quote));
+
+    strncpy(d->girlstr, gtk_entry_get_text(GTK_ENTRY(d->setting_fields[TXT_GIRLSTR])),sizeof(d->girlstr));
+
+    d->hasHeader = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(d->setting_fields[BOOL_HASHEADER]));
+    d->utf8 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(d->setting_fields[BOOL_UTF8]));
+
+    for (gint i = 0; i < NUM_TXTS; i++) {
+        d->columns[i] = gtk_combo_box_get_active(GTK_COMBO_BOX(d->fields[i]));
     }
 }
 
@@ -356,37 +368,6 @@ static void selecter(GtkComboBox *combo, gpointer arg)
     struct i_text *d = arg;
     read_values(d);
     import_txt(d->filename, TRUE, d);
-}
-
-static GtkWidget *set_text_entry(GtkWidget *table, int row,
-				 char *text, const char *deftxt, struct i_text *data)
-{
-    GtkWidget *tmp;
-
-    tmp = gtk_label_new(text);
-#if (GTKVER == 3)
-    gtk_grid_attach(GTK_GRID(table), tmp, 0, row, 1, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), tmp, 0, 1, row, row + 1);
-#endif
-    data->labels[row] = tmp = gtk_label_new("        ");
-#if (GTKVER == 3)
-    gtk_grid_attach(GTK_GRID(table), tmp, 2, row, 1, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), tmp, 2, 3, row, row + 1);
-#endif
-    tmp = gtk_entry_new();
-    gtk_entry_set_max_length(GTK_ENTRY(tmp), 20);
-    gtk_entry_set_text(GTK_ENTRY(tmp), deftxt ? deftxt : "");
-
-    g_signal_connect(G_OBJECT(tmp), "changed", G_CALLBACK(selecter), data);
-
-#if (GTKVER == 3)
-    gtk_grid_attach(GTK_GRID(table), tmp, 1, row, 1, 1);
-#else
-    gtk_table_attach_defaults(GTK_TABLE(table), tmp, 1, 2, row, row + 1);
-#endif
-    return tmp;
 }
 
 static GtkWidget *set_col_entry(GtkWidget *table, int row,
@@ -468,7 +449,7 @@ static gboolean get_preferences_str(gchar *name, gchar *out)
 
 void import_txt_dialog(GtkWidget *w, gpointer arg)
 {
-    GtkWidget *dialog, *table, *utf8;
+    GtkWidget *dialog, *table;
     gchar *name = NULL;
     gchar buf[32];
     gint i;
@@ -534,8 +515,12 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     get_preferences_int("importtxtcolcomment3",&data->columns[TXT_COMMENT3]);
     get_preferences_str("importtxtgirlstr",    data->girlstr);
     get_preferences_str("importtxtseparator",  data->separator);
+    get_preferences_str("importtxtquote",      data->quote);
+    get_preferences_int("importtxthasheader",  &data->hasHeader);
     if (data->separator[0] == 0)
         strcpy(data->separator, ",");
+    if (data->quote[0] == 0)
+            strcpy(data->quote, "\"");
 
     dialog = gtk_dialog_new_with_buttons (_("Preferences"),
 					  GTK_WINDOW(main_window),
@@ -551,14 +536,6 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     table = gtk_grid_new();
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        table, FALSE, FALSE, 0);
-
-    utf8 = gtk_check_button_new_with_label("UTF-8");
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-                       utf8, FALSE, FALSE, 0);
-    if (file_is_utf8(name) == 1) {
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(utf8), TRUE);
-	data->utf8 = TRUE;
-    }
 #else
     gtk_container_add(GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), data->lineread);
     table = gtk_table_new(3, 16, FALSE);
@@ -581,8 +558,56 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     data->fields[TXT_COMMENT1]   = set_col_entry (table,13, _("Comment:"),          data->columns[TXT_COMMENT1],data);
     data->fields[TXT_COMMENT2]   = set_col_entry (table,14, _("Comment:"),          data->columns[TXT_COMMENT2],data);
     data->fields[TXT_COMMENT3]   = set_col_entry (table,15, _("Comment:"),          data->columns[TXT_COMMENT3],data);
-    data->fields[TXT_GIRLSTR]   = set_text_entry(table,16, _("Girl Text:"),        data->girlstr,             data);
-    data->fields[TXT_SEPARATOR] = set_text_entry(table,17, _("Column Separator:"), data->separator,           data);
+
+#if (GTKVER == 3)
+    table = gtk_grid_new();
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       table, FALSE, FALSE, 0);
+
+    GtkWidget *tmp;
+    //GIRL TEXT
+    tmp = gtk_label_new(_("Girl Text:"));
+    gtk_grid_attach(GTK_GRID(table), tmp, 0, 0, 1, 1);
+    tmp = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(tmp), 4);
+    gtk_entry_set_text(GTK_ENTRY(tmp), data->girlstr);
+    data->setting_fields[TXT_GIRLSTR]=tmp;
+    g_signal_connect(G_OBJECT(tmp), "changed", G_CALLBACK(selecter), data);
+    gtk_grid_attach(GTK_GRID(table), tmp, 1, 0, 1, 1);
+    //HAS HEADER
+    tmp = gtk_check_button_new_with_label(_("First line is header"));;
+    data->setting_fields[BOOL_HASHEADER]=tmp;
+    g_signal_connect(G_OBJECT(tmp), "toggled", G_CALLBACK(selecter), data);
+    gtk_grid_attach(GTK_GRID(table), tmp, 2, 0, 2, 1);
+    //SEPARATOR
+    tmp = gtk_label_new(_("Column Separator:"));
+    gtk_grid_attach(GTK_GRID(table), tmp, 0, 1, 1, 1);
+    tmp = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(tmp), 4);
+    gtk_entry_set_text(GTK_ENTRY(tmp), data->separator);
+    data->setting_fields[TXT_SEPARATOR]=tmp;
+    g_signal_connect(G_OBJECT(tmp), "changed", G_CALLBACK(selecter), data);
+    gtk_grid_attach(GTK_GRID(table), tmp, 1, 1, 1, 1);
+    //QUOTE
+    tmp = gtk_label_new(_("Quote Character:"));
+    gtk_grid_attach(GTK_GRID(table), tmp, 2, 1, 1, 1);
+    tmp = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(tmp), 4);
+    gtk_entry_set_text(GTK_ENTRY(tmp), data->quote);
+    data->setting_fields[TXT_QUOTE]=tmp;
+    g_signal_connect(G_OBJECT(tmp), "changed", G_CALLBACK(selecter), data);
+    gtk_grid_attach(GTK_GRID(table), tmp, 3, 1, 1, 1);
+    //UTF8
+    tmp = gtk_check_button_new_with_label(_("UTF-8"));;
+    data->setting_fields[BOOL_UTF8]=tmp;
+    g_signal_connect(G_OBJECT(tmp), "toggled", G_CALLBACK(selecter), data);
+    gtk_grid_attach(GTK_GRID(table), tmp, 0, 2, 2, 1);
+
+    if (file_is_utf8(name) == 1) {
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(data->setting_fields[BOOL_UTF8]), TRUE);
+	data->utf8 = TRUE;
+    }
+#endif
 
     gtk_widget_show_all(dialog);
 
@@ -590,8 +615,6 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     import_txt(name, TRUE, data);
 
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
-	data->utf8 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(utf8));
-
         read_values(data);
         import_txt(name, FALSE, data);
         //matches_refresh();
@@ -611,6 +634,8 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
         set_preferences_int("importtxtcolclubseeding",data->columns[TXT_CLUBSEEDING]);
         set_preferences_str("importtxtgirlstr",   data->girlstr);
         set_preferences_str("importtxtseparator", data->separator);
+        set_preferences_str("importtxtquote",     data->quote);
+        set_preferences_int("importtxthasheader", data->hasHeader);
         set_preferences_int("importtxtcolcomment",data->columns[TXT_COMMENT1]);
         set_preferences_int("importtxtcolcomment2",data->columns[TXT_COMMENT2]);
         set_preferences_int("importtxtcolcomment3",data->columns[TXT_COMMENT3]);
