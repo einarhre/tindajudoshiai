@@ -180,7 +180,7 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
     else comments[0] = "";
     if (valid_data(TXT_COMMENT2, tokens, num_cols, d)) comments[1] = tokens[d->columns[TXT_COMMENT2] - 1];
     else comments[1] = "";
-    if (valid_data(TXT_COMMENT2, tokens, num_cols, d)) comments[2] = tokens[d->columns[TXT_COMMENT3] - 1];
+    if (valid_data(TXT_COMMENT3, tokens, num_cols, d)) comments[2] = tokens[d->columns[TXT_COMMENT3] - 1];
     else comments[2] = "";
 
     if (comments[0][0] || comments[1][0] || comments[2][0])
