@@ -1051,8 +1051,20 @@ msgid "Girl Text:"
 msgstr "Dames tekst:"
 
 #: ../judoshiai/import.c
+msgid "First line is header"
+msgstr ""
+
+#: ../judoshiai/import.c
 msgid "Column Separator:"
 msgstr "Kolom scheidingsteken:"
+
+#: ../judoshiai/import.c
+msgid "Quote Character:"
+msgstr ""
+
+#: ../judoshiai/import.c
+msgid "UTF-8"
+msgstr ""
 
 #: ../judoshiai/import.c
 msgid "competitors added"
