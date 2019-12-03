@@ -1,15 +1,17 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: oh2ncp@kolumbus.fi\n"
 "POT-Creation-Date: 2016-10-25 13:22+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2019-12-02 21:40-0500\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: ../judotimer/comm.c ../judotimer/main.c ../judotimer/menus.c
 #: ../judotimer/stopwatch.c
@@ -136,6 +138,14 @@ msgstr "Effacer la sélection"
 msgid "View Log"
 msgstr "Afficher le registre"
 
+#: ../judotimer/menus.c
+msgid "Show competitors"
+msgstr "Afficher les compétiteurs"
+
+#: ../judotimer/menus.c
+msgid "Show competitors..."
+msgstr "Afficher les compétiteurs..."
+
 #: ../judotimer/menus.c ../judotimer/show-ad.c
 msgid "Show Competitors"
 msgstr "Afficher les compétiteurs"
@@ -173,7 +183,6 @@ msgstr "Arrêter le chrono sur Ippon"
 msgid "2017 Rules"
 msgstr "Règles de 2017"
 
-#: ../judotimer/menus.c
 msgid "2018 Rules"
 msgstr "Règles de 2018"
 
@@ -195,7 +204,7 @@ msgstr "Pas de texte SOREMADE/IPPON"
 
 #: ../judotimer/menus.c
 msgid "Require judogi control"
-msgstr ""
+msgstr "Exiger le contrôle du judogi"
 
 #: ../judotimer/menus.c
 msgid "Display layout"
@@ -383,7 +392,7 @@ msgstr "Taille du drapeau:"
 
 #: ../judotimer/show-ad.c
 msgid "Name size:"
-msgstr "Taille du nom"
+msgstr "Taille du nom:"
 
 #: ../judotimer/show-ad.c ../judoshiai/custom-category.c
 #: ../judoshiai/menuacts.c ../judoshiai/svg.c ../judoshiai/write-results.c
@@ -707,7 +716,7 @@ msgstr "Id:"
 
 #: ../judoshiai/competitors.c ../judoshiai/import.c
 msgid "Coach Id:"
-msgstr "Id de l'entraîneur"
+msgstr "Id de l'entraîneur:"
 
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "Gender:"
@@ -739,7 +748,7 @@ msgstr "Cacher le nom:"
 
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "Team:"
-msgstr "Équipe"
+msgstr "Équipe:"
 
 #: ../judoshiai/competitors.c
 msgid "System:"
@@ -760,7 +769,6 @@ msgstr "Créer des membres par défaut:"
 #: ../judoshiai/competitors.c
 msgid "Coach"
 msgstr "Entraîneur"
-
 
 #: ../judoshiai/competitors.c ../judoshiai/matches.c
 msgid "Group"
@@ -827,7 +835,7 @@ msgstr "Définitions de catégories manquantes:"
 #: ../judoshiai/db-validate.c
 #, c-format
 msgid "Category %s is not defined."
-msgstr "La catégorie n'est pas définie."
+msgstr "La catégorie %s n'est pas définie."
 
 #: ../judoshiai/db-validate.c
 msgid "Category typing errors:"
@@ -1325,7 +1333,7 @@ msgstr "Geler l'ordre de match"
 
 #: ../judoshiai/matches.c
 msgid "canceled"
-msgstr "Annulé"
+msgstr "annulé"
 
 #: ../judoshiai/matches.c
 msgid "changed"
@@ -1406,7 +1414,7 @@ msgstr "au tatami"
 
 #: ../judoshiai/medal-matches.c
 msgid "delay"
-msgstr " suspension"
+msgstr "suspension"
 
 #: ../judoshiai/medal-matches.c ../common/common.c
 msgid "Final"
@@ -1482,7 +1490,7 @@ msgstr "Copier les poids"
 
 #: ../judoshiai/menuacts.c
 msgid "weights updated"
-msgstr "Poids mis à jour"
+msgstr "poids mis à jour"
 
 #: ../judoshiai/menuacts.c
 msgid "Do Backup"
@@ -1793,7 +1801,7 @@ msgstr "Sélectionner"
 
 #: ../judoshiai/popup-menu.c
 msgid "competitors from"
-msgstr "Compétiteurs de"
+msgstr "compétiteurs de"
 
 #: ../judoshiai/popup-menu.c
 msgid "each selected category"
@@ -1869,7 +1877,7 @@ msgstr "Imprimer cartes d'accréditation sélectionnées sur l'imprimante défau
 
 #: ../judoshiai/popup-menu.c
 msgid "Color..."
-msgstr "couleur..."
+msgstr "Couleur..."
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Finnish"
@@ -2042,7 +2050,7 @@ msgstr ""
 
 #: ../judoshiai/properties.c
 msgid "Seeded to fixed places:"
-msgstr "Favori à des positions fixes"
+msgstr "Favori à des positions fixes:"
 
 #: ../judoshiai/properties.c
 msgid "Use the first places only:"
@@ -2078,7 +2086,7 @@ msgstr "Résoudre triple égalité par poids:"
 
 #: ../judoshiai/properties.c
 msgid "Mix pool matches into rounds:"
-msgstr "Mélanger les matchs de pool en rondes"
+msgstr "Mélanger les matchs de pool en rondes:"
 
 #: ../judoshiai/properties.c
 msgid "Use points 10/1/0:"
@@ -2106,7 +2114,7 @@ msgstr "Utilisez les points 10/5/1:"
 
 #: ../judoshiai/properties.c
 msgid "Add extra match in teams points tie:"
-msgstr "Ajouter un match supplémentaire dans matches d'équipe en égalité"
+msgstr "Ajouter un match supplémentaire dans matches d'équipe en égalité:"
 
 #: ../judoshiai/properties.c
 msgid "Only wins count, ignore match points:"
@@ -2212,7 +2220,7 @@ msgstr "Joueurs"
 
 #: ../judoshiai/properties.c
 msgid "Max age"
-msgstr "âge max"
+msgstr "Âge max"
 
 #: ../judoshiai/properties.c
 msgid "Min"
@@ -2583,8 +2591,8 @@ msgid "ERROR"
 msgstr "ERREUR"
 
 #: ../judoweight/menus.c
-msgid "Scale Correction Table"
-msgstr "Table de correction de balance"
+msgid "Scale Correction Table..."
+msgstr "Table de correction de balance..."
 
 #: ../judoweight/menus.c
 msgid "No manual edit"
@@ -2626,29 +2634,29 @@ msgstr "Recharger"
 msgid "About JudoProxy"
 msgstr "À propos de JudoProxy"
 
+msgid "Contest duration: automatic"
+msgstr "Durée du combat: automatique"
+
+msgid "Contest duration: 2 min (short pin times)"
+msgstr "Durée du combat: 2 min (temps court d'immobilisation)"
+
+msgid "Contest duration: 2 min"
+msgstr "Durée du combat: 2 min"
+
+msgid "Contest duration: 3 min"
+msgstr "Durée du combat: 3 min"
+
+msgid "Contest duration: 4 min"
+msgstr "Durée du combat: 4 min"
+
+msgid "Contest duration: 5 min"
+msgstr "Durée du combat: 5 min"
+
 #~ msgid "Contest duration automatically from JudoShiai program"
 #~ msgstr "Durée du combat automatique du programme JudoShiai"
 
 #~ msgid "Match duration: 2 min E-juniors"
 #~ msgstr "Durée du match: 2 min E-juniors"
-
-#~ msgid "Contest duration: automatic"
-#~ msgstr "Durée du combat: automatique"
-
-#~ msgid "Contest duration: 2 min (short pin times)"
-#~ msgstr "Durée du combat: 2 min (temps court d'immobilisation)"
-
-#~ msgid "Contest duration: 2 min"
-#~ msgstr "Durée du combat: 2 min"
-
-#~ msgid "Contest duration: 3 min"
-#~ msgstr "Durée du combat: 3 min"
-
-#~ msgid "Contest duration: 4 min"
-#~ msgstr "Durée du combat: 4 min"
-
-#~ msgid "Contest duration: 5 min"
-#~ msgstr "Durée du combat: 5 min"
 
 #~ msgid "Contest area 1"
 #~ msgstr "Tatami 1"
