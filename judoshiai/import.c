@@ -61,7 +61,7 @@ struct i_text {
     gboolean hasHeader;
 };
 
-#define MAX_NUM_COLUMNS 16
+#define MAX_NUM_COLUMNS 21
 static gchar *combotxts[MAX_NUM_COLUMNS] = {0};
 
 static gboolean valid_data(gint item, gchar **tokens, gint num_cols, struct i_text *d)
