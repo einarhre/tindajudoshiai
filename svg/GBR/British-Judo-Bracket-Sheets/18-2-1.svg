@@ -34,14 +34,14 @@
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
    inkscape:window-width="1920"
-   inkscape:window-height="1017"
+   inkscape:window-height="1001"
    id="namedview3493"
    showgrid="false"
    inkscape:zoom="1.1700353"
-   inkscape:cx="443.41384"
-   inkscape:cy="372.27275"
-   inkscape:window-x="-8"
-   inkscape:window-y="-8"
+   inkscape:cx="299.40109"
+   inkscape:cy="509.02076"
+   inkscape:window-x="-9"
+   inkscape:window-y="-9"
    inkscape:window-maximized="1"
    inkscape:current-layer="Layer_1" /><rect
    x="23.222544"
@@ -145,6 +145,7 @@
 
 
 
+
 <text
    font-size="10"
    id="text3275"
@@ -152,6 +153,7 @@
    x="314.76889"
    y="400.11807"
    transform="scale(1.018585,0.98175411)">%t19:</text>
+
 
 
 
@@ -169,6 +171,7 @@
 
 
 
+
 <text
    font-size="10"
    id="text3279"
@@ -176,6 +179,7 @@
    x="47.248505"
    y="193.50185"
    transform="scale(1.018585,0.98175411)">%t7</text>
+
 
 
 
@@ -193,6 +197,7 @@
 
 
 
+
 <text
    font-size="10"
    id="text3283"
@@ -200,6 +205,7 @@
    x="47.245407"
    y="563.6156"
    transform="scale(1.018585,0.98175411)">%t7</text>
+
 
 
 
@@ -217,6 +223,7 @@
 
 
 
+
 <text
    font-size="10"
    id="text3287"
@@ -229,6 +236,7 @@
 
 
 
+
 <text
    font-size="10"
    id="text3289"
@@ -236,6 +244,7 @@
    x="47.247215"
    y="278.91278"
    transform="scale(1.018585,0.98175411)">%t7</text>
+
 
 
 
@@ -462,9 +471,10 @@
    font-size="14"
    id="text3377"
    style="font-size:22.34908867px;line-height:0%;font-family:Arial-BoldMT"
-   x="122.47913"
+   x="34.121231"
    y="59.192841"
    transform="scale(1.018585,0.98175411)">%i-competition</text>
+
 
 
 
@@ -474,9 +484,10 @@
    font-size="14"
    id="text3379"
    style="font-size:22.34908867px;line-height:0%;font-family:Arial-BoldMT"
-   x="122.47913"
+   x="34.121231"
    y="87.927376"
    transform="scale(1.018585,0.98175411)">%i-catname</text>
+
 
 
 
@@ -494,6 +505,7 @@
 
 
 
+
 <text
    font-size="14"
    id="text3383"
@@ -501,6 +513,7 @@
    x="550.30615"
    y="59.192841"
    transform="scale(1.018585,0.98175411)">%i-place</text>
+
 
 
 
@@ -530,6 +543,7 @@
 
 
 
+
 <text
    font-size="7.366"
    id="text3393"
@@ -537,6 +551,7 @@
    x="749.12531"
    y="637.7843"
    transform="scale(1.018585,0.98175411)">1</text>
+
 
 
 
@@ -554,6 +569,7 @@
 
 
 
+
 <text
    font-size="7.366"
    id="text3397"
@@ -566,6 +582,7 @@
 
 
 
+
 <text
    font-size="7.366"
    id="text3399"
@@ -573,6 +590,7 @@
    x="763.6236"
    y="658.69446"
    transform="scale(1.018585,0.98175411)">%r2first-s-last-s-club</text>
+
 
 
 
@@ -595,6 +613,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3405"
@@ -607,6 +626,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3407"
@@ -614,6 +634,7 @@
    x="112.4594"
    y="238.17424"
    transform="scale(1.018585,0.98175411)">%m1-1-hm1-club</text>
+
 
 
 
@@ -637,6 +658,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3412"
@@ -644,6 +666,7 @@
    x="463.79663"
    y="257.09607"
    transform="scale(1.018585,0.98175411)">%m1-winner-grd</text>
+
 
 
 
@@ -661,6 +684,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3416"
@@ -668,6 +692,7 @@
    x="543.44415"
    y="281.04715"
    transform="scale(1.018585,0.98175411)">%m1-winner-club</text>
+
 
 
 
@@ -685,6 +710,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3420"
@@ -692,6 +718,7 @@
    x="112.4594"
    y="323.48438"
    transform="scale(1.018585,0.98175411)">%m1-2-hm1-club</text>
+
 
 
 
@@ -715,6 +742,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3425"
@@ -722,6 +750,7 @@
    x="31.951849"
    y="300.69168"
    transform="scale(1.018585,0.98175411)">%m1-2-grd</text>
+
 
 
 
@@ -739,6 +768,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3429"
@@ -751,6 +781,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3431"
@@ -758,6 +789,7 @@
    x="113.3188"
    y="380.44119"
    transform="scale(1.018585,0.98175411)">%m2-1-hm1-club</text>
+
 
 
 
@@ -781,6 +813,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3436"
@@ -788,6 +821,7 @@
    x="464.65668"
    y="399.36179"
    transform="scale(1.018585,0.98175411)">%m2-winner-grd</text>
+
 
 
 
@@ -805,6 +839,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3440"
@@ -812,6 +847,7 @@
    x="544.3042"
    y="423.31409"
    transform="scale(1.018585,0.98175411)">%m2-winner-club</text>
+
 
 
 
@@ -829,6 +865,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3444"
@@ -836,6 +873,7 @@
    x="113.3188"
    y="465.75128"
    transform="scale(1.018585,0.98175411)">%m2-2-hm1-club</text>
+
 
 
 
@@ -859,6 +897,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3449"
@@ -866,6 +905,7 @@
    x="32.811237"
    y="442.95746"
    transform="scale(1.018585,0.98175411)">%m2-2-grd</text>
+
 
 
 
@@ -883,6 +923,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3453"
@@ -895,6 +936,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3455"
@@ -902,6 +944,7 @@
    x="111.60001"
    y="522.70447"
    transform="scale(1.018585,0.98175411)">%m3-1-hm1-club</text>
+
 
 
 
@@ -925,6 +968,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3460"
@@ -932,6 +976,7 @@
    x="462.9379"
    y="541.62628"
    transform="scale(1.018585,0.98175411)">%m3-winner-grd</text>
+
 
 
 
@@ -949,6 +994,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3464"
@@ -956,6 +1002,7 @@
    x="542.58539"
    y="565.57733"
    transform="scale(1.018585,0.98175411)">%m3-winner-hm1-club</text>
+
 
 
 
@@ -973,6 +1020,7 @@
 
 
 
+
 <text
    font-size="7"
    id="text3468"
@@ -980,6 +1028,7 @@
    x="111.60001"
    y="608.01465"
    transform="scale(1.018585,0.98175411)">%m3-2-hm1-club</text>
+
 
 
 
@@ -1003,6 +1052,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3473"
@@ -1010,6 +1060,7 @@
    x="31.092453"
    y="585.2207"
    transform="scale(1.018585,0.98175411)">%m3-2-grd</text>
+
 
 
 
@@ -1027,6 +1078,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3477"
@@ -1034,6 +1086,7 @@
    x="387.60306"
    y="399.36179"
    transform="scale(1.018585,0.98175411)">%m2time</text>
+
 
 
 
@@ -1051,6 +1104,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3481"
@@ -1058,6 +1112,7 @@
    x="459.38129"
    y="216.34607"
    transform="scale(1.018585,0.98175411)">%m1s1-1</text>
+
 
 
 
@@ -1075,6 +1130,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3485"
@@ -1082,6 +1138,7 @@
    x="459.38129"
    y="500.8764"
    transform="scale(1.018585,0.98175411)">%m3s1-1</text>
+
 
 
 
@@ -1099,6 +1156,7 @@
 
 
 
+
 <text
    font-size="9"
    id="text3489"
@@ -1106,6 +1164,7 @@
    x="459.38129"
    y="442.90463"
    transform="scale(1.018585,0.98175411)">%m2s2-1</text>
+
 
 
 
@@ -1123,6 +1182,7 @@
 
 
 
+
 <text
    id="text3790"
    y="262.24564"
@@ -1134,6 +1194,7 @@
      x="861.83765"
      id="tspan3788"
      sodipodi:role="line">LEGEND</tspan></text>
+
 
 
 
@@ -1215,6 +1276,7 @@
 
 
 
+
 <text
    id="text3830"
    y="278.93637"
@@ -1286,6 +1348,7 @@
      y="478.93637"
      x="1003.6375"
      sodipodi:role="line">1,10</tspan></text>
+
 
 
 
@@ -1367,6 +1430,7 @@
 
 
 
+
 <ellipse
    ry="4.9681702"
    rx="5.0362277"
@@ -1437,6 +1501,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
@@ -1448,6 +1513,7 @@
      x="517.05145"
      y="628.53723"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Referees</tspan></text>
+
 
 
 
@@ -1495,12 +1561,13 @@
    width="100" /><text
    xml:space="preserve"
    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:'Calibri, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1"
-   x="125.84911"
+   x="35.849113"
    y="108.78794"
    id="text7515"><tspan
      sodipodi:role="line"
      id="tspan7513"
-     x="125.84911"
+     x="35.849113"
      y="108.78794"
      style="stroke-width:1">%n Judoka</tspan></text>
+
 </svg>

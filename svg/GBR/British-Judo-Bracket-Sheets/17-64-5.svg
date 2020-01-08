@@ -38,8 +38,8 @@
    id="namedview6657"
    showgrid="false"
    inkscape:zoom="1.3871734"
-   inkscape:cx="301.53305"
-   inkscape:cy="303.0252"
+   inkscape:cx="339.49497"
+   inkscape:cy="317.1647"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
@@ -1006,6 +1006,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,20.7734,334.6279)"
    id="text5703"
@@ -1014,7 +1019,12 @@
      y="0"
      font-size="10.08"
      id="tspan5705"
-     style="font-size:10.07999992px;font-family:Helvetica-Bold">C2</tspan></text>
+     style="font-size:10.07999992px;font-family:Helvetica-Bold">C1</tspan></text>
+
+
+
+
+
 
 
 
@@ -1030,6 +1040,11 @@
      font-size="10.08"
      id="tspan5739"
      style="font-size:10.07999992px;font-family:Helvetica-Bold">C3</tspan></text>
+
+
+
+
+
 
 
 
@@ -1056,6 +1071,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,20.7744,461.3477)"
    id="text5749"
@@ -1071,6 +1091,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,21.0137,432.5469)"
    id="text5755"
@@ -1080,6 +1105,11 @@
      font-size="10.08"
      id="tspan5757"
      style="font-size:10.07999992px;font-family:Helvetica-Bold">A4</tspan></text>
+
+
+
+
+
 
 
 
@@ -1146,6 +1176,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,308.5371,412.3877)"
    id="text5811"
@@ -1160,6 +1195,11 @@
      font-size="10.08"
      id="tspan5815"
      style="font-size:10.07999992px;font-family:Helvetica-Bold">5</tspan></text>
+
+
+
+
+
 
 
 
@@ -1226,6 +1266,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,556.9375,552.3086)"
    font-size="10.08"
@@ -1233,6 +1278,11 @@
    style="font-size:10.07999992px;line-height:0%;font-family:Helvetica-Bold"><tspan
      style="font-weight:bold;-inkscape-font-specification:'Sans Bold'"
      id="tspan7123">O</tspan></text>
+
+
+
+
+
 
 
 
@@ -1259,6 +1309,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,308.5361,285.6685)"
    id="text5923"
@@ -1273,6 +1328,11 @@
      font-size="10.08"
      id="tspan5927"
      style="font-size:10.07999992px;font-family:Helvetica-Bold">5</tspan></text>
+
+
+
+
+
 
 
 
@@ -1294,6 +1354,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,20.7764,391.5078)"
    id="text5975"
@@ -1309,6 +1374,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,558.1387,298.8682)"
    font-size="10.08"
@@ -1316,6 +1386,11 @@
    style="font-size:10.07999992px;line-height:0%;font-family:Helvetica-Bold"><tspan
      style="font-weight:bold;-inkscape-font-specification:'Sans Bold'"
      id="tspan7125">P</tspan></text>
+
+
+
+
+
 
 
 
@@ -1337,6 +1412,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,20.7769,236.708)"
    id="text6067"
@@ -1346,6 +1426,11 @@
      font-size="10.08"
      id="tspan6069"
      style="font-size:10.07999992px;font-family:Helvetica-Bold">B1</tspan></text>
+
+
+
+
+
 
 
 
@@ -1367,6 +1452,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,20.7759,109.9873)"
    id="text6079"
@@ -1376,6 +1466,11 @@
      font-size="10.08"
      id="tspan6081"
      style="font-size:10.07999992px;font-family:Helvetica-Bold">B3</tspan></text>
+
+
+
+
+
 
 
 
@@ -1397,6 +1492,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,20.7769,138.7871)"
    id="text6091"
@@ -1412,6 +1512,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,21.0171,179.1074)"
    id="text6097"
@@ -1421,6 +1526,11 @@
      font-size="10.08"
      id="tspan6099"
      style="font-size:10.07999992px;font-family:Helvetica-Bold">A3</tspan></text>
+
+
+
+
+
 
 
 
@@ -1447,6 +1557,11 @@
 
 
 
+
+
+
+
+
 <text
    transform="matrix(1.0006,0,0,1,20.7769,81.1875)"
    id="text6169"
@@ -1456,6 +1571,11 @@
      font-size="10.08"
      id="tspan6171"
      style="font-size:10.07999992px;font-family:Helvetica-Bold">C2</tspan></text>
+
+
+
+
+
 
 
 
@@ -2394,6 +2514,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="14"
    id="text1637"
@@ -2406,12 +2531,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="14"
    id="text1641"
    style="font-size:18.05244064px;line-height:0%;font-family:Arial-BoldMT"
-   x="566.38678"
-   y="47.083679">%i-date</text>
+   x="524.38678"
+   y="91.083679">%i-date</text>
+
+
+
+
+
 
 
 
@@ -2422,8 +2557,13 @@
    font-size="14"
    id="text1643"
    style="font-size:18.05244064px;line-height:0%;font-family:Arial-BoldMT"
-   x="566.38678"
-   y="23.8734">%i-place</text>
+   x="524.38678"
+   y="67.873398">%i-place</text>
+
+
+
+
+
 
 
 
@@ -2443,12 +2583,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="9.96"
    id="text1145"
    style="font-size:12.84302235px;line-height:0%;font-family:ArialMT"
    x="36.438324"
    y="37.932087">%t7</text>
+
+
+
+
+
 
 
 
@@ -2467,12 +2617,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-7"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="127.00257"
    y="123.46035">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2491,12 +2651,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-0"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="127.00257"
    y="250.33705">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2515,12 +2685,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-48"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="127.00257"
    y="376.13242">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2539,12 +2719,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-2"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="127.00257"
    y="503.36957">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2563,12 +2753,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-5"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="253.1584"
    y="346.57593">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2587,12 +2787,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-71"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="253.1584"
    y="92.822495">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2611,12 +2821,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-27"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="371.38437"
    y="250.33705">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2635,12 +2855,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-14"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="371.38437"
    y="503.00916">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2659,12 +2889,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-22"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="503.66782"
    y="439.93121">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2683,12 +2923,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text515-85"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="640.27655"
    y="495.43976">%t19:</text>
+
+
+
+
+
 
 
 
@@ -2718,6 +2968,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -2735,6 +2990,11 @@
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular"
    id="text3972_1_-76-18-1-6"
    font-size="7.5546">98</text>
+
+
+
+
+
 
 
 
@@ -2764,6 +3024,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -2781,6 +3046,11 @@
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular"
    id="text3972_1_-76-18-1-6-2"
    font-size="7.5546">100</text>
+
+
+
+
+
 
 
 
@@ -2810,6 +3080,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -2827,6 +3102,11 @@
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular"
    id="text3972_1_-76-18-1-6-4"
    font-size="7.5546">102</text>
+
+
+
+
+
 
 
 
@@ -2856,6 +3136,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -2873,6 +3158,11 @@
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular"
    id="text3972_1_-76-18-1-6-3"
    font-size="7.5546">104</text>
+
+
+
+
+
 
 
 
@@ -2902,6 +3192,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -2919,6 +3214,11 @@
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular"
    id="text3972_1_-76-18-1-6-7"
    font-size="7.5546">110</text>
+
+
+
+
+
 
 
 
@@ -2948,6 +3248,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -2965,6 +3270,11 @@
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular"
    id="text3972_1_-76-18-1-6-31"
    font-size="7.5546">112</text>
+
+
+
+
+
 
 
 
@@ -2994,6 +3304,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -3011,6 +3326,11 @@
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular"
    id="text3972_1_-76-18-1-6-28"
    font-size="7.5546">114</text>
+
+
+
+
+
 
 
 
@@ -3040,6 +3360,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -3057,6 +3382,11 @@
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular"
    id="text3972_1_-76-18-1-6-86"
    font-size="7.5546">116</text>
+
+
+
+
+
 
 
 
@@ -3086,6 +3416,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -3103,6 +3438,11 @@
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular"
    id="text3972_1_-76-18-1-6-38"
    font-size="7.5546">120</text>
+
+
+
+
+
 
 
 
@@ -3132,6 +3472,11 @@
 
 
 
+
+
+
+
+
 <circle
    style="fill:#ffffff;stroke:#1d1d1b;stroke-miterlimit:10"
    sodipodi:ry="6.0110002"
@@ -3155,12 +3500,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="36.282314"
    y="51.345959">%m97-1-grd</text>
+
+
+
+
+
 
 
 
@@ -3179,6 +3534,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154"
@@ -3191,12 +3551,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.466156"
+   x="68.466156"
    y="51.345959">%m97-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3223,12 +3593,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.212006"
+   x="68.212006"
    y="79.851837">%m97-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3253,12 +3633,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="60.610687"
    y="89.276031">%m97-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -3277,12 +3667,22 @@
 
 
 
+
+
+
+
+
 <text
    y="53.828815"
    x="192.34909"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_"
    font-size="6.2755">%m97-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -3301,12 +3701,22 @@
 
 
 
+
+
+
+
+
 <text
    y="108.61648"
    x="193.06998"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7"
    font-size="6.2755">%m98-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -3325,12 +3735,22 @@
 
 
 
+
+
+
+
+
 <text
    y="178.48549"
    x="192.33452"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-8"
    font-size="6.2755">%m99-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -3349,12 +3769,22 @@
 
 
 
+
+
+
+
+
 <text
    y="235.67813"
    x="192.49718"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-9"
    font-size="6.2755">%m100-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -3373,12 +3803,22 @@
 
 
 
+
+
+
+
+
 <text
    y="305.23462"
    x="192.5674"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-3"
    font-size="6.2755">%m101-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -3397,12 +3837,22 @@
 
 
 
+
+
+
+
+
 <text
    y="361.7543"
    x="192.40477"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-98"
    font-size="6.2755">%m102-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -3421,12 +3871,22 @@
 
 
 
+
+
+
+
+
 <text
    y="431.51801"
    x="192.40479"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0"
    font-size="6.2755">%m103-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -3445,12 +3905,22 @@
 
 
 
+
+
+
+
+
 <text
    y="488.99149"
    x="192.82253"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-6"
    font-size="6.2755">%m104-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -3469,12 +3939,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-7"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="36.186909"
    y="109.62537">%m98-1-grd</text>
+
+
+
+
+
 
 
 
@@ -3493,6 +3973,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-60"
@@ -3505,12 +3990,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-1"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.370758"
+   x="68.370758"
    y="109.62537">%m98-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3537,12 +4032,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-7"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.116608"
+   x="68.116608"
    y="138.13127">%m98-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3567,12 +4072,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-1"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="60.515282"
    y="147.55547">%m98-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -3591,12 +4106,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-0"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="36.072186"
    y="177.91559">%m99-1-grd</text>
+
+
+
+
+
 
 
 
@@ -3615,6 +4140,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-1"
@@ -3627,12 +4157,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-4"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.256027"
+   x="68.256027"
    y="177.91559">%m99-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3659,12 +4199,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-1"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.001877"
+   x="68.001877"
    y="206.42148">%m99-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3689,12 +4239,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-7"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="60.400558"
    y="215.84567">%m99-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -3713,12 +4273,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-3"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="36.177479"
    y="235.13049">%m100-1-grd</text>
+
+
+
+
+
 
 
 
@@ -3737,6 +4307,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-5"
@@ -3749,12 +4324,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-9"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.361351"
+   x="68.361351"
    y="235.13049">%m100-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3781,12 +4366,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-18"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.107201"
+   x="68.107201"
    y="263.63638">%m100-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3811,12 +4406,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-6"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="60.505856"
    y="273.06058">%m100-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -3835,12 +4440,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-38"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="36.269962"
    y="304.45413">%m101-1-grd</text>
+
+
+
+
+
 
 
 
@@ -3859,6 +4474,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-2"
@@ -3871,12 +4491,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-5"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.453804"
+   x="68.453804"
    y="304.45413">%m101-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3903,12 +4533,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-4"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.199654"
+   x="68.199654"
    y="332.96002">%m101-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -3933,12 +4573,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-5"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="60.598339"
    y="342.38422">%m101-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -3957,12 +4607,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-2"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="36.107281"
    y="362.20499">%m102-1-grd</text>
+
+
+
+
+
 
 
 
@@ -3981,6 +4641,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-4"
@@ -3993,12 +4658,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-0"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.291138"
+   x="68.291138"
    y="362.20499">%m102-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4025,12 +4700,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-8"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.036987"
+   x="68.036987"
    y="390.71085">%m102-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4055,12 +4740,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-4"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="60.435658"
    y="400.13504">%m102-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -4079,12 +4774,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="35.944622"
    y="431.81891">%m103-1-grd</text>
+
+
+
+
+
 
 
 
@@ -4103,6 +4808,19 @@
 
 
 
+
+
+
+
+
+<text
+   font-size="7"
+   id="text1147-08"
+   style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
+   x="68.036987"
+   y="431.81891">%m103-1-hm1-first-s-last</text>
+
+
 <text
    font-size="8"
    id="text1154-8"
@@ -4115,12 +4833,14 @@
 
 
 
-<text
-   font-size="7"
-   id="text1147-08"
-   style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="64.128456"
-   y="431.81891">%m103-1-hm1-first-s-last</text>
+
+
+
+
+
+
+
+
 
 
 
@@ -4134,6 +4854,14 @@
    width="11.605141"
    height="11.605141"
    style="fill:#ffffcc;stroke:#ffffcc;stroke-width:0.32236502;opacity:0" /><text
+   font-size="7"
+   id="text1147-3-3"
+   style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
+   x="68.036987"
+   y="460.32477">%m103-2-hm1-first-s-last</text>
+
+
+<text
    font-size="8"
    id="text1367-78"
    style="font-size:10.3156805px;line-height:0%;font-family:ArialMT"
@@ -4147,12 +4875,14 @@
 
 
 
-<text
-   font-size="7"
-   id="text1147-3-3"
-   style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="63.87431"
-   y="460.32477">%m103-2-hm1-first-s-last</text>
+
+
+
+
+
+
+
+
 
 
 
@@ -4177,6 +4907,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10"
@@ -4189,12 +4924,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-6-73"
    style="font-size:10.3156805px;line-height:0%;font-family:MyriadPro-Regular"
    x="168.89311"
    y="460.22696">%m103p2-1==0'LOSS'</text>
+
+
+
+
+
 
 
 
@@ -4215,6 +4960,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="9"
    id="text6217-1"
@@ -4223,6 +4973,11 @@
    y="474.58841"><tspan
      style="font-size:10px"
      id="tspan3617-7">BRONZE MEDALLIST</tspan></text>
+
+
+
+
+
 
 
 
@@ -4241,6 +4996,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-8-2"
@@ -4253,12 +5013,30 @@
 
 
 
+
+
+
+
+
+<text
+   font-size="7"
+   id="text1147-08-4"
+   style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
+   x="68.036987"
+   y="489.68964">%m104-1-hm1-first-s-last</text>
+
+
 <text
    font-size="7"
    id="text1149-4-37-7"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="34.657997"
    y="518.20178">%m104-2-grd</text>
+
+
+
+
+
 
 
 
@@ -4277,12 +5055,14 @@
 
 
 
-<text
-   font-size="7"
-   id="text1147-08-4"
-   style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="59.245308"
-   y="489.68964">%m104-1-hm1-first-s-last</text>
+
+
+
+
+
+
+
+
 
 
 
@@ -4293,8 +5073,13 @@
    font-size="7"
    id="text1147-3-3-9"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="59.245308"
+   x="68.036987"
    y="518.1955">%m104-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4327,12 +5112,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-0"
    style="font-size:10.3156805px;line-height:0%;font-family:MyriadPro-Regular"
    x="168.89311"
    y="489.19156">%m104p1-1==0'LOSS'</text>
+
+
+
+
+
 
 
 
@@ -4351,12 +5146,22 @@
 
 
 
+
+
+
+
+
 <text
    y="53.341831"
    x="324.90015"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8"
    font-size="6.2755">%m109-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -4375,12 +5180,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="192.90103"
    y="64.533142">%m109-1-grd</text>
+
+
+
+
+
 
 
 
@@ -4399,6 +5214,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0"
@@ -4411,12 +5231,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="214.32886"
+   x="224.76993"
    y="65.614471">%m109-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4443,12 +5273,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-3-2"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="212.76993"
+   x="224.76993"
    y="122.62376">%m109-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4473,12 +5313,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="224.56145"
    y="133.85019">%m109-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -4497,12 +5347,22 @@
 
 
 
+
+
+
+
+
 <text
    y="306.72861"
    x="325.26151"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20"
    font-size="6.2755">%m111-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -4521,12 +5381,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="193.26239"
    y="317.91992">%m111-1-grd</text>
+
+
+
+
+
 
 
 
@@ -4545,6 +5415,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1"
@@ -4557,12 +5432,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="214.69023"
+   x="224.76993"
    y="319.00125">%m111-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4589,12 +5474,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-3-2-2"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="213.13129"
+   x="224.76993"
    y="376.01053">%m111-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4619,12 +5514,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="224.92281"
    y="387.23697">%m111-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -4643,12 +5548,22 @@
 
 
 
+
+
+
+
+
 <text
    y="180.39577"
    x="325.05533"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-4"
    font-size="6.2755">%m110-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -4667,12 +5582,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-8"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="193.0562"
    y="191.58707">%m110-1-grd</text>
+
+
+
+
+
 
 
 
@@ -4691,6 +5616,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-7"
@@ -4703,12 +5633,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-0"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="214.48402"
+   x="224.76993"
    y="192.6684">%m110-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4735,12 +5675,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-3-2-2-8"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="212.92509"
+   x="224.76993"
    y="249.67767">%m110-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4765,12 +5715,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-4"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="224.71663"
    y="260.90411">%m110-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -4789,12 +5749,22 @@
 
 
 
+
+
+
+
+
 <text
    y="433.70416"
    x="325.53357"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-49"
    font-size="6.2755">%m112-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -4813,12 +5783,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-0"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="193.53445"
    y="444.89548">%m112-1-grd</text>
+
+
+
+
+
 
 
 
@@ -4837,6 +5817,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-9"
@@ -4849,12 +5834,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-5"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="214.96228"
+   x="224.76993"
    y="445.97678">%m112-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4881,12 +5876,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-3-2-2-5"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
-   x="213.40335"
+   x="224.76993"
    y="502.98608">%m112-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -4911,12 +5916,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-1"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="225.19489"
    y="514.2124">%m112-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -4935,12 +5950,22 @@
 
 
 
+
+
+
+
+
 <text
    y="82.856308"
    x="438.30124"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-49-8"
    font-size="6.2755">%m113-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -4959,12 +5984,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-0-4"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="323.92758"
    y="82.047607">%m113-1-grd</text>
+
+
+
+
+
 
 
 
@@ -4983,6 +6018,11 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-9-2"
@@ -4995,12 +6035,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-5-3"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="323.92758"
    y="94.408051">%m113-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -5027,12 +6077,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-3-3-2-2-5-5"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="323.62674"
    y="158.967">%m113-2-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -5057,12 +6117,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-1-2"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="323.81436"
    y="168.75163">%m113-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -5081,12 +6151,22 @@
 
 
 
+
+
+
+
+
 <text
    y="209.25888"
    x="438.83453"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-49-8-4"
    font-size="6.2755">%m114-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -5105,12 +6185,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-0-4-8"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="324.46088"
    y="208.45018">%m114-1-grd</text>
+
+
+
+
+
 
 
 
@@ -5129,12 +6219,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-5-3-6"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="324.46088"
    y="220.81062">%m114-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -5161,6 +6261,11 @@
 
 
 
+
+
+
+
+
 <rect
    id="m114l-2"
    x="438.76248"
@@ -5179,12 +6284,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-1-2-4"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="324.34766"
    y="295.15457">%m114-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -5203,12 +6318,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-9-2-9"
    style="font-size:10.3156805px;line-height:0%;font-family:MyriadPro-Regular"
    x="451.09848"
    y="220.24765">%m114p1-1==0'LOSS'</text>
+
+
+
+
+
 
 
 
@@ -5227,12 +6352,22 @@
 
 
 
+
+
+
+
+
 <text
    y="336.367"
    x="438.40408"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-49-8-4-9"
    font-size="6.2755">%m115-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -5251,12 +6386,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-0-4-8-7"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="324.03046"
    y="335.55829">%m115-1-grd</text>
+
+
+
+
+
 
 
 
@@ -5275,12 +6420,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-5-3-6-2"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="324.03046"
    y="347.91873">%m115-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -5307,6 +6462,11 @@
 
 
 
+
+
+
+
+
 <rect
    id="m115l-2"
    x="438.33206"
@@ -5325,12 +6485,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-1-2-4-9"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="323.91724"
    y="422.2623">%m115-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -5349,12 +6519,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-9-2-9-1"
    style="font-size:10.3156805px;line-height:0%;font-family:MyriadPro-Regular"
    x="450.66806"
    y="347.35577">%m115p1-1==0'LOSS'</text>
+
+
+
+
+
 
 
 
@@ -5373,12 +6553,22 @@
 
 
 
+
+
+
+
+
 <text
    y="463.05518"
    x="438.71799"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-49-8-4-9-9"
    font-size="6.2755">%m116-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -5397,12 +6587,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-0-4-8-7-0"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="324.34436"
    y="462.24649">%m116-1-grd</text>
+
+
+
+
+
 
 
 
@@ -5421,12 +6621,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-5-3-6-2-1"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="324.34436"
    y="474.60693">%m116-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -5453,6 +6663,11 @@
 
 
 
+
+
+
+
+
 <rect
    id="m116l-2"
    x="438.64597"
@@ -5471,12 +6686,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-1-2-4-9-9"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="324.23114"
    y="548.95056">%m116-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -5495,12 +6720,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-9-2-9-1-4"
    style="font-size:10.3156805px;line-height:0%;font-family:MyriadPro-Regular"
    x="450.98196"
    y="474.04398">%m116p1-1==0'LOSS'</text>
+
+
+
+
+
 
 
 
@@ -5519,12 +6754,22 @@
 
 
 
+
+
+
+
+
 <text
    y="111.34196"
    x="531.6189"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-49-8-4-9-9-0"
    font-size="6.2755">%m119-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -5543,12 +6788,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-0-4-8-7-0-3"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="438.52454"
    y="111.41679">%m119-1-grd</text>
+
+
+
+
+
 
 
 
@@ -5567,12 +6822,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-5-3-6-2-1-5"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="438.52454"
    y="127.93991">%m119-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -5599,6 +6864,11 @@
 
 
 
+
+
+
+
+
 <rect
    id="m119l-2"
    x="531.34924"
@@ -5617,12 +6887,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-1-2-4-9-9-5"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="439.32999"
    y="267.69016">%m119-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -5641,12 +6921,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-9-2-9-1-4-6"
    style="font-size:10.3156805px;line-height:0%;font-family:MyriadPro-Regular"
    x="544.32404"
    y="127.01651">%m119p1-1==0'LOSS'</text>
+
+
+
+
+
 
 
 
@@ -5665,12 +6955,22 @@
 
 
 
+
+
+
+
+
 <text
    y="364.73282"
    x="532.08539"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-49-8-4-9-9-0-9"
    font-size="6.2755">%m120-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -5689,12 +6989,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-0-4-8-7-0-3-4"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="438.99091"
    y="364.80765">%m120-1-grd</text>
+
+
+
+
+
 
 
 
@@ -5713,12 +7023,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-5-3-6-2-1-5-3"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="438.99091"
    y="381.33078">%m120-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -5745,6 +7065,11 @@
 
 
 
+
+
+
+
+
 <rect
    id="m120l-2"
    x="531.81573"
@@ -5763,12 +7088,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-1-2-4-9-9-5-1"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="439.79636"
    y="521.08105">%m120-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -5787,12 +7122,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-9-2-9-1-4-6-4"
    style="font-size:10.3156805px;line-height:0%;font-family:MyriadPro-Regular"
    x="544.79053"
    y="380.40738">%m120p1-1==0'LOSS'</text>
+
+
+
+
+
 
 
 
@@ -5811,12 +7156,22 @@
 
 
 
+
+
+
+
+
 <text
    y="164.85875"
    x="666.86749"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-49-8-4-9-9-0-9-0"
    font-size="6.2755">%m121-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -5835,12 +7190,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-0-4-8-7-0-3-4-4"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="568.76044"
    y="165.53357">%m121-1-grd</text>
+
+
+
+
+
 
 
 
@@ -5859,12 +7224,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-5-3-6-2-1-5-3-6"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="568.76044"
    y="186.38202">%m121-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -5891,6 +7266,11 @@
 
 
 
+
+
+
+
+
 <rect
    id="m121l-2"
    x="666.78357"
@@ -5909,12 +7289,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-1-2-4-9-9-5-1-8"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="568.94806"
    y="315.21671">%m121-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -5933,12 +7323,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-9-2-9-1-4-6-4-9"
    style="font-size:10.3156805px;line-height:0%;font-family:MyriadPro-Regular"
    x="678.52087"
    y="185.66975">%m121p1-1==0'LOSS'</text>
+
+
+
+
+
 
 
 
@@ -5957,12 +7357,22 @@
 
 
 
+
+
+
+
+
 <text
    y="418.82944"
    x="666.13141"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT"
    id="text555_10_-7-0-8-20-49-8-4-9-9-0-9-0-6"
    font-size="6.2755">%m122-s-1-1</text>
+
+
+
+
+
 
 
 
@@ -5981,12 +7391,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1149-9-8-0-0-4-8-7-0-3-4-4-9"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="567.90875"
    y="417.06696">%m122-1-grd</text>
+
+
+
+
+
 
 
 
@@ -6005,12 +7425,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text1147-08-46-8-5-3-6-2-1-5-3-6-7"
    style="font-size:9.02622032px;line-height:0%;font-family:ArialMT"
    x="567.90875"
    y="438.63632">%m122-1-hm1-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -6037,6 +7467,11 @@
 
 
 
+
+
+
+
+
 <rect
    id="m122l-2"
    x="666.74915"
@@ -6055,12 +7490,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="5"
    id="text1151-9-10-0-4-1-2-4-9-9-5-1-8-6"
    style="font-size:6.44730043px;line-height:0%;font-family:ArialMT"
    x="568.09637"
    y="567.97223">%m122-2-hm1-club</text>
+
+
+
+
+
 
 
 
@@ -6079,12 +7524,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text1154-8-0-1-9-2-9-1-4-6-4-9-6"
    style="font-size:10.3156805px;line-height:0%;font-family:MyriadPro-Regular"
    x="678.77252"
    y="439.10074">%m122p1-1==0'LOSS'</text>
+
+
+
+
+
 
 
 
@@ -6103,12 +7558,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text6591"
    style="font-size:9.85850906px;line-height:0%;font-family:ArialMT"
    x="702.62695"
    y="500.72083">%m122-winner-first-s-last</text>
+
+
+
+
+
 
 
 
@@ -6127,12 +7592,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="7"
    id="text6619"
    style="font-size:8.62619495px;line-height:0%;font-family:ArialMT"
    x="703.22638"
    y="232.92381">%m121-winner-grd</text>
+
+
+
+
+
 
 
 
@@ -6151,12 +7626,22 @@
 
 
 
+
+
+
+
+
 <text
    font-size="8"
    id="text6659"
    style="font-size:9.85850906px;line-height:0%;font-family:ArialMT"
    x="702.62695"
    y="517.08118">%m122-winner-club</text>
+
+
+
+
+
 
 
 
@@ -6175,35 +7660,50 @@
 
 
 
+
+
+
+
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;font-size:26.010849px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65027124"
-   x="57.28447"
-   y="573.76831"
+   x="562.07532"
+   y="353.49408"
    id="text3875"
-   transform="scale(1.0643474,0.93954288)"><tspan
+   transform="scale(1.0643474,0.93954287)"><tspan
      sodipodi:role="line"
      id="tspan3873"
-     x="57.28447"
-     y="573.76831"
+     x="562.07532"
+     y="353.49408"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.40433979px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65027124">Table Officials</tspan></text>
 
 
 
 
 
+
+
+
+
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;font-size:26.010849px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65027124"
-   x="197.35756"
-   y="573.76831"
+   x="702.14838"
+   y="353.49408"
    id="text3875-8"
-   transform="scale(1.0643474,0.93954288)"><tspan
+   transform="scale(1.0643474,0.93954287)"><tspan
      sodipodi:role="line"
      id="tspan3873-7"
-     x="197.35756"
-     y="573.76831"
+     x="702.14838"
+     y="353.49408"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.40433979px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.65027124">Referees</tspan></text>
+
+
+
+
+
 
 
 
@@ -6211,35 +7711,35 @@
 
 <path
    style="fill:none;stroke:#000000;stroke-width:0.65027124px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="M 61.310715,540.28111 H 139.21519"
+   d="M 598.58352,333.32403 H 676.488"
    id="path3916"
    inkscape:connector-curvature="0" /><path
    style="fill:none;stroke:#000000;stroke-width:0.65027124px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="m 210.31576,539.98081 49.66835,0.3003"
+   d="m 747.58857,333.02373 49.66835,0.3003"
    id="path3918"
    inkscape:connector-curvature="0" /><path
    style="fill:none;stroke:#000000;stroke-width:0.65027124px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="M 44.471095,553.55656 H 160.4773"
+   d="M 581.7439,350.59948 H 697.75011"
    id="path3920"
    inkscape:connector-curvature="0" /><path
    style="fill:none;stroke:#000000;stroke-width:0.65027124px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="M 44.471095,567.31876 H 160.4773"
+   d="M 581.7439,368.36168 H 697.75011"
    id="path3920-7"
    inkscape:connector-curvature="0" /><path
    style="fill:none;stroke:#000000;stroke-width:0.65027124px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="M 44.471095,581.08096 H 160.4773"
+   d="M 581.7439,386.12388 H 697.75011"
    id="path3920-3"
    inkscape:connector-curvature="0" /><path
    style="fill:none;stroke:#000000;stroke-width:0.65027124px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="M 178.02696,553.58762 H 294.03317"
+   d="M 715.29977,350.63054 H 831.30598"
    id="path3920-35"
    inkscape:connector-curvature="0" /><path
    style="fill:none;stroke:#000000;stroke-width:0.65027124px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="M 178.02696,567.34982 H 294.03317"
+   d="M 715.29977,368.39274 H 831.30598"
    id="path3920-7-0"
    inkscape:connector-curvature="0" /><path
    style="fill:none;stroke:#000000;stroke-width:0.65027124px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="M 178.02696,581.11201 H 294.03317"
+   d="M 715.29977,386.15493 H 831.30598"
    id="path3920-3-7"
    inkscape:connector-curvature="0" /><image
    y="13.238013"

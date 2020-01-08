@@ -27,9 +27,9 @@
    id="defs424" /><sodipodi:namedview
    id="namedview711"
    inkscape:current-layer="Layer_1"
-   inkscape:window-y="-8"
-   inkscape:window-x="-8"
-   inkscape:window-height="1017"
+   inkscape:window-y="-9"
+   inkscape:window-x="-9"
+   inkscape:window-height="1001"
    inkscape:window-width="1920"
    inkscape:pageshadow="2"
    inkscape:pageopacity="0"
@@ -39,7 +39,7 @@
    guidetolerance="10"
    inkscape:cy="485.37589"
    gridtolerance="10"
-   inkscape:cx="385.32455"
+   inkscape:cx="518.22194"
    objecttolerance="10"
    inkscape:zoom="1.4409613"
    borderopacity="1"
@@ -510,11 +510,13 @@
 
 
 
+
 <text
    id="text157"
    transform="translate(652.0522,239.0063)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:ArialMT">%t19:</text>
+
 
 
 
@@ -530,11 +532,13 @@
 
 
 
+
 <text
    id="text161"
    transform="translate(441.9766,519.145)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:ArialMT">%t19:</text>
+
 
 
 
@@ -550,11 +554,13 @@
 
 
 
+
 <text
    id="text165"
    transform="translate(205.958,348.0737)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:ArialMT">%t19:</text>
+
 
 
 
@@ -570,11 +576,13 @@
 
 
 
+
 <text
    id="text169"
    transform="translate(260.8872,711.3237)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:Arial-BoldMT">E</text>
+
 
 
 
@@ -590,11 +598,13 @@
 
 
 
+
 <text
    id="text173"
    transform="translate(441.9766,681.8042)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:ArialMT">%t19:</text>
+
 
 
 
@@ -610,11 +620,13 @@
 
 
 
+
 <text
    id="text177"
    transform="translate(20.0605,593.8481)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:Arial-BoldMT">C</text>
+
 
 
 
@@ -630,11 +642,13 @@
 
 
 
+
 <text
    id="text181"
    transform="translate(18.6279,348.0737)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:Arial-BoldMT">D</text>
+
 
 
 
@@ -650,11 +664,13 @@
 
 
 
+
 <text
    id="text185"
    transform="translate(423.9756,175.7515)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:ArialMT">%t19:</text>
+
 
 
 
@@ -670,11 +686,13 @@
 
 
 
+
 <text
    id="text189"
    transform="translate(18.6279,275.7808)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:Arial-BoldMT">C</text>
+
 
 
 
@@ -690,11 +708,13 @@
 
 
 
+
 <text
    id="text193"
    transform="translate(18.6279,203.4878)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:Arial-BoldMT">B</text>
+
 
 
 
@@ -710,11 +730,13 @@
 
 
 
+
 <text
    id="text197"
    transform="translate(327.4224,166.7095)"
    font-size="9.9403"
    style="font-size:9.94029999px;line-height:0%;font-family:Arial-BoldMT">E</text>
+
 
 
 
@@ -1253,6 +1275,7 @@
 
 
 
+
 <path
    id="path407"
    inkscape:connector-curvature="0"
@@ -1262,6 +1285,7 @@
    transform="translate(972.9771,245.6343)"
    font-size="22.5917"
    style="font-size:22.5916996px;line-height:0%;font-family:Arial-BoldMT">1</text>
+
 
 
 
@@ -1281,6 +1305,7 @@
 
 
 
+
 <path
    id="path415"
    inkscape:connector-curvature="0"
@@ -1290,6 +1315,7 @@
    transform="translate(723.2651,672.7681)"
    font-size="22.5917"
    style="font-size:22.5916996px;line-height:0%;font-family:Arial-BoldMT;fill:#ffffff">3</text>
+
 
 
 
@@ -1305,6 +1331,7 @@
 
 
 
+
 <text
    id="text421"
    transform="translate(22.2051,57.2056)"
@@ -1315,11 +1342,14 @@
 
 
 
+
 <text
    id="text423"
-   transform="translate(451.4473,57.2056)"
    font-size="17.5713"
-   style="font-size:17.57130051px;line-height:0%;font-family:Arial-BoldMT">%i-date</text>
+   style="font-size:17.57130051px;line-height:0%;font-family:Arial-BoldMT"
+   x="565.44727"
+   y="57.205601">%i-date</text>
+
 
 
 
@@ -1327,9 +1357,11 @@
 
 <text
    id="text425"
-   transform="translate(451.4473,34.6138)"
    font-size="17.5713"
-   style="font-size:17.57130051px;line-height:0%;font-family:Arial-BoldMT">%i-place</text>
+   style="font-size:17.57130051px;line-height:0%;font-family:Arial-BoldMT"
+   x="565.44727"
+   y="34.6138">%i-place</text>
+
 
 
 
@@ -1366,12 +1398,14 @@
 
 
 
+
 <text
    id="text439"
    font-size="9.245"
    style="font-size:9.24499989px;line-height:0%;font-family:ArialMT"
    x="789.97089"
    y="290.60974">1</text>
+
 
 
 
@@ -1388,12 +1422,14 @@
 
 
 
+
 <text
    id="text443"
    font-size="9.245"
    style="font-size:9.24499989px;line-height:0%;font-family:ArialMT"
    x="789.97089"
    y="306.01895">2</text>
+
 
 
 
@@ -1410,12 +1446,14 @@
 
 
 
+
 <text
    id="text447"
    font-size="9.245"
    style="font-size:9.24499989px;line-height:0%;font-family:ArialMT"
    x="789.97089"
    y="321.37143">3</text>
+
 
 
 
@@ -1432,12 +1470,14 @@
 
 
 
+
 <text
    id="text451"
    font-size="9.245"
    style="font-size:9.24499989px;line-height:0%;font-family:ArialMT"
    x="789.97089"
    y="336.83334">3</text>
+
 
 
 
@@ -1454,12 +1494,14 @@
 
 
 
+
 <text
    id="text455"
    font-size="9.245"
    style="font-size:9.24499989px;line-height:0%;font-family:ArialMT"
    x="804.08228"
    y="353.29044">%r5first-s-last-s-club</text>
+
 
 
 
@@ -1484,6 +1526,7 @@
 
 
 
+
 <text
    id="text463"
    font-size="9.245"
@@ -1495,12 +1538,14 @@
 
 
 
+
 <text
    id="text465"
    font-size="9.245"
    style="font-size:9.24499989px;line-height:0%;font-family:ArialMT"
    x="789.97089"
    y="367.32452">5</text>
+
 
 
 
@@ -1521,6 +1566,7 @@
 
 
 
+
 <text
    id="text471"
    transform="translate(20.9028,113.4868)"
@@ -1531,11 +1577,13 @@
 
 
 
+
 <text
    id="text473"
    transform="translate(67.0503,125.8726)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m1-1-hm1-club</text>
+
 
 
 
@@ -1560,6 +1608,7 @@
 
 
 
+
 <text
    id="text478"
    transform="translate(60.7744,148.4165)"
@@ -1570,11 +1619,13 @@
 
 
 
+
 <text
    id="text480"
    transform="translate(60.7744,163.728)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m1-2-hm1-club</text>
+
 
 
 
@@ -1599,11 +1650,13 @@
 
 
 
+
 <text
    id="text485"
    transform="translate(20.9028,149.0728)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m1-2-grd</text>
+
 
 
 
@@ -1619,6 +1672,7 @@
 
 
 
+
 <text
    id="text489"
    transform="translate(22.1548,185.0269)"
@@ -1629,11 +1683,13 @@
 
 
 
+
 <text
    id="text491"
    transform="translate(68.3047,197.4126)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m2-1-hm1-club</text>
+
 
 
 
@@ -1658,6 +1714,7 @@
 
 
 
+
 <text
    id="text496"
    transform="translate(68.3047,219.9565)"
@@ -1668,11 +1725,13 @@
 
 
 
+
 <text
    id="text498"
    transform="translate(68.3047,235.2681)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m2-2-hm1-club</text>
+
 
 
 
@@ -1697,11 +1756,13 @@
 
 
 
+
 <text
    id="text503"
    transform="translate(22.1548,220.6138)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m2-2-grd</text>
+
 
 
 
@@ -1717,6 +1778,7 @@
 
 
 
+
 <text
    id="text507"
    transform="translate(22.1548,257.8198)"
@@ -1727,11 +1789,13 @@
 
 
 
+
 <text
    id="text509"
    transform="translate(68.3047,270.2065)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m3-1-hm1-club</text>
+
 
 
 
@@ -1756,6 +1820,7 @@
 
 
 
+
 <text
    id="text514"
    transform="translate(68.3047,292.7515)"
@@ -1766,11 +1831,13 @@
 
 
 
+
 <text
    id="text516"
    transform="translate(68.3047,308.063)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m3-2-hm1-club</text>
+
 
 
 
@@ -1795,11 +1862,13 @@
 
 
 
+
 <text
    id="text521"
    transform="translate(22.1548,293.4067)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m3-2-grd</text>
+
 
 
 
@@ -1815,6 +1884,7 @@
 
 
 
+
 <text
    id="text525"
    transform="translate(22.1548,329.7798)"
@@ -1825,11 +1895,13 @@
 
 
 
+
 <text
    id="text527"
    transform="translate(68.3047,342.1665)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m4-1-hm1-club</text>
+
 
 
 
@@ -1854,6 +1926,7 @@
 
 
 
+
 <text
    id="text532"
    transform="translate(68.3047,364.7114)"
@@ -1864,11 +1937,13 @@
 
 
 
+
 <text
    id="text534"
    transform="translate(68.3047,380.0229)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m4-2-hm1-club</text>
+
 
 
 
@@ -1893,11 +1968,13 @@
 
 
 
+
 <text
    id="text539"
    transform="translate(22.1548,365.3657)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m4-2-grd</text>
+
 
 
 
@@ -1913,11 +1990,13 @@
 
 
 
+
 <text
    id="text543"
    transform="translate(254.0103,131.6821)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m1time</text>
+
 
 
 
@@ -1933,11 +2012,13 @@
 
 
 
+
 <text
    id="text547"
    transform="translate(254.0103,275.6001)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m3time</text>
+
 
 
 
@@ -1953,6 +2034,7 @@
 
 
 
+
 <text
    id="text551"
    transform="translate(353.6289,130.6392)"
@@ -1963,11 +2045,13 @@
 
 
 
+
 <text
    id="text553"
    transform="translate(313.7578,130.6392)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:ArialMT">%m5-1-grd</text>
+
 
 
 
@@ -1992,11 +2076,13 @@
 
 
 
+
 <text
    id="text560"
    transform="translate(484.5293,169.3345)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m5time</text>
+
 
 
 
@@ -2012,11 +2098,13 @@
 
 
 
+
 <text
    id="text564"
    transform="translate(353.2114,226.063)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m5-2-hm1-club</text>
+
 
 
 
@@ -2041,11 +2129,13 @@
 
 
 
+
 <text
    id="text569"
    transform="translate(313.7583,204.7163)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m5-2-grd</text>
+
 
 
 
@@ -2061,6 +2151,7 @@
 
 
 
+
 <text
    id="text573"
    transform="translate(313.1309,276.8569)"
@@ -2071,11 +2162,13 @@
 
 
 
+
 <text
    id="text575"
    transform="translate(353.002,299.2827)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m6-1-hm1-club</text>
+
 
 
 
@@ -2100,11 +2193,13 @@
 
 
 
+
 <text
    id="text580"
    transform="translate(483.9019,311.7896)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m6time</text>
+
 
 
 
@@ -2120,11 +2215,13 @@
 
 
 
+
 <text
    id="text584"
    transform="translate(352.5854,372.2808)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m6-2-hm1-club</text>
+
 
 
 
@@ -2149,11 +2246,13 @@
 
 
 
+
 <text
    id="text589"
    transform="translate(313.1309,350.9351)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m6-2-grd</text>
+
 
 
 
@@ -2169,6 +2268,7 @@
 
 
 
+
 <text
    id="text593"
    transform="translate(38.8921,430.6079)"
@@ -2179,11 +2279,13 @@
 
 
 
+
 <text
    id="text595"
    transform="translate(79.3906,451.7778)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m7-1-hm1-club</text>
+
 
 
 
@@ -2208,11 +2310,13 @@
 
 
 
+
 <text
    id="text600"
    transform="translate(269.2808,466.1646)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m7time</text>
+
 
 
 
@@ -2228,11 +2332,13 @@
 
 
 
+
 <text
    id="text604"
    transform="translate(78.3457,524.1489)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m5-2-hm1-club</text>
+
 
 
 
@@ -2257,11 +2363,13 @@
 
 
 
+
 <text
    id="text609"
    transform="translate(38.8926,502.8013)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m7-2-grd</text>
+
 
 
 
@@ -2277,6 +2385,7 @@
 
 
 
+
 <text
    id="text613"
    transform="translate(38.8921,592.5151)"
@@ -2287,11 +2396,13 @@
 
 
 
+
 <text
    id="text615"
    transform="translate(79.3906,613.6851)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m8-1-hm1-club</text>
+
 
 
 
@@ -2316,11 +2427,13 @@
 
 
 
+
 <text
    id="text620"
    transform="translate(269.2808,628.0718)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m8time</text>
+
 
 
 
@@ -2336,11 +2449,13 @@
 
 
 
+
 <text
    id="text624"
    transform="translate(78.3457,686.0552)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m8-2-hm1-club</text>
+
 
 
 
@@ -2365,11 +2480,13 @@
 
 
 
+
 <text
    id="text629"
    transform="translate(38.8926,664.7085)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m8-2-grd</text>
+
 
 
 
@@ -2385,6 +2502,7 @@
 
 
 
+
 <text
    id="text633"
    transform="translate(313.7578,465.7505)"
@@ -2395,11 +2513,13 @@
 
 
 
+
 <text
    id="text635"
    transform="translate(350.7017,486.9204)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m9-1-hm1-club</text>
+
 
 
 
@@ -2424,11 +2544,13 @@
 
 
 
+
 <text
    id="text640"
    transform="translate(485.1572,505.0728)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m9time</text>
+
 
 
 
@@ -2444,11 +2566,13 @@
 
 
 
+
 <text
    id="text644"
    transform="translate(320.5791,568.0776)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m9-2-hm1-club</text>
+
 
 
 
@@ -2473,11 +2597,13 @@
 
 
 
+
 <text
    id="text649"
    transform="translate(281.126,546.73)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m9-2-grd</text>
+
 
 
 
@@ -2493,6 +2619,7 @@
 
 
 
+
 <text
    id="text653"
    transform="translate(314.3853,629.5396)"
@@ -2503,11 +2630,13 @@
 
 
 
+
 <text
    id="text655"
    transform="translate(351.3291,650.7104)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m10-1-hm1-club</text>
+
 
 
 
@@ -2532,11 +2661,13 @@
 
 
 
+
 <text
    id="text660"
    transform="translate(485.7847,668.8618)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m10time</text>
+
 
 
 
@@ -2552,11 +2683,13 @@
 
 
 
+
 <text
    id="text664"
    transform="translate(321.2065,731.8657)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m10-2-hm1-club</text>
+
 
 
 
@@ -2581,11 +2714,13 @@
 
 
 
+
 <text
    id="text669"
    transform="translate(281.7534,710.519)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m10-2-grd</text>
+
 
 
 
@@ -2601,11 +2736,13 @@
 
 
 
+
 <text
    id="text673"
    transform="translate(566.6323,668.5483)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:ArialMT">%m10-winner-first-s-last</text>
+
 
 
 
@@ -2621,11 +2758,13 @@
 
 
 
+
 <text
    id="text677"
    transform="translate(530.9927,668.0688)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:ArialMT">%m10-winner-grd</text>
+
 
 
 
@@ -2641,11 +2780,13 @@
 
 
 
+
 <text
    id="text681"
    transform="translate(566.6323,696.1606)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m10-winner-club</text>
+
 
 
 
@@ -2661,6 +2802,7 @@
 
 
 
+
 <text
    id="text685"
    transform="translate(529.0044,168.2915)"
@@ -2671,11 +2813,13 @@
 
 
 
+
 <text
    id="text687"
    transform="translate(566.3687,188.2065)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m11-1-hm1-club</text>
+
 
 
 
@@ -2700,11 +2844,13 @@
 
 
 
+
 <text
    id="text692"
    transform="translate(695.3853,238.9937)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m11time</text>
+
 
 
 
@@ -2720,11 +2866,13 @@
 
 
 
+
 <text
    id="text696"
    transform="translate(566.5776,333.3735)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m11-2-hm1-club</text>
+
 
 
 
@@ -2749,11 +2897,13 @@
 
 
 
+
 <text
    id="text701"
    transform="translate(529.6323,313.2817)"
    font-size="8.7857"
    style="font-size:8.78569984px;line-height:0%;font-family:MyriadPro-Regular">%m11-2-grd</text>
+
 
 
 
@@ -2769,6 +2919,7 @@
 
 
 
+
 <text
    id="text705"
    transform="translate(752.5171,240.7095)"
@@ -2779,11 +2930,13 @@
 
 
 
+
 <text
    id="text707"
    transform="translate(789.4116,265.0366)"
    font-size="10.0408"
    style="font-size:10.04080009px;line-height:0%;font-family:ArialMT">%m11-winner-club</text>
+
 
 
 
@@ -2806,6 +2959,7 @@
 
 
 
+
 <circle
    fill="#FFFFFF"
    stroke="#1D1D1B"
@@ -2818,6 +2972,7 @@
    transform="translate(310.8491,171.3779)"
    font-size="7.5546"
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular">2</text>
+
 
 
 
@@ -2840,6 +2995,7 @@
 
 
 
+
 <circle
    fill="#FFFFFF"
    stroke="#1D1D1B"
@@ -2852,6 +3008,7 @@
    transform="translate(309.8384,316.7852)"
    font-size="7.5546"
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular">4</text>
+
 
 
 
@@ -2874,6 +3031,7 @@
 
 
 
+
 <circle
    fill="#FFFFFF"
    stroke="#1D1D1B"
@@ -2891,11 +3049,13 @@
 
 
 
+
 <text
    id="text555_1_"
    transform="translate(316.6289,107.7241)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m1-s-1-1</text>
+
 
 
 
@@ -2911,11 +3071,13 @@
 
 
 
+
 <text
    id="text555_4_"
    transform="translate(316.6294,179.2769)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m2-s-1-1</text>
+
 
 
 
@@ -2931,11 +3093,13 @@
 
 
 
+
 <text
    id="text555_6_"
    transform="translate(316.6289,251.9106)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m3-s-1-1</text>
+
 
 
 
@@ -2951,11 +3115,13 @@
 
 
 
+
 <text
    id="text555_8_"
    transform="translate(316.6289,324.4038)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m4-s-1-1</text>
+
 
 
 
@@ -2971,11 +3137,13 @@
 
 
 
+
 <text
    id="text564_1_"
    transform="translate(352.5854,153.0645)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m5-1-hm1-club</text>
+
 
 
 
@@ -2991,11 +3159,13 @@
 
 
 
+
 <text
    id="text555_9_"
    transform="translate(487.6289,189.2095)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m5-s-2-1</text>
+
 
 
 
@@ -3011,11 +3181,13 @@
 
 
 
+
 <text
    id="text555_11_"
    transform="translate(487.6289,333.3457)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m6-s-2-1</text>
+
 
 
 
@@ -3038,6 +3210,7 @@
 
 
 
+
 <circle
    fill="#FFFFFF"
    stroke="#1D1D1B"
@@ -3055,11 +3228,13 @@
 
 
 
+
 <text
    id="text555_14_"
    transform="translate(705.1245,153.0645)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m11-s-1-1</text>
+
 
 
 
@@ -3075,11 +3250,13 @@
 
 
 
+
 <text
    id="text555_16_"
    transform="translate(273.6289,414.8931)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m7-s-1-1</text>
+
 
 
 
@@ -3095,6 +3272,7 @@
 
 
 
+
 <text
    id="text555_18_"
    transform="translate(273.6289,577.6724)"
@@ -3105,11 +3283,13 @@
 
 
 
+
 <text
    id="text555_17_"
    transform="translate(273.6294,649.6997)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m8-s-2-1</text>
+
 
 
 
@@ -3132,6 +3312,7 @@
 
 
 
+
 <circle
    fill="#FFFFFF"
    stroke="#1D1D1B"
@@ -3144,6 +3325,7 @@
    transform="translate(526.8638,445.1938)"
    font-size="7.5546"
    style="font-size:7.55459976px;line-height:0%;font-family:MyriadPro-Regular">9</text>
+
 
 
 
@@ -3166,11 +3348,13 @@
 
 
 
+
 <text
    id="text555_20_"
    transform="translate(487.7061,450.7778)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m9-s-1-1</text>
+
 
 
 
@@ -3186,6 +3370,7 @@
 
 
 
+
 <text
    id="text555_22_"
    transform="translate(487.7061,613.686)"
@@ -3196,11 +3381,13 @@
 
 
 
+
 <text
    id="text555_21_"
    transform="translate(487.7061,694.5103)"
    font-size="6.2755"
    style="font-size:6.27549982px;line-height:0%;font-family:ArialMT">%m10-s-2-1</text>
+
 
 
 
@@ -3222,6 +3409,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -3233,6 +3421,7 @@
      y="257.79074"
      style="font-size:7.5px;line-height:1.25"
      id="tspan3763">2</tspan></text>
+
 
 
 
@@ -3254,6 +3443,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -3265,6 +3455,7 @@
      x="11.103699"
      y="186.13313"
      style="font-size:7.5px;line-height:1.25">4</tspan></text>
+
 
 
 
@@ -3286,6 +3477,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -3297,6 +3489,7 @@
      x="9.7758827"
      y="365.87424"
      style="font-size:7.5px;line-height:1.25">6</tspan></text>
+
 
 
 
@@ -3318,6 +3511,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -3334,6 +3528,7 @@
 
 
 
+
 <text
    id="text3790"
    y="496.43777"
@@ -3345,6 +3540,7 @@
      x="872.31689"
      id="tspan3788"
      sodipodi:role="line">LEGEND</tspan></text>
+
 
 
 
@@ -3426,6 +3622,7 @@
 
 
 
+
 <text
    id="text3830"
    y="513.12854"
@@ -3497,6 +3694,7 @@
      y="713.12848"
      x="1014.1168"
      sodipodi:role="line">1,10</tspan></text>
+
 
 
 
@@ -3578,6 +3776,7 @@
 
 
 
+
 <ellipse
    ry="4.9681702"
    rx="5.0362277"
@@ -3648,6 +3847,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
@@ -3659,6 +3859,7 @@
      x="866.05682"
      y="397.71927"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Referees</tspan></text>
+
 
 
 
@@ -3714,4 +3915,5 @@
      x="22.92098"
      y="76.845085"
      style="stroke-width:1">%n Judoka</tspan></text>
+
 </svg>
