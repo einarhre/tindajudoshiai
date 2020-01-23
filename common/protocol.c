@@ -236,7 +236,7 @@ gint encode_msg(struct message *m, guchar *buf, gint buflen)
 gint decode_msg(struct message *m, guchar *buf, gint buflen)
 {
     guchar *p = buf, *end = buf + buflen;
-    gint len, ver, i;
+    gint len = 0, ver, i;
 
     get8(ver);
 

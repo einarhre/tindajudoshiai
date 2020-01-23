@@ -549,7 +549,7 @@ ok:
         curl_global_init(CURL_GLOBAL_NOTHING);
 
         /* Create a bg thread using glib */
-        gth = gth; // make compiler happy
+        (void)gth; // make compiler happy
 
 	gth = g_thread_new("Node",
 			   (GThreadFunc)node_thread,

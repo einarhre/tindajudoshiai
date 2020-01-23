@@ -2487,7 +2487,7 @@ int main( int   argc,
     open_comm_socket();
 
     /* Create a bg thread using glib */
-    gth = gth;
+    (void)gth;
 #if (GTKVER == 3)
     gth = g_thread_new("Client",
                        (GThreadFunc)client_thread,

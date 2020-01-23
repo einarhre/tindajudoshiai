@@ -1235,7 +1235,7 @@ gpointer ssdp_thread(gpointer args)
 
                     //g_print("SSDP %s send: '%s'\n", APPLICATION, resp);
                     ret = sendto(sock_out, resp, strlen(resp), 0, (struct sockaddr *)&clientsock, socklen);
-                    ret = ret; // make compiler happy
+                    (void)ret; // make compiler happy
                     g_free(resp);
                 }
             } // len > 0

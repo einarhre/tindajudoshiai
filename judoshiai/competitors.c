@@ -559,7 +559,7 @@ void view_on_row_activated(GtkTreeView        *treeview,
         *coachid = NULL;
     guint belt, index = 0, birthyear;
     gint weight, seeding = 0, clubseeding = 0;
-    gboolean visible;
+    gboolean visible = FALSE;
     guint deleted;
     gchar weight_s[10], birthyear_s[10], clubseeding_s[10];
     GtkAccelGroup *accel_group;

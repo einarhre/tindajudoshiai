@@ -443,7 +443,7 @@ void row_activated(GtkTreeView        *treeview,
         j->category = g_strdup("?");
         db_add_judoka(j->index, j);
         ret = display_one_judoka(j);
-        ret = ret; // make compiler happy while this value is not used
+        (void)ret; // make compiler happy while this value is not used
 #if 0
         if (ret >= 0) {
             /* new category */
