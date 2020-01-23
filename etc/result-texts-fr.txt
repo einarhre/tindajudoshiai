@@ -1,5 +1,5 @@
 ### First line is the menu text
-Results in French
+Résultats en français
 ### 1: Competitors
 Compétiteurs
 ### 2: Competitors A (for double and quadruple pools)
@@ -9,9 +9,9 @@ Compétiteurs B
 ### 4: Competitors C
 Compétiteurs C
 ### 5: Competitors D
-Compétiteurs D
+Competitors D
 ### 6: # (= short text for "Number", like "Nr")
-#
+Nº
 ### 7: Name
 Nom
 ### 8: Grade (belt grade, 1. dan, 3. kyu etc)
@@ -19,17 +19,17 @@ Grade
 ### 9: Club
 Club
 ### 10: Matches
-Matchs
+Combats
 ### 11: Matches A
-Matchs A
+Combats A
 ### 12: Matches B
-Matchs B
+Combats B
 ### 13: Matches C
-Matchs C
+Combats C
 ### 14: Matches D
-Matchs D
+Combats D
 ### 15: Match
-Match
+Combat
 ### 16: Blue
 Bleu
 ### 17: White
@@ -41,11 +41,11 @@ Résultats
 ### 20: Time (fight time)
 Temps
 ### 21: Wins (number of wins)
-Vic.
+Vainqueurs
 ### 22: Pts (short text for points)
 Pts
 ### 23: Pos (short text for position = winner, second, bronze)
-Pos
+Place
 ### 24: Previous winner
 Gagnant précédent
 ### 25: Next (competitors who have the next fight)
@@ -53,7 +53,7 @@ Suivant
 ### 26: Weight:
 Poids:
 ### 27: PRELIMINARY SCHEDULE
-PROGRAMME PRÉLIMINAIRE
+COMBATS PRELIMINAIRE
 ### 28: weighin-notes.pdf (file name)
 Notes-Pesées.pdf
 ### 29: schedule.pdf (file name)
@@ -75,25 +75,25 @@ Total
 ### 37: Country
 Pays
 ### 38: Not drawn
-Tirage au sort non fait
+Pas tiré au sort
 ### 39: Finished
 Terminé
 ### 40: Match ongoing
-Match en cours
+Combat en cours
 ### 41: Started (category has started)
 Commencé
 ### 42: Drawing ready
-Tirage au sort prêt
+Tirage prêt
 ### 43: Coach
-Entraîneur
+Coach
 ### 44: Surname
-Nom de famille
+Prénom
 ### 45: Status
-Statut
+Status
 ### 46: Display
-Affichage
+Afficher
 ### 47: "Match after n matches" divided in two parts
 ###     Match after ("Match after" n matches)
-Match suivant
+Combat suivant
 ### 48: matches (Match after n "matches")
-Matchs
+Combats
