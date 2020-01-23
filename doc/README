@@ -29,7 +29,7 @@ It is recommended to use a copy of an older database before opening it.
 
 Common
 ------
-+ New comman line program db-convert added. It converts a version 3.0 database
++ New command line program db-convert added. It converts a version 3.0 database
   to version 2.9. This enables going back to an older JudoShiai version if
   a bug is detected. Usage: Start console (program cmd). Type 
   C:\Program Files\JudoShiai64\bin\db-convert.exe contest.shi
