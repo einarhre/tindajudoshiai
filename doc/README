@@ -10,8 +10,8 @@ Linux (Debian based): judoshiai_n.n-1_amd64.deb
 Raspberry Pi: judoshiai_n.n-1_armhf.deb
 
 NOTE for Windows:
-  Windows XP should work everywhere, but there are reports that Win10 has problems.
-  JudoShiai32 and JudoShiai64 do not work in Windows XP and they are experimental.
+  Windows XP should work everywhere.
+  JudoShiai32 and JudoShiai64 do not work in Windows XP.
   Default installation directories are JudoShiaiXP, JudoShiai32, and JudoShiai64.
 
   In some operations JudoShiai64 is much faster than JudoShiaiXP in Win64 PC.
@@ -29,6 +29,14 @@ It is recommended to use a copy of an older database before opening it.
 
 Common
 ------
++ New comman line program db-convert added. It converts a version 3.0 database
+  to version 2.9. This enables going back to an older JudoShiai version if
+  a bug is detected. Usage: Start console (program cmd). Type 
+  C:\Program Files\JudoShiai64\bin\db-convert.exe contest.shi
+  You will have a new file contest-29.shi.
+  You may try to fix a corrupted file by using option -c:
+  C:\Program Files\JudoShiai64\bin\db-convert.exe -c contest.shi
+  You may have a new working file contest-0.shi, if you are lucky.
 + Farsi language added.
 + Bug fixes.
 
@@ -36,6 +44,10 @@ JudoShiai
 ---------
 + GBR version updated.
 + Categories can be colorized for easier observation.
++ Competitor import enhanced (thanks Felix):
+  - more columns
+  - quote character definition
+  - ignore optional header line
 
 ==============================================
 RELEASE NOTE

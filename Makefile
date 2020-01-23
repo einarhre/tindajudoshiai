@@ -8,6 +8,7 @@ JUDOJUDOGIFILE=$(JS_BUILD_DIR)/judojudogi/$(OBJDIR)/judojudogi$(SUFF)
 JUDOPROXYFILE=$(JS_BUILD_DIR)/judoproxy/$(OBJDIR)/judoproxy$(SUFF)
 AUTOUPDATEFILE=$(JS_BUILD_DIR)/auto-update/$(OBJDIR)/auto-update$(SUFF)
 JUDOHTTPDFILE=$(JS_BUILD_DIR)/judohttpd/$(OBJDIR)/judohttpd$(SUFF)
+DBCONVERTFILE=$(JS_BUILD_DIR)/utils/$(OBJDIR)/db-convert$(SUFF)
 
 RELFILE=$(RELDIR)/bin/judoshiai$(SUFF)
 RUNDIR=$(DEVELDIR)
@@ -94,6 +95,7 @@ all:
 	make -C judojudogi
 	make -C serial
 	make -C auto-update
+	make -C utils
 ifeq ($(JUDOHTTPD),YES)
 	make -C judohttpd
 endif
@@ -110,6 +112,7 @@ endif
 	cp $(JUDOWEIGHTFILE) $(RELDIR)/bin/
 	cp $(JUDOJUDOGIFILE) $(RELDIR)/bin/
 	cp $(AUTOUPDATEFILE) $(RELDIR)/bin/
+	cp $(DBCONVERTFILE) $(RELDIR)/bin/
 ifeq ($(JUDOHTTPD),YES)
 	cp $(JUDOHTTPDFILE) $(RELDIR)/bin/
 endif
