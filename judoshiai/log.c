@@ -65,22 +65,25 @@ static void date_cell_data_func (GtkTreeViewColumn *col,
                                  gpointer           user_data)
 {
     gchar         buf[32];
-    time_t        date;
+    time_t        t;
+    unsigned int  date;
     struct tm    *tm;
 
+    buf[0] = 0;
     gtk_tree_model_get(model, iter, COL_DATE, &date, -1);
-  
-    tm = localtime(&date);
+    t = date;
+    
+    tm = localtime(&t);
 
-	if (tm)
-	    sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", 
-	            tm->tm_year+1900, 
-	            tm->tm_mon+1,
-	            tm->tm_mday,
-	            tm->tm_hour,
-	            tm->tm_min,
-	            tm->tm_sec);
-        
+    if (tm)
+        sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", 
+                tm->tm_year+1900, 
+                tm->tm_mon+1,
+                tm->tm_mday,
+                tm->tm_hour,
+                tm->tm_min,
+                tm->tm_sec);
+    
     g_object_set(renderer, "foreground-set", FALSE, NULL); /* print this normal */
 
     g_object_set(renderer, "text", buf, NULL);
@@ -199,7 +202,7 @@ void shiai_log(guint severity, guint tatami, gchar *format, ...)
     va_end(args);
 
     t = time(NULL);
-
+    
     while (num_log_lines >= 100) {
         gtk_tree_model_get_iter_first(model, &iter);
         gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
@@ -225,15 +228,15 @@ void shiai_log(guint severity, guint tatami, gchar *format, ...)
             gchar *text_ISO_8859_1 = 
                 g_convert(text, -1, "ISO-8859-1", "UTF-8", NULL, &x, NULL);
 
-			if (tm)
-	            fprintf(f, "%04d-%02d-%02d %02d:%02d:%02d %d %d %s\n",
-	                    tm->tm_year+1900, 
-	                    tm->tm_mon+1,
-	                    tm->tm_mday,
-	                    tm->tm_hour,
-	                    tm->tm_min,
-	                    tm->tm_sec,
-	                    severity, tatami, text_ISO_8859_1);
+            if (tm)
+                fprintf(f, "%04d-%02d-%02d %02d:%02d:%02d %d %d %s\n",
+                        tm->tm_year+1900, 
+                        tm->tm_mon+1,
+                        tm->tm_mday,
+                        tm->tm_hour,
+                        tm->tm_min,
+                        tm->tm_sec,
+                        severity, tatami, text_ISO_8859_1);
             g_free(text_ISO_8859_1);
             fclose(f);
         }
