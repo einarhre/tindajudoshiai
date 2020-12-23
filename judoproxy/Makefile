@@ -1,4 +1,4 @@
-include ../common/Makefile.inc
+include ../mk/common.mk
 
 VIDEO=no
 
@@ -33,7 +33,7 @@ CFLAGS += -DVIDEO
 endif
 
 ### Windows executable ###
-ifeq ($(TGT),WIN32)
+ifeq ($(TGT),WIN32OS)
 OBJS += $(OBJDIR)/judoproxy-icon.res
 
 $(OBJDIR)/judoproxy-icon.res: judoproxy-icon.rc

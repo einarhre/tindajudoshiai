@@ -1,4 +1,4 @@
-include ../common/Makefile.inc
+include ../mk/common.mk
 
 EXE = websock-serial$(SUFF)
 APP = websock-serial-pkg$(ZIP)
@@ -20,8 +20,8 @@ endif
 
 ifeq ($(TGTEXT),XP)
 $(OBJDIR)/$(APP): $(OBJDIR)/$(EXE)
-	zip -j $(OBJDIR)/$(APP) $(OBJDIR)/$(EXE) $(DLLS)
-else ifeq ($(TGT),LINUX)
+	7z a $(OBJDIR)/$(APP) $(OBJDIR)/$(EXE) $(DLLS)
+else ifeq ($(TGT),LINUXOS)
 $(OBJDIR)/$(APP): $(OBJDIR)/$(EXE)
 	mkdir -p $(OBJDIR)/$(APP)
 	cp $(OBJDIR)/$(EXE) $(OBJDIR)/$(APP)/

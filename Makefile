@@ -1,4 +1,4 @@
-include common/Makefile.inc
+include mk/common.mk
 
 JUDOSHIAIFILE=$(JS_BUILD_DIR)/judoshiai/$(OBJDIR)/judoshiai$(SUFF)
 JUDOTIMERFILE=$(JS_BUILD_DIR)/judotimer/$(OBJDIR)/judotimer$(SUFF)
@@ -6,7 +6,7 @@ JUDOINFOFILE=$(JS_BUILD_DIR)/judoinfo/$(OBJDIR)/judoinfo$(SUFF)
 JUDOWEIGHTFILE=$(JS_BUILD_DIR)/judoweight/$(OBJDIR)/judoweight$(SUFF)
 JUDOJUDOGIFILE=$(JS_BUILD_DIR)/judojudogi/$(OBJDIR)/judojudogi$(SUFF)
 JUDOPROXYFILE=$(JS_BUILD_DIR)/judoproxy/$(OBJDIR)/judoproxy$(SUFF)
-AUTOUPDATEFILE=$(JS_BUILD_DIR)/auto-update/$(OBJDIR)/auto-update$(SUFF)
+#AUTOUPDATEFILE=$(JS_BUILD_DIR)/auto-update/$(OBJDIR)/auto-update$(SUFF)
 JUDOHTTPDFILE=$(JS_BUILD_DIR)/judohttpd/$(OBJDIR)/judohttpd$(SUFF)
 DBCONVERTFILE=$(JS_BUILD_DIR)/utils/$(OBJDIR)/db-convert$(SUFF)
 
@@ -20,23 +20,35 @@ ifeq ($(TOOL),MXE)
     DLLS += libffi-6.dll libfontconfig-1.dll libfreetype-6.dll
     DLLS += libgcrypt-20.dll libgdk-3-0.dll
     DLLS += libgdk_pixbuf-2.0-0.dll libgio-2.0-0.dll libglib-2.0-0.dll
-    DLLS += libgmodule-2.0-0.dll libgmp-10.dll libgnutls-30.dll
+    DLLS += libgmodule-2.0-0.dll 
     DLLS += libgobject-2.0-0.dll libgthread-2.0-0.dll
-    DLLS += libgtk-3-0.dll libharfbuzz-0.dll libhogweed-4.dll libhogweed-5.dll
+    DLLS += libgtk-3-0.dll libharfbuzz-0.dll
     DLLS += libiconv-2.dll libidn2-0.dll libintl-8.dll
     DLLS += libjpeg-9.dll liblzma-5.dll libmpg123-0.dll
-    DLLS += libnettle-6.dll libnettle-7.dll libpango-1.0-0.dll libpangocairo-1.0-0.dll
+    DLLS += libpango-1.0-0.dll libpangocairo-1.0-0.dll
     DLLS += libpangoft2-1.0-0.dll libpangowin32-1.0-0.dll libpcre-1.dll
     DLLS += libpixman-1-0.dll libpng16-16.dll librsvg-2-2.dll
     DLLS += libssh2-1.dll libtiff-5.dll libunistring-2.dll
     DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll libwebp-7.dll
-    DLLS += libgpg-error-0.dll libtasn1-6.dll
+    DLLS += libgpg-error-0.dll libgnutls-30.dll libgmp-10.dll
+    DLLS += libhogweed-4.dll libnettle-6.dll
 
     ifeq ($(TARGETOS),WIN32)
         DLLS += libgcc_s_sjlj-1.dll libcrypto-1_1.dll
     else
-        DLLS += libgpg-error6-0.dll libgcc_s_seh-1.dll libcrypto-1_1-x64.dll
+        DLLS += libgcc_s_seh-1.dll
     endif
+
+# libgmp-10.dll libgnutls-30.dll  libhogweed-4.dll libhogweed-5.dll
+# libnettle-6.dll libnettle-7.dll  libtasn1-6.dll
+
+#32  libcrypto-1_1.dll
+
+#64 libgpg-error6-0.dll libcrypto-1_1-x64.dll
+endif
+
+ifeq ($(TOOL),MINGW)
+    DLLS=$(shell ldd.exe /c/js-build/judoshiai/obj-win64/judoshiai.exe | grep mingw | awk '{print $3;}')
 endif
 
 $(info --- MAKE VARIABLES: ---)
@@ -94,7 +106,7 @@ all:
 	make -C judoweight
 	make -C judojudogi
 	make -C serial
-	make -C auto-update
+	#make -C auto-update
 	make -C utils
 ifeq ($(JUDOHTTPD),YES)
 	make -C judohttpd
@@ -111,7 +123,7 @@ endif
 	cp $(JUDOINFOFILE) $(RELDIR)/bin/
 	cp $(JUDOWEIGHTFILE) $(RELDIR)/bin/
 	cp $(JUDOJUDOGIFILE) $(RELDIR)/bin/
-	cp $(AUTOUPDATEFILE) $(RELDIR)/bin/
+	#cp $(AUTOUPDATEFILE) $(RELDIR)/bin/
 	cp $(DBCONVERTFILE) $(RELDIR)/bin/
 ifeq ($(JUDOHTTPD),YES)
 	cp $(JUDOHTTPDFILE) $(RELDIR)/bin/
@@ -121,29 +133,44 @@ ifeq ($(JUDOPROXY),YES)
 endif
 
 ### Windows executable ###
-ifeq ($(TGT),WIN32)
-ifeq ($(GTKVER),3)
+ifeq ($(TGT),WIN32OS)
 	mkdir -p $(RELDIR)/share/glib-2.0
 	cp -r $(RUNDIR)/share/glib-2.0/schemas $(RELDIR)/share/glib-2.0/
-endif
-	make -C auto-update install
+	#make -C auto-update install
 	@echo "---------------------------"
 	@echo "Copy DLLs"
 	@echo "---------------------------"
-ifeq ($(TOOL),MXE)
-	    cp $(foreach dll,$(DLLS),$(DEVELDIR)/bin/$(dll)) $(RELDIR)/bin/
-else
-	    cp $(RUNDIR)/bin/*.dll $(RELDIR)/bin/
-	    cp $(SOUNDDIR)/bin/*.dll $(RELDIR)/bin/
-	    cp $(RSVGDIR)/bin/*.dll $(RELDIR)/bin/
-	    cp $(CURLDIR)/bin/*.dll $(RELDIR)/bin/
-	    cp $(SSH2DIR)/bin/*.dll $(RELDIR)/bin/
-            ifeq ($(JUDOPROXY),YES)
-		cp $(WEBKITDIR)/bin/*.dll $(RELDIR)/bin/
-		cp $(SOAPDIR)/bin/*.dll $(RELDIR)/bin/
-            endif
+  ifeq ($(TOOL),MXE)
+	cp $(foreach dll,$(DLLS),$(DEVELDIR)/bin/$(dll)) $(RELDIR)/bin/
+    ifeq ($(TGTEXT),64)
+      # patch
+	cp $(WIN32_BASE)/dll64/* $(RELDIR)/bin/
+    endif # 64
+  else # Not MXE, winxp or mingw
+    ifeq ($(TARGETOS),WIN64) # mingw64
+	cat mk/mingw-win64-dll.txt | while read LINE; do cp $$LINE $(RELDIR)/bin/; done
+    else # WIN64
+      ifeq ($(TARGETOS),WIN32) # mingw32
+	cat mk/mingw-win32-dll.txt | while read LINE; do cp $$LINE $(RELDIR)/bin/; done
+      else # WIN32 winxp
+        ifeq ($(TOOL),MINGW)
+	cat mk/mingw-winxp-dll.txt | while read LINE; do cp $$LINE $(RELDIR)/bin/; done
+        else
+	cp $(RUNDIR)/bin/*.dll $(RELDIR)/bin/
+	cp $(SOUNDDIR)/bin/*.dll $(RELDIR)/bin/
+	cp $(RSVGDIR)/bin/*.dll $(RELDIR)/bin/
+	cp $(CURLDIR)/bin/*.dll $(RELDIR)/bin/
+	cp $(SSH2DIR)/bin/*.dll $(RELDIR)/bin/
+        ifeq ($(JUDOPROXY),YES)
+	  cp $(WEBKITDIR)/bin/*.dll $(RELDIR)/bin/
+	  cp $(SOAPDIR)/bin/*.dll $(RELDIR)/bin/
+        endif # MINGW
+      endif # WIN32
 	cp -r $(RUNDIR)/lib/gtk-$(GTKVER).0 $(RELDIR)/lib/
-endif
+    endif # WIN64
+  endif # MXE
+endif # WIN32OS
+
 	@echo "---------------------------"
 	@echo "Copy share files"
 	@echo "---------------------------"
@@ -173,7 +200,7 @@ endif
 	echo '[Settings]' >$(RELDIR)/etc/gtk-3.0/settings.ini
 	echo '#gtk-theme-name=Adwaita' >>$(RELDIR)/etc/gtk-3.0/settings.ini
 	echo '#gtk-theme-name=win32' >>$(RELDIR)/etc/gtk-3.0/settings.ini
-endif
+endif # WIN32
 	@echo "---------------------------"
 	@echo "Copy documents"
 	@echo "---------------------------"
@@ -215,10 +242,10 @@ endif
 	@echo "  make setup"
 	@echo
 	@echo "To make a Debian package run (Linux only)"
-	@echo "  sudo -E JS_BUILD_DIR=$(JS_BUILD_DIR) make debian"
+	@echo "  make debian"
 
 setup:
-ifeq ($(TGT),WIN32)
+ifeq ($(TGT),WIN32OS)
 	sed "s/AppVerName=.*/AppVerName=Shiai $(SHIAI_VER_NUM)/" etc/judoshiai.iss >judoshiai1.iss
 	sed "s/OutputBaseFilename=.*/OutputBaseFilename=judoshiai-setup-$(SHIAI_VER_NUM)-$(TGTEXT)/" judoshiai1.iss >judoshiai2.iss
 	sed "s/TGTEXT/$(TGTEXT)/" judoshiai2.iss >judoshiai1.iss
@@ -228,6 +255,11 @@ else
 	sed "s/ARCHMODE//" judoshiai1.iss >judoshiai2.iss
 endif
 	sed "s,RELDIR,$(RELEASEDIR)," judoshiai2.iss | tr '/' '\\' >judoshiai1.iss
+ifeq ($(TOOL),MINGW)
+	echo "MINGW_DIR=$(MINGW_DIR)"
+	sed "s,\(.home\),$(MINGW_DIR)\1," judoshiai1.iss >judoshiai2.iss
+	cp judoshiai2.iss judoshiai1.iss
+endif
 	$(INNOSETUP) judoshiai1.iss
 	rm -f judoshiai*.iss
 else
@@ -240,7 +272,7 @@ else
 endif
 
 $(RELEASEDIR)/judoshiai/etc/remote-install.exe:
-ifeq ($(TGT),WIN32)
+ifeq ($(TGT),WIN32OS)
 	sed "s/AppVerName=.*/AppVerName=Shiai $(SHIAI_VER_NUM)/" etc/remote-inst.iss >judoshiai1.iss
 	sed "s,RELDIR,$(RELEASEDIR)," judoshiai1.iss | tr '/' '\\' >judoshiai2.iss
 	$(INNOSETUP) judoshiai2.iss

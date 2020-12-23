@@ -1,4 +1,4 @@
-include ../common/Makefile.inc
+include ../mk/common.mk
 
 OBJDIR := $(JS_BUILD_DIR)/$(LASTPART)/$(OBJDIR)
 
@@ -16,15 +16,20 @@ CFLAGS += -DAPPLICATION="\"judotimer\""
 CFLAGS += -DAPP_NUM=2
 
 ### WindowsXP executable ###
-ifeq ($(TGT),WIN32)
-CFLAGS += -I$(SOUNDDIR)/include
-ifeq ($(TOOL),MXE)
-LIBS += -lmpg123 -lao
-else
-LIBS += -L$(SOUNDDIR)/bin -lmpg123-0 -lao-4
-endif
-RPATH =
-OBJS += $(OBJDIR)/judotimer-icon.res
+ifeq ($(TGT),WIN32OS)
+  CFLAGS += -I$(SOUNDDIR)/include
+  ifeq ($(TOOL),MXE)
+    LIBS += -lmpg123 -lao
+  else # MXE
+    ifeq ($(TOOL),MINGW)
+      LIBS += $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs libmpg123) -lao
+    else # MINGW
+      LIBS += -L$(SOUNDDIR)/bin -lmpg123-0 -lao-4
+    endif # MINGW
+  endif # MXE
+
+  RPATH =
+  OBJS += $(OBJDIR)/judotimer-icon.res
 
 $(OBJDIR)/judotimer-icon.res: judotimer-icon.rc
 	$(WINDRES) -O coff judotimer-icon.rc $(OBJDIR)/judotimer-icon.res
@@ -33,10 +38,10 @@ judotimer-icon.rc:
 	echo "APPICONS ICON \"../etc/judotimer.ico\"" >judotimer-icon.rc
 
 ### Linux executable ###
-else
-LIBS += -lmpg123 -lao
-RPATH = -Wl,-rpath,/usr/lib/judoshiai/lib
-endif
+else # WIN32
+  LIBS += -lmpg123 -lao
+  RPATH = -Wl,-rpath,/usr/lib/judoshiai/lib
+endif # WIN32
 
 $(OBJDIR)/judotimer$(SUFF): $(OBJS)
 	${LD} -g $(RPATH) $(OBJS) -o $(OBJDIR)/judotimer$(SUFF) $(LIBS)

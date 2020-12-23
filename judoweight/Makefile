@@ -1,4 +1,4 @@
-include ../common/Makefile.inc
+include ../mk/common.mk
 
 OBJDIR := $(JS_BUILD_DIR)/$(LASTPART)/$(OBJDIR)
 
@@ -15,7 +15,7 @@ CFLAGS += -DAPPLICATION="\"judoweight\""
 CFLAGS += -DAPP_NUM=4
 
 ### Windows executable ###
-ifeq ($(TGT),WIN32)
+ifeq ($(TGT),WIN32OS)
 OBJS += $(OBJDIR)/judoweight-icon.res
 
 $(OBJDIR)/judoweight-icon.res: judoweight-icon.rc

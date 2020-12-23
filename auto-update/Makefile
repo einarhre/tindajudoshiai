@@ -1,4 +1,4 @@
-include ../common/Makefile.inc
+include ../mk/common.mk
 
 EXE = auto-update$(SUFF)
 REM_INST = judoshiai-remote
@@ -7,7 +7,7 @@ OBJS = $(OBJDIR)/main.o $(OBJDIR)/sha1.o
 
 OBJDIR := $(JS_BUILD_DIR)/$(LASTPART)/$(OBJDIR)
 
-ifeq ($(TGT),WIN32)
+ifeq ($(TGT),WIN32OS)
 LIBS = -L$(WIN32DIR)/w32api/lib -lws2_32 -mwindows
 else
 LIBS =
@@ -15,7 +15,7 @@ endif
 
 all: $(OBJDIR) $(OBJDIR)/$(EXE) $(OBJDIR)/REM_INST$(SUFF)
 
-ifeq ($(TGT),WIN32)
+ifeq ($(TGT),WIN32OS)
 OBJS += $(OBJDIR)/auto-update-icon.res
 
 $(OBJDIR)/auto-update-icon.res: auto-update-icon.rc
@@ -29,7 +29,7 @@ else
 endif
 
 $(OBJDIR)/REM_INST$(SUFF): $(OBJDIR)/$(EXE)
-ifeq ($(TGT),WIN32)
+ifeq ($(TGT),WIN32OS)
 	sed "s/AppVerName=.*/AppVerName=Shiai $(SHIAI_VER_NUM)/" remote-inst.iss >ri1.iss
 	sed "s/OutputBaseFilename=.*/OutputBaseFilename=$(REM_INST)-setup-$(SHIAI_VER_NUM)/" ri1.iss >ri2.iss
 	sed "s,OBJDIR,$(OBJDIR)," ri2.iss | tr '/' '\\' >ri3.iss
@@ -53,7 +53,7 @@ $(OBJDIR)/sha1.o: ../common/sha1.c
 	${CC} $(PROF) $(CFLAGS) -c $< -o $@
 
 install:
-ifeq ($(TGT),WIN32)
+ifeq ($(TGT),WIN32OS)
 	mkdir -p $(RELDIR)/etc/bin/
 	cp  $(OBJDIR)/$(REM_INST)*.exe $(RELDIR)/etc/bin/
 endif

@@ -1,4 +1,4 @@
-include ../common/Makefile.inc
+include ../mk/common.mk
 
 MSGFMT=msgfmt
 XGETTEXT=xgettext

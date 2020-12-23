@@ -1,4 +1,4 @@
-include ../common/Makefile.inc
+include ../mk/common.mk
 
 ifeq ($(OS),Windows_NT)
 DOCPATH=$(shell pwd -W | tr '/' '\\')\\

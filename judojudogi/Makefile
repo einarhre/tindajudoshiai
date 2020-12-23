@@ -1,4 +1,4 @@
-include ../common/Makefile.inc
+include ../mk/common.mk
 
 OBJDIR := $(JS_BUILD_DIR)/$(LASTPART)/$(OBJDIR)
 
@@ -16,7 +16,7 @@ CFLAGS += -DAPPLICATION="\"judojudogi\""
 CFLAGS += -DAPP_NUM=5
 
 ### Windows executable ###
-ifeq ($(TGT),WIN32)
+ifeq ($(TGT),WIN32OS)
 OBJS += $(OBJDIR)/judojudogi-icon.res
 
 $(OBJDIR)/judojudogi-icon.res: judojudogi-icon.rc
