@@ -9,6 +9,8 @@
 
 #include "round.h"
 
+struct cJSON;
+
 #define ptr_to_gint( p ) ((gint)(uintptr_t) (p) )
 #define gint_to_ptr( p ) ((void*)(uintptr_t) (p) )
 
@@ -373,6 +375,7 @@ struct msg_web_resp {
 
 	struct msg_web_get_bracket_resp {
             int tatami;
+            char filename[160];
         } get_bracket_resp;
 
 	struct msg_web_get_category_info_resp {
@@ -383,6 +386,10 @@ struct msg_web_resp {
 	    int wishsys;
 	    int num_pages;
 	} get_category_info_resp;
+
+	struct msg_web_json_resp {
+            struct cJSON *json;
+        } json;
     } u;
 };
 
@@ -395,6 +402,7 @@ struct msg_web_req {
 #define MSG_WEB_GET_MATCH_INFO  4
 #define MSG_WEB_GET_BRACKET     5
 #define MSG_WEB_GET_CAT_INFO    6
+#define MSG_WEB_JSON            7
     int request;
     /* httpd allocates space for resp. */
     struct msg_web_resp *resp;
@@ -424,6 +432,9 @@ struct msg_web_req {
 	    int catix;
 	} get_category_info;
 
+	struct msg_web_json {
+            struct cJSON *json;
+        } json;
     } u;
 };
 
@@ -550,7 +561,6 @@ extern void handle_ssdp_packet(char *p);
 extern const char *round_to_str(int round);
 
 /* websocket-protocol.c */
-struct cJSON;
 extern int websock_encode_msg(struct message *m, unsigned char *buf, int buflen);
 extern int websock_decode_msg(struct message *m, struct cJSON *json);
 
