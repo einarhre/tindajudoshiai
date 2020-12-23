@@ -14,6 +14,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <gdk/gdkkeysyms-compat.h>
+#include <glib/gprintf.h>
 
 #ifdef WIN32
 #include <process.h>
@@ -186,6 +187,68 @@ gint color_rgba_to_dec(GdkRGBA *rgba)
 	((int)(rgba->red*255) << 16) +
 	((int)(rgba->green*255) << 8) +
 	(int)(rgba->blue*255);
+}
+
+/** string functions **/
+
+void string_init(string *s)
+{
+    s->buf = NULL;
+    s->len = 0;
+    s->size = 0;
+}
+
+void string_free(string *s)
+{
+    g_free(s->buf);
+    s->buf = NULL;
+    s->len = 0;
+    s->size = 0;
+}
+
+gint string_concat(string *s, gchar *fmt, ...)
+{
+    gboolean esc = FALSE;
+    
+    if (fmt[0] == '!') {
+	esc = TRUE;
+	fmt++;
+    }
+
+    gchar *r = NULL;
+    va_list ap;
+    va_start(ap, fmt);
+    gint n = g_vasprintf(&r, fmt, ap);
+    va_end(ap);
+    gint n_esc = esc ? n*2+1 : n+1;
+    
+    if (!s->buf || !s->size) {
+	s->len = 0;
+	s->size = 128;
+	while (n_esc >= s->size)
+	    s->size *= 2;
+	s->buf = g_malloc(s->size);
+    } else if (s->len + n_esc >= s->size) {
+	while (s->len + n_esc >= s->size)
+	    s->size *= 2;
+	s->buf = g_realloc(s->buf, s->size);
+    }
+
+    if (esc) {
+	gchar *p = r;
+	while (*p) {
+	    if (*p == '"') s->buf[s->len++] = '\\';
+	    s->buf[s->len++] = *p;
+	    p++;
+	}
+    } else {
+	memcpy(s->buf + s->len, r, n);
+	s->len += n;
+    }
+    s->buf[s->len] = 0;
+
+    g_free(r);
+    return s->len;
 }
 
 #if defined(__WIN32__) || defined(WIN32)

@@ -95,6 +95,21 @@ void get_text_extents(cairo_t *cr, gchar *txt, PangoFontDescription *desc,
 void color_dec_to_rgba(gint dec, GdkRGBA *rgba);
 gint color_rgba_to_dec(GdkRGBA *rgba);
 
+/** string functions **/
+
+typedef struct string_ {
+    char *buf;
+    int   len;
+    int   size;
+} string;
+
+void string_init(string *s);
+void string_free(string *s);
+int string_concat(string *s, char *fmt, ...);
+int string_append(string *s, string *append_to_tail);
+
+/***/
+
 void print_trace(void);
 
 #endif
