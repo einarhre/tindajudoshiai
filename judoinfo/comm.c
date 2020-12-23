@@ -243,9 +243,11 @@ void msg_received(struct message *input_msg)
 {
     gint i;
 
-    if (input_msg->sender < 10)
+    /**
+    if (input_msg->sender >= 0 && input_msg->sender < 10)
         return;
-
+    **/
+    
     traffic_last_rec_time = time(NULL);
 #if 0
     g_print("msg type = %d from %d\n",

@@ -162,10 +162,10 @@ gboolean msg_accepted(struct message *m)
 
 void msg_received(struct message *input_msg)
 {
-/**
+    /**
    if (input_msg->sender < 10)
    return;
-**/
+    **/
 #if 0
     g_print("msg type = %d from %d\n",
             input_msg->type, input_msg->sender);
@@ -187,7 +187,7 @@ void msg_received(struct message *input_msg)
                                 input_msg->u.next_match.white_1);
         }
 #endif
-        if (input_msg->sender < 10 ||
+        if (/*input_msg->sender < 10 ||*/
             input_msg->u.next_match.tatami != tatami ||
             mode == MODE_SLAVE)
             return;

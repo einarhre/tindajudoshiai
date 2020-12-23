@@ -116,9 +116,10 @@ gboolean msg_accepted(struct message *m)
 
 void msg_received(struct message *input_msg)
 {
+    /*
     if (input_msg->sender < 10)
         return;
-
+    */
     traffic_last_rec_time = time(NULL);
 #if 0
     g_print("msg type = %d from %d\n", 
