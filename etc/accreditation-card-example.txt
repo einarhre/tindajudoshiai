@@ -111,6 +111,10 @@
 # %CLUBCOUNTRY%       Club and country combined (result depends on the settings).
 # %INDEX%             Internal database index.
 # %BARCODE%           This is not text but a barcode presentation of the INDEX.
+# %QRCODE%            2D barcode containing index, reg. category, last name, and first name.
+# %QRCODE-3%          QR code version is 3 (default). Can hold 53 bytes with low error correction.
+# %QRCODE-4-1%        QR code version 4 with medium (1) error correction can hold 62 bytes.
+#                     Version is 1 - 40, error correction 0 - 3. More: https://github.com/ricmoo/QRCode
 # %WEIGHT%            Competitor's weight.
 # %YOB%               Competitor's year of birth.
 # %GRADE%             Competitor's grade (belt).
@@ -150,5 +154,6 @@ text 22.0 15.0 0 %REGCATEGORY%
 text 36.0 15.0 0 %CLUBCOUNTRY%
 text 22.0 23.0 0 %LAST%, %FIRST%
 text 60.0 44.0 0 %INDEX%
-text 55.0 34.0 0 %BARCODE%
+#text 55.0 34.0 0 %BARCODE%
+text 55.0 34.0 0 %QRCODE-3-0%
 text 22.0 30.0 0 %WEIGHTTEXT%
