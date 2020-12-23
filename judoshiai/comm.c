@@ -51,6 +51,20 @@
 #include "sqlite3.h"
 #include "judoshiai.h"
 #include "sha.h"
+#include "cJSON.h"
+
+#define JSON_CHECK(_a) do { if (!(_a)) { ret = MSG_WEB_RESP_ERR; goto json_end; }} while (0)
+#define JSON_GET_VAL(_root, _item) cJSON *_item = cJSON_GetObjectItem(_root, #_item); JSON_CHECK(_item)
+#define JSON_GET_STR(_root, _item)              \
+    const gchar *_item;                                                 \
+    do { cJSON *tmp = cJSON_GetObjectItem(_root, #_item); JSON_CHECK(tmp); \
+        _item = tmp->valuestring; } while (0)
+#define JSON_GET_INT(_root, _item)              \
+    int _item;                                                          \
+    do { cJSON *tmp = cJSON_GetObjectItem(_root, #_item); JSON_CHECK(tmp); \
+        _item = tmp->valueint; } while (0)
+#define JSON_OP(_op) (!strcmp(op, #_op))
+    
 
 static void send_packet_1(struct message *msg);
 void send_packet(struct message *msg);
@@ -207,6 +221,90 @@ gboolean msg_accepted(struct message *m)
     return FALSE;
 }
 
+static gchar *find_estim_cat(struct judoka *j)
+{
+    // free returned value
+    if (j->regcategory == NULL || j->regcategory[0] == 0)
+        return find_correct_category(current_year - j->birthyear, j->weight,
+                                     (j->deleted & GENDER_FEMALE) ? IS_FEMALE : IS_MALE,
+                                     NULL, TRUE);
+    return find_correct_category(0, j->weight, 0, j->regcategory, FALSE);
+}
+
+static void json_add_judoka_data(cJSON *out, struct judoka *j)
+{
+    cJSON_AddNumberToObject(out, "index", j->index);
+    cJSON_AddStringToObject(out, "last", j->last);
+    cJSON_AddStringToObject(out, "first", j->first);
+    cJSON_AddStringToObject(out, "club", j->club);
+    cJSON_AddStringToObject(out, "country", j->country);
+    cJSON_AddStringToObject(out, "regcat", j->regcategory);
+    cJSON_AddStringToObject(out, "cat", j->category);
+    cJSON_AddNumberToObject(out, "weight", j->weight);
+    gchar *estim = find_estim_cat(j);
+    if (estim) {
+        cJSON_AddStringToObject(out, "ecat", estim);
+        g_free(estim);
+    }
+}
+
+static struct judoka *find_judoka_by_id(const gchar *id)
+{
+    gboolean coach;
+    struct judoka *j = NULL;
+    gint indx = db_get_index_by_id(id, &coach);
+    if (indx) j = get_data(indx);
+    if (!j) j = get_data(atoi(id));
+    return j;
+}
+
+static void fill_msg_edit_competitor(struct message *msg, struct judoka *j)
+{
+#define CP2MSG_INT(_dst) msg->u.edit_competitor._dst = j->_dst
+#define CP2MSG_STR(_dst) strncpy(msg->u.edit_competitor._dst, j->_dst, sizeof(msg->u.edit_competitor._dst)-1)
+    CP2MSG_INT(index);
+    CP2MSG_STR(last);
+    CP2MSG_STR(first);
+    CP2MSG_INT(birthyear);
+    CP2MSG_STR(club);
+    CP2MSG_STR(regcategory);
+    CP2MSG_INT(belt);
+    CP2MSG_INT(weight);
+    CP2MSG_INT(visible);
+    CP2MSG_STR(category);
+    CP2MSG_INT(deleted);
+    CP2MSG_STR(country);
+    CP2MSG_STR(id);
+    CP2MSG_INT(seeding);
+    CP2MSG_INT(clubseeding);
+    CP2MSG_STR(comment);
+    CP2MSG_STR(coachid);
+    strncpy(msg->u.edit_competitor.beltstr, belts[j->belt], sizeof(msg->u.edit_competitor.beltstr)-1);
+    msg->u.edit_competitor.matchflags = get_judogi_status(j->index);
+}
+
+static void fill_judoka_edit_competitor(struct message *msg, struct judoka *j)
+{
+#define SET_J(_x) j->_x = msg->u.edit_competitor._x
+    SET_J(index);
+    SET_J(last);
+    SET_J(first);
+    SET_J(birthyear);
+    SET_J(belt);
+    SET_J(club);
+    SET_J(regcategory);
+    SET_J(weight);
+    SET_J(visible);
+    SET_J(category);
+    SET_J(deleted);
+    SET_J(country);
+    SET_J(id);
+    SET_J(seeding);
+    SET_J(clubseeding);
+    SET_J(comment);
+    SET_J(coachid);
+}
+
 void msg_received(struct message *input_msg)
 {
     struct message output_msg;
@@ -286,6 +384,7 @@ void msg_received(struct message *input_msg)
         break;
 
     case MSG_ALL_REQ:
+        g_print("REQUESTING ALL\n");
         for (i = 1; i <= NUM_TATAMIS; i++)
             send_matches(i);
         break;
@@ -303,39 +402,14 @@ void msg_received(struct message *input_msg)
             gboolean coach;
 	    gint indx = 0;
 
-	    if (input_msg->u.edit_competitor.id[0])
-		indx = db_get_index_by_id(input_msg->u.edit_competitor.id, &coach);
-	    if (indx)
-		j = get_data(indx);
-	    else
-		j = get_data(atoi(input_msg->u.edit_competitor.id));
+            j = find_judoka_by_id(input_msg->u.edit_competitor.id);
 
 	    memset(&output_msg, 0, sizeof(output_msg));
 	    output_msg.type = MSG_EDIT_COMPETITOR;
 	    output_msg.u.edit_competitor.operation = EDIT_OP_GET;
 
 	    if (j) {
-#define CP2MSG_INT(_dst) output_msg.u.edit_competitor._dst = j->_dst
-#define CP2MSG_STR(_dst) strncpy(output_msg.u.edit_competitor._dst, j->_dst, sizeof(output_msg.u.edit_competitor._dst)-1)
-		CP2MSG_INT(index);
-		CP2MSG_STR(last);
-		CP2MSG_STR(first);
-		CP2MSG_INT(birthyear);
-		CP2MSG_STR(club);
-		CP2MSG_STR(regcategory);
-		CP2MSG_INT(belt);
-		CP2MSG_INT(weight);
-		CP2MSG_INT(visible);
-		CP2MSG_STR(category);
-		CP2MSG_INT(deleted);
-		CP2MSG_STR(country);
-		CP2MSG_STR(id);
-		CP2MSG_INT(seeding);
-		CP2MSG_INT(clubseeding);
-		CP2MSG_STR(comment);
-		CP2MSG_STR(coachid);
-                strncpy(output_msg.u.edit_competitor.beltstr, belts[j->belt], sizeof(output_msg.u.edit_competitor.beltstr)-1);
-                output_msg.u.edit_competitor.matchflags = get_judogi_status(j->index);
+                fill_msg_edit_competitor(&output_msg, j);
 		free_judoka(j);
 	    }
 
@@ -352,41 +426,10 @@ void msg_received(struct message *input_msg)
                     memset(&output_msg, 0, sizeof(output_msg));
                     output_msg.type = MSG_EDIT_COMPETITOR;
                     output_msg.u.edit_competitor.operation = EDIT_OP_CONFIRM;
-                    CP2MSG_INT(index);
-                    CP2MSG_STR(last);
-                    CP2MSG_STR(first);
-                    CP2MSG_STR(club);
-                    CP2MSG_STR(country);
-                    CP2MSG_STR(id);
-                    CP2MSG_STR(regcategory);
-                    CP2MSG_INT(weight);
-                    CP2MSG_INT(deleted);
-
-                    CP2MSG_INT(belt);
-                    CP2MSG_INT(visible);
-                    CP2MSG_STR(category);
-                    CP2MSG_INT(seeding);
-                    CP2MSG_INT(clubseeding);
+                    fill_msg_edit_competitor(&output_msg, j);
 
                     // find estimated category
-                    gchar *estim = NULL;
-
-                    if (j->regcategory == NULL || j->regcategory[0] == 0) {
-                        gint gender = 0;
-
-                        if (j->deleted & GENDER_FEMALE)
-                            gender = IS_FEMALE;
-                        else
-                            gender = IS_MALE;
-
-                        estim = find_correct_category(current_year - j->birthyear,
-                                                      j->weight,
-                                                      gender,
-                                                      NULL, TRUE);
-                    } else {
-                        estim = find_correct_category(0, j->weight, 0, j->regcategory, FALSE);
-                    }
-
+                    gchar *estim = find_estim_cat(j);
                     strncpy(output_msg.u.edit_competitor.estim_category,
                             estim ? estim : "", sizeof(output_msg.u.edit_competitor.estim_category)-1);
                     g_free(estim);
@@ -399,25 +442,9 @@ void msg_received(struct message *input_msg)
 	} else if (input_msg->u.edit_competitor.operation == EDIT_OP_SET_JUDOGI) {
             set_judogi_status(input_msg->u.edit_competitor.index, input_msg->u.edit_competitor.matchflags);
 	} else if (input_msg->u.edit_competitor.operation == EDIT_OP_SET) {
-#define SET_J(_x) j2._x = input_msg->u.edit_competitor._x
 	    memset(&j2, 0, sizeof(j2));
-	    SET_J(index);
-	    SET_J(last);
-	    SET_J(first);
-	    SET_J(birthyear);
-	    SET_J(belt);
-	    SET_J(club);
-	    SET_J(regcategory);
-	    SET_J(weight);
-	    SET_J(visible);
-	    SET_J(category);
-	    SET_J(deleted);
-	    SET_J(country);
-	    SET_J(id);
-	    SET_J(seeding);
-	    SET_J(clubseeding);
-	    SET_J(comment);
-	    SET_J(coachid);
+            fill_judoka_edit_competitor(&input_msg, &j2);
+
 	    if (j2.index) { // edit old competitor
 		j = get_data(j2.index);
 		if (j) {
@@ -499,14 +526,10 @@ void msg_received(struct message *input_msg)
 	if (input_msg->u.web.request == MSG_WEB_GET_COMP_DATA ||
 	    input_msg->u.web.request == MSG_WEB_SET_COMP_WEIGHT) {
 	    if (input_msg->u.web.request == MSG_WEB_GET_COMP_DATA)
-		indx = db_get_index_by_id(input_msg->u.web.u.get_comp_data.id, &coach);
+                j = find_judoka_by_id(input_msg->u.web.u.get_comp_data.id);
 	    else
-		indx = db_get_index_by_id(input_msg->u.web.u.set_comp_weight.id, &coach);
+                j = find_judoka_by_id(input_msg->u.web.u.set_comp_weight.id);
 
-	    if (indx)
-		j = get_data(indx);
-	    else
-		j = get_data(atoi(input_msg->u.web.u.get_comp_data.id));
 	    if (!j) {
 		g_atomic_int_set(&resp->ready, MSG_WEB_RESP_ERR);
 		return;
@@ -520,7 +543,8 @@ void msg_received(struct message *input_msg)
 
 #define CP2WEB_INT(_dst) resp->u.get_comp_data_resp._dst = j->_dst
 #define CP2WEB_STR(_dst) strncpy(resp->u.get_comp_data_resp._dst, j->_dst, sizeof(resp->u.get_comp_data_resp._dst)-1)
-	    resp->u.get_comp_data_resp.index = indx;
+	    //resp->u.get_comp_data_resp.index = indx;
+	    CP2WEB_INT(index);
 	    CP2WEB_STR(last);
 	    CP2WEB_STR(first);
 	    CP2WEB_STR(club);
@@ -530,24 +554,7 @@ void msg_received(struct message *input_msg)
 	    CP2WEB_INT(weight);
 
 	    // find estimated category
-	    gchar *estim = NULL;
-
-	    if (j->regcategory == NULL || j->regcategory[0] == 0) {
-		gint gender = 0;
-
-		if (j->deleted & GENDER_FEMALE)
-		    gender = IS_FEMALE;
-		else
-		    gender = IS_MALE;
-
-		estim = find_correct_category(current_year - j->birthyear,
-					      j->weight,
-					      gender,
-					      NULL, TRUE);
-	    } else {
-		estim = find_correct_category(0, j->weight, 0, j->regcategory, FALSE);
-	    }
-
+            gchar *estim = find_estim_cat(j);
 	    strncpy(resp->u.get_comp_data_resp.estim_category,
 		    estim ? estim : "", sizeof(resp->u.get_comp_data_resp.estim_category)-1);
 	    g_free(estim);
@@ -584,15 +591,11 @@ void msg_received(struct message *input_msg)
 		resp->u.get_match_info_resp[i+1].round = m[i].round;
 	    }
 	} else	if (input_msg->u.web.request == MSG_WEB_GET_BRACKET) {
-	    gint t = input_msg->u.web.u.get_bracket.tatami;
-	    resp->u.get_bracket_resp.tatami = t;
             get_bracket_2(input_msg->u.web.u.get_bracket.tatami,
                 input_msg->u.web.u.get_bracket.cat,
                 input_msg->u.web.u.get_bracket.svg,
                 input_msg->u.web.u.get_bracket.page,
-                input_msg->u.web.u.get_bracket.connum);
-            g_atomic_int_set(&resp->ready, MSG_WEB_RESP_OK_SENT);
-            return;
+                resp);
 	} else 	if (input_msg->u.web.request == MSG_WEB_GET_CAT_INFO) {
 	    gint catix = input_msg->u.web.u.get_category_info.catix;
 	    struct compsys sys = get_cat_system(catix);
@@ -602,6 +605,34 @@ void msg_received(struct message *input_msg)
 	    resp->u.get_category_info_resp.table = sys.table;
 	    resp->u.get_category_info_resp.wishsys = sys.wishsys;
 	    resp->u.get_category_info_resp.num_pages = num_pages(sys);
+	} else 	if (input_msg->u.web.request == MSG_WEB_JSON) {
+            int ret = MSG_WEB_RESP_OK;
+            cJSON *root = input_msg->u.web.u.json.json;
+            JSON_GET_STR(root, op);
+            j = NULL;
+            
+            if (JSON_OP(getcomp) || JSON_OP(setweight)) {
+                JSON_GET_STR(root, id);
+                JSON_CHECK(j = find_judoka_by_id(id));
+
+                if (JSON_OP(setweight)) {
+                    JSON_GET_INT(root, weight);
+                    j->weight = weight;
+                    db_update_judoka(j->index, j);
+                    display_one_judoka(j);
+                }
+
+                cJSON *out = cJSON_CreateObject();
+                json_add_judoka_data(out, j);
+
+                resp->u.json.json = out;
+            }
+
+        json_end:
+            if (j) free_judoka(j);
+            cJSON_Delete(root);
+            g_atomic_int_set(&resp->ready, ret);
+            return;
 	}
 
 	g_atomic_int_set(&resp->ready, MSG_WEB_RESP_OK);
