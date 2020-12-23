@@ -16,6 +16,7 @@
 
 #include "judoshiai.h"
 #include "common-utils.h"
+#include "qrcode.h"
 
 #define SIZEX 630
 #define SIZEY 891
@@ -115,6 +116,70 @@ static void write_map_file(const gchar *catname, gint page)
         }
         fclose(map);
     }
+}
+
+void png_file(gint ctg, const gchar *dir, const gchar *prefix)
+{
+    gint i;
+    gchar buf[200];
+    cairo_t *c_png;
+    cairo_surface_t *cs_png;
+    gchar *pngname;
+    struct judoka *ctgdata = get_data(ctg);
+    struct compsys sys = db_get_system(ctg);
+    struct paint_data pd;
+
+    if (!ctgdata)
+        return;
+    
+    memset(&pd, 0, sizeof(pd));
+
+    gint svgw, svgh;
+    if (get_svg_page_size(ctg, 0, &svgw, &svgh)) {
+        if (svgw < svgh) {
+            pd.paper_height = SIZEY;
+            pd.paper_width = SIZEX;
+        } else {
+            pd.paper_height = SIZEX;
+            pd.paper_width = SIZEY;
+            pd.landscape = TRUE;
+        }
+    } else if (print_landscape(ctg)) {
+        pd.paper_height = SIZEX;
+        pd.paper_width = SIZEY;
+        pd.landscape = TRUE;
+    } else {
+        pd.paper_height = SIZEY;
+        pd.paper_width = SIZEX;
+    }
+    pd.total_width = 0;
+    pd.category = ctg;
+    
+    cs_png = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                        pd.paper_width, pd.paper_height);
+    c_png = cairo_create(cs_png);
+
+    pd.c = c_png;
+    paint_category(&pd);
+    cairo_show_page(c_png);
+
+    snprintf(buf, sizeof(buf), "%s.png", prefix);
+    pngname = g_build_filename(dir, buf, NULL);
+    cairo_surface_write_to_png(cs_png, pngname);
+    g_free(pngname);
+    for (i = 1; i < num_pages(sys); i++) { // print other pages
+        pd.page = i;
+        paint_category(&pd);
+        cairo_show_page(c_png);
+
+        snprintf(buf, sizeof(buf), "%s-%d.png", prefix, pd.page);
+        pngname = g_build_filename(dir, buf, NULL);
+        cairo_surface_write_to_png(cs_png, pngname);
+        g_free(pngname);
+    }
+
+    cairo_destroy(c_png);
+    cairo_surface_destroy(cs_png);
 }
 
 void write_png(GtkWidget *menuitem, gpointer userdata)
@@ -534,6 +599,43 @@ static void draw_code_39_string(gchar *s, struct paint_data *pd, double bar_heig
     }
 
     draw_code_39_pattern ('*', pd, bar_height);
+    cairo_restore(pd->c);
+}
+
+static void draw_qrcode_string(gchar *s, struct paint_data *pd, int ver, int ecc)
+{
+    int          iterator;
+    double       x, y;
+    int          x1, y1;
+    int          bars = TRUE;
+
+    if (!s)
+        return;
+
+    cairo_save(pd->c);
+
+    /* set color */
+    cairo_set_operator (pd->c, CAIRO_OPERATOR_OVER);
+
+    /* get current point */
+    cairo_get_current_point (pd->c, &x, &y);
+
+    QRCode qrcode;
+    uint8_t qrcodeData[qrcode_getBufferSize(ver)];
+    qrcode_initText(&qrcode, qrcodeData, ver, ecc, s);
+
+    for (y1 = 0; y1 < qrcode.size; y1++) {
+        for (x1 = 0; x1 < qrcode.size; x1++) {
+            if (qrcode_getModule(&qrcode, x1, y1))
+                cairo_set_source_rgb(pd->c, 0, 0, 0);
+            else
+                cairo_set_source_rgb(pd->c, 1.0, 1.0, 1.0);
+
+            cairo_rectangle(pd->c, x + x1*2.0, y + y1*2.0, 2, 2);
+            cairo_fill(pd->c);
+        }
+    }
+
     cairo_restore(pd->c);
 }
 
@@ -1146,6 +1248,31 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
                     } else if (IS_STR("%BARCODE%")) {
                         //g_print("barcode found, len=%d\n", len);
                         draw_code_39_string(id_str, pd, bar_height, FALSE);
+                    } else if (IS_STR("%QRCODE")) {
+                        char buf[128];
+                        snprintf(buf, sizeof(buf), "%s\t%s\t%s\t%s", id_str, cat, last, first);
+                        int ver = 0, ecc = 0;
+                        if (wn_texts[t].text[k + len] == '-') {
+                            len++;
+                            while (wn_texts[t].text[k + len] >= '0' &&
+                                   wn_texts[t].text[k + len] <= '9') {
+                                ver = 10*ver + wn_texts[t].text[k + len] - '0';
+                                len++;
+                            }
+                            if (wn_texts[t].text[k + len] == '-') {
+                                len++;
+                                while (wn_texts[t].text[k + len] >= '0' &&
+                                       wn_texts[t].text[k + len] <= '9') {
+                                    ecc = 10*ecc + wn_texts[t].text[k + len] - '0';
+                                    len++;
+                                }
+                            } else len++;
+                        } else {
+                            ver = 3;
+                            len++;
+                        }
+                        
+                        draw_qrcode_string(buf, pd, ver, ecc);
                     } else if (IS_STR("%WEIGHTTEXT%"))
                         d += sprintf(buf + d, "%s", _T(weight));
                     else if (IS_STR("%WINPOS%")) {
