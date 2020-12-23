@@ -39,27 +39,63 @@
 
 #include <gtk/gtk.h>
 #include <glib/gprintf.h>
+#include <glib/gstdio.h>
 
 #include "judoshiai.h"
-#include "httpp.h"
+#include "common-utils.h"
+#include "cJSON.h"
 
-#define USE_THREADS
+#include "microhttpd.h"
+
+#define httpp_get_query_param(_parser, _str) \
+    MHD_lookup_connection_value(_parser, MHD_GET_ARGUMENT_KIND, _str)
+
+#define http_parser_t struct MHD_Connection
+#define param_t struct MHD_Connection
+
+#define FSTART                                                  \
+    string s;                                                   \
+    string_init(&s)
+
+#define FEND return www_send(parser, &s, "text/html; charset=utf-8")
+#define FEND_PNG return www_send(parser, &s, "image/png")
+#define FEND_404 return www_send(parser, &s, NULL)
+#define FEND_MIME(_mime) return www_send(parser, &s, _mime)
+
+#define SCC(_a...) string_concat(&s, _a)
 
 extern void get_websock(http_parser_t *parser, gint connum);
 
-void index_html(http_parser_t *parser, gchar *txt);
-void send_html_top(http_parser_t *parser, gchar *bodyattr);
-void send_html_bottom(http_parser_t *parser);
+int index_html(http_parser_t *parser, gchar *txt);
+void send_html_top(string *s, http_parser_t *parser, gchar *bodyattr);
+void send_html_bottom(string *s, http_parser_t *parser);
+
+#define PAGE "<html><head><title>File not found</title></head><body>File not found</body></html>"
+#define AUTHPAGE "<html><head><title>libmicrohttpd demo</title></head><body>Access granted</body></html>"
+#define AUTHDENIED "<html><head><title>libmicrohttpd demo</title></head><body>Access denied</body></html>"
+#define AUTHOPAQUE "11733b200778ce33060f31c9af70a870ba96ddd4"
+#define LOGOUTPAGE "<html><head><title>libmicrohttpd demo</title></head><body>Logout</body></html>"
+#define INTERNAL_ERROR_PAGE "<html><head><title>Internal error</title></head><body>Internal error</body></html>"
+#define REQUEST_REFUSED_PAGE "<html><head><title>Request refused</title></head><body>Request refused (file exists?)</body></html>"
+#define DUMMY_PAGE "<html><head><title></title></head><body></body></html>"
 
 /* System-dependent definitions */
 #ifndef WIN32
 #define closesocket     close
 #define SOCKET          int
+#define HANDLE          int
 #define INVALID_SOCKET  -1
 #define SOCKET_ERROR    -1
+#define INVALID_HANDLE_VALUE -1
 #define SOCKADDR_BTH    struct sockaddr_rc
 #define AF_BTH          PF_BLUETOOTH
 #define BTHPROTO_RFCOMM BTPROTO_RFCOMM
+#define int_to_handle(_x) (_x)
+#define handle_to_int(_x) (_x)
+#else // WIN32
+#define O_RDONLY S_IREAD
+#define int_to_handle(_x) gint_to_ptr(_x)
+#define handle_to_int(_x) ptr_to_gint(_x)
 #endif
 
 int sigreceived = 0;
@@ -77,22 +113,13 @@ struct judoka unknown_judoka = {
     .coachid = ""
 };
 
-#define NUM_CONNECTIONS 32
-static struct {
-    guint fd;
-    gulong addr;
-    gboolean closed;
-    struct msg_web_resp resp;
-#ifdef USE_THREADS
-    GThread *gth;
-#endif
-} connections[NUM_CONNECTIONS];
-
 void sighandler(int sig)
 {
     printf("sig received\n");
     sigreceived = 1;
 }
+
+int reply_web(http_parser_t *parser, struct msg_web_resp *resp);
 
 gint mysend(SOCKET s, const gchar *p, gint len)
 {
@@ -131,6 +158,22 @@ gint sendf(SOCKET s, gchar *fmt, ...)
     return ret;
 }
 
+gint www_send(http_parser_t *parser, string *s, const gchar *mime)
+{
+    struct MHD_Response *response;
+    response = MHD_create_response_from_buffer(s->len, s->buf, MHD_RESPMEM_MUST_FREE);
+    if (!response) {
+	g_printerr("ERROR: response\n");
+	string_free(s);
+	return MHD_NO;
+    }
+    MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, mime);
+    int ret = MHD_queue_response(parser, mime ? MHD_HTTP_OK : MHD_HTTP_NOT_FOUND, response);
+    MHD_destroy_response(response);
+    
+    return ret;
+}
+
 #define NUM_ADDRESSES 24
 static gulong ipaddresses[NUM_ADDRESSES] = {0};
 
@@ -156,8 +199,14 @@ static void add_accepted(gulong addr)
     g_print("ERROR: No more space for accepted IP addresses!\n");
 }
 
-static gboolean is_accepted(gulong addr)
+static gboolean is_accepted(http_parser_t *parser)
 {
+#if 1
+    return TRUE;
+    //struct sockaddr_in *a = (struct sockaddr_in *)parser->addr;
+    //gulong addr = a ? a->sin_addr.s_addr : 0;
+#else
+    gulong addr = parser->address;
     gint i;
     if (webpwcrc32 == 0)
         return TRUE;
@@ -166,16 +215,17 @@ static gboolean is_accepted(gulong addr)
             return TRUE;
         }
     return FALSE;
+#endif
 }
 
 #define HIDDEN(x) do {							\
         if (x) h_##x = x;                                               \
         if (h_##x) {                                                    \
-            sendf(s, "<input type=\"hidden\" name=\"h_" #x "\" value=\"%s\">\r\n", h_##x); \
+            string_concat(s, "<input type=\"hidden\" name=\"h_" #x "\" value=\"%s\">\r\n", h_##x); \
         }                                                               \
     } while (0)
 
-void send_point_buttons(SOCKET s, gint catnum, gint matchnum, gboolean blue)
+void send_point_buttons(string *s, gint catnum, gint matchnum, gboolean blue)
 {
     gchar m[64];
     gchar c[64];
@@ -186,7 +236,7 @@ void send_point_buttons(SOCKET s, gint catnum, gint matchnum, gboolean blue)
     else
         sprintf(c, "style=\"background:#ffffff none; color:#000000; \"");
 
-    sendf(s, 
+    string_concat(s, 
           "<table><tr>"
           "<td><input type=\"submit\" name=\"%s-10\" value=\"10\" %s></td>"
           "<td><input type=\"submit\" name=\"%s-7\" value=\"7\" %s></td>"
@@ -197,9 +247,10 @@ void send_point_buttons(SOCKET s, gint catnum, gint matchnum, gboolean blue)
           m, c, m, c, m, c, m, c, m, c);
 }
 
-void get_categories(http_parser_t *parser)
+int get_categories(http_parser_t *parser)
 {
-    SOCKET s = parser->sock;
+    FSTART;
+#if 0
     gchar buf[1024];
     gint row;
 
@@ -270,7 +321,7 @@ void get_categories(http_parser_t *parser)
         h_id = httpp_get_query_param(parser, "h_id");
     }
 
-    send_html_top(parser, "");
+    send_html_top(&s, parser, "");
 
     sendf(s, "<form name=\"catform\" action=\"categories\" method=\"get\">");
 
@@ -324,7 +375,7 @@ void get_categories(http_parser_t *parser)
         }
 
         sendf(s, "<tr><td class=\"cpl\">%s:<br>", _("Previous winner"));
-        if (is_accepted(parser->address))
+        if (is_accepted(parser))
             sendf(s, "<input type=\"submit\" name=\"MR-%d-%d-0\" value=\"%s\">",
                   next_matches_info[i][0].won_catnum, next_matches_info[i][0].won_matchnum,
                   _("Cancel the match"));
@@ -357,7 +408,7 @@ void get_categories(http_parser_t *parser)
             sendf(s, "<tr><td %s><b>%s %d:</b></td><td %s><b>%s</b></td></tr>", 
                   class_ul, _("Match"), m[k].number, class_ur, cat->last);
 
-            if (k == 0 && is_accepted(parser->address)) {
+            if (k == 0 && is_accepted(parser)) {
                 sendf(s, "<tr><td %s>", class_cl);
                 send_point_buttons(s, m[k].category, m[k].number, TRUE);
                 sendf(s, "</td><td %s>", class_cr);
@@ -415,7 +466,10 @@ void get_categories(http_parser_t *parser)
     sendf(s, "<img src=\"web?op=5&c=%s&p=2\">", h_id ? h_id : "0");
     sendf(s, "</td></tr></table></form>\r\n");
 
-    send_html_bottom(parser);
+    send_html_bottom(&s, parser);
+
+#endif
+    FEND;
 }
 
 static struct bracket_cache {
@@ -448,63 +502,40 @@ gboolean is_png(const guchar *png)
 	    png[2] == 78 && png[3] == 71);
 }
 
-static cairo_status_t write_to_http(void *closure, const unsigned char *data, unsigned int length)
+void get_bracket_2(gint tatami, gint catid, gint svg, gint page, struct msg_web_resp *resp)
 {
-    struct write_closure *c = closure;
-    gint t = c->tatami;
-
-#ifndef USE_THREADS
-    gboolean start = FALSE;
-
-    if (c->len == 0) {
-	if (!is_png(data))
-	    mysend(c->fd, svg_start, strlen(svg_start));
-	else
-	    mysend(c->fd, png_start, strlen(png_start));
-    }
-    c->len += length;
-
-    mysend(c->fd, (gchar *)data, length);
-#endif
-
-    if (t < 0 || t >= NUM_TATAMIS) {
-	mysend(c->fd, (gchar *)data, length);
-	return CAIRO_STATUS_SUCCESS;
-    }
-
-    if (!sheet_cache[t].sheet) {
-	sheet_cache[t].sheet = g_malloc(1024*8);
-	sheet_cache[t].size = 1024*8;
-    }
-
-    while (length >= sheet_cache[t].size - sheet_cache[t].len) {
-	sheet_cache[t].size *= 2;
-	sheet_cache[t].sheet = g_realloc(sheet_cache[t].sheet,
-					 sheet_cache[t].size);
-    }
-
-    memcpy(sheet_cache[t].sheet + sheet_cache[t].len, data, length);
-    sheet_cache[t].len += length;
-
-    return CAIRO_STATUS_SUCCESS;
-}
-
-void get_bracket_2(gint tatami, gint catid, gint svg, gint page, gint connum)
-{
-    struct write_closure closure;
-    memset(&closure, 0, sizeof(closure));
-    closure.fd = connections[connum].fd;
     tatami--;
 
     if (catid == 0 && tatami >= 0 && tatami < NUM_TATAMIS)
 	catid = next_matches_info[tatami][0].catnum;
 
-    closure.cat = catid;
-    closure.tatami = tatami;
-    closure.info = TRUE;
-    closure.svg = svg;
-    closure.page = page;
+    if (catid == 0)
+        return;
 
+    if (page == -1 && tatami >= 0 && tatami < NUM_TATAMIS) {
+        page = match_on_page(catid, next_matches_info[tatami][0].matchnum);
+    }
+    
+    const gchar *dir = g_get_tmp_dir();
+    gchar prefix[64];
+    snprintf(prefix, sizeof(prefix), "%d", catid);
+    png_file(catid, dir, prefix);
+
+    gchar buf[200];
+    gchar *pngname;
+    if (page <= 0) {
+        snprintf(buf, sizeof(buf), "%s.png", prefix);
+        pngname = g_build_filename(dir, buf, NULL);
+        g_strlcpy(resp->u.get_bracket_resp.filename, pngname, sizeof(resp->u.get_bracket_resp.filename));
+        g_free(pngname);
+    } else {
+        snprintf(buf, sizeof(buf), "%s-%d.png", prefix, page);
+        pngname = g_build_filename(dir, buf, NULL);
+        g_strlcpy(resp->u.get_bracket_resp.filename, pngname, sizeof(resp->u.get_bracket_resp.filename));
+        g_free(pngname);
+    }
+
+#if 0    
     g_mutex_lock(&cache_lock);
 
     if (tatami >= 0 && tatami < NUM_TATAMIS) {
@@ -524,6 +555,7 @@ void get_bracket_2(gint tatami, gint catid, gint svg, gint page, gint connum)
     }
 
     g_mutex_unlock(&cache_lock);
+#endif
 }
 
 void clear_cache_by_cat(gint cat)
@@ -557,9 +589,10 @@ static gint pts2int(const gchar *p)
     return r;
 }
 
-void check_password(http_parser_t *parser)
+int check_password(http_parser_t *parser)
 {
-    SOCKET s = parser->sock;
+    FSTART;
+#if 0
     const gchar *auth = httpp_getvar(parser, "authorization");
     gboolean accepted = FALSE;
     static time_t last_time = 0;
@@ -654,15 +687,13 @@ verdict:
               _("Wrong password"), _("Back"));
 #endif
     }
+#endif
+    FEND;
 }
 
-void send_html_top(http_parser_t *parser, gchar *bodyattr)
+void send_html_top(string *s, http_parser_t *parser, gchar *bodyattr)
 {
-    SOCKET s = parser->sock;
-
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    sendf(s, "Content-Type: text/html; charset=utf-8\r\n\r\n");
-    sendf(s, "<html><head>"
+    string_concat(s, "<html><head>"
 	  "<meta name=\"viewport\" content=\"width=device-width, "
 	  "target-densitydpi=device-dpi\">\r\n"
 	  "<link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap.css\">"
@@ -675,70 +706,60 @@ void send_html_top(http_parser_t *parser, gchar *bodyattr)
           "<title>JudoShiai</title></head><body %s>\r\n", bodyattr);
 
     if (webpwcrc32) {
-	if (is_accepted(parser->address))
-	    sendf(s, "<a href=\"logout\">%s</a>\r\n", _("Logout"));
+	if (is_accepted(parser))
+	    string_concat(s, "<a href=\"logout\">%s</a>\r\n", _("Logout"));
 	else
-	    sendf(s, "<a href=\"login\">%s</a>\r\n", _("Login"));
+	    string_concat(s, "<a href=\"login\">%s</a>\r\n", _("Login"));
     }
 
-    sendf(s, "<a href=\"timer.html\"><img src=\"judotimer.png\"></a>\r\n");
-    sendf(s, "<a href=\"info.html\"><img src=\"judoinfo.png\"></a>\r\n");
-    sendf(s, "<a href=\"weight.html\"><img src=\"judoweight.png\"></a>\r\n");
-    sendf(s, "<p><a href=\"https://sourceforge.net/projects/judoshiai/\">"
+    string_concat(s, "<a href=\"timer.html\"><img src=\"judotimer.png\"></a>\r\n");
+    string_concat(s, "<a href=\"info.html\"><img src=\"judoinfo.png\"></a>\r\n");
+    string_concat(s, "<a href=\"weight.html\"><img src=\"judoweight.png\"></a>\r\n");
+    string_concat(s, "<p><a href=\"https://sourceforge.net/projects/judoshiai/\">"
 	  "<img src=\"auto-update.png\"><b>Download JudoShiai from Sourceforge.</b></a></p>");
-    sendf(s, "<p><a href=\"judoshiai-remote-setup-" SHIAI_VERSION ".exe\">"
+    string_concat(s, "<p><a href=\"judoshiai-remote-setup-" SHIAI_VERSION ".exe\">"
 	  "<img src=\"auto-update.png\"><b>Install JudoShiai from communication node.</b></a>");
-    sendf(s, "<br>This is a partially installation intended to be used in JudoTimer and JudoInfo computers."
+    string_concat(s, "<br>This is a partially installation intended to be used in JudoTimer and JudoInfo computers."
 	  "<br><tt>.shi</tt> files are not associated with JudoShiai program.");
 }
 
-void send_html_bottom(http_parser_t *parser)
+void send_html_bottom(string *s, http_parser_t *parser)
 {
-    SOCKET s = parser->sock;
-
-    sendf(s, "</body></html>\r\n\r\n");
+    string_concat(s, "</body></html>\r\n\r\n");
 }
 
-void logout(http_parser_t *parser)
+int logout(http_parser_t *parser)
 {
-    SOCKET s = parser->sock;
+    FSTART;
+#if 0
     remove_accepted(parser->address);
     index_html(parser, "");
     return;
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    sendf(s, "Content-Type: text/html\r\n\r\n");
-    sendf(s, "<html><head><title>JudoShiai</title></head><body>\r\n");
-    sendf(s, "<p>OK. <a href=\"index.html\">%s.</a></p></body></html>\r\n\r\n", _("Back"));
+    string_concat(s, "HTTP/1.0 200 OK\r\n");
+    string_concat(s, "Content-Type: text/html\r\n\r\n");
+    string_concat(s, "<html><head><title>JudoShiai</title></head><body>\r\n");
+    string_concat(s, "<p>OK. <a href=\"index.html\">%s.</a></p></body></html>\r\n\r\n", _("Back"));
+#endif
+    FEND;
 }
 
-void index_html(http_parser_t *parser, gchar *txt)
+int index_html(http_parser_t *parser, gchar *txt)
 {
-    SOCKET s = parser->sock;
-
-    send_html_top(parser, "");
-    sendf(s, "%s", txt);
-    send_html_bottom(parser);
+    FSTART;
+    send_html_top(&s, parser, "");
+    string_concat(&s, "%s", txt);
+    send_html_bottom(&s, parser);
+    FEND;
 }
 
-void run_judotimer(http_parser_t *parser)
+int run_judotimer(http_parser_t *parser)
 {
-    SOCKET s = parser->sock;
-    //avl_node *node;
-    //http_var_t *var;
+    FSTART;
+
     gint tatami = 0, cat = 0, match = 0, bvote = 0, wvote = 0, bhkm = 0, whkm = 0, tmo = 0;
     const gchar *bpts = NULL, *wpts = NULL, *tmp;
     gint b = 0, w = 0;
 
-#if 0
-    node = avl_get_first(parser->queryvars);
-    while (node) {
-        var = (http_var_t *)node->key;
-        if (var) {
-            g_print("Query variable: '%s'='%s'\n", var->name, var->value);
-        }
-        node = avl_get_next(node);
-    }
-#endif
     tmp = httpp_get_query_param(parser, "tatami");
     if (tmp) tatami = atoi(tmp);
 
@@ -768,7 +789,7 @@ void run_judotimer(http_parser_t *parser)
     wpts = httpp_get_query_param(parser, "wpts");
     if (wpts) w = pts2int(wpts);
 
-    if ((b != w || bvote != wvote || bhkm != whkm) && tatami && is_accepted(parser->address)) {
+    if ((b != w || bvote != wvote || bhkm != whkm) && tatami && is_accepted(parser)) {
         struct message msg;
         memset(&msg, 0, sizeof(msg));
         msg.type = MSG_RESULT;
@@ -789,11 +810,8 @@ void run_judotimer(http_parser_t *parser)
             g_usleep(10000);
     }
 
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    sendf(s, "Content-Type: text/plain\r\n\r\n");
-
     if (tatami == 0)
-        return;
+        FEND_MIME("text/plain");
 
     //g_static_mutex_lock(&next_match_mutex);
     struct match *m = get_cached_next_matches(tatami);
@@ -801,10 +819,10 @@ void run_judotimer(http_parser_t *parser)
 
     if (!m) {
         //g_static_mutex_unlock(&next_match_mutex);
-        return;
+        FEND_MIME("text/plain");
     }
 
-    sendf(s, "%d %d\r\n", m[0].category, m[0].number);
+    string_concat(&s, "%d %d\r\n", m[0].category, m[0].number);
 
     for (k = 0; m[k].number != 1000 && k < 2; k++) {
         struct judoka *blue, *white, *jcat;
@@ -826,13 +844,13 @@ void run_judotimer(http_parser_t *parser)
             g_print("NEXT MATCH ERR: %s %s\n", 
                     next_matches_info[tatami-1][0].blue_first, blue->first);
 
-        sendf(s, "%s\r\n", jcat->last);
-        if (k == 0 && !is_accepted(parser->address)) {
-            sendf(s, "%s!\r\n", _("No rights to give results"));
-            sendf(s, "%s.\r\n", _("Login"));
+        string_concat(&s, "%s\r\n", jcat->last);
+        if (k == 0 && !is_accepted(parser)) {
+            string_concat(&s, "%s!\r\n", _("No rights to give results"));
+            string_concat(&s, "%s.\r\n", _("Login"));
         } else {
-            sendf(s, "%s %s %s\r\n", blue->first, blue->last, blue->club);
-            sendf(s, "%s %s %s\r\n", white->first, white->last, white->club);
+            string_concat(&s, "%s %s %s\r\n", blue->first, blue->last, blue->club);
+            string_concat(&s, "%s %s %s\r\n", white->first, white->last, white->club);
         }
 
         if (blue != &unknown_judoka)
@@ -843,45 +861,28 @@ void run_judotimer(http_parser_t *parser)
             free_judoka(jcat);
     }
     //g_static_mutex_unlock(&next_match_mutex);
-    sendf(s, "\r\n");
+    string_concat(&s, "\r\n");
+
+    FEND_MIME("text/plain");
 }
 
-void send_json_pair(SOCKET s, gchar *key, gchar *val, gboolean cont)
-{
-    sendf(s, "\"%s\":", key);
-    if (strchr(val, '"')) {
-	gchar *p = val;
-	sendf(s, "\"");
-	while (*p) {
-	    if (*p == '"') sendf(s, "\\");
-	    sendf(s, "%c", *p);
-	    p++;
-	}
-	sendf(s, "\"%s\r\n", cont ? "," : "");
-    } else {
-	sendf(s, "\"%s\"%s\r\n", val, cont ? "," : "");
-    }
-}
-
-void send_json_pair_int(SOCKET s, gchar *key, gint val, gboolean cont)
-{
-    sendf(s, "\"%s\":%d%s", key, val, cont ? "," : "");
-}
-
-void get_web(http_parser_t *parser, gint connum)
+int get_web(http_parser_t *parser, gint connum)
 {
     gint op;
+    time_t start;
     struct message msg;
-    struct msg_web_resp *resp = NULL;
+    struct msg_web_resp reply;
+    struct msg_web_resp *resp = &reply;
     const gchar *tmp;
     const gchar *id = NULL;
     const gchar *wg = NULL;
     const gchar *t = NULL;
-    const gchar *s = NULL;
+    const gchar *s1 = NULL;
     const gchar *c = NULL;
     const gchar *p = NULL;
-
-    resp = &connections[connum].resp;
+    FSTART;
+    
+    //resp = &connections[connum].resp;
     resp->request = MSG_WEB_GET_ERR;
     resp->ready = 0;
 
@@ -931,13 +932,12 @@ void get_web(http_parser_t *parser, gint connum)
     case MSG_WEB_GET_BRACKET:
 	t = httpp_get_query_param(parser, "t");
         msg.u.web.u.get_bracket.tatami = t ? atoi(t) : 0;
-        s = httpp_get_query_param(parser, "s");
-        msg.u.web.u.get_bracket.svg = s ? atoi(s) : 0;
+        s1 = httpp_get_query_param(parser, "s");
+        msg.u.web.u.get_bracket.svg = s1 ? atoi(s1) : 0;
         c = httpp_get_query_param(parser, "c");
         msg.u.web.u.get_bracket.cat = c ? atoi(c) : 0;
         p = httpp_get_query_param(parser, "p");
         msg.u.web.u.get_bracket.page = p ? atoi(p) : -1;
-        msg.u.web.u.get_bracket.connum = connum;
 	break;
 
     case MSG_WEB_GET_CAT_INFO:
@@ -948,135 +948,171 @@ void get_web(http_parser_t *parser, gint connum)
 	break;
 
     default:
-	goto err;
+        goto err;
     }
 
     put_to_rec_queue(&msg);
-    return;
 
- err:
-    resp->ready = MSG_WEB_RESP_ERR;
+    start = time(NULL);
+    
+    while (!g_atomic_int_get(&resp->ready) &&
+           time(NULL) < start + 10) {
+        g_usleep(50000);
+    }
+    if (time(NULL) >= start + 10 ||
+        g_atomic_int_get(&resp->ready) != MSG_WEB_RESP_OK) {
+        g_printerr("NO WEB REPLY\n");
+        return reply_web(parser, NULL);
+    }
+    
+    return reply_web(parser, resp);
+err:
+    return reply_web(parser, NULL);
 }
 
-void reply_web(gint connum)
+int reply_web(http_parser_t *parser, struct msg_web_resp *resp)
 {
+    cJSON *root, *array, *member;
+    FSTART;
 
-    struct msg_web_resp *resp = &connections[connum].resp;
+    g_print("reply_web\n");
+    if (!resp) {
+        FEND_404;
+    }
+    
     gint op = resp->request, i;
     gint ready = g_atomic_int_get(&resp->ready);
-    SOCKET s = connections[connum].fd;
+    g_print("reply_web op=%d ready=%d\n", op, ready);
 
     resp->request = 0;
 
     if (op == MSG_WEB_GET_BRACKET) {
-	gint tatami = resp->u.get_bracket_resp.tatami - 1;
-	if (tatami < 0 || tatami >= NUM_TATAMIS)
-	    goto out;
-	g_mutex_lock(&cache_lock);
-	mysend(s, sheet_cache[tatami].sheet, sheet_cache[tatami].len);
-	g_mutex_unlock(&cache_lock);
-        goto out;
-    }
+        GStatBuf st;
+        struct MHD_Response *response;
+        g_print("looking for %s\n", resp->u.get_bracket_resp.filename);
+        HANDLE fd = int_to_handle(g_open(resp->u.get_bracket_resp.filename, O_RDONLY, 0));
+        if (fd != INVALID_HANDLE_VALUE) {
+            if (g_stat(resp->u.get_bracket_resp.filename, &st) || (!S_ISREG(st.st_mode))) {
+#ifdef WIN32
+                CloseHandle(fd);
+#else
+                g_close(fd, NULL);
+#endif
+                fd = INVALID_HANDLE_VALUE;
+            }
+        }
 
-    if (ready != MSG_WEB_RESP_OK) {
-	sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
-	goto out;
-    }
+        if (fd == INVALID_HANDLE_VALUE) {
+            response = MHD_create_response_from_buffer(strlen (PAGE),
+                                                       (void *) PAGE,
+                                                       MHD_RESPMEM_PERSISTENT);
+            int ret = MHD_queue_response(parser, MHD_HTTP_NOT_FOUND, response);
+            MHD_destroy_response(response);
+            return ret;
+        }
 
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    sendf(s, "Content-Type: text/plain; charset=utf-8\r\n\r\n{\r\n");
+        response = MHD_create_response_from_fd64(st.st_size, handle_to_int(fd));
+        if (!response) {
+            g_printerr("response failed\n");
+#ifdef WIN32
+            CloseHandle(fd);
+#else
+            g_close(fd, NULL);
+#endif
+            return MHD_NO;
+        }
+
+        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, "image/png");
+        int ret = MHD_queue_response(parser, MHD_HTTP_OK, response);
+        MHD_destroy_response(response);
+        return ret;
+    }
 
     switch (op) {
     case MSG_WEB_GET_COMP_DATA:
     case MSG_WEB_SET_COMP_WEIGHT:
-	send_json_pair_int(s, "req", resp->request, TRUE);
-	send_json_pair(s, "last", resp->u.get_comp_data_resp.last, TRUE);
-	send_json_pair(s, "first", resp->u.get_comp_data_resp.first, TRUE);
-	send_json_pair(s, "club", resp->u.get_comp_data_resp.club, TRUE);
-	send_json_pair(s, "rcat", resp->u.get_comp_data_resp.regcategory, TRUE);
-	send_json_pair(s, "cat", resp->u.get_comp_data_resp.category, TRUE);
-	send_json_pair_int(s, "weight", resp->u.get_comp_data_resp.weight, TRUE);
-	send_json_pair(s, "ecat", resp->u.get_comp_data_resp.estim_category, FALSE);
+#define CSTR(_s) _s ? _s : ""
+        root = cJSON_CreateObject();	
+	cJSON_AddNumberToObject(root, "req", resp->request);
+	cJSON_AddNumberToObject(root, "ix", resp->u.get_comp_data_resp.index);
+	cJSON_AddStringToObject(root, "last", CSTR(resp->u.get_comp_data_resp.last));
+	cJSON_AddStringToObject(root, "first", CSTR(resp->u.get_comp_data_resp.first));
+	cJSON_AddStringToObject(root, "club", CSTR(resp->u.get_comp_data_resp.club));
+	cJSON_AddStringToObject(root, "rcat", CSTR(resp->u.get_comp_data_resp.regcategory));
+	cJSON_AddStringToObject(root, "cat", CSTR(resp->u.get_comp_data_resp.category));
+	cJSON_AddNumberToObject(root, "weight", resp->u.get_comp_data_resp.weight);
+        cJSON_AddStringToObject(root, "ecat", CSTR(resp->u.get_comp_data_resp.estim_category));
+        s.buf = cJSON_PrintUnformatted(root);
+        s.len = strlen(s.buf);
+        cJSON_Delete(root);
 	break;
 
     case MSG_WEB_GET_MATCH_CRC:
-	sendf(s, "\"crc\":[");
+	string_concat(&s, "\"crc\":[");
 	for (i = 0; i < NUM_TATAMIS; i++)
-	    sendf(s, "%c%d", i ? ',' : ' ', resp->u.get_match_crc_resp.crc[i]);
-	sendf(s, "]\r\n");
+	    string_concat(&s, "%c%d", i ? ',' : ' ', resp->u.get_match_crc_resp.crc[i]);
+	string_concat(&s, "]\r\n");
 	break;
 
     case MSG_WEB_GET_MATCH_INFO:
-	sendf(s, "\"match_info\":[");
+	root = cJSON_CreateObject();	
+	array = cJSON_CreateArray();
+	cJSON_AddItemToObject(root, "match_info", array);
+
 	for (i = 0; i <= INFO_MATCH_NUM; i++) {
-	    sendf(s, "%c\r\n{", i ? ',' : ' ');
-	    send_json_pair_int(s, "t", resp->u.get_match_info_resp[i].tatami, TRUE);
-	    send_json_pair_int(s, "row", resp->u.get_match_info_resp[i].num, TRUE);
-	    send_json_pair_int(s, "cat", resp->u.get_match_info_resp[i].match_category_ix, TRUE);
-	    send_json_pair_int(s, "num", resp->u.get_match_info_resp[i].match_number, TRUE);
-	    send_json_pair_int(s, "comp1", resp->u.get_match_info_resp[i].comp1, TRUE);
-	    send_json_pair_int(s, "comp2", resp->u.get_match_info_resp[i].comp2, TRUE);
-	    send_json_pair_int(s, "round", resp->u.get_match_info_resp[i].round, FALSE);
-	    sendf(s, "}");
-	}
-	sendf(s, "]\r\n");
+            member = cJSON_CreateObject();
+            cJSON_AddItemToArray(array, member);
+	    cJSON_AddNumberToObject(member, "t", resp->u.get_match_info_resp[i].tatami);
+	    cJSON_AddNumberToObject(member, "row", resp->u.get_match_info_resp[i].num);
+	    cJSON_AddNumberToObject(member, "cat", resp->u.get_match_info_resp[i].match_category_ix);
+	    cJSON_AddNumberToObject(member, "num", resp->u.get_match_info_resp[i].match_number);
+	    cJSON_AddNumberToObject(member, "comp1", resp->u.get_match_info_resp[i].comp1);
+	    cJSON_AddNumberToObject(member, "comp2", resp->u.get_match_info_resp[i].comp2);
+	    cJSON_AddNumberToObject(member, "round", resp->u.get_match_info_resp[i].round);
+        }
+        s.buf = cJSON_PrintUnformatted(root);
+        s.len = strlen(s.buf);
+        cJSON_Delete(root);
 	break;
 
     case MSG_WEB_GET_CAT_INFO:
-	send_json_pair_int(s, "cat", resp->u.get_category_info_resp.catix, TRUE);
-	send_json_pair_int(s, "system", resp->u.get_category_info_resp.system, TRUE);
-	send_json_pair_int(s, "numcomp", resp->u.get_category_info_resp.numcomp, TRUE);
-	send_json_pair_int(s, "table", resp->u.get_category_info_resp.table, TRUE);
-	send_json_pair_int(s, "wishsys", resp->u.get_category_info_resp.wishsys, TRUE);
-	send_json_pair_int(s, "numpages", resp->u.get_category_info_resp.num_pages, FALSE);
+	root = cJSON_CreateObject();	
+	cJSON_AddNumberToObject(root, "cat", resp->u.get_category_info_resp.catix);
+	cJSON_AddNumberToObject(root, "system", resp->u.get_category_info_resp.system);
+	cJSON_AddNumberToObject(root, "numcomp", resp->u.get_category_info_resp.numcomp);
+	cJSON_AddNumberToObject(root, "table", resp->u.get_category_info_resp.table);
+	cJSON_AddNumberToObject(root, "wishsys", resp->u.get_category_info_resp.wishsys);
+	cJSON_AddNumberToObject(root, "numpages", resp->u.get_category_info_resp.num_pages);
+        s.buf = cJSON_PrintUnformatted(root);
+        s.len = strlen(s.buf);
+        cJSON_Delete(root);
 	break;
     }
 
-    sendf(s, "}\r\n\r\n");
-
- out:
-    ;
-#ifndef USE_THREADS
-#if defined(__WIN32__) || defined(WIN32)
-    shutdown(s, SD_SEND);
-#endif
-    connections[connum].closed = TRUE;
-#endif
+    FEND;
 }
 
-static gint my_atoi(gchar *s) { return (s ? atoi(s) : 0); }
+static gint my_atoi(const gchar *s) { return (s ? atoi(s) : 0); }
 
 #define GET_INT(_x) gint _x = new_comp ? 0 : my_atoi(db_get_col_data(tablecopy, numcols, row, #_x))
 #define GET_STR(_x) gchar *_x = new_comp ? "" : db_get_col_data(tablecopy, numcols, row, #_x)
 
 #define SEARCH_FIELD "<form method=\"get\" action=\"getcompetitor\" name=\"search\">Search (bar code):<input type=\"text\" name=\"index\"></form>\r\n"
 
-void get_competitor(http_parser_t *parser)
+int get_competitor(http_parser_t *parser)
 {
-    SOCKET s = parser->sock;
+    FSTART;
     gchar buf[1024];
     gint row;
     gint i;
     gboolean new_comp = FALSE;
-    gchar *ix = NULL;
+    const gchar *ix = NULL;
 
-    avl_node *node;
-    http_var_t *var;
-    node = avl_get_first(parser->queryvars);
-    while (node) {
-        var = (http_var_t *)node->key;
-        if (var) {
-            //printf("Query variable: '%s'='%s'\n", var->name, var->value);
-            if (!strcmp(var->name, "index")) {
-                ix = var->value;
-                if (!strcmp(ix, "0"))
-                    new_comp = TRUE;
-            }
-        }
-        node = avl_get_next(node);
-    }
+    ix = httpp_get_query_param(parser, "index");
+    if (!strcmp(ix, "0"))
+        new_comp = TRUE;
 
-    send_html_top(parser, "onLoad=\"document.valtable.weight.focus()\"");
+    send_html_top(&s, parser, "onLoad=\"document.valtable.weight.focus()\"");
 
     snprintf(buf, sizeof(buf), "select * from competitors where \"id\"=\"%s\"", ix);
     gint numrows, numcols;
@@ -1089,9 +1125,9 @@ void get_competitor(http_parser_t *parser)
     }
 
     if (!tablecopy) {
-        sendf(s, "<h1>%s</h1>", _("No competitor found!"));
-        send_html_bottom(parser);
-        return;
+        string_concat(&s, "<h1>%s</h1>", _("No competitor found!"));
+        send_html_bottom(&s, parser);
+        FEND;
     } else if (numrows == 0)
         new_comp = TRUE;
 
@@ -1114,13 +1150,13 @@ void get_competitor(http_parser_t *parser)
     GET_INT(clubseeding);
 
 #define HTML_ROW_STR(_h, _x)                                            \
-    sendf(s, "<tr><td>%s:</td><td><input type=\"text\" name=\"%s\" value=\"%s\"/></td></tr>\r\n", \
+    string_concat(&s, "<tr><td>%s:</td><td><input type=\"text\" name=\"%s\" value=\"%s\"/></td></tr>\r\n", \
           _h, #_x, _x)
 #define HTML_ROW_INT(_h, _x)                                            \
-    sendf(s, "<tr><td>%s:</td><td><input type=\"text\" name=\"%s\" value=\"%d\"/></td></tr>\r\n", \
+    string_concat(&s, "<tr><td>%s:</td><td><input type=\"text\" name=\"%s\" value=\"%d\"/></td></tr>\r\n", \
           _h, #_x, _x)
 
-    sendf(s, "<form method=\"get\" action=\"setcompetitor\" name=\"valtable\">"
+    string_concat(&s, "<form method=\"get\" action=\"setcompetitor\" name=\"valtable\">"
           "<input type=\"hidden\" name=\"index\" value=\"%d\">"
           "<table class=\"competitor\">\r\n", 
           index, category);
@@ -1131,10 +1167,10 @@ void get_competitor(http_parser_t *parser)
     HTML_ROW_STR("First Name", first);
     HTML_ROW_INT("Year of Birth", birthyear);
 
-    sendf(s, "<tr><td>%s:</td><td><select name=\"belt\" value=\"\">", "Grade");
+    string_concat(&s, "<tr><td>%s:</td><td><select name=\"belt\" value=\"\">", "Grade");
     for (i = 0; belts[i]; i++)
-        sendf(s, "<option %s>%s</option>", belt == i ? "selected" : "", belts[i]);
-    sendf(s, "</select></td></tr>\r\n");
+        string_concat(&s, "<option %s>%s</option>", belt == i ? "selected" : "", belts[i]);
+    string_concat(&s, "</select></td></tr>\r\n");
 
     HTML_ROW_STR("Club", club);
     HTML_ROW_STR("Country", country);
@@ -1143,69 +1179,69 @@ void get_competitor(http_parser_t *parser)
     // category list box
 //    db_close_table();  //mutex problem.
     numrows = db_get_table("select category from categories order by category");
-    sendf(s, "<tr><td>%s:</td><td><select name=\"category\" value=\"\">", "Category");
+    string_concat(&s, "<tr><td>%s:</td><td><select name=\"category\" value=\"\">", "Category");
     for (row = 0; row < numrows; row++) {
     	gchar *cat = db_get_data(row, "category");
-         sendf(s, "<option %s>%s</option>", !strcmp(cat,category) ? "selected" : "", cat);
+         string_concat(&s, "<option %s>%s</option>", !strcmp(cat,category) ? "selected" : "", cat);
     }
     db_close_table();
-    sendf(s, "</select></td></tr>\r\n");
+    string_concat(&s, "</select></td></tr>\r\n");
 
-    sendf(s, "<tr><td>%s:</td><td><input type=\"text\" name=\"weight\" value=\"%d.%02d\"/></td></tr>\r\n", \
+    string_concat(&s, "<tr><td>%s:</td><td><input type=\"text\" name=\"weight\" value=\"%d.%02d\"/></td></tr>\r\n", \
           "Weight", weight/1000, (weight%1000)/10);
 
-    sendf(s, "<tr><td>%s:</td><td><select name=\"seeding\" value=\"\">", "Seeding");
+    string_concat(&s, "<tr><td>%s:</td><td><select name=\"seeding\" value=\"\">", "Seeding");
     for (i = 0; i <= 4; i++)
-        sendf(s, "<option %s>%d</option>", seeding == i ? "selected" : "", i);
-    sendf(s, "</select></td></tr>\r\n");
+        string_concat(&s, "<option %s>%d</option>", seeding == i ? "selected" : "", i);
+    string_concat(&s, "</select></td></tr>\r\n");
 
-    sendf(s, "<tr><td>%s:</td><td><input type=\"text\" name=\"clubseeding\" value=\"%d\"/></td></tr>\r\n", \
+    string_concat(&s, "<tr><td>%s:</td><td><input type=\"text\" name=\"clubseeding\" value=\"%d\"/></td></tr>\r\n", \
           "Club Seeding", clubseeding);
 
     HTML_ROW_STR("ID", id);
 
-    sendf(s, "<tr><td>%s:</td><td><select name=\"gender\" value=\"\">", "Gender");
-    sendf(s, "<option %s>%s</option>", (deleted & (GENDER_MALE | GENDER_FEMALE)) == 0 ? "selected" : "", "?");
-    sendf(s, "<option %s>%s</option>", deleted & GENDER_MALE ? "selected" : "", "Male");
-    sendf(s, "<option %s>%s</option>", deleted & GENDER_FEMALE ? "selected" : "", "Female");
-    sendf(s, "</select></td></tr>\r\n");
+    string_concat(&s, "<tr><td>%s:</td><td><select name=\"gender\" value=\"\">", "Gender");
+    string_concat(&s, "<option %s>%s</option>", (deleted & (GENDER_MALE | GENDER_FEMALE)) == 0 ? "selected" : "", "?");
+    string_concat(&s, "<option %s>%s</option>", deleted & GENDER_MALE ? "selected" : "", "Male");
+    string_concat(&s, "<option %s>%s</option>", deleted & GENDER_FEMALE ? "selected" : "", "Female");
+    string_concat(&s, "</select></td></tr>\r\n");
 
-    sendf(s, "<tr><td>%s:</td><td><select name=\"judogi\" value=\"\">", "Control");
-    sendf(s, "<option %s>%s</option>", (deleted & (JUDOGI_OK | JUDOGI_NOK)) == 0 ? "selected" : "", "Not checked");
-    sendf(s, "<option %s>%s</option>", deleted & JUDOGI_OK ? "selected" : "", "OK");
-    sendf(s, "<option %s>%s</option>", deleted & JUDOGI_NOK ? "selected" : "", "NOK");
-    sendf(s, "</select></td></tr>\r\n");
+    string_concat(&s, "<tr><td>%s:</td><td><select name=\"judogi\" value=\"\">", "Control");
+    string_concat(&s, "<option %s>%s</option>", (deleted & (JUDOGI_OK | JUDOGI_NOK)) == 0 ? "selected" : "", "Not checked");
+    string_concat(&s, "<option %s>%s</option>", deleted & JUDOGI_OK ? "selected" : "", "OK");
+    string_concat(&s, "<option %s>%s</option>", deleted & JUDOGI_NOK ? "selected" : "", "NOK");
+    string_concat(&s, "</select></td></tr>\r\n");
 
-    sendf(s, "<tr><td>%s:</td><td><input type=\"checkbox\" name=\"hansokumake\" "
+    string_concat(&s, "<tr><td>%s:</td><td><input type=\"checkbox\" name=\"hansokumake\" "
           "value=\"yes\" %s/></td></tr>\r\n", "Hansoku-make", deleted&2 ? "checked" : "");
 
     if (category[0] == '?')
-        sendf(s, "<tr><td>%s:</td><td><input type=\"checkbox\" name=\"delete\" "
+        string_concat(&s, "<tr><td>%s:</td><td><input type=\"checkbox\" name=\"delete\" "
               "value=\"yes\" %s/></td></tr>\r\n", "Delete", deleted&1 ? "checked" : "");
 
-    sendf(s, "</table>\r\n");
+    string_concat(&s, "</table>\r\n");
 
-    if (is_accepted(parser->address))
-        sendf(s, "<input type=\"submit\" value=\"%s\">", new_comp ? _("Add") : _("OK"));
+    if (is_accepted(parser))
+        string_concat(&s, "<input type=\"submit\" value=\"%s\">", new_comp ? _("Add") : _("OK"));
 
-    sendf(s, "</form><br><a href=\"competitors\">Competitors</a>"
+    string_concat(&s, "</form><br><a href=\"competitors\">Competitors</a>"
           SEARCH_FIELD);
 
-    send_html_bottom(parser);
+    send_html_bottom(&s, parser);
 
     db_close_table_copy(tablecopy);
+
+    FEND;
 }
 
-#define GET_HTML_STR(_x) \
-    else if (!strcmp(var->name, #_x)) _x = var->value
-#define GET_HTML_INT(_x) \
-    else if (!strcmp(var->name, #_x)) _x = my_atoi(var->value)
-#define DEF_STR(_x) gchar *_x = ""
+#define GET_HTML_STR(_x) _x = httpp_get_query_param(parser, #_x)
+#define GET_HTML_INT(_x) _x = my_atoi(httpp_get_query_param(parser, #_x))
+#define DEF_STR(_x) const gchar *_x = ""
 #define DEF_INT(_x) gint _x = 0
 
-void set_competitor(http_parser_t *parser)
+int set_competitor(http_parser_t *parser)
 {
-    SOCKET s = parser->sock;
+    FSTART;
 
     DEF_INT(index);
     DEF_STR(last);
@@ -1227,35 +1263,25 @@ void set_competitor(http_parser_t *parser)
     DEF_STR(judogi);
     DEF_STR(gender);
 
-    avl_node *node;
-    http_var_t *var;
-    node = avl_get_first(parser->queryvars);
-    while (node) {
-        var = (http_var_t *)node->key;
-        if (var) {
-            if (0) { }
-            GET_HTML_INT(index);
-            GET_HTML_STR(last);
-            GET_HTML_STR(first);
-            GET_HTML_INT(birthyear);
-            GET_HTML_STR(club);
-            GET_HTML_STR(regcategory);
-            GET_HTML_STR(belt);
-            GET_HTML_STR(weight);
-            //GET_HTML_INT(visible);
-            GET_HTML_STR(category);
-            //GET_HTML_INT(deleted);
-            GET_HTML_INT(seeding);
-            GET_HTML_INT(clubseeding);
-            GET_HTML_STR(country);
-            GET_HTML_STR(hansokumake);
-            GET_HTML_STR(id);
-            GET_HTML_STR(delete);
-            GET_HTML_STR(judogi);
-            GET_HTML_STR(gender);
-        }
-        node = avl_get_next(node);
-    }
+    GET_HTML_INT(index);
+    GET_HTML_STR(last);
+    GET_HTML_STR(first);
+    GET_HTML_INT(birthyear);
+    GET_HTML_STR(club);
+    GET_HTML_STR(regcategory);
+    GET_HTML_STR(belt);
+    GET_HTML_STR(weight);
+    //GET_HTML_INT(visible);
+    GET_HTML_STR(category);
+    //GET_HTML_INT(deleted);
+    GET_HTML_INT(seeding);
+    GET_HTML_INT(clubseeding);
+    GET_HTML_STR(country);
+    GET_HTML_STR(hansokumake);
+    GET_HTML_STR(id);
+    GET_HTML_STR(delete);
+    GET_HTML_STR(judogi);
+    GET_HTML_STR(gender);
 
     deleted = 0;
 
@@ -1276,7 +1302,7 @@ void set_competitor(http_parser_t *parser)
         deleted |= JUDOGI_NOK;
 
     gint beltval;
-    gchar *b = belt;
+    const gchar *b = belt;
     gboolean kyu = strchr(b, 'k') != NULL || strchr(b, 'K') != NULL;
     gboolean mon = strchr(b, 'm') != NULL || strchr(b, 'M') != NULL;
     while (*b && (*b < '0' || *b > '9'))
@@ -1292,14 +1318,16 @@ void set_competitor(http_parser_t *parser)
 
     if (beltval < 0 || beltval > 20) beltval = 0;
 
+#undef STRCPY
 #define STRCPY(_x)                                                      \
     strncpy(msg.u.edit_competitor._x, _x, sizeof(msg.u.edit_competitor._x)-1)
 
-#define STRCPY_UTF8(_x)                                                      \
-    do { gsize _sz;                                                       \
+#undef STRCPY_UTF8
+#define STRCPY_UTF8(_x)                                                 \
+    do { gsize _sz;                                                     \
         gchar *_s = g_convert(_x, -1, "UTF-8", "ISO-8859-1", NULL, &_sz, NULL); \
         strncpy(msg.u.edit_competitor._x, _s, sizeof(msg.u.edit_competitor._x)-1); \
-        g_free(_s);                                                      \
+        g_free(_s);                                                     \
     } while (0)
 
     struct message msg;
@@ -1328,33 +1356,25 @@ void set_competitor(http_parser_t *parser)
     while ((time(NULL) < start + 5) && (msg2->type != 0))
         g_usleep(10000);
 
-    send_html_top(parser, "");
+    send_html_top(&s, parser, "");
 
-    sendf(s, "<h1>OK</h1>"
+    string_concat(&s, "<h1>OK</h1>"
           "%s %s saved.<br>"
           "<a href=\"competitors\">Show competitors</a>\r\n"
           SEARCH_FIELD, first, last);
 
-    send_html_bottom(parser);
+    send_html_bottom(&s, parser);
+
+    FEND;
 }
 
-void get_competitors(http_parser_t *parser, gboolean show_deleted)
+int get_competitors(http_parser_t *parser, gboolean show_deleted)
 {
-    SOCKET s = parser->sock;
+    FSTART;
     gint row;
-    gchar *order = "country";
-    avl_node *node;
-    http_var_t *var;
-    node = avl_get_first(parser->queryvars);
-    while (node) {
-        var = (http_var_t *)node->key;
-        if (var) {
-            //printf("Query variable: '%s'='%s'\n", var->name, var->value);
-            if (!strcmp(var->name, "order"))
-                order = var->value;
-        }
-        node = avl_get_next(node);
-    }
+    const gchar *order = "country";
+    
+    order = httpp_get_query_param(parser, "order");
 
     gint numrows, numcols;
     gchar **tablecopy;
@@ -1387,14 +1407,14 @@ void get_competitors(http_parser_t *parser, gboolean show_deleted)
                                       &numrows, &numcols);
 
     if (!tablecopy)
-        return;
+        FEND;
 
-    send_html_top(parser, "onLoad=\"document.search.index.focus()\"");
+    send_html_top(&s, parser, "onLoad=\"document.search.index.focus()\"");
 
-    sendf(s, SEARCH_FIELD);
+    string_concat(&s, SEARCH_FIELD);
 
-    sendf(s, "<table id=\"competitors\">\r\n");
-    sendf(s, "<tr>"
+    string_concat(&s, "<table id=\"competitors\">\r\n");
+    string_concat(&s, "<tr>"
           "<th><a href=\"#\" onclick=\"sort(0);\"><b>%s</b></a></th>"
           "<th><b>%s</b></th>"
           "<th><a href=\"#\" onclick=\"sort(2);\"><b>%s</b></a></th>"
@@ -1425,14 +1445,14 @@ void get_competitors(http_parser_t *parser, gboolean show_deleted)
 
 	if (strcmp(lastcat, cat)) {
 	    catid++;
-            sendf(s, "<tr data-tt-id=\"%d\"><td>%s</td><td></td><td></td><td></td>"
+            string_concat(&s, "<tr data-tt-id=\"%d\"><td>%s</td><td></td><td></td><td></td>"
 		  "<td></td><td></td><td></td></tr>\r\n", catid, cat);
 	    strcpy(lastcat, cat);
 	}
 
         if (((deleted&1) && show_deleted) ||
             ((deleted&1) == 0 && show_deleted == FALSE)) {
-            sendf(s, "<tr %s data-tt-id=\"%s\" data-tt-parent-id=\"%d\">"
+            string_concat(&s, "<tr %s data-tt-id=\"%s\" data-tt-parent-id=\"%d\">"
 		  "<td><a href=\"getcompetitor?index=%s\">%s</a></td><td>%s</td><td>%s</td><td>%s</td>"
                   "<td>%s</td><td>%d.%02d</td>"
                   "<td><a href=\"getcompetitor?index=%s\">%s/%s</a></td></tr>\r\n",
@@ -1443,57 +1463,43 @@ void get_competitors(http_parser_t *parser, gboolean show_deleted)
         }
     }
 
-    sendf(s, "</table>\r\n");
-    sendf(s, "<script> $(\"#competitors\").treetable({ expandable: true }); </script>\r\n");
-    sendf(s, "<script> function sort(col) {"
+    string_concat(&s, "</table>\r\n");
+    string_concat(&s, "<script> $(\"#competitors\").treetable({ expandable: true }); </script>\r\n");
+    string_concat(&s, "<script> function sort(col) {"
 	  "$(\"#competitors tr:not(:first-child)\").each(function() {"
 	  "var node = $(\"#competitors\").treetable(\"node\", $(this).attr('data-tt-id'));"
 	  "$(\"#competitors\").treetable(\"sortBranch\", node, col); });"
 	  "} </script>\r\n");
 
-    send_html_bottom(parser);
+    send_html_bottom(&s, parser);
 
     db_close_table_copy(tablecopy);
+
+    FEND;
 }
 
-void get_match_info(http_parser_t *parser, gchar *txt)
+int get_match_info(http_parser_t *parser, gchar *txt)
 {
-    SOCKET s = parser->sock;
-    avl_node *node;
-    http_var_t *var;
+    FSTART;
     int t = 0, i;
-    node = avl_get_first(parser->queryvars);
-    while (node) {
-        var = (http_var_t *)node->key;
-        if (var) {
-            //printf("Query variable: '%s'='%s'\n", var->name, var->value);
-            if (!strcmp(var->name, "t"))
-                t = atoi(var->value);
-        }
-        node = avl_get_next(node);
-    }
+
+    t = my_atoi(httpp_get_query_param(parser, "t"));
 
     if (t < 1 || t > NUM_TATAMIS) {
 	/* abstract */
-	sendf(s, "HTTP/1.0 200 OK\r\n");
-	sendf(s, "Content-Type: text/plain\r\n\r\n");
 	for (t = 1; t <= NUM_TATAMIS; t++) {
-	    sendf(s, "%d,%d\r\n", t, match_crc[t]);
+	    string_concat(&s, "%d,%d\r\n", t, match_crc[t]);
 	}
-	sendf(s, "\r\n");
-	return;
+	string_concat(&s, "\r\n");
+        FEND_MIME("text/plain");
     }
 
     struct match *m = get_cached_next_matches(t);
     if (!m) {
-	sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
-	return;
+        FEND_404;
     }
 
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    sendf(s, "Content-Type: text/plain\r\n\r\n");
-
-    sendf(s, "%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
+    string_concat(&s, "%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
 	  t, 0,
 	  next_matches_info[t-1][0].won_catnum,
 	  next_matches_info[t-1][0].won_matchnum,
@@ -1501,57 +1507,46 @@ void get_match_info(http_parser_t *parser, gchar *txt)
 	  0, 0, 0, 0);
 
     for (i = 0; i < NEXT_MATCH_NUM; i++) {
-	sendf(s, "%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
+	string_concat(&s, "%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
 	      t, i+1, m[i].category, m[i].number,
 	      m[i].blue, m[i].white,
 	      0, 0, m[i].round);
     }
 
-    sendf(s, "\r\n");
+    string_concat(&s, "\r\n");
+
+    FEND_MIME("text/plain");
 }
 
-void get_name_info(http_parser_t *parser, gchar *txt)
+int get_name_info(http_parser_t *parser, gchar *txt)
 {
-    SOCKET s = parser->sock;
-    avl_node *node;
-    http_var_t *var;
+    FSTART;
     int comp = 0;
-    node = avl_get_first(parser->queryvars);
-    while (node) {
-        var = (http_var_t *)node->key;
-        if (var) {
-            //printf("Query variable: '%s'='%s'\n", var->name, var->value);
-            if (!strcmp(var->name, "c"))
-                comp = atoi(var->value);
-        }
-        node = avl_get_next(node);
-    }
+
+    comp = my_atoi(httpp_get_query_param(parser, "c"));
 
     struct judoka *j = get_data(comp);
     if (!j) {
-	sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
-	return;
+        FEND_404;
     }
 
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    sendf(s, "Content-Type: text/plain\r\n\r\n");
-    sendf(s, "%d\t%s\t%s\t%s\r\n\r\n",
+    string_concat(&s, "%d\t%s\t%s\t%s\r\n\r\n",
 	  comp, j->last, j->first, get_club_text(j, CLUB_TEXT_ABBREVIATION));
     free_judoka(j);
+
+    FEND_MIME("text/plain");
 }
 
-void set_result(http_parser_t *parser, gchar *txt)
+int set_result(http_parser_t *parser, gchar *txt)
 {
-    SOCKET s = parser->sock;
+    FSTART;
     struct message msg;
     const char *tmp;
 
-    if (!is_accepted(parser->address)) {
-	sendf(s, "HTTP/1.0 200 OK\r\n");
-	sendf(s, "Content-Type: text/plain\r\n\r\n");
-	sendf(s, "%s!\r\n", _("No rights to give results"));
-	sendf(s, "%s.\r\n", _("Login"));
-	return;
+    if (!is_accepted(parser)) {
+	string_concat(&s, "%s!\r\n", _("No rights to give results"));
+	string_concat(&s, "%s.\r\n", _("Login"));
+        FEND;
     }
     memset(&msg, 0, sizeof(msg));
     msg.type = MSG_RESULT;
@@ -1583,28 +1578,23 @@ void set_result(http_parser_t *parser, gchar *txt)
 	(msg.u.result.blue_score != msg.u.result.white_score ||
 	 msg.u.result.blue_vote != msg.u.result.white_vote ||
 	 msg.u.result.blue_hansokumake != msg.u.result.white_hansokumake)) {
-	sendf(s, "HTTP/1.0 200 OK\r\n");
-	sendf(s, "Content-Type: text/plain\r\n\r\nOK\r\n\r\n");
 	put_to_rec_queue(&msg);
-	return;
+        FEND_MIME("text/plain");
     }
 
-    sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
-    return;
+    FEND_404;
 }
 
-void cancel_rest(http_parser_t *parser, gchar *txt)
+int cancel_rest(http_parser_t *parser, gchar *txt)
 {
-    SOCKET s = parser->sock;
+    FSTART;
     struct message msg;
     const char *tmp;
 
-    if (!is_accepted(parser->address)) {
-	sendf(s, "HTTP/1.0 200 OK\r\n");
-	sendf(s, "Content-Type: text/plain\r\n\r\n");
-	sendf(s, "%s!\r\n", _("No rights to give results"));
-	sendf(s, "%s.\r\n", _("Login"));
-	return;
+    if (!is_accepted(parser)) {
+	string_concat(&s, "%s!\r\n", _("No rights to give results"));
+	string_concat(&s, "%s.\r\n", _("Login"));
+        FEND;
     }
 
     memset(&msg, 0, sizeof(msg));
@@ -1619,14 +1609,15 @@ void cancel_rest(http_parser_t *parser, gchar *txt)
     tmp = httpp_get_query_param(parser, "w");
     if (tmp) msg.u.cancel_rest_time.white = atoi(tmp);
 
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    sendf(s, "Content-Type: text/plain\r\n\r\nOK\r\n\r\n");
+    string_concat(&s, "HTTP/1.0 200 OK\r\n");
+    string_concat(&s, "Content-Type: text/plain\r\n\r\nOK\r\n\r\n");
     put_to_rec_queue(&msg);
+    FEND_MIME("text/plain");
 }
 
-void get_judoshiai(http_parser_t *parser, gchar *txt)
+int get_judoshiai(http_parser_t *parser, gchar *txt)
 {
-    SOCKET s = parser->sock;
+    FSTART;
     int t = 0, x = 0, y = 0;
     static gint tab = 0;
     const char *tmp;
@@ -1684,54 +1675,42 @@ void get_judoshiai(http_parser_t *parser, gchar *txt)
 	     gtk_window_get_title(GTK_WINDOW(main_window)));
     system(buf);
 
-    send_html_top(parser, "");
-    sendf(s,
+    send_html_top(&s, parser, "");
+    string_concat(&s,
 	  "<form action=\"judoshiai\">\r\n"
 	  "<input type=\"image\" id=\"jsImg\" src=\"js.png\" alt=\"Submit\" />\r\n"
 	  "</form>\r\n", t);
-    send_html_bottom(parser);
+    send_html_bottom(&s, parser);
+    FEND;
 }
 
-void get_js_png(http_parser_t *parser, gchar *txt)
+int get_js_png(http_parser_t *parser, gchar *txt)
 {
     gchar *img;
     gsize len;
-    SOCKET s = parser->sock;
+    FSTART;
 
     if (g_file_get_contents("/tmp/js.png", &img, &len, NULL)) {
-	sendf(s, "HTTP/1.0 200 OK\r\n");
-	sendf(s, "Content-Type: image/png\r\n\r\n");
-	mysend(s, img, len);
-	g_free(img);
+        s.buf = img;
+        s.len = len;
+        FEND_PNG;
     } else {
-	sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
+        FEND_404;
     }
 }
 
-void get_next_match(http_parser_t *parser, gchar *txt)
+int get_next_match(http_parser_t *parser, gchar *txt)
 {
-    SOCKET s = parser->sock;
-    avl_node *node;
-    http_var_t *var;
+    FSTART;
     int t = 0;
     struct message *msg;
     struct msg_next_match *nm;
 
-    node = avl_get_first(parser->queryvars);
-    while (node) {
-        var = (http_var_t *)node->key;
-        if (var) {
-            //printf("Query variable: '%s'='%s'\n", var->name, var->value);
-            if (!strcmp(var->name, "t"))
-                t = atoi(var->value);
-        }
-        node = avl_get_next(node);
-    }
+    t = my_atoi(httpp_get_query_param(parser, "t"));
 
     if (t <= 0 || t > NUM_TATAMIS) {
 	g_print("next match t=%d\n", t);
-	sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
-	return;
+        FEND_404;
     }
 
     msg = get_next_match_msg(t);
@@ -1741,67 +1720,59 @@ void get_next_match(http_parser_t *parser, gchar *txt)
     if (now < msg->u.next_match.rest_time)
 	rest_time = msg->u.next_match.rest_time - now;
 
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    sendf(s, "Content-Type: text/plain\r\n\r\n");
-    sendf(s, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
+    string_concat(&s, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
 	  nm->tatami, nm->category, nm->match,  nm->minutes, nm->match_time,
 	  nm->gs_time, nm->rep_time, rest_time, nm->pin_time_ippon,
 	  nm->pin_time_wazaari, nm->pin_time_yuko, nm->pin_time_koka,
 	  nm->flags);
-    sendf(s, "%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
+    string_concat(&s, "%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
 	  nm->cat_1, nm->blue_1, nm->white_1,
 	  nm->cat_2, nm->blue_2, nm->white_2);
+    FEND_MIME("text/plain");
 }
 
-void sql_cmd(http_parser_t *parser, gchar *txt)
+int sql_cmd(http_parser_t *parser, gchar *txt)
 {
-    SOCKET s = parser->sock;
+    FSTART;
     gchar **tablecopy;
     gint numrows, numcols, row, col;
     const char *sql;
 
-    if (!is_accepted(parser->address)) {
-	sendf(s, "HTTP/1.0 404 NOK\r\n");
-	sendf(s, "Content-Type: text/plain\r\n\r\n");
-	sendf(s, "%s!\r\n", "No access rights!");
-	sendf(s, "%s.\r\n\r\n", _("Login"));
-	return;
+    if (!is_accepted(parser)) {
+	string_concat(&s, "%s!\r\n", "No access rights!");
+	string_concat(&s, "%s.\r\n\r\n", _("Login"));
+        FEND_404;
     }
 
     sql = httpp_get_query_param(parser, "sql");
     tablecopy = db_get_table_copy((char *)(uintptr_t)sql, &numrows, &numcols);
 
     if (!tablecopy) {
-	sendf(s, "HTTP/1.0 404 NOK\r\n");
-	sendf(s, "Content-Type: text/plain\r\n\r\n");
-	sendf(s, "Error!\r\n\r\n");
-	return;
+	string_concat(&s, "Error!\r\n\r\n");
+	FEND_404;
     }
-
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    sendf(s, "Content-Type: text/plain\r\n\r\n");
 
     for (row = 0; row < numrows; row++) {
 	for (col = 0; col < numcols; col++) {
-	    sendf(s, "%s", tablecopy[col + numcols*row]);
+	    string_concat(&s, "%s", tablecopy[col + numcols*row]);
 	    if (col < numcols - 1)
-		sendf(s, "\t");
+		string_concat(&s, "\t");
 	}
-	sendf(s, "\r\n");
+	string_concat(&s, "\r\n");
     }
-    sendf(s, "\r\n");
+    string_concat(&s, "\r\n");
 
     db_close_table_copy(tablecopy);
+    FEND_MIME("text/plain");
 }
 
-void get_file(http_parser_t *parser)
+int get_file(struct MHD_Connection *connection, const char *url)
 {
-    SOCKET s = parser->sock;
-    gchar bufo[512];
-    gint n, w, i;
+    gint i;
+    struct MHD_Response *response;
+    const char *p = url + 1;
 
     char *mime = "application/octet-stream";
-    const char *p = parser->uri + 1;
     if (*p == 0)
         p = "index.html";
 
@@ -1873,305 +1844,249 @@ void get_file(http_parser_t *parser)
     gchar *docfile = g_build_filenamev(path);
     g_print("GET %s\n", docfile);
 
-    FILE *f = fopen(docfile, "rb");
+    //FILE *f = fopen(docfile, "rb");
+    HANDLE fd = int_to_handle(g_open(docfile, O_RDONLY, 0));
+    
+    GStatBuf st;
+    if (fd != INVALID_HANDLE_VALUE) {
+	if (g_stat(docfile, &st) || (!S_ISREG(st.st_mode))) {
+	    /* not a regular file, refuse to serve */
+            g_printerr("%s is not a regular file %x\n", docfile, st.st_mode);
+#ifdef WIN32
+            CloseHandle(fd);
+#else
+	    g_close(fd, NULL);
+#endif
+	    fd = INVALID_HANDLE_VALUE;
+	}
+    }
 
     g_strfreev(path1);
     g_free(docfile);
 
-    if (!f) {
-        sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
-        return;
+    if (fd == INVALID_HANDLE_VALUE) {
+	response = MHD_create_response_from_buffer(strlen (PAGE),
+						   (void *) PAGE,
+						   MHD_RESPMEM_PERSISTENT);
+	int ret = MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, response);
+	MHD_destroy_response(response);
+        return ret;
     }
 
-    sendf(s, "HTTP/1.0 200 OK\r\n");
-    if (mime)
-        sendf(s, "Content-Type: %s\r\n\r\n", mime);
-
-    while ((n = fread(bufo, 1, sizeof(bufo), f)) > 0)
-        if ((w = mysend(s, bufo, n)) < 0)
-            break;
-    fclose(f);
-}
-
-gpointer analyze_http(gpointer param, gint connum)
-{
-    http_parser_t *parser = param;
-
-    connections[connum].resp.request = 0;
-
-    if (parser->req_type == httpp_req_get) {
-        //g_print("GET %s (fd=%d)\n", parser->uri, parser->sock);
-
-        if (!strcmp(parser->uri, "/competitors"))
-            get_competitors(parser, FALSE);
-        else if (!strcmp(parser->uri, "/delcompetitors"))
-            get_competitors(parser, TRUE);
-        else if (!strcmp(parser->uri, "/getcompetitor"))
-            get_competitor(parser);
-        else if (!strcmp(parser->uri, "/setcompetitor"))
-            set_competitor(parser);
-        else if (!strcmp(parser->uri, "/categories"))
-            get_categories(parser);
-        else if (!strcmp(parser->uri, "/judotimer"))
-            run_judotimer(parser);
-        else if (!strcmp(parser->uri, "/password"))
-            check_password(parser);
-        else if (!strcmp(parser->uri, "/login"))
-            check_password(parser);
-        else if (!strcmp(parser->uri, "/logout"))
-            logout(parser);
-        else if (!strcmp(parser->uri, "/matchinfo"))
-            get_match_info(parser, "");
-        else if (!strcmp(parser->uri, "/nameinfo"))
-            get_name_info(parser, "");
-        else if (!strcmp(parser->uri, "/nextmatch"))
-            get_next_match(parser, "");
-        else if (!strcmp(parser->uri, "/matchresult"))
-            set_result(parser, "");
-        else if (!strcmp(parser->uri, "/restcancel"))
-            cancel_rest(parser, "");
-        else if (!strcmp(parser->uri, "/sqlcmd"))
-            sql_cmd(parser, "");
-        else if (!strcmp(parser->uri, "/judoshiai"))
-            get_judoshiai(parser, "");
-        else if (!strcmp(parser->uri, "/web") ||
-		 !strcmp(parser->uri, "/www/web"))
-            get_web(parser, connum);
-        else if (!strcmp(parser->uri, "/js.png"))
-            get_js_png(parser, "");
-        else if (!strcmp(parser->uri, "/index.html"))
-            index_html(parser, "");
-        else if (!strcmp(parser->uri, "/"))
-            index_html(parser, "");
-        else
-            get_file(parser);
-    } else if (parser->req_type == httpp_req_post) {
-        g_print("POST %s\n", parser->uri);
-    }
-#ifndef USE_THREADS
-    /* Waiting for answer? */
-    if (connections[connum].resp.request == 0) {
-#if defined(__WIN32__) || defined(WIN32)
-	shutdown(parser->sock, SD_SEND);
-#endif
-	connections[connum].closed = TRUE;
-    }
-
-    httpp_destroy(parser);
-#endif
-    return NULL;
-}
-
-#ifdef USE_THREADS
-gpointer conn_thread(gpointer arg)
-{
-    char buf[2048];
-    gint i = ptr_to_gint(arg);
-    gint r;
-
-    if ((r = recv(connections[i].fd, buf, sizeof(buf)-1, 0)) > 0) {
-	http_parser_t *parser;
-	buf[r] = 0;
-	//g_print("CONN=%d DATA='%s'\n", i, buf);
-
-	parser = httpp_create_parser();
-	if (parser) {
-	    httpp_initialize(parser, NULL);
-	    parser->sock = connections[i].fd;
-	    parser->address = connections[i].addr;
-	    connections[i].resp.request = 0;
-
-	    if (httpp_parse(parser, buf, r)) {
-		analyze_http(parser, i);
-
-		if (connections[i].resp.request) {
-		    time_t start = time(NULL);
-		    while (!g_atomic_int_get(&connections[i].resp.ready) &&
-			   time(NULL) < start + 20) {
-			g_usleep(50000);
-		    }
-		    if (time(NULL) >= start + 20)
-			g_print("NO REPLY IN TIME conn=%d\n", i);
-		    reply_web(i);
-		}
-	    } else {
-		g_print("http req error\n");
-	    }
-
-	    httpp_destroy(parser);
-	}
-    }
-
-    //g_print("Received 0: connection %d fd=%d closed\n", i, connections[i].fd);
-#if defined(__WIN32__) || defined(WIN32)
-    shutdown(connections[i].fd, SD_SEND);
-#endif
-    closesocket(connections[i].fd);
-    connections[i].fd = 0;
-    connections[i].resp.request = 0;
-    g_thread_exit(0);
-    return NULL;
-}
-#endif
-
-gpointer httpd_thread(gpointer args)
-{
-    SOCKET serv_fd, tmp_fd;
-    socklen_t alen;
-    struct sockaddr_in my_addr, caller;
-    fd_set read_fd, fds;
-    int reuse = 1;
-
-    g_print("HTTP thread started\n");
-
-    if ((serv_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror("serv socket");
-        g_print("Cannot open http socket!\n");
-        g_thread_exit(NULL);    /* not required just good pratice */
-        return NULL;
-    }
-
-    if (setsockopt(serv_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)) < 0) {
-        perror("setsockopt (SO_REUSEADDR)");
-    }
-
-    //signal(SIGPIPE, sighandler);
-
-    memset(&my_addr, 0, sizeof(my_addr));
-    my_addr.sin_family = AF_INET;
-    my_addr.sin_port = htons(8088);
-    my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-    if (bind(serv_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
-        perror("serv bind");
-        g_print("Cannot bind http socket!\n");
-        return 0;
-    }
-
-    listen(serv_fd, 1);
-
-    FD_ZERO(&read_fd);
-    FD_SET(serv_fd, &read_fd);
-
-    g_print("Listening http socket\n");
-
-    for ( ; *((gboolean *)args); )   /* exit loop when flag is cleared */
-    {
-        int r, i;
-#ifndef USE_THREADS
-        static char buf[1024];
-#endif
-        struct timeval timeout;
-
-        fds = read_fd;
-        timeout.tv_sec = 0;
-        timeout.tv_usec = 100000;
-
-        r = select(32, &fds, NULL, NULL, &timeout);
-
-#ifndef USE_THREADS
-        for (i = 0; i < NUM_CONNECTIONS; i++) {
-	    if (connections[i].fd && connections[i].resp.request) {
-		if (g_atomic_int_get(&connections[i].resp.ready))
-		    reply_web(i);
-		continue;
-	    }
-
-            if (connections[i].fd && connections[i].closed) {
-                //g_print("Closed: connection %d fd=%d closed\n", i, connections[i].fd);
-                FD_CLR(connections[i].fd, &read_fd);
-                closesocket(connections[i].fd);
-                connections[i].fd = 0;
-            }
-        }
-#endif
-
-        if (r <= 0)
-            continue;
-
-        if (FD_ISSET(serv_fd, &fds)) {
-            alen = sizeof(caller);
-            if ((tmp_fd = accept(serv_fd, (struct sockaddr *)&caller, &alen)) < 0) {
-                perror("serv accept");
-                continue;
-            }
-
-            for (i = 0; i < NUM_CONNECTIONS; i++)
-                if (connections[i].fd == 0)
-                    break;
-
-            if (i >= NUM_CONNECTIONS) {
-                g_print("Node cannot accept new connections!\n");
-                closesocket(tmp_fd);
-            } else {
-		connections[i].fd = tmp_fd;
-		connections[i].addr = caller.sin_addr.s_addr;
-		connections[i].closed = FALSE;
-		connections[i].resp.request = 0;
-#if 0
-		const int nodelayflag = 1;
-		if (setsockopt(tmp_fd, IPPROTO_TCP, TCP_NODELAY, 
-			       (const void *)&nodelayflag, sizeof(nodelayflag))) {
-		    g_print("CANNOT SET TCP_NODELAY (2)\n");
-		}
-#endif
-		/*g_print("Node: new connection[%d]: fd=%d addr=%lx\n", 
-		  i, tmp_fd, caller.sin_addr.s_addr);*/
-#ifndef USE_THREADS
-		FD_SET(tmp_fd, &read_fd);
+    response = MHD_create_response_from_fd64(st.st_size, handle_to_int(fd));
+    if (!response) {
+        g_printerr("response failed\n");
+#ifdef WIN32
+        CloseHandle(fd);
 #else
-		gchar thname[16];
-		snprintf(thname, sizeof(thname), "HttpConn%d", i);
-		connections[i].gth = g_thread_try_new(thname, (GThreadFunc)conn_thread,
-						      gint_to_ptr(i), NULL);
-		if (!connections[i].gth) {
-		    closesocket(connections[i].fd);
-		    connections[i].fd = 0;
-		    g_print("Out of thread resources!\n");
-		}
+        g_close(fd, NULL);
 #endif
-	    }
-        }
-
-#ifndef USE_THREADS
-        for (i = 0; i < NUM_CONNECTIONS; i++) {
-            if (connections[i].fd == 0)
-                continue;
-
-            if (!(FD_ISSET(connections[i].fd, &fds)))
-                continue;
-
-            r = recv(connections[i].fd, buf, sizeof(buf)-1, 0);
-            if (r > 0) {
-                http_parser_t *parser;
-
-                buf[r] = 0;
-                g_print("DATA='%s'\n", buf);
-
-                parser = httpp_create_parser();
-                httpp_initialize(parser, NULL);
-                parser->sock = connections[i].fd;
-                parser->address = connections[i].addr;
-
-                if (httpp_parse(parser, buf, r)) {
-                    analyze_http(parser, i);
-                } else {
-                    g_print("http req error\n");
-                    httpp_destroy(parser);
-                }
-            } else {
-                //g_print("Received 0: connection %d fd=%d closed\n", i, connections[i].fd);
-                closesocket(connections[i].fd);
-                FD_CLR(connections[i].fd, &read_fd);
-                connections[i].fd = 0;
-		connections[i].resp.request = 0;
-            }
-        }
-#endif
+        return MHD_NO;
     }
 
-    g_print("httpd exit\n");
+    MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, mime);
+    int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+    MHD_destroy_response(response);
+    return ret;
+}
+
+#define INTERNAL_ERROR_PAGE "<html><head><title>Internal error</title></head><body>Internal error</body></html>"
+
+#define REQUEST_REFUSED_PAGE "<html><head><title>Request refused</title></head><body>Request refused (file exists?)</body></html>"
+
+#define DUMMY_PAGE "<html><head><title></title></head><body></body></html>"
+
+/**
+ * Context we keep for an upload.
+ */
+struct UploadContext
+{
+    char *data;
+    int   len;
+    int   space;
+};
+
+#define httpp_get_query_param(_parser, _str) \
+    MHD_lookup_connection_value(_parser, MHD_GET_ARGUMENT_KIND, _str)
+
+#define log g_printerr
+
+int analyze_http(void *cls,
+		 struct MHD_Connection *connection,
+		 const char *url,
+		 const char *method,
+		 const char *version,
+		 const char *upload_data,
+		 size_t *upload_data_size,
+		 void **ptr)
+{
+    static int aptr;
+
+    (void)version;           /* Unused. Silent compiler warning. */
+    (void)upload_data;       /* Unused. Silent compiler warning. */
+    (void)upload_data_size;  /* Unused. Silent compiler warning. */
+
+    g_printerr("%s %s conn=%p *ptr=%p upload_data=%p upload_data_size=%d\n", method, url, connection, *ptr,
+               upload_data, (int)*upload_data_size);
+    
+    if (!strcmp(method, MHD_HTTP_METHOD_POST)) {
+        struct UploadContext *uc = *ptr;
+
+        if (strcmp("/json", url))
+            return MHD_NO;
+
+        if (NULL == uc) {
+            if (NULL == (uc = malloc (sizeof (struct UploadContext))))
+                return MHD_NO; /* out of memory, close connection */
+            memset(uc, 0, sizeof (struct UploadContext));
+            uc->space = 1024;
+            uc->data = malloc(uc->space);
+            *ptr = uc;
+            return MHD_YES;
+        }
+
+        if (*upload_data_size != 0) {
+            if (*upload_data_size >= uc->space - uc->len) {
+                while (*upload_data_size >= uc->space - uc->len)
+                    uc->space *= 2;
+                uc->data = realloc(uc->data, uc->space);
+                //g_printerr("Realloc space=%d\n", uc->space);
+            }
+            memcpy(uc->data + uc->len, upload_data, *upload_data_size);
+            uc->len += *upload_data_size;
+            //g_printerr("Got %d bytes\n", (int)*upload_data_size);
+            //g_printerr("-- data:\n  %s\n", upload_data);
+            *upload_data_size = 0;
+            return MHD_YES;
+        }
+
+        //g_printerr("End of %d bytes of data\n", uc->len);
+        cJSON *json = cJSON_Parse(uc->data);
+        free(uc->data);
+        free(uc);
+        if (!json)
+            return MHD_NO;
+        
+        struct message msg;
+        struct msg_web_resp resp;
+
+        resp.request = MSG_WEB_GET_ERR;
+        resp.ready = 0;
+        resp.request = MSG_WEB_JSON;
+        resp.u.json.json = NULL;
+        
+        memset(&msg, 0, sizeof(msg));
+        msg.type = MSG_WEB;
+        msg.u.web.request = MSG_WEB_JSON;
+        msg.u.web.resp = &resp;
+        msg.u.web.u.json.json = json;
+
+        put_to_rec_queue(&msg);
+
+        time_t start = time(NULL);
+    
+        while (!g_atomic_int_get(&resp.ready) &&
+               time(NULL) < start + 10) {
+            g_usleep(50000);
+        }
+        if (time(NULL) >= start + 10 ||
+            g_atomic_int_get(&resp.ready) != MSG_WEB_RESP_OK) {
+            g_printerr("NO JSON REPLY resp.ready=%d\n", resp.ready);
+            return MHD_NO;
+        }
+
+        struct MHD_Response *response = NULL;
+        if (resp.u.json.json) {
+            char *s = cJSON_PrintUnformatted(resp.u.json.json);
+            cJSON_Delete(resp.u.json.json);
+            response = MHD_create_response_from_buffer(strlen(s), s, MHD_RESPMEM_MUST_FREE);
+        } else {
+            response = MHD_create_response_from_buffer(2, "{}", MHD_RESPMEM_PERSISTENT);
+        }
+        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, "application/json");
+        int ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
+        MHD_destroy_response(response);
+        return ret;
+    } // POST
+
+    if (strcmp(method, MHD_HTTP_METHOD_GET) && strcmp(method, MHD_HTTP_METHOD_HEAD))
+	return MHD_NO;              /* unexpected method */
+
+    if (&aptr != *ptr) {
+	/* do never respond on first call */
+	*ptr = &aptr;
+	return MHD_YES;
+    }
+    *ptr = NULL;                  /* reset when done */
+
+    if (!strcmp(url, "/competitors"))
+        return get_competitors(connection, FALSE);
+    else if (!strcmp(url, "/delcompetitors"))
+        return get_competitors(connection, TRUE);
+    else if (!strcmp(url, "/getcompetitor"))
+        return get_competitor(connection);
+    else if (!strcmp(url, "/setcompetitor"))
+        return set_competitor(connection);
+    else if (!strcmp(url, "/categories"))
+        return get_categories(connection);
+    else if (!strcmp(url, "/judotimer"))
+        return run_judotimer(connection);
+    else if (!strcmp(url, "/password"))
+        return check_password(connection);
+    else if (!strcmp(url, "/login"))
+        return check_password(connection);
+    else if (!strcmp(url, "/logout"))
+        return logout(connection);
+    else if (!strcmp(url, "/matchinfo"))
+        return get_match_info(connection, "");
+    else if (!strcmp(url, "/nameinfo"))
+        return get_name_info(connection, "");
+    else if (!strcmp(url, "/nextmatch"))
+        return get_next_match(connection, "");
+    else if (!strcmp(url, "/matchresult"))
+        return set_result(connection, "");
+    else if (!strcmp(url, "/restcancel"))
+        return cancel_rest(connection, "");
+    else if (!strcmp(url, "/sqlcmd"))
+        return sql_cmd(connection, "");
+    else if (!strcmp(url, "/judoshiai"))
+        return get_judoshiai(connection, "");
+    else if (!strcmp(url, "/web") ||
+             !strcmp(url, "/www/web"))
+        return get_web(connection, 0/*connum*/);
+    else if (!strcmp(url, "/js.png"))
+        return get_js_png(connection, "");
+    else if (!strcmp(url, "/index.html"))
+        return index_html(connection, "");
+    else if (!strcmp(url, "/"))
+        return index_html(connection, "");
+    else
+        return get_file(connection, url);
+
+    return MHD_YES;
+}
+
+void *httpd_thread(void *arg)
+{
+    struct MHD_Daemon *d;
+
+    g_printerr("HTTPD thread started\n");
+
+    do {
+	d = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD | MHD_USE_ERROR_LOG | MHD_ALLOW_UPGRADE,
+			      8088,
+			      NULL, NULL, &analyze_http, PAGE, MHD_OPTION_END);
+	if (!d) g_usleep(2000000);
+    } while (!d);
+    
+    while (1)   /* exit loop when flag is cleared */
+    {
+	g_usleep(100000);
+    }
+
+    MHD_stop_daemon(d);
+
+    g_printerr("httpd exit\n");
     g_thread_exit(NULL);    /* not required just good pratice */
     return NULL;
 }
-
