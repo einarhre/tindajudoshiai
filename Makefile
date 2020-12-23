@@ -144,7 +144,7 @@ ifeq ($(TGT),WIN32OS)
 	cp $(foreach dll,$(DLLS),$(DEVELDIR)/bin/$(dll)) $(RELDIR)/bin/
     ifeq ($(TGTEXT),64)
       # patch
-	cp $(WIN32_BASE)/dll64/* $(RELDIR)/bin/
+	cp patch/libpangowin32-1.0-0.dll $(RELDIR)/bin/
     endif # 64
   else # Not MXE, winxp or mingw
     ifeq ($(TARGETOS),WIN64) # mingw64
