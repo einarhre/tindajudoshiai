@@ -38,6 +38,7 @@ extern void toggle_belt_colors(GtkWidget *menu_item, gpointer data);
 extern void toggle_col_visible(GtkWidget *menu_item, gpointer data);
 extern void get_from_old_competition(GtkWidget *w, gpointer data);
 extern void get_weights_from_old_competition(GtkWidget *w, gpointer data);
+extern void get_weights_from_text_file(GtkWidget *w, gpointer data);
 extern void start_help(GtkWidget *w, gpointer data);
 extern void locate_to_tatamis(GtkWidget *w, gpointer data);
 extern void set_tatami_state(GtkWidget *menu_item, gpointer data);
@@ -65,7 +66,7 @@ static GtkWidget *menubar,
     *tournament_new, *tournament_choose, *tournament_choose_net, *tournament_properties, 
     *tournament_quit, *tournament_backup, *tournament_validation, *tournament_custom,
     *competitor_new, *competitor_search, *competitor_select_from_tournament, *competitor_add_from_text_file,
-    *competitor_add_all_from_shiai, *competitor_update_weights, *competitor_remove_unweighted,
+    *competitor_add_all_from_shiai, *competitor_update_weights, *competitor_remove_unweighted, *competitor_update_weights_txt,
     *competitor_restore_removed, *competitor_delete_removed, *competitor_bar_code_search, *competitor_print_weigh_notes, *competitor_print_with_template,
     *category_new, *category_team_new, *category_team_event_new, *category_remove_empty, *category_create_official,
     *category_colorize, *category_show_colors,
@@ -190,6 +191,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     competitor_add_from_text_file   = gtk_menu_item_new_with_label(_("Add From a Text File"));
     competitor_add_all_from_shiai   = gtk_menu_item_new_with_label(_("Add All From Another Shiai"));
     competitor_update_weights       = gtk_menu_item_new_with_label(_("Update Weights From Another Shiai"));
+    competitor_update_weights_txt   = gtk_menu_item_new_with_label(_("Update Weights From text File"));
     competitor_remove_unweighted    = gtk_menu_item_new_with_label(_("Remove Unweighted"));
     competitor_restore_removed      = gtk_menu_item_new_with_label(_("Restore Removed"));
     competitor_delete_removed       = gtk_menu_item_new_with_label(_("Delete Removed"));
@@ -204,6 +206,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_add_from_text_file);
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_add_all_from_shiai);
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_update_weights);
+    gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_update_weights_txt);
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), gtk_separator_menu_item_new());
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_remove_unweighted);
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_restore_removed);
@@ -220,6 +223,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(competitor_add_from_text_file),  "activate", G_CALLBACK(import_txt_dialog), 0);
     g_signal_connect(G_OBJECT(competitor_add_all_from_shiai),  "activate", G_CALLBACK(get_from_old_competition), 0);
     g_signal_connect(G_OBJECT(competitor_update_weights),      "activate", G_CALLBACK(get_weights_from_old_competition), 0);
+    g_signal_connect(G_OBJECT(competitor_update_weights_txt),  "activate", G_CALLBACK(get_weights_from_text_file), 0);
     g_signal_connect(G_OBJECT(competitor_remove_unweighted),   "activate", G_CALLBACK(remove_unweighed_competitors), 0);
     g_signal_connect(G_OBJECT(competitor_restore_removed),     "activate", G_CALLBACK(db_restore_removed_competitors), 0);
     g_signal_connect(G_OBJECT(competitor_delete_removed),      "activate", G_CALLBACK(db_delete_removed_competitors), 0);
@@ -584,8 +588,11 @@ void set_preferences(void)
     x1 = g_key_file_get_integer(keyfile, "preferences", "win_width", &error);
     if (!error) {
         x2 = g_key_file_get_integer(keyfile, "preferences", "win_height", &error);
-        if (!error)
+        if (!error) {
             gtk_window_resize(GTK_WINDOW(main_window), x1, x2);
+            display_width = x1;
+            display_height = x2;
+        }
     }
 
     error = NULL;
@@ -766,6 +773,7 @@ void set_menu_active(void)
     SET_SENSITIVE(competitor_add_from_text_file  , DB_OK);
     SET_SENSITIVE(competitor_add_all_from_shiai  , DB_OK);
     SET_SENSITIVE(competitor_update_weights      ,DB_OK);
+    SET_SENSITIVE(competitor_update_weights_txt  ,DB_OK);
     SET_SENSITIVE(competitor_remove_unweighted   , DB_OK);
     SET_SENSITIVE(competitor_restore_removed     , DB_OK);
     SET_SENSITIVE(competitor_delete_removed      , DB_OK);
@@ -832,6 +840,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(competitor_add_from_text_file  , _("Add From a Text File"));
     change_menu_label(competitor_add_all_from_shiai  , _("Add All From Another Shiai"));
     change_menu_label(competitor_update_weights      , _("Update Weights From Another Shiai"));
+    change_menu_label(competitor_update_weights_txt  , _("Update Weights From Text File"));
     change_menu_label(competitor_remove_unweighted   , _("Remove Unweighted"));
     change_menu_label(competitor_restore_removed     , _("Restore Removed"));
     change_menu_label(competitor_delete_removed      , _("Delete Removed"));
