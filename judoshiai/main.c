@@ -246,7 +246,12 @@ void open_shiai_display(void)
     set_judokas_page(notebook);
     set_sheet_page(notebook);
     set_category_graph_page(notebook);
+
+#ifdef TARGETOS_WINXP
     set_match_graph_page(notebook);
+#else
+    set_match_table_page(notebook);
+#endif
     set_match_pages(notebook);
     set_log_page(notebook);
 
