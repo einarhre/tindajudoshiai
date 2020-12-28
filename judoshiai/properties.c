@@ -551,8 +551,12 @@ void init_property(gchar *prop, gchar *val)
                 //g_print("init prop: %s\n", props[i].value);
             }
 
-            if (i == PROP_NUM_TATAMIS)
+            if (i == PROP_NUM_TATAMIS) {
                 number_of_tatamis = props[i].intval;
+#ifndef TARGETOS_WINXP
+                update_match_table();
+#endif
+            }
 
             if (i == PROP_CAT_OPTS) {
                 gint k;
@@ -678,6 +682,9 @@ void props_save_to_db(void)
         db_set_info(props[i].name, props[i].value);
 
     number_of_tatamis = prop_get_int_val(PROP_NUM_TATAMIS);
+#ifndef TARGETOS_WINXP
+    update_match_table();
+#endif
 }
 
 #define SET_VAL(_n, _s, _i) do { if (if_unset==FALSE || props[_n].value[0]==0) prop_set_val(_n, _s, _i); } while (0)
@@ -723,7 +730,9 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
 
     if (number_of_tatamis == 0)
         number_of_tatamis = 3;
-
+#ifndef TARGETOS_WINXP
+    update_match_table();
+#endif    
     SET_VAL(PROP_NUM_TATAMIS, NULL, number_of_tatamis);
 
     if (draw_system == DRAW_INTERNATIONAL || draw_system == DRAW_NORWEGIAN)
