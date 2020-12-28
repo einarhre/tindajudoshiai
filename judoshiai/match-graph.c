@@ -76,21 +76,10 @@ static gint   rest_flags[NUM_TATAMIS];
 static GtkWidget *match_graph_label = NULL;
 static gboolean pending_timeout = FALSE;
 
-gboolean mirror_display = FALSE;
-gboolean show_colors = FALSE;
-
 static struct win_collection {
     GtkWidget *scrolled_window;
     GtkWidget *darea;
 } wincoll;
-
-void toggle_show_colors(GtkWidget *menu_item, gpointer data)
-{
-    show_colors = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
-    g_key_file_set_boolean(keyfile, "preferences", "showcolors", show_colors);
-    draw_match_graph();
-    refresh_window();
-}
 
 void draw_match_graph(void)
 {

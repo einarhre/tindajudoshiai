@@ -15,17 +15,19 @@
 
 #include "sqlite3.h"
 #include "judoshiai.h"
+#include "cJSON.h"
 
 //extern void test_judoshiai(void);
 
-extern gboolean mirror_display;
 extern gboolean auto_arrange;
 
 void get_from_old_competition(GtkWidget *w, gpointer data);
 void get_weights_from_old_competition(GtkWidget *w, gpointer data);
+void get_weights_from_old_competition_txt(GtkWidget *w, gpointer data);
 void start_help(GtkWidget *w, gpointer data);
 
 static gchar *backup_directory = NULL;
+gboolean mirror_display = FALSE;
 
 void about_shiai( GtkWidget *w, gpointer data)
 {
@@ -540,6 +542,219 @@ void get_weights_from_old_competition(GtkWidget *w, gpointer data)
 
     gtk_widget_destroy (dialog);        
 }
+
+#define CH  ((i < len) ? contents[i] : 0)
+#define GET_WORD while (CH && CH <= ' ') i++
+#define GET_NUM while (CH && (CH < '0' || CH > '9')) i++
+#define NEXT_LINE do { while (CH && CH != '\r' && CH != '\n') i++; GET_WORD; } while (0)
+#define COPY_WORD(_dst) do { gint _d = 0; while (CH && CH > ' ' && _d < sizeof(_dst)-1) { \
+            _dst[_d++] = CH; i++; } _dst[_d] = 0; } while(0)
+
+#define JSON_GET_VAL(_root, _item) cJSON *_item = cJSON_GetObjectItem(_root, #_item)
+#define JSON_GET_STR(_root, _item)                        \
+    const gchar *_item;                                   \
+    do { cJSON *tmp = cJSON_GetObjectItem(_root, #_item); \
+        _item = tmp ? tmp->valuestring : NULL; } while (0)
+#define JSON_GET_INT(_root, _item)                        \
+    int _item;                                            \
+    do { cJSON *tmp = cJSON_GetObjectItem(_root, #_item); \
+        _item = tmp ? tmp->valueint : 0; } while (0)
+#define JSON_GET_DST_STR(_root, _dst, _item)                  \
+    do { cJSON *tmp = cJSON_GetObjectItem(_root, #_item); \
+        _dst = tmp ? tmp->valuestring : ""; } while (0)
+#define JSON_GET_DST_INT(_root, _dst, _item)                  \
+    do { cJSON *tmp = cJSON_GetObjectItem(_root, #_item); \
+        _dst = tmp ? tmp->valueint : 0; } while (0)
+
+static gboolean ok_all = FALSE;
+
+void json_create_new_judoka(cJSON *root, gboolean ok)
+{
+    struct judoka j1;
+    JSON_GET_DST_STR(root, j1.last, last);
+    JSON_GET_DST_STR(root, j1.first, first);
+    JSON_GET_DST_STR(root, j1.club, club);
+    JSON_GET_DST_STR(root, j1.regcategory, regcat);
+    //JSON_GET_DST_STR(root, j1.category, category);
+    JSON_GET_DST_STR(root, j1.country, country);
+    JSON_GET_DST_STR(root, j1.id, id);
+    JSON_GET_DST_STR(root, j1.comment, comment);
+    JSON_GET_DST_STR(root, j1.coachid, coachid);
+    JSON_GET_DST_INT(root, j1.birthyear, birthyear);
+    JSON_GET_DST_INT(root, j1.belt, belt);
+    JSON_GET_DST_INT(root, j1.weight, weight);
+    JSON_GET_DST_INT(root, j1.deleted, flags);
+    JSON_GET_DST_INT(root, j1.seeding, seeding);
+    JSON_GET_DST_INT(root, j1.clubseeding, clubseeding);
+    JSON_GET_DST_INT(root, j1.gender, gender);
+    j1.index = comp_index_get_free();
+    j1.category = "?";
+    if (j1.gender == IS_FEMALE)
+        j1.deleted |= GENDER_FEMALE;
+    else
+        j1.deleted |= GENDER_MALE;
+        
+    GtkTreeIter iter;
+    if (find_iter_name_2(&iter, j1.last, j1.first, j1.club, j1.regcategory))
+        return;
+    
+    if (ok == FALSE && ok_all == FALSE) {
+        GtkWidget *dialog, *box;
+        dialog = gtk_dialog_new_with_buttons (_("Add competitor"),
+                                              GTK_WINDOW(main_window),
+                                              GTK_DIALOG_DESTROY_WITH_PARENT,
+                                              GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                              GTK_STOCK_SELECT_ALL, GTK_RESPONSE_APPLY,
+                                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                              NULL);
+        box = gtk_grid_new();
+        gtk_grid_set_row_spacing(GTK_GRID(box), 5);
+        gtk_grid_set_column_spacing(GTK_GRID(box), 5);
+        gtk_grid_attach(GTK_GRID(box), gtk_label_new(j1.regcategory), 0, 0, 1, 1);
+        gtk_grid_attach(GTK_GRID(box), gtk_label_new(j1.last), 1, 0, 1, 1);
+        gtk_grid_attach(GTK_GRID(box), gtk_label_new(j1.first), 2, 0, 1, 1);
+        gtk_grid_attach(GTK_GRID(box), gtk_label_new(j1.club), 3, 0, 1, 1);
+        gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                           box, FALSE, FALSE, 0);
+            
+        gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
+        gtk_widget_show_all(dialog);
+
+        gint resp = gtk_dialog_run (GTK_DIALOG (dialog));
+        if (resp == GTK_RESPONSE_OK || resp == GTK_RESPONSE_APPLY) {
+            if (resp == GTK_RESPONSE_APPLY) ok_all = TRUE;
+            ok = TRUE;
+        }
+        gtk_widget_destroy (dialog);
+    }
+
+    if (ok || ok_all) {
+        g_print("Adding [%d] %s\n", j1.index, j1.last);
+        gint rc = db_add_judoka(j1.index, &j1);
+        if (rc == SQLITE_OK)
+            display_one_judoka(&j1);
+        else
+            g_print("Could not add [%d] %s\n", j1.index, j1.last);
+    }
+}
+
+void json_set_weight(cJSON *root)
+{
+    JSON_GET_STR(root, id);
+    JSON_GET_INT(root, ix);
+    JSON_GET_INT(root, weight);
+    if ((!id && ix == 0) || weight == 0)
+        return;
+    g_print("json id=%s ix=%d weight=%d\n", id ? id : "NULL", ix, weight);
+    
+    struct judoka *j = NULL;
+    if (ix) j = get_data(ix);
+    else {
+        gboolean coach;
+        gint indx = db_get_index_by_id(id, &coach);
+        if (indx) j = get_data(indx);
+    }
+    if (!j) {
+        /* This is a new judoka */
+        json_create_new_judoka(root, FALSE);
+        return;
+    }
+
+    j->weight = weight;
+    display_one_judoka(j);
+    db_update_judoka(j->index, j);
+    free_judoka(j);
+}
+
+void get_weights_from_text_file(GtkWidget *w, gpointer data)
+{
+    GtkWidget *dialog;
+
+    ok_all = FALSE;
+    
+    dialog = gtk_file_chooser_dialog_new (_("Copy Weights"),
+					  GTK_WINDOW(main_window),
+                                          GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                          GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                          NULL);
+
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+        gchar *dirname = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+        GDir *dir = g_dir_open(dirname, 0, NULL);
+        if (dir) {
+            const gchar *fname = g_dir_read_name(dir);
+            while (fname) {
+                gchar *fullname = g_build_filename(dirname, fname, NULL);
+		gchar *contents;
+		gsize len;
+		if (g_file_get_contents(fullname, &contents, &len, NULL)) {
+                    gint i = 0;
+
+                    GET_WORD;
+                    if (CH != '{' && CH != '[') {
+                        /* Line: index weight other... */
+                        while (CH) {
+                            char id[20], weight[20];
+                            GET_WORD;
+                            COPY_WORD(id);
+                            GET_WORD;
+                            COPY_WORD(weight);
+                            g_print("id=%s weight=%s\n", id, weight);
+
+                            gboolean coach;
+                            struct judoka *j = NULL;
+                            gint indx = db_get_index_by_id(id, &coach);
+                            if (indx) j = get_data(indx);
+                            if (!j) j = get_data(atoi(id));
+                            if (j) {
+                                j->weight = atoi(weight);
+                                display_one_judoka(j);
+                                db_update_judoka(j->index, j);
+                                free_judoka(j);
+                            }
+                            NEXT_LINE;
+                        }
+                    } else {
+                        /* json format */
+                        cJSON *root = cJSON_Parse(&contents[i]);
+                        if (root) {
+                            if (root->type == cJSON_Object)
+                                json_set_weight(root);
+                            else if (root->type == cJSON_Array) {
+                                cJSON *e = root->child;
+                                while (e) {
+                                    json_set_weight(e);
+                                    e = e->next;
+                                }
+                            }
+                            cJSON_Delete(root);
+                        }
+                    }
+                    g_free(contents);
+                }
+                g_free(fullname);
+                fname = g_dir_read_name(dir);
+            }
+            g_free (dirname);
+        }
+
+        gtk_widget_destroy (dialog);
+    }
+}
+
+gboolean show_colors = FALSE;
+
+void toggle_show_colors(GtkWidget *menu_item, gpointer data)
+{
+    show_colors = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
+    g_key_file_set_boolean(keyfile, "preferences", "showcolors", show_colors);
+    draw_match_graph();
+    refresh_window();
+}
+
+
 
 #ifdef WIN32
 #define WIN32_LEAN_AND_MEAN 1
