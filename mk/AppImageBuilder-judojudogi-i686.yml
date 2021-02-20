@@ -1,0 +1,78 @@
+# appimage-builder recipe see https://appimage-builder.readthedocs.io for details
+version: 1
+AppDir:
+  path: ./AppDir
+  app_info:
+    id: judojudogi
+    name: judojudogi
+    icon: judojudogi
+    version: latest
+    exec: usr/lib/judoshiai/programs/judojudogi
+    exec_args: $@
+  runtime:
+    env:
+      APPDIR_LIBRARY_PATH: $APPDIR/usr/lib/i386-linux-gnu/gio/modules:$APPDIR/usr/lib/i386-linux-gnu/gvfs:$APPDIR/usr/lib/i386-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders:$APPDIR/lib/i386-linux-gnu:$APPDIR/usr/lib/i386-linux-gnu
+  apt:
+    arch: i386
+    allow_unauthenticated: true
+    sources:
+    - sourceline: deb http://ppa.launchpad.net/cubic-wizard/release/ubuntu bionic
+        main
+    - sourceline: 'deb http://packages.linuxmint.com tricia main upstream import backport
+        #id:linuxmint_main'
+    - sourceline: deb http://archive.ubuntu.com/ubuntu bionic main restricted universe
+        multiverse
+    - sourceline: deb http://archive.ubuntu.com/ubuntu bionic-updates main restricted
+        universe multiverse
+    - sourceline: deb http://archive.ubuntu.com/ubuntu bionic-backports main restricted
+        universe multiverse
+    - sourceline: deb http://security.ubuntu.com/ubuntu/ bionic-security main restricted
+        universe multiverse
+    - sourceline: deb http://archive.canonical.com/ubuntu/ bionic partner
+    include:
+    - gvfs
+    - libgcrypt20
+    - libgtk-3-0
+    - liblz4-1
+    - liblzma5
+    - libpcre3
+    - libsystemd0
+    - libxau6
+    - libxdmcp6
+    - libxext6
+    - libxfixes3
+    - libxinerama1
+    - libxrender1
+    exclude: []
+  files:
+    exclude:
+    - usr/share/man
+    - usr/share/doc/*/README.*
+    - usr/share/doc/*/changelog.*
+    - usr/share/doc/*/NEWS.*
+    - usr/share/doc/*/TODO.*
+  test:
+    fedora:
+      image: appimagecrafters/tests-env:fedora-30
+      command: ./AppRun
+      use_host_x: true
+    debian:
+      image: appimagecrafters/tests-env:debian-stable
+      command: ./AppRun
+      use_host_x: true
+    arch:
+      image: appimagecrafters/tests-env:archlinux-latest
+      command: ./AppRun
+      use_host_x: true
+    centos:
+      image: appimagecrafters/tests-env:centos-7
+      command: ./AppRun
+      use_host_x: true
+    ubuntu:
+      image: appimagecrafters/tests-env:ubuntu-xenial
+      command: ./AppRun
+      use_host_x: true
+AppImage:
+  arch: i686
+  update-information: guess
+  sign-key: None
