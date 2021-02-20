@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=JudoTimer Scoreboard and Clocks
+Name=JudoTimer
 Comment=Run judo contest
 Exec=judotimer
-Icon=judotimer.png
+Icon=judotimer
 Terminal=false
 Type=Application
-Categories=Application;Other;
+Categories=Utility;Sports;
 StartupNotify=true

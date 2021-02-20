@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=JudoWeight for weigh-in
+Name=JudoWeight
 Comment=Remote weigh-in
 Exec=judoweight
-Icon=judoweight.png
+Icon=judoweight
 Terminal=false
 Type=Application
-Categories=Application;Other;
+Categories=Utility;Sports;
 StartupNotify=true

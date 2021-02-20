@@ -1,10 +1,10 @@
 [Desktop Entry]
-Name=JudoShiai Tournament Organizer
+Name=JudoShiai
 Comment=Create and run judo tournaments
 Exec=judoshiai %f
-Icon=judoshiai.png
+Icon=judoshiai
 Terminal=false
 Type=Application
-Categories=Application;Other;
+Categories=Utility;Sports;
 StartupNotify=true
 MimeType=application/judoshiai;
