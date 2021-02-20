@@ -37,4 +37,6 @@ CFLAGS = $(WARNINGS) -g \
          -Wno-deprecated-declarations
 
 LIBS= -lusp10 $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0) \
-              $(shell $(DEVELDIR)/bin/curl-config --libs) -lssh2 -lws2_32 -mwindows
+              $(shell $(DEVELDIR)/bin/curl-config --libs) -lssh2 -lws2_32 -mwindows -mconsole
+# To add console out:
+# -mconsole

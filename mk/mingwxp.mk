@@ -1,5 +1,5 @@
 TOOL=MINGW
-JS_BUILD_DIR=/home/$(USER)/js-build
+JS_BUILD_DIR ?= /home/$(USER)/js-build
 RELEASEDIR=$(JS_BUILD_DIR)/release-winxp
 MINGW_DIR="C:\\\\msys32"
 OBJDIR=obj-winxp
@@ -14,7 +14,7 @@ LD=gcc
 PKGCONFIG=pkg-config
 TGT=WIN32OS
 TOOL=MINGW
-TGTEXT=32
+TGTEXT=XP
 SUFF=.exe
 ZIP=.zip
 

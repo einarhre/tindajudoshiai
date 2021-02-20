@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=3.0A
+SHIAI_VER_NUM=3.1beta
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 LASTPART := $(shell basename $(CURDIR))
 GTKVER=3
@@ -39,7 +39,12 @@ else
     ifeq ($(IS64),64)
       TARGETOS=LINUX
     else
-      TARGETOS=LINUX32
+      ISARM = $(shell uname -m | grep -o arm)
+      ifeq ($(ISARM),arm)
+        TARGETOS=LINUXARM
+      else
+        TARGETOS=LINUX32
+      endif
     endif
   endif
   ifeq ($(TARGETOS),WIN32)
@@ -59,8 +64,13 @@ else
     -include mk/linux.mk
   endif
   ifeq ($(TARGETOS),LINUX32)
+    ARCHITECTURE=-a i386
     -include ../mk/linux32.mk
     -include mk/linux32.mk
+  endif
+  ifeq ($(TARGETOS),LINUXARM)
+    -include ../mk/linux-armhf.mk
+    -include mk/linux-armhf.mk
   endif
 endif
 
