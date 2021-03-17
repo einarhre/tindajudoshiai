@@ -553,7 +553,7 @@ void init_property(gchar *prop, gchar *val)
 
             if (i == PROP_NUM_TATAMIS) {
                 number_of_tatamis = props[i].intval;
-#ifndef TARGETOS_WINXP
+#ifdef MATCH_TABLE
                 update_match_table();
 #endif
             }
@@ -682,7 +682,7 @@ void props_save_to_db(void)
         db_set_info(props[i].name, props[i].value);
 
     number_of_tatamis = prop_get_int_val(PROP_NUM_TATAMIS);
-#ifndef TARGETOS_WINXP
+#ifdef MATCH_TABLE
     update_match_table();
 #endif
 }
@@ -730,7 +730,7 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
 
     if (number_of_tatamis == 0)
         number_of_tatamis = 3;
-#ifndef TARGETOS_WINXP
+#ifdef MATCH_TABLE
     update_match_table();
 #endif    
     SET_VAL(PROP_NUM_TATAMIS, NULL, number_of_tatamis);

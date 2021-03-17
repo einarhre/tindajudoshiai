@@ -223,7 +223,10 @@ void open_shiai_display(void)
     if (notebook)
         gtk_widget_destroy(notebook);
     notebook = NULL;
-	
+    current_view = NULL;
+#ifdef MATCH_TABLE
+    match_table_clear();
+#endif	
     current_index = 10;
     current_category_index = 10000;
     current_category = 0;
@@ -247,10 +250,10 @@ void open_shiai_display(void)
     set_sheet_page(notebook);
     set_category_graph_page(notebook);
 
-#ifdef TARGETOS_WINXP
-    set_match_graph_page(notebook);
-#else
+#ifdef MATCH_TABLE
     set_match_table_page(notebook);
+#else
+    set_match_graph_page(notebook);
 #endif
     set_match_pages(notebook);
     set_log_page(notebook);

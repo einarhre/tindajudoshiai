@@ -1,6 +1,12 @@
 #PROF=-pg
 PROF=
 
+ifeq ($(TARGETOS),WINXP)
+  MATCH_TABLE=no
+else
+  MATCH_TABLE=yes
+endif
+
 include ../mk/common.mk
 
 OBJDIR := $(JS_BUILD_DIR)/$(LASTPART)/$(OBJDIR)
@@ -28,10 +34,13 @@ OBJS += $(OBJDIR)/main.o $(OBJDIR)/competitors.o $(OBJDIR)/sheets.o $(OBJDIR)/se
 	$(OBJDIR)/custom-category-svg-template.o $(OBJDIR)/common.o $(OBJDIR)/sha1.o \
 	$(OBJDIR)/websock.o $(OBJDIR)/websock-protocol.o  $(OBJDIR)/cJSON.o $(OBJDIR)/minilisp.o \
 	$(OBJDIR)/svg-lisp.o $(OBJDIR)/auto-update.o $(OBJDIR)/common-utils.o \
-	$(OBJDIR)/gdpr.o $(OBJDIR)/qrcode.o $(OBJDIR)/match-graph.o
+	$(OBJDIR)/gdpr.o $(OBJDIR)/qrcode.o
 
-ifneq ($(TARGETOS),WINXP)
-  OBJS += $(OBJDIR)/match-table.o
+ifeq ($(MATCH_TABLE),yes)
+    OBJS += $(OBJDIR)/match-table.o
+    CFLAGS += -DMATCH_TABLE=1
+else
+    OBJS += $(OBJDIR)/match-graph.o
 endif
 
 MHD_SRC := ../3rdparty/microhttpd
