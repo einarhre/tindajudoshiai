@@ -37,6 +37,12 @@
 /* Uncomment this to print round number table that can be inserted in the code. */
 //#define CALCULATE_ROUNDS
 
+#ifdef MATCH_TABLE
+#define draw_match_graph draw_match_table
+#define set_graph_rest_time set_table_rest_time
+#define set_match_graph_titles set_match_table_titles
+#endif
+
 #define FAST_DB
 
 #define PRINT_TIME print_time(__FUNCTION__, __LINE__)
@@ -877,7 +883,7 @@ extern gboolean create_statistics;
 extern gint webpwcrc32;
 extern gboolean use_weights;
 
-const char *db_name;
+extern const char *db_name;
 
 extern guint selected_judokas[TOTAL_NUM_COMPETITORS];
 extern guint num_selected_judokas;
@@ -888,6 +894,8 @@ extern gint cat_opts[NUM_CAT_OPTS];
 
 extern gint num_custom_brackets;
 extern gint show_columns;
+
+extern gboolean mirror_display;
 
 #define NUM_COMP_COLS 14
 extern const gchar *competitor_column_names[NUM_COMP_COLS];
@@ -1052,7 +1060,7 @@ extern void update_next_matches_coach_info(void);
 extern gboolean db_event_matches_update(guint category, struct match *last, gint *weightclass);
 extern void db_print_category_matches(struct category_data *catdata, FILE *f);
 extern void db_change_competitor(gint category, gint number, gboolean is_blue, gint index);
-extern void db_print_category_to_pdf_comments(gint catix, gchar *filename);
+//extern void db_print_category_to_pdf_comments(gint catix, gchar *filename);
 extern void db_set_category_color(gint category, const gchar *color);
 
 
@@ -1298,7 +1306,6 @@ extern struct club_name_data *club_name_get(const gchar *club);
 
 /* match_graph */
 extern gboolean show_colors;
-
 extern void draw_match_graph(void);
 extern void set_match_graph_page(GtkWidget *notebook);
 extern void set_graph_rest_time(gint tatami, time_t rest_end, gint flags);
@@ -1323,6 +1330,7 @@ extern struct compsys get_system_for_category(gint index, gint competitors);
 extern void make_backup(void);
 
 /* print */
+extern void png_file(gint ctg, const gchar *dir, const gchar *prefix);
 extern void write_png(GtkWidget *menuitem, gpointer userdata);
 extern void do_print(GtkWidget *menuitem, gpointer userdata);
 extern void print_doc(GtkWidget *menuitem, gpointer userdata);
@@ -1417,7 +1425,7 @@ extern void show_msg(GtkTextBuffer *buf, gchar *tagname, gchar *format, ...);
 
 /* http */
 extern void clear_cache_by_cat(gint cat);
-extern void get_bracket_2(gint tatami, gint catid, gint svg, gint page, gint connum);
+extern void get_bracket_2(gint tatami, gint catid, gint svg, gint page, struct msg_web_resp *resp);
 
 /* match order */
 extern void read_match_order_dialog(GtkWidget *w, gpointer arg);
@@ -1432,6 +1440,12 @@ extern gint gdpr_enable;
 
 extern gboolean gdpr_ok(struct judoka *j);
 extern void set_gdpr(GtkWidget *menuitem, gpointer userdata);
+
+/* match-table */
+extern void match_table_clear(void);
+extern void set_match_table_page(GtkWidget *nb);
+extern void update_match_table(void);
+extern void draw_match_table(void);
 
 /* profiling stuff */
 //#define PROFILE
