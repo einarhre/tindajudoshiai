@@ -2221,7 +2221,7 @@ static int db_callback_matches_pdf(void *data, int argc, char **argv, char **azC
 	_ret = atoi(p);						\
     } while (0)
 
-
+#if 0
 #define goto_out do { g_print("%s[%d] Error\n", __FUNCTION__, __LINE__); goto out; } while (0)
 
 #define NUM_XREF 1024
@@ -2415,3 +2415,4 @@ void db_print_category_to_pdf_comments(gint catix, gchar *filename)
     if (pdfname) g_free(pdfname);
     if (pdf) fclose(pdf);
 }
+#endif
