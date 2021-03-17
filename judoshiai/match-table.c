@@ -411,6 +411,48 @@ static struct {
     gint num;
 } last_wins[NUM_TATAMIS];
 
+#define AREA_SHIFT        4
+#define ARG_MASK        0xf
+
+struct traverse {
+    guint match_data;
+    gint  op;
+};
+
+enum {
+    TRAVERSE_UPDATE_CELL,
+    TRAVERSE_UPDATE_COLUMN,
+    TRAVERSE_UPDATE_ALL,
+    NUM_TRAVERSE
+};
+
+static GtkWidget *match_table_view = NULL;
+static GtkListStore *match_table_store = NULL;
+static GtkTreeViewColumn *columns[NUM_TATAMIS+1];
+static GtkWidget *match_scrolled_window;
+static GtkWidget *match_table_label = NULL;
+
+static time_t rest_times[NUM_TATAMIS];
+static gint   rest_flags[NUM_TATAMIS];
+
+void match_table_clear(void)
+{
+    have_drag = FALSE;
+    drag_data = 0;
+    drag_x0 = drag_y0 = drag_x = drag_y = 0;
+    adj_x = adj_y = 0;
+    drag_after = FALSE;
+    drag_text[0] = 0;
+    memset(&last_wins, 0, sizeof(last_wins));
+    match_table_view = NULL;
+    match_table_store = NULL;
+    memset(&columns, 0, sizeof(columns));
+    match_scrolled_window = NULL;
+    match_table_label = NULL;
+    memset(&rest_times, 0, sizeof(rest_times));
+    memset(&rest_flags, 0, sizeof(rest_flags));
+}
+
 static void
 custom_cell_renderer_match_render(GtkCellRenderer      *cell_renderer,
                                   cairo_t              *c,
@@ -730,27 +772,6 @@ custom_cell_renderer_match_render(GtkCellRenderer      *cell_renderer,
     gtk_style_context_restore(style);
 }
 
-#define AREA_SHIFT        4
-#define ARG_MASK        0xf
-
-struct traverse {
-    guint match_data;
-    gint  op;
-};
-
-enum {
-    TRAVERSE_UPDATE_CELL,
-    TRAVERSE_UPDATE_COLUMN,
-    TRAVERSE_UPDATE_ALL,
-    NUM_TRAVERSE
-};
-
-static GtkWidget *match_table_view = NULL;
-static GtkListStore *match_table_store = NULL;
-static GtkWidget *match_label;
-static GtkTreeViewColumn *columns[NUM_TATAMIS+1];
-static GtkWidget *match_scrolled_window;
-
 static gboolean traverse_rows(GtkTreeModel *model,
 			      GtkTreePath *path,
 			      GtkTreeIter *iter,
@@ -819,6 +840,12 @@ void draw_match_table(void)
     t.op = TRAVERSE_UPDATE_ALL;
     if (match_table_store)
         gtk_tree_model_foreach(GTK_TREE_MODEL(match_table_store), traverse_rows, &t);
+}
+
+void set_table_rest_time(gint tatami, time_t rest_end, gint flags)
+{
+    rest_times[tatami-1] = rest_end;
+    rest_flags[tatami-1] = flags;
 }
 
 static guint find_match_data_by_xy_update(gint x, gint y, gboolean update)
@@ -1115,6 +1142,7 @@ create_view_and_model (void)
 
         col = gtk_tree_view_column_new();
         columns[i] = col;
+        g_print("columns[%d]=%p\n", i, col);
         gtk_tree_view_column_set_expand(col, TRUE);
         gtk_tree_view_column_pack_start (col, renderer, TRUE);
         gtk_tree_view_column_add_attribute (col, renderer, "match", i);
@@ -1146,6 +1174,7 @@ void update_match_table(void)
     gint i;
     
     for (i = 0; i <= NUM_TATAMIS; i++) {
+        g_print("update_match_table columns[%d] == %p\n", i, columns[i]);
         if (columns[i])
             gtk_tree_view_column_set_visible(columns[i], i <= number_of_tatamis);
     }
@@ -1355,14 +1384,16 @@ static guint n_targets = sizeof(target_table) / sizeof(target_table[0]);
 
 void set_match_table_page(GtkWidget *nb)
 {
+    match_table_clear();
+
     match_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_container_set_border_width(GTK_CONTAINER(match_scrolled_window), 10);
     create_view_and_model();
     gtk_container_add(GTK_CONTAINER(match_scrolled_window), match_table_view);
     //gtk_widget_show_all(match_scrolled_window);
 
-    match_label = gtk_label_new (_("Matches"));
-    gtk_notebook_append_page(GTK_NOTEBOOK(nb), match_scrolled_window, match_label);
+    match_table_label = gtk_label_new (_("Matches"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), match_scrolled_window, match_table_label);
 
     gtk_drag_dest_set (match_table_view,
                        GTK_DEST_DEFAULT_MOTION|GTK_DEST_DEFAULT_DROP,
@@ -1393,4 +1424,10 @@ void set_match_table_page(GtkWidget *nb)
     g_signal_connect (match_table_view, "drag_data_delete",
                       G_CALLBACK (source_drag_data_delete), NULL);
 
+}
+
+void set_match_table_titles(void)
+{
+    if (match_table_label)
+        gtk_label_set_text(GTK_LABEL(match_table_label), _("Matches"));
 }
