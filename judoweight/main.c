@@ -547,7 +547,7 @@ int main( int   argc,
 
     /* timers */
 
-    timer = g_timer_new();
+    //timer = g_timer_new();
 
     gtk_widget_show_all(window);
 
