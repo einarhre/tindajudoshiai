@@ -3196,7 +3196,6 @@ void write_sheet_to_stream(gint cat, cairo_write_func_t write_func, void *closur
 	next_matches_info[wc->tatami][0].catnum == pd.category) {
 	    pd.highlight_match = next_matches_info[wc->tatami][0].matchnum;
 	    pd.page = match_on_page(pd.category, pd.highlight_match);
-	    g_print("cat=%d match=%d page=%d\n", pd.category, pd.highlight_match, pd.page);
     }
 
     pd.show_highlighted_page = 1;
@@ -3220,7 +3219,7 @@ void write_sheet_to_stream(gint cat, cairo_write_func_t write_func, void *closur
     cairo_show_page(pd.c);
     cairo_destroy(pd.c);
 
-    write_func(closure, (const guchar *)png_start, strlen(png_start));
+    //write_func(closure, (const guchar *)png_start, strlen(png_start));
     cairo_surface_write_to_png_stream(cs, write_func, closure);
     cairo_surface_destroy(cs);
 }
