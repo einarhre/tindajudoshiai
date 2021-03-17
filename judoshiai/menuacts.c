@@ -565,6 +565,10 @@ void get_weights_from_old_competition(GtkWidget *w, gpointer data)
 #define JSON_GET_DST_INT(_root, _dst, _item)                  \
     do { cJSON *tmp = cJSON_GetObjectItem(_root, #_item); \
         _dst = tmp ? tmp->valueint : 0; } while (0)
+#define JSON_PUT_DST_STR(_c, _src, _item)                  \
+    do { cJSON_AddStringToObject(_c, #_item, _src); } while (0)
+#define JSON_PUT_DST_INT(_c, _src, _item)                  \
+    do { cJSON_AddNumberToObject(_c, #_item, _src); } while (0)
 
 static gboolean ok_all = FALSE;
 
@@ -643,7 +647,7 @@ void json_set_weight(cJSON *root)
     JSON_GET_STR(root, id);
     JSON_GET_INT(root, ix);
     JSON_GET_INT(root, weight);
-    if ((!id && ix == 0) || weight == 0)
+    if (!id && ix == 0)
         return;
     g_print("json id=%s ix=%d weight=%d\n", id ? id : "NULL", ix, weight);
     
@@ -660,19 +664,21 @@ void json_set_weight(cJSON *root)
         return;
     }
 
-    j->weight = weight;
-    display_one_judoka(j);
-    db_update_judoka(j->index, j);
+    if (weight) {
+        j->weight = weight;
+        display_one_judoka(j);
+        db_update_judoka(j->index, j);
+    }
     free_judoka(j);
 }
 
-void get_weights_from_text_file(GtkWidget *w, gpointer data)
+void get_comp_data_from_json_file(GtkWidget *w, gpointer data)
 {
     GtkWidget *dialog;
 
     ok_all = FALSE;
     
-    dialog = gtk_file_chooser_dialog_new (_("Copy Weights"),
+    dialog = gtk_file_chooser_dialog_new (_("Choose a directory"),
 					  GTK_WINDOW(main_window),
                                           GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -692,56 +698,81 @@ void get_weights_from_text_file(GtkWidget *w, gpointer data)
 		if (g_file_get_contents(fullname, &contents, &len, NULL)) {
                     gint i = 0;
 
-                    GET_WORD;
-                    if (CH != '{' && CH != '[') {
-                        /* Line: index weight other... */
-                        while (CH) {
-                            char id[20], weight[20];
-                            GET_WORD;
-                            COPY_WORD(id);
-                            GET_WORD;
-                            COPY_WORD(weight);
-                            g_print("id=%s weight=%s\n", id, weight);
-
-                            gboolean coach;
-                            struct judoka *j = NULL;
-                            gint indx = db_get_index_by_id(id, &coach);
-                            if (indx) j = get_data(indx);
-                            if (!j) j = get_data(atoi(id));
-                            if (j) {
-                                j->weight = atoi(weight);
-                                display_one_judoka(j);
-                                db_update_judoka(j->index, j);
-                                free_judoka(j);
+                    /* json format */
+                    cJSON *root = cJSON_Parse(&contents[i]);
+                    if (root) {
+                        if (root->type == cJSON_Object)
+                            json_set_weight(root);
+                        else if (root->type == cJSON_Array) {
+                            cJSON *e = root->child;
+                            while (e) {
+                                json_set_weight(e);
+                                e = e->next;
                             }
-                            NEXT_LINE;
                         }
-                    } else {
-                        /* json format */
-                        cJSON *root = cJSON_Parse(&contents[i]);
-                        if (root) {
-                            if (root->type == cJSON_Object)
-                                json_set_weight(root);
-                            else if (root->type == cJSON_Array) {
-                                cJSON *e = root->child;
-                                while (e) {
-                                    json_set_weight(e);
-                                    e = e->next;
-                                }
-                            }
-                            cJSON_Delete(root);
-                        }
+                        cJSON_Delete(root);
                     }
                     g_free(contents);
                 }
                 g_free(fullname);
                 fname = g_dir_read_name(dir);
             }
-            g_free (dirname);
         }
-
-        gtk_widget_destroy (dialog);
+        g_free (dirname);
     }
+    gtk_widget_destroy (dialog);
+}
+
+void json_add_judoka(cJSON *root, struct judoka *j)
+{
+    cJSON *c = cJSON_CreateObject();
+    cJSON_AddItemToArray(root, c);
+    JSON_PUT_DST_INT(c, j->index, ix);
+    JSON_PUT_DST_STR(c, j->last, last);
+    JSON_PUT_DST_STR(c, j->first, first);
+    JSON_PUT_DST_STR(c, j->club, club);
+    JSON_PUT_DST_STR(c, j->regcategory, regcat);
+    JSON_PUT_DST_STR(c, j->category, category);
+    JSON_PUT_DST_STR(c, j->country, country);
+    JSON_PUT_DST_STR(c, j->id, id);
+    JSON_PUT_DST_STR(c, j->comment, comment);
+    JSON_PUT_DST_STR(c, j->coachid, coachid);
+    JSON_PUT_DST_INT(c, j->birthyear, birthyear);
+    JSON_PUT_DST_INT(c, j->belt, belt);
+    JSON_PUT_DST_INT(c, j->weight, weight);
+    JSON_PUT_DST_INT(c, j->deleted, flags);
+    JSON_PUT_DST_INT(c, j->seeding, seeding);
+    JSON_PUT_DST_INT(c, j->clubseeding, clubseeding);
+    JSON_PUT_DST_INT(c, j->gender, gender);
+}
+
+void put_comp_data_to_json_file(GtkWidget *w, gpointer data)
+{
+    extern void db_comp_print_json(cJSON *root);
+    GtkWidget *dialog;
+
+    dialog = gtk_file_chooser_dialog_new (_("Choose a directory"),
+					  GTK_WINDOW(main_window),
+                                          GTK_FILE_CHOOSER_ACTION_SAVE,
+                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                          GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                          NULL);
+
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+        gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        FILE *f = fopen(filename, "w");
+        if (f) {
+            cJSON *root = cJSON_CreateArray();
+            db_comp_print_json(root);
+            char *out = cJSON_PrintUnformatted(root);
+            fputs(out, f);
+            fclose(f);
+        }
+        g_free(filename);
+    }
+
+    gtk_widget_destroy (dialog);
+
 }
 
 gboolean show_colors = FALSE;

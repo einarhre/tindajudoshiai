@@ -14,6 +14,7 @@
 #include "sqlite3.h"
 #include "judoshiai.h"
 #include "language.h"
+#include "cJSON.h"
 
 #define ADD_COMPETITORS               1
 #define ADD_COMPETITORS_WITH_WEIGHTS  2
@@ -26,7 +27,9 @@
 #define FIND_COMPETITOR_BY_COACHID  256
 #define UPDATE_WEIGHTS              512
 #define LIST_COMPETITORS           1024
+#define PRINT_COMPETITORS_JSON     2048
 
+static cJSON *json_root = NULL;
 static FILE *print_file = NULL;
 static gint num_competitors;
 static gint num_weighted_competitors;
@@ -160,6 +163,11 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
         return 0;
     }
 
+    if (flags & PRINT_COMPETITORS_JSON) {
+        extern void json_add_judoka(cJSON *root, struct judoka *j);
+        json_add_judoka(json_root, &j);
+    }
+    
     if (flags & FIND_COMPETITOR_BY_ID) {
         competitor_by_id = j.index;
         return 1;
@@ -621,3 +629,11 @@ void write_competitor_for_coach_display(struct judoka *j)
     //snprintf(buf, sizeof(buf), "c-%d.txt", j->index);
 }
 
+void db_comp_print_json(cJSON *root)
+{
+    json_root = root;
+
+    db_exec(db_name, "SELECT * FROM competitors ORDER BY \"last\" ASC, \"first\" ASC", 
+            (void *)PRINT_COMPETITORS_JSON, 
+            db_callback);
+}
