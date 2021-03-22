@@ -375,6 +375,7 @@ struct msg_web_resp {
 
 	struct msg_web_get_bracket_resp {
             int tatami;
+            int svg;
             char filename[160];
         } get_bracket_resp;
 
