@@ -45,6 +45,7 @@
 #include "httpp.h"
 #include "cJSON.h"
 
+#define g_print(_a...) do { } while (0)
 
 /* System-dependent definitions */
 #ifndef WIN32
