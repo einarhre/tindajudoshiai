@@ -134,6 +134,7 @@ extern void read_svg_file(void);
 extern gint paint_svg(struct paint_data *pd);
 extern void font_dialog(GtkWidget *w, gpointer data);
 extern void ask_for_data(gint index);
+extern gint refresh_now;
 
 #ifndef EMSCRIPTEN
 extern gboolean show_bracket(void);

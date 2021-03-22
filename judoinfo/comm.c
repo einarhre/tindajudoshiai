@@ -256,12 +256,14 @@ void msg_received(struct message *input_msg)
     switch (input_msg->type) {
     case MSG_MATCH_INFO:
 	handle_info_msg(&input_msg->u.match_info);
+        g_atomic_int_set(&refresh_now, 1);
         break;
 
     case MSG_11_MATCH_INFO:
 	for (i = 0; i < 11; i++) {
 	    handle_info_msg(&input_msg->u.match_info_11.info[i]);
 	}
+        g_atomic_int_set(&refresh_now, 1);
         break;
 
     case MSG_NAME_INFO:

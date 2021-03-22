@@ -122,11 +122,7 @@ static struct {
 
 static void refresh_darea(void)
 {
-#if (GTKVER == 3)
     gtk_widget_queue_draw(darea);
-#else
-    expose(darea, 0, 0);
-#endif
 }
 
 static gboolean delete_event( GtkWidget *widget,
@@ -155,9 +151,18 @@ void destroy( GtkWidget *widget,
     gtk_main_quit ();
 }
 
+gint refresh_now = 0;
+
 static gboolean refresh_graph(gpointer data)
 {
-    refresh_window();
+    static time_t last = 0;
+    time_t now = time(NULL);
+
+    if (g_atomic_int_get(&refresh_now) || now > last + 1) {
+        last = now;
+        refresh_now = FALSE;
+        refresh_window();
+    }
     return TRUE;
 }
 
@@ -657,33 +662,17 @@ void paint_bracket(cairo_t *c, gdouble paper_width, gdouble paper_height)
 /* This is called when we need to draw the windows contents */
 static gboolean expose(GtkWidget *widget, GdkEventExpose *event, gpointer userdata)
 {
-#if (GTKVER == 3)
     cairo_t *c = (cairo_t *)event;
-#else
-    cairo_t *c = gdk_cairo_create(widget->window);
-#endif
     struct paint_data pd;
 
     pd.c = c;
-#if (GTKVER == 3)
     pd.paper_width = gtk_widget_get_allocated_width(widget);
     pd.paper_height = gtk_widget_get_allocated_height(widget);
-#else
-    pd.paper_width = widget->allocation.width;
-    pd.paper_height = widget->allocation.height;
-#endif
 
     if (paint_svg(&pd) == FALSE)
-#if (GTKVER == 3)
         paint(c, gtk_widget_get_allocated_width(widget),
               gtk_widget_get_allocated_height(widget), userdata);
     paint_bracket(c, pd.paper_width, pd.paper_height);
-#else
-        paint(c, widget->allocation.width, widget->allocation.height, userdata);
-
-    cairo_show_page(c);
-    cairo_destroy(c);
-#endif
 
     return FALSE;
 }
@@ -777,11 +766,7 @@ static gboolean write_mjpeg(gpointer data)
 
 void toggle_full_screen(GtkWidget *menu_item, gpointer data)
 {
-#if (GTKVER == 3)
     if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item))) {
-#else
-    if (GTK_CHECK_MENU_ITEM(menu_item)->active) {
-#endif
         gtk_window_fullscreen(GTK_WINDOW(main_window));
         g_key_file_set_boolean(keyfile, "preferences", "fullscreen", TRUE);
     } else {
@@ -793,11 +778,7 @@ void toggle_full_screen(GtkWidget *menu_item, gpointer data)
 
 void toggle_small_display(GtkWidget *menu_item, gpointer data)
 {
-#if (GTKVER == 3)
     if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item))) {
-#else
-    if (GTK_CHECK_MENU_ITEM(menu_item)->active) {
-#endif
         num_lines = NUM_LINES;
         display_type = ptr_to_gint(data);
         g_key_file_set_integer(keyfile, "preferences", "displaytype", ptr_to_gint(data));
@@ -818,11 +799,7 @@ void toggle_small_display(GtkWidget *menu_item, gpointer data)
 
 void toggle_mirror(GtkWidget *menu_item, gpointer data)
 {
-#if (GTKVER == 3)
     if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item))) {
-#else
-    if (GTK_CHECK_MENU_ITEM(menu_item)->active) {
-#endif
         mirror_display = TRUE;
         g_key_file_set_boolean(keyfile, "preferences", "mirror", TRUE);
     } else {
@@ -835,11 +812,7 @@ void toggle_mirror(GtkWidget *menu_item, gpointer data)
 void toggle_whitefirst(GtkWidget *menu_item, gpointer data)
 {
     return; /* always white first*/
-#if (GTKVER == 3)
     if (TRUE || gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item))) {
-#else
-    if (TRUE || GTK_CHECK_MENU_ITEM(menu_item)->active) {
-#endif
         white_first = TRUE;
         g_key_file_set_boolean(keyfile, "preferences", "whitefirst", TRUE);
     } else {
@@ -851,22 +824,14 @@ void toggle_whitefirst(GtkWidget *menu_item, gpointer data)
 
 void toggle_redbackground(GtkWidget *menu_item, gpointer data)
 {
-#if (GTKVER == 3)
     red_background = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
-#else
-    red_background = GTK_CHECK_MENU_ITEM(menu_item)->active;
-#endif
     g_key_file_set_boolean(keyfile, "preferences", "redbackground", red_background);
     refresh_darea();
 }
 
 void toggle_bracket(GtkWidget *menu_item, gpointer data)
 {
-#if (GTKVER == 3)
     display_bracket = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
-#else
-    display_bracket = GTK_CHECK_MENU_ITEM(menu_item)->active;
-#endif
     g_key_file_set_boolean(keyfile, "preferences", "bracket", display_bracket);
     refresh_darea();
 }
@@ -910,11 +875,7 @@ int main( int   argc,
     font = pango_font_description_from_string("Sans bold 12");
 
 #ifdef WIN32
-#if (GTKVER == 3)
     installation_dir = g_win32_get_package_installation_directory_of_module(NULL);
-#else
-    installation_dir = g_win32_get_package_installation_directory(NULL, NULL);
-#endif
 #else
     gbr_init(NULL);
     installation_dir = gbr_find_prefix(NULL);
@@ -937,12 +898,6 @@ int main( int   argc,
     current_year = tm->tm_year+1900;
     srand(now); //srandom(now);
     my_address = now + getpid()*10000;
-
-#if (GTKVER != 3)
-    g_thread_init(NULL);    /* Initialize GLIB thread support */
-    gdk_threads_init();     /* Initialize GDK locks */
-    gdk_threads_enter();    /* Acquire GDK locks */
-#endif
 
     gtk_init (&argc, &argv);
 
@@ -982,11 +937,7 @@ int main( int   argc,
 
     gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
-#if (GTKVER == 3)
     main_vbox = gtk_grid_new();
-#else
-    main_vbox = gtk_vbox_new(FALSE, 0);
-#endif
     gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 0);
     gtk_container_add (GTK_CONTAINER (window), main_vbox);
     gtk_widget_show(main_vbox);
@@ -995,37 +946,21 @@ int main( int   argc,
     menubar = get_menubar_menu(window);
     gtk_widget_show(menubar);
 
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(main_vbox), menubar, 0, 0, 1, 1);
     gtk_widget_set_hexpand(menubar, TRUE);
     //gtk_widget_set_halign(menubar, GTK_ALIGN_FILL);
-#else
-    gtk_box_pack_start(GTK_BOX(main_vbox), menubar, FALSE, TRUE, 0);
-#endif
     darea = gtk_drawing_area_new();
-#if (GTKVER != 3)
-    GTK_WIDGET_SET_FLAGS(darea, GTK_CAN_FOCUS);
-#endif
     gtk_widget_add_events(darea, GDK_BUTTON_PRESS_MASK);
 
     gtk_widget_show(darea);
 
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(main_vbox), darea, 0, 1, 1, 1);
     //gtk_grid_attach_next_to(GTK_GRID(main_vbox), darea, menubar, GTK_POS_BOTTOM, 1, 1);
     gtk_widget_set_hexpand(darea, TRUE);
     gtk_widget_set_vexpand(darea, TRUE);
-#else
-    gtk_box_pack_start_defaults(GTK_BOX(main_vbox), darea);
-#endif
 
-#if (GTKVER == 3)
     g_signal_connect(G_OBJECT(darea),
                      "draw", G_CALLBACK(expose), NULL);
-#else
-    g_signal_connect(G_OBJECT(darea),
-                     "expose-event", G_CALLBACK(expose), NULL);
-#endif
     g_signal_connect(G_OBJECT(darea),
                      "button-press-event", G_CALLBACK(button_pressed), NULL);
 
@@ -1034,7 +969,7 @@ int main( int   argc,
     timer = g_timer_new();
 
     /*g_timeout_add(100, timeout, NULL);*/
-    g_timeout_add(2000, refresh_graph, NULL);
+    g_timeout_add(100, refresh_graph, NULL);
     if (mjpeg_width && mjpeg_height)
         g_timeout_add(1000/fps, write_mjpeg, NULL);
 
@@ -1045,7 +980,6 @@ int main( int   argc,
 
     open_comm_socket();
 
-#if (GTKVER == 3)
     gth = g_thread_new("Client",
                        (GThreadFunc)client_thread,
                        (gpointer)&run_flag);
@@ -1055,16 +989,6 @@ int main( int   argc,
     gth = g_thread_new("SSDP",
                        (GThreadFunc)ssdp_thread,
                        (gpointer)&run_flag);
-#else
-    /* Create a bg thread using glib */
-    gth = g_thread_create((GThreadFunc)client_thread,
-                          (gpointer)&run_flag, FALSE, NULL);
-
-    extern gpointer ssdp_thread(gpointer args);
-    g_snprintf(ssdp_id, sizeof(ssdp_id), "JudoInfo");
-    gth = g_thread_create((GThreadFunc)ssdp_thread,
-                          (gpointer)&run_flag, FALSE, NULL);
-#endif
     gth = gth; // make compiler happy
 
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER_ALWAYS);
@@ -1095,9 +1019,6 @@ int main( int   argc,
      * and waits for an event to occur (like a key press or
      * mouse event). */
     gtk_main();
-#if (GTKVER != 3)
-    gdk_threads_leave();  /* release GDK locks */
-#endif
     run_flag = FALSE;     /* flag threads to stop and exit */
     //g_thread_join(gth);   /* wait for thread to exit */
 
@@ -1118,35 +1039,6 @@ void refresh_window(void)
 {
     gtk_widget_queue_draw(GTK_WIDGET(main_window));
     return;
-
-#if 0
-    GtkWidget *widget;
-    widget = GTK_WIDGET(main_window);
-#if (GTKVER == 3)
-    if (gtk_widget_get_window(widget)) {
-        gdk_window_invalidate_rect(gtk_widget_get_window(widget), NULL, TRUE);
-        gdk_window_process_updates(gtk_widget_get_window(widget), TRUE);
-        /*
-        cairo_rectangle_int_t r;
-        r.x = 0;
-        r.y = 0;
-        r.width = gtk_widget_get_allocated_width(widget);
-        r.height = gtk_widget_get_allocated_height(widget);
-        region = cairo_region_create_rectangle(&r);
-        gdk_window_invalidate_region(gtk_widget_get_window(widget), region, TRUE);
-        gdk_window_process_updates(gtk_widget_get_window(widget), TRUE);
-        cairo_region_destroy(region);
-        */
-    }
-#else
-    if (widget->window) {
-        GdkRegion *region;
-        region = gdk_drawable_get_clip_region(widget->window);
-        gdk_window_invalidate_region(widget->window, region, TRUE);
-        gdk_window_process_updates(widget->window, TRUE);
-    }
-#endif
-#endif
 }
 
 static gint find_box(gdouble x, gdouble y)
