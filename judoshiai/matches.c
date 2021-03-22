@@ -2355,6 +2355,119 @@ void fill_match_info(struct message *msg, gint tatami, gint pos, struct match *m
         msg->u.match_info_11.info[pos].flags |= MATCH_FLAG_JUDOGI2_OK;
 }
 
+static struct html_match_s {
+    string s;
+    GMutex lock;
+    struct msg_match_info info;
+} html_matches[NUM_TATAMIS][INFO_MATCH_NUM+1];
+
+int get_html_match(string *s, gint tatami, gint position)
+{
+    gint tatami0 = tatami - 1;
+    g_mutex_lock(&(html_matches[tatami0][position].lock));
+    string_clone(s, &(html_matches[tatami0][position].s));
+    g_mutex_unlock(&(html_matches[tatami0][position].lock));
+    return 0;
+}
+
+static gboolean same_info(struct msg_match_info *info1, struct msg_match_info *info2)
+{
+    return
+        info1->category == info2->category &&
+        info1->number == info2->number &&
+        info1->blue == info2->blue &&
+        info1->white == info2->white &&
+        info1->flags == info2->flags &&
+        info1->rest_time == info2->rest_time &&
+        info1->round == info2->round;
+}
+
+void make_html_match(struct msg_match_info *info)
+{
+    gint t0 = info->tatami - 1;
+    gint pos = info->position;
+    string *s = &(html_matches[t0][pos].s);
+    GMutex *lock = &(html_matches[t0][pos].lock);
+
+    // no change
+    if (s->buf && same_info(info, &(html_matches[t0][pos].info)))
+        return;
+
+    // check if the same as the next one
+    if (pos >= 1 && pos < INFO_MATCH_NUM) {
+        string *s1 = &(html_matches[t0][pos + 1].s);
+        if (s1->buf && same_info(info, &(html_matches[t0][pos + 1].info))) {
+            // shift match up
+            GMutex *lock1 = &(html_matches[t0][pos + 1].lock);
+            g_mutex_lock(lock);
+            g_mutex_lock(lock1);
+            string_free(s);
+            html_matches[t0][pos].s = html_matches[t0][pos + 1].s;
+            html_matches[t0][pos].info = html_matches[t0][pos + 1].info;
+            string_init(s1);
+            memset(&(html_matches[t0][pos + 1].info), 0, sizeof(struct msg_match_info));
+            g_mutex_unlock(lock1);
+            g_mutex_unlock(lock);
+            return;
+        }
+    }
+    
+    struct judoka *j1 = avl_get_competitor(info->blue);
+    struct judoka *j2 = avl_get_competitor(info->white);
+    struct category_data *cd = avl_get_category(info->category);
+    gchar *club1 = j1 ? get_club_text(j1, CLUB_TEXT_ABBREVIATION) : "&nbsp;";
+    gchar *club2 = j2 ? get_club_text(j2, CLUB_TEXT_ABBREVIATION) : "&nbsp;";
+    gchar *cat = cd ? cd->category : "&nbsp;";
+
+    if (cat == NULL || cat[0] == 0)
+        cat = "&nbsp;";
+    
+    g_mutex_lock(lock);
+    html_matches[t0][pos].info = *info;
+    string_free(s);
+    string_concat(s, "<table class='match'>");
+
+    if (pos == 0) {
+        string_concat(s, "<tr class='winner'><td class='winner'>%s</td><td class='winner'>&nbsp;</td></tr>", _("Prev. winner:"));
+        string_concat(s, "<tr><td class='winner'>%s</td><td class='winner'>&nbsp;</td></tr>", cd ? cd->category : "");
+        string_concat(s, "<tr><td class='winner'>%s %s</td><td class='winner'>&nbsp;</td></tr>",
+                      j1 ? j1->first : "&nbsp;", j1 ? j1->last : "&nbsp;");
+        string_concat(s, "<tr><td class='winner'>%s</td><td class='winner'>&nbsp;</td></tr>", club1);
+        string_concat(s, "</table>");
+
+        g_mutex_unlock(lock);
+        return;
+    }
+    
+    string_concat(s, "<tr><td class='cat'>");
+    string_concat(s, "%s", cat);
+    string_concat(s, "</td><td class='rnd'>");
+    string_concat(s, "%s", round_to_str(info->round));
+    string_concat(s, "</td></tr>");
+
+    string_concat(s, "<tr><td class='bfirst'>");
+    string_concat(s, "%s", j1 ? j1->first : "&nbsp;");
+    string_concat(s, "</td><td class='wfirst'>");
+    string_concat(s, "%s", j2 ? j2->first : "&nbsp;");
+    string_concat(s, "</td></tr>");
+
+    string_concat(s, "<tr><td class='blast'>");
+    string_concat(s, "%s", j1 ? j1->last : "&nbsp;");
+    string_concat(s, "</td><td class='wlast'>");
+    string_concat(s, "%s", j2 ? j2->last : "&nbsp;");
+    string_concat(s, "</td></tr>");
+
+    string_concat(s, "<tr><td class='bclub'>");
+    string_concat(s, "%s", club1);
+    string_concat(s, "</td><td class='wclub'>");
+    string_concat(s, "%s", club2);
+    string_concat(s, "</td></tr>");
+    
+    string_concat(s, "</table>");
+
+    g_mutex_unlock(lock);
+}
+
 void send_match(gint tatami, gint pos, struct match *m)
 {
     struct message msg;
@@ -2426,8 +2539,12 @@ void send_matches(gint tatami)
    }
 
     send_packet(&msg);
+
+    for (k = 0; k <= INFO_MATCH_NUM; k++)
+        make_html_match(&msg.u.match_info_11.info[k]);
 }
 
+#if 0
 void update_matches_small(guint category, struct compsys sys_or_tatami)
 {
     if (sys_or_tatami.system == 0)
@@ -2451,6 +2568,7 @@ void update_matches_small(guint category, struct compsys sys_or_tatami)
         break;
     }
 }
+#endif
 
 void send_next_matches(gint category, gint tatami, struct match *nm)
 {
@@ -2682,6 +2800,8 @@ void update_matches(guint category, struct compsys sys, gint tatami)
     struct match *nm;
     PROF_START;
     if (category) {
+        set_bracket_status(category, 0); // bracket invalidation
+
         struct category_data *catdata = avl_get_category(category);
         if (catdata && (catdata->deleted & TEAM_EVENT) &&
 	    (category & MATCH_CATEGORY_SUB_MASK)) {

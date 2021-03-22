@@ -182,6 +182,63 @@ void png_file(gint ctg, const gchar *dir, const gchar *prefix)
     cairo_surface_destroy(cs_png);
 }
 
+void pdf_file(gint ctg, const gchar *dir, const gchar *prefix)
+{
+    gint i;
+    gchar buf[200];
+    cairo_t *c_pdf;
+    cairo_surface_t *cs_pdf;
+    gchar *pdfname;
+    struct judoka *ctgdata = get_data(ctg);
+    struct compsys sys = db_get_system(ctg);
+    struct paint_data pd;
+    gint svgw, svgh;
+
+    if (!ctgdata)
+        return;
+    
+    memset(&pd, 0, sizeof(pd));
+
+    if (get_svg_page_size(ctg, 0, &svgw, &svgh)) {
+        if (svgw < svgh) {
+            pd.paper_height = SIZEY;
+            pd.paper_width = SIZEX;
+        } else {
+            pd.paper_height = SIZEX;
+            pd.paper_width = SIZEY;
+            pd.landscape = TRUE;
+        }
+    } else if (print_landscape(ctg)) {
+        pd.paper_height = SIZEX;
+        pd.paper_width = SIZEY;
+        pd.landscape = TRUE;
+    } else {
+        pd.paper_height = SIZEY;
+        pd.paper_width = SIZEX;
+    }
+    pd.total_width = 0;
+    pd.category = ctg;
+
+    for (i = 0; i < num_pages(sys); i++) { // print other pages
+        pd.page = i;
+        if (i == 0)
+            snprintf(buf, sizeof(buf), "%s.pdf", prefix);
+        else
+            snprintf(buf, sizeof(buf), "%s-%d.pdf", prefix, pd.page);
+
+        pdfname = g_build_filename(dir, buf, NULL);
+        g_print("PDF=%s\n", pdfname);
+        cs_pdf = cairo_pdf_surface_create(pdfname, pd.paper_width, pd.paper_height);
+        c_pdf = cairo_create(cs_pdf);
+        pd.c = c_pdf;
+        paint_category(&pd);
+        cairo_show_page(c_pdf);
+        cairo_destroy(c_pdf);
+        cairo_surface_destroy(cs_pdf);
+        g_free(pdfname);
+    }
+}
+
 void write_png(GtkWidget *menuitem, gpointer userdata)
 {
     gint ctg = ptr_to_gint(userdata), i;

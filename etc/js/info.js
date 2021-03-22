@@ -108,21 +108,7 @@ var show_menu = true;
 var tatami_order= [];
 
 /* Initialize */
-var match_list = [];
 for (var i = 0; i < NUM_TATAMIS; i++) {
-    var t = [];
-    for (var j = 0; j < NUM_POS; j++) {
-	t[j] = {
-	    category:0,
-	    number:0,
-	    blue:0,
-	    white:0,
-	    flags:0,
-	    round:0,
-	    rest_end:0
-	};
-    }
-    match_list[i] = t;
     tatami_order.push(i);
 }
 
@@ -151,6 +137,7 @@ for (var i = 0; i < NUM_TATAMIS; i++)
     $("#sel"+(i+1)).prop('checked', show_tatami[i]);
 
 var show_bracket = false;
+var use_pdf = false;
 
 /*
 $("td").css("font-family", "Arial");
@@ -189,8 +176,6 @@ function connect(){
 	    sendmsg([COMM_VERSION,MSG_DUMMY,0,myaddr,apptype,0]);
 	    sendmsg([COMM_VERSION,MSG_ALL_REQ,0,myaddr]);
 	    $(".hdr").css("background-color", "white");
-	    get_translations();
-	    get_comp_data();
         }
 
         webSocket.onmessage = function(msg){
@@ -224,169 +209,50 @@ function parse_msg(data) {
     }
     var msg = message.msg;
     if (!msg) return;
-    //console.log(JSON.stringify(message, null));
-    if (msg[1] == MSG_NAME_INFO) {
-	name_data[msg[4]] = {
-	    last:  msg[5],
-	    first: msg[6],
-	    club:  msg[7]
-	};
 
-	for (var t = 0; t < NUM_TATAMIS; t++) {
-	    if (!show_tatami[t])
-		continue;
-	    for (var p = 0; p < NUM_POS; p++) {
-		var m = match_list[t][p];
-		if (m.blue == msg[4] ||
-		    m.white == msg[4] ||
-		    m.cat == msg[4]) {
-		    draw_match(t+1, p);
-		}
-	    }
-	}
-    } else if (msg[1] == MSG_MATCH_INFO) {
+    if (msg[1] == MSG_MATCH_INFO) {
 	handle_info(msg.slice(4, 13));
     } else if (msg[1] == MSG_11_MATCH_INFO) {
 	for (var i = 0; i < 11; i++) {
 	    handle_info(msg.slice(4+i*9, 13+i*9));
 	}
-    } else if (msg[1] == MSG_LANG) {
-	$(".lang").each(function() {
-	    if ($(this).text() == msg[4])
-		$(this).html(msg[5]);
-	});
-
-	//$(".lang:contains("+msg[4]+")").html(msg[5]);
-    }
-}
-
-function draw_match(tatami, pos) {
-    var m = match_list[tatami-1][pos];
-    var ndata;
-
-    ndata = name_data[m.category];
-    if (ndata) {
-	if (m.category) {
-	    $("#"+mk_id("cat", tatami, pos)).text(ndata.last +" #"+ m.number);
-	    $("#"+mk_id("rnd", tatami, pos)).text(round_to_str(m.round));
-	} else {
-            $("#"+mk_id("cat", tatami, pos)).text(ndata.last);
-            $("#"+mk_id("rnd", tatami, pos)).text(ndata.last);
-	}
-    } else {
-	$("#"+mk_id("cat", tatami, pos)).text("?");
-    }
-
-    ndata = name_data[m.blue];
-    if (ndata) {
-	$("#"+mk_id("bfirst", tatami, pos)).text(ndata.first);
-	$("#"+mk_id("blast", tatami, pos)).text(ndata.last);
-	$("#"+mk_id("bclub", tatami, pos)).text(ndata.club);
-    } else {
-	$("#"+mk_id("blast", tatami, pos)).text("?");
-    }
-
-    if (pos == 0)
-	return;
-
-    ndata = name_data[m.white];
-    if (ndata) {
-	$("#"+mk_id("wfirst", tatami, pos)).text(ndata.first);
-	$("#"+mk_id("wlast", tatami, pos)).text(ndata .last);
-	$("#"+mk_id("wclub", tatami, pos)).text(ndata.club);
-    } else {
-	$("#"+mk_id("wlast", tatami, pos)).text("?");
     }
 }
 
 var last_cat = 0;
 var last_num = 0;
 
-function get_bracket() {
+function first_tatami() {
     for (var i = 0; i < NUM_TATAMIS; i++) {
-	if (show_tatami[i]) {
-	    $("#bracketimage").html("<img src='web?op=5&t="+(i+1)+"&s=1'/>");
-	    break;
-	}
+	if (show_tatami[i])
+            return i + 1;
     }
+    return 0;
+}
+
+function get_bracket(t, cat, num) {
+    if (use_pdf)
+        $("#bracketimage").html("<embed src='web?op=5&t="+t+"&s=2&c="+cat+"&n="+num+"#toolbar=0&zoom=80"+
+                                "' width='"+(screenwidth*3/4)+"' height='"+screenheight+
+                                "' type='application/pdf' zoom='70' frameborder='0' scrollbar='0' toolbar='0' navpanes='0' allowfullscreen />");
+    else
+        $("#bracketimage").html("<img src='web?op=5&t="+t+"&s=1&c="+cat+"&n="+num+"'/>");
 }
 
 function handle_info(msg) {
-    match_list[msg[0]-1][msg[1]] = {
-	    category: msg[2],
-	    number:   msg[3],
-	    blue:     msg[4],
-	    white:    msg[5],
-	    flags:    msg[6],
-	    round:    msg[8],
-	    rest_end: 0
-    };
 
-    if (!name_data[msg[2]]) comp_queue.push(msg[2]);
-    if (!name_data[msg[4]]) comp_queue.push(msg[4]);
-    if (!name_data[msg[5]]) comp_queue.push(msg[5]);
-
-    if (is_active(msg[0]))
-	draw_match(msg[0], msg[1]);
+    var id = mk_id('m', msg[0], msg[1]);
+    $('#' + id).load("getmatch?t=" + msg[0] + "&p=" + msg[1] + " table");
 
     if (show_bracket &&
+        msg[0] == first_tatami() &&
 	msg[1] == 1 &&
 	(msg[2] != last_cat ||
 	 msg[3] != last_num)) {
 	last_cat = msg[2];
 	last_num = msg[3];
-	get_bracket();
+	get_bracket(msg[0], last_cat, last_num);
     }
-}
-
-function get_comp_by_id(ix) {
-    var msg = editcomp;
-    judoka_ix = ix;
-    msg[4] = EDIT_OP_GET_BY_ID;
-    msg[17] = String(ix);
-    sendmsg(msg);
-}
-
-function xlate(en) {
-    var msg = [COMM_VERSION,MSG_LANG,0,myaddr,en,""];
-    sendmsg(msg);
-}
-
-// translations
-
-var words = [];
-var wordix = 0;
-var tmo;
-
-function askone() {
-    if (wordix >= words.length) {
-	window.clearTimeout(tmo);
-	return;
-    }
-    xlate(words[wordix]);
-    wordix++;
-}
-
-function get_translations() {
-    $(".lang").each(function() {
-	words.push($(this).text());
-	//xlate($(this).text());
-    });
-    tmo = window.setInterval(askone, 100);
-}
-
-// competitor req queue
-
-function get_one_comp() {
-    var c = comp_queue[0];
-    if (c) {
-	comp_queue.shift();
-	sendmsg([COMM_VERSION,MSG_NAME_REQ,0,myaddr,c]);
-    }
-}
-
-function get_comp_data() {
-    comptmo = window.setInterval(get_one_comp, 100);
 }
 
 /* Action */
@@ -406,6 +272,19 @@ $(document).ready(function() {
 
 var tablestr;
 
+function get_matches() {
+    //jQuery.ajaxSetup({async:false});
+    for (var i = 0; i < NUM_TATAMIS; i++) {
+	var t = tatami_order[i];
+	if (!is_active(t+1)) continue;
+        for (var j = 0; j < NUM_POS; j++) {
+            var id = mk_id('m', t+1, j);
+            $('#' + id).load("getmatch?t=" + (t+1) + "&p=" + j);
+        }
+    }
+    //jQuery.ajaxSetup({async:true});
+}
+
 function is_active(t) {
     return show_tatami[t-1];
 }
@@ -422,90 +301,57 @@ function make_table() {
     tablestr += "<table id='maintable'><tr><td id='brtd1'>";
 
     tablestr += "<table id='infotable'>";
-
+    
     tablestr += "<tr>";
     for (var i = 0; i < NUM_TATAMIS; i++) {
-	t = tatami_order[i];
+	var t = tatami_order[i];
 	if (!is_active(t+1)) continue;
-	tablestr += "<th class='hdr' colspan='2'>Tatami "+(t+1)+"</th>";
-    }
-    tablestr += "</tr><tr>";
-    for (var i = 0; i < NUM_TATAMIS; i++) {
-	t = tatami_order[i];
-	if (!is_active(t+1)) continue;
-	tablestr += "<td class='winner'><div class='lang'>Prev winner:</div></td>";
-	tablestr += "<td class='winner'>&nbsp;</td>";
-    }
-    tablestr += "</tr><tr>";
-    for (var i = 0; i < NUM_TATAMIS; i++) {
-	t = tatami_order[i];
-	if (!is_active(t+1)) continue;
-	tablestr += "<td class='winner' id='"+mk_id("cat", t+1, 0)+"'>&nbsp;</td>";
-	tablestr += "<td class='winner' id='"+mk_id("bfirst", t+1, 0)+"'>&nbsp;</td>";
-    }
-    tablestr += "</tr><tr>";
-    for (var i = 0; i < NUM_TATAMIS; i++) {
-	t = tatami_order[i];
-	if (!is_active(t+1)) continue;
-	tablestr += "<td class='winner'>&nbsp;</td>";
-	tablestr += "<td class='winner' id='"+mk_id("blast", t+1, 0)+"'>&nbsp;</td>";
-    }
-    tablestr += "</tr><tr>";
-    for (var i = 0; i < NUM_TATAMIS; i++) {
-	t = tatami_order[i];
-	if (!is_active(t+1)) continue;
-	tablestr += "<td class='winner1'>&nbsp;</td>";
-	tablestr += "<td class='winner1' id='"+mk_id("bclub", t+1, 0)+"'>&nbsp;</td>";
+	tablestr += "<th class='hdr' colspan='1'>Tatami "+(t+1)+"</th>";
     }
     tablestr += "</tr>";
 
-    for (var i = 1; i < NUM_POS; i++)
+    for (var i = 0; i < NUM_POS; i++)
 	make_match_rows(i);
 
     tablestr += "</table>";
     tablestr += "</td><td id='brtd2'><div id='bracketimage'></div></td></tr></table>";
 
     $("#info").html(tablestr);
+
+    get_matches();
+    
     init_colors();
 
     if (show_bracket)
-	get_bracket();
+	get_bracket(first_tatami(), 0, 0);
 }
 
 function make_match_rows(num) {
-    tablestr += "<tr>";
+    tablestr += "<tr class='mc'>";
+
     for (var i = 0; i < NUM_TATAMIS; i++) {
-	t = tatami_order[i];
+	var t = tatami_order[i];
 	if (!is_active(t+1)) continue;
-	tablestr += "<td class='cat' id='"+mk_id("cat", t+1, num)+"'>&nbsp;</td>";
-	tablestr += "<td class='rnd' id='"+mk_id("rnd", t+1, num)+"'>&nbsp;</td>";
-    }
-    tablestr += "</tr><tr>";
-    for (var i = 0; i < NUM_TATAMIS; i++) {
-	t = tatami_order[i];
-	if (!is_active(t+1)) continue;
-	tablestr += "<td class='bfirst' id='"+mk_id("bfirst", t+1, num)+"'>&nbsp;</td>";
-	tablestr += "<td class='wfirst' id='"+mk_id("wfirst", t+1, num)+"'>&nbsp;</td>";
-    }
-    tablestr += "</tr><tr>";
-    for (var i = 0; i < NUM_TATAMIS; i++) {
-	t = tatami_order[i];
-	if (!is_active(t+1)) continue;
-	tablestr += "<td class='blast' id='"+mk_id("blast", t+1, num)+"'>&nbsp;</td>";
-	tablestr += "<td class='wlast' id='"+mk_id("wlast", t+1, num)+"'>&nbsp;</td>";
-    }
-    tablestr += "</tr><tr>";
-    for (var i = 0; i < NUM_TATAMIS; i++) {
-	t = tatami_order[i];
-	if (!is_active(t+1)) continue;
-	tablestr += "<td class='bclub' id='"+mk_id("bclub", t+1, num)+"'>&nbsp;</td>";
-	tablestr += "<td class='wclub' id='"+mk_id("wclub", t+1, num)+"'>&nbsp;</td>";
+        tablestr += "<td class='mc' id='" + mk_id("m", t+1, num) + "'>&nbsp;</td>";
     }
     tablestr += "</tr>";
 }
 
 function init_colors() {
+    
     $("#infotable").css("width", "100%");
+    $("#infotable td").css("width", ""+(50/num_tatamis())+"%");
+
+    if (show_bracket) {
+	$("#brtd1").css("width", "25%");
+	$("#brtd2").css("width", "75%");
+    } else {
+	$("#brtd1").css("width", "100%");
+	$("#brtd2").css("width", "0%");
+    }
+
+    return;
+
     //$(".infotable").css("width", "100%");
 
     $("#infotable").css("border", "0");
@@ -516,39 +362,44 @@ function init_colors() {
     $(".rnd").css("background-color", "white");
     $(".bfirst").css("background-color", "white");
     $(".blast").css("background-color", "white");
+    $(".blast").css("font-weight", "bold");
     $(".bclub").css("background-color", "white");
-    if ($("#redbg").prop('checked')) {
-	$(".wfirst").css("background-color", "red");
-	$(".wlast").css("background-color", "red");
-	$(".wclub").css("background-color", "red");
-    } else {
-	$(".wfirst").css("background-color", "blue");
-	$(".wlast").css("background-color", "blue");
-	$(".wclub").css("background-color", "blue");
-    }
     $(".wfirst").css("color", "white");
     $(".wlast").css("color", "white");
+    $(".wlast").css("font-weight", "bold");
     $(".wclub").css("color", "white");
 
+    $("#infotable td").css("border-left-style", "solid");
+    $("#infotable td").css("border-left-width", "1px");
+    $("#infotable td").css("border-right-style", "solid");
+    $("#infotable td").css("border-right-width", "1px");
+    $("#infotable tr").css("border-bottom-style", "solid");
+    $("#infotable tr").css("border-bottom-width", "1px");
+    /*
     $("#infotable td:nth-child(2n+1)").css("border-left-style", "solid");
     $("#infotable td:nth-child(2n+1)").css("border-left-width", "1px");
     $("#infotable tr:nth-child(4n+1)").css("border-bottom-style", "solid");
     $("#infotable tr:nth-child(4n+1)").css("border-bottom-width", "1px");
+    */
+    
 
-    if (show_bracket) {
-	$("#brtd1").css("width", "25%");
-	$("#brtd2").css("width", "75%");
-    } else {
-	$("#brtd1").css("width", "100%");
-	$("#brtd2").css("width", "0%");
-    }
-
-    $("#infotable td").css("width", ""+(50/num_tatamis())+"%");
 
     $(".rb").css("border-right-style", "solid");
     $(".rb").css("border-right-width", "1px");
     $(".lb").css("border-left-style", "solid");
     $(".lb").css("border-left-width", "1px");
+
+    $(".match").css("width", "100%");
+    $(".match td").css("width", "50%");
+    $(".match").css("border", "0");
+    $(".match").css("border-collapse", "collapse");
+    $(".match td").css("border", "0");
+    $(".match td").css("border-collapse", "collapse");
+    $(".match tr").css("border", "0");
+    $(".match tr").css("border-collapse", "collapse");
+
+    $(".cat").css("font-weight", "bold");
+    $("*").css("font-family", "Verdana, Arial");
 }
 
 function round_to_str(round) {
@@ -588,10 +439,12 @@ function round_to_str(round) {
 
 function configure() {
     show_bracket = $("#bracket").prop('checked');
+    use_pdf = $("#pdf").prop('checked');
     var found = false;
     var tatamis = 0;
 
     setCookie("infobracket", show_bracket ? 1 : 0, 30);
+    setCookie("infopdf", use_pdf ? 1 : 0, 30);
 
     for (var i = 0; i < NUM_TATAMIS; i++) {
 	var sel = $("#sel"+(i+1)).prop('checked');
@@ -619,21 +472,22 @@ function configure() {
 
     make_table();
 
-    for (var t = 0; t < NUM_TATAMIS; t++) {
-	if (!show_tatami[t])
-	    continue;
-	for (var p = 0; p < NUM_POS; p++)
-		draw_match(t+1, p);
-    }
-
-    if ($("#redbg").prop('checked'))
-	setCookie("inforedbg", 1, 30);
-    else
-	setCookie("inforedbg", 0, 30);
+    // get translations
+    var words = '{"op":"lang","words":["Full screen mode","Show bracket","Mirror tatami order","Preferences"]}';
+    
+    $.post('json', words, function(data) {
+        //console.log("LANG=",data);
+        if (data.length == 4) {
+            $('#fullscreen').html(data[0]);
+            $('#txtbracket').html(data[1]);
+            $('#txtmirror').html(data[2]);
+            $('#txtpref').html(data[3]);
+        }
+    }, 'json');
 }
 
 $("#bracket").change(configure);
-$("#redbg").change(configure);
+$("#pdf").change(configure);
 $("#mirror").change(configure);
 $(".tsel").change(function() {
     if (show_bracket &&
@@ -670,15 +524,14 @@ function getCookie(cname) {
 
 function read_configuration() {
     var tatamis = getCookie("infotatamis");
-    console.log("tatamis="+tatamis);
     if (tatamis != "") {
 	for (var i = 0; i < NUM_TATAMIS; i++) {
 	    $("#sel"+(i+1)).prop('checked', tatamis & (1 << i));
 	}
     }
 
-    if (getCookie("inforedbg") == "1")
-	$("#redbg").prop('checked', true);
+    if (getCookie("infopdf") == "1")
+	$("#pdf").prop('checked', true);
 
     if (getCookie("infomirror") == "1")
 	$("#mirror").prop('checked', true);

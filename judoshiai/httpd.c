@@ -502,10 +502,68 @@ gboolean is_png(const guchar *png)
 	    png[2] == 78 && png[3] == 71);
 }
 
+static gchar *get_bracket_file_name(gint catid, gint type)
+{
+    gchar buf[200];
+    const gchar *dir = g_get_tmp_dir();
+
+    switch (type) {
+    case 0:
+        snprintf(buf, sizeof(buf), "%d.png", catid);
+        break;
+    case 1:
+        snprintf(buf, sizeof(buf), "%d.svg", catid);
+        break;
+    case 2:
+        snprintf(buf, sizeof(buf), "%d.pdf", catid);
+        break;
+    default:
+        return NULL;
+    }
+    gchar *filename = g_build_filename(dir, buf, NULL);
+    return filename;
+}
+
+void set_bracket_status(gint catid, gint c)
+{
+    GStatBuf st;
+    gint i, j;
+    for (i = 0; i <= 2; i++) {
+        gchar *filename = get_bracket_file_name(catid, 0);
+        if (g_stat(filename, &st) == 0) {
+            j = 0;
+            while (j < 5 && g_unlink(filename)) {
+                // cannot rm, wait
+                j++;
+                g_print("Cannot unlink %s, wait (%d)\n", filename, j);
+                g_usleep(100000);
+            }
+        }
+        g_free(filename);
+    }
+}
+
+gint get_bracket_status(gint catid, gint type)
+{
+    GStatBuf st;
+    gint r = 0;
+    gchar *filename = get_bracket_file_name(catid, type);
+    if (g_stat(filename, &st) == 0) {
+        struct timespec mtim = st.st_mtim;
+        time_t now = time(NULL);
+        g_print("%s: time st=%d now=%d diff=%d\n", filename, (int)mtim.tv_sec, (int)now, (int)(now - mtim.tv_sec));
+        if (mtim.tv_sec > now - 10)
+            r = 1;
+    }
+    g_free(filename);
+    return r;
+}
+
 void get_bracket_2(gint tatami, gint catid, gint svg, gint page, struct msg_web_resp *resp)
 {
     tatami--;
 
+    g_print("get_bracket t=%d cat=%d svg=%d\n", tatami, catid, svg);
     if (catid == 0 && tatami >= 0 && tatami < NUM_TATAMIS)
 	catid = next_matches_info[tatami][0].catnum;
 
@@ -519,21 +577,30 @@ void get_bracket_2(gint tatami, gint catid, gint svg, gint page, struct msg_web_
     const gchar *dir = g_get_tmp_dir();
     gchar prefix[64];
     snprintf(prefix, sizeof(prefix), "%d", catid);
-    png_file(catid, dir, prefix);
+
+    if (get_bracket_status(catid, svg) == 0) {
+        g_print("*** WRITE %s/%s\n", dir, prefix);
+        if (svg == 2)
+            pdf_file(catid, dir, prefix);
+        else
+            png_file(catid, dir, prefix);
+    }
 
     gchar buf[200];
     gchar *pngname;
     if (page <= 0) {
-        snprintf(buf, sizeof(buf), "%s.png", prefix);
+        snprintf(buf, sizeof(buf), "%s.%s", prefix, svg == 2 ? "pdf" : "png");
         pngname = g_build_filename(dir, buf, NULL);
         g_strlcpy(resp->u.get_bracket_resp.filename, pngname, sizeof(resp->u.get_bracket_resp.filename));
         g_free(pngname);
     } else {
-        snprintf(buf, sizeof(buf), "%s-%d.png", prefix, page);
+        snprintf(buf, sizeof(buf), "%s-%d.%s", prefix, page, svg == 2 ? "pdf" : "png");
         pngname = g_build_filename(dir, buf, NULL);
         g_strlcpy(resp->u.get_bracket_resp.filename, pngname, sizeof(resp->u.get_bracket_resp.filename));
         g_free(pngname);
     }
+
+    resp->u.get_bracket_resp.svg = svg;
 
 #if 0    
     g_mutex_lock(&cache_lock);
@@ -866,6 +933,21 @@ int run_judotimer(http_parser_t *parser)
     FEND_MIME("text/plain");
 }
 
+int get_match(http_parser_t *parser)
+{
+    gint tatami0 = 0, position = 0;
+    struct MHD_Response *response;
+    string s;
+    
+    gchar *tmp = httpp_get_query_param(parser, "t");
+    if (tmp) tatami0 = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "p");
+    if (tmp) position = atoi(tmp);
+    
+    get_html_match(&s, tatami0, position);
+    FEND;
+}
+
 int get_web(http_parser_t *parser, gint connum)
 {
     gint op;
@@ -948,6 +1030,7 @@ int get_web(http_parser_t *parser, gint connum)
 	break;
 
     default:
+        g_print("UNKNOWN WEB OP %d\n", op);
         goto err;
     }
 
@@ -956,10 +1039,10 @@ int get_web(http_parser_t *parser, gint connum)
     start = time(NULL);
     
     while (!g_atomic_int_get(&resp->ready) &&
-           time(NULL) < start + 10) {
+           time(NULL) < start + 5) {
         g_usleep(50000);
     }
-    if (time(NULL) >= start + 10 ||
+    if (time(NULL) >= start + 5 ||
         g_atomic_int_get(&resp->ready) != MSG_WEB_RESP_OK) {
         g_printerr("NO WEB REPLY\n");
         return reply_web(parser, NULL);
@@ -1003,6 +1086,7 @@ int reply_web(http_parser_t *parser, struct msg_web_resp *resp)
         }
 
         if (fd == INVALID_HANDLE_VALUE) {
+            g_print("WEB RESP: FILE %s NOT FOUND!\n", resp->u.get_bracket_resp.filename);
             response = MHD_create_response_from_buffer(strlen (PAGE),
                                                        (void *) PAGE,
                                                        MHD_RESPMEM_PERSISTENT);
@@ -1022,7 +1106,8 @@ int reply_web(http_parser_t *parser, struct msg_web_resp *resp)
             return MHD_NO;
         }
 
-        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, "image/png");
+        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                resp->u.get_bracket_resp.svg == 2 ? "application/pdf" : "image/png");
         int ret = MHD_queue_response(parser, MHD_HTTP_OK, response);
         MHD_destroy_response(response);
         return ret;
@@ -1928,7 +2013,7 @@ int analyze_http(void *cls,
 
     g_printerr("%s %s conn=%p *ptr=%p upload_data=%p upload_data_size=%d\n", method, url, connection, *ptr,
                upload_data, (int)*upload_data_size);
-    
+
     if (!strcmp(method, MHD_HTTP_METHOD_POST)) {
         struct UploadContext *uc = *ptr;
 
@@ -1960,7 +2045,7 @@ int analyze_http(void *cls,
             return MHD_YES;
         }
 
-        //g_printerr("End of %d bytes of data\n", uc->len);
+        g_printerr("End of %d bytes of data %s\n", uc->len, uc->data);
         cJSON *json = cJSON_Parse(uc->data);
         free(uc->data);
         free(uc);
@@ -2054,6 +2139,8 @@ int analyze_http(void *cls,
     else if (!strcmp(url, "/web") ||
              !strcmp(url, "/www/web"))
         return get_web(connection, 0/*connum*/);
+    else if (!strcmp(url, "/getmatch"))
+        get_match(connection);
     else if (!strcmp(url, "/js.png"))
         return get_js_png(connection, "");
     else if (!strcmp(url, "/index.html"))
