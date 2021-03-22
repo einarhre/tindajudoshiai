@@ -63,6 +63,10 @@
     int _item;                                                          \
     do { cJSON *tmp = cJSON_GetObjectItem(_root, #_item); JSON_CHECK(tmp); \
         _item = tmp->valueint; } while (0)
+#define JSON_GET_LIST(_root, _item)              \
+    struct cJSON *_item;                                                          \
+    do { cJSON *tmp = cJSON_GetObjectItem(_root, #_item); JSON_CHECK(tmp); \
+        _item = tmp->child; } while (0)
 #define JSON_OP(_op) (!strcmp(op, #_op))
     
 
@@ -626,6 +630,14 @@ void msg_received(struct message *input_msg)
                 json_add_judoka_data(out, j);
 
                 resp->u.json.json = out;
+            } else if (JSON_OP(lang)) {
+                JSON_GET_LIST(root, words);
+                cJSON *out = cJSON_CreateArray();
+                while (words) {
+                    cJSON_AddItemToArray(out, cJSON_CreateString(_(words->valuestring)));
+                    words = words->next;
+                }
+                resp->u.json.json = out;
             }
 
         json_end:
@@ -791,7 +803,7 @@ static gboolean send_message_to_application[NUM_MESSAGES][NUM_APPLICATION_TYPES]
     {TRUE,  FALSE, TRUE , FALSE, FALSE, FALSE, FALSE,  TRUE}, // MSG_UPDATE_LABEL,
     {FALSE, FALSE, FALSE, FALSE, TRUE , TRUE , FALSE, FALSE}, // MSG_EDIT_COMPETITOR,
     {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_SCALE,
-    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE,  TRUE}, // MSG_11_NAME_INFO,
+    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE,  TRUE}, // MSG_11_MATCH_INFO,
     {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_EVENT,
     {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_WEB,
     {TRUE,  FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE}, // MSG_LANG,
