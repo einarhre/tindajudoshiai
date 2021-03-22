@@ -1091,6 +1091,10 @@ static void analyze_ssdp(gchar *rec, struct sockaddr_in *client)
 gpointer ssdp_thread(gpointer args)
 {
     SOCKET sock_in, sock_out;
+#if (APP_NUM == APPLICATION_TYPE_SHIAI)
+    SOCKET sock_mdns;
+    struct sockaddr_in mdns_local, mdns_remote;
+#endif
     gint ret;
     struct sockaddr_in name_out, name_in;
     struct sockaddr_in clientsock;
@@ -1142,6 +1146,40 @@ gpointer ssdp_thread(gpointer args)
         perror("SSDP setsockopt");
     }
 
+#if (APP_NUM == APPLICATION_TYPE_SHIAI)
+    // mDNS
+
+    if ((sock_mdns = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
+        perror("mDNS socket");
+        goto out;
+    }
+
+    if (setsockopt(sock_mdns, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)) < 0) {
+        perror("setsockopt (SO_REUSEADDR)");
+    }
+
+    memset((gchar *)&mdns_local, 0, sizeof(mdns_local));
+    mdns_local.sin_family = AF_INET;
+    mdns_local.sin_port = htons(5353);
+    mdns_local.sin_addr.s_addr = htonl(INADDR_ANY);
+    if (bind(sock_mdns, (struct sockaddr *)&mdns_local, sizeof(mdns_local)) == -1) {
+        perror("mDNS bind");
+        goto out;
+    }
+
+    memset((gchar *)&mdns_remote, 0, sizeof(mdns_remote));
+    mdns_remote.sin_family = AF_INET;
+    mdns_remote.sin_port = htons(5353);
+    mdns_remote.sin_addr.s_addr = inet_addr("224.0.0.251");
+    
+    memset(&mreq, 0, sizeof(mreq));
+    mreq.imr_multiaddr.s_addr = inet_addr("224.0.0.251");
+    mreq.imr_interface.s_addr = htonl(INADDR_ANY);
+    if (setsockopt(sock_mdns, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void *)&mreq, sizeof(mreq)) == -1) {
+        perror("mDNS setsockopt");
+    }
+#endif
+    
     // transmitting socket
 
     if ((sock_out = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
@@ -1169,7 +1207,10 @@ gpointer ssdp_thread(gpointer args)
     FD_ZERO(&fds);
     FD_SET(sock_in, &fds);
     FD_SET(sock_out, &fds);
-
+#if (APP_NUM == APPLICATION_TYPE_SHIAI)
+    FD_SET(sock_mdns, &fds);
+#endif
+    
     for ( ; *((gboolean *)args) ; )   /* exit loop when flag is cleared */
     {
 	struct timeval timeout;
@@ -1240,6 +1281,63 @@ gpointer ssdp_thread(gpointer args)
                 }
             } // len > 0
         }
+
+#if (APP_NUM == APPLICATION_TYPE_SHIAI)
+        if (FD_ISSET(sock_mdns, &read_fd)) {
+            socklen = sizeof(clientsock);
+            if ((len = recvfrom(sock_mdns, inbuf, sizeof(inbuf)-1, 0,
+                                (struct sockaddr *)&clientsock, &socklen)) == (size_t)-1) {
+                perror("mDNS recvfrom");
+                goto out;
+            }
+
+            if (len > 0) {
+#define GET_SHORT(_i) ((inbuf[_i]<<8) | inbuf[_i+1])
+#define SET_SHORT(_i, _v) inbuf[_i] = (_v >> 8); inbuf[_i+1] = (_v & 0xff)
+                guint16 id = GET_SHORT(0);
+                guint16 flags = GET_SHORT(2);
+                guint16 questions = GET_SHORT(4);
+                guint16 answer = GET_SHORT(6);
+                guint16 auth = GET_SHORT(8);
+                guint16 addit = GET_SHORT(10);
+
+                if (questions == 1 && (flags & 0xf000) == 0x0000) {
+                    guchar *names;
+                    gint n = 0, k = 12, i;
+                    guchar strlen = inbuf[k++];
+                    while (strlen && k < len) {
+                        if (n == 0)
+                            names = &inbuf[k];
+                        n++;
+                        k += strlen;
+                        strlen = inbuf[k];
+                        k++;
+                    }
+
+                    guint16 type = GET_SHORT(k); 
+                    guint16 klass = GET_SHORT(k + 2);
+                    if (type == 0x0001 && klass == 0x0001 && n > 0 && strncmp(names[0], "judoshiai", 9) == 0) {
+                        SET_SHORT(2, 0x8400); // flags
+                        SET_SHORT(4, 0x0000); // questions
+                        SET_SHORT(6, 0x0001); // answers
+                        SET_SHORT(8, 0x0000); // auth
+                        SET_SHORT(10, 0x0000); // addit
+                        SET_SHORT(k + 2, 0x8001); // class
+                        SET_SHORT(k + 4, 0x0000); // time to live msb
+                        SET_SHORT(k + 6, 0x0078); // time to live lsb, 2 min
+                        SET_SHORT(k + 8, 0x0004); // data length
+                        inbuf[k + 13] = (my_ip_address >> 24) & 0xff;
+                        inbuf[k + 12] = (my_ip_address >> 16) & 0xff;
+                        inbuf[k + 11] = (my_ip_address >> 8) & 0xff;
+                        inbuf[k + 10] = (my_ip_address >> 0) & 0xff;
+                        
+                        ret = sendto(sock_mdns, inbuf, len + 10, 0,
+                                     (struct sockaddr *)&mdns_remote, sizeof(mdns_remote));
+                    }
+                }
+            } // len > 0
+        }
+#endif
 
         time_t now = time(NULL);
         static time_t last_notify = 0;
