@@ -577,6 +577,9 @@ const gchar *get_club_text(struct judoka *j, gint flags)
     gchar *p;
     struct club_name_data *data = NULL;
 
+    if (!j)
+        return "";
+
     if (!gdpr_ok(j))
 	return "Xxx";
 
