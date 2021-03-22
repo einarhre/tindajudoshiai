@@ -11,6 +11,7 @@
 #include "comm.h"
 #include "avl.h"
 #include "custom-category.h"
+#include "common-utils.h"
 
 #ifdef ENABLE_NLS
 #include <libintl.h>
@@ -729,6 +730,7 @@ struct competitor_data {
     gint status;
     gint position;
     gboolean info_sent;
+    struct judoka j;
 };
 
 struct club_data {
@@ -1175,6 +1177,8 @@ extern gchar *get_match_number_text(gint category, gint number);
 extern void send_matches(gint tatami);
 extern void send_match(gint tatami, gint pos, struct match *m);
 extern void send_next_matches(gint category, gint tatami, struct match *nm);
+extern int get_html_match(string *s, gint tatami0, gint position);
+
 
 /* sheets */
 extern void paint_category(struct paint_data *pd);
@@ -1283,6 +1287,7 @@ extern void avl_set_category_rest_times(void);
 extern gint avl_get_category_status_by_name(const gchar *name);
 extern void set_category_to_queue(struct category_data *data);
 extern void avl_set_competitor(gint index, struct judoka *j);
+extern struct judoka *avl_get_competitor(gint index);
 extern gint avl_get_competitor_hash(gint index);
 extern void avl_set_competitor_last_match_time(gint index);
 extern void avl_reset_competitor_last_match_time(gint index);
@@ -1331,6 +1336,7 @@ extern void make_backup(void);
 
 /* print */
 extern void png_file(gint ctg, const gchar *dir, const gchar *prefix);
+extern void pdf_file(gint ctg, const gchar *dir, const gchar *prefix);
 extern void write_png(GtkWidget *menuitem, gpointer userdata);
 extern void do_print(GtkWidget *menuitem, gpointer userdata);
 extern void print_doc(GtkWidget *menuitem, gpointer userdata);
@@ -1426,6 +1432,7 @@ extern void show_msg(GtkTextBuffer *buf, gchar *tagname, gchar *format, ...);
 /* http */
 extern void clear_cache_by_cat(gint cat);
 extern void get_bracket_2(gint tatami, gint catid, gint svg, gint page, struct msg_web_resp *resp);
+extern void set_bracket_status(gint catid, gint c);
 
 /* match order */
 extern void read_match_order_dialog(GtkWidget *w, gpointer arg);
