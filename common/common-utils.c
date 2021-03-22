@@ -251,6 +251,20 @@ gint string_concat(string *s, gchar *fmt, ...)
     return s->len;
 }
 
+int string_clone(string *dst, string *src)
+{
+    if (src->buf) {
+        dst->buf = g_malloc(src->size);
+        memcpy(dst->buf, src->buf, src->len + 1);
+    } else
+        dst->buf = NULL;
+
+    dst->len = src->len;
+    dst->size = src->size;
+    return 0;
+}
+
+
 #if defined(__WIN32__) || defined(WIN32)
 
 void print_trace(void)

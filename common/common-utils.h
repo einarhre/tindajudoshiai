@@ -107,6 +107,7 @@ void string_init(string *s);
 void string_free(string *s);
 int string_concat(string *s, char *fmt, ...);
 int string_append(string *s, string *append_to_tail);
+int string_clone(string *dst, string *src);
 
 /***/
 
