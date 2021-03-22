@@ -105,6 +105,18 @@ static int free_avl_key(void *key)
     return 1;
 }
 
+static int free_competitor_avl_key(void *key)
+{
+    struct competitor_data *key1 = key;
+
+    g_free(key1->j.last); g_free(key1->j.first); g_free(key1->j.club);
+    g_free(key1->j.regcategory); g_free(key1->j.category); g_free(key1->j.country);
+    g_free(key1->j.id); g_free(key1->j.comment); g_free(key1->j.coachid);
+
+    g_free(key);
+    return 1;
+}
+
 static int free_club_avl_key(void *key)
 {
     struct club_data *key1 = key;
@@ -328,6 +340,8 @@ gint avl_get_competitor_hash(gint index)
     return 0;
 }
 
+#define STRDUP(_s) data->j._s = g_strdup(j->_s ? j->_s : "")
+
 void avl_set_competitor(gint index, struct judoka *j)
 {
     const gchar *first = j->first;
@@ -353,13 +367,17 @@ void avl_set_competitor(gint index, struct judoka *j)
     gint crc1 = pwcrc32((guchar *)last, strlen(last));
     gint crc2 = pwcrc32((guchar *)first, strlen(first));
     data->hash = crc1 ^ crc2;
-	
+    data->j = *j;
+    STRDUP(last); STRDUP(first); STRDUP(club);
+    STRDUP(regcategory); STRDUP(category); STRDUP(country);
+    STRDUP(id); STRDUP(comment); STRDUP(coachid);
+    
     datah->hash = data->hash;
     datah->last_match_time = 0;
 
     if (avl_get_by_key(competitors_tree, data, &data1) == 0) {
         /* data exists */
-        avl_delete(competitors_tree, data, free_avl_key);
+        avl_delete(competitors_tree, data, free_competitor_avl_key);
     }
     avl_insert(competitors_tree, data);
 
@@ -372,6 +390,21 @@ void avl_set_competitor(gint index, struct judoka *j)
 
     // data for coach display
     write_competitor_for_coach_display(j);
+}
+
+struct judoka *avl_get_competitor(gint index)
+{
+    struct competitor_data data, *data1;
+
+    if (!competitors_tree)
+        return NULL;
+
+    data.index = index;
+    if (avl_get_by_key(competitors_tree, &data, (void **)&data1) == 0) {
+        return &(data1->j);
+    }
+
+    return NULL;
 }
 
 void avl_set_competitor_last_match_time(gint index)
@@ -722,7 +755,7 @@ void init_trees(void)
     categories_tree = avl_tree_new(categories_avl_compare, NULL);
 
     if (competitors_tree)
-        avl_tree_free(competitors_tree, free_avl_key);
+        avl_tree_free(competitors_tree, free_competitor_avl_key);
     competitors_tree = avl_tree_new(competitors_avl_compare, NULL);
 
     if (competitors_hash_tree)
