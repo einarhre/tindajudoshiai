@@ -599,14 +599,17 @@ msgid "Categories"
 msgstr "קטגוריות"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze exported"
 msgstr "הסר הקפאה ממיוצאים"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze imported"
 msgstr "הסר הקפאה ממיובאים"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze this"
 msgstr "הסר הקפאה"
 
@@ -615,7 +618,7 @@ msgid "Move Matches"
 msgstr "הזז קרבות"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
-#: ../judoshiai/popup-menu.c
+#: ../judoshiai/match-table.c ../judoshiai/popup-menu.c
 msgid "Show Sheet"
 msgstr "הצג דף"
 
@@ -951,8 +954,8 @@ msgstr ""
 msgid "Hide name if age less than"
 msgstr ""
 
-#: ../judoshiai/httpd.c ../judoshiai/match-graph.c ../judoshiai/print.c
-#: ../judoshiai/write-results.c
+#: ../judoshiai/httpd.c ../judoshiai/match-graph.c ../judoshiai/match-table.c
+#: ../judoshiai/print.c ../judoshiai/write-results.c
 msgid "Matches"
 msgstr "קרבות"
 
@@ -1309,32 +1312,33 @@ msgstr "מותאם אישית"
 msgid "GER Double Repechage"
 msgstr ""
 
-#: ../judoshiai/match-graph.c ../judoinfo/main.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
+#: ../judoinfo/main.c
 msgid "Prev. winner:"
 msgstr "מנצח קודם"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 #, c-format
 msgid "Delayed"
 msgstr "מעוכב"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Next match"
 msgstr "קרב הבא"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Preparing"
 msgstr "מתכונן"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Delay the match"
 msgstr "דחה הקרב"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 msgid "Remove delay"
 msgstr "הסר עיכוב"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 msgid "Freeze match order"
 msgstr "הקפא סדר קרבות"
 
@@ -1500,6 +1504,10 @@ msgid "weights updated"
 msgstr "משקלים עודכנו"
 
 #: ../judoshiai/menuacts.c
+msgid "Add competitor"
+msgstr ""
+
+#: ../judoshiai/menuacts.c
 msgid "Do Backup"
 msgstr "בצע גיבוי"
 
@@ -1574,6 +1582,18 @@ msgstr "הוסף הכל מקובץ תחרות אחר"
 #: ../judoshiai/menus.c
 msgid "Update Weights From Another Shiai"
 msgstr "עדכן משקל מקוץ תחרות אחר"
+
+#: ../judoshiai/menus.c
+msgid "JSON"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Read From Directory"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Write To File"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Remove Unweighted"

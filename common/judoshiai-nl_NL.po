@@ -599,14 +599,17 @@ msgid "Categories"
 msgstr "Categorieën"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze exported"
 msgstr "Ontgrendel geëxporteerde"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze imported"
 msgstr "Ontgrendel geïmporteerde"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze this"
 msgstr "Ontgrendel deze"
 
@@ -615,7 +618,7 @@ msgid "Move Matches"
 msgstr "Verplaats Wedstrijden"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
-#: ../judoshiai/popup-menu.c
+#: ../judoshiai/match-table.c ../judoshiai/popup-menu.c
 msgid "Show Sheet"
 msgstr "Pagina weergeven"
 
@@ -952,8 +955,8 @@ msgstr ""
 msgid "Hide name if age less than"
 msgstr ""
 
-#: ../judoshiai/httpd.c ../judoshiai/match-graph.c ../judoshiai/print.c
-#: ../judoshiai/write-results.c
+#: ../judoshiai/httpd.c ../judoshiai/match-graph.c ../judoshiai/match-table.c
+#: ../judoshiai/print.c ../judoshiai/write-results.c
 msgid "Matches"
 msgstr "Wedstrijden"
 
@@ -1315,32 +1318,33 @@ msgstr "Aangepast"
 msgid "GER Double Repechage"
 msgstr ""
 
-#: ../judoshiai/match-graph.c ../judoinfo/main.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
+#: ../judoinfo/main.c
 msgid "Prev. winner:"
 msgstr "Vorige winnaar:"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 #, c-format
 msgid "Delayed"
 msgstr "Uitgesteld"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Next match"
 msgstr "Volgende wedstrijd"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Preparing"
 msgstr "Voorbereiding"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Delay the match"
 msgstr "Wedstrijd uitstellen"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 msgid "Remove delay"
 msgstr "Verwijder vertraging"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 msgid "Freeze match order"
 msgstr "Vergrendel wedstrijd volgorde"
 
@@ -1506,6 +1510,10 @@ msgid "weights updated"
 msgstr "gewichten bijgewerkt"
 
 #: ../judoshiai/menuacts.c
+msgid "Add competitor"
+msgstr ""
+
+#: ../judoshiai/menuacts.c
 msgid "Do Backup"
 msgstr "Maak Backup"
 
@@ -1580,6 +1588,18 @@ msgstr "Alles toevoegen uit andere Shiai"
 #: ../judoshiai/menus.c
 msgid "Update Weights From Another Shiai"
 msgstr "Gewichten bijwerken vanuit een andere Shiai"
+
+#: ../judoshiai/menus.c
+msgid "JSON"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Read From Directory"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Write To File"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Remove Unweighted"

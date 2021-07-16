@@ -599,14 +599,17 @@ msgid "Categories"
 msgstr "Sarjat"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze exported"
 msgstr "Vapauta viedyt"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze imported"
 msgstr "Vapauta tuodut"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze this"
 msgstr "Vapauta tämä"
 
@@ -615,7 +618,7 @@ msgid "Move Matches"
 msgstr "Siirrä otteluita"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
-#: ../judoshiai/popup-menu.c
+#: ../judoshiai/match-table.c ../judoshiai/popup-menu.c
 msgid "Show Sheet"
 msgstr "Näytä kaavio"
 
@@ -951,8 +954,8 @@ msgstr "Piilota sarja jos ikä vähemmän kuin"
 msgid "Hide name if age less than"
 msgstr "Piilota nimi jos ikä vähemmän kuin"
 
-#: ../judoshiai/httpd.c ../judoshiai/match-graph.c ../judoshiai/print.c
-#: ../judoshiai/write-results.c
+#: ../judoshiai/httpd.c ../judoshiai/match-graph.c ../judoshiai/match-table.c
+#: ../judoshiai/print.c ../judoshiai/write-results.c
 msgid "Matches"
 msgstr "Ottelut"
 
@@ -1315,32 +1318,33 @@ msgstr "Mukautettu"
 msgid "GER Double Repechage"
 msgstr ""
 
-#: ../judoshiai/match-graph.c ../judoinfo/main.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
+#: ../judoinfo/main.c
 msgid "Prev. winner:"
 msgstr "Ed. voittaja:"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 #, c-format
 msgid "Delayed"
 msgstr "Viivytetyt"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Next match"
 msgstr "Seuraava ottelu"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Preparing"
 msgstr "Valmistautuvat"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Delay the match"
 msgstr "Viivytä ottelua"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 msgid "Remove delay"
 msgstr "Poista viivytys"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 msgid "Freeze match order"
 msgstr "Jäädytä ottelujärjestys"
 
@@ -1508,6 +1512,10 @@ msgid "weights updated"
 msgstr "painoa kopioitu"
 
 #: ../judoshiai/menuacts.c
+msgid "Add competitor"
+msgstr ""
+
+#: ../judoshiai/menuacts.c
 msgid "Do Backup"
 msgstr "Tee varmuuskopio"
 
@@ -1582,6 +1590,18 @@ msgstr "Lisää kaikki toisesta salikisasta"
 #: ../judoshiai/menus.c
 msgid "Update Weights From Another Shiai"
 msgstr "Kopioi painot toisesta tietokannasta"
+
+#: ../judoshiai/menus.c
+msgid "JSON"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Read From Directory"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Write To File"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Remove Unweighted"

@@ -599,14 +599,17 @@ msgid "Categories"
 msgstr "Flokkar"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze exported"
 msgstr "Leyfa útflutning"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze imported"
 msgstr "Leyfa innflutning"
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c
 msgid "Unfreeze this"
 msgstr "Leyfa þetta"
 
@@ -615,7 +618,7 @@ msgid "Move Matches"
 msgstr ""
 
 #: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
-#: ../judoshiai/popup-menu.c
+#: ../judoshiai/match-table.c ../judoshiai/popup-menu.c
 msgid "Show Sheet"
 msgstr "Sýna blað"
 
@@ -952,8 +955,8 @@ msgstr ""
 msgid "Hide name if age less than"
 msgstr ""
 
-#: ../judoshiai/httpd.c ../judoshiai/match-graph.c ../judoshiai/print.c
-#: ../judoshiai/write-results.c
+#: ../judoshiai/httpd.c ../judoshiai/match-graph.c ../judoshiai/match-table.c
+#: ../judoshiai/print.c ../judoshiai/write-results.c
 msgid "Matches"
 msgstr "Viðureignir"
 
@@ -1314,32 +1317,33 @@ msgstr ""
 msgid "GER Double Repechage"
 msgstr ""
 
-#: ../judoshiai/match-graph.c ../judoinfo/main.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
+#: ../judoinfo/main.c
 msgid "Prev. winner:"
 msgstr "Síðasti sigurvegari:"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 #, c-format
 msgid "Delayed"
 msgstr "Í bið"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Next match"
 msgstr "Næsta viðureign"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Preparing"
 msgstr "Tilbúin"
 
-#: ../judoshiai/match-graph.c ../judoshiai/matches.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c ../judoshiai/matches.c
 msgid "Delay the match"
 msgstr "Seinka viðureign"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 msgid "Remove delay"
 msgstr "Fjarlægja seinkun"
 
-#: ../judoshiai/match-graph.c
+#: ../judoshiai/match-graph.c ../judoshiai/match-table.c
 msgid "Freeze match order"
 msgstr "Frysta viðureignar röð"
 
@@ -1505,6 +1509,10 @@ msgid "weights updated"
 msgstr ""
 
 #: ../judoshiai/menuacts.c
+msgid "Add competitor"
+msgstr ""
+
+#: ../judoshiai/menuacts.c
 msgid "Do Backup"
 msgstr "Taktu afrit"
 
@@ -1578,6 +1586,18 @@ msgstr "Bæta við af öðru móti"
 
 #: ../judoshiai/menus.c
 msgid "Update Weights From Another Shiai"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "JSON"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Read From Directory"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Write To File"
 msgstr ""
 
 #: ../judoshiai/menus.c
