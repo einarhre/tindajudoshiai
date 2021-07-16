@@ -312,9 +312,15 @@ static volatile struct message message_queue[MSG_QUEUE_LEN];
 static volatile gint msg_put = 0, msg_get = 0;
 G_LOCK_DEFINE_STATIC(msg_mutex);
 
+static struct message last_labels_sent[MAX_LABEL_NUMBER];
+
 void send_label_msg(struct message *msg)
 {
     msg->sender = tatami;
+    if (msg->type == MSG_UPDATE_LABEL &&
+        msg->u.update_label.label_num < MAX_LABEL_NUMBER)
+        last_labels_sent[msg->u.update_label.label_num] = *msg;
+        
     G_LOCK(msg_mutex);
     message_queue[msg_put++] = *msg;
     if (msg_put >= MSG_QUEUE_LEN)
@@ -426,6 +432,13 @@ gpointer master_thread(gpointer args)
             g_print("Master: new connection[%d]: fd=%d addr=%s\n",
                     i, (int)tmp_fd, inet_ntoa(caller.sin_addr));
             FD_SET(tmp_fd, &read_fd);
+
+            for (i = 0; i < MAX_LABEL_NUMBER; i++) {
+                if (last_labels_sent[i].u.update_label.label_num == i &&
+                    last_labels_sent[i].type == MSG_UPDATE_LABEL)
+                    if (send_msg(tmp_fd, &last_labels_sent[i], 0) < 0)
+                        perror("Send to slave");
+            }
         }
 
         for (i = 0; i < NUM_CONNECTIONS; i++) {

@@ -72,6 +72,7 @@
 #define SET_TIMER_VALUE     140
 #define SET_TIMER_OSAEKOMI_COLOR 141
 #define SET_TIMER_RUN_COLOR 142
+#define MAX_LABEL_NUMBER    143
 
 extern GTimer *timer;
 
