@@ -1302,7 +1302,7 @@ gpointer ssdp_thread(gpointer args)
                 guint16 addit = GET_SHORT(10);
 
                 if (questions == 1 && (flags & 0xf000) == 0x0000) {
-                    guchar *names;
+                    guchar *names = NULL;
                     gint n = 0, k = 12, i;
                     guchar strlen = inbuf[k++];
                     while (strlen && k < len) {
@@ -1316,7 +1316,8 @@ gpointer ssdp_thread(gpointer args)
 
                     guint16 type = GET_SHORT(k); 
                     guint16 klass = GET_SHORT(k + 2);
-                    if (type == 0x0001 && klass == 0x0001 && n > 0 && strncmp(names[0], "judoshiai", 9) == 0) {
+                    if (type == 0x0001 && klass == 0x0001 && n > 0 &&
+                        names && strncmp(names, "judoshiai", 9) == 0) {
                         SET_SHORT(2, 0x8400); // flags
                         SET_SHORT(4, 0x0000); // questions
                         SET_SHORT(6, 0x0001); // answers
