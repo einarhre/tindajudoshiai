@@ -614,21 +614,17 @@ void msg_received(struct message *input_msg)
             cJSON *root = input_msg->u.web.u.json.json;
             JSON_GET_STR(root, op);
             j = NULL;
-            
             if (JSON_OP(getcomp) || JSON_OP(setweight)) {
-                JSON_GET_STR(root, id);
-                JSON_CHECK(j = find_judoka_by_id(id));
-
+                JSON_GET_INT(root, ix);
+                JSON_CHECK(j = get_data(ix));
                 if (JSON_OP(setweight)) {
                     JSON_GET_INT(root, weight);
                     j->weight = weight;
                     db_update_judoka(j->index, j);
                     display_one_judoka(j);
                 }
-
                 cJSON *out = cJSON_CreateObject();
                 json_add_judoka_data(out, j);
-
                 resp->u.json.json = out;
             } else if (JSON_OP(lang)) {
                 JSON_GET_LIST(root, words);
