@@ -42,6 +42,9 @@
 #include <string.h>
 #ifndef EMSCRIPTEN
 #include <glib.h>
+#else
+#define gint int
+#define gchar char
 #endif
 #include "comm.h"
 #include "cJSON.h"
