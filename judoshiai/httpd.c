@@ -1897,10 +1897,15 @@ int get_file(struct MHD_Connection *connection, const char *url)
 	    mime = "application/pdf";
         } else if (!strcmp(p2, "swf")) {
 	    mime = "application/x-shockwave-flash";
-        } else if (!strcmp(p2, "js")) {
+        } else if (!strcmp(p2, "js") || !strcmp(p2, "mem") || !strcmp(p2, "map")) {
 	    mime = "text/javascript";
 	    dir = "js";
         } else if (!strcmp(p2, "map")) {
+	    dir = "js";
+        } else if (!strcmp(p2, "data")) {
+	    dir = "html";
+        } else if (!strcmp(p2, "wasm")) {
+            mime = "application/wasm";
 	    dir = "js";
         } else if (!strcmp(p2, "ttf")) {
 	    mime = "application/octet-stream";
@@ -2011,8 +2016,7 @@ int analyze_http(void *cls,
     (void)upload_data;       /* Unused. Silent compiler warning. */
     (void)upload_data_size;  /* Unused. Silent compiler warning. */
 
-    g_printerr("%s %s conn=%p *ptr=%p upload_data=%p upload_data_size=%d\n", method, url, connection, *ptr,
-               upload_data, (int)*upload_data_size);
+    //g_printerr("%s %s conn=%p *ptr=%p upload_data=%p upload_data_size=%d\n", method, url, connection, *ptr, upload_data, (int)*upload_data_size);
 
     if (!strcmp(method, MHD_HTTP_METHOD_POST)) {
         struct UploadContext *uc = *ptr;
@@ -2031,21 +2035,22 @@ int analyze_http(void *cls,
         }
 
         if (*upload_data_size != 0) {
-            if (*upload_data_size >= uc->space - uc->len) {
-                while (*upload_data_size >= uc->space - uc->len)
+            if (*upload_data_size >= uc->space - uc->len - 1) {
+                while (*upload_data_size >= uc->space - uc->len - 1)
                     uc->space *= 2;
                 uc->data = realloc(uc->data, uc->space);
                 //g_printerr("Realloc space=%d\n", uc->space);
             }
             memcpy(uc->data + uc->len, upload_data, *upload_data_size);
             uc->len += *upload_data_size;
+            uc->data[uc->len] = 0;
             //g_printerr("Got %d bytes\n", (int)*upload_data_size);
             //g_printerr("-- data:\n  %s\n", upload_data);
             *upload_data_size = 0;
             return MHD_YES;
         }
 
-        g_printerr("End of %d bytes of data %s\n", uc->len, uc->data);
+        //g_printerr("End of %d bytes of data %s\n", uc->len, uc->data);
         cJSON *json = cJSON_Parse(uc->data);
         free(uc->data);
         free(uc);
@@ -2055,7 +2060,7 @@ int analyze_http(void *cls,
         struct message msg;
         struct msg_web_resp resp;
 
-        resp.request = MSG_WEB_GET_ERR;
+        //resp.request = MSG_WEB_GET_ERR;
         resp.ready = 0;
         resp.request = MSG_WEB_JSON;
         resp.u.json.json = NULL;
@@ -2074,6 +2079,7 @@ int analyze_http(void *cls,
                time(NULL) < start + 10) {
             g_usleep(50000);
         }
+
         if (time(NULL) >= start + 10 ||
             g_atomic_int_get(&resp.ready) != MSG_WEB_RESP_OK) {
             g_printerr("NO JSON REPLY resp.ready=%d\n", resp.ready);
