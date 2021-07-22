@@ -92,8 +92,10 @@ void get_text_extents(cairo_t *cr, gchar *txt, PangoFontDescription *desc,
 		if (end) *end = 0;					\
 	}} while (0)
 
+#ifndef EMSCRIPTEN
 void color_dec_to_rgba(gint dec, GdkRGBA *rgba);
 gint color_rgba_to_dec(GdkRGBA *rgba);
+#endif
 
 /** string functions **/
 

@@ -13,10 +13,15 @@
 #ifndef __BINRELOC_H__
 #define __BINRELOC_H__
 
+#ifndef EMSCRIPTEN
 #include <glib.h>
+#else // EMSCRIPTEN
+#include "../common/cairowrapper.h"
+#endif // EMSCRIPTEN
 
+#ifndef EMSCRIPTEN
 G_BEGIN_DECLS
-
+#endif
 
 /** These error codes can be returned by br_init(), br_init_lib(), gbr_init() or gbr_init_lib(). */
 typedef enum {
@@ -63,6 +68,8 @@ gchar   *gbr_find_libexec_dir (const gchar *default_libexec_dir);
 gchar   *gbr_find_etc_dir     (const gchar *default_etc_dir);
 
 
+#ifndef EMSCRIPTEN
 G_END_DECLS
+#endif
 
 #endif /* __BINRELOC_H__ */

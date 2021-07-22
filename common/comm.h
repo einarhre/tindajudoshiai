@@ -5,6 +5,7 @@
  * Full copyright text is included in the software package.
  */ 
 
+#include <stdio.h>
 #include <stdint.h>
 
 #include "round.h"
