@@ -1,0 +1,99 @@
+* {
+    font-family: Verdana, Arial;
+}
+#infotable {
+    width: 100%;
+    border: 0;
+    border-collapse: collapse;
+}
+.winner {
+    background-color: yellow;
+}
+.winner1 {
+    background-color: yellow;
+}
+.cat {
+    background-color: white;
+}
+.rnd {
+    background-color: white;
+}
+.bfirst {
+    background-color: white;
+}
+.blast {
+    background-color: white;
+    font-weight: bold;
+}
+.bclub {
+    background-color: white;
+}
+.wfirst {
+    background-color: blue;
+}
+.wlast {
+    background-color: blue;
+}
+.wclub {
+    background-color: blue;
+}
+.wfirst {
+    color: white;
+}
+.wlast {
+    color: white;
+    font-weight: bold;
+}
+.wclub {
+    color: white;
+}
+#infotable .mc {
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-style: solid;
+    border-right-width: 1px;
+
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+#infotableXX tr {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+#brtd1 {
+    width: 100%;
+}
+#brtd2 {
+    width: 0%;
+}
+#infotable td {
+    //width: 33%;
+}
+.rb {
+    border-right-style: solid;
+    border-right-width: 1px;
+}
+.lb {
+    border-left-style: solid;
+    border-left-width: 1px;
+}
+.match {
+    width: 100%;
+    border-collapse: collapse;
+    border: 0;
+}
+.match td {
+    width: 50%;
+    border: 0;
+    border-collapse: collapse;
+}
+.match tr {
+    border: 0;
+    border: 0;
+    border-collapse: collapse;
+}
+.cat {
+    font-weight: bold;
+}
