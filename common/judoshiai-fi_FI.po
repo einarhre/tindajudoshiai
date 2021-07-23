@@ -819,7 +819,7 @@ msgstr "Samoja sijoituksia sarjassa:"
 #: ../judoshiai/db-validate.c
 #, c-format
 msgid "Category %s: seeding %s defined %s times."
-msgstr ""
+msgstr "Sarja %s: sijoittelu %s määritelty %s kertaa."
 
 #: ../judoshiai/db-validate.c
 msgid "Duplicate club seedings:"
@@ -828,7 +828,7 @@ msgstr "Samoja sijoituksia seurassa:"
 #: ../judoshiai/db-validate.c
 #, c-format
 msgid "Club %s: seeding %s defined %s times."
-msgstr ""
+msgstr "Seura %s: sijoittelu %s määritelty %s kertaa."
 
 #: ../judoshiai/db-validate.c
 msgid "Missing category definitions:"
@@ -837,7 +837,7 @@ msgstr "Puuttuvia sarjamäärittelyjä:"
 #: ../judoshiai/db-validate.c
 #, c-format
 msgid "Category %s is not defined."
-msgstr ""
+msgstr "Sarjaa %s ei ole määritelty."
 
 #: ../judoshiai/db-validate.c
 msgid "Category typing errors:"
@@ -1054,7 +1054,7 @@ msgstr "Tyttöteksti:"
 
 #: ../judoshiai/import.c
 msgid "First line is header"
-msgstr ""
+msgstr "Ensimmäinen rivi on otsikko"
 
 #: ../judoshiai/import.c
 msgid "Column Separator:"
@@ -1062,7 +1062,7 @@ msgstr "Sarake-erotin:"
 
 #: ../judoshiai/import.c
 msgid "Quote Character:"
-msgstr ""
+msgstr "Lainausmerkki:"
 
 #: ../judoshiai/import.c
 msgid "UTF-8"
@@ -1513,7 +1513,7 @@ msgstr "painoa kopioitu"
 
 #: ../judoshiai/menuacts.c
 msgid "Add competitor"
-msgstr ""
+msgstr "Lisää kilpailija"
 
 #: ../judoshiai/menuacts.c
 msgid "Do Backup"
@@ -1597,11 +1597,11 @@ msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Read From Directory"
-msgstr ""
+msgstr "Lue hakemistosta"
 
 #: ../judoshiai/menus.c
 msgid "Write To File"
-msgstr ""
+msgstr "Kirjoita tiedostoon"
 
 #: ../judoshiai/menus.c
 msgid "Remove Unweighted"
@@ -1613,7 +1613,7 @@ msgstr "Palauta poistetut"
 
 #: ../judoshiai/menus.c
 msgid "Delete Removed"
-msgstr ""
+msgstr "Poista poistetut"
 
 #: ../judoshiai/menus.c
 msgid "Bar Code Search"
@@ -1637,11 +1637,11 @@ msgstr "Muodosta viralliset sarjat"
 
 #: ../judoshiai/menus.c
 msgid "Init Colors"
-msgstr ""
+msgstr "Alusta värit"
 
 #: ../judoshiai/menus.c
 msgid "Show Colors"
-msgstr ""
+msgstr "Näytä värit"
 
 #: ../judoshiai/menus.c
 msgid "Print All"
@@ -1848,7 +1848,7 @@ msgstr "kaikista valituista sarjoista"
 
 #: ../judoshiai/popup-menu.c
 msgid "Select a color"
-msgstr ""
+msgstr "Valitse väri"
 
 #: ../judoshiai/popup-menu.c
 msgid "already exists"
@@ -1912,7 +1912,7 @@ msgstr "Tulosta valitut akreditointikortit oletuskirjoittimelle"
 
 #: ../judoshiai/popup-menu.c
 msgid "Color..."
-msgstr ""
+msgstr "Väri..."
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Finnish"
@@ -2153,7 +2153,7 @@ msgstr "Lisää ottelu jos joukkueiden pisteet tasan:"
 
 #: ../judoshiai/properties.c
 msgid "Only wins count, ignore match points:"
-msgstr ""
+msgstr "Vain voitot lasketaan, ei pisteitä"
 
 #: ../judoshiai/properties.c
 msgid ""
@@ -2161,12 +2161,16 @@ msgid ""
 "of wins is declared the winner.\n"
 "The remaining contests will not be fought:"
 msgstr ""
+"Joukkue, joka voittaa otteluiden enemmistön\n"
+"on voittaja.\nLoppuja otteluita ei otella:"
 
 #: ../judoshiai/properties.c
 msgid ""
 "The athletes in the drawn category will\n"
 "refight a golden score contest:"
 msgstr ""
+"Ottelijat arvotusta painoluokasta\n"
+"ottelevat uudelleen golden score -säännöillä:"
 
 #: ../judoshiai/properties.c
 msgid ""
@@ -2174,6 +2178,9 @@ msgid ""
 "all categories regardless\n"
 "if the team has a player or not:"
 msgstr ""
+"Uusintaottelun painoluokka arvotaan\n"
+"kaikista painoluokista vaikka\n"
+"painoluokassa ei olisi kilpailijaa:"
 
 #: ../judoshiai/properties.c
 msgid "International System"
@@ -2273,7 +2280,7 @@ msgstr "Yleiset asetukset"
 
 #: ../judoshiai/properties.c
 msgid "Rules"
-msgstr ""
+msgstr "Säännöt"
 
 #: ../judoshiai/properties.c
 msgid "Pool settings"
@@ -2281,7 +2288,7 @@ msgstr "Poolin asetukset"
 
 #: ../judoshiai/properties.c
 msgid "Team event"
-msgstr ""
+msgstr "Joukkuekilpailu"
 
 #: ../judoshiai/properties.c
 msgid "Default systems"
@@ -2297,7 +2304,7 @@ msgstr "Tilastot"
 
 #: ../judoshiai/properties.c
 msgid "Color"
-msgstr ""
+msgstr "Väri"
 
 #: ../judoshiai/search.c
 msgid "Search"
@@ -2437,23 +2444,23 @@ msgstr "Tulosta SVG"
 
 #: ../judoshiai/write-results.c
 msgid "Extra Links"
-msgstr ""
+msgstr "Lisälinkit"
 
 #: ../judoshiai/write-results.c
 msgid "Link"
-msgstr ""
+msgstr "Linkki"
 
 #: ../judoshiai/write-results.c
 msgid "(Example)"
-msgstr ""
+msgstr "(Esimerkki)"
 
 #: ../judoshiai/write-results.c
 msgid "Embed"
-msgstr ""
+msgstr "Upota"
 
 #: ../judoshiai/write-results.c
 msgid "New Window"
-msgstr ""
+msgstr "Uusi ikkuna"
 
 #: ../judoinfo/main.c ../judojudogi/main.c
 msgid "Category starts"
@@ -2653,11 +2660,11 @@ msgstr "Tietoja JudoJudogista"
 
 #: ../judoproxy/main.c
 msgid "Camera"
-msgstr ""
+msgstr "Kamera"
 
 #: ../judoproxy/main.c
 msgid "Reload"
-msgstr ""
+msgstr "Lataa uudelleen"
 
 #: ../judoproxy/menus.c
 msgid "About JudoProxy"
