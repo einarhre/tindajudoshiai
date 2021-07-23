@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2020 by Hannu Jokinen
+ * Copyright (C) 2006-2021 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -31,7 +31,7 @@ static void about_judotimer( GtkWidget *w,
     gtk_show_about_dialog (NULL,
                            "name", "Judotimer",
                            "title", _("About Judotimer"),
-                           "copyright", "Copyright 2006-2020 Hannu Jokinen",
+                           "copyright", "Copyright 2006-2021 Hannu Jokinen",
                            "version", full_version(),
                            "website", "http://sourceforge.net/projects/judoshiai/",
                            NULL);
