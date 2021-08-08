@@ -549,10 +549,10 @@ gint get_bracket_status(gint catid, gint type)
     gint r = 0;
     gchar *filename = get_bracket_file_name(catid, type);
     if (g_stat(filename, &st) == 0) {
-        struct timespec mtim = st.st_mtim;
+        time_t mtim = st.st_mtime;
         time_t now = time(NULL);
-        g_print("%s: time st=%d now=%d diff=%d\n", filename, (int)mtim.tv_sec, (int)now, (int)(now - mtim.tv_sec));
-        if (mtim.tv_sec > now - 10)
+        //g_print("%s: time st=%d now=%d diff=%d\n", filename, (int)mtim, (int)now, (int)(now - mtim));
+        if (mtim > now - 10)
             r = 1;
     }
     g_free(filename);
