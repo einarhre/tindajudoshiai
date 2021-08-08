@@ -23,7 +23,7 @@ else
 fi
 
 cat $YML | \
-    sed "s/latest/$VER/" | \
+    sed "s/VER/$VER/" | \
     sed "s,./AppDir,/tmp/AppDir," >/tmp/AppImageBuilder.yml
 
 cd $RELEASEDIR && appimage-builder --skip-test --recipe /tmp/AppImageBuilder.yml

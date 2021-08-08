@@ -6,7 +6,7 @@ AppDir:
     id: judoinfo
     name: judoinfo
     icon: judoinfo
-    version: latest
+    version: "VER"
     exec: usr/lib/judoshiai/programs/judoinfo
     exec_args: $@
   runtime:
