@@ -113,6 +113,9 @@ int string_clone(string *dst, string *src);
 
 /***/
 
+GtkWidget *get_legends_widget(void);
+
+/***/
 void print_trace(void);
 
 #endif

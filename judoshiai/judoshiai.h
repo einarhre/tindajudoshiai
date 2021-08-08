@@ -329,6 +329,7 @@ enum {
     COL_MATCH_COMMENT,
     COL_MATCH_VIS,
     COL_MATCH_STATUS,
+    COL_MATCH_LEGEND,
     NUM_MATCH_COLUMNS
 };
 
@@ -1041,6 +1042,7 @@ extern void db_set_points(gint category, gint number, gint minutes,
                           gint blue, gint white, gint blue_score, gint white_score, gint legend);
 extern gint db_set_score(gint category, gint number, gint score, gboolean is_blue, gboolean hikiwake);
 extern void db_set_time(gint category, gint number, gint tim);
+extern void db_set_legend(gint category, gint number, gint legend);
 extern void db_read_match(gint category, gint number);
 extern void db_read_matches_of_category(gint category);
 extern struct match *db_next_match(gint category, gint tatami);

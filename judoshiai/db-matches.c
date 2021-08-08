@@ -1274,6 +1274,14 @@ void db_set_time(gint category, gint number, gint tim)
                 tim, category, number);
 }
 
+void db_set_legend(gint category, gint number, gint legend)
+{
+    db_exec_str(NULL, db_callback_matches,
+                "UPDATE matches SET \"legend\"=%d "
+                "WHERE \"category\"=%d AND \"number\"=%d",
+                legend, category, number);
+}
+
 void db_reset_last_match_times(gint category, gint number, gboolean blue, gboolean white)
 {
     gint x = 0;

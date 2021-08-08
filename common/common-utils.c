@@ -264,6 +264,19 @@ int string_clone(string *dst, string *src)
     return 0;
 }
 
+static gchar *legends[] =
+{"?", "(T)", "(H)", "(C)", "(L)", "(TH)", "(HT)", "(TT)", "(HH)", "FG",
+ "HM", "/HM\\", "KG", "/P\\", "T", "H", "S", NULL};
+
+GtkWidget *get_legends_widget(void)
+{
+    GtkWidget *w;
+    gint i;
+    w = gtk_combo_box_text_new();
+    for (i = 0; legends[i]; i++)
+        gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(w), NULL, legends[i]);
+    return w;
+}
 
 #if defined(__WIN32__) || defined(WIN32)
 

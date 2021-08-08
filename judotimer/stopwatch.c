@@ -802,10 +802,6 @@ static gboolean expose_ask(GtkWidget *widget, GdkEventExpose *event, gpointer us
     return FALSE;
 }
 
-static gchar *legends[] =
-{"?", "(T)", "(H)", "(C)", "(L)", "(TH)", "(HT)", "(TT)", "(HH)", "FG",
- "HM", "/HM\\", "KG", "/P\\", "T", "H", "S", NULL};
-
 static void create_ask_window(void)
 {
     GtkWidget *vbox, *hbox, *ok, *nok, *lbl;
@@ -823,72 +819,35 @@ static void create_ask_window(void)
 
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
-#if (GTKVER == 3)
     vbox = gtk_grid_new();
-#else
-    vbox = gtk_vbox_new(FALSE, 1);
-#endif
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 1);
 
     if (mode != MODE_SLAVE) {
-#if (GTKVER == 3)
         hbox = gtk_grid_new();
-#else
-        hbox = gtk_hbox_new(FALSE, 1);
-#endif
         lbl = gtk_label_new(_("Start New Match?"));
         ok = gtk_button_new_with_label(_("OK"));
         nok = gtk_button_new_with_label(_("Cancel"));
 
-        gint i;
-#if (GTKVER == 3)
-        legend_widget = gtk_combo_box_text_new();
-#else
-        legend_widget = gtk_combo_box_new_text();
-#endif
-        for (i = 0; legends[i]; i++)
-#if (GTKVER == 3)
-            gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(legend_widget), NULL, legends[i]);
-#else
-            gtk_combo_box_append_text(GTK_COMBO_BOX(legend_widget), legends[i]);
-#endif
-#if (GTKVER == 3)
+        legend_widget = get_legends_widget();
+
         gtk_grid_attach(GTK_GRID(hbox), lbl, 0, 0, 1, 1);
         gtk_grid_attach(GTK_GRID(hbox), ok, 1, 0, 1, 1);
         gtk_grid_attach(GTK_GRID(hbox), nok, 2, 0, 1, 1);
         gtk_grid_attach(GTK_GRID(hbox), legend_widget, 3, 0, 1, 1);
 
         gtk_grid_attach(GTK_GRID(vbox), hbox, 0, 0, 1, 1);
-#else
-        gtk_box_pack_start(GTK_BOX(hbox), lbl, FALSE, TRUE, 5);
-        gtk_box_pack_start(GTK_BOX(hbox), ok, FALSE, TRUE, 5);
-        gtk_box_pack_start(GTK_BOX(hbox), nok, FALSE, TRUE, 5);
-        gtk_box_pack_start(GTK_BOX(hbox), legend_widget, FALSE, TRUE, 5);
-
-        gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, TRUE, 0);
-#endif
     } else {
         lbl = gtk_label_new("- - -");
-#if (GTKVER == 3)
         gtk_grid_attach(GTK_GRID(vbox), lbl, 0, 0, 1, 1);
-#else
-        gtk_box_pack_start(GTK_BOX(vbox), lbl, FALSE, TRUE, 5);
-#endif
     }
 
     if (show_competitor_names && get_winner(TRUE)) {
         ask_area = gtk_drawing_area_new();
-#if (GTKVER == 3)
         gtk_widget_set_hexpand(ask_area, TRUE);
         gtk_widget_set_vexpand(ask_area, TRUE);
         gtk_grid_attach(GTK_GRID(vbox), ask_area, 0, 1, 1, 1);
         g_signal_connect(G_OBJECT(ask_area),
                          "draw", G_CALLBACK(expose_ask), NULL);
-#else
-        gtk_box_pack_start(GTK_BOX(vbox), ask_area, TRUE, TRUE, 5);
-        g_signal_connect(G_OBJECT(ask_area),
-                         "expose-event", G_CALLBACK(expose_ask), NULL);
-#endif
     }
 
     gtk_container_add (GTK_CONTAINER (window), vbox);

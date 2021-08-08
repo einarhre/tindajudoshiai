@@ -3365,7 +3365,7 @@ static void view_match_points_popup_menu(GtkWidget *treeview,
 struct score {
     guint category, number;
     gboolean is_blue;
-    GtkWidget *ippon, *wazaari, *yuko, *shido, *gs, *hantei;
+    GtkWidget *ippon, *wazaari, *yuko, *shido, *gs, *hantei, *legend;
 };
 
 struct match_time {
@@ -3394,6 +3394,12 @@ static void set_score(GtkWidget *widget,
 			  s->is_blue ? 1 : 0,
 			  s->is_blue ? 0 : 1, 0, 0, 0);
 
+        gint l = gtk_combo_box_get_active(GTK_COMBO_BOX(s->legend));
+        if (l < 0) l = 0;
+        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(s->gs)))
+            l += 0x100;
+        db_set_legend(s->category, s->number, l);
+
 	log_match(s->category, s->number, pts >> 8, pts & 0xff);
 	db_read_match(s->category, s->number);
 	update_matches(s->category, db_get_system(s->category),
@@ -3403,6 +3409,7 @@ static void set_score(GtkWidget *widget,
     } else if (ptr_to_gint(event) == GTK_RESPONSE_NO) {
 	db_set_score(s->category, s->number, 0, TRUE, 0);
 	db_set_score(s->category, s->number, 0, FALSE, 0);
+        db_set_legend(s->category, s->number, 0);
 	db_read_match(s->category, s->number);
 	update_matches(s->category, db_get_system(s->category),
 		       db_find_match_tatami(s->category, s->number));
@@ -3441,7 +3448,8 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
                                         guint category,
                                         guint number,
                                         guint score,
-                                        gboolean is_blue)
+                                        gboolean is_blue,
+                                        gint legend)
 {
     struct score *s = g_malloc0(sizeof *s);
     GtkWidget *dialog, *table;
@@ -3482,6 +3490,7 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
     }
     s->gs = gtk_check_button_new();
     s->hantei = gtk_check_button_new();
+    s->legend = get_legends_widget();
 
     table = gtk_grid_new();
     gtk_grid_attach(GTK_GRID(table), gtk_label_new("I"), 0, 0, 1, 1);
@@ -3490,7 +3499,8 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
     gtk_grid_attach(GTK_GRID(table), gtk_label_new("/"), 3, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new("S"), 4, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), gtk_label_new("GS"),5, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(table), gtk_label_new("Hantei"),6, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new("Hantei"), 6, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Legend")), 7, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->ippon,           0, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->wazaari,         1, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->yuko,            2, 1, 1, 1);
@@ -3498,11 +3508,14 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
     gtk_grid_attach(GTK_GRID(table), s->shido,           4, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->gs,              5, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), s->hantei,          6, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), s->legend,          7, 1, 1, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->ippon), (score>>16)&15);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->wazaari), (score>>12)&15);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->yuko), (score>>8)&15);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->shido), score&7);
-
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(s->gs), (legend & 0x100) != 0); // bit 8 is gs
+    gtk_combo_box_set_active(GTK_COMBO_BOX(s->legend), legend & 0xff);             // bits 0-7 are legend
+    
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        table, FALSE, FALSE, 0);
     gtk_widget_show_all(dialog);
@@ -3563,6 +3576,7 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
         guint category, number, blue, white, w, b, blue_score, white_score, tim;
         gboolean visible, handled = FALSE;
         guint category1, number1;
+        gint legend;
 
         if (gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(treeview),
                                           (gint) event->x,
@@ -3582,6 +3596,7 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
                                COL_MATCH_BLUE, &b,
                                COL_MATCH_WHITE, &w,
                                COL_MATCH_TIME, &tim,
+                               COL_MATCH_LEGEND, &legend,
                                -1);
             category1 = category | (number & MATCH_CATEGORY_SUB_MASK);
             number1 = number & MATCH_CATEGORY_MASK;
@@ -3632,7 +3647,8 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
                                             category1,
                                             number1,
                                             blue_score,
-                                            TRUE);
+                                            TRUE,
+                                            legend);
 /*
                 view_match_points_popup_menu(treeview, event,
                                              category1,
@@ -3647,7 +3663,8 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
                                             category1,
                                             number1,
                                             white_score,
-                                            FALSE);
+                                            FALSE,
+                                            legend);
 /*
                 view_match_points_popup_menu(treeview, event,
                                              category1,
@@ -3660,14 +3677,16 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
                                             category1,
                                             number1,
                                             blue_score,
-                                            TRUE);
+                                            TRUE,
+                                            legend);
                 handled = TRUE;
             } else if (visible && event->button == 3 && col == white_score_col) {
                 view_match_score_popup_menu(treeview, event,
                                             category1,
                                             number1,
                                             white_score,
-                                            FALSE);
+                                            FALSE,
+                                            legend);
                 handled = TRUE;
             } else if (visible && event->button == 3 && col == time_col) {
                 view_match_time_popup_menu(treeview, event,
@@ -3729,7 +3748,8 @@ static GtkTreeModel *create_and_fill_model (void)
                                    G_TYPE_UINT, /* time */
                                    G_TYPE_UINT, /* comment */
                                    G_TYPE_BOOLEAN,/* visible */
-                                   G_TYPE_UINT  /* status */
+                                   G_TYPE_UINT, /* status */
+                                   G_TYPE_INT   /* legend */
         );
 
     return GTK_TREE_MODEL(treestore);
@@ -4181,11 +4201,7 @@ void set_match(struct match *m)
     set_competitor_position_drawn(m->blue);
     set_competitor_position_drawn(m->white);
 
-#if (GTKVER == 3)
     G_LOCK(set_match_mutex);
-#else
-    g_static_mutex_lock(&set_match_mutex);
-#endif
 
     struct category_data *c = avl_get_category(m->category & MATCH_CATEGORY_MASK);
     if (c && (c->deleted & TEAM_EVENT)) { // team event
@@ -4194,11 +4210,7 @@ void set_match(struct match *m)
             m1.number = m->number | (m->category & MATCH_CATEGORY_SUB_MASK)
 		| (m->category & MATCH_CATEGORY_CAT_MASK);
         } else {
-#if (GTKVER == 3)
             G_UNLOCK(set_match_mutex);
-#else
-            g_static_mutex_unlock(&set_match_mutex);
-#endif
             return;
         }
     }
@@ -4207,11 +4219,7 @@ void set_match(struct match *m)
     /* Find info about category */
     if (find_iter(&cat, m->category) == FALSE) {
         g_print("CANNOT FIND CAT %d (num=%d)\n", m->category, m->number);
-#if (GTKVER == 3)
         G_UNLOCK(set_match_mutex);
-#else
-        g_static_mutex_unlock(&set_match_mutex);
-#endif
         //assert(0);
         return; /* error */
     }
@@ -4262,11 +4270,7 @@ void set_match(struct match *m)
 
     if (tatami == 0) {
         //g_print("TATAMI NOT SET\n");
-#if (GTKVER == 3)
         G_UNLOCK(set_match_mutex);
-#else
-        g_static_mutex_unlock(&set_match_mutex);
-#endif
         return; /* tatami not set */
     }
 
@@ -4307,6 +4311,7 @@ void set_match(struct match *m)
                            COL_MATCH_COMMENT,      0,
                            COL_MATCH_VIS,          FALSE,
                            COL_MATCH_STATUS,       0,
+                           COL_MATCH_LEGEND,       0,
                            -1);
     }
 
@@ -4347,6 +4352,7 @@ void set_match(struct match *m)
                            COL_MATCH_COMMENT,      0,
                            COL_MATCH_VIS,          FALSE,
                            COL_MATCH_STATUS,       0,
+                           COL_MATCH_LEGEND,       0,
                            -1);
     }
 
@@ -4384,13 +4390,10 @@ update:
                        COL_MATCH_COMMENT,      m->comment,
                        COL_MATCH_VIS,          TRUE,
                        COL_MATCH_STATUS,       m->forcedtatami,
+                       COL_MATCH_LEGEND,       m->legend,
                        -1);
 
-#if (GTKVER == 3)
     G_UNLOCK(set_match_mutex);
-#else
-    g_static_mutex_unlock(&set_match_mutex);
-#endif
 }
 
 static gint remove_category_from_matches(gint category)
