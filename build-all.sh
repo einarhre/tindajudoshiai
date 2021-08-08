@@ -1,7 +1,16 @@
 #!/bin/bash
 
-LINUX32_IP=192.168.99.104
+LINUX32_IP=192.168.122.67
 RPI_IP=192.168.129.130
+
+mkdir -p ~/js-build/sourceforge/Android
+mkdir -p ~/js-build/sourceforge/Linux-i386
+mkdir -p ~/js-build/sourceforge/Linux-x86_64
+mkdir -p ~/js-build/sourceforge/RaspberryPi
+mkdir -p ~/js-build/sourceforge/Windows-32
+mkdir -p ~/js-build/sourceforge/Windows-64
+mkdir -p ~/js-build/sourceforge/WindowsXP
+
 
 make_linux() {
     date
@@ -9,8 +18,8 @@ make_linux() {
     make -j && \
     make debian && \
     make appimage && \
-    cp ~/js-build/release-linux/*.deb ~/js-build/ && \
-    cp ~/js-build/release-linux/*.AppImage ~/js-build/
+    mv ~/js-build/release-linux/*.deb ~/js-build/sourceforge/Linux-x86_64/ && \
+    mv ~/js-build/release-linux/*.AppImage ~/js-build/sourceforge/Linux-x86_64/
 }
 
 make_win64() {
@@ -18,7 +27,7 @@ make_win64() {
     make clean TARGETOS=WIN64 && \
     make -j TARGETOS=WIN64       && \
     make setup TARGETOS=WIN64 && \
-    cp ~/js-build/release-win64/*.exe ~/js-build/
+    mv ~/js-build/release-win64/*.exe ~/js-build/sourceforge/Windows-64/
 }
 
 make_win32() {
@@ -26,7 +35,7 @@ make_win32() {
     make clean TARGETOS=WIN32 && \
     make -j TARGETOS=WIN32       && \
     make setup TARGETOS=WIN32 && \
-    cp ~/js-build/release-win32/*.exe ~/js-build/
+    mv ~/js-build/release-win32/*.exe ~/js-build/sourceforge/Windows-32/
 }
 
 make_remote_linux32() {
@@ -35,7 +44,7 @@ make_remote_linux32() {
     date
     rsync -av * $LINUX32_IP:judoshiai/. && \
     ssh $LINUX32_IP "cd judoshiai && make clean && make && make debian && make appimage" && \
-    scp $LINUX32_IP:js-build/release-linux32/*.{deb,AppImage} ~/js-build/.
+    scp $LINUX32_IP:js-build/release-linux32/*.{deb,AppImage} ~/js-build/sourceforge/Linux-i386/
 }
 
 make_remote_armhf() {
@@ -44,8 +53,8 @@ make_remote_armhf() {
     # Remove etc/html/websock-serial since appimage do not accept i386 files.
     date
     rsync -av * pi@$RPI_IP:judoshiai/. && \
-        ssh pi@$RPI_IP "cd judoshiai && rm etc/html/websock-serial && make clean && make && make debian && make appimage" && \
-            scp pi@$RPI_IP:js-build/release-linux-armhf/*.{deb,AppImage} ~/js-build/.
+    ssh pi@$RPI_IP "cd judoshiai && rm etc/html/websock-serial && make clean && make && make debian && make appimage" && \
+    scp pi@$RPI_IP:js-build/release-linux-armhf/*.{deb,AppImage} ~/js-build/sourceforge/RaspberryPi/
 }
 
 # Run compilations in parallel.
