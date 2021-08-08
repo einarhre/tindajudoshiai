@@ -803,7 +803,8 @@ static gboolean expose_ask(GtkWidget *widget, GdkEventExpose *event, gpointer us
 }
 
 static gchar *legends[] =
-    {"?", "(T)", "(H)", "(C)", "(L)", "HH", "HM", "KG", "T", "H", "S", "/P\\", "FG", "TT", "TH", "/HM\\", NULL};
+{"?", "(T)", "(H)", "(C)", "(L)", "(TH)", "(HT)", "(TT)", "(HH)", "FG",
+ "HM", "/HM\\", "KG", "/P\\", "T", "H", "S", NULL};
 
 static void create_ask_window(void)
 {
