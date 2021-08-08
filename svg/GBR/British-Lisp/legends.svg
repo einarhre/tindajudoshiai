@@ -2,13 +2,6 @@
 <!-- Generator: Adobe Illustrator 13.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="Layer_1"
    x="0px"
@@ -18,12 +11,66 @@
    viewBox="0 0 42.479 51.711"
    enable-background="new 0 0 42.479 51.711"
    xml:space="preserve"
-   inkscape:version="0.48.2 r9819"
-   sodipodi:docname="legends.svg"><metadata
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   sodipodi:docname="legends.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"><metadata
    id="metadata92"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
-   id="defs90" /><sodipodi:namedview
+   id="defs90">
+	
+	
+
+
+
+	
+		
+
+
+
+
+	
+	
+
+
+
+	
+		
+
+
+
+
+	
+	
+
+
+
+	
+		
+
+
+
+
+	
+
+
+
+	
+		
+
+
+
+	
+
+
+
+</defs><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -33,16 +80,17 @@
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
    inkscape:window-width="1366"
-   inkscape:window-height="706"
+   inkscape:window-height="705"
    id="namedview88"
    showgrid="false"
-   inkscape:zoom="4.563826"
-   inkscape:cx="-103.27319"
-   inkscape:cy="-400.32201"
+   inkscape:zoom="1.1409565"
+   inkscape:cx="-222.62023"
+   inkscape:cy="-176.60621"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
-   inkscape:current-layer="Layer_1" />
+   inkscape:current-layer="Layer_1"
+   inkscape:pagecheckerboard="0" />
 <rect
    id="legend0"
    x="-222.067"
@@ -53,123 +101,94 @@
    width="25.512"
    height="25.512" />
 <g
-   id="legend1">
-	<ellipse
-   fill="none"
-   stroke="#000000"
-   stroke-width="3"
-   cx="-209.311"
-   cy="-272.322"
-   rx="12.756"
-   ry="12.409"
-   id="ellipse5" />
-	<text
-   transform="matrix(1.028 0 0 1 -216.5886 -264.4707)"
-   font-family="'MyriadPro-Bold'"
-   font-size="21.0124"
-   id="text7">T</text>
-
-
-	
-		<text
-   transform="matrix(1.028 0 0 1 -216.5886 -264.4707)"
-   fill="none"
-   stroke="#000000"
-   font-family="'MyriadPro-Bold'"
-   font-size="21.0124"
-   id="text9">T</text>
-
-
-</g>
+   id="legend1"
+   inkscape:label="#legend1"><ellipse
+     fill="none"
+     stroke="#000000"
+     stroke-width="3"
+     cx="-211.28305"
+     cy="-271.44553"
+     rx="12.756"
+     ry="12.409"
+     id="ellipse5" /><text
+     transform="scale(1.0139033,0.9862873)"
+     font-size="21.0124"
+     id="text7"
+     style="font-size:21.3045px;line-height:0%;font-family:MyriadPro-Bold;stroke-width:1.0139"
+     x="-213.61859"
+     y="-268.14774">T</text><text
+     transform="scale(1.0139033,0.9862873)"
+     font-size="21.0124"
+     id="text9"
+     style="font-size:21.3045px;line-height:0%;font-family:MyriadPro-Bold;fill:none;stroke:#000000;stroke-width:1.0139"
+     x="-213.61859"
+     y="-268.14774">T</text></g>
 <g
-   id="legend2">
-	<ellipse
-   fill="none"
-   stroke="#000000"
-   stroke-width="3"
-   cx="-209.311"
-   cy="-209.978"
-   rx="12.756"
-   ry="12.756"
-   id="ellipse12" />
-	<text
-   transform="matrix(1 0 0 1 -217.3884 -202.7949)"
-   font-family="'MyriadPro-Bold'"
-   font-size="21.6002"
-   id="text14">H</text>
-
-
-	
-		<text
-   transform="matrix(1 0 0 1 -217.3884 -202.7949)"
-   fill="none"
-   stroke="#000000"
-   font-family="'MyriadPro-Bold'"
-   font-size="21.6002"
-   id="text16">H</text>
-
-
-</g>
+   id="legend2"
+   inkscape:label="#legend2"><circle
+     fill="none"
+     stroke="#000000"
+     stroke-width="3"
+     cx="-211.72128"
+     cy="-209.53976"
+     id="ellipse12"
+     r="12.756" /><text
+     font-size="21.6002"
+     id="text14"
+     style="font-size:21.6002px;line-height:0%;font-family:MyriadPro-Bold"
+     x="-217.3884"
+     y="-202.79491">H</text><text
+     font-size="21.6002"
+     id="text16"
+     style="font-size:21.6002px;line-height:0%;font-family:MyriadPro-Bold;fill:none;stroke:#000000"
+     x="-217.3884"
+     y="-202.79491">H</text></g>
 <g
-   id="legend3">
-	<ellipse
-   fill="none"
-   stroke="#000000"
-   stroke-width="3"
-   cx="-209.311"
-   cy="-148.059"
-   rx="12.756"
-   ry="12.678"
-   id="ellipse19" />
-	<text
-   transform="matrix(1.0061 0 0 1 -217.8376 -140.5918)"
-   font-family="'MyriadPro-Bold'"
-   font-size="21.4676"
-   id="text21">C</text>
-
-
-	
-		<text
-   transform="matrix(1.0061 0 0 1 -217.8376 -140.5918)"
-   fill="none"
-   stroke="#000000"
-   font-family="'MyriadPro-Bold'"
-   font-size="21.4676"
-   id="text23">C</text>
-
-
-</g>
+   id="legend3"
+   inkscape:label="#legend3"><ellipse
+     fill="none"
+     stroke="#000000"
+     stroke-width="3"
+     cx="-211.311"
+     cy="-147.18254"
+     rx="12.756"
+     ry="12.678"
+     id="ellipse19" /><text
+     transform="scale(1.0030454,0.99696388)"
+     font-size="21.4676"
+     id="text21"
+     style="font-size:21.533px;line-height:0%;font-family:MyriadPro-Bold;stroke-width:1.00305"
+     x="-217.17622"
+     y="-141.01996">C</text><text
+     transform="scale(1.0030454,0.99696388)"
+     font-size="21.4676"
+     id="text23"
+     style="font-size:21.533px;line-height:0%;font-family:MyriadPro-Bold;fill:none;stroke:#000000;stroke-width:1.00305"
+     x="-217.17622"
+     y="-141.01996">C</text></g>
 <g
-   id="legend4">
-	<text
-   transform="matrix(1 0 0 1 -215.6726 -78.3711)"
-   font-family="'MyriadPro-Bold'"
-   font-size="21.5996"
-   id="text26">L</text>
-
-
-	
-		<text
-   transform="matrix(1 0 0 1 -215.6726 -78.3711)"
-   fill="none"
-   stroke="#000000"
-   font-family="'MyriadPro-Bold'"
-   font-size="21.5996"
-   id="text28">L</text>
-
-
-	<ellipse
-   fill="none"
-   stroke="#000000"
-   stroke-width="3"
-   cx="-209.311"
-   cy="-85.984"
-   rx="12.756"
-   ry="12.756"
-   id="ellipse30" />
-</g>
+   id="legend4"
+   inkscape:label="#legend4"><text
+     font-size="21.5996"
+     id="text26"
+     style="font-size:21.5996px;line-height:0%;font-family:MyriadPro-Bold"
+     x="-215.67261"
+     y="-78.371101">L</text><text
+     font-size="21.5996"
+     id="text28"
+     style="font-size:21.5996px;line-height:0%;font-family:MyriadPro-Bold;fill:none;stroke:#000000"
+     x="-215.67261"
+     y="-78.371101">L</text><circle
+     fill="none"
+     stroke="#000000"
+     stroke-width="3"
+     cx="-210.84482"
+     cy="-84.88842"
+     id="ellipse30"
+     r="12.756" /></g>
 <g
-   id="legend5">
+   id="legend10"
+   inkscape:label="#legend10">
 	<rect
    x="-221.631"
    y="25.254"
@@ -180,34 +199,18 @@
    height="25.512"
    id="rect33" />
 	<text
-   transform="matrix(0.7971 0 0 1 -220.5691 44.7471)"
-   font-family="'MyriadPro-Bold'"
+   transform="matrix(0.7971,0,0,1,-220.5691,44.7471)"
    font-size="23.6231"
-   id="text35">SG</text>
+   id="text35"
+   style="font-size:23.62310028px;line-height:0%;font-family:MyriadPro-Bold">HM</text>
 
-
-</g>
-<g
-   id="legend6">
-	<rect
-   x="-221.632"
-   y="-36.743"
-   fill="none"
-   stroke="#676767"
-   stroke-width="0.01"
-   width="24.646"
-   height="25.512"
-   id="rect38" />
-	<text
-   transform="matrix(0.6945 0 0 1 -221.7507 -17.3564)"
-   font-family="'MyriadPro-Bold'"
-   font-size="23.336"
-   id="text40">HM</text>
 
 
 </g>
+
 <g
-   id="legend7">
+   id="legend12"
+   inkscape:label="#legend12">
 	<rect
    x="-221.224"
    y="87.251"
@@ -218,15 +221,17 @@
    height="24.937"
    id="rect43" />
 	<text
-   transform="matrix(0.8099 0 0 1 -221.0686 106.2178)"
-   font-family="'MyriadPro-Bold'"
+   transform="matrix(0.8099,0,0,1,-221.0686,106.2178)"
    font-size="22.9852"
-   id="text45">KG</text>
+   id="text45"
+   style="font-size:22.98520088px;line-height:0%;font-family:MyriadPro-Bold">KG</text>
+
 
 
 </g>
 <g
-   id="legend8">
+   id="legend14"
+   inkscape:label="#legend14">
 	<rect
    x="-222.067"
    y="149.248"
@@ -237,15 +242,17 @@
    height="24.938"
    id="rect48" />
 	<text
-   transform="matrix(1.0231 0 0 1 -215.801 168.624)"
-   font-family="'MyriadPro-Bold'"
+   transform="matrix(1.0231,0,0,1,-215.801,168.624)"
    font-size="22.4802"
-   id="text50">T</text>
+   id="text50"
+   style="font-size:22.48019981px;line-height:0%;font-family:MyriadPro-Bold">T</text>
+
 
 
 </g>
 <g
-   id="legend9">
+   id="legend15"
+   inkscape:label="#legend15">
 	<rect
    x="-222.067"
    y="211.244"
@@ -256,34 +263,39 @@
    height="24.938"
    id="rect53" />
 	<text
-   transform="matrix(1.0231 0 0 1 -216.218 229.1572)"
-   font-family="'MyriadPro-Bold'"
+   transform="matrix(1.0231,0,0,1,-216.218,229.1572)"
    font-size="20.7307"
-   id="text55">H</text>
+   id="text55"
+   style="font-size:20.73069954px;line-height:0%;font-family:MyriadPro-Bold">H</text>
+
 
 
 </g>
 <g
-   id="legend10">
+   id="legend16"
+   transform="translate(-2.6293728,-14.899779)"
+   inkscape:label="#legend16">
 	<rect
    x="-222.067"
    y="273.241"
    fill="none"
    stroke="#000000"
    stroke-width="0.01"
-   width="25.512"
-   height="25.374"
+   width="25.511999"
+   height="25.374001"
    id="rect58" />
 	<text
-   transform="matrix(1.0054 0 0 1 -216.4197 294.2041)"
-   font-family="'MyriadPro-Bold'"
+   transform="matrix(1.0054,0,0,1,-216.4197,294.2041)"
    font-size="24.8568"
-   id="text60">S</text>
+   id="text60"
+   style="font-size:24.8568px;line-height:0%;font-family:MyriadPro-Bold">S</text>
+
 
 
 </g>
 <g
-   id="legend11">
+   id="legend13"
+   inkscape:label="#legend13">
 	<g
    id="g63">
 		<line
@@ -315,15 +327,17 @@
    id="line69" />
 	</g>
 	<text
-   transform="matrix(1 0 0 1 -214.7605 418.8555)"
-   font-family="'MyriadPro-Bold'"
+   transform="translate(-214.7605,418.8555)"
    font-size="18"
-   id="text71">P</text>
+   id="text71"
+   style="font-size:18px;line-height:0%;font-family:MyriadPro-Bold">P</text>
+
 
 
 </g>
 <g
-   id="legend12">
+   id="legend9"
+   inkscape:label="#legend9">
 	<rect
    x="-221.558"
    y="316.918"
@@ -334,34 +348,85 @@
    height="24.938"
    id="rect74" />
 	<text
-   transform="matrix(0.8099 0 0 1 -221.4021 335.8848)"
-   font-family="'MyriadPro-Bold'"
+   transform="matrix(0.8099,0,0,1,-221.4021,335.8848)"
    font-size="22.9852"
-   id="text76">FG</text>
+   id="text76"
+   style="font-size:22.98520088px;line-height:0%;font-family:MyriadPro-Bold">FG</text>
+
 
 
 </g>
+
+
 <g
-   id="legend13">
+   id="legend11"
+   inkscape:label="#legend11"><g
+     id="g63-7"
+     transform="translate(0,54)"><line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-209.80099"
+       y1="397.23401"
+       x2="-196.55499"
+       y2="420.11801"
+       id="line65-4" /><line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-196.55499"
+       y1="420.11801"
+       x2="-222.067"
+       y2="420.11801"
+       id="line67-0" /><line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-222.067"
+       y1="420.11801"
+       x2="-209.80099"
+       y2="397.23401"
+       id="line69-9" /></g><text
+     style="font-size:18px;line-height:0%;font-family:MyriadPro-Bold"
+     font-size="18"
+     id="text71-4"
+     x="-214.73253"
+     y="470.63638"><tspan
+       style="font-size:10px"
+       id="tspan3102">HM</tspan></text></g><g
+   id="legend8"
+   inkscape:label="#legend8"><g
+     id="HH"
+     inkscape:label="#HH">
 	<rect
-   x="-163.558"
-   y="-285.082"
+   x="-221.632"
+   y="-36.743"
    fill="none"
-   stroke="#000000"
+   stroke="#676767"
    stroke-width="0.01"
-   width="23.857"
-   height="24.938"
-   id="rect79" />
+   width="24.646"
+   height="25.511999"
+   id="rect38" />
 	<text
-   transform="matrix(0.8099 0 0 1 -163.4021 -266.1152)"
-   font-family="'MyriadPro-Bold'"
-   font-size="22.9852"
-   id="text81">TT</text>
+   transform="scale(0.83336667,1.199952)"
+   font-size="23.336"
+   id="text40"
+   style="font-size:17.3334px;line-height:0%;font-family:MyriadPro-Bold;stroke-width:0.833367"
+   x="-265.03851"
+   y="-15.400567">HH</text>
 
 
-</g>
-<g
-   id="legend14">
+
+</g><g
+     id="g670"
+     inkscape:label="#legend6"
+     transform="translate(1.7529152,-0.8764576)"><circle
+       fill="none"
+       stroke="#000000"
+       stroke-width="3"
+       cx="-213.41742"
+       cy="-24.979042"
+       id="ellipse30-2"
+       r="12.756" /></g></g><g
+   id="legend5"
+   inkscape:label="#legend5"><g
+     id="legend144"
+     inkscape:label="#legend144"
+     transform="matrix(0.91737422,0,0,0.91737422,-12.993667,-27.582765)">
 	<rect
    x="-162.558"
    y="-347.082"
@@ -372,41 +437,87 @@
    height="24.938"
    id="rect84" />
 	<text
-   transform="matrix(0.8099 0 0 1 -162.4021 -328.1152)"
-   font-family="'MyriadPro-Bold'"
+   transform="scale(0.89994444,1.1111797)"
    font-size="22.9852"
-   id="text86">TH</text>
+   id="text86"
+   style="font-size:18.8945px;line-height:0%;font-family:MyriadPro-Bold;stroke-width:0.899944"
+   x="-179.3963"
+   y="-296.14526">TH</text>
 
 
-</g>
-<g
-   id="legend15"
-   transform="translate(0,54)"><g
-   id="g63-7"><line
-     style="fill:none;stroke:#000000;stroke-width:2"
-     x1="-209.80099"
-     y1="397.23401"
-     x2="-196.55499"
-     y2="420.11801"
-     id="line65-4" /><line
-     style="fill:none;stroke:#000000;stroke-width:2"
-     x1="-196.55499"
-     y1="420.11801"
-     x2="-222.067"
-     y2="420.11801"
-     id="line67-0" /><line
-     style="fill:none;stroke:#000000;stroke-width:2"
-     x1="-222.067"
-     y1="420.11801"
-     x2="-209.80099"
-     y2="397.23401"
-     id="line69-9" /></g><text
-   style="font-size:18px;font-family:MyriadPro-Bold"
-   font-size="18"
-   id="text71-4"
-   x="-217.38988"
-   y="418.63638"><tspan
-     style="font-size:10px"
-     id="tspan3102">HM</tspan></text>
 
-</g></svg>
+</g><g
+     id="g670-0"
+     inkscape:label="#legend6"
+     transform="translate(62.009371,-311.7998)"><circle
+       fill="none"
+       stroke="#000000"
+       stroke-width="3"
+       cx="-213.41742"
+       cy="-24.979042"
+       id="ellipse30-2-9"
+       r="12.756" /></g></g><g
+   id="legend7"
+   inkscape:label="#legend7"><g
+     id="legend133"
+     inkscape:label="#legend133"
+     transform="matrix(0.90819357,0,0,0.90819357,-13.701448,-24.200789)">
+	<rect
+   x="-163.558"
+   y="-285.082"
+   fill="none"
+   stroke="#000000"
+   stroke-width="0.01"
+   width="23.857"
+   height="24.938"
+   id="rect79" />
+	<text
+   transform="scale(0.89994444,1.1111797)"
+   font-size="22.9852"
+   id="text81"
+   style="font-size:19.0855px;line-height:0%;font-family:MyriadPro-Bold;stroke-width:0.899944"
+   x="-180.49675"
+   y="-240.35739">TT</text>
+
+
+
+</g><g
+     id="g670-0-7"
+     inkscape:label="#legend6"
+     transform="translate(62.228485,-248.47572)"><circle
+       fill="none"
+       stroke="#000000"
+       stroke-width="3"
+       cx="-213.41742"
+       cy="-24.979042"
+       id="ellipse30-2-9-4"
+       r="12.756" /></g></g><g
+   id="legend6"
+   inkscape:label="#legend6"><g
+     id="legend144-1"
+     inkscape:label="#legend144"
+     transform="matrix(0.91737422,0,0,0.91737422,-8.8304956,92.711045)"><rect
+       x="-162.558"
+       y="-347.082"
+       fill="none"
+       stroke="#000000"
+       stroke-width="0.01"
+       width="23.857"
+       height="24.938"
+       id="rect84-7" /><text
+       transform="scale(0.89994444,1.1111797)"
+       font-size="22.9852"
+       id="text86-2"
+       style="font-size:18.8945px;line-height:0%;font-family:MyriadPro-Bold;stroke-width:0.899944"
+       x="-178.33469"
+       y="-295.28546">HT</text></g><g
+     id="g670-0-2"
+     inkscape:label="#legend6"
+     transform="translate(67.048999,-190.62953)"><circle
+       fill="none"
+       stroke="#000000"
+       stroke-width="3"
+       cx="-213.41742"
+       cy="-24.979042"
+       id="ellipse30-2-9-6"
+       r="12.756" /></g></g></svg>
