@@ -1406,6 +1406,10 @@ msgid "Set score"
 msgstr "Aseta pisteet"
 
 #: ../judoshiai/matches.c
+msgid "Legend"
+msgstr ""
+
+#: ../judoshiai/matches.c
 msgid "White"
 msgstr "Valkoinen"
 
@@ -2162,7 +2166,8 @@ msgid ""
 "The remaining contests will not be fought:"
 msgstr ""
 "Joukkue, joka voittaa otteluiden enemmistön\n"
-"on voittaja.\nLoppuja otteluita ei otella:"
+"on voittaja.\n"
+"Loppuja otteluita ei otella:"
 
 #: ../judoshiai/properties.c
 msgid ""

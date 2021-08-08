@@ -1406,6 +1406,10 @@ msgid "Set score"
 msgstr "Stel punten in"
 
 #: ../judoshiai/matches.c
+msgid "Legend"
+msgstr ""
+
+#: ../judoshiai/matches.c
 msgid "White"
 msgstr "Wit"
 

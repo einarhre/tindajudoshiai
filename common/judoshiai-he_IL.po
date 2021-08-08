@@ -1400,6 +1400,10 @@ msgid "Set score"
 msgstr "קבע ניקוד"
 
 #: ../judoshiai/matches.c
+msgid "Legend"
+msgstr ""
+
+#: ../judoshiai/matches.c
 msgid "White"
 msgstr "לבן"
 

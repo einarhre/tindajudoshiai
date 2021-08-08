@@ -1404,6 +1404,10 @@ msgid "Set score"
 msgstr "Поставити оцінку"
 
 #: ../judoshiai/matches.c
+msgid "Legend"
+msgstr ""
+
+#: ../judoshiai/matches.c
 msgid "White"
 msgstr "Білий"
 

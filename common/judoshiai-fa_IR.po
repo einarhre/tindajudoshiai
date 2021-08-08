@@ -1402,6 +1402,10 @@ msgid "Set score"
 msgstr "تنظیم امتیاز"
 
 #: ../judoshiai/matches.c
+msgid "Legend"
+msgstr ""
+
+#: ../judoshiai/matches.c
 msgid "White"
 msgstr "سفید"
 
