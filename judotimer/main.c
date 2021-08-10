@@ -1269,12 +1269,14 @@ static void show_big(void)
 
 void display_big(gchar *txt, gint tmo_sec)
 {
+    if (no_big_text)
+        return;
+
     gtk_window_set_title(GTK_WINDOW(main_window), txt);
     STRCPY_UTF8(big_text, txt);
     big_end = time(NULL) + tmo_sec;
     big_dialog = TRUE;
-    if (no_big_text == FALSE)
-	show_big();
+    show_big();
     /*send_label(START_BIG);*/
 
     if (mode != MODE_SLAVE) {
@@ -1825,22 +1827,32 @@ static gboolean scroll_cb(GtkWidget *widget,
 static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userdata)
 {
     gboolean ctl = event->state & 4;
+    gboolean shft = event->state & 1;
+    static GtkWidget *titlebar = NULL;
 
     if (event->type != GDK_KEY_PRESS)
         return FALSE;
 
-    if (event->keyval == GDK_m && ctl) {
+    if ((event->keyval == GDK_m || event->keyval == GDK_M) && ctl) {
+        gint x, y;
+        gtk_window_get_position(GTK_WINDOW(main_window), &x, &y);
+
         if (menu_hidden) {
+	    gtk_window_set_decorated(GTK_WINDOW(main_window), TRUE);
             gtk_widget_show(menubar);
-	    gtk_window_set_decorated((GtkWindow*)main_window, TRUE);
-	    gtk_window_set_keep_above(GTK_WINDOW(main_window), FALSE);
+ 	    gtk_window_set_keep_above(GTK_WINDOW(main_window), FALSE);
             menu_hidden = FALSE;
         } else {
+            titlebar = gtk_window_get_titlebar(GTK_WINDOW(main_window));
             gtk_widget_hide(menubar);
-	    gtk_window_set_decorated((GtkWindow*)main_window, FALSE);
+	    gtk_window_set_decorated(GTK_WINDOW(main_window), FALSE);
+            if (shft)
+                gtk_window_set_titlebar(GTK_WINDOW(main_window), NULL);
 	    gtk_window_set_keep_above(GTK_WINDOW(main_window), TRUE);
             menu_hidden = TRUE;
         }
+
+        gtk_window_move(GTK_WINDOW(main_window), x, y);
         return FALSE;
     }
     if (event->keyval == GDK_n && ctl && ACTIVE) {
