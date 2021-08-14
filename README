@@ -34,7 +34,7 @@ $ sudo apt-get install liblzma-dev libxml2-dev
 
 Debian package creation requires Ruby and fpm:
 
-$ sudo apt-get -y install ruby ruby-dev rubygems
+$ sudo apt-get -y install ruby ruby-dev
 $ sudo -E gem install fpm
 
 You may have to update stuff first (Raspberry Pi):
