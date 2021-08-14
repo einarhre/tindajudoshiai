@@ -757,8 +757,8 @@ void set_timer_value(guint min, guint tsec, guint sec)
         send_label_msg(&msg);
     }
 
-    if (min < 20) {
-        set_text(MY_LABEL(t_min), num_to_str(min%10));
+    if (min < 60) {
+        set_text(MY_LABEL(t_min), num_to_str(min));
         set_text(MY_LABEL(t_tsec), num_to_str(tsec));
         set_text(MY_LABEL(t_sec), num_to_str(sec));
     } else {
