@@ -1291,7 +1291,7 @@ gpointer ssdp_thread(gpointer args)
                 goto out;
             }
 
-            if (len > 0) {
+            if (len >= 12) {
 #define GET_SHORT(_i) ((inbuf[_i]<<8) | inbuf[_i+1])
 #define SET_SHORT(_i, _v) inbuf[_i] = (_v >> 8); inbuf[_i+1] = (_v & 0xff)
                 guint16 id = GET_SHORT(0);
