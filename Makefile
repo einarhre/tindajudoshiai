@@ -35,8 +35,12 @@ ifeq ($(TOOL),MXE)
 
     ifeq ($(TARGETOS),WIN32)
         DLLS += libgcc_s_sjlj-1.dll libcrypto-1_1.dll
+        DLLS += gspawn-win32-helper-console.exe
+        DLLS += gspawn-win32-helper.exe
     else
         DLLS += libgcc_s_seh-1.dll
+        DLLS += gspawn-win64-helper-console.exe
+        DLLS += gspawn-win64-helper.exe
     endif
 
 # libgmp-10.dll libgnutls-30.dll  libhogweed-4.dll libhogweed-5.dll
