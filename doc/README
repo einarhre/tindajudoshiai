@@ -1,23 +1,72 @@
 Documentation is included in the software package, but online versions
 as well as other documents are available here:
-http://judoshiai.sourceforge.net/
+
+    https://judoshiai.org/
 
 Versions:
-Windows XP: judoshiai-setup-n.n.n-XP.exe
-Windows 32: judoshiai-setup-n.n.n-32.exe
 Windows 64: judoshiai-setup-n.n.n-64.exe
+Windows 32: judoshiai-setup-n.n.n-32.exe
 Linux (Debian based): judoshiai_n.n-1_amd64.deb
 Raspberry Pi: judoshiai_n.n-1_armhf.deb
 
 NOTE for Windows:
-  Windows XP should work everywhere.
-  JudoShiai32 and JudoShiai64 do not work in Windows XP.
-  Default installation directories are JudoShiaiXP, JudoShiai32, and JudoShiai64.
+  Default installation directories are JudoShiai32 and JudoShiai64.
+  Support for WinXP has ended. WinXP release is possible if requested.
+  Consider installing 32 bit Linux to your old computers.
 
-  In some operations JudoShiai64 is much faster than JudoShiaiXP in Win64 PC.
-  For example opening category definitions is 500% faster.
+NOTE for Linux:
+  Install using gdebi. Example:
+    sudo gdebi judoshiai_n.n-1_amd64.deb
+  AppImages are large files, but include all the necessary libraries.
+  Use those if deb packages cannot be installed.
 
-  Please report your experiences to oh2ncp @ gmail . com
+NOTE for Android:
+  Applications are available in Play store. They are in Open testing phase.
+
+Please report your experiences to oh2ncp @ gmail . com
+
+==============================================
+RELEASE NOTE
+VERSION 3.1
+
+Common
+------
++ Bug fixes.
++ AppImages included in the release (for Linux).
++ No WinXP release. Please send request if XP really needed.
+
+JudoShiai
+---------
++ Competitor data can be saved to a JSON file.
++ Weights and new competitors input from JSON files.
++ Match graphics changed to table format.
++ QR code option for accreditation cards.
++ Match legend can be changed.
++ mDNS support (for the future).
+
+JudoTimer
+---------
++ Bug fix (no soremade/ippon texts didn't work).
++ Partial bug fix (ctl-m doesn't hide title bar in Win10. ctl-shift-m does it, but do not recover).
++ Legends changed (used in UK).
++ Minutes >= 10 shown with two digits.
++ JudoTimer sends all display data to slave when it connects.
+
+JudoLive (Raspberry Pi)
+-----------------------
++ Can use Raspberry's camera module or external USB camera.
++ Control with a web browser. Connect http://<rpi_ip_addr>:8000
+
+JudoWeight (Android)
+--------------------
++ In Open testing
++ Join testing here: https://play.google.com/store/apps/details?id=org.judoshiai.android.judoweight
+
+JudoLive (Android)
+------------------
++ Much simpler that Raspberry Pi version.
++ In Open testing
++ Join testing here: https://play.google.com/store/apps/details?id=org.judoshiai.android.judolive
 
 ==============================================
 RELEASE NOTE
