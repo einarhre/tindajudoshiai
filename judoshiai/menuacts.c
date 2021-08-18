@@ -38,7 +38,7 @@ void about_shiai( GtkWidget *w, gpointer data)
                            "title", "About JudoShiai",
                            "copyright", "Copyright 2006-2021 Hannu Jokinen",
                            "version", full_version(),
-                           "website", "http://sourceforge.net/projects/judoshiai/",
+                           "website", "https://judoshiai.org/",
                            NULL);
 }
 
