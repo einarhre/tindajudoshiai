@@ -51,7 +51,7 @@ static void about_judoinfo( GtkWidget *w,
                            "title", _("About JudoWeight"),
                            "copyright", "Copyright 2006-2021 Hannu Jokinen",
                            "version", full_version(),
-                           "website", "https://judoshiai.org/",
+                           "website", "https://www.judoshiai.org/",
                            NULL);
 }
 

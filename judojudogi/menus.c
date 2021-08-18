@@ -50,7 +50,7 @@ static void about_judojudogi( GtkWidget *w,
                            "title", _("About JudoJudogi"),
                            "copyright", "Copyright 2006-2021 Hannu Jokinen",
                            "version", full_version(),
-                           "website", "https://judoshiai.org/",
+                           "website", "https://www.judoshiai.org/",
                            NULL);
 }
 
