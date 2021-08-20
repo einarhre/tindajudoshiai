@@ -1179,7 +1179,7 @@ void update_match_table(void)
     gint i;
     
     for (i = 0; i <= NUM_TATAMIS; i++) {
-        g_print("update_match_table columns[%d] == %p\n", i, columns[i]);
+        //g_print("update_match_table columns[%d] == %p\n", i, columns[i]);
         if (columns[i])
             gtk_tree_view_column_set_visible(columns[i], i <= number_of_tatamis);
     }
@@ -1385,6 +1385,11 @@ static GtkTargetEntry target_table[] = {
   { "application/x-rootwindow-drop", 0, TARGET_ROOTWIN }
 };
 
+gboolean scroll_entries(GtkWidget * widget, GdkEvent * event, gpointer data) {
+    gtk_widget_queue_draw(match_table_view);
+    return FALSE; // Let other handlers respond to this event
+}
+
 static guint n_targets = sizeof(target_table) / sizeof(target_table[0]);
 
 void set_match_table_page(GtkWidget *nb)
@@ -1428,6 +1433,8 @@ void set_match_table_page(GtkWidget *nb)
                       G_CALLBACK (source_drag_data_get), NULL);
     g_signal_connect (match_table_view, "drag_data_delete",
                       G_CALLBACK (source_drag_data_delete), NULL);
+
+    g_signal_connect(match_scrolled_window, "scroll-event", G_CALLBACK(scroll_entries), NULL);
 
 }
 
