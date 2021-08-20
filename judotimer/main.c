@@ -1828,7 +1828,7 @@ static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userda
 {
     gboolean ctl = event->state & 4;
     gboolean shft = event->state & 1;
-    static GtkWidget *titlebar = NULL;
+    //static GtkWidget *titlebar = NULL;
 
     if (event->type != GDK_KEY_PRESS)
         return FALSE;
@@ -1843,11 +1843,13 @@ static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userda
  	    gtk_window_set_keep_above(GTK_WINDOW(main_window), FALSE);
             menu_hidden = FALSE;
         } else {
-            titlebar = gtk_window_get_titlebar(GTK_WINDOW(main_window));
+            //titlebar = gtk_window_get_titlebar(GTK_WINDOW(main_window));
             gtk_widget_hide(menubar);
 	    gtk_window_set_decorated(GTK_WINDOW(main_window), FALSE);
+#ifndef WINXP
             if (shft)
                 gtk_window_set_titlebar(GTK_WINDOW(main_window), NULL);
+#endif
 	    gtk_window_set_keep_above(GTK_WINDOW(main_window), TRUE);
             menu_hidden = TRUE;
         }

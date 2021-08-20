@@ -46,7 +46,7 @@ CFLAGS = $(WARNINGS) -g \
          -I$(WIN32_BASE)/rsvg/include/librsvg-2.0 \
          -I$(WIN32_BASE)/curl/include \
          -I$(WIN32_BASE)/ssh2/include \
-         -I../common -mms-bitfields
+         -I../common -mms-bitfields -DWINXP=1
 
 LIBS=-L$(DEVELDIR)/lib $(DEVELDIR)/lib/glib-2.0.lib -L$(RSVGDIR)/bin \
      -L$(DEVELDIR)/bin \
