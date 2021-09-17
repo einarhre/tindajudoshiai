@@ -572,32 +572,73 @@ void get_weights_from_old_competition(GtkWidget *w, gpointer data)
 
 static gboolean ok_all = FALSE;
 
+gboolean json_fill_judoka_struct(cJSON *root, struct judoka *j)
+{
+    gboolean is_new = FALSE;
+    
+    memset(j, 0, sizeof(*j));
+    JSON_GET_DST_STR(root, j->last, last);
+    JSON_GET_DST_STR(root, j->first, first);
+    JSON_GET_DST_STR(root, j->club, club);
+    JSON_GET_DST_STR(root, j->regcategory, regcat);
+    JSON_GET_DST_STR(root, j->category, category);
+    JSON_GET_DST_STR(root, j->country, country);
+    JSON_GET_DST_STR(root, j->id, id);
+    JSON_GET_DST_STR(root, j->comment, comment);
+    JSON_GET_DST_STR(root, j->coachid, coachid);
+    JSON_GET_DST_INT(root, j->index, ix);
+    JSON_GET_DST_INT(root, j->birthyear, birthyear);
+    JSON_GET_DST_INT(root, j->belt, belt);
+    JSON_GET_DST_INT(root, j->weight, weight);
+    JSON_GET_DST_INT(root, j->deleted, flags);
+    JSON_GET_DST_INT(root, j->seeding, seeding);
+    JSON_GET_DST_INT(root, j->clubseeding, clubseeding);
+    JSON_GET_DST_INT(root, j->gender, gender);
+    j->visible = TRUE;
+
+    if (j->gender == IS_FEMALE)
+        j->deleted |= GENDER_FEMALE;
+    else if (j->gender == IS_MALE)
+        j->deleted |= GENDER_MALE;
+
+    if (j->index == 0) {
+        j->index = comp_index_get_free();
+        j->category = "?";
+        is_new = TRUE;
+    }
+
+    return is_new;
+}
+
+gint json_edit_or_create_judoka(cJSON *root)
+{
+    struct judoka j;
+    gboolean is_new = json_fill_judoka_struct(root, &j);
+
+    if (is_new) {
+        g_print("Adding [%d] %s\n", j.index, j.last);
+        gint rc = db_add_judoka(j.index, &j);
+        if (rc == SQLITE_OK)
+            display_one_judoka(&j);
+        else
+            g_print("Could not add [%d] %s\n", j.index, j.last);
+    } else {
+        g_print("Update [%d] %s\n", j.index, j.last);
+        db_update_judoka(j.index, &j);
+        display_one_judoka(&j);
+    }
+
+    return j.index;
+}
+
 void json_create_new_judoka(cJSON *root, gboolean ok)
 {
     struct judoka j1;
-    JSON_GET_DST_STR(root, j1.last, last);
-    JSON_GET_DST_STR(root, j1.first, first);
-    JSON_GET_DST_STR(root, j1.club, club);
-    JSON_GET_DST_STR(root, j1.regcategory, regcat);
-    //JSON_GET_DST_STR(root, j1.category, category);
-    JSON_GET_DST_STR(root, j1.country, country);
-    JSON_GET_DST_STR(root, j1.id, id);
-    JSON_GET_DST_STR(root, j1.comment, comment);
-    JSON_GET_DST_STR(root, j1.coachid, coachid);
-    JSON_GET_DST_INT(root, j1.birthyear, birthyear);
-    JSON_GET_DST_INT(root, j1.belt, belt);
-    JSON_GET_DST_INT(root, j1.weight, weight);
-    JSON_GET_DST_INT(root, j1.deleted, flags);
-    JSON_GET_DST_INT(root, j1.seeding, seeding);
-    JSON_GET_DST_INT(root, j1.clubseeding, clubseeding);
-    JSON_GET_DST_INT(root, j1.gender, gender);
-    j1.index = comp_index_get_free();
-    j1.category = "?";
-    if (j1.gender == IS_FEMALE)
-        j1.deleted |= GENDER_FEMALE;
-    else
-        j1.deleted |= GENDER_MALE;
-        
+    gboolean is_new = json_fill_judoka_struct(root, &j1);
+
+    if (!is_new)
+        return;
+    
     GtkTreeIter iter;
     if (find_iter_name_2(&iter, j1.last, j1.first, j1.club, j1.regcategory))
         return;
@@ -932,4 +973,3 @@ void make_backup(void)
         filenames[ix] = NULL;
     }
 }
-
