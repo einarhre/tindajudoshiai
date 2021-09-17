@@ -44,7 +44,7 @@ extern void start_help(GtkWidget *w, gpointer data);
 extern void locate_to_tatamis(GtkWidget *w, gpointer data);
 extern void set_tatami_state(GtkWidget *menu_item, gpointer data);
 extern void backup_shiai(GtkWidget *w, gpointer data);
-extern void db_validation(GtkWidget *w, gpointer data);
+extern gchar *db_validation(GtkWidget *w, gpointer data);
 extern void toggle_mirror(GtkWidget *menu_item, gpointer data);
 extern void toggle_auto_arrange(GtkWidget *menu_item, gpointer data);
 extern void select_use_logo(GtkWidget *w, gpointer data);
@@ -747,6 +747,8 @@ void set_preferences(void)
     if (g_key_file_get_boolean(keyfile, "preferences", "showcolors", &error)) {
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(category_show_colors), TRUE);
     }
+
+    //auth_init();
 }
 
 static void change_menu_label(GtkWidget *item, const gchar *new_text)
