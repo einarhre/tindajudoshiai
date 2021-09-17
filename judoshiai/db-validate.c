@@ -72,70 +72,62 @@ static void insert_tag(GtkTextBuffer *buffer, gchar *txt, gchar *tag, gint lines
     gtk_text_buffer_apply_tag_by_name (buffer, tag, &start, &end);
 }
 
-void db_validation(GtkWidget *w, gpointer data)
+gchar *db_validation(GtkWidget *w, gpointer data)
 {
     gint warnings = 0;
+    gchar txt[256];
+    gchar _txt[256];
     GtkTextBuffer *buffer;
-    GtkWidget *vbox, *result, *ok;
-	gchar txt[256];
-	gchar _txt[256];
-    GtkWindow *window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
-    gtk_window_set_title(GTK_WINDOW(window), _("Database Validation"));
-    gtk_widget_set_size_request(GTK_WIDGET(window), SIZEX, SIZEY);
-    gtk_window_set_transient_for(GTK_WINDOW(window), GTK_WINDOW(main_window));
-    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER_ON_PARENT);
-    gtk_window_set_destroy_with_parent(GTK_WINDOW(window), TRUE);
 
-#if (GTKVER == 3)
-    vbox = gtk_grid_new();
-#else
-    vbox = gtk_vbox_new(FALSE, 1);
-#endif
-    gtk_container_set_border_width (GTK_CONTAINER (vbox), 1);
-    gtk_container_add (GTK_CONTAINER (window), vbox);
+    if (w) {
+        GtkWidget *vbox, *result, *ok;
+        GtkWindow *window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
+        gtk_window_set_title(GTK_WINDOW(window), _("Database Validation"));
+        gtk_widget_set_size_request(GTK_WIDGET(window), SIZEX, SIZEY);
+        gtk_window_set_transient_for(GTK_WINDOW(window), GTK_WINDOW(main_window));
+        gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER_ON_PARENT);
+        gtk_window_set_destroy_with_parent(GTK_WINDOW(window), TRUE);
 
-    result = gtk_text_view_new();
-    ok = gtk_button_new_with_label(_("OK"));
+        vbox = gtk_grid_new();
+        gtk_container_set_border_width (GTK_CONTAINER (vbox), 1);
+        gtk_container_add (GTK_CONTAINER (window), vbox);
 
-    GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
-    gtk_container_set_border_width(GTK_CONTAINER(scrolled_window), 10);
+        result = gtk_text_view_new();
+        ok = gtk_button_new_with_label(_("OK"));
+
+        GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+        gtk_container_set_border_width(GTK_CONTAINER(scrolled_window), 10);
 #if (GTKVER == 3) && GTK_CHECK_VERSION(3,8,0)
-    gtk_container_add(GTK_CONTAINER(scrolled_window), result);
+        gtk_container_add(GTK_CONTAINER(scrolled_window), result);
 #else
-    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), result);
+        gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), result);
 #endif
 
-#if (GTKVER == 3)
-    gtk_grid_attach(GTK_GRID(vbox), scrolled_window, 0, 0, 1, 1);
-    gtk_widget_set_hexpand(scrolled_window, TRUE);
-    gtk_widget_set_vexpand(scrolled_window, TRUE);
-    gtk_grid_attach(GTK_GRID(vbox), ok,              0, 1, 1, 1);
-#else
-    gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), ok, FALSE, TRUE, 0);
-#endif
-    gtk_widget_show_all(GTK_WIDGET(window));
-    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(result));
+        gtk_grid_attach(GTK_GRID(vbox), scrolled_window, 0, 0, 1, 1);
+        gtk_widget_set_hexpand(scrolled_window, TRUE);
+        gtk_widget_set_vexpand(scrolled_window, TRUE);
+        gtk_grid_attach(GTK_GRID(vbox), ok,              0, 1, 1, 1);
+        gtk_widget_show_all(GTK_WIDGET(window));
+        buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(result));
 
-    PangoFontDescription *font_desc = pango_font_description_from_string("Courier 10");
-#if (GTKVER == 3)
-    gtk_widget_override_font(GTK_WIDGET(result), font_desc);
-#else
-    gtk_widget_modify_font(GTK_WIDGET(result), font_desc);
-#endif
-    pango_font_description_free (font_desc);
+        PangoFontDescription *font_desc = pango_font_description_from_string("Courier 10");
+        gtk_widget_override_font(GTK_WIDGET(result), font_desc);
+        pango_font_description_free (font_desc);
 
-    g_signal_connect (G_OBJECT (window), "delete_event",
-                      G_CALLBACK (delete_event_validate), NULL);
-    g_signal_connect (G_OBJECT (window), "destroy",
-                      G_CALLBACK (destroy_validate), NULL);
+        g_signal_connect (G_OBJECT (window), "delete_event",
+                          G_CALLBACK (delete_event_validate), NULL);
+        g_signal_connect (G_OBJECT (window), "destroy",
+                          G_CALLBACK (destroy_validate), NULL);
 
-    g_signal_connect_swapped (ok, "clicked",
-			      G_CALLBACK (gtk_widget_destroy),
-                              window);
+        g_signal_connect_swapped (ok, "clicked",
+                                  G_CALLBACK (gtk_widget_destroy),
+                                  window);
 
-    gtk_text_view_set_editable(GTK_TEXT_VIEW(result), FALSE);
-
+        gtk_text_view_set_editable(GTK_TEXT_VIEW(result), FALSE);
+    } else {
+        buffer = gtk_text_buffer_new(NULL);
+    }
+    
     gtk_text_buffer_set_text(buffer, "", -1);
     gtk_text_buffer_create_tag (buffer, "bold", 
                                 "weight", PANGO_WEIGHT_BOLD, NULL); 
@@ -413,6 +405,16 @@ void db_validation(GtkWidget *w, gpointer data)
     g_snprintf(_txt, sizeof _txt, ngettext("One warning.","%d warnings.",warnings), warnings);
     g_snprintf(txt, sizeof txt, "\n* %s *\n", _txt);
     insert_tag(buffer, txt, "bold", 1);
+
+    if (!w) {
+        GtkTextIter start, end;
+        gint lines = gtk_text_buffer_get_line_count(buffer);
+        gtk_text_buffer_get_iter_at_line (buffer, &start, 0);
+        gtk_text_buffer_get_iter_at_line (buffer, &end, lines);
+        return gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+    }
+
+    return NULL;
 }
 
 
