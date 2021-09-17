@@ -53,6 +53,8 @@
 #include "sha.h"
 #include "cJSON.h"
 
+extern gint json_edit_or_create_judoka(cJSON *root);
+
 #define JSON_CHECK(_a) do { if (!(_a)) { ret = MSG_WEB_RESP_ERR; goto json_end; }} while (0)
 #define JSON_GET_VAL(_root, _item) cJSON *_item = cJSON_GetObjectItem(_root, #_item); JSON_CHECK(_item)
 #define JSON_GET_STR(_root, _item)              \
@@ -95,6 +97,7 @@ static struct {
 } noconnections[NUM_CONNECTIONS];
 
 static SOCKET mcast_out_fd;
+
 
 //static volatile struct message message_queue[MSG_QUEUE_LEN];
 //static volatile gint msg_put = 0, msg_get = 0;
@@ -252,6 +255,53 @@ static void json_add_judoka_data(cJSON *out, struct judoka *j)
     }
 }
 
+static void json_add_category_data(cJSON *out, struct category_data *c)
+{
+    cJSON_AddNumberToObject(out, "index", c->index);
+    cJSON_AddStringToObject(out, "category", c->category);
+    cJSON_AddNumberToObject(out, "tatami", c->tatami);
+    cJSON_AddNumberToObject(out, "group", c->group);
+    cJSON_AddNumberToObject(out, "system", c->system.system);
+    cJSON_AddNumberToObject(out, "numcomp", c->system.numcomp);
+    cJSON_AddNumberToObject(out, "table", c->system.table);
+    cJSON_AddNumberToObject(out, "wishsys", c->system.wishsys);
+    cJSON_AddNumberToObject(out, "status", c->match_status);
+    cJSON_AddNumberToObject(out, "count", c->match_count);
+    cJSON_AddNumberToObject(out, "matchedcnt", c->matched_matches_count);
+}
+
+static void json_add_match_data(cJSON *obj, struct match *m)
+{
+    if (m->number == 1000)
+        return;
+
+    struct category_data *cat = avl_get_category(m->category);
+    if (!cat)
+        return;
+    cJSON_AddStringToObject(obj, "category", cat->category);
+    cJSON_AddNumberToObject(obj, "number", m->number);
+
+    struct judoka *j1 = avl_get_competitor(m->blue);
+    if (j1) {
+        cJSON *comp = cJSON_CreateObject();
+        cJSON_AddStringToObject(comp, "last", j1->last);
+        cJSON_AddStringToObject(comp, "first", j1->first);
+        cJSON_AddStringToObject(comp, "club", j1->club);
+        cJSON_AddStringToObject(comp, "country", j1->country);
+        cJSON_AddItemToObject(obj, "comp1", comp);
+    }
+        
+    struct judoka *j2 = avl_get_competitor(m->white);
+    if (j2) {
+        cJSON *comp = cJSON_CreateObject();
+        cJSON_AddStringToObject(comp, "last", j2->last);
+        cJSON_AddStringToObject(comp, "first", j2->first);
+        cJSON_AddStringToObject(comp, "club", j2->club);
+        cJSON_AddStringToObject(comp, "country", j2->country);
+        cJSON_AddItemToObject(obj, "comp2", comp);
+    }
+}
+
 static struct judoka *find_judoka_by_id(const gchar *id)
 {
     gboolean coach;
@@ -307,6 +357,180 @@ static void fill_judoka_edit_competitor(struct message *msg, struct judoka *j)
     SET_J(clubseeding);
     SET_J(comment);
     SET_J(coachid);
+}
+
+// curl -X POST -H 'Content-Type: application/json' -d '{"op": "getcomp", "ix":23}' http://localhost:8088/json
+void handle_json(struct message *input_msg)
+{
+    struct judoka *j = NULL;
+    int ret = MSG_WEB_RESP_OK;
+    cJSON *root = input_msg->u.web.u.json.json;
+    struct msg_web_resp *resp;
+    resp = input_msg->u.web.resp;
+    resp->request = input_msg->u.web.request;
+
+    if (webpwcrc32) {
+        JSON_GET_STR(root, pw);
+        gint crc = pwcrc32(pw, strlen(pw));
+        if (crc != webpwcrc32) {
+            ret = MSG_WEB_RESP_ERR;
+            goto json_end;
+        }
+    }
+    
+    JSON_GET_STR(root, op);
+    j = NULL;
+
+    if (JSON_OP(getcomp) || JSON_OP(setweight)) {
+        JSON_GET_INT(root, ix);
+        JSON_CHECK(j = get_data(ix));
+        if (JSON_OP(setweight)) {
+            JSON_GET_INT(root, weight);
+            j->weight = weight;
+            db_update_judoka(j->index, j);
+            display_one_judoka(j);
+        }
+        cJSON *out = cJSON_CreateObject();
+        json_add_judoka_data(out, j);
+        resp->u.json.json = out;
+    } else if (JSON_OP(lang)) {
+        JSON_GET_LIST(root, words);
+        cJSON *out = cJSON_CreateArray();
+        while (words) {
+            cJSON_AddItemToArray(out, cJSON_CreateString(_(words->valuestring)));
+            words = words->next;
+        }
+        resp->u.json.json = out;
+    } else if (JSON_OP(setcomp)) {
+        gint index = json_edit_or_create_judoka(root);
+        cJSON *out = cJSON_CreateObject();
+        cJSON_AddNumberToObject(out, "ix", index);
+        resp->u.json.json = out;
+    } else if (JSON_OP(sql)) {
+        gint row;
+        int numrows, numcols;
+        JSON_GET_STR(root, cmd);
+
+        char **tablecopy = db_get_table_copy(cmd, &numrows, &numcols);
+        if (tablecopy == NULL)
+            goto json_end;
+
+        cJSON *out = cJSON_CreateArray();
+
+        for (row = 0; row <= numrows; row++) {
+            cJSON *jsonrow = cJSON_CreateStringArray(&tablecopy[row*numcols], numcols);
+            cJSON_AddItemToArray(out, jsonrow);
+        }        
+
+        db_close_table_copy(tablecopy);
+        resp->u.json.json = out;
+    } else if (JSON_OP(matches)) {
+        JSON_GET_INT(root, tatami);
+        cJSON *out = cJSON_CreateArray();
+        struct match *m = get_cached_next_matches(tatami);
+        int i;
+
+        for (i = 0; i < NEXT_MATCH_NUM; i++) {
+            if (m[i].number == 1000)
+                break;
+            cJSON *a = cJSON_CreateObject();
+            json_add_match_data(a, &m[i]);
+            cJSON_AddItemToArray(out, a);
+        }
+
+        resp->u.json.json = out;
+    } else if (JSON_OP(draw)) {
+        GtkTreeIter iter;
+
+        JSON_GET_LIST(root, cat);
+        while (cat) {
+            if (find_iter(&iter, cat->valueint)) {
+                gint n = gtk_tree_model_iter_n_children(current_model, &iter);
+                if (n >= 1 && n <= NUM_COMPETITORS)
+                    draw_one_category(&iter, n);
+            }
+            cat = cat->next;
+        }
+        cJSON *out = cJSON_CreateObject();
+        resp->u.json.json = out;
+    } else if (JSON_OP(validate)) {
+        extern gchar *db_validation(GtkWidget *w, gpointer data);
+        gchar *r = db_validation(NULL, NULL);
+        cJSON *out = cJSON_CreateObject();
+        if (r) {
+            cJSON_AddStringToObject(out, "validate", r);
+            g_free(r);
+        }
+        resp->u.json.json = out;
+    } else if (JSON_OP(categories)) {
+        gint i;
+        cJSON *out = cJSON_CreateArray();
+        resp->u.json.json = out;
+
+        for (i = 0; i <= number_of_tatamis; i++) {
+            struct category_data *cd = category_queue[i].next;
+            while (cd) {
+                cJSON *catobj = cJSON_CreateObject();
+                json_add_category_data(catobj, cd);
+                cJSON_AddItemToArray(out, catobj);
+                cd = cd->next;
+            }
+        }
+#if 0
+        
+#define TBL_INT(_name) do { \
+            char *a = db_get_col_data(tablecopy, numcols, row, #_name); \
+            cJSON_AddNumberToObject(catobj, #_name, a ? atoi(a) : 0); \
+        } while (0)
+#define TBL_STR(_name) do { \
+            char *a = db_get_col_data(tablecopy, numcols, row, #_name); \
+            cJSON_AddStringToObject(catobj, #_name, a); \
+        } while (0)
+        
+        gint row;
+        int numrows, numcols;
+        char **tablecopy = db_get_table_copy(
+            "SELECT * FROM categories WHERE \"deleted\"=0 ORDER BY \"category\" ASC",
+            &numrows, &numcols);
+
+
+
+        if (tablecopy == NULL)
+            goto json_end;
+
+        for (row = 0; row < numrows; row++) {
+            char *ix = db_get_col_data(tablecopy, numcols, row, "index");
+            char *cat = db_get_col_data(tablecopy, numcols, row, "category");
+
+            cJSON *catobj = cJSON_CreateObject();
+            cJSON_AddNumberToObject(catobj, "ix", ix ? atoi(ix) : 0);
+            TBL_STR(category);
+            TBL_INT(tatami);
+            TBL_INT(group);
+            TBL_INT(system);
+            TBL_INT(numcomp);
+            TBL_INT(table);
+            TBL_INT(wishsys);
+            TBL_INT(pos1);
+            TBL_INT(pos2);
+            TBL_INT(pos3);
+            TBL_INT(pos4);
+            TBL_INT(pos5);
+            TBL_INT(pos6);
+            TBL_INT(pos7);
+            TBL_INT(pos8);
+            TBL_STR(color);
+            cJSON_AddItemToArray(out, catobj);
+        }
+
+        db_close_table_copy(tablecopy);
+#endif
+    }
+
+json_end:
+    if (j) free_judoka(j);
+    cJSON_Delete(root);
+    g_atomic_int_set(&resp->ready, ret);
 }
 
 void msg_received(struct message *input_msg)
@@ -403,9 +627,6 @@ void msg_received(struct message *input_msg)
 
     case MSG_EDIT_COMPETITOR:
 	if (input_msg->u.edit_competitor.operation == EDIT_OP_GET_BY_ID) {
-            gboolean coach;
-	    gint indx = 0;
-
             j = find_judoka_by_id(input_msg->u.edit_competitor.id);
 
 	    memset(&output_msg, 0, sizeof(output_msg));
@@ -447,7 +668,7 @@ void msg_received(struct message *input_msg)
             set_judogi_status(input_msg->u.edit_competitor.index, input_msg->u.edit_competitor.matchflags);
 	} else if (input_msg->u.edit_competitor.operation == EDIT_OP_SET) {
 	    memset(&j2, 0, sizeof(j2));
-            fill_judoka_edit_competitor(&input_msg, &j2);
+            fill_judoka_edit_competitor(input_msg, &j2);
 
 	    if (j2.index) { // edit old competitor
 		j = get_data(j2.index);
@@ -521,8 +742,6 @@ void msg_received(struct message *input_msg)
 
     case MSG_WEB: {
 	struct msg_web_resp *resp;
-	gint indx = 0;
-	gboolean coach;
 
 	resp = input_msg->u.web.resp;
 	resp->request = input_msg->u.web.request;
@@ -610,36 +829,7 @@ void msg_received(struct message *input_msg)
 	    resp->u.get_category_info_resp.wishsys = sys.wishsys;
 	    resp->u.get_category_info_resp.num_pages = num_pages(sys);
 	} else 	if (input_msg->u.web.request == MSG_WEB_JSON) {
-            int ret = MSG_WEB_RESP_OK;
-            cJSON *root = input_msg->u.web.u.json.json;
-            JSON_GET_STR(root, op);
-            j = NULL;
-            if (JSON_OP(getcomp) || JSON_OP(setweight)) {
-                JSON_GET_INT(root, ix);
-                JSON_CHECK(j = get_data(ix));
-                if (JSON_OP(setweight)) {
-                    JSON_GET_INT(root, weight);
-                    j->weight = weight;
-                    db_update_judoka(j->index, j);
-                    display_one_judoka(j);
-                }
-                cJSON *out = cJSON_CreateObject();
-                json_add_judoka_data(out, j);
-                resp->u.json.json = out;
-            } else if (JSON_OP(lang)) {
-                JSON_GET_LIST(root, words);
-                cJSON *out = cJSON_CreateArray();
-                while (words) {
-                    cJSON_AddItemToArray(out, cJSON_CreateString(_(words->valuestring)));
-                    words = words->next;
-                }
-                resp->u.json.json = out;
-            }
-
-        json_end:
-            if (j) free_judoka(j);
-            cJSON_Delete(root);
-            g_atomic_int_set(&resp->ready, ret);
+            handle_json(input_msg);
             return;
 	}
 
