@@ -462,6 +462,42 @@ void handle_json(struct message *input_msg)
             g_free(r);
         }
         resp->u.json.json = out;
+    } else if (JSON_OP(accrcard)) {
+        GSList *complist = NULL;
+        JSON_GET_LIST(root, comps);
+        JSON_GET_INT(root, what);
+        while (comps) {
+            complist = g_slist_append(complist, gint_to_ptr(comps->valueint));
+            comps = comps->next;
+        }
+        get_accr_cards(complist, what, resp);
+        g_slist_free(g_steal_pointer (&complist));
+    } else if (JSON_OP(movcat)) {
+        cJSON *out = cJSON_CreateArray();
+        resp->u.json.json = out;
+
+        JSON_GET_LIST(root, comps);
+        JSON_GET_STR(root, dest);
+        while (comps) {
+            struct judoka *j = get_data(comps->valueint);
+            if (j) {
+                if (db_competitor_match_status(j->index) & MATCH_EXISTS) {
+                    cJSON *msg = cJSON_CreateObject();
+                    cJSON_AddStringToObject(msg, "first", j->first);
+                    cJSON_AddStringToObject(msg, "last", j->last);
+                    cJSON_AddStringToObject(msg, "msg", _("Remove drawing first"));
+                    cJSON_AddItemToArray(out, msg);
+                } else {
+                    if (j->category)
+                        g_free((void *)j->category);
+                    j->category = strdup(dest);
+                    display_one_judoka(j);
+                    db_update_judoka(j->index, j);
+                }
+                free_judoka(j);
+            }
+            comps = comps->next;
+        }
     } else if (JSON_OP(categories)) {
         gint i;
         cJSON *out = cJSON_CreateArray();
