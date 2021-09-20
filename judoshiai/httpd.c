@@ -2001,6 +2001,12 @@ struct UploadContext
 
 #define log g_printerr
 
+#define RETURN_404 \
+    response = MHD_create_response_from_buffer(strlen (PAGE), (void *) PAGE, MHD_RESPMEM_PERSISTENT); \
+    int ret = MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, response); \
+    MHD_destroy_response(response);                                     \
+    return ret
+
 int analyze_http(void *cls,
 		 struct MHD_Connection *connection,
 		 const char *url,
@@ -2021,7 +2027,7 @@ int analyze_http(void *cls,
     if (!strcmp(method, MHD_HTTP_METHOD_POST)) {
         struct UploadContext *uc = *ptr;
 
-        if (strcmp("/json", url))
+        if (strcmp("/json", url) && strcmp("/api", url))
             return MHD_NO;
 
         if (NULL == uc) {
@@ -2064,6 +2070,7 @@ int analyze_http(void *cls,
         resp.ready = 0;
         resp.request = MSG_WEB_JSON;
         resp.u.json.json = NULL;
+        resp.u.json.file = 0;
         
         memset(&msg, 0, sizeof(msg));
         msg.type = MSG_WEB;
@@ -2088,6 +2095,57 @@ int analyze_http(void *cls,
 
         struct MHD_Response *response = NULL;
         if (resp.u.json.json) {
+            if (resp.u.json.file) {
+                GStatBuf st;
+                struct MHD_Response *response;
+                cJSON *file = cJSON_GetObjectItem(resp.u.json.json, "file");
+                cJSON *mime = cJSON_GetObjectItem(resp.u.json.json, "mime");
+                if (file == NULL || mime == NULL) {
+                    cJSON_Delete(resp.u.json.json);
+                    RETURN_404;
+                }
+
+                char *filename = file->valuestring;
+                g_print("looking for %s / %s\n", filename, mime->valuestring);
+                
+                HANDLE fd = int_to_handle(g_open(filename, O_RDONLY, 0));
+                if (fd != INVALID_HANDLE_VALUE) {
+                    if (g_stat(filename, &st) || (!S_ISREG(st.st_mode))) {
+#ifdef WIN32
+                        CloseHandle(fd);
+#else
+                        g_close(fd, NULL);
+#endif
+                        fd = INVALID_HANDLE_VALUE;
+                    }
+                }
+
+                if (fd == INVALID_HANDLE_VALUE) {
+                    g_print("WEB RESP: FILE %s NOT FOUND!\n", resp.u.get_bracket_resp.filename);
+                    cJSON_Delete(resp.u.json.json);
+                    RETURN_404;
+                }
+
+                response = MHD_create_response_from_fd64(st.st_size, handle_to_int(fd));
+                if (!response) {
+                    g_printerr("response failed\n");
+#ifdef WIN32
+                    CloseHandle(fd);
+#else
+                    g_close(fd, NULL);
+#endif
+                    cJSON_Delete(resp.u.json.json);
+                    return MHD_NO;
+                }
+
+                MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, mime->valuestring);
+                MHD_add_response_header(response, "Content-Disposition", "inline");
+                int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+                MHD_destroy_response(response);
+                cJSON_Delete(resp.u.json.json);
+                return ret;
+            }
+            
             char *s = cJSON_PrintUnformatted(resp.u.json.json);
             cJSON_Delete(resp.u.json.json);
             response = MHD_create_response_from_buffer(strlen(s), s, MHD_RESPMEM_MUST_FREE);
