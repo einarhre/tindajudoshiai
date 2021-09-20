@@ -1,0 +1,31 @@
+<table id="prop_table" class="center" style="background: white; border: 2px solid black;">
+</table>
+
+<script>
+
+ function info_cb(data, arg) {
+     data.shift();
+     let rows = '';
+     data.forEach(i => {
+         rows += '<tr><td>'+i[0]+'</td><td><input id="'+i[0]+'" value="'+i[1]+'" type="text"></td></tr>'
+     });
+
+     rows += '<tr><td><button id="n_submit" onClick="edit_submit()">OK</button></td>';
+     rows += '<td><button id="n_cancel" onClick="edit_cancel()">Cancel</button></td></tr>';
+
+     document.getElementById("prop_table").innerHTML = rows;
+ }
+ 
+ function properties_start() {
+     json_send(JSON.stringify({ op: 'sql', cmd: 'SELECT * FROM info' }), info_cb, 0);
+ }
+
+ function edit_cancel() {
+     document.getElementById("popup").innerHTML = '';
+ }
+
+ function edit_submit() {
+     document.getElementById("popup").innerHTML = '';
+ }
+
+</script>

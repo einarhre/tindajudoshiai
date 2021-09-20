@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>JudoShiai</title>
+        <link rel="stylesheet" href="jquery-ui.min.css">
+        <link rel="stylesheet" href="jquery.menubar.min.css"" />
+        <link rel="stylesheet" href="tabulator.min.css">
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="jqueryjson.min.js"></script>
+        <script type="text/javascript" src="jquery-ui.min.js"></script>
+        <script type="text/javascript" src="jquery.menubar.min.js"></script>
+        <script type="text/javascript" src="reconnecting-websocket.min.js"></script>
+        <script type="text/javascript" src="tabulator.min.js"></script>
+    </head>
+    <body>
+        <ul id="menu">
+            <li><div id="m1"></div>
+                <ul>
+                    <li><a href="#" id="m1-1"></a></li>
+                    <li><a href="#" id="m1-5"></a></li>
+                </ul>
+            </li>
+            <li><div id="m2"></div>
+                <ul>
+                    <li><div id="m2-1"></div></li>
+                </ul>
+            </li>
+            <li><div id="m3"></div>
+                <ul>
+                    <li>
+                        Item 3-1
+                    </li>
+                    <li>
+                        Item 3-2
+                    </li>
+                    <li>
+                        Item 3-3
+                    </li>
+                </ul>
+            </li>
+            <li><div id="m4"></div></li>
+            <li><div id="m5"></div></li>
+            <li><div id="m6"></div></li>
+            <li><div id="m7"></div></li>
+        </ul>
+        <hr>
+        <div id="competitors"></div>
+        <div id="popup" style="position: absolute; top: 20%; left: 30%; overflow: auto;"></div>
+
+        <script type="text/javascript" src="shiai.js"></script>
+        <script type="text/javascript">
+         $(document).ready(function(){
+             $( "#menu" ).menubar();
+
+             $('#m1-1').click(function(e) {
+                 e.preventDefault();
+                 if(!ajax_loading) {
+                     ajax_loading = true;
+                     $('#popup')
+                         .load('editproperties.html', 
+                               function() { 
+                                   ajax_loading = false;
+                                   properties_start();
+                               }
+                         );
+                 }
+             });
+
+             $('#m1-5').click(function(e) {
+                 e.preventDefault();
+                 if(!ajax_loading) {
+                     ajax_loading = true;
+                     $('#popup')
+                         .load('validate.html', 
+                               function() { 
+                                   ajax_loading = false;
+                                   validate_start();
+                               }
+                         );
+                 }
+             });
+         });
+        </script>
+    </body>
+</html>

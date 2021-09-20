@@ -1,0 +1,21 @@
+<div style="background: white; border: 2px solid black;">
+    <pre id="validate_txt" >
+    </pre>
+    <button onClick="validate_ok()">OK</button>
+</div>
+
+<script>
+
+ function validate_cb(data, arg) {
+     document.getElementById("validate_txt").innerHTML = data.validate;
+ }
+ 
+ function validate_start() {
+     json_send(JSON.stringify({ op: 'validate' }), validate_cb, 0);
+ }
+
+ function validate_ok() {
+     document.getElementById("popup").innerHTML = '';
+ }
+
+</script>

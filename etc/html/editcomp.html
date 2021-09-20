@@ -1,0 +1,301 @@
+<table class="center" style="background: white; border: 2px solid black;">
+    <tr>
+        <td><h3><div class="lang">Competitor</div></h3></td>
+	<td><button id="newcomp"><div class="lang">New Competitor</div></button></td>
+	<td colspan="2"></td>
+    </tr>
+    <tr>
+	<td><div class="lang">Last Name:</div></td>
+	<td><input id="n_last" type="text"></td>
+	<td class="tooltip"></td>
+	<td></td>
+    </tr>
+    <tr>
+	<td><div class="lang">First Name:</div></td>
+	<td><input id="n_first" type="text"></td>
+	<td  class="tooltip"></td>
+	<td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Year of Birth:</div></td>
+        <td><input id="n_yob" type="text"></td>
+        <td></td>
+	<td rowspan="16">
+            <table id="lookup">
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td><div class="lang">Grade:</div></td>
+        <td>
+	    <select id="n_grade" placeholder="Grade..."  style="width:100%">
+	        <option value="0">?</option>
+	        <option value="1">6. kyu</option>
+	        <option value="2">5. kyu</option>
+	        <option value="3">4. kyu</option>
+	        <option value="4">3. kyu</option>
+	        <option value="5">2. kyu</option>
+	        <option value="6">1. kyu</option>
+	        <option value="7">1. dan</option>
+	        <option value="8">2. dan</option>
+	        <option value="9">3. dan</option>
+	        <option value="10">4. dan</option>
+	        <option value="11">5. dan</option>
+	        <option value="12">6. dan</option>
+	        <option value="13">7. dan</option>
+	        <option value="14">8. dan</option>
+	        <option value="15">9. dan</option>
+	    </select></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Club:</div></td>
+        <td><input id="n_club" type="text"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Country:</div></td>
+        <td><input id="n_country" type="text"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Reg. Category:</div></td>
+        <td><input id="n_regcat" type="text"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr><td><div class="lang">Category:</div></td>
+        <td id="n_realcat"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Weight:</div></td>
+        <td><input id="n_weight" type="text"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Seeding:</div></td>
+	<td>
+	    <select id="n_seeding" placeholder="Seeding..."  style="width:100%">
+		<option value="0"><div class="lang">No seeding</div></option>
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+	    </select>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Club Seeding:</div></td>
+        <td><input id="n_clubseeding" type="text"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Id:</div></td>
+        <td><input id="n_id" type="text"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Coach Id:</div></td>
+        <td><input id="n_coachid" type="text"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Gender:</div></td>
+        <td>
+	    <select id="n_gender" placeholder="Gender..."  style="width:100%">
+		<option value="0">?</option>
+		<option value="1"><div class="lang">Male</div></option>
+		<option value="2"><div class="lang">Female</div></option>
+	    </select>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Control:</div></td>
+        <td>
+	    <select id="n_control" placeholder="Control..." style="width:100%">
+		<option value="0">?</option>
+		<option value="1">OK</option>
+		<option value="2">NOK</option>
+	    </select>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Hansoku-make:</td>
+        <td><input id="n_hansokumake" type="checkbox"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><div class="lang">Comment:</div></td>
+        <td><input id="n_comment" type="text"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><button id="n_submit" onClick="edit_submit()">OK</button></td>
+        <td><button id="n_cancel" onClick="edit_cancel()">Cancel</button></td>
+        <td></td>
+    </tr>
+</table>
+<input id="n_index" type="hidden">
+
+<script>
+ // var categories = [];
+ var old_category = '';
+ 
+ function edit_cancel() {
+     document.getElementById("popup").innerHTML = '';
+ }
+
+ function edit_submit() {
+     let grade = document.getElementById("n_grade").value;
+     let seeding = document.getElementById("n_seeding").value;
+     let gender = document.getElementById("n_gender").value;
+     let control = document.getElementById("n_control").value;
+     let hansokumake = document.getElementById('n_hansokumake').checked;
+     let flags = 0;
+
+     if (gender == 1) flags |= 128;
+     else if (gender == 2) flags |= 256;
+
+     if (control == 1) flags |= 32;
+     else if (control == 2) flags |= 64;
+
+     if (hansokumake) flags |= 2;
+
+     category = document.getElementById("n_category").value;
+     let new_category = document.getElementById("n_category").value;
+
+     fetch("/json", {
+         method: "POST",
+         body: JSON.stringify({
+             op: 'setcomp',
+             ix: parseInt(document.getElementById("n_index").value),
+             last: document.getElementById("n_last").value,
+             first: document.getElementById("n_first").value,
+             birthyear: parseInt(document.getElementById("n_yob").value),
+             belt: parseInt(document.getElementById("n_grade").value),
+             club: document.getElementById("n_club").value,
+             country: document.getElementById("n_country").value,
+             regcat: document.getElementById("n_regcat").value,
+             category: document.getElementById("n_category").value,
+             weight: parseInt(document.getElementById("n_weight").value),
+             seeding: parseInt(document.getElementById("n_seeding").value),
+             clubseeding: parseInt(document.getElementById("n_clubseeding").value),
+             id: document.getElementById("n_id").value,
+             coachid: document.getElementById("n_coachid").value,
+             flags: flags,
+             comment: document.getElementById("n_comment").value,
+         })
+     })
+             .then(response => response.json())
+             .then(data => {
+                 console.log('Success:', data);
+             })
+             .catch((error) => {
+                 alarm('Error:', error);
+             });
+
+     document.getElementById("popup").innerHTML = '';
+
+     if (old_category != new_category) {
+         get_competitors(old_category);
+         get_competitors(new_category);
+     }
+ }
+
+ function edit_set_data(data) {
+     c = data[1];
+     console.log("c=", c);
+     let flags = parseInt(c[10]);
+
+     let gender = 0;
+     if (flags & 128) gender = 1;
+     else if (flags & 256) gender = 2;
+
+     let hansokumake = false;
+     if (flags & 2) hansokumake = true;
+
+     let judogi_ok = 0;
+     if (flags & 32) judogi_ok = 1;
+     else if (flags & 64) judogi_ok = 2;
+
+     document.getElementById("n_index").value = c[0];
+     document.getElementById("n_last").value = c[1];
+     document.getElementById("n_first").value = c[2];
+     document.getElementById("n_yob").value = c[3];
+     document.getElementById('n_grade').getElementsByTagName('option')[c[4]].selected = 'selected';
+     document.getElementById("n_club").value = c[5];
+     document.getElementById("n_country").value = c[11];
+     document.getElementById("n_regcat").value = c[6];
+     document.getElementById("n_weight").value = c[7];
+     document.getElementById('n_seeding').getElementsByTagName('option')[c[13]].selected = 'selected';
+     document.getElementById("n_clubseeding").value = c[14];
+     document.getElementById("n_id").value = c[12];
+     document.getElementById("n_coachid").value = c[16];
+     document.getElementById('n_gender').getElementsByTagName('option')[gender].selected = 'selected';
+     document.getElementById('n_control').getElementsByTagName('option')[judogi_ok].selected = 'selected';
+     document.getElementById("n_hansokumake").checked = hansokumake;
+     document.getElementById("n_comment").value = c[15];
+
+     old_category = c[9];
+     
+     let disable = false;
+     try {
+         disable = (cat2index[c[9]].status & MATCH_EXISTS) != 0;
+     } catch(err) {
+     }
+     let cats = '<select id="n_category" style="width:100%">';
+
+     for (var cat in cat2index) {
+         if (c[9] == cat)
+             cats += '<option value="'+cat+'" selected>'+cat+'</option>';
+         else if (disable)
+             cats += '<option value="'+cat+'" disabled>'+cat+'</option>';
+         else {
+             if (cat2index[cat].status & REAL_MATCH_EXISTS)
+                 cats += '<option value="'+cat+'" disabled>'+cat+'</option>';
+             else
+                 cats += '<option value="'+cat+'">'+cat+'</option>';
+         }
+     };
+     cats += '</select>';
+     document.getElementById("n_realcat").innerHTML = cats;
+ }
+
+ function get_comp(data, ix) {
+     set_category_list(data);
+
+     json_send(JSON.stringify({
+         op: 'sql',
+         cmd: 'SELECT * FROM competitors WHERE "index"='+ix+''
+     }), function(data, arg) {
+         edit_set_data(data);
+     }, '');
+ }
+
+ function edit_start(ix) {
+     json_send(JSON.stringify({ op: 'categories' }), get_comp, ix);
+ }
+
+</script>
