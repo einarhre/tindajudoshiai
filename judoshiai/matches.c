@@ -3080,20 +3080,21 @@ void set_points_and_score(struct message *msg)
             blue_pts = points;
         else
             white_pts = points;
+    } else if (msg->u.result.blue_vote && msg->u.result.white_vote) { // hikiwake
+            blue_pts = 11;
+            white_pts = 11;
+    } else if (msg->u.result.blue_vote || msg->u.result.white_vote) { // voting
+        if (msg->u.result.blue_vote > msg->u.result.white_vote)
+            blue_pts = 1;
+        else
+            white_pts = 1;
     } else if (/*prop_get_int_val(PROP_EQ_SCORE_LESS_SHIDO_WINS) &&*/
                winscore != losescore) {
         if ((msg->u.result.blue_score & 0xf) > (msg->u.result.white_score & 0xf))
             white_pts = 1;
         else
             blue_pts = 1;
-    } else if (msg->u.result.blue_vote && msg->u.result.white_vote) { // hikiwake
-            blue_pts = 11;
-            white_pts = 11;
     } else {
-        if (msg->u.result.blue_vote > msg->u.result.white_vote)
-            blue_pts = 1;
-        else
-            white_pts = 1;
     }
 
     /*** Timer cannot disqualify competitors from the tournament
