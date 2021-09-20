@@ -277,7 +277,7 @@ struct msg_update_label {
 	    int pts2[5];
 	};
 	struct {
-	    int i1, i2, i3;
+	    int i1, i2, i3, i4, i5;
 	};
     };
     double x, y;
@@ -391,6 +391,7 @@ struct msg_web_resp {
 
 	struct msg_web_json_resp {
             struct cJSON *json;
+            int file;
         } json;
     } u;
 };
