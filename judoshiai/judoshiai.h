@@ -1342,6 +1342,7 @@ extern void pdf_file(gint ctg, const gchar *dir, const gchar *prefix);
 extern void write_png(GtkWidget *menuitem, gpointer userdata);
 extern void do_print(GtkWidget *menuitem, gpointer userdata);
 extern void print_doc(GtkWidget *menuitem, gpointer userdata);
+extern void get_accr_cards(GSList *list, gint what, struct msg_web_resp *resp);
 extern void print_matches(GtkWidget *menuitem, gpointer userdata);
 extern void print_accreditation_cards(gboolean all);
 extern void print_schedule_cb(GtkWidget *menuitem, gpointer userdata);
@@ -1455,6 +1456,11 @@ extern void match_table_clear(void);
 extern void set_match_table_page(GtkWidget *nb);
 extern void update_match_table(void);
 extern void draw_match_table(void);
+
+/* auth */
+extern void auth_init(void);
+extern int auth_validate(char *u, char *p);
+extern int auth_set_user(int n, char *u, char *p);
 
 /* profiling stuff */
 //#define PROFILE
