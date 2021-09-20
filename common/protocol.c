@@ -161,6 +161,7 @@ gint encode_msg(struct message *m, guchar *buf, gint buflen)
 	putstr(m->u.update_label.size);
 	put32(m->u.update_label.label_num);
 	put32(m->u.update_label.xalign);
+	put32(m->u.update_label.round);
 	break;
     case MSG_EDIT_COMPETITOR:
 	put32(m->u.edit_competitor.operation);
@@ -378,6 +379,7 @@ gint decode_msg(struct message *m, guchar *buf, gint buflen)
 	getstr(m->u.update_label.size);
 	get32(m->u.update_label.label_num);
 	get32(m->u.update_label.xalign);
+	get32(m->u.update_label.round);
 	break;
     case MSG_EDIT_COMPETITOR:
 	get32(m->u.edit_competitor.operation);

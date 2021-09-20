@@ -673,7 +673,7 @@ struct message *put_to_rec_queue(volatile struct message *m)
 gint send_msg(gint fd, struct message *msg, gint mcastport)
 {
     gint i = 0, err = 0, k = 0, len;
-    guchar out[1024], buf[512];
+    guchar out[2048], buf[2048];
 
     if (mcastport) {
 	struct sockaddr_in mcast_out;
@@ -747,7 +747,7 @@ gpointer client_thread(gpointer args)
     gint n;
     struct sockaddr_in node;
     struct message input_msg;
-    static guchar inbuf[1000];
+    static guchar inbuf[2048];
     fd_set read_fd, fds;
     gint old_port = get_port();
     struct message msg_out;
@@ -890,7 +890,7 @@ gpointer client_thread(gpointer args)
                 struct message m;
                 static gint ri = 0;
                 static gboolean escape = FALSE;
-                static guchar p[512];
+                static guchar p[2048];
 
 		if (multicast) {
 		    if ((n = recv(comm_fd, (void *)&m, sizeof(m), 0)) > 0) {
@@ -1098,7 +1098,7 @@ gpointer ssdp_thread(gpointer args)
     gint ret;
     struct sockaddr_in name_out, name_in;
     struct sockaddr_in clientsock;
-    static gchar inbuf[1024];
+    static gchar inbuf[2048];
     fd_set read_fd, fds;
     socklen_t socklen;
     struct ip_mreq mreq;

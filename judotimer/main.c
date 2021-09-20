@@ -59,6 +59,7 @@ static void expose_label(cairo_t *c, gint w);
 static gboolean expose(GtkWidget *widget, GdkEventExpose *event, gpointer userdata);
 static void init_display(void);
 gboolean delete_big(gpointer data);
+void update_one_label(gint num, const gchar *txt);
 gint language = LANG_EN;
 
 //#define TABLE_PARAM (GTK_EXPAND)
@@ -1157,7 +1158,8 @@ void set_comment_text(gchar *txt)
 
     set_text(MY_LABEL(comment), txt);
     expose_label(NULL, comment);
-
+    update_one_label(comment, txt);
+    
     if (big_dialog)
 	show_big();
 }
@@ -1912,6 +1914,25 @@ gboolean undo_func(GtkWidget *menu_item, GdkEventButton *event, gpointer data)
 	return TRUE;
 }
 
+void update_one_label(gint num, const gchar *txt)
+{
+    if (mode == MODE_SLAVE)
+        return;
+    
+    struct message msg;
+    memset(&msg, 0, sizeof(msg));
+    msg.type = MSG_UPDATE_LABEL;
+    msg.u.update_label.label_num = num;
+    STRCPY_UTF8(msg.u.update_label.text, txt);
+    msg.u.update_label.fg_r = labels[num].fg_r;
+    msg.u.update_label.fg_g = labels[num].fg_g;
+    msg.u.update_label.fg_b = labels[num].fg_b;
+    msg.u.update_label.bg_r = labels[num].bg_r;
+    msg.u.update_label.bg_g = labels[num].bg_g;
+    msg.u.update_label.bg_b = labels[num].bg_b;
+    send_label_msg(&msg);
+}
+
 gboolean send_label(gint bigdsp)
 {
         struct message msg;
@@ -2061,6 +2082,7 @@ void update_label(struct msg_update_label *msg)
     } else if (w == SET_TIMER_RUN_COLOR) {
 	set_timer_run_color(ntoh32(msg->i1), ntoh32(msg->i2));
     } else if (w >= 0 && w < num_labels) {
+        g_print("LABEL=%d val=%s\n", w, msg->text);
         //labels[w].x = msg->x;
         //labels[w].y = msg->y;
         //labels[w].w = msg->w;
@@ -2811,10 +2833,10 @@ void toggle_switch_sides(GtkWidget *menu_item, gpointer data)
 
 static void set_position(gint lbl, gdouble x, gdouble y, gdouble w, gdouble h)
 {
-	labels[lbl].x = x;
-	labels[lbl].y = y;
-	labels[lbl].w = w;
-	labels[lbl].h = h;
+    labels[lbl].x = x;
+    labels[lbl].y = y;
+    labels[lbl].w = w;
+    labels[lbl].h = h;
 }
 
 void set_gs_text(gchar *txt)
