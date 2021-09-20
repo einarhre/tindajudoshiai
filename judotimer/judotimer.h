@@ -159,7 +159,7 @@ extern int get_match_time(void);
 extern void set_hantei_winner(gint cmd);
 extern void set_timer_run_color(gboolean running, gboolean resttime);
 extern void set_timer_osaekomi_color(gint osaekomi_state, gint points, gboolean orun);
-extern void set_timer_value(guint min, guint tsec, guint sec);
+extern void set_timer_value(guint min, guint tsec, guint sec, gboolean isrest, guint flags);
 extern void set_osaekomi_value(guint tsec, guint sec);
 extern void set_points(gint blue[5], gint white[5]);
 extern void set_score(guint score);

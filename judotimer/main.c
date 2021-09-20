@@ -744,7 +744,7 @@ void set_timer_osaekomi_color(gint osaekomi_state, gint pts, gboolean orun)
     expose_label(NULL, pts_to_white);
 }
 
-void set_timer_value(guint min, guint tsec, guint sec)
+void set_timer_value(guint min, guint tsec, guint sec, gboolean isrest, guint flags)
 {
     if (mode != MODE_SLAVE) {
 	struct message msg;
@@ -754,6 +754,8 @@ void set_timer_value(guint min, guint tsec, guint sec)
 	msg.u.update_label.i1 = hton32(min);
 	msg.u.update_label.i2 = hton32(tsec);
 	msg.u.update_label.i3 = hton32(sec);
+	msg.u.update_label.i4 = hton32(isrest);
+	msg.u.update_label.i5 = hton32(flags);
         send_label_msg(&msg);
     }
 
@@ -772,6 +774,7 @@ void set_timer_value(guint min, guint tsec, guint sec)
     expose_label(NULL, t_sec);
 
     update_tvlogo = TRUE;
+    set_competitor_window_rest_time(min, tsec, sec, isrest, flags);
 }
 
 void set_osaekomi_value(guint tsec, guint sec)
@@ -2047,7 +2050,12 @@ void update_label(struct msg_update_label *msg)
     } else if (w == SET_OSAEKOMI_VALUE) {
 	set_osaekomi_value(ntoh32(msg->i1), ntoh32(msg->i2));
     } else if (w == SET_TIMER_VALUE) {
-	set_timer_value(ntoh32(msg->i1), ntoh32(msg->i2), ntoh32(msg->i3));
+        gint min = ntoh32(msg->i1);
+        gint tsec = ntoh32(msg->i2);
+        gint sec = ntoh32(msg->i3);
+        gboolean isrest = ntoh32(msg->i4);
+        gint flags = ntoh32(msg->i5);
+	set_timer_value(min, tsec, sec, isrest, flags);
     } else if (w == SET_TIMER_OSAEKOMI_COLOR) {
 	set_timer_osaekomi_color(ntoh32(msg->i1), ntoh32(msg->i2), ntoh32(msg->i3));
     } else if (w == SET_TIMER_RUN_COLOR) {

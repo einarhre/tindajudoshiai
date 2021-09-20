@@ -173,8 +173,7 @@ void update_display(void)
 
     if (t != last_m_time) {
         last_m_time = t;
-        set_timer_value(min, sec/10, sec%10);
-        set_competitor_window_rest_time(min, sec/10, sec%10, rest_time, rest_flags);
+        set_timer_value(min, sec/10, sec%10, rest_time, rest_flags);
     }
 
     if (oSec != last_m_otime) {
@@ -1073,8 +1072,8 @@ void reset(guint key, struct msg_next_match *msg0)
     switch (key) {
     case GDK_0:
         if (msg0) {
-            /*g_print("is-gs=%d match=%d gs=%d rep=%d flags=0x%x\n",
-              golden_score, msg->match_time, msg->gs_time, msg->rep_time, msg->flags);*/
+            /*g_print("is-gs=%d match=%d gs=%d rep=%d flags=0x%x rest=%d\n",
+              golden_score, msg0->match_time, msg0->gs_time, msg0->rep_time, msg0->flags, msg0->rest_time);*/
             if ((msg0->flags & MATCH_FLAG_REPECHAGE) && msg0->rep_time) {
                 total = msg0->rep_time;
                 golden_score = TRUE;
