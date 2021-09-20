@@ -1239,6 +1239,7 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page, GSLi
         gchar *weight = db_get_data(0, "weight");
         gchar *yob = db_get_data(0, "birthyear");
         gchar *grade = db_get_data(0, "belt");
+        gchar *comment = db_get_data(0, "comment");
 
         struct judoka j;
 	j.index = 0;
@@ -1322,6 +1323,11 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page, GSLi
                     } else if (IS_STR("%BARCODE%")) {
                         //g_print("barcode found, len=%d\n", len);
                         draw_code_39_string(id_str, pd, bar_height, FALSE);
+                    } else if (IS_STR("%COMMENT%")) {
+                        gint a = 0;
+                        while (comment && comment[a] && comment[a] != '#')
+                            buf[d++] = comment[a++];
+                        buf[d] = 0;
                     } else if (IS_STR("%QRCODE")) {
                         char buf[128];
                         snprintf(buf, sizeof(buf), "%s\t%s\t%s\t%s", id_str, cat, last, first);
