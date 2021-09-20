@@ -17,6 +17,7 @@
 #include "judoshiai.h"
 #include "common-utils.h"
 #include "qrcode.h"
+#include "cJSON.h"
 
 #define SIZEX 630
 #define SIZEY 891
@@ -1085,12 +1086,16 @@ static void filter_winners(void)
     num_selected_judokas = n;
 }
 
-static gint get_num_pages(struct paint_data *pd)
+static gint get_num_pages(struct paint_data *pd, GSList *list)
 {
     gint i, pages = 1;
     gdouble x = 0.0, y = 0.0;
+    gint judokas = num_selected_judokas;
 
-    for (i = 0; i < num_selected_judokas; i++) {
+    if (list)
+        judokas = g_slist_length(list);
+
+    for (i = 0; i < judokas; i++) {
         x += X_MM(note_w);
         if (x + X_MM(note_w) > pd->paper_width + 1.0) {
             x = 0.0;
@@ -1108,15 +1113,19 @@ static gint get_num_pages(struct paint_data *pd)
     return pages;
 }
 
-static gint get_starting_judoka(struct paint_data *pd, gint what, gint pagenum)
+static gint get_starting_judoka(struct paint_data *pd, gint what, gint pagenum, GSList *list)
 {
-    gint i, pages = 1;
+    gint i = 0, pages = 1;
     gdouble x = 0.0, y = 0.0;
-
+    gint judokas = num_selected_judokas;
+    
     if (what & PRINT_ONE_PER_PAGE)
         return pagenum-1;
 
-    for (i = 0; i < num_selected_judokas; i++) {
+    if (list)
+        judokas = g_slist_length(list);
+    
+    for (i = 0; i < judokas; i++) {
         if (pages == pagenum)
             return i;
         x += X_MM(note_w);
@@ -1129,12 +1138,18 @@ static gint get_starting_judoka(struct paint_data *pd, gint what, gint pagenum)
             }
         }
     }
-    return num_selected_judokas;
+    return judokas;
+}
+
+gint get_selected_judoka(gint n, GSList *list) {
+    if (list)
+        return ptr_to_gint(g_slist_nth_data(list, n));
+    return selected_judokas[n];
 }
 
 static gchar *roman_numbers[9] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII"};
 
-static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
+static void paint_weight_notes(struct paint_data *pd, gint what, gint page, GSList *list)
 {
     gint row, t = 0, current_page = 0;
     gchar buf[128];
@@ -1142,7 +1157,7 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
     gdouble sx = 1.0, sy = 1.0;
     cairo_surface_t *image = NULL;
 
-    if (num_selected_judokas <= 0)
+    if (list == NULL && num_selected_judokas <= 0)
         return;
 
     cairo_set_antialias(pd->c, CAIRO_ANTIALIAS_NONE);
@@ -1176,13 +1191,15 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
     double bar_height = H(0.02);
     gchar id_str[10];
     gchar request[128];
-    gint start = get_starting_judoka(pd, what, page);
-    gint stop = get_starting_judoka(pd, what, page+1);
+    gint start = get_starting_judoka(pd, what, page, list);
+    gint stop = get_starting_judoka(pd, what, page+1, list);
+
+    g_print("\nlistlen=%d page=%d start=%d stop=%d\n", g_slist_length(list), page, start, stop);
 
     for (row = start; row < stop; row++) {
         struct category_data *catdata = NULL;
         gint wincat = 0;
-        gint winpos = db_get_competitors_position(selected_judokas[row], &wincat);
+        gint winpos = db_get_competitors_position(get_selected_judoka(row, list), &wincat);
 
         if (wincat) {
             catdata = avl_get_category(wincat);
@@ -1196,7 +1213,7 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
         snprintf(request, sizeof(request),
                  "select * from competitors "
                  "where \"deleted\"&1=0 and \"index\"=%d ",
-                 selected_judokas[row]);
+                 get_selected_judoka(row, list));
 
         gint numrows = db_get_table(request);
 
@@ -2104,7 +2121,7 @@ static void begin_print(GtkPrintOperation *operation,
         if (ptr_to_gint(user_data) & PRINT_ONE_PER_PAGE)
             numpages = num_selected_judokas;
         else
-            numpages = get_num_pages(&pd);
+            numpages = get_num_pages(&pd, NULL);
 
         gtk_print_operation_set_n_pages(operation, numpages);
     } else {
@@ -2155,7 +2172,7 @@ static void draw_page(GtkPrintOperation *operation,
         break;
 #endif
     case PRINT_WEIGHING_NOTES:
-	paint_weight_notes(&pd, ctg, page_nr+1);
+	paint_weight_notes(&pd, ctg, page_nr+1, NULL);
 	break;
     case PRINT_SCHEDULE:
         if (ctg & PRINT_LANDSCAPE)
@@ -2320,10 +2337,10 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
 	    if (ptr_to_gint(userdata) & PRINT_ONE_PER_PAGE)
 		numpages = num_selected_judokas;
 	    else
-		numpages = get_num_pages(&pd);
+		numpages = get_num_pages(&pd, NULL);
 
             for (i = 1; i <= numpages; i++) {
-                paint_weight_notes(&pd, ptr_to_gint(userdata), i);
+                paint_weight_notes(&pd, ptr_to_gint(userdata), i, NULL);
                 cairo_show_page(pd.c);
             }
             break;
@@ -2349,6 +2366,52 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
 	g_free(filename);
         break;
     }
+}
+
+void get_accr_cards(GSList *list, gint what, struct msg_web_resp *resp)
+{
+    gchar buf[200];
+    struct paint_data pd;
+    const gchar *dir = g_get_tmp_dir();
+    gchar *filename = g_build_filename(dir, "accrcard.pdf", NULL);
+    cairo_surface_t *cs;
+    cairo_t *c;
+    gint i, n = g_slist_length(list), pages;
+    
+    read_print_template(NULL, NULL);
+
+    memset(&pd, 0, sizeof(pd));
+    gint s = 1;
+    pd.paper_width = page_size_table[s].w_px;
+    pd.paper_height = page_size_table[s].h_px;
+    pd.paper_width_mm = page_size_table[s].w_mm;
+    pd.paper_height_mm = page_size_table[s].h_mm;
+
+    cs = cairo_pdf_surface_create(filename, pd.paper_width, pd.paper_height);
+    c = pd.c = cairo_create(cs);
+
+    if (what & PRINT_ONE_PER_PAGE)
+        pages = n;
+    else
+        pages = get_num_pages(&pd, list);
+
+    for (i = 1; i <= pages; i++) {
+        paint_weight_notes(&pd, what, i, list);
+        cairo_show_page(pd.c);
+    }
+
+    cairo_destroy(c);
+    cairo_surface_flush(cs);
+    cairo_surface_destroy(cs);
+    
+    cJSON *out = cJSON_CreateObject();
+    cJSON_AddStringToObject(out, "file", filename);
+    cJSON_AddStringToObject(out, "mime", "application/pdf");
+
+    g_free(filename);
+
+    resp->u.json.json = out;
+    resp->u.json.file = 1;
 }
 
 void print_matches(GtkWidget *menuitem, gpointer userdata)
