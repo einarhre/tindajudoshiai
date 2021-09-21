@@ -32,13 +32,17 @@ guint french_matches_blue[64] = {
 };
 guint french_matches_white_offset[NUM_FRENCH] = {4, 8, 16, 32, 64};
 guint french_mul[NUM_FRENCH] = {16, 8, 4, 2, 1};
-guint french_matches_gbr[64] = {
-    1, 64, 32, 33, 16, 49, 17, 48, 8, 57, 25, 40, 9, 56, 24, 41,
-    4, 61, 29, 36, 13, 52, 20, 45, 5, 60, 28, 37, 12, 53, 21, 44,
-    2, 63, 31, 34, 15, 50, 18, 47, 7, 58, 26, 39, 10, 55, 23, 42,
-    3, 62, 30, 35, 14, 51, 19, 46, 6, 59, 27, 38, 11, 54, 22, 43
+guint french_matches_gbr[128] = {
+    1, 128, 64, 65, 32, 97, 33, 96, 16, 113, 49, 80, 17, 112, 48, 81,
+    8, 121, 57, 72, 25, 104, 40, 89, 9, 120, 56, 73, 24, 105, 41, 88,
+    4, 125, 61, 68, 29, 100, 36, 93, 13, 116, 52, 77, 20, 109, 45, 84,
+    5, 124, 60, 69, 28, 101, 37, 92, 12, 117, 53, 76, 21, 108, 44, 85,
+    2, 127, 63, 66, 31, 98, 34, 95, 15, 114, 50, 79, 18, 111, 47, 82,
+    7, 122, 58, 71, 26, 103, 39, 90, 10, 119, 55, 74, 23, 106, 42, 87,
+    3, 126, 62, 67, 30, 99, 35, 94, 14, 115, 51, 78, 19, 110, 46, 83,
+    6, 123, 59, 70, 27, 102, 38, 91, 11, 118, 54, 75, 22, 107, 43, 86
 };
-guint french_mul_gbr[NUM_FRENCH] = {8, 4, 2, 1};
+guint french_mul_gbr[NUM_FRENCH] = {16, 8, 4, 2, 1};
 
 #define MAX_MATES 100000
 
@@ -607,7 +611,8 @@ static gint get_competitor_group(gint comp, struct mdata *mdata)
 // return competitor's number based on position
 gint get_drawed_number(gint pos, gint sys)
 {
-    if (draw_system == DRAW_BRITISH && sys >= 0 && sys <= 3) {
+    if ((draw_system == DRAW_BRITISH || draw_system == DRAW_FINNISH) &&
+        sys >= 0 && sys <= 4) {
 	return french_matches_gbr[(pos-1) * french_mul_gbr[sys]];
     }
     if (sys >= 0) {
