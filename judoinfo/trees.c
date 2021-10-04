@@ -39,7 +39,8 @@ struct name_data *avl_get_data(gint index)
 {
     struct name_data data;
     void *data1;
-
+    index &= 0xff00ffff;
+    
     data.index = index;
     if (avl_get_by_key(competitors_tree, &data, &data1) == 0) {
         return data1;
@@ -55,6 +56,7 @@ void avl_set_data(gint index, gchar *first, gchar *last, gchar *club)
 {
     struct name_data *data;
     void *data1;
+    index &= 0xff00ffff;
 
     data = g_malloc(sizeof(*data));
     memset(data, 0, sizeof(*data));

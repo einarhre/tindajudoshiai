@@ -257,7 +257,12 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
             if (m->number >= 1000)
                 break;
 
-            struct name_data *catdata = avl_get_data(m->category);
+            gint catix = m->category;
+            if (catix & 0x00ff0000) { // is this a team event?
+                if (m->number < 999)
+                    catix = (catix & 0x00ffffff) | (m->number << 24);
+            }
+            struct name_data *catdata = avl_get_data(catix);
 
             cairo_save(c);
             if (k == 0) {
@@ -338,9 +343,10 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
             else
                 cairo_move_to(c, left+5, y_pos+extents.height);
 
-	    if (m->number == 999)
-		SNPRINTF_UTF8(buf, "%s *", catdata ? catdata->last : "?");
-	    else
+	    if (m->category & 0x00ff0000)
+		SNPRINTF_UTF8(buf, "%s%s #%d", m->number == 999 ? "*" : "",
+                              catdata ? catdata->last : "?", (m->category >> 16) & 0xff);
+            else
 		SNPRINTF_UTF8(buf, "%s #%d", catdata ? catdata->last : "?", m->number);
 #ifdef USE_PANGO
             if (k == 0)

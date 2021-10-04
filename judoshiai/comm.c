@@ -268,6 +268,7 @@ static void json_add_category_data(cJSON *out, struct category_data *c)
     cJSON_AddNumberToObject(out, "status", c->match_status);
     cJSON_AddNumberToObject(out, "count", c->match_count);
     cJSON_AddNumberToObject(out, "matchedcnt", c->matched_matches_count);
+    cJSON_AddStringToObject(out, "sysdescr", get_system_description(c->index, c->system.numcomp));
 }
 
 static void json_add_match_data(cJSON *obj, struct match *m)
@@ -638,7 +639,17 @@ void msg_received(struct message *input_msg)
             memset(&output_msg, 0, sizeof(output_msg));
             output_msg.type = MSG_NAME_INFO;
             output_msg.u.name_info.index = input_msg->u.name_req.index;
-            strncpy(output_msg.u.name_info.last, j->last, sizeof(output_msg.u.name_info.last)-1);
+            if (input_msg->u.name_req.index & 0xff000000) {
+                gint ageix = find_age_index(j->last);
+                guint n = (guint)input_msg->u.name_req.index >> 24;
+                g_print("IX=0x%x CAT=%s AGEIX=%d SUB=%d\n", input_msg->u.name_req.index, j->last, ageix, n);
+                if (ageix >= 0 && n > 0 && n <= NUM_CAT_DEF_WEIGHTS) {
+                    snprintf(output_msg.u.name_info.last, sizeof(output_msg.u.name_info.last),
+                             "%s (%s)", j->last, 
+                             category_definitions[ageix].weights[n - 1].weighttext);
+                }
+            } else
+                strncpy(output_msg.u.name_info.last, j->last, sizeof(output_msg.u.name_info.last)-1);
             strncpy(output_msg.u.name_info.first, j->first, sizeof(output_msg.u.name_info.first)-1);
             strncpy(output_msg.u.name_info.club, get_club_text(j, CLUB_TEXT_ABBREVIATION),
 		    sizeof(output_msg.u.name_info.club)-1);

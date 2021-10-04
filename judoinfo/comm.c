@@ -192,13 +192,13 @@ static void handle_info_msg(struct msg_match_info *input_msg)
     match_list[tatami][position].round    = input_msg->round;
     match_list[tatami][position].rest_end = input_msg->rest_time + time(NULL);
 
-    /***
+#if 0    
 	g_print("match info %d:%d b=%d w=%d\n",
 	match_list[tatami][position].category,
 	match_list[tatami][position].number,
 	match_list[tatami][position].blue,
 	match_list[tatami][position].white);
-    ***/
+#endif
 
 #if 0 // let avl search initiate data request (need to know basis)
     j = avl_get_data(match_list[tatami][position].category);
