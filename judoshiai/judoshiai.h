@@ -399,7 +399,7 @@ enum {
   Team events have details hidden in category index. Bits from MSB to LSB:
   4 bits: reserved.
   4 bits: weight class for extra match (for example 1 = -66, 2 = -73,...).
-  8 bits: root match number (for example 1 - 11).
+  8 bits: root match number (for example 1 - 11). (= kohtaaminen)
   16 bits: category index.
 
   Root match numbers go normally (1 - 11).

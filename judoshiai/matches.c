@@ -3270,23 +3270,14 @@ static void change_competitor(gint index, gpointer data)
 {
     struct match *nm;
     gint tatami = db_get_tatami(popupdata.category);
-
-    db_change_competitor(popupdata.category, popupdata.number, popupdata.is_blue, index);
+    db_change_competitor(popupdata.category & ~MATCH_CATEGORY_CAT_MASK, popupdata.number, popupdata.is_blue, index);
     db_read_match(popupdata.category, popupdata.number);
 
-#if (GTKVER == 3)
     G_LOCK(next_match_mutex);
-#else
-    g_static_mutex_lock(&next_match_mutex);
-#endif
     nm = db_next_match(popupdata.category, tatami);
     if (nm)
         send_next_matches(popupdata.category, tatami, nm);
-#if (GTKVER == 3)
     G_UNLOCK(next_match_mutex);
-#else
-    g_static_mutex_unlock(&next_match_mutex);
-#endif
     send_matches(tatami);
 }
 
@@ -3299,7 +3290,6 @@ static void view_match_competitor_popup_menu(GtkWidget *treeview,
     popupdata.category = category;
     popupdata.number = number;
     popupdata.is_blue = is_blue;
-
     search_competitor_args(NULL, change_competitor, &popupdata);
 }
 
@@ -4139,6 +4129,7 @@ static gboolean find_match_iter(GtkTreeModel *model,
     return FALSE;
 }
 
+#if 0
 void change_competitor_names(gint cat, gint num, gint comp1, gint comp2)
 {
     gint i;
@@ -4162,6 +4153,7 @@ void change_competitor_names(gint cat, gint num, gint comp1, gint comp2)
 	}
     }
 }
+#endif
 
 static gboolean find_group_iter(GtkTreeModel *model,
                                 GtkTreeIter *iter,

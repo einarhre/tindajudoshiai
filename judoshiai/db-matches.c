@@ -1300,8 +1300,8 @@ void db_read_match(gint category, gint number)
 {
     gchar buffer[200];
 
-    sprintf(buffer, "SELECT * FROM matches WHERE \"category\"=%d AND \"number\"=%d",
-            category, number);
+    sprintf(buffer, "SELECT * FROM matches WHERE \"category\"&%u=%d AND \"number\"=%d",
+            ~MATCH_CATEGORY_CAT_MASK, category, number);
 
     db_exec(db_name, buffer, (gpointer)ADD_MATCH, db_callback_matches);
 }
@@ -2173,9 +2173,9 @@ void db_change_competitor(gint category, gint number, gboolean is_blue, gint ind
 {
     db_exec_str(NULL, NULL,
                 "UPDATE matches SET \"%s\"=%d "
-                "WHERE \"category\"=%d AND \"number\"=%d",
+                "WHERE \"category\"&%u=%d AND \"number\"=%d",
                 is_blue ? "blue" : "white", index,
-                category, number);
+                ~MATCH_CATEGORY_CAT_MASK, category, number);
 }
 
 static gboolean nocomment = FALSE;
