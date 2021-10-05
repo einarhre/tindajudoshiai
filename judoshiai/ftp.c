@@ -57,6 +57,8 @@
 #include "sqlite3.h"
 #include "judoshiai.h"
 
+// Convert OPENSSH private key file to RSA: ssh-keygen -f id_rsa -m pem -p
+
 #define PROTO_FTP     0
 #define PROTO_HTTP    1
 #define PROTO_RFC1738 2
@@ -69,10 +71,12 @@ struct url {
     GtkWidget *address, *port, *path, *start;
     GtkWidget *user, *password, *proxy_address, *proxy_port;
     GtkWidget *do_it, *proto, *proxy_user, *proxy_password;
+    GtkWidget *ssh_priv_key_file, *ssh_pub_key_file;
 };
 
 static gchar *ftp_server = NULL, *ftp_path = NULL, *proxy_host = NULL,
-    *ftp_user = NULL, *ftp_password = NULL, *proxy_user, *proxy_password;
+    *ftp_user = NULL, *ftp_password = NULL, *proxy_user, *proxy_password,
+    *ssh_priv_key_file, *ssh_pub_key_file;
 static gint ftp_port = 21, proxy_port = 8080, proto = PROTO_FTP;
 static gboolean ftp_update = FALSE, do_ftp = FALSE;
 
@@ -118,6 +122,12 @@ static void ftp_to_server_callback(GtkWidget *widget,
 
         STRDUP(ftp_password, gtk_entry_get_text(GTK_ENTRY(uri->password)));
         g_key_file_set_string(keyfile, "preferences", "ftppassword", ftp_password);
+
+        STRDUP(ssh_priv_key_file, gtk_entry_get_text(GTK_ENTRY(uri->ssh_priv_key_file)));
+        g_key_file_set_string(keyfile, "preferences", "sshprivkeyfile", ssh_priv_key_file);
+
+        STRDUP(ssh_pub_key_file, gtk_entry_get_text(GTK_ENTRY(uri->ssh_pub_key_file)));
+        g_key_file_set_string(keyfile, "preferences", "sshpubkeyfile", ssh_pub_key_file);
 
         STRDUP(proxy_user, gtk_entry_get_text(GTK_ENTRY(uri->proxy_user)));
         g_key_file_set_string(keyfile, "preferences", "ftpproxyuser", proxy_user);
@@ -169,7 +179,7 @@ static gint timer_callback(gpointer data)
 void ftp_to_server(GtkWidget *w, gpointer data)
 {
     gchar buf[128];
-    GtkWidget *dialog, *hbox, *hbox1, *hbox2, *hbox3, *hbox4;
+    GtkWidget *dialog, *hbox, *hbox1, *hbox2, *hbox3, *hbox4, *hbox5;
     struct url *uri = g_malloc0(sizeof(*uri));
     GtkWidget *proxy_lbl = gtk_label_new(_("Proxy:"));
 
@@ -226,6 +236,16 @@ void ftp_to_server(GtkWidget *w, gpointer data)
     gtk_entry_set_text(GTK_ENTRY(uri->password), ftp_password);
     gtk_entry_set_width_chars(GTK_ENTRY(uri->password), 20);
 
+    GETSTR(ssh_priv_key_file, "sshprivkeyfile");
+    uri->ssh_priv_key_file = gtk_entry_new();
+    gtk_entry_set_text(GTK_ENTRY(uri->ssh_priv_key_file), ssh_priv_key_file);
+    gtk_entry_set_width_chars(GTK_ENTRY(uri->ssh_priv_key_file), 20);
+
+    GETSTR(ssh_pub_key_file, "sshpubkeyfile");
+    uri->ssh_pub_key_file = gtk_entry_new();
+    gtk_entry_set_text(GTK_ENTRY(uri->ssh_pub_key_file), ssh_pub_key_file);
+    gtk_entry_set_width_chars(GTK_ENTRY(uri->ssh_pub_key_file), 20);
+    
     GETSTR(proxy_user, "ftpproxyuser");
     uri->proxy_user = gtk_entry_new();
     gtk_entry_set_text(GTK_ENTRY(uri->proxy_user), proxy_user);
@@ -256,6 +276,12 @@ void ftp_to_server(GtkWidget *w, gpointer data)
     gtk_grid_attach_next_to(GTK_GRID(hbox2), gtk_label_new(_("Password:")), NULL, GTK_POS_RIGHT, 1, 1);
     gtk_grid_attach_next_to(GTK_GRID(hbox2), uri->password, NULL, GTK_POS_RIGHT, 1, 1);
 
+    hbox5 = gtk_grid_new();
+    gtk_grid_attach_next_to(GTK_GRID(hbox5), gtk_label_new(_("Public key file:")), NULL, GTK_POS_RIGHT, 1, 1);
+    gtk_grid_attach_next_to(GTK_GRID(hbox5), uri->ssh_pub_key_file, NULL, GTK_POS_RIGHT, 1, 1);
+    gtk_grid_attach_next_to(GTK_GRID(hbox5), gtk_label_new(_("Private key file:")), NULL, GTK_POS_RIGHT, 1, 1);
+    gtk_grid_attach_next_to(GTK_GRID(hbox5), uri->ssh_priv_key_file, NULL, GTK_POS_RIGHT, 1, 1);
+    
     hbox1 = gtk_grid_new();
     gtk_grid_attach_next_to(GTK_GRID(hbox1), proxy_lbl, NULL, GTK_POS_RIGHT, 1, 1);
     gtk_grid_attach_next_to(GTK_GRID(hbox1), uri->proxy_address, NULL, GTK_POS_RIGHT, 1, 1);
@@ -282,6 +308,8 @@ void ftp_to_server(GtkWidget *w, gpointer data)
                        hbox, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        hbox2, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       hbox5, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        hbox1, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
@@ -337,11 +365,8 @@ static void init_curl(CURL *curl)
 
     /* user & password */
     if (ftp_user && ftp_user[0]) {
-        gchar pwd[64];
-        snprintf(pwd, sizeof(pwd), "%s:%s", ftp_user,
-                 ftp_password?ftp_password:"");
-        if ((err = curl_easy_setopt(curl, CURLOPT_USERPWD, pwd)))
-            ftp_log("Username/password option error: %s!", curl_easy_strerror(err));
+        curl_easy_setopt(curl, CURLOPT_USERNAME, ftp_user);
+        curl_easy_setopt(curl, CURLOPT_PASSWORD, ftp_password ? ftp_password : "");
     }
 
     /* proxy */
@@ -354,11 +379,8 @@ static void init_curl(CURL *curl)
 
     /* proxy user & password */
     if (proxy_user && proxy_user[0]) {
-        gchar pwd[64];
-        snprintf(pwd, sizeof(pwd), "%s:%s", proxy_user,
-                 proxy_password?proxy_password:"");
-        if ((err = curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, pwd)))
-            ftp_log("Proxy user/password option error: %s!", curl_easy_strerror(err));
+        curl_easy_setopt(curl, CURLOPT_PROXYUSERNAME, proxy_user);
+        curl_easy_setopt(curl, CURLOPT_PROXYPASSWORD, proxy_password ? proxy_password : "");
     }
 
     if (ftp_port) {
@@ -380,7 +402,7 @@ static void init_curl(CURL *curl)
 #endif
 }
 
-int put_using_ftp(const char *fullname, const char *fname)
+int put_using_proto(gint protocol, const char *fullname, const char *fname)
 {
     CURL *curl;
     CURLcode res;
@@ -413,16 +435,19 @@ int put_using_ftp(const char *fullname, const char *fname)
 
 	init_curl(curl);
 
-#if 0
-	/* build a list of commands to pass to libcurl */
-	gchar *n = g_strdup_printf("DELE %s", fname);
-	headerlist = curl_slist_append(headerlist, n);
-	g_free(n);
-	headerlist = curl_slist_append(headerlist, "RNFR TMPXYZ");
-	n = g_strdup_printf("RNTO %s", fname);
-	headerlist = curl_slist_append(headerlist, n);
-	g_free(n);
-#endif
+        if (protocol == PROTO_SCP || protocol == PROTO_SFTP) {
+            if (ssh_priv_key_file && ssh_priv_key_file[0]) {
+                curl_easy_setopt(curl, CURLOPT_SSH_AUTH_TYPES, CURLSSH_AUTH_PUBLICKEY);
+                curl_easy_setopt(curl, CURLOPT_SSH_PRIVATE_KEYFILE, ssh_priv_key_file);
+                curl_easy_setopt(curl, CURLOPT_KEYPASSWD, ftp_password ? ftp_password : "");
+                if (ssh_pub_key_file && ssh_pub_key_file[0])
+                    curl_easy_setopt(curl, CURLOPT_SSH_PUBLIC_KEYFILE, ssh_pub_key_file);
+            } else if (ftp_password && ftp_password[0])
+                curl_easy_setopt(curl, CURLOPT_SSH_AUTH_TYPES, CURLSSH_AUTH_PASSWORD);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);        
+        }
+        
 	/* we want to use our own read function */
 	curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
 
@@ -430,7 +455,11 @@ int put_using_ftp(const char *fullname, const char *fname)
 	curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
 	/* specify target */
-	if (ftp_path && ftp_path[0])
+        if (protocol == PROTO_SCP)
+            u = g_strdup_printf("scp://%s/%s/%s", ftp_server, ftp_path, fname);
+        else if (protocol == PROTO_SFTP)
+            u = g_strdup_printf("sftp://%s/%s/%s", ftp_server, ftp_path, fname);
+	else if (ftp_path && ftp_path[0])
 	    u = g_strdup_printf("ftp://%s/%s/%s", ftp_server, ftp_path, fname);
 	else
 	    u = g_strdup_printf("ftp://%s/%s", ftp_server, fname);
@@ -622,209 +651,6 @@ int put_using_put(const char *fullname, const char *fname)
     return 0;
 }
 
-int put_using_sftp(const char *fullname, const char *fname)
-{
-    static SOCKET sock = 0;
-    static LIBSSH2_SESSION *session = NULL;
-    static LIBSSH2_SFTP *sftp_session = NULL;
-    LIBSSH2_SFTP_HANDLE *sftp_handle = NULL;
-    LIBSSH2_CHANNEL *channel = NULL;
-    struct stat fileinfo;
-    int rc;
-    struct sockaddr_in sin;
-    FILE *local = NULL;
-    char mem[1024*100];
-    size_t nread;
-    char *ptr;
-
-    if (!fullname) { // close connection
-	if (session)
-	    goto close_sftp_session;
-	return 0;
-    }
-
-    if (!session) {
-	struct addrinfo hints, *res, *res0;
-	int error;
-
-	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET;     /* IPv4, IPv6, or anything */
-	hints.ai_socktype = SOCK_STREAM;  /* Dummy socket type */
-	error = getaddrinfo(ftp_server, NULL, &hints, &res0);
-	if (error) {
-	    ftp_log("DNS query failed for %s: %s!\n", ftp_server, gai_strerror(error));
-	    snprintf(progr_pros, sizeof(progr_pros), "DNS query failed!");
-	    return -1;
-	}
-
-	sock = socket(AF_INET, SOCK_STREAM, 0);
-
-	for (res = res0; res != NULL; res = res->ai_next) {
-	    if (res->ai_family == AF_INET) {
-		sin.sin_family = AF_INET;
-		sin.sin_port = htons(ftp_port ? ftp_port : 22);
-		sin.sin_addr = ((struct sockaddr_in *)res->ai_addr)->sin_addr;
-		if (connect(sock, (struct sockaddr *)(&sin),
-			    sizeof(struct sockaddr_in)) == 0)
-		    break;
-	    }
-	}
-
-	freeaddrinfo(res0);
-
-	if (res == NULL) {
-	    ftp_log("failed to connect to %s!\n", ftp_server);
-	    snprintf(progr_pros, sizeof(progr_pros), "Failed to connect!");
-	    goto close_sock;
-	}
-	
-	/* Create a session instance */
-	session = libssh2_session_init();
-	if(!session) {
-	    goto close_sock;
-	}
-
-	/* Since we have set non-blocking, tell libssh2 we are blocking */
-	libssh2_session_set_blocking(session, 1);
-
-	/* ... start it up. This will trade welcome banners, exchange keys,
-	 * and setup crypto, compression, and MAC layers
-	 */
-	rc = libssh2_session_handshake(session, sock);
-	if (rc) {
-	    ftp_log("Failure establishing SSH session: %d\n", rc);
-	    snprintf(progr_pros, sizeof(progr_pros), "SSH failed!");
-	    goto close_session;
-	}
-
-	/* At this point we havn't yet authenticated.  The first thing to do
-	 * is check the hostkey's fingerprint against our known hosts Your app
-	 * may have it hard coded, may go to a file, may present it to the
-	 * user, that's your call
-	 */
-
-	if (libssh2_userauth_password(session, ftp_user, ftp_password)) {
-	    ftp_log("Authentication by ftp_password failed.\n");
-	    snprintf(progr_pros, sizeof(progr_pros), "SSH auth failed!");
-	    goto close_session;
-	}
-
-	if (proto == PROTO_SFTP) {
-	    sftp_session = libssh2_sftp_init(session);
-	
-	    if (!sftp_session) {
-		ftp_log("Unable to init SFTP session\n");
-		snprintf(progr_pros, sizeof(progr_pros), "SSH failed!");
-		goto close_sftp_session;
-	    }
-	}
-    }
-	
-    progr_file = fname;
-    stat(fullname, &fileinfo);
-    local = fopen(fullname, "rb");
-    if (!local) {
-        ftp_log("Can't open local file %s\n", fullname);
-	snprintf(progr_pros, sizeof(progr_pros), "Cannot open %s!", fullname);
-	progr_file = NULL;
-        return -1;
-    }
-
-    gchar *u;
-    if (ftp_path && ftp_path[0])
-	u = g_strdup_printf("%s/%s", ftp_path, fname);
-    else
-	u = g_strdup_printf("%s", fname);
-    
-    if (proto == PROTO_SFTP) {
-	/* Request a file via SFTP */
-	sftp_handle =
-	    libssh2_sftp_open(sftp_session, u,
-			      LIBSSH2_FXF_WRITE|LIBSSH2_FXF_CREAT|LIBSSH2_FXF_TRUNC,
-			      LIBSSH2_SFTP_S_IRUSR|LIBSSH2_SFTP_S_IWUSR|
-			      LIBSSH2_SFTP_S_IRGRP|LIBSSH2_SFTP_S_IROTH);
-	if (!sftp_handle) {
-	    ftp_log("Unable to open file with SFTP\n");
-	    snprintf(progr_pros, sizeof(progr_pros), "SSH cannot open remote file!");
-	    g_free(u);
-	    goto close_sftp_session;
-	}
-    } else {
-	channel = libssh2_scp_send(session, u, fileinfo.st_mode & 0777,
-				   (unsigned long)fileinfo.st_size);
-	if (!channel) {
-	    ftp_log("Unable to open file with SCP\n");
-	    snprintf(progr_pros, sizeof(progr_pros), "SSH cannot open remote file!");
-	    g_free(u);
-	    goto close_sftp_session;
-	}
-    }
-    
-    g_free(u);
-    
-    do {
-        nread = fread(mem, 1, sizeof(mem), local);
-        if (nread <= 0) {
-            /* end of file */
-            break;
-        }
-        ptr = mem;
-
-        do {
-            /* write data in a loop until we block */
-	    if (proto == PROTO_SFTP)
-		rc = libssh2_sftp_write(sftp_handle, ptr, nread);
-	    else
-		rc = libssh2_channel_write(channel, ptr, nread);
-
-            if(rc < 0)
-                break;
-            ptr += rc;
-            nread -= rc;
-        } while (nread);
-
-    } while (rc > 0);
-
-    if (proto == PROTO_SFTP) {
-	libssh2_sftp_close(sftp_handle);
-	sftp_handle = NULL;
-    } else {
-	libssh2_channel_send_eof(channel);
-	libssh2_channel_wait_eof(channel);
-	libssh2_channel_wait_closed(channel);
-	libssh2_channel_free(channel);
-	channel = NULL;
-    }
-
-    xfer_ok++;
-    progr_file = NULL;
-    return 0;
-    
-close_sftp_session:
-    if (sftp_session) {
-	libssh2_sftp_shutdown(sftp_session);
-	sftp_session = NULL;
-    }
-close_session:
-    if (session) {
-	libssh2_session_disconnect(session, "Normal Shutdown");
-	libssh2_session_free(session);
-	session = NULL;
-    }
-    
-close_sock:
-    if (sock) {
-	closesocket(sock);
-	sock = 0;
-    }
-
-    if (local)
-        fclose(local);
-
-    progr_file = NULL;
-    return 0;
-}
-
 gpointer ftp_thread(gpointer args)
 {
     CURLcode res;
@@ -865,12 +691,10 @@ gpointer ftp_thread(gpointer args)
                     if (!g_stat(fullname, &statbuf)) {
                         if (statbuf.st_mtime >= last_copy &&
                             (statbuf.st_mode & S_IFREG)) {
-			    if (proto == PROTO_FTP) {
-				put_using_ftp(fullname, fname);
+			    if (proto == PROTO_FTP || proto == PROTO_SCP || proto == PROTO_SFTP) {
+				put_using_proto(proto, fullname, fname);
 			    } else if (proto == PROTO_RFC1738) {
 				put_using_post(fullname, fname);
-			    } else if (proto == PROTO_SFTP || proto == PROTO_SCP) {
-				put_using_sftp(fullname, fname);
 			    } else {
 				put_using_put(fullname, fname);
                             } // if (proto)
@@ -885,7 +709,6 @@ gpointer ftp_thread(gpointer args)
                 last_copy = copy_start;
             } // if (dir)
 
-	    put_using_sftp(NULL, NULL); // reset ssh conn if used
             g_usleep(2000000);
         } // while (!ftp_update)
         ftp_log("Configuration update.");
