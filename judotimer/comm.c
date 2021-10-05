@@ -160,6 +160,9 @@ gboolean msg_accepted(struct message *m)
     return FALSE;
 }
 
+#define IS_NEW_MATCH  ((current_category != input_msg->u.next_match.category || \
+                        current_match != input_msg->u.next_match.match))
+
 void msg_received(struct message *input_msg)
 {
     /**
@@ -210,14 +213,13 @@ void msg_received(struct message *input_msg)
 
         //g_print("minutes=%d auto=%d\n", input_msg->u.next_match.minutes, automatic);
         if (input_msg->u.next_match.minutes && automatic)
-            reset((input_msg->u.next_match.round & ROUND_GOLDEN_SCORE) ? GDK_9 : GDK_0,
+            reset(((input_msg->u.next_match.round & ROUND_GOLDEN_SCORE) && IS_NEW_MATCH) ? GDK_9 : GDK_0,
 		  &input_msg->u.next_match);
 
         if (golden_score)
             set_comment_text(_("Golden Score"));
 
-        if (current_category != input_msg->u.next_match.category ||
-            current_match != input_msg->u.next_match.match) {
+        if (IS_NEW_MATCH) {
             /***
             g_print("current=%d/%d new=%d/%d\n",
                     current_category, current_match,
