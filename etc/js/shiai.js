@@ -3,7 +3,7 @@
 var webSocket;
 
 var po1 = ['Index', 'Last Name', 'First Name', 'Year of Birth', 'Grade', 'Club', 'Country',
-           'Reg.Category', 'Weight', 'Id', 'Seeding', 'Club Seeding',
+           'Reg. Category', 'Weight', 'Id', 'Seeding', 'Club Seeding',
            // 12 ->
            'Tournament', 'Competitors', 'Categories', 'Drawing', 'Results', 'Preferences', 'Help',
            // 19 ->
@@ -274,7 +274,7 @@ function update_competitors(catix, data) {
             grade: c[4],
             club: c[5],
             regcat: c[6],
-            weight: c[7],
+            weight: c[7]/1000,
             //visible: c[8],
             category: c[9],
             //deleted: c[10],
@@ -308,7 +308,7 @@ function rec_json(data, what, arg) {
             let cat = {
                 index: c.index,
                 last: c.category,
-                first: 'system',
+                first: c.sysdescr,
                 yob: '[' + c.numcomp + ']',
                 grade: 'T'+c.tatami,
                 status: c.status,
@@ -338,9 +338,9 @@ function rec_json(data, what, arg) {
         $('#m1-5').html(po[23]);
         $('#m2-1').html(po[19]);
 
-        competitors_row_menu[1].label = po[20];
-        competitors_row_menu[2].label = po[21];
-        competitors_row_menu[3].label = po[24];
+        competitors_row_menu[2].label = po[20];
+        competitors_row_menu[3].label = po[21];
+        competitors_row_menu[4].label = po[24];
         
         create_table();
     }
