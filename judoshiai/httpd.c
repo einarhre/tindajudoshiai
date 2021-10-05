@@ -779,15 +779,15 @@ void send_html_top(string *s, http_parser_t *parser, gchar *bodyattr)
 	    string_concat(s, "<a href=\"login\">%s</a>\r\n", _("Login"));
     }
 
+    //string_concat(s, "<a href=\"shiai.html\"><img src=\"judoshiai.png\"></a>\r\n");
     string_concat(s, "<a href=\"timer.html\"><img src=\"judotimer.png\"></a>\r\n");
     string_concat(s, "<a href=\"info.html\"><img src=\"judoinfo.png\"></a>\r\n");
     string_concat(s, "<a href=\"weight.html\"><img src=\"judoweight.png\"></a>\r\n");
-    string_concat(s, "<p><a href=\"https://sourceforge.net/projects/judoshiai/\">"
-	  "<img src=\"auto-update.png\"><b>Download JudoShiai from Sourceforge.</b></a></p>");
-    string_concat(s, "<p><a href=\"judoshiai-remote-setup-" SHIAI_VERSION ".exe\">"
-	  "<img src=\"auto-update.png\"><b>Install JudoShiai from communication node.</b></a>");
-    string_concat(s, "<br>This is a partially installation intended to be used in JudoTimer and JudoInfo computers."
-	  "<br><tt>.shi</tt> files are not associated with JudoShiai program.");
+    string_concat(s, "<p><br><a href=\"competitors.html?g=6\">Competitors by category</a>\r\n");
+    string_concat(s, "<br><a href=\"competitors.html?g=11\">Competitors by country</a>\r\n");
+    string_concat(s, "<br><a href=\"competitors.html?g=5\">Competitors by club</a>\r\n");
+    string_concat(s, "</p><br><p><a href=\"https://sourceforge.net/projects/judoshiai/\">"
+                  "<img src=\"auto-update.png\"><b>Download JudoShiai from Sourceforge.</b></a></p>");
 }
 
 void send_html_bottom(string *s, http_parser_t *parser)
@@ -1932,7 +1932,7 @@ int get_file(struct MHD_Connection *connection, const char *url)
     path[i+off] = NULL;
 
     gchar *docfile = g_build_filenamev(path);
-    g_print("GET %s\n", docfile);
+    //g_print("GET %s\n", docfile);
 
     //FILE *f = fopen(docfile, "rb");
     HANDLE fd = int_to_handle(g_open(docfile, O_RDONLY, 0));
