@@ -601,10 +601,15 @@ gboolean json_fill_judoka_struct(cJSON *root, struct judoka *j)
     else if (j->gender == IS_MALE)
         j->deleted |= GENDER_MALE;
 
-    if (j->index == 0) {
+    struct judoka *j1 = get_data(j->index);
+    if (j1)
+        free_judoka(j1);
+    else
+        is_new = TRUE;
+
+    if (is_new) {
         j->index = comp_index_get_free();
         j->category = "?";
-        is_new = TRUE;
     }
 
     return is_new;
