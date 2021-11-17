@@ -553,8 +553,8 @@ custom_cell_renderer_match_render(GtkCellRenderer      *cell_renderer,
 
         y_pos += BOX_HEIGHT;
         WRITE_TEXT_2(x+5, y_pos, next_matches_info[tatami-1][0].won_first, desc);
-        WRITE_TEXT_2(-1, -1, " ", desc);
-        WRITE_TEXT_2(-1, -1, next_matches_info[tatami-1][0].won_last, desc);
+        WRITE_TEXT(-1, -1, " ", desc);
+        WRITE_TEXT(-1, -1, next_matches_info[tatami-1][0].won_last, desc);
         y_pos += BOX_HEIGHT;
     } else if (position > 0) {
         m = &mlist[position-1];
