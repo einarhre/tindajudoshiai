@@ -937,6 +937,7 @@ void club_stat_print(FILE *f)
         prev = p;
 
         struct judoka j;
+        memset(&j, 0, sizeof(j));
 	j.index = 0;
         j.club = p->name;
         j.country = p->country;

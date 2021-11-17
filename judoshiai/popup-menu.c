@@ -644,6 +644,7 @@ static void create_new_category(GtkWidget *menuitem, gpointer userdata)
             if (ret >= 0) {
                 /* new category */
                 struct judoka e;
+                memset(&e, 0, sizeof(e));
                 e.index = ret;
                 e.last = cbuf;
                 e.belt = 0;

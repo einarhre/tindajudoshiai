@@ -95,6 +95,8 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
     struct judoka j;
     gchar *newcat = NULL;
 
+    memset(&j, 0, sizeof(j));
+    
     for(i = 0; i < argc; i++){
         //g_print("  %s=%s", azColName[i], argv[i] ? argv[i] : "(NULL)");
         if (IS(index))

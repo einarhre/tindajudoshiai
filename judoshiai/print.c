@@ -1242,6 +1242,7 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page, GSLi
         gchar *comment = db_get_data(0, "comment");
 
         struct judoka j;
+        memset(&j, 0, sizeof(j));
 	j.index = 0;
         j.club = club;
         j.country = country;

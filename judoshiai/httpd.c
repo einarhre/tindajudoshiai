@@ -100,7 +100,7 @@ void send_html_bottom(string *s, http_parser_t *parser);
 
 int sigreceived = 0;
 
-struct judoka unknown_judoka = {
+static struct judoka unknown_judoka = {
     .index = 0,
     .last = "?",
     .first = "?",

@@ -30,6 +30,7 @@ static gint set_category(GtkTreeIter *iter, guint index,
     gtk_tree_store_append((GtkTreeStore *)current_model, 
                           iter, NULL);
 
+    memset(&j, 0, sizeof(j));
     j.index = index ? index : current_category_index++;
     j.last = category;
     j.first = "";
