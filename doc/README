@@ -27,6 +27,46 @@ Please report your experiences to oh2ncp @ gmail . com
 
 ==============================================
 RELEASE NOTE
+VERSION 3.3
+
+JudoShiai
+---------
++ Unofficial category creation crash fixed.
++ Barcode search can include weight, too. Usage:
+  Add weight to barcode separated by letter W. Example for id 33, weight 67.8:
+  0033W67.8
+  This works only with internal ids. Idea is that weigh-in can produce labels that contain
+  also weights and someone can later feed in the data to JudoShiai reliable with a scanner.
++ Match table update problems fixed.
++ SFTP results copying can use public SSH keys.
++ Team event enhancemets:
+  - Could not change data of an extra match. Fixed.
+  - Potential problem with extra match and golden score fixed.
+  - Weight classes are now shown.
+
+==============================================
+RELEASE NOTE
+VERSION 3.2
+
+Common
+------
++ This is basically a bug fix release, but some features have been enhanced.
+
+JudoShiai
+---------
++ Bug fix: In WIN10 match table scrolling did not update the display. Forced display update added. Still not perfect.
++ Bug fix: Hantei and hikiwake are taken into account before number of shidos (for old kid's rules).
++ Finnish rules use IJF numbering.
++ Comment field added to the accreditation cards.
+
+JudoTimer
+---------
++ Bug fix: Match type was not visible in the slave timers
+  (More data in messages. Note compatibility!).
++ Bug fix: Rest time was not seen on slave display.
+
+==============================================
+RELEASE NOTE
 VERSION 3.1
 
 Common
