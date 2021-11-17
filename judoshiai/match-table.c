@@ -292,6 +292,7 @@ static gint drag_x0, drag_y0, drag_x, drag_y;
 static gint adj_x, adj_y;
 static gboolean drag_after;
 static gchar drag_text[32];
+static gboolean invalidate = FALSE;
 
 
 /***************************************************************************
@@ -485,6 +486,7 @@ custom_cell_renderer_match_render(GtkCellRenderer      *cell_renderer,
     g_print("Render match=%p x=%d y=%d w=%d h=%d tatami=%d position=%d\n", m,
             cell_area->x, cell_area->y,
             cell_area->width, cell_area->height, tatami, position);
+
 #endif
     //custom_cell_renderer_match_get_preferred_height (cell_renderer, widget, &height, &height);
     //custom_cell_renderer_match_get_preferred_width (cell_renderer, widget, &width, &width);
@@ -540,19 +542,19 @@ custom_cell_renderer_match_render(GtkCellRenderer      *cell_renderer,
         cairo_rectangle(c, x, y, w, h);
         cairo_fill(c);
         cairo_set_source_rgb(c, 0.0, 0.0, 0.0);
-        WRITE_TEXT(x+5, y, _("Prev. winner:"), desc);
+        WRITE_TEXT_2(x+5, y, _("Prev. winner:"), desc);
         y_pos += BOX_HEIGHT;
-        WRITE_TEXT(x+5, y_pos, next_matches_info[tatami-1][0].won_cat, desc);
+        WRITE_TEXT_2(x+5, y_pos, next_matches_info[tatami-1][0].won_cat, desc);
 
         gchar *txt = get_match_number_text(next_matches_info[tatami-1][0].won_catnum,
                                            next_matches_info[tatami-1][0].won_matchnum);
         if (txt)
-            WRITE_TEXT(x+5+w/2, 0, txt, desc);
+            WRITE_TEXT_2(x+5+w/2, 0, txt, desc);
 
         y_pos += BOX_HEIGHT;
-        WRITE_TEXT(x+5, y_pos, next_matches_info[tatami-1][0].won_first, desc);
-        WRITE_TEXT(-1, -1, " ", desc);
-        WRITE_TEXT(-1, -1, next_matches_info[tatami-1][0].won_last, desc);
+        WRITE_TEXT_2(x+5, y_pos, next_matches_info[tatami-1][0].won_first, desc);
+        WRITE_TEXT_2(-1, -1, " ", desc);
+        WRITE_TEXT_2(-1, -1, next_matches_info[tatami-1][0].won_last, desc);
         y_pos += BOX_HEIGHT;
     } else if (position > 0) {
         m = &mlist[position-1];
@@ -610,7 +612,7 @@ custom_cell_renderer_match_render(GtkCellRenderer      *cell_renderer,
             } else
                 snprintf(buf, sizeof(buf), "?");
 
-            WRITE_TEXT(x+5, y, buf, desc_bold);
+            WRITE_TEXT_2(x+5, y, buf, desc_bold);
 
             const gchar *txt = round_to_str(m->round);
 
@@ -637,7 +639,7 @@ custom_cell_renderer_match_render(GtkCellRenderer      *cell_renderer,
                     snprintf(buf, sizeof(buf), "T%d", catdata ? catdata->tatami : 0);
                 else if (txt && txt[0])
                     SNPRINTF_UTF8(buf, "%s", txt);
-		WRITE_TEXT(x+5+w/2, y, buf, desc_bold);
+		WRITE_TEXT_2(x+5+w/2, y, buf, desc_bold);
             }
 #if 0
             gint rt = (gint)rest_times[tatami-1] - (gint)time(NULL);
@@ -647,7 +649,7 @@ custom_cell_renderer_match_render(GtkCellRenderer      *cell_renderer,
                 else
                     sprintf(buf, "== %d:%02d =>", rt/60, rt%60);
                 cairo_set_source_rgb(c, 0.8, 0.0, 0.0);
-		WRITE_TEXT(left+5+colwidth/2, y_pos, buf, desc_bold);
+		WRITE_TEXT_2(left+5+colwidth/2, y_pos, buf, desc_bold);
             }
 #endif
             //cairo_restore(c);
@@ -863,7 +865,7 @@ static guint find_match_data_by_xy_update(gint x, gint y, gboolean update)
     guint match_data = 0;
     gint tatami = -1;
     gint position;
-    
+
     if (!gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(match_table_view), x, y,
                                       &path, &col, NULL, NULL))
         return 0;
@@ -883,10 +885,17 @@ static guint find_match_data_by_xy_update(gint x, gint y, gboolean update)
         
     gtk_tree_model_get(model, &iter, tatami, &match_data, -1);
     position = MATCH_DATA_TO_POSITION(match_data);
-
+    if (match_data & 0xfff00000) {
+        g_print("ERROR: match_data=0x%x\n", match_data);
+        return 0;
+    }
+    
     if (!update)
         goto out;
     
+    gtk_widget_queue_draw(match_table_view);
+
+#if 0
     gtk_list_store_set(match_table_store, &iter, tatami, match_data, -1);
 
     if (tatami > 0)
@@ -897,7 +906,7 @@ static guint find_match_data_by_xy_update(gint x, gint y, gboolean update)
         gtk_list_store_set(match_table_store, &iter, tatami+1,
                            MATCH_DATA_FROM_T_POS(tatami+1, position), -1);
 
-    if (gtk_tree_path_prev(path)) {
+    if (position > 1 /*gtk_tree_path_prev(path)*/) {
         gtk_tree_model_get_iter(model, &iter, path);
         gtk_list_store_set(match_table_store, &iter, tatami,
                            MATCH_DATA_FROM_T_POS(tatami, position-1), -1);
@@ -910,10 +919,10 @@ static guint find_match_data_by_xy_update(gint x, gint y, gboolean update)
         gtk_list_store_set(match_table_store, &iter, tatami,
                            MATCH_DATA_FROM_T_POS(tatami, position+1), -1);
     }
-
+#endif
 out:
     gtk_tree_path_free(path);
-        
+
     return match_data;
 }
 
@@ -1343,7 +1352,7 @@ static void target_drag_data_received(GtkWidget        *widget,
         struct match *m = get_match_by_match_data(drag_data);
 
         g_print("Match %d:%d to T=%d pos=%d\n", m->category, m->number, tatami, pos);
-        if (m)
+        if (pos > 0 && m)
             db_change_freezed(m->category,
                               m->number,
                               tatami,
@@ -1385,8 +1394,17 @@ static GtkTargetEntry target_table[] = {
   { "application/x-rootwindow-drop", 0, TARGET_ROOTWIN }
 };
 
+static gboolean do_invalidation(gpointer data)
+{
+    if (invalidate) {
+        invalidate = FALSE;
+        //gtk_widget_queue_draw(match_table_view);
+    }
+    return TRUE;
+}
+
 gboolean scroll_entries(GtkWidget * widget, GdkEvent * event, gpointer data) {
-    gtk_widget_queue_draw(match_table_view);
+    invalidate = TRUE;
     return FALSE; // Let other handlers respond to this event
 }
 
@@ -1436,6 +1454,7 @@ void set_match_table_page(GtkWidget *nb)
 
     g_signal_connect(match_scrolled_window, "scroll-event", G_CALLBACK(scroll_entries), NULL);
 
+    //g_timeout_add(300, do_invalidation, NULL);
 }
 
 void set_match_table_titles(void)
