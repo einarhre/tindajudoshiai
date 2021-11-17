@@ -19,6 +19,7 @@
 
 #include "judotimer.h"
 #include "language.h"
+#include "common-utils.h"
 
 void start_timer_help(GtkWidget *w, gpointer data);
 void start_log_view(GtkWidget *w, gpointer data);
@@ -101,6 +102,18 @@ static void display_competitors(GtkWidget *w,
 {
     display_comp_window(saved_cat, saved_last1, saved_last2, 
                         saved_first1, saved_first2, saved_country1, saved_country2, saved_round);
+
+    if (mode != MODE_SLAVE) {
+        struct message msg;
+        memset(&msg, 0, sizeof(msg));
+        msg.type = MSG_UPDATE_LABEL;
+        msg.u.update_label.label_num = START_COMPETITORS;
+        SNPRINTF_UTF8(msg.u.update_label.text, "%s\t%s\t%s", saved_last1, saved_first1, saved_country1);
+        SNPRINTF_UTF8(msg.u.update_label.text2, "%s\t%s\t%s", saved_last2, saved_first2, saved_country2);
+        STRCPY_UTF8(msg.u.update_label.text3, saved_cat);
+        msg.u.update_label.round = saved_round;
+        send_label_msg(&msg);
+    }
 }
 
 static void display_video( GtkWidget *w,

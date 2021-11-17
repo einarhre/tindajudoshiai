@@ -2041,7 +2041,7 @@ void update_label(struct msg_update_label *msg)
         display_ad_window();
     } else if (w == START_COMPETITORS) {
 	change_custom_layout(msg->expose);
-        display_comp_window(msg->text3, msg->text, msg->text2, "", "", "", "", 0);
+        display_comp_window(msg->text3, msg->text, msg->text2, "", "", "", "", msg->round);
         /*write_tv_logo(msg);*/
         return;
     } else if (w == STOP_COMPETITORS) {

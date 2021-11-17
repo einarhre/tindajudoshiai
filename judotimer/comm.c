@@ -225,24 +225,24 @@ void msg_received(struct message *input_msg)
                     current_category, current_match,
                     input_msg->u.next_match.category, input_msg->u.next_match.match);
             ***/
-	    if (!demo)
+	    if (!demo) {
 		display_comp_window(saved_cat, saved_last1, saved_last2,
 				    saved_first1, saved_first2,
 				    saved_country1, saved_country2, saved_round);
 
-            struct message msg;
-            memset(&msg, 0, sizeof(msg));
-            msg.type = MSG_UPDATE_LABEL;
-            msg.u.update_label.label_num = START_COMPETITORS;
-            STRCPY_UTF8(msg.u.update_label.text, input_msg->u.next_match.blue_1);
-            STRCPY_UTF8(msg.u.update_label.text2, input_msg->u.next_match.white_1);
-            STRCPY_UTF8(msg.u.update_label.text3, input_msg->u.next_match.cat_1);
-            STRCPY_UTF8(msg.u.update_label.expose, input_msg->u.next_match.layout);
-
-            /*write_tv_logo(&(msg.u.update_label));*/
-
-            if (mode != MODE_SLAVE)
-                send_label_msg(&msg);
+                if (mode != MODE_SLAVE) {
+                    struct message msg;
+                    memset(&msg, 0, sizeof(msg));
+                    msg.type = MSG_UPDATE_LABEL;
+                    msg.u.update_label.label_num = START_COMPETITORS;
+                    STRCPY_UTF8(msg.u.update_label.text, input_msg->u.next_match.blue_1);
+                    STRCPY_UTF8(msg.u.update_label.text2, input_msg->u.next_match.white_1);
+                    STRCPY_UTF8(msg.u.update_label.text3, input_msg->u.next_match.cat_1);
+                    STRCPY_UTF8(msg.u.update_label.expose, input_msg->u.next_match.layout);
+                    msg.u.update_label.round = input_msg->u.next_match.round;
+                    send_label_msg(&msg);
+                }
+            }
         }
 
         current_category = input_msg->u.next_match.category;

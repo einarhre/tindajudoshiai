@@ -1526,8 +1526,8 @@ static gboolean comp_names_pending = FALSE;
 static gboolean no_ads = FALSE;
 static time_t comp_names_start = 0;
 static gchar category[32];
-static gchar b_last[32];
-static gchar w_last[32];
+static gchar b_last[64], w_last[64];
+static gchar b_first[32], w_first[32];
 static gchar b_country[8], w_country[8];
 static GtkWidget *ok_button = NULL;
 static gint cat_round = 0;
@@ -2303,32 +2303,63 @@ void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2,
     STRCPY_UTF8(category, cat);
     cat_round = round;
 
-    if (showletter) {
-        gchar buf[8];
-        if (first1[0]) {
-            g_utf8_strncpy(buf, first1, 1);
-            SNPRINTF_UTF8(b_last, "%s.%s", buf, comp1);
-        } else
-            STRCPY_UTF8(b_last, comp1);
-
-        if (first2[0]) {
-            g_utf8_strncpy(buf, first2, 1);
-            SNPRINTF_UTF8(w_last, "%s.%s", buf, comp2);
-        } else
-            STRCPY_UTF8(w_last, comp2);
-    } else {
-        STRCPY_UTF8(b_last, comp1);
-        STRCPY_UTF8(w_last, comp2);
-    }
-
-    STRCPY_UTF8(b_country, country1);
-    STRCPY_UTF8(w_country, country2);
+    b_last[0] = w_last[0] = 0;
+    b_first[0] = w_first[0] = 0;
+    b_country[0] = w_country[0] = 0;
+    
+    // check if all data is in names
+    STRCPY_UTF8(b_last, comp1);
+    STRCPY_UTF8(w_last, comp2);
 
     p = strchr(b_last, '\t');
-    if (p) *p = 0;
+    if (p) {
+        *p = 0;
+        STRCPY_UTF8(b_first, p+1);
+        p = strchr(b_first, '\t');
+        if (p) {
+            *p = 0;
+            STRCPY_UTF8(b_country, p+1);
+            p = strchr(b_country, '\t');
+            if (p) *p = 0;
+        }
+    }
 
     p = strchr(w_last, '\t');
-    if (p) *p = 0;
+    if (p) {
+        *p = 0;
+        STRCPY_UTF8(w_first, p+1);
+        p = strchr(w_first, '\t');
+        if (p) {
+            *p = 0;
+            STRCPY_UTF8(w_country, p+1);
+            p = strchr(w_country, '\t');
+            if (p) *p = 0;
+        }
+    }
+
+    if (first1 && first1[0])
+        STRCPY_UTF8(b_first, first1);
+    if (first2 && first2[0])
+        STRCPY_UTF8(w_first, first2);
+
+    if (country1 && country1[0])
+        STRCPY_UTF8(b_country, country1);
+    if (country2 && country2[0])
+        STRCPY_UTF8(w_country, country2);
+
+    if (showletter) {
+        gchar buf[8], buf2[32];
+        if (b_first[0]) {
+            g_utf8_strncpy(buf, b_first, 1);
+            SNPRINTF_UTF8(buf2, "%s.%s", buf, b_last);
+            STRCPY_UTF8(b_last, buf2);
+        }
+        if (w_first[0]) {
+            g_utf8_strncpy(buf, w_first, 1);
+            SNPRINTF_UTF8(buf2, "%s.%s", buf, w_last);
+            STRCPY_UTF8(w_last, buf2);
+        }
+    }
 
     comp_names_start = 0;
     comp_names_pending = TRUE;
