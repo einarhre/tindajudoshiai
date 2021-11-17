@@ -772,7 +772,6 @@ gpointer client_thread(gpointer args)
 	    multicast = FALSE;
 	
 	if (multicast) {
-	    g_print("Multicast socket\n");
 	    if ((comm_fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
 		perror("client udp socket");
 		g_print("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
@@ -780,7 +779,6 @@ gpointer client_thread(gpointer args)
 		return NULL;
 	    }
 	} else {
-	    g_print("TCP socket\n");
 	    if ((comm_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
 		perror("client tcp socket");
 		g_print("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);

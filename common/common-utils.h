@@ -29,9 +29,17 @@
 #define TEXT_ANCHOR_END     1
 #define TEXT_ANCHOR_BOTTOM  1
 
+#define CURRENT_Y -10000.0
+
 #define WRITE_TEXT(_x, _y, _txt, _desc)	do {				\
 	gdouble __x = _x, __y = _y;					\
+        if (__y < 0) __y = CURRENT_Y;                                   \
 	write_text(c, _txt, &__x, &__y, NULL, NULL, -1, -1, _desc, 0, 0); \
+    } while (0)
+
+#define WRITE_TEXT_2(_x, _y, _txt, _desc)	do {                    \
+        gdouble __x = _x, __y = _y;					\
+        write_text(c, _txt, &__x, &__y, NULL, NULL, -1, -1, _desc, 0, 0); \
     } while (0)
 
 

@@ -112,7 +112,7 @@ void write_text(cairo_t *cr,
 	else
 	    y1 = *y + *h/2 - height/2;
     } else {
-	if (*y >= 0) {
+	if (*y != CURRENT_Y) {
 	    y1 = *y;
 	} else {
 	    y1 = current_y;
