@@ -91,7 +91,7 @@ static GtkWidget    *competitor_label = NULL;
 gint show_columns = 0xffe3;
 static GtkTreeViewColumn *columns[16];
 
-static void display_competitor(gint indx);
+static void display_competitor(gint indx, const char *txt);
 static gboolean foreach_select_coach(GtkTreeModel *model,
                                      GtkTreePath  *path,
                                      GtkTreeIter  *iter,
@@ -539,10 +539,10 @@ static GtkWidget *set_entry(GtkWidget *table, int row,
  * Activations
  */
 
-void view_on_row_activated(GtkTreeView        *treeview,
-                           GtkTreePath        *path,
-                           GtkTreeViewColumn  *col,
-                           gpointer            userdata)
+struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
+                                            GtkTreePath        *path,
+                                            GtkTreeViewColumn  *col,
+                                            gpointer            userdata)
 {
     GtkTreeModel *model = NULL;
     GtkTreeIter   iter;
@@ -1003,6 +1003,8 @@ void view_on_row_activated(GtkTreeView        *treeview,
 
     gtk_widget_show_all(dialog);
     editing_ongoing = TRUE;
+
+    return judoka_tmp;
 }
 
 void new_judoka(GtkWidget *w, gpointer data)
@@ -1037,7 +1039,7 @@ static gboolean display_coach(GtkWidget *treeview,
                               GdkEventButton *event,
                               gpointer userdata)
 {
-    display_competitor(ptr_to_gint(userdata) | 0x10000);
+    display_competitor(ptr_to_gint(userdata) | 0x10000, NULL);
     return TRUE;
 }
 
@@ -2451,20 +2453,27 @@ void remove_competitors(GtkWidget *w, gpointer data)
 
 /* barcode stuff */
 
+struct dsp_comp_data {
+    gint indx;
+    const gchar *txt;
+    struct judoka_widget *j
+};
+
 static gboolean foreach_comp_dsp(GtkTreeModel *model,
                                  GtkTreePath  *path,
                                  GtkTreeIter  *iter,
-                                 void         *indx)
+                                 void         *data)
 {
+    struct dsp_comp_data *d = data;
     gint   id;
-    gint   lookfor = ptr_to_gint(indx) & 0xffff;
-
+    gint   lookfor = d->indx & 0xffff;
+    
     gtk_tree_model_get(model, iter,
                        COL_INDEX, &id,
                        -1);
 
     if (id == lookfor) {
-        view_on_row_activated(GTK_TREE_VIEW(current_view), path, NULL, gint_to_ptr(ptr_to_gint(indx) & 0x10000));
+        d->j = view_on_row_activated(GTK_TREE_VIEW(current_view), path, NULL, gint_to_ptr(d->indx & 0x10000));
 
         return TRUE;
     }
@@ -2472,11 +2481,22 @@ static gboolean foreach_comp_dsp(GtkTreeModel *model,
     return FALSE; /* do not stop walking the store, call us with next row */
 }
 
-static void display_competitor(gint indx)
+static void display_competitor(gint indx, const char *txt)
 {
+    struct dsp_comp_data d;
+    d.indx = indx;
+    d.txt = txt;
+    d.j = NULL;
+    
     gtk_tree_model_foreach(GTK_TREE_MODEL(current_model),
                            (GtkTreeModelForeachFunc) foreach_comp_dsp,
-                           gint_to_ptr(indx));
+                           &d);
+    if (txt && d.j) {
+        const char *p = strchr(txt, 'W');
+        if (p && d.j->weight) {
+            gtk_entry_set_text(d.j->weight, p+1);
+        }
+    }
 }
 
 #if 0
@@ -2571,7 +2591,7 @@ static void on_enter(GtkEntry *entry, gpointer user_data)  {
     const gchar *the_text;
     gint indx;
     gboolean coach;
-
+    
     the_text = gtk_entry_get_text(GTK_ENTRY(entry));
     indx = db_get_index_by_id(the_text, &coach);
 
@@ -2579,9 +2599,9 @@ static void on_enter(GtkEntry *entry, gpointer user_data)  {
         print_competitors_dialog(the_text, indx);
         // if (indx) display_competitor(indx | 0x10000);
     } else if (indx)
-        display_competitor(indx);
+        display_competitor(indx, the_text);
     else
-        display_competitor(atoi(the_text));
+        display_competitor(atoi(the_text), the_text);
     gtk_entry_set_text(GTK_ENTRY(entry), "");
     //gtk_widget_grab_focus(GTK_WIDGET(entry));
 }

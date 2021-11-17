@@ -65,7 +65,8 @@ static gint set_one_category(GtkTreeModel *model, GtkTreeIter *iter, guint index
 			     const gchar *category, guint tatami, guint group, struct compsys sys)
 {
     struct judoka j;
-
+    memset(&j, 0, sizeof(j));
+    
     if (find_iter_category_model(iter, category, model)) {
         /* category exists */
         return -1;
@@ -159,6 +160,8 @@ static int db_competitor_callback(void *data, int argc, char **argv, char **azCo
     struct judoka j;
     GtkTreeModel *model = data;
 
+    memset(&j, 0, sizeof(j));
+    
     for(i = 0; i < argc; i++){
         //g_print("  %s=%s", azColName[i], argv[i] ? argv[i] : "(NULL)");
         if (IS(index))
@@ -406,10 +409,10 @@ static void read_foreign_matches(gchar *dbname, struct shiai_map *mp)
     sqlite3_close(db);
 }
 
-extern void view_on_row_activated (GtkTreeView        *treeview,
-                                   GtkTreePath        *path,
-                                   GtkTreeViewColumn  *col,
-                                   gpointer            userdata);
+extern struct judoka_widget *view_on_row_activated (GtkTreeView        *treeview,
+                                                    GtkTreePath        *path,
+                                                    GtkTreeViewColumn  *col,
+                                                    gpointer            userdata);
 
 void row_activated(GtkTreeView        *treeview,
 		   GtkTreePath        *path,
@@ -448,6 +451,7 @@ void row_activated(GtkTreeView        *treeview,
         if (ret >= 0) {
             /* new category */
             struct judoka e;
+            memset(&e, 0, sizeof(e));
             e.index = ret;
             e.last = j->category;
             e.belt = 0;

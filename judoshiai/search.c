@@ -14,10 +14,10 @@
 #include "judoshiai.h"
 #include "common-utils.h"
 
-extern void view_on_row_activated (GtkTreeView        *treeview,
-                                   GtkTreePath        *path,
-                                   GtkTreeViewColumn  *col,
-                                   gpointer            userdata);
+extern struct judoka_widget *view_on_row_activated (GtkTreeView        *treeview,
+                                                    GtkTreePath        *path,
+                                                    GtkTreeViewColumn  *col,
+                                                    gpointer            userdata);
 
 
 #define NUM_RESULTS 10
