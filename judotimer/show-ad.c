@@ -1807,8 +1807,8 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
         else
             cairo_set_source_rgb(c, 0.0, 0.0, 0.0);
 
-        cairo_text_extents(c, w_last, &extents);
-        cairo_move_to(c, name_start+5.0, THIRD_BLOCK_START + (OTHER_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
+        //cairo_text_extents(c, w_last, &extents);
+        //cairo_move_to(c, name_start+5.0, THIRD_BLOCK_START + (OTHER_BLOCK_HEIGHT - extents.height)/2.0 - extents.y_bearing);
         //cairo_show_text(c, w_last);
 	{
 	    gdouble _x = name_start+5.0, _y = THIRD_BLOCK_START, _w = 0, _h = OTHER_BLOCK_HEIGHT;
