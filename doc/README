@@ -44,6 +44,13 @@ JudoShiai
   - Potential problem with extra match and golden score fixed.
   - Weight classes are now shown.
 
+JudoTimer
+---------
++ Slave duplicates better the master's display
+  - Match type
+  - Country flags
+  - Initial letter of the first name
+
 ==============================================
 RELEASE NOTE
 VERSION 3.2

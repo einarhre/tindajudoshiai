@@ -577,6 +577,19 @@ msgstr "Mót"
 msgid "Tournament"
 msgstr "Mót"
 
+#: ../judoshiai/auth.c
+msgid "Users"
+msgstr ""
+
+#: ../judoshiai/auth.c ../judoshiai/httpd.c ../judoshiai/menus.c
+#: ../judoshiai/set-password.c ../judoweight/main.c ../judoweight/menus.c
+msgid "Password"
+msgstr "Lykilorð"
+
+#: ../judoshiai/auth.c
+msgid "For API"
+msgstr ""
+
 #: ../judoshiai/categories.c
 msgid "Cannot move"
 msgstr "Get ekk flutt"
@@ -622,6 +635,10 @@ msgstr ""
 msgid "Show Sheet"
 msgstr "Sýna blað"
 
+#: ../judoshiai/comm.c ../judoshiai/competitors.c ../judoshiai/popup-menu.c
+msgid "Remove drawing first"
+msgstr "Fjarlægja fyrst dráttinn"
+
 #: ../judoshiai/comm.c
 msgid "Connections to this node"
 msgstr "Tengingar við þennan búnað"
@@ -649,10 +666,6 @@ msgstr "Félagi forraðað"
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "Er nú þegar til!"
-
-#: ../judoshiai/competitors.c ../judoshiai/popup-menu.c
-msgid "Remove drawing first"
-msgstr "Fjarlægja fyrst dráttinn"
 
 #: ../judoshiai/competitors.c ../judoshiai/menus.c
 msgid "Competitors"
@@ -936,6 +949,14 @@ msgid "Copy to Server"
 msgstr ""
 
 #: ../judoshiai/ftp.c
+msgid "Public key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
+msgid "Private key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
 msgid "Proxy User:"
 msgstr ""
 
@@ -983,11 +1004,6 @@ msgstr "Lykilorð samþykkt.<br>"
 #: ../judoshiai/httpd.c
 msgid "User"
 msgstr "Notandi"
-
-#: ../judoshiai/httpd.c ../judoshiai/menus.c ../judoshiai/set-password.c
-#: ../judoweight/main.c ../judoweight/menus.c
-msgid "Password"
-msgstr "Lykilorð"
 
 #: ../judoshiai/httpd.c
 msgid "Back"

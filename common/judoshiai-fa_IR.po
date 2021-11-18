@@ -577,6 +577,19 @@ msgstr "مسابقات"
 msgid "Tournament"
 msgstr "مسابقات"
 
+#: ../judoshiai/auth.c
+msgid "Users"
+msgstr ""
+
+#: ../judoshiai/auth.c ../judoshiai/httpd.c ../judoshiai/menus.c
+#: ../judoshiai/set-password.c ../judoweight/main.c ../judoweight/menus.c
+msgid "Password"
+msgstr "رمز عبور"
+
+#: ../judoshiai/auth.c
+msgid "For API"
+msgstr ""
+
 #: ../judoshiai/categories.c
 msgid "Cannot move"
 msgstr "قابل جا به جایی نیست"
@@ -622,6 +635,10 @@ msgstr "انتقال مسابقه ها"
 msgid "Show Sheet"
 msgstr "نمایش جدول"
 
+#: ../judoshiai/comm.c ../judoshiai/competitors.c ../judoshiai/popup-menu.c
+msgid "Remove drawing first"
+msgstr "ابتدا قرعه ها را پاک کنید"
+
 #: ../judoshiai/comm.c
 msgid "Connections to this node"
 msgstr "اتصالات به این نقطه اتصال"
@@ -649,10 +666,6 @@ msgstr "سیدبندی باشگاه"
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "از قبل وحود دارد"
-
-#: ../judoshiai/competitors.c ../judoshiai/popup-menu.c
-msgid "Remove drawing first"
-msgstr "ابتدا قرعه ها را پاک کنید"
 
 #: ../judoshiai/competitors.c ../judoshiai/menus.c
 msgid "Competitors"
@@ -935,6 +948,14 @@ msgid "Copy to Server"
 msgstr "رونوشت به سرور"
 
 #: ../judoshiai/ftp.c
+msgid "Public key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
+msgid "Private key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
 msgid "Proxy User:"
 msgstr "نام کاربری پروکسی"
 
@@ -982,11 +1003,6 @@ msgstr "رمز عبور تایید شد.<br>"
 #: ../judoshiai/httpd.c
 msgid "User"
 msgstr "کاربر"
-
-#: ../judoshiai/httpd.c ../judoshiai/menus.c ../judoshiai/set-password.c
-#: ../judoweight/main.c ../judoweight/menus.c
-msgid "Password"
-msgstr "رمز عبور"
 
 #: ../judoshiai/httpd.c
 msgid "Back"

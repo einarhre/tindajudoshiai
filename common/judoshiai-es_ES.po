@@ -577,6 +577,19 @@ msgstr "Torneos"
 msgid "Tournament"
 msgstr "Torneo"
 
+#: ../judoshiai/auth.c
+msgid "Users"
+msgstr ""
+
+#: ../judoshiai/auth.c ../judoshiai/httpd.c ../judoshiai/menus.c
+#: ../judoshiai/set-password.c ../judoweight/main.c ../judoweight/menus.c
+msgid "Password"
+msgstr "Clave"
+
+#: ../judoshiai/auth.c
+msgid "For API"
+msgstr ""
+
 #: ../judoshiai/categories.c
 msgid "Cannot move"
 msgstr "No se puede mover"
@@ -622,6 +635,10 @@ msgstr ""
 msgid "Show Sheet"
 msgstr "Mostrar hoja"
 
+#: ../judoshiai/comm.c ../judoshiai/competitors.c ../judoshiai/popup-menu.c
+msgid "Remove drawing first"
+msgstr "Elimina los sorteos promero"
+
 #: ../judoshiai/comm.c
 msgid "Connections to this node"
 msgstr "Conexiones a este nodo"
@@ -649,10 +666,6 @@ msgstr "Club Cabeza de Serie"
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "¡Ya exite!"
-
-#: ../judoshiai/competitors.c ../judoshiai/popup-menu.c
-msgid "Remove drawing first"
-msgstr "Elimina los sorteos promero"
 
 #: ../judoshiai/competitors.c ../judoshiai/menus.c
 msgid "Competitors"
@@ -937,6 +950,14 @@ msgid "Copy to Server"
 msgstr ""
 
 #: ../judoshiai/ftp.c
+msgid "Public key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
+msgid "Private key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
 msgid "Proxy User:"
 msgstr ""
 
@@ -984,11 +1005,6 @@ msgstr "Clave aceptada.<br>"
 #: ../judoshiai/httpd.c
 msgid "User"
 msgstr "Usuario"
-
-#: ../judoshiai/httpd.c ../judoshiai/menus.c ../judoshiai/set-password.c
-#: ../judoweight/main.c ../judoweight/menus.c
-msgid "Password"
-msgstr "Clave"
 
 #: ../judoshiai/httpd.c
 msgid "Back"

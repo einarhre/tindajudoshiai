@@ -577,6 +577,19 @@ msgstr "Turnaje"
 msgid "Tournament"
 msgstr "Turnaj"
 
+#: ../judoshiai/auth.c
+msgid "Users"
+msgstr ""
+
+#: ../judoshiai/auth.c ../judoshiai/httpd.c ../judoshiai/menus.c
+#: ../judoshiai/set-password.c ../judoweight/main.c ../judoweight/menus.c
+msgid "Password"
+msgstr "Heslo"
+
+#: ../judoshiai/auth.c
+msgid "For API"
+msgstr ""
+
 #: ../judoshiai/categories.c
 msgid "Cannot move"
 msgstr "Nemožný presun"
@@ -622,6 +635,10 @@ msgstr "Presun zápasov"
 msgid "Show Sheet"
 msgstr "Zobraz List"
 
+#: ../judoshiai/comm.c ../judoshiai/competitors.c ../judoshiai/popup-menu.c
+msgid "Remove drawing first"
+msgstr "Najskôr odstráň Losovanie"
+
 #: ../judoshiai/comm.c
 msgid "Connections to this node"
 msgstr "Pripojenie do tohto uzla"
@@ -649,10 +666,6 @@ msgstr "Nasadenie Klubov"
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "už existuje!"
-
-#: ../judoshiai/competitors.c ../judoshiai/popup-menu.c
-msgid "Remove drawing first"
-msgstr "Najskôr odstráň Losovanie"
 
 #: ../judoshiai/competitors.c ../judoshiai/menus.c
 msgid "Competitors"
@@ -935,6 +948,14 @@ msgid "Copy to Server"
 msgstr "Kopírovať na Server"
 
 #: ../judoshiai/ftp.c
+msgid "Public key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
+msgid "Private key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
 msgid "Proxy User:"
 msgstr "Užívateľ Proxy:"
 
@@ -982,11 +1003,6 @@ msgstr "Heslo prijaté.<br>"
 #: ../judoshiai/httpd.c
 msgid "User"
 msgstr "Užívateľ"
-
-#: ../judoshiai/httpd.c ../judoshiai/menus.c ../judoshiai/set-password.c
-#: ../judoweight/main.c ../judoweight/menus.c
-msgid "Password"
-msgstr "Heslo"
 
 #: ../judoshiai/httpd.c
 msgid "Back"

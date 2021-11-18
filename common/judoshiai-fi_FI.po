@@ -577,6 +577,19 @@ msgstr "Kilpailut"
 msgid "Tournament"
 msgstr "Kilpailu"
 
+#: ../judoshiai/auth.c
+msgid "Users"
+msgstr ""
+
+#: ../judoshiai/auth.c ../judoshiai/httpd.c ../judoshiai/menus.c
+#: ../judoshiai/set-password.c ../judoweight/main.c ../judoweight/menus.c
+msgid "Password"
+msgstr "Salasana"
+
+#: ../judoshiai/auth.c
+msgid "For API"
+msgstr ""
+
 #: ../judoshiai/categories.c
 msgid "Cannot move"
 msgstr "Ei voi siirtää"
@@ -622,6 +635,10 @@ msgstr "Siirrä otteluita"
 msgid "Show Sheet"
 msgstr "Näytä kaavio"
 
+#: ../judoshiai/comm.c ../judoshiai/competitors.c ../judoshiai/popup-menu.c
+msgid "Remove drawing first"
+msgstr "Poista arvonta ensin"
+
 #: ../judoshiai/comm.c
 msgid "Connections to this node"
 msgstr "Yhteydet tähän solmuun"
@@ -649,10 +666,6 @@ msgstr "Sijoitus seurassa"
 #: ../judoshiai/competitors.c ../judoshiai/set-categories.c
 msgid "already exists!"
 msgstr "on jo olemassa!"
-
-#: ../judoshiai/competitors.c ../judoshiai/popup-menu.c
-msgid "Remove drawing first"
-msgstr "Poista arvonta ensin"
 
 #: ../judoshiai/competitors.c ../judoshiai/menus.c
 msgid "Competitors"
@@ -935,6 +948,14 @@ msgid "Copy to Server"
 msgstr "Kopioi palvelimelle"
 
 #: ../judoshiai/ftp.c
+msgid "Public key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
+msgid "Private key file:"
+msgstr ""
+
+#: ../judoshiai/ftp.c
 msgid "Proxy User:"
 msgstr "Välittimen käyttäjätunnus:"
 
@@ -982,11 +1003,6 @@ msgstr "Salasana hyv&auml;ksytty.<br>"
 #: ../judoshiai/httpd.c
 msgid "User"
 msgstr "Käyttäjä"
-
-#: ../judoshiai/httpd.c ../judoshiai/menus.c ../judoshiai/set-password.c
-#: ../judoweight/main.c ../judoweight/menus.c
-msgid "Password"
-msgstr "Salasana"
 
 #: ../judoshiai/httpd.c
 msgid "Back"
