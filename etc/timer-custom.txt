@@ -196,4 +196,6 @@
 # Examples:
 #106 stopippon=false
 #106 rules2017=true
+106 confirmmatch=false
+106 showcompetitornames=false
 106 displayfont=Arial Bold

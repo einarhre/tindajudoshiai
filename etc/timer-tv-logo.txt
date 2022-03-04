@@ -136,3 +136,5 @@
 
 # Background picture
 105 ../etc/png/timer-tv-logo.png
+
+106 displayfont=Arial Bold

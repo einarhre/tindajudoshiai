@@ -111,6 +111,8 @@ gchar *custom_layout_file = NULL;
 gchar  custom_layout_file_ext[8];
 static cairo_surface_t *background_image = NULL;
 
+static gint current_orun = 0;
+
 static const gchar *num_to_str(guint num)
 {
         static gchar result[10];
@@ -639,6 +641,8 @@ void set_timer_osaekomi_color(gint osaekomi_state, gint pts, gboolean orun)
         send_label_msg(&msg);
     }
 
+    current_orun = orun;
+    
     if (pts) {
         if (osaekomi_state == OSAEKOMI_DSP_BLUE ||
             osaekomi_state == OSAEKOMI_DSP_WHITE ||
@@ -1320,7 +1324,7 @@ static void expose_label(cairo_t *c, gint w)
     gchar buf1[32], buf2[32];
     gchar *txt1 = labels[w].text, *txt2 = labels[w].text2;
     gdouble fsize;
-    gint zok = 0, orun = current_osaekomi_state == OSAEKOMI_DSP_YES;
+    gint zok = 0, orun = current_orun;//current_osaekomi_state != OSAEKOMI_DSP_NO;
 #ifdef USE_PANGO
     PangoLayout *layout;
     gint iwidth, iheight;
@@ -1360,9 +1364,6 @@ static void expose_label(cairo_t *c, gint w)
     wi = W(labels[w].w);
     he = H(labels[w].h);
 
-    cairo_rectangle(c, x1, y1, wi, he);
-    cairo_clip(c);
-
     if (labels[w].bg_r > -0.001 && (zok & 2) == 0) {
         cairo_set_source_rgb(c, labels[w].bg_r,
                              labels[w].bg_g, labels[w].bg_b);
@@ -1388,6 +1389,9 @@ static void expose_label(cairo_t *c, gint w)
 	    cairo_restore(c);
 	}
     }
+
+    cairo_rectangle(c, x1, y1, wi, he);
+    cairo_clip(c);
 
     if (zok & 1)
 	    txt1[0] = 0;
@@ -1833,7 +1837,7 @@ static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userda
 {
     gboolean ctl = event->state & 4;
     gboolean shft = event->state & 1;
-    //static GtkWidget *titlebar = NULL;
+    static GtkWidget *titlebar = NULL;
 
     if (event->type != GDK_KEY_PRESS)
         return FALSE;
@@ -1847,11 +1851,14 @@ static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userda
             gtk_widget_show(menubar);
  	    gtk_window_set_keep_above(GTK_WINDOW(main_window), FALSE);
             menu_hidden = FALSE;
+            if (titlebar)
+                gtk_window_set_titlebar(GTK_WINDOW(main_window), titlebar);
         } else {
             //titlebar = gtk_window_get_titlebar(GTK_WINDOW(main_window));
             gtk_widget_hide(menubar);
 	    gtk_window_set_decorated(GTK_WINDOW(main_window), FALSE);
 #ifndef WINXP
+            titlebar = gtk_window_get_titlebar(GTK_WINDOW(main_window));
             if (shft)
                 gtk_window_set_titlebar(GTK_WINDOW(main_window), NULL);
 #endif
@@ -2047,11 +2054,13 @@ void update_label(struct msg_update_label *msg)
     } else if (w == STOP_COMPETITORS) {
         close_ad_window();
     } else if (w == START_WINNER) {
-        display_ask_window(msg->text, msg->text2, msg->text3[0]);
+        if (rules_confirm_match)
+            display_ask_window(msg->text, msg->text2, msg->text3[0]);
         /*write_tv_logo(msg);*/
         return;
     } else if (w == STOP_WINNER) {
-        close_ask_window();
+        if (rules_confirm_match)
+            close_ask_window();
     } else if (w == SAVED_LAST_NAMES) {
         STRCPY_UTF8(saved_last1, msg->text);
         STRCPY_UTF8(saved_last2, msg->text2);
@@ -2082,7 +2091,6 @@ void update_label(struct msg_update_label *msg)
     } else if (w == SET_TIMER_RUN_COLOR) {
 	set_timer_run_color(ntoh32(msg->i1), ntoh32(msg->i2));
     } else if (w >= 0 && w < num_labels) {
-        g_print("LABEL=%d val=%s\n", w, msg->text);
         //labels[w].x = msg->x;
         //labels[w].y = msg->y;
         //labels[w].w = msg->w;

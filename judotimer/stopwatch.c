@@ -673,7 +673,8 @@ static gboolean close_ask_ok(GtkWidget *widget, gpointer userdata)
     if (legend < 0) legend = 0;
 
     reset(ASK_OK, NULL);
-    gtk_widget_destroy(userdata);
+    if (userdata)
+        gtk_widget_destroy(userdata);
     return FALSE;
 }
 
@@ -681,7 +682,8 @@ static gboolean close_ask_nok(GtkWidget *widget, gpointer userdata)
 {
     legend = 0;
     reset(ASK_NOK, NULL);
-    gtk_widget_destroy(userdata);
+    if (userdata)
+        gtk_widget_destroy(userdata);
     return FALSE;
 }
 
