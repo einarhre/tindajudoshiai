@@ -9,7 +9,7 @@
 
 #define NUM_CUSTOM_MATCHES   512
 #define NUM_CUST_POS          16
-#define NUM_ROUND_ROBIN_POOLS 16
+#define NUM_ROUND_ROBIN_POOLS 64
 #define NUM_RR_MATCHES        64
 #define NUM_BEST_OF_3_PAIRS   16
 #define NUM_GROUPS             8
