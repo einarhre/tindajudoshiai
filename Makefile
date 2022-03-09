@@ -31,10 +31,10 @@ ifeq ($(TOOL),MXE)
     DLLS += libssh2-1.dll libtiff-5.dll libunistring-2.dll
     DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll libwebp-7.dll
     DLLS += libgpg-error-0.dll libgnutls-30.dll libgmp-10.dll
-    DLLS += libhogweed-4.dll libnettle-6.dll
+    DLLS += libhogweed-6.dll libnettle-8.dll
 
     ifeq ($(TARGETOS),WIN32)
-        DLLS += libgcc_s_sjlj-1.dll libcrypto-1_1.dll
+        DLLS += libgcc_s_sjlj-1.dll
         DLLS += gspawn-win32-helper-console.exe
         DLLS += gspawn-win32-helper.exe
     else
@@ -93,7 +93,6 @@ all:
 	mkdir -p $(RELDIR)/share/locale/nl/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/cs/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/de/LC_MESSAGES
-	mkdir -p $(RELDIR)/share/locale/ru/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/da/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/he/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/fr/LC_MESSAGES
@@ -190,7 +189,6 @@ endif # WIN32OS
 	cp -r $(RUNDIR)/share/locale/nl $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/cs $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/de $(RELDIR)/share/locale/
-	cp -r $(RUNDIR)/share/locale/ru $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/da $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/he $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/fr $(RELDIR)/share/locale/
@@ -224,7 +222,6 @@ endif # WIN32
 	cp common/judoshiai-nl_NL.mo $(RELDIR)/share/locale/nl/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-cs_CZ.mo $(RELDIR)/share/locale/cs/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-de_DE.mo $(RELDIR)/share/locale/de/LC_MESSAGES/judoshiai.mo
-	cp common/judoshiai-ru_RU.mo $(RELDIR)/share/locale/ru/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-da_DK.mo $(RELDIR)/share/locale/da/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-he_IL.mo $(RELDIR)/share/locale/he/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-fr_FR.mo $(RELDIR)/share/locale/fr/LC_MESSAGES/judoshiai.mo

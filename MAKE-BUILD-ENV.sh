@@ -30,7 +30,7 @@ report "Stuff for Win32 and Win64 builds. This will take a long time to finish."
 cd
 git clone https://github.com/mxe/mxe.git
 cd ~/mxe
-make MXE_TARGETS='i686-w64-mingw32.shared x86_64-w64-mingw32.shared' gtk3 curl librsvg libao mpg123
+make MXE_TARGETS='i686-w64-mingw32.shared x86_64-w64-mingw32.shared' cc gtk3 curl librsvg libao mpg123 gnutls
 report "Get JudoShiai source code"
 cd
 git clone http://git.code.sf.net/p/judoshiai/judoshiai
