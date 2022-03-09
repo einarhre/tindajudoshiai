@@ -148,7 +148,6 @@
 #104 10 10 500 130
 
 # Background picture
-#105 /home/hjokinen/Dropbox/Documents/judo/samurai-cup_judotimer.png
-105 ../etc/png/samurai-cup.png
+105 ../etc/png/timer-tv-logo.png
 
 106 displayfont=Arial Bold
