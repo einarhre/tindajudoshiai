@@ -74,6 +74,13 @@
 #define SET_TIMER_RUN_COLOR 142
 #define MAX_LABEL_NUMBER    143
 
+struct paint_data {
+    cairo_t *c;
+    gint page;
+    gdouble  paper_width;
+    gdouble  paper_height;
+};
+
 extern GTimer *timer;
 
 extern GtkWidget *main_window;
@@ -107,6 +114,7 @@ extern gboolean no_big_text;
 extern gboolean show_competitor_names;
 extern gchar saved_first1[32], saved_first2[32], saved_last1[32], saved_last2[32], saved_cat[16];
 extern gchar saved_country1[8], saved_country2[8];
+extern gchar saved_club1[32], saved_club2[32];
 extern gint saved_round;
 extern gboolean fullscreen;
 extern gboolean require_judogi_ok;
@@ -139,6 +147,8 @@ extern gint   custom_layout_file_num;
 
 extern gchar font_face[32];
 extern gint  font_slant, font_weight;
+
+extern gint adwin_x, adwin_y, adwin_w, adwin_h;
 
 extern gboolean this_is_shiai(void);
 extern void copy_packet(struct message *msg); // not used
@@ -217,6 +227,7 @@ extern gboolean delete_big(gpointer data);
 extern gint display_advertisement(gchar *FileName);
 extern void toggle_advertise(GtkWidget *menu_item, gpointer data);
 extern void display_ad_window(void);
+extern void read_svg_file(gchar *fname);
 extern void send_label_msg(struct message *msg);
 extern gpointer master_thread(gpointer args);
 extern gpointer video_thread(gpointer args);
@@ -235,7 +246,7 @@ extern void light_switch_sides(gboolean yes);
 extern void parse_name(const gchar *s, gchar *first, gchar *last, gchar *club, gchar *country);
 extern void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2, 
                                 gchar *first1, gchar *first2, gchar *country1, gchar *country2,
-				gint round);
+				gchar *club1, gchar *club2, gint round);
 extern gboolean blue_background(void);
 extern void close_ad_window(void);
 extern void display_ask_window(gchar *name, gchar *cat, gchar winner);

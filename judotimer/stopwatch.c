@@ -1408,7 +1408,8 @@ void clock_key(guint key, guint event_state)
 
     if (key == GDK_t) {
         display_comp_window(saved_cat, saved_last1, saved_last2,
-                            saved_first1, saved_first2, saved_country1, saved_country2, saved_round);
+                            saved_first1, saved_first2, saved_country1, saved_country2,
+                            saved_club1, saved_club2, saved_round);
         return;
 
         extern GtkWidget *main_window;

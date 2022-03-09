@@ -44,10 +44,99 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <gtk/gtk.h>
+#include <librsvg/rsvg.h>
+#include <gdk/gdkkeysyms-compat.h>
 
 #include "judotimer.h"
 #include "common-utils.h"
 
+/**** SVG RELATED ****/
+
+#ifdef WIN32
+typedef struct RsvgRectangle_ {
+    gdouble x, y, width, height;
+} RsvgRectangle;
+#endif
+
+#define WRITE2(_s, _l)                                                  \
+    do {                                                                \
+        if (!rsvg_handle_write(handle, (guchar *)_s, _l, &err)) {       \
+            g_print("\nERROR %s: %s %d\n",                              \
+                    err->message, __FUNCTION__, __LINE__); err = NULL; return TRUE; } } while (0)
+
+#define WRITE1(_s, _l)                                                  \
+    do { gint _i; for (_i = 0; _i < _l; _i++) {                         \
+        if (_s[_i] == '&')                                              \
+            WRITE2("&amp;", 5);                                         \
+        else if (_s[_i] == '<')                                         \
+            WRITE2("&lt;", 4);                                          \
+        else if (_s[_i] == '>')                                         \
+            WRITE2("&gt;", 4);                                          \
+        else if (_s[_i] == '\'')                                        \
+            WRITE2("&apos;", 6);                                        \
+        else if (_s[_i] == '"')                                         \
+            WRITE2("&quot;", 6);                                        \
+        else                                                            \
+            WRITE2(&_s[_i], 1);                                         \
+        }} while (0)
+
+#define WRITE(_a) WRITE1(_a, strlen(_a))
+
+#define IS_LABEL_CHAR(_x) ((_x >= 'a' && _x <= 'z') || (_x >= 'A' && _x <= 'Z'))
+#define IS_VALUE_CHAR(_x) (_x >= '0' && _x <= '9')
+
+#define IS_SAME(_a, _b) (!strcmp((char *)_a, (char *)_b))
+#define IS_SAME_P(_a, _b) is_same_by_page(pd, _a, _b)
+
+
+static gchar *svg_file = NULL;
+static gchar *svg_data = NULL;
+static gchar *datamax = NULL;
+static gsize  svg_datalen = 0;
+static gint   svg_width;
+static gint   svg_height;
+static gboolean svg_ok = FALSE;
+static gint page_mask = 0;
+static gint current_page = 0;
+
+#define NUM_PAGES 5
+
+enum {
+    IMAGE_FLAG1,
+    IMAGE_FLAG2,
+    IMAGE_CLOSE,
+    IMAGE_CONTROL1,
+    IMAGE_CONTROL2,
+    NUM_IMAGES
+};
+
+const gchar *imagename[NUM_IMAGES] = {
+    "flag1", "flag2", "close", "control1", "control2"
+};
+
+static struct {
+    RsvgRectangle rect;
+    gboolean exists;
+} images[NUM_PAGES][NUM_IMAGES];
+
+static gdouble paper_width, paper_height;
+
+#define CODE_LEN 16
+
+static struct {
+    guchar code[CODE_LEN];
+    gint codecnt;
+    gint value;
+} attr[16];
+static gint cnt = 0;
+
+/********/
+
+void set_svg_file(GtkWidget *menu_item, GdkEventButton *event, gpointer data);
+gint paint_svg(struct paint_data *pd);
+static gboolean mouse_click(GtkWidget *window, GdkEventButton *event, gpointer userdata);
+
+gint adwin_x = 0, adwin_y = 0, adwin_w = 0, adwin_h = 0;
 gboolean showflags = FALSE, showletter = FALSE;
 gdouble  flagsize = 7.0, namesize = 10.0;
 
@@ -1526,9 +1615,10 @@ static gboolean comp_names_pending = FALSE;
 static gboolean no_ads = FALSE;
 static time_t comp_names_start = 0;
 static gchar category[32];
-static gchar b_last[64], w_last[64];
+static gchar b_last[32], w_last[32];
 static gchar b_first[32], w_first[32];
-static gchar b_country[8], w_country[8];
+static gchar b_country[32], w_country[32];
+static gchar b_club[32], w_club[32];
 static GtkWidget *ok_button = NULL;
 static gint cat_round = 0;
 
@@ -1576,20 +1666,11 @@ void set_competitor_window_rest_time(gint min, gint tsec, gint sec, gboolean res
     rrest = rest;
     rflags = flags;
 
-#if (GTKVER == 3)
     gtk_widget_queue_draw(GTK_WIDGET(ad_window));
     //gdk_window_invalidate_rect(GDK_WINDOW(ad_window), NULL, TRUE);
     /*if (gtk_widget_get_window(widget)) {
         gdk_window_invalidate_rect(gtk_widget_get_window(widget), NULL, TRUE);
         }*/
-#else
-    GtkWidget *widget = GTK_WIDGET(ad_window);
-    if (widget->window) {
-        GdkRegion *region = gdk_drawable_get_clip_region(widget->window);
-        gdk_window_invalidate_region(widget->window, region, TRUE);
-        gdk_window_process_updates(widget->window, TRUE);
-    }
-#endif
 }
 
 void set_competitor_window_judogi_control(gboolean control, gint flags)
@@ -1655,16 +1736,22 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
     gint width, height;
     struct frame *frame = NULL;
 
+    if (!white_ctl) {
+        gchar *file = g_build_filename(installation_dir, "etc", "png", "white-ctl.png", NULL);
+        white_ctl = cairo_image_surface_create_from_png(file);
+        g_free(file);
+    }
+    if (!blue_ctl) {
+        gchar *file = g_build_filename(installation_dir, "etc", "png", "blue-ctl.png", NULL);
+        blue_ctl = cairo_image_surface_create_from_png(file);
+        g_free(file);
+    }
+    
     if (!no_ads)
         frame = get_current_frame(widget);
 
-#if (GTKVER == 3)
     width = gtk_widget_get_allocated_width(widget);
     height = gtk_widget_get_allocated_height(widget);
-#else
-    width = widget->allocation.width;
-    height = widget->allocation.height;
-#endif
 
     if (!frame) {
         if (comp_names_pending == FALSE)
@@ -1678,14 +1765,18 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
 #define OTHER_BLOCK_HEIGHT ((height-FIRST_BLOCK_HEIGHT)/2.0)
 
         cairo_text_extents_t extents;
-#if (GTKVER == 3)
         cairo_t *c = (cairo_t *)event;
-#else
-        cairo_t *c = gdk_cairo_create(widget->window);
-#endif
+        
+        struct paint_data pd;
+        pd.c = c;
+        pd.paper_width = width;
+        pd.paper_height = height;
+        if (paint_svg(&pd))
+            return FALSE;
+
         if (ok_button)
             gtk_widget_show(ok_button);
-
+        
 	if (font_face[0])
 	    cairo_select_font_face(c, font_face, font_slant, font_weight);
 	else
@@ -1819,17 +1910,6 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
 
         // judogi control warning
         if (judogi_control) {
-            if (!white_ctl) {
-                gchar *file = g_build_filename(installation_dir, "etc", "png", "white-ctl.png", NULL);
-                white_ctl = cairo_image_surface_create_from_png(file);
-                g_free(file);
-            }
-            if (!blue_ctl) {
-                gchar *file = g_build_filename(installation_dir, "etc", "png", "blue-ctl.png", NULL);
-                blue_ctl = cairo_image_surface_create_from_png(file);
-                g_free(file);
-            }
-
             static gboolean even = FALSE;
             if (even) {
                 gchar buf[16];
@@ -1858,10 +1938,6 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
             even = !even;
         }
 
-#if (GTKVER != 3)
-        cairo_show_page(c);
-        cairo_destroy(c);
-#endif
         return FALSE;
     }
 
@@ -1874,11 +1950,7 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
     gdouble x = (scale*frame->width < width) ? (width/scale - frame->width)/2.0 : 0;
     gdouble y = (scale*frame->height < height) ? (height/scale - frame->height)/2.0 : 0;
 
-#if (GTKVER == 3)
     cairo_t *c = (cairo_t *)event;
-#else
-    cairo_t *c = gdk_cairo_create(widget->window);
-#endif
 
     cairo_set_source_rgb(c, 0.0, 0.0, 0.0);
     cairo_rectangle(c, 0.0, 0.0, width, height);
@@ -1888,11 +1960,6 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
 
     cairo_set_source_surface(c, frame->surface, x, y);
     cairo_paint(c);
-
-#if (GTKVER != 3)
-    cairo_show_page(c);
-    cairo_destroy(c);
-#endif
 
     return FALSE;
 }
@@ -1967,22 +2034,7 @@ static gboolean refresh_frame(gpointer data)
 
  update:
     widget = GTK_WIDGET(data);
-#if (GTKVER == 3)
     gtk_widget_queue_draw(GTK_WIDGET(widget));
-    /*
-    if (gtk_widget_get_window(widget)) {
-        gdk_window_invalidate_rect(gtk_widget_get_window(widget), NULL, TRUE);
-        gdk_window_process_updates(gtk_widget_get_window(widget), TRUE);
-    }
-    */
-#else
-    if (widget->window) {
-        GdkRegion *region;
-        region = gdk_drawable_get_clip_region(widget->window);
-        gdk_window_invalidate_region(widget->window, region, TRUE);
-        gdk_window_process_updates(widget->window, TRUE);
-    }
-#endif
     return TRUE;
 }
 
@@ -2041,6 +2093,29 @@ extern GtkWidget *main_window;
 
 static gboolean close_display(GtkWidget *widget, GdkEventKey *event, gpointer userdata)
 {
+    if (event && event->type == GDK_KEY_PRESS &&
+        (event->keyval == GDK_Left || event->keyval == GDK_BackSpace)) {
+        if (current_page > 0) current_page--;
+        gtk_widget_queue_draw(GTK_WIDGET(ad_window));
+        return FALSE;
+    }
+
+    current_page++;
+    if ((1 << current_page) & page_mask) {
+        gtk_widget_queue_draw(GTK_WIDGET(ad_window));
+        return FALSE;
+    }
+    current_page = 0;
+    
+    if (!fullscreen) {
+        gtk_window_get_position(GTK_WINDOW(userdata), &adwin_x, &adwin_y);
+        gtk_window_get_size(GTK_WINDOW(userdata), &adwin_w, &adwin_h);
+        g_key_file_set_integer(keyfile, "preferences", "adwin_x", adwin_x);
+        g_key_file_set_integer(keyfile, "preferences", "adwin_y", adwin_y);
+        g_key_file_set_integer(keyfile, "preferences", "adwin_w", adwin_w);
+        g_key_file_set_integer(keyfile, "preferences", "adwin_h", adwin_h);
+    }
+    
     gtk_widget_destroy(userdata);
     return FALSE;
 }
@@ -2070,45 +2145,39 @@ void display_ad_window(void)
     GtkWindow *window = ad_window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_keep_above(GTK_WINDOW(ad_window), TRUE);
     gtk_window_set_title(GTK_WINDOW(window), _("Advertisement"));
+
     if (fullscreen)
         gtk_window_fullscreen(GTK_WINDOW(window));
-    else
-        gtk_widget_set_size_request(GTK_WIDGET(window), width, height);
-
-    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-
+    else if (adwin_w > 100 && adwin_h > 100) {
+        gtk_window_set_default_size(GTK_WIDGET(window), adwin_w, adwin_h);
+        gtk_window_move(GTK_WINDOW(window), adwin_x, adwin_y);
+    } else {
+        gtk_window_set_default_size(GTK_WIDGET(window), width, height);
+        gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+    }
+    
     gtk_window_set_modal(GTK_WINDOW(window),TRUE);
     gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(main_window));
 
     GtkWidget *vbox;
-#if (GTKVER == 3)
     vbox = gtk_grid_new();
-#else
-    vbox = gtk_vbox_new(FALSE, 1);
-#endif
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 1);
     if (mode != MODE_SLAVE) {
         ok_button = gtk_button_new_with_label(_("OK"));
-#if (GTKVER == 3)
         gtk_grid_attach(GTK_GRID(vbox), ok_button, 0, 0, 1, 1);
-#else
-        gtk_box_pack_start(GTK_BOX(vbox), ok_button, FALSE, TRUE, 5);
-#endif
     } else
         ok_button = NULL;
 
     GtkWidget *darea = gtk_drawing_area_new();
-#if (GTKVER == 3)
     gtk_grid_attach(GTK_GRID(vbox), darea, 0, 1, 1, 1);
     gtk_widget_set_hexpand(darea, TRUE);
     gtk_widget_set_vexpand(darea, TRUE);
-#else
-    gtk_box_pack_start(GTK_BOX(vbox), darea, TRUE, TRUE, 0);
-#endif
 
     gtk_container_add (GTK_CONTAINER (window), vbox);
     gtk_widget_show_all(GTK_WIDGET(window));
 
+    current_page == 0;
+    
     if (ok_button)
         gtk_widget_hide(ok_button);
 
@@ -2116,15 +2185,16 @@ void display_ad_window(void)
                       G_CALLBACK (delete_event_ad), NULL);
     g_signal_connect (G_OBJECT (window), "destroy",
                       G_CALLBACK (destroy_ad), NULL);
-#if (GTKVER == 3)
     g_signal_connect(G_OBJECT(darea),
                      "draw", G_CALLBACK(expose_ad), NULL);
-#else
+
+    gtk_widget_add_events(darea, GDK_BUTTON_PRESS_MASK);
     g_signal_connect(G_OBJECT(darea),
-                     "expose-event", G_CALLBACK(expose_ad), NULL);
-#endif
+                     "button-press-event", G_CALLBACK(mouse_click), NULL);
+
     g_signal_connect(G_OBJECT(window),
                      "key-press-event", G_CALLBACK(close_display), window);
+
     if (ok_button)
         g_signal_connect(G_OBJECT(ok_button),
                          "clicked", G_CALLBACK(close_display_2), window);
@@ -2137,11 +2207,13 @@ void display_ad_window(void)
         g_timeout_add(100, refresh_frame, window);
 }
 
+
 static gchar *ad_directory = NULL;
 
 void toggle_show_comp(GtkWidget *menu_item, gpointer data)
 {
     GtkWidget *dialog, *show_flags, *show_letter, *show_names, *vbox, *label;
+    GtkWidget *svgfile;
 
     dialog = gtk_dialog_new_with_buttons (_("Show Competitors"),
                                           GTK_WINDOW(main_window),
@@ -2149,7 +2221,6 @@ void toggle_show_comp(GtkWidget *menu_item, gpointer data)
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OK, GTK_RESPONSE_OK,
                                           NULL);
-
 
     vbox = gtk_grid_new();
     gtk_grid_set_column_homogeneous(GTK_GRID(vbox), TRUE);
@@ -2199,6 +2270,11 @@ void toggle_show_comp(GtkWidget *menu_item, gpointer data)
 
     gtk_grid_attach(GTK_GRID(vbox), name_scale,  1, 4, 1, 1);
 
+    // SVG
+    svgfile = gtk_button_new_with_label(_("SVG Templates"));
+    g_signal_connect(G_OBJECT(svgfile), "button-press-event", G_CALLBACK(set_svg_file), 0);
+    gtk_grid_attach(GTK_GRID(vbox), svgfile,  0, 5, 1, 1);
+    
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        vbox, FALSE, FALSE, 0);
 
@@ -2293,12 +2369,11 @@ void toggle_advertise(GtkWidget *menu_item, gpointer data)
 
 void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2,
                          gchar *first1, gchar *first2,
-                         gchar *country1, gchar *country2, gint round)
+                         gchar *country1, gchar *country2,
+                         gchar *club1, gchar *club2, gint round)
 {
     if (!show_competitor_names)
         return;
-
-    gchar *p;
 
     STRCPY_UTF8(category, cat);
     cat_round = round;
@@ -2306,7 +2381,11 @@ void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2,
     b_last[0] = w_last[0] = 0;
     b_first[0] = w_first[0] = 0;
     b_country[0] = w_country[0] = 0;
-    
+    b_club[0] = w_club[0] = 0;
+
+    parse_name(comp1, b_first, b_last, b_club, b_country);
+    parse_name(comp2, w_first, w_last, w_club, w_country);
+#if 0    
     // check if all data is in names
     STRCPY_UTF8(b_last, comp1);
     STRCPY_UTF8(w_last, comp2);
@@ -2337,6 +2416,8 @@ void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2,
         }
     }
 
+#endif
+
     if (first1 && first1[0])
         STRCPY_UTF8(b_first, first1);
     if (first2 && first2[0])
@@ -2347,6 +2428,11 @@ void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2,
     if (country2 && country2[0])
         STRCPY_UTF8(w_country, country2);
 
+    if (club1 && club1[0])
+        STRCPY_UTF8(b_club, club1);
+    if (club2 && club2[0])
+        STRCPY_UTF8(w_club, club2);
+    
     if (showletter) {
         gchar buf[8], buf2[32];
         if (b_first[0]) {
@@ -2366,4 +2452,348 @@ void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2,
     if (ad_window == NULL)
         no_ads = TRUE;
     display_ad_window();
+}
+
+/*
+ * SVG
+ */
+
+static gchar *get_file_name(void)
+{
+    GtkWidget *dialog;
+    static gchar *last_dir = NULL;
+    gint response;
+
+    dialog = gtk_file_chooser_dialog_new (_("Open file"),
+                                          GTK_WINDOW(main_window),
+                                          GTK_FILE_CHOOSER_ACTION_OPEN,
+                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                          GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+                                          GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                          NULL);
+
+    if (last_dir)
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), last_dir);
+
+    response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+    if (response == GTK_RESPONSE_ACCEPT) {
+        g_free(svg_file);
+        svg_file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+        g_free(last_dir);
+        last_dir = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER (dialog));
+        g_key_file_set_string(keyfile, "preferences", "svgfile", svg_file);
+    } else if (response == GTK_RESPONSE_CLOSE) {
+        svg_ok = FALSE;
+        g_free(svg_file);
+        svg_file = NULL;
+        g_key_file_set_string(keyfile, "preferences", "svgfile", "");
+    }
+
+    gtk_widget_destroy (dialog);
+
+    return svg_file;
+}
+
+void read_svg_file(gchar *fname)
+{
+    g_free(svg_data);
+    svg_data = NULL;
+    svg_datalen = 0;
+    svg_ok = FALSE;
+    //flag1exists = flag2exists = FALSE;
+    memset(&images, 0, sizeof(images));
+    page_mask = 1;
+    
+    if (fname) {
+        g_free(svg_file);
+        svg_file = g_strdup(fname);
+    }
+    
+    if (svg_file == NULL || svg_file[0] == 0)
+        return;
+
+    if (!g_file_get_contents(svg_file, &svg_data, &svg_datalen, NULL))
+        g_print("CANNOT OPEN '%s'\n", svg_file);
+    else  {
+        datamax = svg_data + svg_datalen;
+        RsvgHandle *h = rsvg_handle_new_from_data((guchar *)svg_data, svg_datalen, NULL);
+        if (h) {
+            RsvgDimensionData dim;
+            rsvg_handle_get_dimensions(h, &dim);
+            svg_width = dim.width;
+            svg_height = dim.height;
+
+            if (adwin_h < 100) {
+                gint width;
+                gint height;
+                gtk_window_get_size(GTK_WINDOW(main_window), &width, &height);
+                adwin_h = height;
+            }
+            adwin_w = adwin_h*dim.width/dim.height;
+
+            /***
+            RsvgRectangle viewport;
+            RsvgRectangle out_ink_rect;
+            viewport.x = 0;
+            viewport.y = 0;
+            viewport.width = svg_width;
+            viewport.height = svg_height;
+            ***/
+            
+            gint page;
+            for (page = 0; page < NUM_PAGES; page++) {
+                gchar buf[16];
+                gint n;
+
+                snprintf(buf, sizeof(buf), "#page%d", page+1);
+                if (rsvg_handle_has_sub(h, buf))
+                    page_mask |= (1 << page);
+                else if (page > 0)
+                    break;
+                
+                for (n = 0; n < NUM_IMAGES; n++) {
+                    if (page == 0) {
+                        snprintf(buf, sizeof(buf), "#%s", imagename[n]);
+                        if (!rsvg_handle_has_sub(h, buf))
+                            snprintf(buf, sizeof(buf), "#%s_%d", imagename[n], page+1);
+                    } else
+                        snprintf(buf, sizeof(buf), "#%s_%d", imagename[n], page+1);
+                    
+                    if (rsvg_handle_has_sub(h, buf)) {
+                        RsvgDimensionData dim;
+                        RsvgPositionData pos;
+                        rsvg_handle_get_dimensions_sub (h, &dim, buf);
+                        rsvg_handle_get_position_sub(h, &pos, buf);
+                        images[page][n].rect.x = (gdouble)pos.x;
+                        images[page][n].rect.y = (gdouble)pos.y;
+                        images[page][n].rect.width = dim.em;
+                        images[page][n].rect.height = dim.ex;
+
+                        /***
+                        rsvg_handle_get_geometry_for_layer(h, buf, &viewport, &out_ink_rect,
+                                                           &images[page][n].rect, NULL);
+                        ***/
+                        images[page][n].exists = TRUE;
+                    }
+                }
+            }
+
+            g_object_unref(h);
+            svg_ok = TRUE;
+        } else {
+            g_print("Cannot open SVG file %s\n", svg_file);
+        }
+    }
+}
+
+void set_svg_file(GtkWidget *menu_item, GdkEventButton *event, gpointer data)
+{
+    get_file_name();
+    read_svg_file(NULL);
+}
+
+void draw_image(struct paint_data *pd, RsvgRectangle *rect, cairo_surface_t *image, gboolean fit)
+{
+    if (!image || cairo_surface_status(image) != CAIRO_STATUS_SUCCESS)
+        return;
+
+    gint w = cairo_image_surface_get_width(image);
+    gint h = cairo_image_surface_get_height(image);
+    gdouble scale_h = rect->height/h;
+    gdouble scale_w = fit ? rect->width/w : scale_h;
+    cairo_save(pd->c);
+    cairo_scale(pd->c, scale_w, scale_h);
+    cairo_set_source_surface(pd->c, image, rect->x/scale_w, rect->y/scale_h);
+    cairo_paint(pd->c);
+    cairo_restore(pd->c);
+}
+
+void draw_image_file(struct paint_data *pd, RsvgRectangle *rect, const gchar *file, gboolean fit)
+{
+    cairo_surface_t *image = cairo_image_surface_create_from_png(file);
+    draw_image(pd, rect, image, fit);
+    cairo_surface_destroy(image);
+}
+
+void draw_flag_2(struct paint_data *pd, RsvgRectangle *rect, const gchar *country)
+{
+    gchar name[16];
+    snprintf(name, sizeof(name), "%s.png", country);
+    gchar *file = g_build_filename(installation_dir, "etc", "flags-ioc", name, NULL);
+    draw_image_file(pd, rect, file, FALSE);
+    g_free(file);
+}
+
+gint paint_svg(struct paint_data *pd)
+{
+    GError *err = NULL;
+
+    if (svg_ok == FALSE || svg_data == NULL)
+        return FALSE;
+
+    paper_width = pd->paper_width;
+    paper_height = pd->paper_height;
+
+    /***
+    if (pd->c) {
+        cairo_set_source_rgb(pd->c, 1.0, 1.0, 1.0);
+        cairo_rectangle(pd->c, 0.0, 0.0, pd->paper_width, pd->paper_height);
+        cairo_fill(pd->c);
+    }
+    ***/
+
+    RsvgHandle *handle = rsvg_handle_new();
+    //rsvg_handle_set_dpi(handle, 90.0);
+    
+    guchar *p = (guchar *)svg_data;
+    while (p < (guchar *)datamax && *p) {
+        if (*p == '%' && IS_LABEL_CHAR(p[1])) {
+            memset(attr, 0, sizeof(attr));
+            cnt = 0;
+            p++;
+            while (IS_LABEL_CHAR(*p) || IS_VALUE_CHAR(*p) || *p == '-' || *p == '\'' || *p == '|' || *p == '!') {
+                while (IS_LABEL_CHAR(*p))
+                    attr[cnt].code[attr[cnt].codecnt++] = *p++;
+
+                if (*p == '-') p++;
+
+                while (IS_VALUE_CHAR(*p))
+                    attr[cnt].value = attr[cnt].value*10 + *p++ - '0';
+
+                if (*p == '-') p++;
+
+                if (*p == '\'' || *p == '|') {
+                    cnt++;
+                    p++;
+                    attr[cnt].code[0] = '\'';
+                    attr[cnt].codecnt = 1;
+                    while (*p && *p != '\'' && *p != '|') {
+                        attr[cnt].code[attr[cnt].codecnt] = *p++;
+                        if (attr[cnt].codecnt < CODE_LEN)
+                            attr[cnt].codecnt++;
+                    }
+                    if (*p == '\'' || *p == '|')
+                        p++;
+                }
+
+                cnt++;
+
+                if (*p == '!') {
+                    p++;
+                    break;
+                }
+            } // while IS_LABEL
+
+            if (attr[0].code[0] == 'R') {
+                const gchar *rnd = round_to_str(cat_round);
+                WRITE(rnd);
+            } else if (attr[0].code[0] == 'C') {
+                WRITE(category);
+            } else if (IS_SAME(attr[0].code, "last")) {
+                gint compnum = attr[0].value;
+                if (compnum == 1)
+                    WRITE(b_last);
+                else
+                    WRITE(w_last);
+            } else if (IS_SAME(attr[0].code, "first")) {
+                gint compnum = attr[0].value;
+                if (compnum == 1)
+                    WRITE(b_first);
+                else
+                    WRITE(w_first);
+            } else if (IS_SAME(attr[0].code, "f")) {
+                gchar buf[8];
+                gint compnum = attr[0].value;
+                if (compnum == 1)
+                    g_utf8_strncpy(buf, b_first, 1);
+                else
+                    g_utf8_strncpy(buf, w_first, 1);
+                WRITE(buf);
+            } else if (IS_SAME(attr[0].code, "country")) {
+                gint compnum = attr[0].value;
+                if (compnum == 1)
+                    WRITE(b_country);
+                else
+                    WRITE(w_country);
+            } else if (IS_SAME(attr[0].code, "club")) {
+                gint compnum = attr[0].value;
+                if (compnum == 1)
+                    WRITE(b_club);
+                else
+                    WRITE(w_club);
+            } else if (IS_SAME(attr[0].code, "rest")) {
+                gint who = attr[0].value;
+                if (rrest && who == 1 && (rflags & MATCH_FLAG_BLUE_REST)) {
+                    gchar buf[16];
+                    snprintf(buf, sizeof(buf), "%d:%d%d", rmin, rtsec, rsec);
+                    WRITE(buf);
+                }
+                if (rrest && who == 2 && (rflags & MATCH_FLAG_WHITE_REST)) {
+                    gchar buf[16];
+                    snprintf(buf, sizeof(buf), "%d:%d%d", rmin, rtsec, rsec);
+                    WRITE(buf);
+                }
+            }
+        } // *p = %
+        else {
+            WRITE2(p, 1);
+            p++;
+        }
+    }
+
+    rsvg_handle_close(handle, NULL);
+
+    if (pd->c) {
+        cairo_save(pd->c);
+        cairo_scale(pd->c, pd->paper_width/svg_width, pd->paper_height/svg_height);
+
+        if (page_mask > 1) {
+            gchar buf[16];
+            snprintf(buf, sizeof(buf), "#page%d", current_page+1);
+            rsvg_handle_render_cairo_sub(handle, pd->c, buf);
+        } else
+            rsvg_handle_render_cairo(handle, pd->c);
+
+        if (images[current_page][IMAGE_FLAG1].exists)
+            draw_flag_2(pd, &images[current_page][IMAGE_FLAG1].rect, b_country);
+        if (images[current_page][IMAGE_FLAG2].exists)
+            draw_flag_2(pd, &images[current_page][IMAGE_FLAG2].rect, w_country);
+
+        if (judogi_control) {
+            if (images[current_page][IMAGE_CONTROL1].exists && !(judogi_control_flags & MATCH_FLAG_JUDOGI1_OK) && white_ctl)
+                draw_image(pd, &images[current_page][IMAGE_CONTROL1].rect, white_ctl, TRUE);
+            if (images[current_page][IMAGE_CONTROL2].exists && !(judogi_control_flags & MATCH_FLAG_JUDOGI2_OK) && blue_ctl)
+                draw_image(pd, &images[current_page][IMAGE_CONTROL2].rect, blue_ctl, TRUE);
+        }
+        
+        cairo_restore(pd->c);
+    }
+    
+    g_object_unref(handle);
+
+    return TRUE;
+}
+
+static gboolean mouse_click(GtkWidget *window,
+                            GdkEventButton *event,
+                            gpointer userdata)
+{
+    if (paper_width == 0 || paper_height == 0 || svg_ok == FALSE || images[current_page][IMAGE_CLOSE].exists == FALSE)
+        return FALSE;
+    
+    if (event->type == GDK_BUTTON_PRESS  &&
+        (event->button == 1 || event->button == 3)) {
+        gdouble x = event->x*svg_width/paper_width;
+        gdouble y = event->y*svg_height/paper_height;
+        RsvgRectangle *rect = &images[current_page][IMAGE_CLOSE].rect;
+
+        if (x >= rect->x && x < rect->x + rect->width &&
+            y >= rect->y && y < rect->y + rect->height) {
+            close_ad_window();
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }

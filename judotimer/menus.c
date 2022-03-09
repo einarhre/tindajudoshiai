@@ -101,15 +101,16 @@ static void display_competitors(GtkWidget *w,
                                 gpointer   data )
 {
     display_comp_window(saved_cat, saved_last1, saved_last2, 
-                        saved_first1, saved_first2, saved_country1, saved_country2, saved_round);
+                        saved_first1, saved_first2, saved_country1, saved_country2,
+                        saved_club1, saved_club2, saved_round);
 
     if (mode != MODE_SLAVE) {
         struct message msg;
         memset(&msg, 0, sizeof(msg));
         msg.type = MSG_UPDATE_LABEL;
         msg.u.update_label.label_num = START_COMPETITORS;
-        SNPRINTF_UTF8(msg.u.update_label.text, "%s\t%s\t%s", saved_last1, saved_first1, saved_country1);
-        SNPRINTF_UTF8(msg.u.update_label.text2, "%s\t%s\t%s", saved_last2, saved_first2, saved_country2);
+        SNPRINTF_UTF8(msg.u.update_label.text, "%s\t%s\t%s\t%s", saved_last1, saved_first1, saved_country1, saved_club1);
+        SNPRINTF_UTF8(msg.u.update_label.text2, "%s\t%s\t%s\t%s", saved_last2, saved_first2, saved_country2, saved_club2);
         STRCPY_UTF8(msg.u.update_label.text3, saved_cat);
         msg.u.update_label.round = saved_round;
         send_label_msg(&msg);
@@ -805,6 +806,29 @@ void set_preferences_keyfile(GKeyFile *key_file, gboolean defaults)
 
     READ_INT_VAL("rulesgeru12", use_ger_u12_rules, 0);
 
+    error = NULL;
+    str = g_key_file_get_string(keyfile, "preferences", "svgfile", &error);
+    if (!error) {
+        read_svg_file(str);
+    }
+
+    gint x1 = g_key_file_get_integer(keyfile, "preferences", "adwin_x", &error);
+    if (!error) {
+        gint x2 = g_key_file_get_integer(keyfile, "preferences", "adwin_y", &error);
+        if (!error) {
+            adwin_x = x1;
+            adwin_y = x2;
+        }
+    }
+    x1 = g_key_file_get_integer(keyfile, "preferences", "adwin_w", &error);
+    if (!error) {
+        gint x2 = g_key_file_get_integer(keyfile, "preferences", "adwin_h", &error);
+        if (!error) {
+            adwin_w = x1;
+            adwin_h = x2;
+        }
+    }
+    
     if (defaults) {
 	error = NULL;
 	i = g_key_file_get_integer(key_file, "preferences", "displaylayout", &error);

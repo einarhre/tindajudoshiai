@@ -175,21 +175,6 @@ void msg_received(struct message *input_msg)
 #endif
     switch (input_msg->type) {
     case MSG_NEXT_MATCH:
-#if 0
-        /* show ad as a slave */
-        if (mode == MODE_SLAVE &&
-            input_msg->u.next_match.tatami == tatami &&
-            input_msg->sender >= 10 &&
-            (input_msg->u.next_match.category != last_category ||
-             input_msg->u.next_match.match != last_match)) {
-            last_category = input_msg->u.next_match.category;
-            last_match = input_msg->u.next_match.match;
-            display_ad_window();
-            display_comp_window(input_msg->u.next_match.cat_1,
-                                input_msg->u.next_match.blue_1,
-                                input_msg->u.next_match.white_1);
-        }
-#endif
         if (/*input_msg->sender < 10 ||*/
             input_msg->u.next_match.tatami != tatami ||
             mode == MODE_SLAVE)
@@ -228,7 +213,8 @@ void msg_received(struct message *input_msg)
 	    if (!demo) {
 		display_comp_window(saved_cat, saved_last1, saved_last2,
 				    saved_first1, saved_first2,
-				    saved_country1, saved_country2, saved_round);
+				    saved_country1, saved_country2,
+                                    saved_club1, saved_club2, saved_round);
 
                 if (mode != MODE_SLAVE) {
                     struct message msg;
