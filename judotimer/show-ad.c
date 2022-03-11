@@ -2149,10 +2149,10 @@ void display_ad_window(void)
     if (fullscreen)
         gtk_window_fullscreen(GTK_WINDOW(window));
     else if (adwin_w > 100 && adwin_h > 100) {
-        gtk_window_set_default_size(GTK_WIDGET(window), adwin_w, adwin_h);
+        gtk_window_set_default_size(GTK_WINDOW(window), adwin_w, adwin_h);
         gtk_window_move(GTK_WINDOW(window), adwin_x, adwin_y);
     } else {
-        gtk_window_set_default_size(GTK_WIDGET(window), width, height);
+        gtk_window_set_default_size(GTK_WINDOW(window), width, height);
         gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     }
     
@@ -2176,7 +2176,7 @@ void display_ad_window(void)
     gtk_container_add (GTK_CONTAINER (window), vbox);
     gtk_widget_show_all(GTK_WIDGET(window));
 
-    current_page == 0;
+    current_page = 0;
     
     if (ok_button)
         gtk_widget_hide(ok_button);
@@ -2561,7 +2561,6 @@ void read_svg_file(gchar *fname)
                         snprintf(buf, sizeof(buf), "#%s_%d", imagename[n], page+1);
                     
                     if (rsvg_handle_has_sub(h, buf)) {
-                        RsvgDimensionData dim;
                         RsvgPositionData pos;
                         rsvg_handle_get_dimensions_sub (h, &dim, buf);
                         rsvg_handle_get_position_sub(h, &pos, buf);
