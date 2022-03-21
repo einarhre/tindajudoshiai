@@ -174,7 +174,7 @@ gchar *db_get_row_col_data(gint row, gint col)
     return data[(row+1)*tablecols + col];
 }
 
-char **db_get_table_copy(char *command, int *tablerows1, int *tablecols1)
+char **db_get_table_copy(const char *command, int *tablerows1, int *tablecols1)
 {
     sqlite3 *db;
     char *zErrMsg = 0;

@@ -662,10 +662,8 @@ static void draw_code_39_string(gchar *s, struct paint_data *pd, double bar_heig
 
 static void draw_qrcode_string(gchar *s, struct paint_data *pd, int ver, int ecc)
 {
-    int          iterator;
     double       x, y;
     int          x1, y1;
-    int          bars = TRUE;
 
     if (!s)
         return;
@@ -1330,8 +1328,8 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page, GSLi
                             buf[d++] = comment[a++];
                         buf[d] = 0;
                     } else if (IS_STR("%QRCODE")) {
-                        char buf[128];
-                        snprintf(buf, sizeof(buf), "%s\t%s\t%s\t%s", id_str, cat, last, first);
+                        gchar buf1[128];
+                        snprintf(buf1, sizeof(buf1), "%s\t%s\t%s\t%s", id_str, cat, last, first);
                         int ver = 0, ecc = 0;
                         if (wn_texts[t].text[k + len] == '-') {
                             len++;
@@ -1353,7 +1351,7 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page, GSLi
                             len++;
                         }
                         
-                        draw_qrcode_string(buf, pd, ver, ecc);
+                        draw_qrcode_string(buf1, pd, ver, ecc);
                     } else if (IS_STR("%WEIGHTTEXT%"))
                         d += sprintf(buf + d, "%s", _T(weight));
                     else if (IS_STR("%WINPOS%")) {
@@ -2257,7 +2255,6 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
     cairo_t *c;
     struct judoka *cat = NULL;
     gint i;
-    gint catix = 0;
 
     gint what  = ptr_to_gint(userdata) & PRINT_ITEM_MASK;
     gint where = ptr_to_gint(userdata) & PRINT_DEST_MASK;
@@ -2282,7 +2279,7 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
             if (cat) {
                 gchar *fn = g_strdup_printf("%s.pdf", cat->last);
                 filename = get_save_as_name(fn, FALSE, NULL);
-		catix = cat->index;
+		//catix = cat->index;
                 free_judoka(cat);
                 g_free(fn);
             } else {
@@ -2377,7 +2374,6 @@ void print_doc(GtkWidget *menuitem, gpointer userdata)
 
 void get_accr_cards(GSList *list, gint what, struct msg_web_resp *resp)
 {
-    gchar buf[200];
     struct paint_data pd;
     const gchar *dir = g_get_tmp_dir();
     gchar *filename = g_build_filename(dir, "accrcard.pdf", NULL);

@@ -1078,7 +1078,7 @@ extern void write_competitor(FILE *f, struct judoka *j, gint club_flags, gboolea
 extern void write_competitor_for_coach_display(struct judoka *j);
 extern int db_get_table(char *command);
 extern void db_close_table(void);
-extern char **db_get_table_copy(char *command, int *tablerows1, int *tablecols1);
+extern char **db_get_table_copy(const char *command, int *tablerows1, int *tablecols1);
 extern void db_close_table_copy(char **tablep);
 extern char *db_get_data(int row, char *name);
 extern gchar *db_sql_command(const gchar *command);

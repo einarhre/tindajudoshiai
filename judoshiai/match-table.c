@@ -41,6 +41,7 @@ static void custom_cell_renderer_match_set_property  (GObject                   
 
 static void custom_cell_renderer_match_finalize (GObject *gobject);
 
+#if 0
 static void
 gtk_cell_renderer_match_get_size (GtkCellRenderer    *cell,
                                   GtkWidget          *widget,
@@ -49,7 +50,7 @@ gtk_cell_renderer_match_get_size (GtkCellRenderer    *cell,
                                   gint               *y_offset,
                                   gint               *width,
                                   gint               *height);
-
+#endif
 
 /* These functions are the heart of our custom cell renderer: */
 
@@ -358,6 +359,7 @@ custom_cell_renderer_match_get_preferred_height (GtkCellRenderer *cell_renderer,
     *natural_size = calc_height;
 }
 
+#if 0
 static void
 gtk_cell_renderer_match_get_size (GtkCellRenderer    *cell,
                                      GtkWidget          *widget,
@@ -397,7 +399,7 @@ gtk_cell_renderer_match_get_size (GtkCellRenderer    *cell,
     if (x_offset) *x_offset = 0;
     if (y_offset) *y_offset = 0;
 }
-
+#endif
 
 /***************************************************************************
  *
@@ -832,6 +834,7 @@ static gboolean traverse_rows(GtkTreeModel *model,
     return FALSE;
 }
 
+#if 0
 static void refresh_tatami(gint tatami)
 {
     struct traverse t;
@@ -839,6 +842,7 @@ static void refresh_tatami(gint tatami)
     t.op = TRAVERSE_UPDATE_COLUMN;
     gtk_tree_model_foreach(GTK_TREE_MODEL(match_table_store), traverse_rows, &t);
 }
+#endif
 
 void draw_match_table(void)
 {
@@ -864,7 +868,7 @@ static guint find_match_data_by_xy_update(gint x, gint y, gboolean update)
     gint i;
     guint match_data = 0;
     gint tatami = -1;
-    gint position;
+    //gint position;
 
     if (!gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(match_table_view), x, y,
                                       &path, &col, NULL, NULL))
@@ -884,7 +888,7 @@ static guint find_match_data_by_xy_update(gint x, gint y, gboolean update)
         goto out;
         
     gtk_tree_model_get(model, &iter, tatami, &match_data, -1);
-    position = MATCH_DATA_TO_POSITION(match_data);
+    //position = MATCH_DATA_TO_POSITION(match_data);
     if (match_data & 0xfff00000) {
         g_print("ERROR: match_data=0x%x\n", match_data);
         return 0;
@@ -1394,6 +1398,7 @@ static GtkTargetEntry target_table[] = {
   { "application/x-rootwindow-drop", 0, TARGET_ROOTWIN }
 };
 
+#if 0
 static gboolean do_invalidation(gpointer data)
 {
     if (invalidate) {
@@ -1402,6 +1407,7 @@ static gboolean do_invalidation(gpointer data)
     }
     return TRUE;
 }
+#endif
 
 gboolean scroll_entries(GtkWidget * widget, GdkEvent * event, gpointer data) {
     invalidate = TRUE;

@@ -109,9 +109,9 @@ static int free_competitor_avl_key(void *key)
 {
     struct competitor_data *key1 = key;
 
-    g_free(key1->j.last); g_free(key1->j.first); g_free(key1->j.club);
-    g_free(key1->j.regcategory); g_free(key1->j.category); g_free(key1->j.country);
-    g_free(key1->j.id); g_free(key1->j.comment); g_free(key1->j.coachid);
+    g_free((gpointer)key1->j.last); g_free((gpointer)key1->j.first); g_free((gpointer)key1->j.club);
+    g_free((gpointer)key1->j.regcategory); g_free((gpointer)key1->j.category); g_free((gpointer)key1->j.country);
+    g_free((gpointer)key1->j.id); g_free((gpointer)key1->j.comment); g_free((gpointer)key1->j.coachid);
 
     g_free(key);
     return 1;

@@ -2415,8 +2415,8 @@ void make_html_match(struct msg_match_info *info)
     struct judoka *j1 = avl_get_competitor(info->blue);
     struct judoka *j2 = avl_get_competitor(info->white);
     struct category_data *cd = avl_get_category(info->category);
-    gchar *club1 = j1 ? get_club_text(j1, CLUB_TEXT_ABBREVIATION) : "&nbsp;";
-    gchar *club2 = j2 ? get_club_text(j2, CLUB_TEXT_ABBREVIATION) : "&nbsp;";
+    const gchar *club1 = j1 ? get_club_text(j1, CLUB_TEXT_ABBREVIATION) : "&nbsp;";
+    const gchar *club2 = j2 ? get_club_text(j2, CLUB_TEXT_ABBREVIATION) : "&nbsp;";
     gchar *cat = cd ? cd->category : "&nbsp;";
 
     if (cat == NULL || cat[0] == 0)

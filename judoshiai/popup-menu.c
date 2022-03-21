@@ -469,8 +469,7 @@ static void color_dialog_response(GtkDialog *dialog, gint response)
     GdkRGBA color;
     gchar *buf;
 
-    switch (response) {
-    case GTK_RESPONSE_OK:
+    if (response == GTK_RESPONSE_OK) {
 	gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
 	buf = gdk_rgba_to_string(&color);
 
@@ -501,10 +500,6 @@ static void color_dialog_response(GtkDialog *dialog, gint response)
 	} // while ok
 
 	g_free(buf);
-	break;
-    default:
-	g_print ("response = %d\n", response);
-	break;
     }
 
     gtk_widget_destroy(GTK_WIDGET(dialog));

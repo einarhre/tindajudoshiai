@@ -936,10 +936,9 @@ int run_judotimer(http_parser_t *parser)
 int get_match(http_parser_t *parser)
 {
     gint tatami0 = 0, position = 0;
-    struct MHD_Response *response;
     string s;
     
-    gchar *tmp = httpp_get_query_param(parser, "t");
+    const gchar *tmp = httpp_get_query_param(parser, "t");
     if (tmp) tatami0 = atoi(tmp);
     tmp = httpp_get_query_param(parser, "p");
     if (tmp) position = atoi(tmp);
@@ -2097,7 +2096,6 @@ int analyze_http(void *cls,
         if (resp.u.json.json) {
             if (resp.u.json.file) {
                 GStatBuf st;
-                struct MHD_Response *response;
                 cJSON *file = cJSON_GetObjectItem(resp.u.json.json, "file");
                 cJSON *mime = cJSON_GetObjectItem(resp.u.json.json, "mime");
                 if (file == NULL || mime == NULL) {

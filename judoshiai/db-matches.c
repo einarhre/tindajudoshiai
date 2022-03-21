@@ -2183,6 +2183,7 @@ void db_change_competitor(gint category, gint number, gboolean is_blue, gint ind
 
 static gboolean nocomment = FALSE;
 
+#if 0
 static int db_callback_matches_pdf(void *data, int argc, char **argv, char **azColName)
 {
     gint i;
@@ -2197,6 +2198,7 @@ static int db_callback_matches_pdf(void *data, int argc, char **argv, char **azC
     fprintf(out, "</js>\n");
     return 0;
 }
+#endif
 
 #define LINE_LEN 512
 #define LINE_SPACE (LINE_LEN+4)

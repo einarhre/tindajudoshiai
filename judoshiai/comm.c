@@ -372,7 +372,7 @@ void handle_json(struct message *input_msg)
 
     if (webpwcrc32) {
         JSON_GET_STR(root, pw);
-        gint crc = pwcrc32(pw, strlen(pw));
+        gint crc = pwcrc32((unsigned char *)pw, strlen(pw));
         if (crc != webpwcrc32) {
             ret = MSG_WEB_RESP_ERR;
             goto json_end;
@@ -412,7 +412,7 @@ void handle_json(struct message *input_msg)
         int numrows, numcols;
         JSON_GET_STR(root, cmd);
 
-        char **tablecopy = db_get_table_copy(cmd, &numrows, &numcols);
+        const char **tablecopy = db_get_table_copy(cmd, &numrows, &numcols);
         if (tablecopy == NULL)
             goto json_end;
 
@@ -480,22 +480,22 @@ void handle_json(struct message *input_msg)
         JSON_GET_LIST(root, comps);
         JSON_GET_STR(root, dest);
         while (comps) {
-            struct judoka *j = get_data(comps->valueint);
-            if (j) {
-                if (db_competitor_match_status(j->index) & MATCH_EXISTS) {
+            struct judoka *j1 = get_data(comps->valueint);
+            if (j1) {
+                if (db_competitor_match_status(j1->index) & MATCH_EXISTS) {
                     cJSON *msg = cJSON_CreateObject();
-                    cJSON_AddStringToObject(msg, "first", j->first);
-                    cJSON_AddStringToObject(msg, "last", j->last);
+                    cJSON_AddStringToObject(msg, "first", j1->first);
+                    cJSON_AddStringToObject(msg, "last", j1->last);
                     cJSON_AddStringToObject(msg, "msg", _("Remove drawing first"));
                     cJSON_AddItemToArray(out, msg);
                 } else {
-                    if (j->category)
-                        g_free((void *)j->category);
-                    j->category = strdup(dest);
-                    display_one_judoka(j);
-                    db_update_judoka(j->index, j);
+                    if (j1->category)
+                        g_free((void *)j1->category);
+                    j1->category = strdup(dest);
+                    display_one_judoka(j1);
+                    db_update_judoka(j1->index, j1);
                 }
-                free_judoka(j);
+                free_judoka(j1);
             }
             comps = comps->next;
         }

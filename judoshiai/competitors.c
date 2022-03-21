@@ -565,7 +565,7 @@ struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
     GtkAccelGroup *accel_group;
 
     if (editing_ongoing)
-        return;
+        return NULL;
 
     struct judoka_widget *judoka_tmp = g_malloc(sizeof(*judoka_tmp));
     memset(judoka_tmp, 0, sizeof(*judoka_tmp));
@@ -2456,7 +2456,7 @@ void remove_competitors(GtkWidget *w, gpointer data)
 struct dsp_comp_data {
     gint indx;
     const gchar *txt;
-    struct judoka_widget *j
+    struct judoka_widget *j;
 };
 
 static gboolean foreach_comp_dsp(GtkTreeModel *model,
@@ -2494,7 +2494,7 @@ static void display_competitor(gint indx, const char *txt)
     if (txt && d.j) {
         const char *p = strchr(txt, 'W');
         if (p && d.j->weight) {
-            gtk_entry_set_text(d.j->weight, p+1);
+            gtk_entry_set_text(GTK_ENTRY(d.j->weight), p+1);
         }
     }
 }
