@@ -1292,12 +1292,12 @@ gpointer ssdp_thread(gpointer args)
             if (len >= 12) {
 #define GET_SHORT(_i) ((inbuf[_i]<<8) | inbuf[_i+1])
 #define SET_SHORT(_i, _v) inbuf[_i] = (_v >> 8); inbuf[_i+1] = (_v & 0xff)
-                guint16 id = GET_SHORT(0);
+                //guint16 id = GET_SHORT(0);
                 guint16 flags = GET_SHORT(2);
                 guint16 questions = GET_SHORT(4);
-                guint16 answer = GET_SHORT(6);
-                guint16 auth = GET_SHORT(8);
-                guint16 addit = GET_SHORT(10);
+                //guint16 answer = GET_SHORT(6);
+                //guint16 auth = GET_SHORT(8);
+                //guint16 addit = GET_SHORT(10);
 
                 if (questions == 1 && (flags & 0xf000) == 0x0000) {
                     guchar *names = NULL;

@@ -149,6 +149,8 @@ extern gchar font_face[32];
 extern gint  font_slant, font_weight;
 
 extern gint adwin_x, adwin_y, adwin_w, adwin_h;
+extern gint last_reported_category;
+extern gint last_reported_number;
 
 extern gboolean this_is_shiai(void);
 extern void copy_packet(struct message *msg); // not used
@@ -189,6 +191,8 @@ extern void toggle_whitefirst(GtkWidget *menu_item, gpointer data);
 extern void toggle_no_texts(GtkWidget *menu_item, gpointer data);
 extern void toggle_show_comp(GtkWidget *menu_item, gpointer data);
 extern void toggle_judogi_control(GtkWidget *menu_item, gpointer data);
+extern void confirm_match_svg(GtkWidget *menu_item, gpointer data);
+extern void read_confirm_svg_file(gchar *fname);
 extern void select_display_layout(GtkWidget *menu_item, gpointer data);
 extern void change_custom_layout(gchar *layout);
 extern void set_custom_layout_file_name(GtkWidget *menu_item, gpointer data);
@@ -248,7 +252,7 @@ extern void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2,
                                 gchar *first1, gchar *first2, gchar *country1, gchar *country2,
 				gchar *club1, gchar *club2, gint round);
 extern gboolean blue_background(void);
-extern void close_ad_window(void);
+extern void close_ad_window(gint pagenum);
 extern void display_ask_window(gchar *name, gchar *cat, gchar winner);
 extern void close_ask_window(void);
 extern void set_competitor_window_rest_time(gint min, gint tsec, gint sec, gboolean rest, gint flags);

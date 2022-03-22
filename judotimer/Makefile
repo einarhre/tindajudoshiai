@@ -10,10 +10,11 @@ $(OBJDIR):
 OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/stopwatch.o $(OBJDIR)/comm.o \
 	$(OBJDIR)/ip.o $(OBJDIR)/protocol.o $(OBJDIR)/show-ad.o $(OBJDIR)/sound.o \
 	$(OBJDIR)/video.o $(OBJDIR)/language.o $(OBJDIR)/common.o $(OBJDIR)/auto-update.o \
-	 $(OBJDIR)/common-utils.o
+	$(OBJDIR)/common-utils.o $(OBJDIR)/svg-common.o $(OBJDIR)/cJSON.o
 
 CFLAGS += -DAPPLICATION="\"judotimer\""
 CFLAGS += -DAPP_NUM=2
+CFLAGS += -I../3rdparty/cJSON
 
 ### WindowsXP executable ###
 ifeq ($(TGT),WIN32OS)
@@ -65,6 +66,12 @@ $(OBJDIR)/auto-update.o: ../common/auto-update.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/common-utils.o: ../common/common-utils.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/svg-common.o: ../common/svg-common.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/cJSON.o: ../3rdparty/cJSON/cJSON.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: %.c judotimer.h ../common/comm.h

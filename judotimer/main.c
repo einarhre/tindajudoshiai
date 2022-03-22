@@ -14,6 +14,8 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 
+#include <curl/curl.h>
+
 #if (GTKVER == 3)
 #include <gdk/gdkkeysyms-compat.h>
 #else
@@ -2055,7 +2057,7 @@ void update_label(struct msg_update_label *msg)
         /*write_tv_logo(msg);*/
         return;
     } else if (w == STOP_COMPETITORS) {
-        close_ad_window();
+        close_ad_window(msg->xalign);
     } else if (w == START_WINNER) {
         if (rules_confirm_match)
             display_ask_window(msg->text, msg->text2, msg->text3[0]);
@@ -2540,6 +2542,7 @@ int main( int   argc,
     reset_display(0);
 
     open_comm_socket();
+    curl_global_init(CURL_GLOBAL_NOTHING);
 
     /* Create a bg thread using glib */
     (void)gth;

@@ -52,6 +52,7 @@
 
 #include "judotimer.h"
 #include "common-utils.h"
+#include "svg-common.h"
 
 void manipulate_time(GtkWidget *widget, gpointer data );
 static void gen_random_key(void);
@@ -687,6 +688,67 @@ static gboolean close_ask_nok(GtkWidget *widget, gpointer userdata)
     return FALSE;
 }
 
+/* Confirm SVG */
+static svg_handle confirm_svg_handle;
+static struct svg_memory svg_reply = {0};
+gint last_reported_category;
+gint last_reported_number;
+
+static gint svg_attr_cb(svg_handle *svg)
+{
+    if (svg->attr[0].code[0] == 'C') {
+        WRITE(saved_cat);
+    } else if (IS_SAME(svg->attr[0].code, "last")) {
+        if (get_winner(TRUE) == BLUE)
+            WRITE(saved_last1);
+        else
+            WRITE(saved_last2);
+    } else if (IS_SAME(svg->attr[0].code, "first")) {
+        if (get_winner(TRUE) == BLUE)
+            WRITE(saved_first1);
+        else
+            WRITE(saved_first2);
+    } else if (strncmp((gchar *)svg->attr[0].code, "#abcd", 5) == 0) {
+        gint winner = get_winner(TRUE);
+        if (svg->attr[0].code[5] == '0' && svg->attr[0].code[6] == '1') {
+            if (winner == BLUE)
+                WRITE("#000000");
+            else
+                WRITE("#ffffff");
+        } else if (svg->attr[0].code[5] == 'e' && svg->attr[0].code[6] == '1') {
+            if (winner == BLUE)
+                WRITE("#ffffff");
+            else
+                WRITE("#0000ff");
+        } else {
+            WRITE(((char *)svg->attr[0].code));
+        }
+    }
+
+    return 0;
+}
+
+static gint svg_img_cb(svg_handle *svg)
+{
+    return 0;
+}
+
+void confirm_match_svg(GtkWidget *menu_item, gpointer data)
+{
+    get_svg_file_name_common(&confirm_svg_handle, GTK_WINDOW(main_window), keyfile, "confirmsvg");
+    read_confirm_svg_file(confirm_svg_handle.svg_file);
+}
+
+void read_confirm_svg_file(gchar *fname)
+{
+    g_free(confirm_svg_handle.svg_file);
+    confirm_svg_handle.svg_file = strdup(fname);
+    read_svg_file_common(&confirm_svg_handle, GTK_WINDOW(main_window));
+    confirm_svg_handle.svg_cb = svg_attr_cb;
+    confirm_svg_handle.img_cb = svg_img_cb;
+}
+/***/
+
 #define FIRST_BLOCK_C 0.25
 #define FIRST_BLOCK_START  0.0
 #define SECOND_BLOCK_START  (FIRST_BLOCK_C*height)
@@ -702,6 +764,17 @@ static gboolean expose_ask(GtkWidget *widget, GdkEventExpose *event, gpointer us
     if (!winner)
         return FALSE;
 
+    width = gtk_widget_get_allocated_width(widget);
+    height = gtk_widget_get_allocated_height(widget);
+
+    cairo_t *c = (cairo_t *)event;
+
+    confirm_svg_handle.c = c;
+    confirm_svg_handle.paper_width = width;
+    confirm_svg_handle.paper_height = height;
+    if (paint_svg_common(&confirm_svg_handle))
+        return FALSE;
+    
     if (winner == BLUE) {
         last_wname = saved_last1;
         first_wname = saved_first1;
@@ -709,20 +782,6 @@ static gboolean expose_ask(GtkWidget *widget, GdkEventExpose *event, gpointer us
         last_wname = saved_last2;
         first_wname = saved_first2;
     }
-
-#if (GTKVER == 3)
-    width = gtk_widget_get_allocated_width(widget);
-    height = gtk_widget_get_allocated_height(widget);
-#else
-    width = widget->allocation.width;
-    height = widget->allocation.height;
-#endif
-
-#if (GTKVER == 3)
-    cairo_t *c = (cairo_t *)event;
-#else
-    cairo_t *c = gdk_cairo_create(widget->window);
-#endif
 
     if (font_face[0])
         cairo_select_font_face(c, font_face, font_slant, font_weight);
@@ -795,11 +854,6 @@ static gboolean expose_ask(GtkWidget *widget, GdkEventExpose *event, gpointer us
     cairo_show_text(c, first_wname);
 #endif
 
-#if (GTKVER != 3)
-    cairo_show_page(c);
-    cairo_destroy(c);
-#endif
-
     return FALSE;
 }
 
@@ -810,6 +864,12 @@ static void create_ask_window(void)
     gint height;
     gtk_window_get_size(GTK_WINDOW(main_window), &width, &height);
 
+    if (svg_reply.response) {
+        free(svg_reply.response);
+        svg_reply.response = NULL;
+        svg_reply.size = 0;
+    }
+    
     GtkWindow *window = ask_window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_keep_above(GTK_WINDOW(ask_window), TRUE);
     gtk_window_set_title(GTK_WINDOW(window), _("Start New Match?"));
@@ -1021,6 +1081,9 @@ void reset(guint key, struct msg_next_match *msg0)
     rest_time = FALSE;
 
     if (key != GDK_0 && golden_score == FALSE) {
+        last_reported_category = current_category;
+        last_reported_number = current_match;
+
         // set bit if golden score
         if (gs_cat == current_category && gs_num == current_match)
             legend |= 0x100;

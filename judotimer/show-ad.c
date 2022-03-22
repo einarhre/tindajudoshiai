@@ -49,57 +49,10 @@
 
 #include "judotimer.h"
 #include "common-utils.h"
+#include "svg-common.h"
+#include "cJSON.h"
 
 /**** SVG RELATED ****/
-
-#ifdef WIN32
-typedef struct RsvgRectangle_ {
-    gdouble x, y, width, height;
-} RsvgRectangle;
-#endif
-
-#define WRITE2(_s, _l)                                                  \
-    do {                                                                \
-        if (!rsvg_handle_write(handle, (guchar *)_s, _l, &err)) {       \
-            g_print("\nERROR %s: %s %d\n",                              \
-                    err->message, __FUNCTION__, __LINE__); err = NULL; return TRUE; } } while (0)
-
-#define WRITE1(_s, _l)                                                  \
-    do { gint _i; for (_i = 0; _i < _l; _i++) {                         \
-        if (_s[_i] == '&')                                              \
-            WRITE2("&amp;", 5);                                         \
-        else if (_s[_i] == '<')                                         \
-            WRITE2("&lt;", 4);                                          \
-        else if (_s[_i] == '>')                                         \
-            WRITE2("&gt;", 4);                                          \
-        else if (_s[_i] == '\'')                                        \
-            WRITE2("&apos;", 6);                                        \
-        else if (_s[_i] == '"')                                         \
-            WRITE2("&quot;", 6);                                        \
-        else                                                            \
-            WRITE2(&_s[_i], 1);                                         \
-        }} while (0)
-
-#define WRITE(_a) WRITE1(_a, strlen(_a))
-
-#define IS_LABEL_CHAR(_x) ((_x >= 'a' && _x <= 'z') || (_x >= 'A' && _x <= 'Z'))
-#define IS_VALUE_CHAR(_x) (_x >= '0' && _x <= '9')
-
-#define IS_SAME(_a, _b) (!strcmp((char *)_a, (char *)_b))
-#define IS_SAME_P(_a, _b) is_same_by_page(pd, _a, _b)
-
-
-static gchar *svg_file = NULL;
-static gchar *svg_data = NULL;
-static gchar *datamax = NULL;
-static gsize  svg_datalen = 0;
-static gint   svg_width;
-static gint   svg_height;
-static gboolean svg_ok = FALSE;
-static gint page_mask = 0;
-static gint current_page = 0;
-
-#define NUM_PAGES 5
 
 enum {
     IMAGE_FLAG1,
@@ -107,34 +60,33 @@ enum {
     IMAGE_CLOSE,
     IMAGE_CONTROL1,
     IMAGE_CONTROL2,
+    IMAGE_PREVFLAG1,
+    IMAGE_PREVFLAG2,
+    IMAGE_NEXTFLAG1,
+    IMAGE_NEXTFLAG2,
     NUM_IMAGES
 };
 
-const gchar *imagename[NUM_IMAGES] = {
-    "flag1", "flag2", "close", "control1", "control2"
+const gchar *imagename[NUM_SVG_IMAGES] = {
+    "flag1", "flag2", "close", "control1", "control2", "prevflag1", "prevflag2", "nextflag1", "nextflag2", NULL
 };
 
-static struct {
-    RsvgRectangle rect;
-    gboolean exists;
-} images[NUM_PAGES][NUM_IMAGES];
+static svg_handle ad_svg_handle = {0};
+static struct svg_memory svg_reply = {0};
+static gchar *prevteam1name, *prevteam2name;
+static gchar *nextteam1name, *nextteam2name;
+static gchar *prevteam1country, *prevteam2country;
+static gchar *nextteam1country, *nextteam2country;
+static gint team1wins, team2wins;
+static gint team1pts, team2pts;
 
-static gdouble paper_width, paper_height;
-
-#define CODE_LEN 16
-
-static struct {
-    guchar code[CODE_LEN];
-    gint codecnt;
-    gint value;
-} attr[16];
-static gint cnt = 0;
 
 /********/
 
 void set_svg_file(GtkWidget *menu_item, GdkEventButton *event, gpointer data);
 gint paint_svg(struct paint_data *pd);
 static gboolean mouse_click(GtkWidget *window, GdkEventButton *event, gpointer userdata);
+static void clear_data(void);
 
 gint adwin_x = 0, adwin_y = 0, adwin_w = 0, adwin_h = 0;
 gboolean showflags = FALSE, showletter = FALSE;
@@ -1767,11 +1719,10 @@ static gboolean expose_ad(GtkWidget *widget, GdkEventExpose *event, gpointer use
         cairo_text_extents_t extents;
         cairo_t *c = (cairo_t *)event;
         
-        struct paint_data pd;
-        pd.c = c;
-        pd.paper_width = width;
-        pd.paper_height = height;
-        if (paint_svg(&pd))
+        ad_svg_handle.c = c;
+        ad_svg_handle.paper_width = width;
+        ad_svg_handle.paper_height = height;
+        if (paint_svg_common(&ad_svg_handle))
             return FALSE;
 
         if (ok_button)
@@ -2093,19 +2044,37 @@ extern GtkWidget *main_window;
 
 static gboolean close_display(GtkWidget *widget, GdkEventKey *event, gpointer userdata)
 {
-    if (event && event->type == GDK_KEY_PRESS &&
-        (event->keyval == GDK_Left || event->keyval == GDK_BackSpace)) {
-        if (current_page > 0) current_page--;
-        gtk_widget_queue_draw(GTK_WIDGET(ad_window));
-        return FALSE;
+    if (event && event->type == GDK_KEY_PRESS) {
+        if (event->keyval == GDK_Left || event->keyval == GDK_BackSpace) {
+            if (ad_svg_handle.current_page > 0) ad_svg_handle.current_page--;
+            if (mode != MODE_SLAVE) {
+                struct message msg;
+                memset(&msg, 0, sizeof(msg));
+                msg.type = MSG_UPDATE_LABEL;
+                msg.u.update_label.label_num = STOP_COMPETITORS;
+                msg.u.update_label.xalign = 0xff00 | ad_svg_handle.current_page;
+                send_label_msg(&msg);
+            }
+            gtk_widget_queue_draw(GTK_WIDGET(ad_window));
+            return FALSE;
+        }
+
+        ad_svg_handle.current_page++;
+        if ((1 << ad_svg_handle.current_page) & ad_svg_handle.page_mask) {
+            if (mode != MODE_SLAVE) {
+                struct message msg;
+                memset(&msg, 0, sizeof(msg));
+                msg.type = MSG_UPDATE_LABEL;
+                msg.u.update_label.label_num = STOP_COMPETITORS;
+                msg.u.update_label.xalign = 0xff00 | ad_svg_handle.current_page;
+                send_label_msg(&msg);
+            }
+            gtk_widget_queue_draw(GTK_WIDGET(ad_window));
+            return FALSE;
+        }
     }
 
-    current_page++;
-    if ((1 << current_page) & page_mask) {
-        gtk_widget_queue_draw(GTK_WIDGET(ad_window));
-        return FALSE;
-    }
-    current_page = 0;
+    ad_svg_handle.current_page = 0;
     
     if (!fullscreen) {
         gtk_window_get_position(GTK_WINDOW(userdata), &adwin_x, &adwin_y);
@@ -2119,15 +2088,22 @@ static gboolean close_display(GtkWidget *widget, GdkEventKey *event, gpointer us
     gtk_widget_destroy(userdata);
     return FALSE;
 }
+
 static gboolean close_display_2(GtkWidget *widget, gpointer userdata)
 {
     return close_display(widget, NULL, userdata);
 }
 
-void close_ad_window(void)
+void close_ad_window(gint pagenum)
 {
-    if (ad_window)
-        close_display(NULL, NULL, ad_window);
+    if (ad_window) {
+        if (pagenum) {
+            ad_svg_handle.current_page = pagenum & 0xff;
+            gtk_widget_queue_draw(GTK_WIDGET(ad_window));
+        } else {
+            close_display(NULL, NULL, ad_window);
+        }
+    }
 }
 
 void display_ad_window(void)
@@ -2138,6 +2114,8 @@ void display_ad_window(void)
     if (comp_names_pending == FALSE && num_ads == 0)
         return;
 
+    clear_data();
+    
     gint width;
     gint height;
     gtk_window_get_size(GTK_WINDOW(main_window), &width, &height);
@@ -2176,7 +2154,7 @@ void display_ad_window(void)
     gtk_container_add (GTK_CONTAINER (window), vbox);
     gtk_widget_show_all(GTK_WIDGET(window));
 
-    current_page = 0;
+    ad_svg_handle.current_page = 0;
     
     if (ok_button)
         gtk_widget_hide(ok_button);
@@ -2458,338 +2436,251 @@ void display_comp_window(gchar *cat, gchar *comp1, gchar *comp2,
  * SVG
  */
 
-static gchar *get_file_name(void)
+static gint svg_img_cb(svg_handle *svg)
 {
-    GtkWidget *dialog;
-    static gchar *last_dir = NULL;
-    gint response;
+    if (svg->images[svg->current_page][IMAGE_FLAG1].exists)
+        draw_flag_common(svg, &svg->images[svg->current_page][IMAGE_FLAG1].rect, b_country);
+    if (svg->images[svg->current_page][IMAGE_FLAG2].exists)
+        draw_flag_common(svg, &svg->images[svg->current_page][IMAGE_FLAG2].rect, w_country);
 
-    dialog = gtk_file_chooser_dialog_new (_("Open file"),
-                                          GTK_WINDOW(main_window),
-                                          GTK_FILE_CHOOSER_ACTION_OPEN,
-                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                          GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-                                          GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                                          NULL);
+    if (svg->images[svg->current_page][IMAGE_PREVFLAG1].exists)
+        draw_flag_common(svg, &svg->images[svg->current_page][IMAGE_PREVFLAG1].rect, prevteam1country);
+    if (svg->images[svg->current_page][IMAGE_PREVFLAG2].exists)
+        draw_flag_common(svg, &svg->images[svg->current_page][IMAGE_PREVFLAG2].rect, prevteam2country);
 
-    if (last_dir)
-        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), last_dir);
+    if (svg->images[svg->current_page][IMAGE_NEXTFLAG1].exists)
+        draw_flag_common(svg, &svg->images[svg->current_page][IMAGE_NEXTFLAG1].rect, nextteam1country);
+    if (svg->images[svg->current_page][IMAGE_NEXTFLAG2].exists)
+        draw_flag_common(svg, &svg->images[svg->current_page][IMAGE_NEXTFLAG2].rect, nextteam2country);
+    
+    if (judogi_control) {
+        if (svg->images[svg->current_page][IMAGE_CONTROL1].exists && !(judogi_control_flags & MATCH_FLAG_JUDOGI1_OK) && white_ctl)
+            draw_image_common(svg, &svg->images[svg->current_page][IMAGE_CONTROL1].rect, white_ctl, TRUE);
+        if (svg->images[svg->current_page][IMAGE_CONTROL2].exists && !(judogi_control_flags & MATCH_FLAG_JUDOGI2_OK) && blue_ctl)
+            draw_image_common(svg, &svg->images[svg->current_page][IMAGE_CONTROL2].rect, blue_ctl, TRUE);
+    }
+    return 0;
+}
 
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
+static void clear_data(void)
+{
+    if (prevteam1name) g_free(prevteam1name);
+    if (prevteam2name) g_free(prevteam2name);
+    if (nextteam1name) g_free(nextteam1name);
+    if (nextteam2name) g_free(nextteam2name);
+    if (prevteam1country) g_free(prevteam1country);
+    if (prevteam2country) g_free(prevteam2country);
+    if (nextteam1country) g_free(nextteam1country);
+    if (nextteam2country) g_free(nextteam2country);
+    prevteam1name = prevteam2name = 0;
+    nextteam1name = nextteam2name = 0;
+    prevteam1country = prevteam2country = 0;
+    nextteam1country = nextteam2country = 0;
+    team1wins = team2wins = 0;
+    team1pts = team2pts = 0;
 
-    if (response == GTK_RESPONSE_ACCEPT) {
-        g_free(svg_file);
-        svg_file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-        g_free(last_dir);
-        last_dir = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER (dialog));
-        g_key_file_set_string(keyfile, "preferences", "svgfile", svg_file);
-    } else if (response == GTK_RESPONSE_CLOSE) {
-        svg_ok = FALSE;
-        g_free(svg_file);
-        svg_file = NULL;
-        g_key_file_set_string(keyfile, "preferences", "svgfile", "");
+    free_svg_memory_common(&svg_reply);
+}
+
+static gboolean get_json(void)
+{
+    if (svg_reply.response == NULL) {
+        gchar buf[256];
+
+        clear_data();
+
+        if (last_reported_category == 0)
+            last_reported_category = current_category;
+        
+        snprintf(buf, sizeof(buf),
+                 "{\"op\":\"sql\", \"cmd\":\""
+                 "select c1.last,c2.last,c1.country,c2.country from matches as m "
+                 "left join competitors as c1 on m.blue=c1.'index' "
+                 "left join competitors as c2 on m.white=c2.'index' "
+                 "where m.category=%d and m.number=1\"}",
+                 last_reported_category & 0xffff);
+        ask_json_common(buf, &svg_reply);
+        prevteam1name = g_strdup(get_array_2_str_common(svg_reply.json, 1, 0));
+        prevteam2name = g_strdup(get_array_2_str_common(svg_reply.json, 1, 1));
+        prevteam1country = g_strdup(get_array_2_str_common(svg_reply.json, 1, 2));
+        prevteam2country = g_strdup(get_array_2_str_common(svg_reply.json, 1, 3));
+
+        free_svg_memory_common(&svg_reply);
+        
+        snprintf(buf, sizeof(buf),
+                 "{\"op\":\"sql\", \"cmd\":\""
+                 "select c1.last,c2.last,c1.country,c2.country from matches as m "
+                 "left join competitors as c1 on m.blue=c1.'index' "
+                 "left join competitors as c2 on m.white=c2.'index' "
+                 "where m.category=%d and m.number=1\"}",
+                 current_category & 0xffff);
+        ask_json_common(buf, &svg_reply);
+        nextteam1name = g_strdup(get_array_2_str_common(svg_reply.json, 1, 0));
+        nextteam2name = g_strdup(get_array_2_str_common(svg_reply.json, 1, 1));
+        nextteam1country = g_strdup(get_array_2_str_common(svg_reply.json, 1, 2));
+        nextteam2country = g_strdup(get_array_2_str_common(svg_reply.json, 1, 3));
+
+        free_svg_memory_common(&svg_reply);
+        
+        snprintf(buf, sizeof(buf),
+                 "{\"op\":\"sql\", \"cmd\":\""
+                 "select m.blue_points,m.white_points,c1.last,c2.last from matches as m "
+                 "left join competitors as c1 on m.blue=c1.'index' "
+                 "left join competitors as c2 on m.white=c2.'index' "
+                 "where m.category=%d\"}",
+                 last_reported_category);
+        ask_json_common(buf, &svg_reply);
+
+        struct cJSON *lst = get_array_1_common(svg_reply.json, 1);
+        if (!lst) return FALSE;
+        while (lst) {
+            gint val1 = 0, val2 = 0;
+            struct cJSON *v;
+            v = cJSON_GetArrayItem(lst, 0);
+            if (v) val1 = atoi(v->valuestring);
+            v = cJSON_GetArrayItem(lst, 1);
+            if (v) val2 = atoi(v->valuestring);
+
+            if (val1 > val2) team1wins++;
+            else if (val1 < val2) team2wins++;
+            
+            if (val1 == 7) val1 = 1;
+            if (val2 == 7) val2 = 1;
+            team1pts += val1;
+            team2pts += val2;
+            
+            lst = lst->next;
+        }
     }
 
-    gtk_widget_destroy (dialog);
+    return svg_reply.json != NULL;
+}
 
-    return svg_file;
+static gint svg_attr_cb(svg_handle *svg)
+{
+    //g_print("ATTR=%s\n", svg->attr[0].code);
+    if (svg->attr[0].code[0] == 'R') {
+        const gchar *rnd = round_to_str(cat_round);
+        WRITE(rnd);
+    } else if (svg->attr[0].code[0] == 'C') {
+        WRITE(category);
+    } else if (IS_SAME(svg->attr[0].code, "last")) {
+        gint compnum = svg->attr[0].value;
+        if (compnum == 1)
+            WRITE(b_last);
+        else
+            WRITE(w_last);
+    } else if (IS_SAME(svg->attr[0].code, "first")) {
+        gint compnum = svg->attr[0].value;
+        if (compnum == 1)
+            WRITE(b_first);
+        else
+            WRITE(w_first);
+    } else if (IS_SAME(svg->attr[0].code, "f")) {
+        gchar buf[8];
+        gint compnum = svg->attr[0].value;
+        if (compnum == 1)
+            g_utf8_strncpy(buf, b_first, 1);
+        else
+            g_utf8_strncpy(buf, w_first, 1);
+        WRITE(buf);
+    } else if (IS_SAME(svg->attr[0].code, "country")) {
+        gint compnum = svg->attr[0].value;
+        if (compnum == 1)
+            WRITE(b_country);
+        else
+            WRITE(w_country);
+    } else if (IS_SAME(svg->attr[0].code, "club")) {
+        gint compnum = svg->attr[0].value;
+        if (compnum == 1)
+            WRITE(b_club);
+        else
+            WRITE(w_club);
+    } else if (IS_SAME(svg->attr[0].code, "rest")) {
+        gint who = svg->attr[0].value;
+        if (rrest && who == 1 && (rflags & MATCH_FLAG_BLUE_REST)) {
+            gchar buf[16];
+            snprintf(buf, sizeof(buf), "%d:%d%d", rmin, rtsec, rsec);
+            WRITE(buf);
+        }
+        if (rrest && who == 2 && (rflags & MATCH_FLAG_WHITE_REST)) {
+            gchar buf[16];
+            snprintf(buf, sizeof(buf), "%d:%d%d", rmin, rtsec, rsec);
+            WRITE(buf);
+        }
+    } else if (IS_SAME(svg->attr[0].code, "prevteam")) {
+        if (!get_json()) return 0;
+        gint who = svg->attr[0].value;
+        if (who == 1 && prevteam1name) WRITE(prevteam1name);
+        else if (who == 2 && prevteam2name) WRITE(prevteam2name);
+    } else if (IS_SAME(svg->attr[0].code, "nextteam")) {
+        if (!get_json()) return 0;
+        gint who = svg->attr[0].value;
+        if (who == 1 && nextteam1name) WRITE(nextteam1name);
+        else if (who == 2 && nextteam2name) WRITE(nextteam2name);
+    } else if (IS_SAME(svg->attr[0].code, "prevcountry")) {
+        gint compnum = svg->attr[0].value;
+        if (compnum == 1)
+            WRITE(prevteam1country);
+        else
+            WRITE(prevteam2country);
+    } else if (IS_SAME(svg->attr[0].code, "nextcountry")) {
+        gint compnum = svg->attr[0].value;
+        if (compnum == 1)
+            WRITE(nextteam1country);
+        else
+            WRITE(nextteam2country);
+    } else if (IS_SAME(svg->attr[0].code, "wins")) {
+        if (!get_json()) return 0;
+        gint who = svg->attr[0].value;
+        gchar buf[16];
+        if (who == 1) snprintf(buf, sizeof(buf), "%d", team1wins);
+        else snprintf(buf, sizeof(buf), "%d", team2wins);
+        WRITE(buf);
+    } else if (IS_SAME(svg->attr[0].code, "pts")) {
+        if (!get_json()) return 0;
+        gint who = svg->attr[0].value;
+        gchar buf[16];
+        if (who == 1) snprintf(buf, sizeof(buf), "%d", team1pts);
+        else snprintf(buf, sizeof(buf), "%d", team2pts);
+        WRITE(buf);
+    }
+    return 0;
 }
 
 void read_svg_file(gchar *fname)
 {
-    g_free(svg_data);
-    svg_data = NULL;
-    svg_datalen = 0;
-    svg_ok = FALSE;
-    //flag1exists = flag2exists = FALSE;
-    memset(&images, 0, sizeof(images));
-    page_mask = 1;
-    
-    if (fname) {
-        g_free(svg_file);
-        svg_file = g_strdup(fname);
-    }
-    
-    if (svg_file == NULL || svg_file[0] == 0)
-        return;
-
-    if (!g_file_get_contents(svg_file, &svg_data, &svg_datalen, NULL))
-        g_print("CANNOT OPEN '%s'\n", svg_file);
-    else  {
-        datamax = svg_data + svg_datalen;
-        RsvgHandle *h = rsvg_handle_new_from_data((guchar *)svg_data, svg_datalen, NULL);
-        if (h) {
-            RsvgDimensionData dim;
-            rsvg_handle_get_dimensions(h, &dim);
-            svg_width = dim.width;
-            svg_height = dim.height;
-
-            if (adwin_h < 100) {
-                gint width;
-                gint height;
-                gtk_window_get_size(GTK_WINDOW(main_window), &width, &height);
-                adwin_h = height;
-            }
-            adwin_w = adwin_h*dim.width/dim.height;
-
-            /***
-            RsvgRectangle viewport;
-            RsvgRectangle out_ink_rect;
-            viewport.x = 0;
-            viewport.y = 0;
-            viewport.width = svg_width;
-            viewport.height = svg_height;
-            ***/
-            
-            gint page;
-            for (page = 0; page < NUM_PAGES; page++) {
-                gchar buf[16];
-                gint n;
-
-                snprintf(buf, sizeof(buf), "#page%d", page+1);
-                if (rsvg_handle_has_sub(h, buf))
-                    page_mask |= (1 << page);
-                else if (page > 0)
-                    break;
-                
-                for (n = 0; n < NUM_IMAGES; n++) {
-                    if (page == 0) {
-                        snprintf(buf, sizeof(buf), "#%s", imagename[n]);
-                        if (!rsvg_handle_has_sub(h, buf))
-                            snprintf(buf, sizeof(buf), "#%s_%d", imagename[n], page+1);
-                    } else
-                        snprintf(buf, sizeof(buf), "#%s_%d", imagename[n], page+1);
-                    
-                    if (rsvg_handle_has_sub(h, buf)) {
-                        RsvgPositionData pos;
-                        rsvg_handle_get_dimensions_sub (h, &dim, buf);
-                        rsvg_handle_get_position_sub(h, &pos, buf);
-                        images[page][n].rect.x = (gdouble)pos.x;
-                        images[page][n].rect.y = (gdouble)pos.y;
-                        images[page][n].rect.width = dim.em;
-                        images[page][n].rect.height = dim.ex;
-
-                        /***
-                        rsvg_handle_get_geometry_for_layer(h, buf, &viewport, &out_ink_rect,
-                                                           &images[page][n].rect, NULL);
-                        ***/
-                        images[page][n].exists = TRUE;
-                    }
-                }
-            }
-
-            g_object_unref(h);
-            svg_ok = TRUE;
-        } else {
-            g_print("Cannot open SVG file %s\n", svg_file);
-        }
-    }
+    ad_svg_handle.imagename = imagename;
+    g_free(ad_svg_handle.svg_file);
+    ad_svg_handle.svg_file = strdup(fname);
+    read_svg_file_common(&ad_svg_handle, GTK_WINDOW(main_window));
+    ad_svg_handle.svg_cb = svg_attr_cb;
+    ad_svg_handle.img_cb = svg_img_cb;
 }
 
 void set_svg_file(GtkWidget *menu_item, GdkEventButton *event, gpointer data)
 {
-    get_file_name();
-    read_svg_file(NULL);
-}
-
-void draw_image(struct paint_data *pd, RsvgRectangle *rect, cairo_surface_t *image, gboolean fit)
-{
-    if (!image || cairo_surface_status(image) != CAIRO_STATUS_SUCCESS)
-        return;
-
-    gint w = cairo_image_surface_get_width(image);
-    gint h = cairo_image_surface_get_height(image);
-    gdouble scale_h = rect->height/h;
-    gdouble scale_w = fit ? rect->width/w : scale_h;
-    cairo_save(pd->c);
-    cairo_scale(pd->c, scale_w, scale_h);
-    cairo_set_source_surface(pd->c, image, rect->x/scale_w, rect->y/scale_h);
-    cairo_paint(pd->c);
-    cairo_restore(pd->c);
-}
-
-void draw_image_file(struct paint_data *pd, RsvgRectangle *rect, const gchar *file, gboolean fit)
-{
-    cairo_surface_t *image = cairo_image_surface_create_from_png(file);
-    draw_image(pd, rect, image, fit);
-    cairo_surface_destroy(image);
-}
-
-void draw_flag_2(struct paint_data *pd, RsvgRectangle *rect, const gchar *country)
-{
-    gchar name[16];
-    snprintf(name, sizeof(name), "%s.png", country);
-    gchar *file = g_build_filename(installation_dir, "etc", "flags-ioc", name, NULL);
-    draw_image_file(pd, rect, file, FALSE);
-    g_free(file);
-}
-
-gint paint_svg(struct paint_data *pd)
-{
-    GError *err = NULL;
-
-    if (svg_ok == FALSE || svg_data == NULL)
-        return FALSE;
-
-    paper_width = pd->paper_width;
-    paper_height = pd->paper_height;
-
-    /***
-    if (pd->c) {
-        cairo_set_source_rgb(pd->c, 1.0, 1.0, 1.0);
-        cairo_rectangle(pd->c, 0.0, 0.0, pd->paper_width, pd->paper_height);
-        cairo_fill(pd->c);
-    }
-    ***/
-
-    RsvgHandle *handle = rsvg_handle_new();
-    //rsvg_handle_set_dpi(handle, 90.0);
-    
-    guchar *p = (guchar *)svg_data;
-    while (p < (guchar *)datamax && *p) {
-        if (*p == '%' && IS_LABEL_CHAR(p[1])) {
-            memset(attr, 0, sizeof(attr));
-            cnt = 0;
-            p++;
-            while (IS_LABEL_CHAR(*p) || IS_VALUE_CHAR(*p) || *p == '-' || *p == '\'' || *p == '|' || *p == '!') {
-                while (IS_LABEL_CHAR(*p))
-                    attr[cnt].code[attr[cnt].codecnt++] = *p++;
-
-                if (*p == '-') p++;
-
-                while (IS_VALUE_CHAR(*p))
-                    attr[cnt].value = attr[cnt].value*10 + *p++ - '0';
-
-                if (*p == '-') p++;
-
-                if (*p == '\'' || *p == '|') {
-                    cnt++;
-                    p++;
-                    attr[cnt].code[0] = '\'';
-                    attr[cnt].codecnt = 1;
-                    while (*p && *p != '\'' && *p != '|') {
-                        attr[cnt].code[attr[cnt].codecnt] = *p++;
-                        if (attr[cnt].codecnt < CODE_LEN)
-                            attr[cnt].codecnt++;
-                    }
-                    if (*p == '\'' || *p == '|')
-                        p++;
-                }
-
-                cnt++;
-
-                if (*p == '!') {
-                    p++;
-                    break;
-                }
-            } // while IS_LABEL
-
-            if (attr[0].code[0] == 'R') {
-                const gchar *rnd = round_to_str(cat_round);
-                WRITE(rnd);
-            } else if (attr[0].code[0] == 'C') {
-                WRITE(category);
-            } else if (IS_SAME(attr[0].code, "last")) {
-                gint compnum = attr[0].value;
-                if (compnum == 1)
-                    WRITE(b_last);
-                else
-                    WRITE(w_last);
-            } else if (IS_SAME(attr[0].code, "first")) {
-                gint compnum = attr[0].value;
-                if (compnum == 1)
-                    WRITE(b_first);
-                else
-                    WRITE(w_first);
-            } else if (IS_SAME(attr[0].code, "f")) {
-                gchar buf[8];
-                gint compnum = attr[0].value;
-                if (compnum == 1)
-                    g_utf8_strncpy(buf, b_first, 1);
-                else
-                    g_utf8_strncpy(buf, w_first, 1);
-                WRITE(buf);
-            } else if (IS_SAME(attr[0].code, "country")) {
-                gint compnum = attr[0].value;
-                if (compnum == 1)
-                    WRITE(b_country);
-                else
-                    WRITE(w_country);
-            } else if (IS_SAME(attr[0].code, "club")) {
-                gint compnum = attr[0].value;
-                if (compnum == 1)
-                    WRITE(b_club);
-                else
-                    WRITE(w_club);
-            } else if (IS_SAME(attr[0].code, "rest")) {
-                gint who = attr[0].value;
-                if (rrest && who == 1 && (rflags & MATCH_FLAG_BLUE_REST)) {
-                    gchar buf[16];
-                    snprintf(buf, sizeof(buf), "%d:%d%d", rmin, rtsec, rsec);
-                    WRITE(buf);
-                }
-                if (rrest && who == 2 && (rflags & MATCH_FLAG_WHITE_REST)) {
-                    gchar buf[16];
-                    snprintf(buf, sizeof(buf), "%d:%d%d", rmin, rtsec, rsec);
-                    WRITE(buf);
-                }
-            }
-        } // *p = %
-        else {
-            WRITE2(p, 1);
-            p++;
-        }
-    }
-
-    rsvg_handle_close(handle, NULL);
-
-    if (pd->c) {
-        cairo_save(pd->c);
-        cairo_scale(pd->c, pd->paper_width/svg_width, pd->paper_height/svg_height);
-
-        if (page_mask > 1) {
-            gchar buf[16];
-            snprintf(buf, sizeof(buf), "#page%d", current_page+1);
-            rsvg_handle_render_cairo_sub(handle, pd->c, buf);
-        } else
-            rsvg_handle_render_cairo(handle, pd->c);
-
-        if (images[current_page][IMAGE_FLAG1].exists)
-            draw_flag_2(pd, &images[current_page][IMAGE_FLAG1].rect, b_country);
-        if (images[current_page][IMAGE_FLAG2].exists)
-            draw_flag_2(pd, &images[current_page][IMAGE_FLAG2].rect, w_country);
-
-        if (judogi_control) {
-            if (images[current_page][IMAGE_CONTROL1].exists && !(judogi_control_flags & MATCH_FLAG_JUDOGI1_OK) && white_ctl)
-                draw_image(pd, &images[current_page][IMAGE_CONTROL1].rect, white_ctl, TRUE);
-            if (images[current_page][IMAGE_CONTROL2].exists && !(judogi_control_flags & MATCH_FLAG_JUDOGI2_OK) && blue_ctl)
-                draw_image(pd, &images[current_page][IMAGE_CONTROL2].rect, blue_ctl, TRUE);
-        }
-        
-        cairo_restore(pd->c);
-    }
-    
-    g_object_unref(handle);
-
-    return TRUE;
+    get_svg_file_name_common(&ad_svg_handle, GTK_WINDOW(main_window), keyfile, "adsvgfile");
+    read_svg_file(ad_svg_handle.svg_file);
 }
 
 static gboolean mouse_click(GtkWidget *window,
                             GdkEventButton *event,
                             gpointer userdata)
 {
-    if (paper_width == 0 || paper_height == 0 || svg_ok == FALSE || images[current_page][IMAGE_CLOSE].exists == FALSE)
+    if (ad_svg_handle.paper_width == 0 || ad_svg_handle.paper_height == 0 || ad_svg_handle.svg_ok == FALSE ||
+        ad_svg_handle.images[ad_svg_handle.current_page][IMAGE_CLOSE].exists == FALSE)
         return FALSE;
     
     if (event->type == GDK_BUTTON_PRESS  &&
         (event->button == 1 || event->button == 3)) {
-        gdouble x = event->x*svg_width/paper_width;
-        gdouble y = event->y*svg_height/paper_height;
-        RsvgRectangle *rect = &images[current_page][IMAGE_CLOSE].rect;
+        gdouble x = event->x*ad_svg_handle.svg_width/ad_svg_handle.paper_width;
+        gdouble y = event->y*ad_svg_handle.svg_height/ad_svg_handle.paper_height;
+        RsvgRectangle *rect = &ad_svg_handle.images[ad_svg_handle.current_page][IMAGE_CLOSE].rect;
 
         if (x >= rect->x && x < rect->x + rect->width &&
             y >= rect->y && y < rect->y + rect->height) {
-            close_ad_window();
+            close_ad_window(0);
             return TRUE;
         }
     }

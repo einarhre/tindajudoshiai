@@ -236,7 +236,7 @@ static GtkWidget *menubar, *match, *preferences, *help, *matchmenu, *preferences
 static GtkWidget *separator1, *separator2, *quit, *viewlog, *showcomp_act, *show_video;
 static GtkWidget *match0, *match1, *match2, *match3, *match4, *match5, *gs;
 static GtkWidget *blue_wins, *white_wins, *red_background, *full_screen, *hikiwake;
-static GtkWidget *rules_stop_ippon, *whitefirst, *showcomp, *confirm_match, *judogi_control;
+static GtkWidget *rules_stop_ippon, *whitefirst, *showcomp, *confirm_match, *confirm_svg, *judogi_control;
 static GtkWidget *tatami_sel, *tatami_sel_none, *tatami_sel_num[NUM_TATAMIS];
 static GtkWidget *node_ip, *my_ip, *video_ip, /* *vlc_cport,*/ *manual, *about, *quick_guide;
 static GtkWidget *light, *menu_light, *menu_switched, *timeset;
@@ -469,6 +469,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     rules_2017      = gtk_check_menu_item_new_with_label("");
     rules_2018      = gtk_check_menu_item_new_with_label("");
     confirm_match   = gtk_check_menu_item_new_with_label("");
+    confirm_svg     = gtk_menu_item_new_with_label("");
     judogi_control  = gtk_check_menu_item_new_with_label("");
 
     tatami_sel_none = gtk_radio_menu_item_new_with_label(NULL, "");
@@ -495,7 +496,10 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_2017);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_2018);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_stop_ippon);
+    gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), gtk_separator_menu_item_new());
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), confirm_match);
+    gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), confirm_svg);
+    gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), gtk_separator_menu_item_new());
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), showcomp);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), judogi_control);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), no_texts);
@@ -564,6 +568,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(rules_2017),      "activate", G_CALLBACK(toggle_rules_2017),     (gpointer)0);
     g_signal_connect(G_OBJECT(rules_2018),      "activate", G_CALLBACK(toggle_rules_2018),     (gpointer)0);
     g_signal_connect(G_OBJECT(confirm_match),   "activate", G_CALLBACK(toggle_confirm_match),  (gpointer)0);
+    g_signal_connect(G_OBJECT(confirm_svg),     "activate", G_CALLBACK(confirm_match_svg),     (gpointer)0);
     g_signal_connect(G_OBJECT(whitefirst),      "activate", G_CALLBACK(toggle_whitefirst),     (gpointer)0);
     g_signal_connect(G_OBJECT(no_texts),        "activate", G_CALLBACK(toggle_no_texts),       (gpointer)0);
     g_signal_connect(G_OBJECT(showcomp),        "activate", G_CALLBACK(toggle_show_comp),      (gpointer)0);
@@ -807,9 +812,15 @@ void set_preferences_keyfile(GKeyFile *key_file, gboolean defaults)
     READ_INT_VAL("rulesgeru12", use_ger_u12_rules, 0);
 
     error = NULL;
-    str = g_key_file_get_string(keyfile, "preferences", "svgfile", &error);
+    str = g_key_file_get_string(keyfile, "preferences", "adsvgfile", &error);
     if (!error) {
         read_svg_file(str);
+    }
+
+    error = NULL;
+    str = g_key_file_get_string(keyfile, "preferences", "confirmsvg", &error);
+    if (!error) {
+        read_confirm_svg_file(str);
     }
 
     gint x1 = g_key_file_get_integer(keyfile, "preferences", "adwin_x", &error);
@@ -911,6 +922,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(rules_2018, _("2018 Rules"));
 
     change_menu_label(confirm_match, _("Confirm New Match"));
+    change_menu_label(confirm_svg,   _("Confirm SVG File"));
     change_menu_label(clock_only,    _("View clocks only"));
     change_menu_label(whitefirst,    _("White first"));
     change_menu_label(no_texts,      _("No SOREMADE/IPPON texts"));
@@ -1203,6 +1215,7 @@ void set_menu_active(void)
     SET_SENSITIVE(rules_2018, ACTIVE);
 
     SET_SENSITIVE(confirm_match, ACTIVE);
+    SET_SENSITIVE(confirm_svg,   ACTIVE);
     SET_SENSITIVE(clock_only,    ACTIVE);
     SET_SENSITIVE(whitefirst,    ACTIVE);
     SET_SENSITIVE(no_texts,      ACTIVE);
