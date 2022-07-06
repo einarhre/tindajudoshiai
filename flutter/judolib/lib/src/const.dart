@@ -77,9 +77,18 @@ const GENDER_MALE   = 0x80;
 const GENDER_FEMALE = 0x100;
 const POOL_TIE3     = 0x200;
 const DO_NOT_SHOW   = 0x400;
+const DB_SAVED      = 0x4000;
 // category flags
 const TEAM          = 0x04;
 const TEAM_EVENT    = 0x08;
 
 const IS_MALE   = 1;
 const IS_FEMALE = 2;
+
+
+const DEV_TYPE_NORMAL = 0;
+const DEV_TYPE_STATHMOS = 1;
+const DEV_TYPE_AP1 = 2;
+const DEV_TYPE_MYWEIGHT = 3;
+
+const baudrate2int = [1200, 9600, 19200, 38400, 115200];
