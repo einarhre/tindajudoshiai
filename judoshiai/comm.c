@@ -513,55 +513,6 @@ void handle_json(struct message *input_msg)
                 cd = cd->next;
             }
         }
-#if 0
-        
-#define TBL_INT(_name) do { \
-            char *a = db_get_col_data(tablecopy, numcols, row, #_name); \
-            cJSON_AddNumberToObject(catobj, #_name, a ? atoi(a) : 0); \
-        } while (0)
-#define TBL_STR(_name) do { \
-            char *a = db_get_col_data(tablecopy, numcols, row, #_name); \
-            cJSON_AddStringToObject(catobj, #_name, a); \
-        } while (0)
-        
-        gint row;
-        int numrows, numcols;
-        char **tablecopy = db_get_table_copy(
-            "SELECT * FROM categories WHERE \"deleted\"=0 ORDER BY \"category\" ASC",
-            &numrows, &numcols);
-
-
-
-        if (tablecopy == NULL)
-            goto json_end;
-
-        for (row = 0; row < numrows; row++) {
-            char *ix = db_get_col_data(tablecopy, numcols, row, "index");
-            char *cat = db_get_col_data(tablecopy, numcols, row, "category");
-
-            cJSON *catobj = cJSON_CreateObject();
-            cJSON_AddNumberToObject(catobj, "ix", ix ? atoi(ix) : 0);
-            TBL_STR(category);
-            TBL_INT(tatami);
-            TBL_INT(group);
-            TBL_INT(system);
-            TBL_INT(numcomp);
-            TBL_INT(table);
-            TBL_INT(wishsys);
-            TBL_INT(pos1);
-            TBL_INT(pos2);
-            TBL_INT(pos3);
-            TBL_INT(pos4);
-            TBL_INT(pos5);
-            TBL_INT(pos6);
-            TBL_INT(pos7);
-            TBL_INT(pos8);
-            TBL_STR(color);
-            cJSON_AddItemToArray(out, catobj);
-        }
-
-        db_close_table_copy(tablecopy);
-#endif
     }
 
 json_end:
@@ -642,7 +593,7 @@ void msg_received(struct message *input_msg)
             if (input_msg->u.name_req.index & 0xff000000) {
                 gint ageix = find_age_index(j->last);
                 guint n = (guint)input_msg->u.name_req.index >> 24;
-                g_print("IX=0x%x CAT=%s AGEIX=%d SUB=%d\n", input_msg->u.name_req.index, j->last, ageix, n);
+                //g_print("IX=0x%x CAT=%s AGEIX=%d SUB=%d\n", input_msg->u.name_req.index, j->last, ageix, n);
                 if (ageix >= 0 && n > 0 && n <= NUM_CAT_DEF_WEIGHTS) {
                     snprintf(output_msg.u.name_info.last, sizeof(output_msg.u.name_info.last),
                              "%s (%s)", j->last, 
@@ -1198,6 +1149,8 @@ gpointer node_thread(gpointer args)
 	    int cpu_diff, ret;
 	    gettimeofday(&cpu_start, NULL);
 
+            ws_send_msg(&msg_out);
+            
             for (i = 0; i < NUM_CONNECTIONS; i++) {
                 if (connections[i].fd == 0)
                     continue;

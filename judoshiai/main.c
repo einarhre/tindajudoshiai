@@ -587,6 +587,14 @@ ok:
 			   (GThreadFunc)get_file_thread,
 			   (gpointer)&run_flag);
 
+	gth = g_thread_new("Ws-broker",
+			   (GThreadFunc)ws_broker_thread,
+			   (gpointer)&run_flag);
+        
+	gth = g_thread_new("Ws-comm",
+			   (GThreadFunc)ws_comm_thread,
+			   (gpointer)&run_flag);
+        
 	g_timeout_add(1000, check_for_connection_status, NULL);
 
         g_print("Comm threads started\n");

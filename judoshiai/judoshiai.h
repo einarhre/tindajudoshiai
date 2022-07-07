@@ -1224,6 +1224,8 @@ extern gpointer serial_thread(gpointer args);
 extern gpointer ssdp_thread(gpointer args);
 extern gpointer auto_update_thread(gpointer args);
 extern gpointer get_file_thread(gpointer args);
+extern gpointer ws_broker_thread(gpointer args);
+extern gpointer ws_comm_thread(gpointer args);
 struct sockaddr_in;
 extern void add_client_ssdp_info(gchar *p, struct sockaddr_in *client);
 extern gchar *other_info(gint num);
@@ -1461,6 +1463,10 @@ extern void draw_match_table(void);
 extern void auth_init(void);
 extern int auth_validate(char *u, char *p);
 extern int auth_set_user(int n, char *u, char *p);
+
+/* ws-comm */
+extern gint ws_send_msg(struct message *msg);
+
 
 /* profiling stuff */
 //#define PROFILE

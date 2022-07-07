@@ -135,16 +135,17 @@ static void websock_message(struct jsconn *conn, unsigned char *p,
 
 	p[length] = 0;
 
+        //g_printerr("MSG len=%d : %s\n", length, p+data);
 	json = cJSON_Parse((char *)p + data);
 	if (!json) {
-	    g_print("json err: %s\n", p+data);
+	    g_printerr("json err: %s\n", p+data);
 	    return;
 	}
 
 	int r = websock_decode_msg(&msg, json);
 	cJSON_Delete(json);
 	if (r < 0) {
-	    g_print("decode err: %s\n", p);
+	    g_printerr("decode err: %s\n", p);
 	    return;
 	}
 
@@ -281,3 +282,4 @@ gint websock_send_msg(gint fd, struct message *msg)
     send(fd, (gchar *)p, len, 0);
     return 0;
 }
+

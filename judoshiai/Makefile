@@ -34,7 +34,7 @@ OBJS += $(OBJDIR)/main.o $(OBJDIR)/competitors.o $(OBJDIR)/sheets.o $(OBJDIR)/se
 	$(OBJDIR)/custom-category-svg-template.o $(OBJDIR)/common.o $(OBJDIR)/sha1.o \
 	$(OBJDIR)/websock.o $(OBJDIR)/websock-protocol.o  $(OBJDIR)/cJSON.o $(OBJDIR)/minilisp.o \
 	$(OBJDIR)/svg-lisp.o $(OBJDIR)/auto-update.o $(OBJDIR)/common-utils.o \
-	$(OBJDIR)/gdpr.o $(OBJDIR)/qrcode.o
+	$(OBJDIR)/gdpr.o $(OBJDIR)/qrcode.o $(OBJDIR)/ws-broker.o $(OBJDIR)/ws-comm.o
 
 ifeq ($(MATCH_TABLE),yes)
     OBJS += $(OBJDIR)/match-table.o
@@ -51,11 +51,16 @@ OBJS += $(MHD_OBJECTS)
 CFLAGS += -DAPPLICATION="\"judoshiai\""
 CFLAGS += -DAPP_NUM=1
 CFLAGS += -I../3rdparty/httpp -I../3rdparty/sqlite3 -I../3rdparty/cJSON -I../3rdparty/lisp \
-	  -I../3rdparty/QRCode/src -I../3rdparty/microhttpd
+	  -I../3rdparty/QRCode/src -I../3rdparty/microhttpd \
+	  -I$(OBJDIR)/wsbuild/include
+
+#LIBS += -lwebsockets
+#LIBS += -L$(OBJDIR)/wsbuild/lib -lwebsockets
 
 ### Windows executable ###
 ifeq ($(TGT),WIN32OS)
-OBJS += $(OBJDIR)/judoshiai-icon.res
+OBJS += $(OBJDIR)/judoshiai-icon.res \
+        $(OBJDIR)/wsbuild/lib/libwebsockets.dll.a
 
 $(OBJDIR)/judoshiai-icon.res: judoshiai-icon.rc
 	$(WINDRES) -O coff judoshiai-icon.rc $(OBJDIR)/judoshiai-icon.res
@@ -63,13 +68,30 @@ $(OBJDIR)/judoshiai-icon.res: judoshiai-icon.rc
 judoshiai-icon.rc: ../etc/judoshiai.ico
 	echo "APPICONS ICON \"../etc/judoshiai.ico\"" >judoshiai-icon.rc
 
+$(OBJDIR)/wsbuild/lib/libwebsockets.a:
+	mkdir -p $(OBJDIR)/wsbuild
+	cmake ../3rdparty/libwebsockets -B $(OBJDIR)/wsbuild -DCMAKE_TOOLCHAIN_FILE=$(PWD)/../mk/$(TOOLCHAINFILE)
+	##cmake -S ../3rdparty/libwebsockets -B $(OBJDIR)/wsbuild -DCMAKE_TOOLCHAIN_FILE=$(PWD)/../mk/$(TOOLCHAINFILE)
+	make -C $(OBJDIR)/wsbuild
+
 ### Linux executable ###
 else
+OBJS += $(OBJDIR)/wsbuild/lib/libwebsockets.a
+LIBS += -luv -lcap
+
 PROF += -rdynamic
+
+$(OBJDIR)/wsbuild/lib/libwebsockets.a:
+	mkdir -p $(OBJDIR)/wsbuild
+	cd $(OBJDIR)/wsbuild && echo PDW $(PWD) && cmake $(PWD)/../3rdparty/libwebsockets
+	make -C $(OBJDIR)/wsbuild
 endif
 
 $(OBJDIR)/judoshiai$(SUFF): $(OBJS)
 	$(LD) $(PROF) -g -Wl,-rpath -Wl,bin $(OBJS) -o $(OBJDIR)/judoshiai$(SUFF) $(LIBS)
+
+$(OBJDIR)/ws-broker.o: ws-broker.c $(OBJDIR)/wsbuild/include/libwebsockets.h
+	${CC} $(PROF) -g $(CFLAGS) -c ws-broker.c -o $@
 
 $(OBJDIR)/avl.o: ../common/avl.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
@@ -133,4 +155,5 @@ $(OBJDIR)/%.o: $(MHD_SRC)/%.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 clean:
+	rm -rf $(OBJDIR)/wsbuild
 	rm -f $(OBJDIR)/* *.res *.rc *~ lex.yy.c basic.tab.c basic.tab.h

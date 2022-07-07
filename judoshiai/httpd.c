@@ -168,6 +168,7 @@ gint www_send(http_parser_t *parser, string *s, const gchar *mime)
 	return MHD_NO;
     }
     MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, mime);
+    MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
     int ret = MHD_queue_response(parser, mime ? MHD_HTTP_OK : MHD_HTTP_NOT_FOUND, response);
     MHD_destroy_response(response);
     
@@ -779,10 +780,10 @@ void send_html_top(string *s, http_parser_t *parser, gchar *bodyattr)
 	    string_concat(s, "<a href=\"login\">%s</a>\r\n", _("Login"));
     }
 
-    //string_concat(s, "<a href=\"shiai.html\"><img src=\"judoshiai.png\"></a>\r\n");
-    string_concat(s, "<a href=\"timer.html\"><img src=\"judotimer.png\"></a>\r\n");
-    string_concat(s, "<a href=\"info.html\"><img src=\"judoinfo.png\"></a>\r\n");
-    string_concat(s, "<a href=\"weight.html\"><img src=\"judoweight.png\"></a>\r\n");
+    string_concat(s, "<a href=\"/web/judoshiai/index.html\"><img src=\"judoshiai.png\"></a>\r\n");
+    string_concat(s, "<a href=\"/web/timer/index.html\"><img src=\"judotimer.png\"></a>\r\n");
+    string_concat(s, "<a href=\"/web/info/index.html\"><img src=\"judoinfo.png\"></a>\r\n");
+    string_concat(s, "<a href=\"/web/weight/index..html\"><img src=\"judoweight.png\"></a>\r\n");
     string_concat(s, "<p><br><a href=\"competitors.html?g=6\">Competitors by category</a>\r\n");
     string_concat(s, "<br><a href=\"competitors.html?g=11\">Competitors by country</a>\r\n");
     string_concat(s, "<br><a href=\"competitors.html?g=5\">Competitors by club</a>\r\n");
@@ -1089,6 +1090,7 @@ int reply_web(http_parser_t *parser, struct msg_web_resp *resp)
             response = MHD_create_response_from_buffer(strlen (PAGE),
                                                        (void *) PAGE,
                                                        MHD_RESPMEM_PERSISTENT);
+            MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
             int ret = MHD_queue_response(parser, MHD_HTTP_NOT_FOUND, response);
             MHD_destroy_response(response);
             return ret;
@@ -1107,6 +1109,7 @@ int reply_web(http_parser_t *parser, struct msg_web_resp *resp)
 
         MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                 resp->u.get_bracket_resp.svg == 2 ? "application/pdf" : "image/png");
+        MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
         int ret = MHD_queue_response(parser, MHD_HTTP_OK, response);
         MHD_destroy_response(response);
         return ret;
@@ -1917,26 +1920,36 @@ int get_file(struct MHD_Connection *connection, const char *url)
 	}
     }
 
-    gchar *path[8], **path1;
+#define PATH_NUM 16
+    
+    gchar *path[PATH_NUM], **path1;
     path[0] = installation_dir;
     path[1] = "etc";
     if (!slash && dir) {
 	path[2] = dir;
 	off = 3;
     }
-    path1 = g_strsplit(p, "/", 5);
+    path1 = g_strsplit(p, "/", PATH_NUM-3);
 
-    for (i = 0; i < 4 && path1[i]; i++)
+    for (i = 0; i < PATH_NUM-4 && path1[i]; i++)
 	path[i+off] = path1[i];
     path[i+off] = NULL;
 
-    gchar *docfile = g_build_filenamev(path);
-    //g_print("GET %s\n", docfile);
+    gchar *docfile1 = g_build_filenamev(path);
+    gchar *docfile = docfile1;
+    GStatBuf st;
+    //g_print("GET1 %s\n", docfile1);
+    if (g_stat(docfile1, &st) || (!S_ISREG(st.st_mode))) {
+        g_print("FIX\n");
+        docfile = g_build_filename(docfile1, "index.html", NULL);
+        mime = "text/html";
+        g_free(docfile1);
+    }
+    //g_print("GET2 %s\n", docfile);
 
     //FILE *f = fopen(docfile, "rb");
     HANDLE fd = int_to_handle(g_open(docfile, O_RDONLY, 0));
     
-    GStatBuf st;
     if (fd != INVALID_HANDLE_VALUE) {
 	if (g_stat(docfile, &st) || (!S_ISREG(st.st_mode))) {
 	    /* not a regular file, refuse to serve */
@@ -1949,7 +1962,8 @@ int get_file(struct MHD_Connection *connection, const char *url)
 	    fd = INVALID_HANDLE_VALUE;
 	}
     }
-
+    //g_print("FD=%p\n", fd);
+    
     g_strfreev(path1);
     g_free(docfile);
 
@@ -1957,6 +1971,7 @@ int get_file(struct MHD_Connection *connection, const char *url)
 	response = MHD_create_response_from_buffer(strlen (PAGE),
 						   (void *) PAGE,
 						   MHD_RESPMEM_PERSISTENT);
+        MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
 	int ret = MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, response);
 	MHD_destroy_response(response);
         return ret;
@@ -1974,6 +1989,7 @@ int get_file(struct MHD_Connection *connection, const char *url)
     }
 
     MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, mime);
+    MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
     int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
     MHD_destroy_response(response);
     return ret;
@@ -2002,9 +2018,28 @@ struct UploadContext
 
 #define RETURN_404 \
     response = MHD_create_response_from_buffer(strlen (PAGE), (void *) PAGE, MHD_RESPMEM_PERSISTENT); \
+    MHD_add_response_header(response, "Access-Control-Allow-Origin", "*"); \
     int ret = MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, response); \
     MHD_destroy_response(response);                                     \
     return ret
+
+int keyValueIterator(void *cls,
+		     enum MHD_ValueKind kind,
+		     const char *key,
+		     const char *value) {
+    struct MHD_Response *response = cls;
+
+    //g_print("KEY=%s VALUE=%s\n", key, value);
+
+    if (!strcmp(key, "Access-Control-Request-Method"))
+	MHD_add_response_header(response, "Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+    else if (!strcmp(key, "Access-Control-Request-Headers"))
+	MHD_add_response_header(response, "Access-Control-Allow-Headers", value);	
+    else if (!strcmp(key, "Origin"))
+	MHD_add_response_header(response, "Access-Control-Allow-Origin", value);
+
+    return 1;
+}
 
 int analyze_http(void *cls,
 		 struct MHD_Connection *connection,
@@ -2138,6 +2173,7 @@ int analyze_http(void *cls,
 
                 MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, mime->valuestring);
                 MHD_add_response_header(response, "Content-Disposition", "inline");
+                MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
                 int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
                 MHD_destroy_response(response);
                 cJSON_Delete(resp.u.json.json);
@@ -2150,12 +2186,37 @@ int analyze_http(void *cls,
         } else {
             response = MHD_create_response_from_buffer(2, "{}", MHD_RESPMEM_PERSISTENT);
         }
-        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, "application/json");
+        MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
+        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, "text/plain");
         int ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
         MHD_destroy_response(response);
         return ret;
     } // POST
 
+    if (strcmp(method, MHD_HTTP_METHOD_OPTIONS) == 0) {
+	if (&aptr != *ptr) {
+	    /* do never respond on first call */
+	    *ptr = &aptr;
+	    return MHD_YES;
+	}
+	*ptr = NULL;                  /* reset when done */
+
+	struct MHD_Response *response;
+	response = MHD_create_response_from_buffer(0, "", MHD_RESPMEM_PERSISTENT);
+	if (!response) {
+	    g_printerr("ERROR: response\n");
+	    return MHD_NO;
+	}
+	MHD_get_connection_values (connection, 0x1f,
+				   keyValueIterator, response);
+	
+        MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
+	int ret = MHD_queue_response(connection, MHD_HTTP_NO_CONTENT, response);
+	MHD_destroy_response(response);
+	
+	return MHD_YES;
+    }
+    
     if (strcmp(method, MHD_HTTP_METHOD_GET) && strcmp(method, MHD_HTTP_METHOD_HEAD))
 	return MHD_NO;              /* unexpected method */
 
