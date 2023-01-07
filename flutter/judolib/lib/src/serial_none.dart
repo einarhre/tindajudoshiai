@@ -1,5 +1,4 @@
 
-
 class SerialDevice {
   static int selected_baudrate = 0;
   static int serialType = 0;

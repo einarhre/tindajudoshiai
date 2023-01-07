@@ -1,4 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:judolib/judolib.dart';
 
 import 'const.dart';
 
@@ -158,3 +159,24 @@ String round2Str(AppLocalizations? t, int round) {
   return "";
 }
 
+String str2hex(String cat) {
+  String r = '';
+  final len = cat.length;
+  for (var i = 0; i < len; i++) {
+    var c = cat.codeUnitAt(i);
+    r += c.toRadixString(16);
+  }
+  return r;
+}
+
+String categoryToUrl(String cat, int page, String suffix) {
+  final hostUrl = getUrl();
+  var url = (page == 0)
+      ? '$hostUrl/${str2hex(cat)}.$suffix'
+      : '$hostUrl/${str2hex(cat)}-${page}.$suffix';
+  return url;
+}
+
+String categoryToIframeElement(String cat, int page, String suffix) {
+  return 'ifr${str2hex(cat)}${page}${suffix}';
+}

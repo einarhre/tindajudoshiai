@@ -6,6 +6,8 @@ export 'src/util.dart';
 export 'src/svg_parse.dart';
 export 'src/settings.dart';
 export 'src/message.dart';
+export 'src/svg.dart';
+export 'src/widget_size.dart';
 
 export 'src/hw_none.dart' // Stub implementation
   if (dart.library.io) 'src/hw_io.dart' // dart:io implementation
@@ -14,3 +16,6 @@ export 'src/hw_none.dart' // Stub implementation
 export 'src/serial_none.dart' // Stub implementation
   if (dart.library.io) 'src/serial_io.dart' // dart:io implementation
   if (dart.library.html) 'src/serial_html.dart'; // dart:html implementation
+
+export 'src/iframe_io.dart'
+    if (dart.library.html) 'src/iframe_html.dart';

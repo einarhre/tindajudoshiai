@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:judolib/judolib.dart';
 import 'package:judotimer/layout.dart';
-import 'package:judotimer/message.dart';
+import 'package:judotimer/settings.dart';
 import 'package:judotimer/util.dart';
 import 'package:judotimer/winner_window.dart';
 import 'global.dart';
@@ -31,11 +32,13 @@ void update_display(LayoutState layout) {
     last_m_time = t;
     layout.set_timer_value(
         min, (sec / 10).toInt(), sec % 10, rest_time, rest_flags);
+    setValInt('clock', t);
   }
 
   if (oSec != last_m_otime) {
     last_m_otime = oSec;
     layout.set_osaekomi_value((oSec / 10).toInt(), oSec % 10);
+    setValInt('osaekomi', oSec);
   }
 
   if (running != last_m_run) {
@@ -78,6 +81,7 @@ void update_display(LayoutState layout) {
   }
 
   if (orun != last_m_orun) {
+    print('STACKDEPTH=$stackdepth');
     last_m_orun = orun;
     layout.set_timer_osaekomi_color(last_m_orun, score1, oRunning);
   }
@@ -118,8 +122,8 @@ void updateClock(LayoutState layout, int tick) {
           (osaekomi_winner == 2 && comp2pts[W] > 0))) {
         running = false;
         oRunning = false;
-        //give_osaekomi_score();
-        //approve_osaekomi_score(0);
+        give_osaekomi_score();
+        approve_osaekomi_score(layout, 0);
       }
     }
     if (oElap >= ippon) {
@@ -127,9 +131,9 @@ void updateClock(LayoutState layout, int tick) {
       running = false;
       oRunning = false;
       int tmp = osaekomi_winner;
-      //give_osaekomi_score();
+      give_osaekomi_score();
       if (tmp > 0) {
-        //approve_osaekomi_score(0);
+        approve_osaekomi_score(layout, 0);
       }
     }
   }
@@ -185,7 +189,8 @@ void oToggle(LayoutState layout) {
 }
 
 bool set_osaekomi_winner(LayoutState layout, int who) {
-  if (oRunning == 0) {
+  print('set_osaekomi_winner who=$who oRunning=$oRunning');
+  if (oRunning == false) {
     return approve_osaekomi_score(layout, who & CMASK);
   }
 
@@ -204,6 +209,7 @@ bool set_osaekomi_winner(LayoutState layout, int who) {
 }
 
 bool approve_osaekomi_score(LayoutState layout, int who) {
+  print('approve_osaekomi_score who=$who stackdepth=$stackdepth');
   if (stackdepth == 0) return FALSE;
 
   stackdepth--;
@@ -307,7 +313,8 @@ void check_ippon(LayoutState layout) {
       layout.beep("IPPON");
 
     var name = layout.get_name(whitepts[I] > 0 ? WHITE : BLUE);
-    if (name == null || name.length == 0) name = whitepts[I] > 0 ? "white" : "blue";
+    if (name == null || name.length == 0)
+      name = whitepts[I] > 0 ? "white" : "blue";
   } else if (golden_score && get_winner(false) > 0) {
     layout.beep("Golden Score");
   } else if (whitepts[S] >= SHIDOMAX && bluepts[S] >= SHIDOMAX) {
@@ -319,7 +326,7 @@ void check_ippon(LayoutState layout) {
     if (running) toggle(layout);
     layout.beep("HANSOKUMAKE");
     String name = layout.get_name(whitepts[I] > 0 ? WHITE : BLUE);
-    if (name == null || name[0] == 0) name = whitepts[I] > 0 ? "white" : "blue";
+    if (name == null || name.length == 0) name = whitepts[I] > 0 ? "white" : "blue";
   }
 }
 
@@ -405,6 +412,9 @@ void clock_key(LayoutState layout, Keys key, bool shift) {
     case Keys.GDK_0:
       automatic = TRUE;
       reset(layout, Keys.GDK_7, null);
+      print('RESET CAT');
+      oldCategory = 0;
+      oldNumber = 0;
       break;
     case Keys.GDK_1:
     case Keys.GDK_2:
@@ -415,12 +425,15 @@ void clock_key(LayoutState layout, Keys key, bool shift) {
     case Keys.GDK_9:
       automatic = FALSE;
       reset(layout, key, null);
+      print('RESET CAT');
+      oldCategory = 0;
+      oldNumber = 0;
       break;
     case Keys.GDK_space:
       toggle(layout);
       break;
     case Keys.GDK_s:
-    // sonomama removed
+      // sonomama removed
       break;
     case Keys.GDK_Up:
       set_osaekomi_winner(layout, BLUE);
@@ -525,8 +538,7 @@ Future<void> reset(LayoutState layout, Keys key, MsgNextMatch? msg0) async {
     return;
   }
 
-  if ((running && rest_time == FALSE) || oRunning || asking)
-    return;
+  if ((running && rest_time == FALSE) || oRunning || asking) return;
 
   layout.set_gs_text("");
 
@@ -545,21 +557,22 @@ Future<void> reset(LayoutState layout, Keys key, MsgNextMatch? msg0) async {
   //print('key=$key msg0=$msg0');
 
   if (key == Keys.GDK_9 ||
-      (bp == wp && result_hikiwake == FALSE &&
+      (bp == wp &&
+          result_hikiwake == FALSE &&
           blue_wins_voting == white_wins_voting &&
-          total > 0 && elap >= total && key != Keys.GDK_0)) {
+          total > 0 &&
+          elap >= total &&
+          key != Keys.GDK_0)) {
     asking = TRUE;
     await ask_for_golden_score(layout);
     print('GS=$golden_score');
     asking = FALSE;
-    if (key == Keys.GDK_9 && golden_score == FALSE)
-      return;
+    if (key == Keys.GDK_9 && golden_score == FALSE) return;
     key = Keys.GDK_9;
     match_time = elap;
     layout.set_gs_text("GOLDEN SCORE");
   } else if (asked == FALSE &&
-      ((bluepts[I] == 0 && whitepts[I] == 0 &&
-          elap > 0 && elap < total) ||
+      ((bluepts[I] == 0 && whitepts[I] == 0 && elap > 0 && elap < total) ||
           (running && rest_time) ||
           rules_confirm_match) &&
       key != Keys.GDK_0) {
@@ -576,22 +589,16 @@ Future<void> reset(LayoutState layout, Keys key, MsgNextMatch? msg0) async {
       first_wname = saved_first2;
     }
 
-    final result = Navigator.push(
-        layout.context,
-        MaterialPageRoute(builder: (context) =>
-            ShowWinner(layout, layout.widget.width, layout.widget.height,
-                saved_cat, last_wname, first_wname)));
+    layout.display_winner_window(saved_cat, last_wname, first_wname, winner);
     return;
   }
 
-  /**
-      if (key != Keys.GDK_0 && rest_time) {
-      if ((rest_flags & MATCH_FLAG_BLUE_REST) != 0)
-      cancel_rest_time(TRUE, FALSE);
-      else if ((rest_flags & MATCH_FLAG_WHITE_REST) != 0)
-      cancel_rest_time(FALSE, TRUE);
-      }
-   **/
+  if (key != Keys.GDK_0 && rest_time) {
+    if ((rest_flags & MATCH_FLAG_BLUE_REST) != 0)
+      cancel_rest_time(layout, TRUE, FALSE);
+    else if ((rest_flags & MATCH_FLAG_WHITE_REST) != 0)
+      cancel_rest_time(layout, FALSE, TRUE);
+  }
 
   rest_time = FALSE;
 
@@ -626,7 +633,10 @@ Future<void> reset(LayoutState layout, Keys key, MsgNextMatch? msg0) async {
   oRunning = FALSE;
   oElap = 0;
 
-  //memset(&(stackval), 0, sizeof(stackval));
+  for (var s in stackval) {
+    s.points = 0;
+    s.who = 0;
+  }
   stackdepth = 0;
 
   if (use_2017_rules || use_2018_rules) {
@@ -648,17 +658,17 @@ Future<void> reset(LayoutState layout, Keys key, MsgNextMatch? msg0) async {
             .gs_time} rep=${msg0.rep_time} flags=${msg0.flags} rest=${msg0
             .rest_time}");*/
         if ((msg0.flags & MATCH_FLAG_REPECHAGE) > 0 && msg0.rep_time > 0) {
-          total = msg0.rep_time*10;
+          total = msg0.rep_time * 10;
           golden_score = TRUE;
         } else if (golden_score)
-          total = msg0.gs_time*10;
+          total = msg0.gs_time * 10;
         else
-          total = msg0.match_time*10;
+          total = msg0.match_time * 10;
 
-        koka = msg0.pin_time_koka*10;
-        yuko = msg0.pin_time_yuko*10;
-        wazaari = msg0.pin_time_wazaari*10;
-        ippon = msg0.pin_time_ippon*10;
+        koka = msg0.pin_time_koka * 10;
+        yuko = msg0.pin_time_yuko * 10;
+        wazaari = msg0.pin_time_wazaari * 10;
+        ippon = msg0.pin_time_ippon * 10;
 
         jcontrol = FALSE;
         if (require_judogi_ok &&
@@ -676,7 +686,7 @@ Future<void> reset(LayoutState layout, Keys key, MsgNextMatch? msg0) async {
               : layout.get_name(WHITE);
           rest_time = TRUE;
           rest_flags = msg0.minutes;
-          total = msg0.rest_time*10;
+          total = msg0.rest_time * 10;
           startTime = now;
           running = TRUE;
           layout.display_big('REST TIME ${name}', msg0.rest_time);
@@ -715,8 +725,7 @@ Future<void> reset(LayoutState layout, Keys key, MsgNextMatch? msg0) async {
       total = 100000;
       break;
     case Keys.GDK_9:
-      if (golden_score)
-        total = gs_time;
+      if (golden_score) total = gs_time;
       break;
   }
 
@@ -735,17 +744,52 @@ Future<void> reset(LayoutState layout, Keys key, MsgNextMatch? msg0) async {
   }
 }
 
-void send_result(LayoutState layout, List<int> bluepts, List<int> whitepts,
-    bool blue_vote, bool white_vote,
-    bool blue_hansokumake, bool white_hansokumake, int legend,
+void send_result(
+    LayoutState layout,
+    List<int> bluepts,
+    List<int> whitepts,
+    bool blue_vote,
+    bool white_vote,
+    bool blue_hansokumake,
+    bool white_hansokumake,
+    int legend,
     bool hikiwake) {
-  var msgout = {'msg': [COMM_VERSION, MSG_RESULT, 0, 7777,
-    tatami, current_category, current_match, get_match_time(),
-    array2int(bluepts), array2int(whitepts),
-    hikiwake ? 1 : (blue_vote ? 1 : 0), hikiwake ? 1 : (white_vote ? 1 : 0),
-    blue_hansokumake ? 1 : 0, white_hansokumake ? 1 : 0, legend]};
+  var msgout = {
+    'msg': [
+      COMM_VERSION,
+      MSG_RESULT,
+      0,
+      7777,
+      tatami,
+      current_category,
+      current_match,
+      get_match_time(),
+      array2int(bluepts),
+      array2int(whitepts),
+      hikiwake ? 1 : (blue_vote ? 1 : 0),
+      hikiwake ? 1 : (white_vote ? 1 : 0),
+      blue_hansokumake ? 1 : 0,
+      white_hansokumake ? 1 : 0,
+      legend
+    ]
+  };
+  layout.sendMsgToJs(msgout);
+}
 
-  layout.sendMsg(msgout);
+void cancel_rest_time(LayoutState layout, bool blue, bool white) {
+  var msgout = {
+    'msg': [
+      COMM_VERSION,
+      MSG_CANCEL_REST_TIME,
+      0,
+      7777,
+      current_category,
+      current_match,
+      blue ? 1 : 0,
+      white ? 1 : 0
+    ]
+  };
+  layout.sendMsgToJs(msgout);
 }
 
 bool clock_running() {
@@ -753,17 +797,78 @@ bool clock_running() {
 }
 
 int get_match_time() {
-  return ((elap + match_time)/10).toInt();
+  return ((elap + match_time) / 10).toInt();
 }
 
 void set_hantei_winner(LayoutState layout, int cmd) {
-  if (cmd == CLEAR_SELECTION)
-    big_displayed = FALSE;
+  if (cmd == CLEAR_SELECTION) big_displayed = FALSE;
 
   if (cmd == HANSOKUMAKE_BLUE)
     whitepts[I] = 1;
-  else if (cmd == HANSOKUMAKE_WHITE)
-    bluepts[I] = 1;
+  else if (cmd == HANSOKUMAKE_WHITE) bluepts[I] = 1;
 
   check_ippon(layout);
 }
+
+void hajime_inc_func(LayoutState layout, int fix) {
+  if (running)
+    return;
+  if (total == 0) {
+    elap += fix*10;
+  } else if (elap >= fix*10)
+    elap -= fix*10;
+  else
+    elap = 0;
+  update_display(layout);
+}
+
+void hajime_dec_func(LayoutState layout, int fix) {
+  if (running)
+    return;
+  if (total == 0) {
+    if (elap >= fix*10) elap -= fix*10;
+  } else if (elap <= (total - fix*10))
+    elap += fix*10;
+  else
+    elap = total;
+  update_display(layout);
+}
+
+void osaekomi_inc_func(LayoutState layout, int fix) {
+  if (running) return;
+  if (oElap <= (ippon - fix*10))
+    oElap += fix*10;
+  else
+    oElap = ippon;
+  oRunning = oElap > 0;
+
+  update_display(layout);
+}
+
+void osaekomi_dec_func(LayoutState layout, int fix) {
+  if (running) return;
+  if (oElap >= fix*10)
+    oElap -= fix*10;
+  else
+    oElap = 0;
+  oRunning = oElap > 0;
+  update_display(layout);
+}
+
+void set_clocks(LayoutState layout, int clock, int osaekomi1) {
+  if (running)
+    return;
+
+  if (clock >= 0 && total >= clock*10)
+    elap = total - clock*10;
+  else if (clock >= 0)
+    elap = clock * 10;
+
+  if (osaekomi1 > 0) {
+    oElap = osaekomi1 * 10;
+    oRunning = TRUE;
+  }
+
+  update_display(layout);
+}
+

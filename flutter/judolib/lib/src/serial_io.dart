@@ -25,8 +25,12 @@ class SerialDevice {
   }
 
   static void initSerialPort() {
-    serialPort = SerialPort(serialDevice);
-    print('Serial port $serialDevice = $serialPort');
+    try {
+      serialPort = SerialPort(serialDevice);
+      print('Serial port $serialDevice = $serialPort');
+    } catch(e) {
+      serialPort = null;
+    }
 
     if (serialPort != null) {
       serialPort!.open(mode: SerialPortMode.readWrite);

@@ -12,6 +12,14 @@ Future<String> getHostName(String key) async {
   return 'localhost';
 }
 
+String getLocation() {
+  return '';
+}
+
+String getUrl() {
+  return 'http://localhost:8000';
+}
+
 var ssdpAddress = new Map();
 
 String getSsdpAddress(String lookfor) {
@@ -40,10 +48,23 @@ void ssdp(String lookfor) {
       if (message.contains(lookfor) && d.address.type == InternetAddressType.IPv4) {
         //print('JudoSHiai addr = ${d.address.address}, type1=${d.address}, type2=${d.address.address.runtimeType}');
         if (ssdpAddress != d.address.address) {
-          print('SSDP ADDRESS FOR $lookfor: ${d.address.address}');
+          //print('SSDP ADDRESS FOR $lookfor: ${d.address.address}');
           ssdpAddress[lookfor] = d.address.address;
         }
       }
     });
   });
+}
+
+void goFullScreen() {
+}
+
+void exitFullScreen() {
+}
+
+void showPdf(List<int> pdf) {
+}
+
+void saveTextFile(String text, String filename) {
+
 }

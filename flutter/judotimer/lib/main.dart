@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:judolib/judolib.dart';
+import 'package:judotimer/lang.dart';
 import 'package:judotimer/settings.dart';
 import 'package:judotimer/show_comp.dart';
 import 'package:judotimer/stopwatch.dart';
@@ -68,30 +70,7 @@ class _MyAppState extends State<MyApp> {
         GlobalCupertinoLocalizations.delegate,
         const FallbackCupertinoLocalisationsDelegate(),
       ],
-      supportedLocales: [
-        // 'en' is the language code. We could optionally provide a
-        // a country code as the second param, e.g.
-        // Locale('en', 'US'). If we do that, we may want to
-        // provide an additional app_en_US.arb file for
-        // region-specific translations.
-        const Locale('fi', ''),
-        const Locale('sv', ''),
-        const Locale('en', ''),
-        const Locale('es', ''),
-        const Locale('et', ''),
-        const Locale('uk', ''),
-        const Locale('is', ''),
-        const Locale('nb', ''),
-        const Locale('pl', ''),
-        const Locale('sk', ''),
-        const Locale('nl', ''),
-        const Locale('cs', ''),
-        const Locale('de', ''),
-        const Locale('da', ''),
-        const Locale('he', ''),
-        const Locale('fr', ''),
-        const Locale('fa', ''),
-      ],
+      supportedLocales: languages,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -165,7 +144,6 @@ class _MyHomePageState extends State<MyHomePage> {
         //initialData: null,
         future: labels,
         builder: (BuildContext context, AsyncSnapshot<List<Label>> snapshot) {
-          print('State: ${snapshot.connectionState}');
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           } else if (snapshot.connectionState == ConnectionState.done) {

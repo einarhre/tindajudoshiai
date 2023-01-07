@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:judotimer/message.dart';
 import 'package:judotimer/util.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'global.dart';
 import 'layout.dart';
 
-AutoReconnectWebSocket? websock = null;
-
-AutoReconnectWebSocket? websockComm(LayoutState layout) {
+/****************
+AutoReconnectWebSocket websockComm(LayoutState layout) {
+  //AutoReconnectWebSocket? websock = null;
   String host = node_name;
   //print('HOSTNAME=$host');
   var url = 'ws://${node_name}:2315';
@@ -35,6 +34,7 @@ AutoReconnectWebSocket? websockComm(LayoutState layout) {
   onDone: () { websock?.close();});
   return websock;
 }
+***********************/
 
 class AutoReconnectWebSocket {
   Uri _endpoint;
@@ -59,7 +59,7 @@ class AutoReconnectWebSocket {
   void close() {
     _ok = false;
     webSocketChannel?.sink.close();
-    websock = null;
+    //websock = null;
   }
 
   void reconnect(Uri new_endpoint) {

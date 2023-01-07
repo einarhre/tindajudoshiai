@@ -1,21 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
+import 'package:judolib/judolib.dart';
 import 'package:judotimer/label.dart';
 import 'package:judotimer/layout.dart';
+import 'package:judotimer/settings.dart';
 import 'package:judotimer/stopwatch.dart';
-import 'package:judotimer/winner_window.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'global.dart';
-//import 'web_specific.dart';
-import 'linux_specific.dart';
-import 'main.dart';
-import 'message.dart';
 
 enum Keys {
   None,
@@ -90,29 +83,24 @@ const char2key = {
   'z': Keys.GDK_z,
 };
 
-Future<String> getHostName() async {
-  return await getHostName1();
-}
-
-
 Future<List<Label>> getTimerCustom() async {
-  var host = await getHostName();
+  var host = await getHostName('jsip');
   var lbs = <Label>[];
 
   try {
     /***
-    var response = await http.get(
-      Uri.parse('http://$host:8088/timer-custom.txt'),
-    );
-        ***/
+        var response = await http.get(
+        Uri.parse('http://$host:8088/timer-custom.txt'),
+        );
+     ***/
     var response = await rootBundle.loadString('assets/timer-custom.txt');
     if (response.length > 0) {
       LineSplitter ls = new LineSplitter();
       List<String> lines = ls.convert(response);
       for (var l in lines) {
-        if (l.length < 1 || l.codeUnitAt(0) < '0'.codeUnitAt(0) ||
-            l.codeUnitAt(0) > '9'.codeUnitAt(0))
-          continue;
+        if (l.length < 1 ||
+            l.codeUnitAt(0) < '0'.codeUnitAt(0) ||
+            l.codeUnitAt(0) > '9'.codeUnitAt(0)) continue;
         final pattern = RegExp('\\s+');
         final l2 = l.replaceAll(pattern, ' ');
         var a = l2.split(' ');
@@ -138,33 +126,24 @@ Future<List<Label>> getTimerCustom() async {
     }
   } catch (e) {
     print("HTTP get timer_custom.txt error $e");
-    rethrow;
+    //rethrow;
   }
   return lbs;
 }
 
 void handle_message(LayoutState layout, Message msg) {
+  var t = AppLocalizations.of(layout.context);
   //print('MSG TYPE=${msg.type}');
   if (msg.type == MSG_NEXT_MATCH) {
     MsgNextMatch nm = MsgNextMatch(msg.message);
     if (nm.tatami != tatami) return;
     if (clock_running()) return;
 
-    layout.show_message(
-        nm.cat_1,
-        nm.blue_1,
-        nm.white_1,
-        nm.cat_2,
-        nm.blue_2,
-        nm.white_2,
-        nm.flags,
-        nm.round);
-    if (nm.minutes > 0 && automatic)
-      reset(layout, Keys.GDK_0, nm);
-    if (golden_score)
-      layout.set_comment_text("Golden Score");
-    if (current_category != nm.category ||
-        current_match != nm.match) {
+    layout.show_message(nm.cat_1, nm.blue_1, nm.white_1, nm.cat_2, nm.blue_2,
+        nm.white_2, nm.flags, nm.round);
+    if (nm.minutes > 0 && automatic) reset(layout, Keys.GDK_0, nm);
+    if (golden_score) layout.set_comment_text(t?.goldenScore7836 ?? '');
+    if (current_category != nm.category || current_match != nm.match) {
       layout.display_comp_window(
           saved_cat,
           saved_last1,
@@ -176,6 +155,18 @@ void handle_message(LayoutState layout, Message msg) {
           saved_round);
       current_category = nm.category;
       current_match = nm.match;
+      print('OLD=$oldCategory/$oldNumber NEW=$current_category/$current_match');
+      if (!clock_running() &&
+          current_category == oldCategory &&
+          current_match == oldNumber &&
+          (oldClock != 0 || oldOsaekomi != 0)) {
+        action_on = true;
+        set_clocks(layout, oldClock, oldOsaekomi);
+      }
+
+      print('SET CAT $current_category/$current_match');
+      setValInt('category', current_category);
+      setValInt('number', current_match);
     }
   } else if (msg.type == MSG_UPDATE_LABEL) {
     MsgUpdateLabel ml = MsgUpdateLabel(msg.message);
@@ -193,28 +184,32 @@ void handle_message(LayoutState layout, Message msg) {
       case START_COMPETITORS:
         print('START COMP');
         StartCompetitors m = ml.start_competitors;
-        layout.display_comp_window(m.cat_1, m.blue_1, m.white_1, '', '', '', '', m.round);
+        layout.display_comp_window(
+            m.cat_1, m.blue_1, m.white_1, '', '', '', '', m.round);
         break;
       case STOP_COMPETITORS:
         print('STOP COMP');
         StopCompetitors m = ml.stop_competitors;
-        Navigator.pop(layout.context);
+        layout.displayMainScreen();
+        //Navigator.pop(layout.context);
         break;
       case START_WINNER:
         print('START WINNER rules_confirm_match=$rules_confirm_match');
         StartWinner m = ml.start_winner;
         if (rules_confirm_match)
+          layout.display_winner_window(m.cat, m.last, m.first, m.winner);
+        /*
           Navigator.push(layout.context,
           MaterialPageRoute(builder: (context) {
               return ShowWinner(layout, layout.widget.width, layout.widget.height, m.cat, m.last, m.first);
           }));
+         */
         break;
       case STOP_WINNER:
         print('STOP WINNER');
-        //Navigator.of(layout.context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-        //    MyHomePage(title: 'JudoTimer')), (Route<dynamic> route) => false);
-        if (Navigator.canPop(layout.context))
-          Navigator.pop(layout.context);
+        layout.displayMainScreen();
+        /*if (Navigator.canPop(layout.context))
+          Navigator.pop(layout.context);*/
         break;
       case SAVED_LAST_NAMES:
         SavedLastNames m = ml.saved_last_names;
@@ -224,7 +219,8 @@ void handle_message(LayoutState layout, Message msg) {
         break;
       case SHOW_MSG:
         ShowMsg m = ml.show_msg;
-        layout.show_message(m.cat_1, m.blue_1, m.white_1, m.cat_2, m.blue_2, m.white_2, m.flags, m.round);
+        layout.show_message(m.cat_1, m.blue_1, m.white_1, m.cat_2, m.blue_2,
+            m.white_2, m.flags, m.round);
         break;
       case SET_SCORE:
         SetScore m = ml.set_score;
@@ -244,7 +240,7 @@ void handle_message(LayoutState layout, Message msg) {
         break;
       case SET_TIMER_OSAEKOMI_COLOR:
         SetTimerOsaekomiColor m = ml.set_timer_osaekomi_color;
-        print('OKOMI COLOR ${m.osaekomi_state} ${m.pts} ${m.orun}');
+        //print('OKOMI COLOR ${m.osaekomi_state} ${m.pts} ${m.orun}');
         layout.set_timer_osaekomi_color(m.osaekomi_state, m.pts, m.orun);
         break;
       case SET_TIMER_RUN_COLOR:
@@ -255,26 +251,23 @@ void handle_message(LayoutState layout, Message msg) {
   }
 }
 
-String get_name_by_layout(String first, String last, String club,
-    String country) {
+String get_name_by_layout(
+    String first, String last, String club, String country) {
   switch (selected_name_layout) {
     case 0:
-      if (country == null || country[0] == 0)
+      if (country == null || country.length == 0)
         return '$first $last, $club';
-      else if (club == null || club[0] == 0)
-        return '$first $last, $country';
+      else if (club == null || club.length == 0) return '$first $last, $country';
       return '$first $last, $country/$club';
     case 1:
-      if (country == null || country[0] == 0)
+      if (country == null ||  country.length == 0)
         return '$last, $first, $club';
-      else if (club == null || club[0] == 0)
-        return '$last, $first, $country';
+      else if (club == null || club.length == 0) return '$last, $first, $country';
       return '$last, $first, $country/$club';
     case 2:
-      if (country == null || country[0] == 0)
+      if (country == null || country.length == 0)
         return '$club, $last, $first';
-      else if (club == null || club[0] == 0)
-        return '$country $last, $first';
+      else if (club == null || club.length == 0) return '$country $last, $first';
       return '$country/$club $last, $first';
     case 3:
       return '$country $last, $first';
@@ -297,50 +290,24 @@ String get_name_by_layout(String first, String last, String club,
   return '';
 }
 
-String round_to_str(int round) {
-  if (round == 0)
-    return "";
-
-  switch (round & ROUND_TYPE_MASK) {
-    case 0:
-      return 'Round ${round & ROUND_MASK}';
-    case ROUND_ROBIN:
-      return "Round Robin";
-    case ROUND_REPECHAGE:
-      return "Repechage";
-    case ROUND_SEMIFINAL:
-      if ((round & ROUND_UP_DOWN_MASK) == ROUND_UPPER)
-        return 'Semifinal 1';
-      else if ((round & ROUND_UP_DOWN_MASK) == ROUND_LOWER)
-        return 'Semifinal 2';
-      else
-        return 'Semifinal';
-    case ROUND_BRONZE:
-      if ((round & ROUND_UP_DOWN_MASK) == ROUND_UPPER)
-        return 'Bronze 1';
-      else if ((round & ROUND_UP_DOWN_MASK) == ROUND_LOWER)
-        return 'Bronze 2';
-      else
-        return 'Bronze';
-    case ROUND_SILVER:
-      return "Silver medal match";
-    case ROUND_FINAL:
-      return "Final";
-  }
-  return "";
-}
-
 int array2int(List<int> pts) {
   int x = 0;
   x = (pts[0] << 16) | (pts[1] << 12) | (pts[2] << 8) | pts[3];
   return x;
 }
 
-const languageCodeToLanguage = {"fi": "Suomi", "sv": "Svensk", "en": "English", "es": "Español", "et": "Eesti",
-  "uk": "Українська", "is": "Íslenska", "nb": "Norsk", "pl": "Polski", "sk": "Slovenčina",
-  "nl": "Nederlands", "cs": "Čeština", "de": "Deutsch", "da": "Dansk", "he": "עברית", "fr": "Français", "fa": "فارسی"};
+void send_label_msg(LayoutState layout, int label, List<dynamic> m) {
+  List<dynamic> hdr = [
+    COMM_VERSION,
+    MSG_UPDATE_LABEL,
+    0,
+    7779,
+    label,
+  ];
 
-const languageCodeToIOC = {"fi": "FIN", "sv": "SWE", "en": "GBR", "es": "ESP", "et": "EST",
-  "uk": "UKR", "is": "ISL", "nb": "NOR", "pl": "POL", "sk": "SLO",
-  "nl": "NED", "cs": "CZE", "de": "GER", "da": "DEN", "he": "ISR", "fr": "FRA", "fa": "IRI"};
+  var msgout = {
+    'msg': hdr + m,
+  };
 
+  layout.sendMsg(msgout);
+}

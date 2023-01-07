@@ -6,18 +6,23 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:judolib/judolib.dart';
 import 'package:judotimer/settings.dart';
 import 'package:judotimer/shiai_timer.dart';
 import 'package:judotimer/show_comp.dart';
 import 'package:judotimer/stopwatch.dart';
 import 'package:judotimer/util.dart';
 import 'package:judotimer/websocket.dart';
+import 'package:judotimer/winner_window.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:just_audio_libwinmedia/just_audio_libwinmedia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'global.dart';
 import 'label.dart';
+import 'lang.dart';
 import 'main.dart';
 import 'menus.dart';
 
@@ -68,20 +73,37 @@ class LayoutState extends State<Layout> {
   bool playing = false;
   int playnum = 0;
   bool playsound = false;
-  late AutoReconnectWebSocket? websock;
+  var websockJs = null;
+  var websockBroker;
   String big_text = '';
   double toolbarheight = 40;
   bool shifted = false;
   late FocusNode node;
   bool mainScreen = true;
   late FocusAttachment _nodeAttachment;
+  bool showCompetitors = false;
+  bool showWinner = false;
+  bool _brokerTrafficDetected = false;
+  bool setClocks = false;
+  var oldPw = jspassword;
 
-/*
-  final _channel = WebSocketChannel.connect(
-    //Uri.parse('wss://${getHostName()}:2315'),
-    Uri.parse('ws://127.0.0.1:2315'),
-  );
-*/
+  String getUrl() {
+    if (mode_slave) return 'ws://${master_name}:$JUDOTIMER_PORT';
+    if (kIsWeb) {
+      final n = getLocation();
+      return 'ws://${n}:$WS_COMM_PORT/tm${tatami}_pw_$jspassword';
+    }
+    String s = getSsdpAddress('JudoShiai');
+    String n = s != '' ? s : node_name;
+    return 'ws://${n}:$WS_COMM_PORT/tm${tatami}_pw_$jspassword';
+  }
+
+  String getBrokerUrl() {
+    String s = getSsdpAddress('JudoShiai');
+    String n = s != '' ? s : node_name;
+    if (mode_slave) return 'ws://${n}:2317/ts$tatami';
+    return 'ws://${n}:$BROKER_PORT/tm$tatami';
+  }
 
   @override
   void initState() {
@@ -90,15 +112,57 @@ class LayoutState extends State<Layout> {
     super.initState();
     readSettings();
     initPlayer();
+    readCompetitorsSvgString();
+    readWinnerSvgStrings();
 
-    websock = websockComm(this);
-    const dly = const Duration(seconds: 3);
+    const dly = const Duration(seconds: 2);
     wstimer = Timer.periodic(
       dly,
       (Timer timer) {
-        if (!websock?.ok) {
-          websock?.close();
-          websock = websockComm(this);
+        if (websockJs == null && !_brokerTrafficDetected) {
+          print('WS CONNECT ${getUrl()}');
+          websockJs = WebSocketChannel.connect(Uri.parse(getUrl()),
+              protocols: ['js']);
+          websockJs.stream.listen((event) {
+            //print('MSG=$event type=${event.runtimeType}');
+            var json = jsonDecode(event);
+            var jsonmsg = json['msg'];
+            Message msg = Message(jsonmsg);
+            handle_message(this, msg);
+          }, onError: (error) {
+            if (websockJs != null) websockJs.sink.close();
+            websockJs = null;
+          }, onDone: () {
+            if (websockJs != null) websockJs.sink.close();
+            websockJs = null;
+          });
+        } else if (websockJs != null) {
+          if (oldPw != jspassword) {
+            oldPw = jspassword;
+            websockJs.sink.close();
+            websockJs = null;
+          }
+        }
+
+        if (websockBroker == null) {
+          //print('WS BROKER CONNECT to ${getBrokerUrl()}');
+          websockBroker = WebSocketChannel.connect(Uri.parse(getBrokerUrl()),
+              protocols: ['broker']);
+          websockBroker.stream.listen((event) {
+            _brokerTrafficDetected = true;
+            var json = jsonDecode(event);
+            var jsonmsg = json['msg'];
+            Message msg = Message(jsonmsg);
+            handle_message(this, msg);
+          }, onError: (error) {
+            print('BROKER ERROR $error');
+            if (websockBroker != null) websockBroker.sink.close();
+            websockBroker = null;
+          }, onDone: () {
+            print('BROKER DONE');
+            if (websockBroker != null) websockBroker.sink.close();
+            websockBroker = null;
+          });
         }
       },
     );
@@ -108,12 +172,17 @@ class LayoutState extends State<Layout> {
     node = FocusNode(debugLabel: 'Button');
     node.addListener(_handleFocusChange);
     _nodeAttachment = node.attach(context, onKey: _handleKeyPress);
+
+    ssdp('JudoShiai');
   }
 
   @override
   void dispose() {
+    if (websockJs != null) websockJs.sink.close();
+    if (websockBroker != null) websockBroker.sink.close();
     node.removeListener(_handleFocusChange);
     node.dispose();
+    wstimer.cancel();
     timer.cancel();
     player.dispose();
     super.dispose();
@@ -140,29 +209,32 @@ class LayoutState extends State<Layout> {
           actions: [
             Builder(
               builder: (context) {
-                print('LANG=$languageCode');
                 return DropdownButton(
-                dropdownColor: Colors.black,
-                onChanged: (v) => setState(() {
-                  languageCode = v.toString();
-                  MyApp.setLocale(context, Locale(v.toString(), ""));
-                }),
-                value: languageCode,
-                items:
-                ["fi", "sv", "en", "es", "et", "uk", "is", "nb", "pl", "sk", "nl", "cs", "de", "da", "he", "fr", "fa"]
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Row(children: [
-                      Padding(padding: EdgeInsets.all(8.0),
-                      child: Image.asset('assets/flags-ioc/${languageCodeToIOC[value]}.png')),
-                      SizedBox(width: 10,),
-                      Text(languageCodeToLanguage[value] ?? '', style: TextStyle(
-                          color: Colors.white)),
-                    ]),
-                  );
-                }).toList(),
-              );},
+                  dropdownColor: Colors.grey,
+                  onChanged: (v) => setState(() {
+                    languageCode = v.toString();
+                    MyApp.setLocale(context, Locale(v.toString(), ""));
+                  }),
+                  value: languageCode,
+                  items: languageCodes
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Row(children: [
+                        Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Image.asset(
+                                'packages/judolib/assets/flags-ioc/${languageCodeToIOC[value]}.png')),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(languageCodeToLanguage[value] ?? '',
+                            style: TextStyle(color: Colors.white)),
+                      ]),
+                    );
+                  }).toList(),
+                );
+              },
             ),
             Builder(
               builder: (context) => ElevatedButton(
@@ -175,13 +247,16 @@ class LayoutState extends State<Layout> {
                   // Navigate to second route when tapped.
                   final result = await Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SettingsScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => SettingsScreen(this)),
                   );
                   mainScreen = true;
-                  print('SLAVE: $old_slave -> $mode_slave');
+                  //print('SLAVE: $old_slave -> $mode_slave');
                   if (old_slave != mode_slave) {
-                    websock?.close();
-                    websock = websockComm(this);
+                    websockJs.sink.close();
+                    websockJs = null;
+                    websockBroker.sink.close();
+                    websockBroker = null;
                   }
                   setState(() {});
                 },
@@ -200,7 +275,7 @@ class LayoutState extends State<Layout> {
   }
 
   void _handleFocusChange() {
-    print('FOCUS CHANGE: ${node.hasFocus}');
+    //print('FOCUS CHANGE: ${node.hasFocus}');
     if (node.hasFocus != mainScreen) {
       //setState(() {
       //_focused = _node.hasFocus;
@@ -209,14 +284,17 @@ class LayoutState extends State<Layout> {
   }
 
   KeyEventResult _handleKeyPress(FocusNode node, RawKeyEvent event) {
-    if (!mainScreen) return KeyEventResult.ignored;
-
+    //if (!mainScreen) return KeyEventResult.ignored;
+    shifted = event.isShiftPressed;
     if (event is RawKeyDownEvent) {
       //print('KEY=${event.logicalKey}');
-      shifted = event.isShiftPressed;
-      String k = event.logicalKey.keyLabel;
-      final Keys? k1 = char2key[k];
-      if (k1 != null) clock_key(this, k1, event.isShiftPressed);
+      if (showCompetitors || showWinner) {
+        displayMainScreen();
+      } else {
+        String k = event.logicalKey.keyLabel;
+        final Keys? k1 = char2key[k];
+        if (k1 != null) clock_key(this, k1, event.isShiftPressed);
+      }
     }
     return KeyEventResult.handled;
   }
@@ -225,8 +303,8 @@ class LayoutState extends State<Layout> {
     player = AudioPlayer();
     player.playbackEventStream.listen((event) {},
         onError: (Object e, StackTrace stackTrace) {
-          print('A stream error occurred: $e');
-        });
+      print('A stream error occurred: $e');
+    });
     /*
     String audioasset = "assets/audio/$soundFile.mp3";
     ByteData bytes = await rootBundle.load(audioasset); //load sound from assets
@@ -241,14 +319,24 @@ class LayoutState extends State<Layout> {
   }
 
   void sendMsg(msgout) {
-    print('SEND $msgout');
+    //print('SEND $msgout');
     final s = jsonEncode(msgout);
-    websock?.send(s);
+    if (websockBroker != null) websockBroker.sink.add(s);
+  }
+
+  void sendMsgToJs(msgout) {
+    //print('SEND TO JS $msgout');
+    final s = jsonEncode(msgout);
+    if (websockJs != null) websockJs.sink.add(s);
   }
 
   void set_timer_value(
       int min, int tsec, int sec, bool rest_time, int rest_flags) {
     //print('SET TIMER $min:$tsec$sec');
+    if (!mode_slave)
+      send_label_msg(this, SET_TIMER_VALUE,
+          [min, tsec, sec, rest_time ? 1 : 0, rest_flags]);
+
     if (min < 60) {
       widget.labels[Label.t_min].text = min.toString();
       widget.labels[Label.t_tsec].text = tsec.toString();
@@ -263,7 +351,20 @@ class LayoutState extends State<Layout> {
 
   void set_timer_osaekomi_color(int osaekomi_state, int pts, bool orun) {
     Color fg = Colors.white, bg = Colors.black, color = Colors.green;
-    //print('OSAEKOMI COLOR F $osaekomi_state $pts $orun');
+
+    if (!mode_slave)
+      send_label_msg(
+          this, SET_TIMER_OSAEKOMI_COLOR, [osaekomi_state, pts, orun ? 1 : 0]);
+
+    widget.labels[Label.w1].hide = false;
+    widget.labels[Label.y1].hide = false;
+    widget.labels[Label.k1].hide = false;
+    widget.labels[Label.w2].hide = false;
+    widget.labels[Label.y2].hide = false;
+    widget.labels[Label.k2].hide = false;
+
+    //print('OCOLOR: state=$osaekomi_state pts=$pts orun=$orun');
+
     if (pts > 0) {
       if (osaekomi_state == OSAEKOMI_DSP_BLUE ||
           osaekomi_state == OSAEKOMI_DSP_WHITE ||
@@ -287,16 +388,16 @@ class LayoutState extends State<Layout> {
             break;
         }
 
-        sb = widget.labels[b].size;
-        sw = widget.labels[w].size;
+        //sb = widget.labels[b].size;
+        //sw = widget.labels[w].size;
 
-        if (osaekomi_state == OSAEKOMI_DSP_BLUE ||
-            osaekomi_state == OSAEKOMI_DSP_UNKNOWN) widget.labels[b].size = 0.5;
-        if (osaekomi_state == OSAEKOMI_DSP_WHITE ||
-            osaekomi_state == OSAEKOMI_DSP_UNKNOWN) widget.labels[w].size = 0.5;
+        widget.labels[b].hide = (osaekomi_state == OSAEKOMI_DSP_BLUE ||
+            osaekomi_state == OSAEKOMI_DSP_UNKNOWN);
+        widget.labels[w].hide = (osaekomi_state == OSAEKOMI_DSP_WHITE ||
+            osaekomi_state == OSAEKOMI_DSP_UNKNOWN);
 
-        widget.labels[b].size = sb;
-        widget.labels[w].size = sw;
+        //widget.labels[b].size = sb;
+        //widget.labels[w].size = sw;
       }
     }
 
@@ -364,6 +465,8 @@ class LayoutState extends State<Layout> {
   }
 
   void setScore(int score) {
+    if (!mode_slave) send_label_msg(this, SET_SCORE, [score]);
+    //print('score: $score');
     widget.labels[Label.points].text = ptsToStr(score);
     setState(() {});
   }
@@ -421,7 +524,7 @@ class LayoutState extends State<Layout> {
                               : (a.xalign > 0
                                   ? Alignment.centerRight
                                   : Alignment.center),
-                          child: Text(a.text,
+                          child: Text(a.hide ? '' : a.text,
                               style: TextStyle(
                                 fontSize:
                                     a.h * (a.size == 0.0 ? 0.7 : a.size) * h,
@@ -431,7 +534,7 @@ class LayoutState extends State<Layout> {
                       : ((a.text != null && a.text.length == 3)
                           ? Image(
                               image:
-                                  AssetImage('assets/flags-ioc/${a.text}.png'),
+                                  AssetImage('packages/judolib/assets/flags-ioc/${a.text}.png'),
                               fit: BoxFit.fitHeight,
                               alignment: Alignment.topLeft,
                             )
@@ -468,7 +571,71 @@ class LayoutState extends State<Layout> {
                       ))))));
     }
 
+    //l.add(SizedBox.shrink());
+
+    if (showCompetitors) {
+      l.add(Positioned(
+        left: 0,
+        top: 0,
+        width: w,
+        height: h,
+        child: ShowCompetitors(this, widget.width, widget.height),
+      ));
+    } else if (showWinner) {
+      l.add(Positioned(
+        left: 0,
+        top: 0,
+        width: w,
+        height: h,
+        child: ShowWinner(this, widget.width, widget.height),
+      ));
+    }
+
+    if (setClocks) {
+      var a = widget.labels[Label.t_min];
+      final isize = a.w * w * 0.5;
+
+      final llist = [Label.t_min, Label.t_tsec, Label.t_sec, Label.o_tsec, Label.o_sec];
+      final tlist = [60, 10, 1, -10, -1];
+      for (var i = 0; i < 5; i++) {
+        a = widget.labels[llist[i]];
+        var s = tlist[i];
+        //print('ADD ARROW ${a.x},${a.y} ($w x $h): ${a.x * w} ${a.y * h} ${a.w *
+        //    w}');
+        final x = a.x * w + (a.w * w - isize)*0.5;
+        l.add(Positioned(
+          left: x,
+          top: a.y * h,
+          child: GestureDetector(
+            onTap: () {
+              if (s > 0) hajime_inc_func(this, s);
+              else osaekomi_inc_func(this, -s);
+            },
+            child: Icon(Icons.arrow_upward_outlined, color: Colors.red,
+            size: isize,),
+        )));
+
+        l.add(Positioned(
+          left: x,
+          top: (a.y + a.h) * h - isize,
+          child: GestureDetector(
+            onTap: () {
+              if (s > 0) hajime_dec_func(this, s);
+              else osaekomi_dec_func(this, -s);
+            },
+            child: Icon(Icons.arrow_downward_outlined, color: Colors.red,
+            size: isize,),
+        )));
+      }
+    }
+
     return l;
+  }
+
+  void adjustClocks() {
+    setState(() {
+      setClocks = !setClocks;
+    });
   }
 
   void click(int i, bool shift) {
@@ -498,24 +665,36 @@ class LayoutState extends State<Layout> {
         clock_key(this, Keys.GDK_s, shift);
         break;
       case Label.w1:
+        if (set_osaekomi_winner(this, BLUE | GIVE_POINTS))
+          break;
         clock_key(this, Keys.GDK_F1, shift);
         break;
       case Label.y1:
+        if (set_osaekomi_winner(this, BLUE | GIVE_POINTS))
+          break;
         clock_key(this, Keys.GDK_F2, shift);
         break;
       case Label.k1:
+        if (set_osaekomi_winner(this, BLUE | GIVE_POINTS))
+          break;
         clock_key(this, Keys.GDK_F3, shift);
         break;
       case Label.s1:
         clock_key(this, Keys.GDK_F4, shift);
         break;
       case Label.w2:
+        if (set_osaekomi_winner(this, WHITE | GIVE_POINTS))
+          break;
         clock_key(this, Keys.GDK_F5, shift);
         break;
       case Label.y2:
+        if (set_osaekomi_winner(this, WHITE | GIVE_POINTS))
+          break;
         clock_key(this, Keys.GDK_F6, shift);
         break;
       case Label.k2:
+        if (set_osaekomi_winner(this, WHITE | GIVE_POINTS))
+          break;
         clock_key(this, Keys.GDK_F7, shift);
         break;
       case Label.s2:
@@ -553,6 +732,8 @@ class LayoutState extends State<Layout> {
   }
 
   void set_osaekomi_value(int tsec, int sec) {
+    if (!mode_slave) send_label_msg(this, SET_OSAEKOMI_VALUE, [tsec, sec]);
+
     widget.labels[Label.o_tsec].text = numToStr(tsec);
     widget.labels[Label.o_sec].text = numToStr(sec);
     setState(() {});
@@ -592,6 +773,8 @@ class LayoutState extends State<Layout> {
   }
 
   void set_points(List<int> blue, List<int> white) {
+    if (!mode_slave) send_label_msg(this, SET_POINTS, blue + white);
+
     set_number(Label.w1, blue[0]);
     set_number(Label.y1, blue[1]);
     set_number(Label.k1, blue[2]);
@@ -634,6 +817,13 @@ class LayoutState extends State<Layout> {
     }
 
     setState(() {});
+
+    setValInt('i1', blue[0]);
+    setValInt('w1', blue[1]);
+    setValInt('s1', blue[3]);
+    setValInt('i2', white[0]);
+    setValInt('w2', white[1]);
+    setValInt('s2', white[3]);
   }
 
   void show_message(String cat_1, String blue_1, String white_1, String cat_2,
@@ -643,21 +833,25 @@ class LayoutState extends State<Layout> {
     var b_first, b_last, b_club, b_country;
     var w_first, w_last, w_club, w_country;
 
+    if (!mode_slave)
+      send_label_msg(this, SHOW_MSG,
+          [cat_1, blue_1, white_1, cat_2, blue_2, white_2, flags, rnd]);
+
     b_first = b_last = b_club = b_country = "";
     w_first = w_last = w_club = w_country = "";
     saved_first1 = saved_first2 = saved_last1 = saved_last2 = saved_cat = "";
     saved_country1 = saved_country2 = "";
 
     var tmp = blue_1.split("\t");
-    b_first = tmp[1];
-    b_last = tmp[0];
-    b_club = tmp[3];
-    b_country = tmp[2];
+    if (tmp.length >= 2) b_first = tmp[1];
+    if (tmp.length >= 1) b_last = tmp[0];
+    if (tmp.length >= 4) b_club = tmp[3];
+    if (tmp.length >= 3) b_country = tmp[2];
     tmp = white_1.split("\t");
-    w_first = tmp[1];
-    w_last = tmp[0];
-    w_club = tmp[3];
-    w_country = tmp[2];
+    if (tmp.length >= 2) w_first = tmp[1];
+    if (tmp.length >= 1) w_last = tmp[0];
+    if (tmp.length >= 4) w_club = tmp[3];
+    if (tmp.length >= 3) w_country = tmp[2];
 
     saved_last1 = b_last;
     saved_last2 = w_last;
@@ -685,15 +879,15 @@ class LayoutState extends State<Layout> {
     widget.labels[Label.cat2].text = cat_2;
 
     tmp = blue_2.split("\t");
-    b_first = tmp[1];
-    b_last = tmp[0];
-    b_club = tmp[3];
-    b_country = tmp[2];
+    if (tmp.length >= 2) b_first = tmp[1];
+    if (tmp.length >= 1) b_last = tmp[0];
+    if (tmp.length >= 4) b_club = tmp[3];
+    if (tmp.length >= 3) b_country = tmp[2];
     tmp = white_2.split("\t");
-    w_first = tmp[1];
-    w_last = tmp[0];
-    w_club = tmp[3];
-    w_country = tmp[2];
+    if (tmp.length >= 2) w_first = tmp[1];
+    if (tmp.length >= 1) w_last = tmp[0];
+    if (tmp.length >= 4) w_club = tmp[3];
+    if (tmp.length >= 3) w_country = tmp[2];
 
     name = get_name_by_layout(b_first, b_last, b_club, b_country);
     widget.labels[Label.comp1_name_2].text = name;
@@ -708,13 +902,18 @@ class LayoutState extends State<Layout> {
     else
       widget.labels[Label.comment].text = "";
 
-    widget.labels[Label.roundnum].text = round_to_str(rnd);
+    var t = AppLocalizations.of(context);
+    widget.labels[Label.roundnum].text = round2Str(t, rnd);
     saved_round = rnd;
+
+    if (!mode_slave)
+      send_label_msg(
+          this, SAVED_LAST_NAMES, [saved_last1, saved_last2, saved_cat]);
 
     setState(() {});
   }
 
-  Future<void> display_comp_window(
+  void display_comp_window(
       String saved_cat,
       String saved_last1,
       String saved_last2,
@@ -723,29 +922,59 @@ class LayoutState extends State<Layout> {
       String saved_country1,
       String saved_country2,
       int saved_round) async {
-    print('WIN -> COMPETITORS');
+    //print('WIN -> COMPETITORS');
+
+    ShowCompetitors.setData(
+        saved_cat,
+        saved_last1,
+        saved_last2,
+        saved_first1,
+        saved_first2,
+        saved_country1,
+        saved_country2,
+        '',
+        '',
+        saved_round);
+
     mainScreen = false;
     node.unfocus();
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return ShowCompetitors(
-            widget.width,
-            widget.height,
-            saved_cat,
-            saved_last1,
-            saved_last2,
-            saved_first1,
-            saved_first2,
-            saved_country1,
-            saved_country2,
-            '',
-            '',
-            saved_round);
-      }),
-    );
+    setState(() {
+      showCompetitors = true;
+    });
+    if (!mode_slave)
+      send_label_msg(this, START_COMPETITORS,
+          ['', ShowCompetitors.comp1, ShowCompetitors.comp2, ShowCompetitors.cat, ShowCompetitors.round]);
+  }
+
+  void display_winner_window(
+      String cat,
+      String last,
+      String first,
+      int winner) async {
+    ShowWinner.setData(cat, last, first, winner);
+
+    mainScreen = false;
+    node.unfocus();
+    setState(() {
+      showWinner = true;
+    });
+    if (!mode_slave)
+      send_label_msg(this, START_WINNER,
+          ['$last\t$first', cat, winner]);
+  }
+
+  displayMainScreen() {
+    if (!mode_slave) {
+      if (showCompetitors)
+        send_label_msg(this, STOP_COMPETITORS, []);
+      if (showWinner)
+        send_label_msg(this, STOP_WINNER, []);
+    }
     mainScreen = true;
-    print('DONE WIN');
+    showCompetitors = false;
+    showWinner = false;
+    node.requestFocus();
+    setState(() {});
   }
 
   void set_gs_text(String txt) {
@@ -756,9 +985,17 @@ class LayoutState extends State<Layout> {
     setState(() {
       big_text = txt;
     });
+
+    if (!mode_slave) send_label_msg(this, START_BIG, [big_text]);
   }
 
-  void delete_big() {}
+  void delete_big() {
+    setState(() {
+      big_text = '';
+    });
+
+    if (!mode_slave) send_label_msg(this, STOP_BIG, []);
+  }
 
   void reset_display(Keys key) {
     set_timer_run_color(FALSE, FALSE);
@@ -769,6 +1006,10 @@ class LayoutState extends State<Layout> {
   }
 
   void set_timer_run_color(bool running, bool resttime) {
+    if (!mode_slave)
+      send_label_msg(
+          this, SET_TIMER_RUN_COLOR, [running ? 1 : 0, resttime ? 1 : 0]);
+
     Color color = clock_stop;
     if (running) {
       if (resttime)
@@ -793,11 +1034,11 @@ class LayoutState extends State<Layout> {
       var duration = await player
           .setAsset('assets/audio/$soundFile.mp3')
           .catchError((error) {
-        print('SET ASSET $playnum: $error');
+        //print('SET ASSET $playnum: $error');
       });
-      print('DURATION $playnum = $duration');
+      //print('DURATION $playnum = $duration');
     } catch (e) {
-      print("Error loading audio source: $e");
+      //print("Error loading audio source: $e");
     }
     player.play();
     playnum -= 1;
@@ -824,7 +1065,7 @@ class LayoutState extends State<Layout> {
         white_wins_voting = TRUE;
         break;
       case HANSOKUMAKE_BLUE:
-    widget.labels[Label.comment].text = "Hansoku-make to white";
+        widget.labels[Label.comment].text = "Hansoku-make to white";
         hansokumake_to_blue = TRUE;
         break;
       case HANSOKUMAKE_WHITE:
@@ -843,7 +1084,6 @@ class LayoutState extends State<Layout> {
     //if (big_dialog)
     //  show_big();
 
-    if (checkippon)
-      set_hantei_winner(this, data);
+    if (checkippon) set_hantei_winner(this, data);
   }
 }

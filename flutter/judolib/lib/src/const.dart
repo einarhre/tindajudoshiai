@@ -92,3 +92,10 @@ const DEV_TYPE_AP1 = 2;
 const DEV_TYPE_MYWEIGHT = 3;
 
 const baudrate2int = [1200, 9600, 19200, 38400, 115200];
+
+const SHIAI_PORT         = 2310;
+const JUDOTIMER_PORT     = 2311;
+const WEBSOCK_PORT       = 2315;
+const SERIAL_PORT        = 2316;
+const BROKER_PORT        = 2317;
+const WS_COMM_PORT       = 2318;

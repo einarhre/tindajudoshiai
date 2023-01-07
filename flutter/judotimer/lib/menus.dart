@@ -32,52 +32,70 @@ Future<void> showPopupMenu(LayoutState layout) async {
           child: Text(t?.matchDuration3Min05b8 ?? ''), value: 'm3'),
       PopupMenuItem<String>(
           height: h,
-          child: Text('Match Duration: 4 min'), value: 'm4'),
+          child: Text(t?.matchDuration4Min92cc ?? ''), value: 'm4'),
       PopupMenuItem<String>(
           height: h,
-          child: Text('Match Duration: 5 min'), value: 'm5'),
+          child: Text(t?.matchDuration5Mina174 ?? ''), value: 'm5'),
       PopupMenuItem<String>(
           height: h ,
-          child: Text('Golden Score...'), value: 'gs'),
+          child: Text((t?.goldenScore7836 ?? '') + '...'), value: 'gs'),
       PopupMenuItem<String>(
           height: 12,
           child: const Divider(), value: 'x1'),
       PopupMenuItem<String>(
           height: h,
-          child: Text('Hantei: white wins'), value: 'h1'),
+          child: Text(t?.hanteiWhiteWins8376 ?? ''), value: 'h1'),
       PopupMenuItem<String>(
           height: h,
-          child: Text('Hantei: blue wins'), value: 'h2'),
+          child: Text(t?.hanteiBlueWinse030 ?? ''), value: 'h2'),
       PopupMenuItem<String>(
           height: h,
-          child: Text('Hansoku-make to white'), value: 'hm1'),
+          child: Text(t?.hansokuMakeToWhite689e ?? ''), value: 'hm1'),
       PopupMenuItem<String>(
           height: h,
-          child: Text('Hansoku-make to blue'), value: 'hm2'),
+          child: Text(t?.hansokuMakeToBlued834 ?? ''), value: 'hm2'),
       PopupMenuItem<String>(
           height: h,
-          child: Text('Hikiwake'), value: 'hw'),
+          child: Text(t?.hikiwake2c14 ?? ''), value: 'hw'),
       PopupMenuItem<String>(
           height: h,
-          child: Text('Clear selection'), value: 'cl'),
+          child: Text(t?.clearSelection80ff ?? ''), value: 'cl'),
       PopupMenuItem<String>(
           height: 12,
           child: const Divider(), value: 'x2'),
       PopupMenuItem<String>(
           height: h,
-          child: Text('Show Competitors'), value: 'showcomp'),
+          child: Text(t?.showCompetitors83b3 ?? ''), value: 'showcomp'),
+      PopupMenuItem<String>(
+          height: 12,
+          child: const Divider(), value: 'x2'),
+      CheckedPopupMenuItem<String>(
+        height: h,
+        checked: layout.setClocks,
+        child: Text(t?.setClocks81f5 ?? ''), value: 'setclocks'),
     ],
     elevation: 8.0,
   ).then((value) async {
-    print('VALUE=$value');
+    //print('VALUE=$value');
     switch (value) {
       case 'showcomp':
+        layout.display_comp_window(
+            saved_cat,
+            saved_last1,
+            saved_last2,
+            saved_first1,
+            saved_first2,
+            saved_country1,
+            saved_country2,
+            saved_round);
+        /****
         layout.mainScreen = false;
         layout.node.unfocus();
         final result = await Navigator.push(
           layout.context,
           MaterialPageRoute(
               builder: (context) => ShowCompetitors(
+                layout,
                   layout.widget.width,
                   layout.widget.height,
                   saved_cat,
@@ -92,6 +110,7 @@ Future<void> showPopupMenu(LayoutState layout) async {
                   saved_round)),
         );
         layout.mainScreen = true;
+            ****/
         break;
       case 'm0':
         clock_key(layout, Keys.GDK_0, false);
@@ -132,11 +151,14 @@ Future<void> showPopupMenu(LayoutState layout) async {
       case 'cl':
         layout.voting_result(CLEAR_SELECTION);
         break;
+      case 'setclocks':
+        layout.adjustClocks();
     }
   });
 }
 
 Future<void> ask_for_golden_score(LayoutState layout) async {
+  var t = AppLocalizations.of(layout.context);
   double left = 0.0; //offset.dx;
   double top = 20.0;
   golden_score = false;
@@ -147,11 +169,11 @@ Future<void> ask_for_golden_score(LayoutState layout) async {
     position: RelativeRect.fromLTRB(left, top, 0, 0),
     items: [
       PopupMenuItem<String>(
-          child: const Text('Cancel'), value: 'cancel'),
+          child: Text(t?.cancelea47 ?? ''), value: 'cancel'),
       PopupMenuItem<String>(
-          child: const Text('Auto'), value: 'auto'),
+          child: Text('Auto'), value: 'auto'),
       PopupMenuItem<String>(
-          child: const Text('No Limit'), value: 'nolimit'),
+          child: Text(t?.noLimitc9b0 ?? ''), value: 'nolimit'),
       PopupMenuItem<String>(
           child: const Text('1:00 min'), value: '100'),
       PopupMenuItem<String>(

@@ -58,6 +58,7 @@ class Label {
   int xalign;
   Color fg = const Color(0xFFFFFFFF);
   Color bg = Colors.transparent;
+  bool hide = false;
 
   Label(this.num, this.x, this.y, this.w, this.h, this.size, this.xalign,
       double fg_r, double fg_g, double fg_b,
