@@ -14,10 +14,12 @@ RELFILE=$(RELDIR)/bin/judoshiai$(SUFF)
 RUNDIR=$(DEVELDIR)
 
 ifeq ($(TOOL),MXE)
+    #DLLS = $(wildcard $(MXE_BIN)/*.dll)
+
     DLLS = libao-4.dll libatk-1.0-0.dll libbz2.dll
     DLLS += libcairo-2.dll libcairo-gobject-2.dll libcroco-0.6-3.dll
     DLLS += libcurl-4.dll libepoxy-0.dll libexpat-1.dll
-    DLLS += libffi-6.dll libfontconfig-1.dll libfreetype-6.dll
+    DLLS += libffi-7.dll libfontconfig-1.dll libfreetype-6.dll
     DLLS += libgcrypt-20.dll libgdk-3-0.dll
     DLLS += libgdk_pixbuf-2.0-0.dll libgio-2.0-0.dll libglib-2.0-0.dll
     DLLS += libgmodule-2.0-0.dll 
@@ -31,7 +33,8 @@ ifeq ($(TOOL),MXE)
     DLLS += libssh2-1.dll libtiff-5.dll libunistring-2.dll
     DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll libwebp-7.dll
     DLLS += libgpg-error-0.dll libgnutls-30.dll libgmp-10.dll
-    DLLS += libhogweed-6.dll libnettle-8.dll
+    DLLS += libhogweed-6.dll libnettle-8.dll libuv-1.dll
+    DLLS += libfribidi-0.dll libtasn1-6.dll
 
     ifeq ($(TARGETOS),WIN32)
         DLLS += libgcc_s_sjlj-1.dll
@@ -42,13 +45,6 @@ ifeq ($(TOOL),MXE)
         DLLS += gspawn-win64-helper-console.exe
         DLLS += gspawn-win64-helper.exe
     endif
-
-# libgmp-10.dll libgnutls-30.dll  libhogweed-4.dll libhogweed-5.dll
-# libnettle-6.dll libnettle-7.dll  libtasn1-6.dll
-
-#32  libcrypto-1_1.dll
-
-#64 libgpg-error6-0.dll libcrypto-1_1-x64.dll
 endif
 
 ifeq ($(TOOL),MINGW)
@@ -102,6 +98,7 @@ all:
 	@echo "---------------------------"
 	@echo "Run make in subdirectories"
 	@echo "---------------------------"
+	make -C flutter
 	make -C common
 	make -C judoshiai
 	make -C judotimer
@@ -144,11 +141,10 @@ ifeq ($(TGT),WIN32OS)
 	@echo "Copy DLLs"
 	@echo "---------------------------"
   ifeq ($(TOOL),MXE)
+	#cp $(DLLS) $(RELDIR)/bin/
 	cp $(foreach dll,$(DLLS),$(DEVELDIR)/bin/$(dll)) $(RELDIR)/bin/
-    ifeq ($(TGTEXT),64)
-      # patch
-	cp patch/libpangowin32-1.0-0.dll $(RELDIR)/bin/
-    endif # 64
+	cp $(JS_BUILD_DIR)/judoshiai/$(OBJDIR)/wsbuild/bin/libwebsockets.dll $(RELDIR)/bin/
+	cp $(MINGWDIR)/bin/libmicrohttpd-12.dll $(RELDIR)/bin/
   else # Not MXE, winxp or mingw
     ifeq ($(TARGETOS),WIN64) # mingw64
 	cat mk/mingw-win64-dll.txt | while read LINE; do cp $$LINE $(RELDIR)/bin/; done
@@ -197,6 +193,7 @@ endif # WIN32OS
 	cp -r share/themes $(RELDIR)/share/
 	cp -r share/icons $(RELDIR)/share/
 	cp -r $(RUNDIR)/etc $(RELDIR)/
+	cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
 
 	mkdir -p $(RELDIR)/etc/gtk-3.0
 	echo '[Settings]' >$(RELDIR)/etc/gtk-3.0/settings.ini
@@ -234,6 +231,7 @@ endif # WIN32
 	cp -r svg $(RELDIR)/
 	cp -r custom-examples $(RELDIR)/
 	cp -r svg-lisp $(RELDIR)/
+	cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
 	# Copy these manually before make. Distributed make doesn't provide the files automatically.
 	#cp $(OBJDIR)/serial/$(OBJDIR)/websock-serial-pkg/websock-serial $(RELDIR)/etc/html/
 	#cp $(JS_BUILD_DIR)/serial/obj-winxp/websock-serial-pkg.zip $(RELDIR)/etc/html/
@@ -245,6 +243,10 @@ endif # WIN32
 	@echo
 	@echo "To make a Debian package run (Linux only)"
 	@echo "  make debian"
+
+build_flutter:
+	make -C flutter
+	cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
 
 setup:
 ifeq ($(TGT),WIN32OS)
@@ -354,7 +356,7 @@ debian:
 	mv $(RELEASEDIR)/pkg/usr/lib/judoshiai/bin $(RELEASEDIR)/pkg/usr/lib/judoshiai/programs
 	fpm $(ARCHITECTURE) -s dir -t deb -C $(RELEASEDIR)/pkg --name judoshiai --version $(SHIAI_VER_NUM) --iteration 1 \
 	-d libao4 -d libatk1.0-0 -d libcairo2 -d libcurl4 -d libgdk-pixbuf2.0-0 -d libgtk-3-0 \
-	-d libpango-1.0-0 -d librsvg2-2 -d libssh2-1 \
+	-d libpango-1.0-0 -d librsvg2-2 -d libssh2-1 -d libuv1 -d libgnutls30 \
 	--description "JudoShiai Package" --deb-no-default-config-files
 	mv *.deb $(RELEASEDIR)/
 
