@@ -15,7 +15,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_libserialport: ^0.2.3
-
+  flutter_svg: ^1.1.0
+  xml: ^6.1.0
 
 dev_dependencies:
   flutter_test:
