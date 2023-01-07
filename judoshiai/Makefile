@@ -43,24 +43,27 @@ else
     OBJS += $(OBJDIR)/match-graph.o
 endif
 
-MHD_SRC := ../3rdparty/microhttpd
-MHD_SOURCES := $(wildcard $(MHD_SRC)/*.c)
-MHD_OBJECTS := $(patsubst $(MHD_SRC)/%.c, $(OBJDIR)/%.o, $(MHD_SOURCES))
-OBJS += $(MHD_OBJECTS)
+MHD_SRC := ../3rdparty/libmicrohttpd-latest.tar.gz
 
 CFLAGS += -DAPPLICATION="\"judoshiai\""
 CFLAGS += -DAPP_NUM=1
 CFLAGS += -I../3rdparty/httpp -I../3rdparty/sqlite3 -I../3rdparty/cJSON -I../3rdparty/lisp \
-	  -I../3rdparty/QRCode/src -I../3rdparty/microhttpd \
-	  -I$(OBJDIR)/wsbuild/include
+	  -I../3rdparty/QRCode/src -I/usr/include/p11-kit-1 \
+	  -I$(OBJDIR)/wsbuild/include 
+	  #-I$(MHD_SRC)/../include
 
-#LIBS += -lwebsockets
-#LIBS += -L$(OBJDIR)/wsbuild/lib -lwebsockets
+LIBS += -lgnutls -lssl -lcrypto
 
-### Windows executable ###
+############################################
+############ Windows executable ############
+############################################
+
 ifeq ($(TGT),WIN32OS)
-OBJS += $(OBJDIR)/judoshiai-icon.res \
-        $(OBJDIR)/wsbuild/lib/libwebsockets.dll.a
+export PATH := $(MXEDIR)/bin:$(PATH)
+
+OBJS += $(OBJDIR)/judoshiai-icon.res
+OBJS += $(OBJDIR)/wsbuild/lib/libwebsockets.dll.a
+OBJS += $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.dll.a
 
 $(OBJDIR)/judoshiai-icon.res: judoshiai-icon.rc
 	$(WINDRES) -O coff judoshiai-icon.rc $(OBJDIR)/judoshiai-icon.res
@@ -68,30 +71,62 @@ $(OBJDIR)/judoshiai-icon.res: judoshiai-icon.rc
 judoshiai-icon.rc: ../etc/judoshiai.ico
 	echo "APPICONS ICON \"../etc/judoshiai.ico\"" >judoshiai-icon.rc
 
-$(OBJDIR)/wsbuild/lib/libwebsockets.a:
+$(OBJDIR)/wsbuild/lib/libwebsockets.dll.a:
 	mkdir -p $(OBJDIR)/wsbuild
-	cmake ../3rdparty/libwebsockets -B $(OBJDIR)/wsbuild -DCMAKE_TOOLCHAIN_FILE=$(PWD)/../mk/$(TOOLCHAINFILE)
-	##cmake -S ../3rdparty/libwebsockets -B $(OBJDIR)/wsbuild -DCMAKE_TOOLCHAIN_FILE=$(PWD)/../mk/$(TOOLCHAINFILE)
+	cmake ../3rdparty/libwebsockets -B $(OBJDIR)/wsbuild -DCMAKE_TOOLCHAIN_FILE=../../mk/$(TOOLCHAINFILE)
+	#cmake -S ../3rdparty/libwebsockets -B $(OBJDIR)/wsbuild -DCMAKE_TOOLCHAIN_FILE=$(PWD)/../mk/$(TOOLCHAINFILE)
+	#cp -r ../3rdparty/libwebsockets/wsbuild $(OBJDIR)/
 	make -C $(OBJDIR)/wsbuild
 
-### Linux executable ###
+$(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.dll.a:
+	mkdir -p $(OBJDIR)/microhttpd
+	tar xf $(MHD_SRC) -C $(OBJDIR)/microhttpd --strip-components 1
+	PKG_CONFIG_PATH=$(MXEDIR)/$(MXE_CPU)-w64-mingw32.$(MXE_DYN)/lib/pkgconfig \
+	cd $(OBJDIR)/microhttpd \
+	&& ./configure --with-gnutls --host=$(MXE_CPU)-w64-mingw32.$(MXE_DYN) --disable-examples \
+	&& make
+
+CFLAGS += -I$(MINGW)/include
+
+$(OBJDIR)/ws-broker.o: ws-broker.c $(OBJDIR)/wsbuild/lib/libwebsockets.dll.a
+	${CC} $(PROF) -g $(CFLAGS) -c ws-broker.c -o $@
+
+############################################
+############ Linux executable ##############
+############################################
+
 else
+
 OBJS += $(OBJDIR)/wsbuild/lib/libwebsockets.a
+OBJS += $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a
 LIBS += -luv -lcap
 
 PROF += -rdynamic
 
 $(OBJDIR)/wsbuild/lib/libwebsockets.a:
 	mkdir -p $(OBJDIR)/wsbuild
-	cd $(OBJDIR)/wsbuild && echo PDW $(PWD) && cmake $(PWD)/../3rdparty/libwebsockets
+	cmake ../3rdparty/libwebsockets -B $(OBJDIR)/wsbuild
+	#cd $(OBJDIR)/wsbuild && echo PDW $(PWD) && cmake $(PWD)/../3rdparty/libwebsockets
+	#cp -r ../3rdparty/libwebsockets/wsbuild $(OBJDIR)/
 	make -C $(OBJDIR)/wsbuild
+
+$(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a:
+	mkdir -p $(OBJDIR)/microhttpd
+	tar xf $(MHD_SRC) -C $(OBJDIR)/microhttpd --strip-components 1
+	cd $(OBJDIR)/microhttpd && ./configure && make
+
+$(OBJDIR)/ws-broker.o: ws-broker.c $(OBJDIR)/wsbuild/lib/libwebsockets.a
+	${CC} $(PROF) -g $(CFLAGS) -c ws-broker.c -o $@
+
 endif
+
+############################################
+############ Common ########################
+############################################
+
 
 $(OBJDIR)/judoshiai$(SUFF): $(OBJS)
 	$(LD) $(PROF) -g -Wl,-rpath -Wl,bin $(OBJS) -o $(OBJDIR)/judoshiai$(SUFF) $(LIBS)
-
-$(OBJDIR)/ws-broker.o: ws-broker.c $(OBJDIR)/wsbuild/include/libwebsockets.h
-	${CC} $(PROF) -g $(CFLAGS) -c ws-broker.c -o $@
 
 $(OBJDIR)/avl.o: ../common/avl.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
@@ -156,4 +191,5 @@ $(OBJDIR)/%.o: $(MHD_SRC)/%.c
 
 clean:
 	rm -rf $(OBJDIR)/wsbuild
+	rm -rf $(OBJDIR)/microhttpd
 	rm -f $(OBJDIR)/* *.res *.rc *~ lex.yy.c basic.tab.c basic.tab.h
