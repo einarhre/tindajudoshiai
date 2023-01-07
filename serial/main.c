@@ -44,6 +44,7 @@ G_LOCK_EXTERN(send_mutex);
 GTimer        *timer;
 GKeyFile      *keyfile;
 gchar         *conffile;
+int webpwcrc32 = 0;
 
 void open_comm_socket(void)
 {

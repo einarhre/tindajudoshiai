@@ -6,7 +6,7 @@ APP = websock-serial-pkg$(ZIP)
 OBJS = $(OBJDIR)/main.o $(OBJDIR)/serial.o $(OBJDIR)/comm.o \
        $(OBJDIR)/websock-protocol.o $(OBJDIR)/cJSON.o \
        $(OBJDIR)/websock.o $(OBJDIR)/httpp.o $(OBJDIR)/sha1.o \
-       $(OBJDIR)/avl.o
+       $(OBJDIR)/avl.o $(OBJDIR)/common.o
 
 OBJDIR := $(JS_BUILD_DIR)/$(LASTPART)/$(OBJDIR)
 
@@ -40,6 +40,9 @@ $(OBJDIR)/%.o: %.c
 	${CC} -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/avl.o: ../common/avl.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/common.o: ../common/common.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/websock-protocol.o: ../common/websock-protocol.c
