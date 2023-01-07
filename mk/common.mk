@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=3.3
+SHIAI_VER_NUM=4.0alpha3
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 LASTPART := $(shell basename $(CURDIR))
 GTKVER=3
@@ -7,6 +7,7 @@ WARNINGS = -Wall -Wshadow
 JUDOPROXY=NO
 JUDOHTTPD=NO
 LIBREOFFICE=libreoffice
+FLUTTER=$(HOME)/src/flutter/bin/flutter
 
 ifneq ("$(wildcard $(CURDIR)/judohttpd)","")
     JUDOHTTPD=NO
