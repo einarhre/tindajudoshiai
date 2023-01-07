@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>JudoShiai</title>
+        <link rel="stylesheet" href="style.css">
+        <script type="text/javascript" src="jquery.js"></script>
+        <style>
+         h2 {
+             font-family: Verdana, Arial;
+         }
+
+         table {
+             page-break-after: always;
+         }
+
+         td {
+             font-family: Verdana;
+             font-size: 14px;
+             font-weight: normal;
+             text-decoration: none;
+             color: black;
+             //background-color: #E0E8EF;
+         }
+        </style>
+    </head>
+    <body>
+        
+        <div id="complist"></div>
+
+        <script>
+         function cb(data, arg) {
+             let grpi = arg.grp;
+             let cols = arg.cols;
+             let out = '';
+             data.shift();
+             let grp = '';
+             data.forEach(c => {
+                 let last = c[1];
+                 let first = c[2];
+                 let club = c[5];
+                 let country = c[11];
+                 let regcat = c[6];
+                 if (grp != c[grpi]) {
+                     grp = c[grpi];
+                     if (grp != '') out += '</table>';
+                     out += '<h2>' + grp + '</h2><table>';
+                 }
+                 out += '<tr>';
+                 cols.forEach(col => {
+                     out += '<td>' + c[col] + '</td>';
+                 });
+                 out += '</tr>';
+             });
+             if (out != '') out += '</table>';
+             document.getElementById("complist").innerHTML = out;
+         }
+
+         async function json_send(sql, pwreq, cb, arg='') {
+             var password = "";
+             if (pwreq == '1') password = await passwordPrompt("Please enter your password");
+             reqjson = JSON.stringify({
+                 op: 'sql',
+                 pw: password,
+                 cmd: sql
+             });
+
+             console.log('SEND:', reqjson);
+             fetch("/json", {
+                 method: "POST",
+                 body: reqjson
+             })
+                 .then(response => response.json())
+                 .then(data => {
+                     //console.log('Success:', data);
+                     if (cb) cb(data, arg);
+                 })
+                 .catch((error) => {
+                     console.error('Error:', error);
+                 });
+         }
+
+         $(document).ready(function(){
+             const queryString = window.location.search;
+             const urlParams = new URLSearchParams(queryString);
+             let pwreq = urlParams.get('pw');
+             console.log("PWREQ="+pwreq);
+             let grp = urlParams.get('g');
+             let arg = {grp:6, cols:[1, 2, 11, 5]};
+             if (!grp) grp = 6;
+             if (grp == 6) {
+                 arg = {grp:6, cols:[1, 2, 11, 5]};
+                 sql = 'SELECT * FROM competitors ORDER BY regcategory,last,first';
+             } else if (grp == 11) {
+                 arg = {grp:11, cols:[1, 2, 5, 6]};
+                 sql = 'SELECT * FROM competitors ORDER BY country,last,first';
+             } else if (grp == 5) {
+                 arg = {grp:5, cols:[1, 2, 11, 6]};
+                 sql = 'SELECT * FROM competitors ORDER BY club,last,first';
+             }
+
+             json_send(sql, pwreq, cb, arg);
+         });
+
+         function passwordPrompt(text){
+             /*creates a password-prompt instead of a normal prompt*/
+             /* first the styling - could be made here or in a css-file. looks very silly now but its just a proof of concept so who cares */
+             var width=200;
+             var height=100;
+             var pwprompt = document.createElement("div"); //creates the div to be used as a prompt
+             pwprompt.id= "password_prompt"; //gives the prompt an id - not used in my example but good for styling with css-file
+             pwprompt.style.position = "fixed"; //make it fixed as we do not want to move it around
+             pwprompt.style.left = ((window.innerWidth / 2) - (width / 2)) + "px"; //let it apear in the middle of the page
+             pwprompt.style.top = ((window.innerWidth / 2) - (width / 2)) + "px"; //let it apear in the middle of the page
+             pwprompt.style.border = "1px solid black"; //give it a border
+             pwprompt.style.padding = "16px"; //give it some space
+             pwprompt.style.background = "white"; //give it some background so its not transparent
+             pwprompt.style.zIndex = 99999; //put it above everything else - just in case
+
+             var pwtext = document.createElement("div"); //create the div for the password-text
+             pwtext.innerHTML = text; //put inside the text
+             pwprompt.appendChild(pwtext); //append the text-div to the password-prompt
+             var pwinput = document.createElement("input"); //creates the password-input
+             pwinput.id = "password_id"; //give it some id - not really used in this example...
+             pwinput.type="password"; // makes the input of type password to not show plain-text
+             pwprompt.appendChild(pwinput); //append it to password-prompt
+             var pwokbutton = document.createElement("button"); //the ok button
+             pwokbutton.innerHTML = "ok";
+             var pwcancelb = document.createElement("button"); //the cancel-button
+             pwcancelb.innerHTML = "cancel";
+             pwprompt.appendChild(pwcancelb); //append cancel-button first
+             pwprompt.appendChild(pwokbutton); //append the ok-button
+             document.body.appendChild(pwprompt); //append the password-prompt so it gets visible
+             pwinput.focus(); //focus on the password-input-field so user does not need to click 
+
+             /*now comes the magic: create and return a promise*/
+             return new Promise(function(resolve, reject) {
+                 pwprompt.addEventListener('click', function handleButtonClicks(e) { //lets handle the buttons
+                     if (e.target.tagName !== 'BUTTON') { return; } //nothing to do - user clicked somewhere else
+                     pwprompt.removeEventListener('click', handleButtonClicks); //removes eventhandler on cancel or ok
+                     if (e.target === pwokbutton) { //click on ok-button
+                         resolve(pwinput.value); //return the value of the password
+                     } else {
+                         reject(new Error('User cancelled')); //return an error
+                     }
+                     document.body.removeChild(pwprompt);  //as we are done clean up by removing the password-prompt
+
+                 });
+                 pwinput.addEventListener('keyup',function handleEnter(e){ //users dont like to click on buttons
+                     if(e.keyCode == 13){ //if user enters "enter"-key on password-field
+                         resolve(pwinput.value); //return password-value
+                         document.body.removeChild(pwprompt); //clean up by removing the password-prompt
+                     }else if(e.keyCode==27){ //user enters "Escape" on password-field
+                         document.body.removeChild(pwprompt); //clean up the password-prompt
+                         reject(new Error("User cancelled")); //return an error
+                     }
+                 });
+             }); 
+         }
+        </script>
+    </body>
+</html>
