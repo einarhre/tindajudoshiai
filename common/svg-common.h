@@ -5,8 +5,9 @@
 
 #include "cJSON.h"
 
-#ifdef WIN32
-typedef struct RsvgRectangle_ {
+#if LIBRSVG_CHECK_VERSION(2,46,0)
+#else
+typedef struct _RsvgRectangle {
     gdouble x, y, width, height;
 } RsvgRectangle;
 #endif
@@ -88,7 +89,7 @@ struct svg_memory {
 };
 
 
-gchar *get_svg_file_name_common(svg_handle *svg, GtkWindow *mainwin, GKeyFile *keyfile, const gchar *keyname);
+gchar *get_svg_file_name_common(GtkWindow *mainwin, GKeyFile *keyfile, const gchar *keyname);
 void read_svg_file_common(svg_handle *svg, GtkWindow *mainwin);
 gint paint_svg_common(svg_handle *svg);
 void draw_flag_common(svg_handle *svg, RsvgRectangle *rect, const gchar *country);

@@ -12,6 +12,14 @@
 
 struct cJSON;
 
+#ifdef MYDEBUG
+#define mylog(_f, _a...) g_print(_f, ##_a)
+#define mylogerr(_f, _a...) g_printerr(_f, ##_a)
+#else
+#define mylog(_f, _a...) do {} while (0)
+#define mylogerr(_f, _a...) do {} while (0)
+#endif
+
 #define ptr_to_gint( p ) ((gint)(uintptr_t) (p) )
 #define gint_to_ptr( p ) ((void*)(uintptr_t) (p) )
 
@@ -72,6 +80,8 @@ struct cJSON;
 #define JUDOTIMER_PORT      2311
 #define WEBSOCK_PORT        2315
 #define SERIAL_PORT         2316
+#define BROKER_PORT         2317
+#define WS_COMM_PORT        2318
 #define JUDOSERVER_PORT     5000
 #define WEBSOCK_INFO_PORT   5030
 #define WEBSOCK_TIMER_PORT  5001
@@ -122,6 +132,23 @@ enum message_types {
     MSG_LABELS,
     NUM_MESSAGES
 };
+
+#define START_BIG           128
+#define STOP_BIG            129
+#define START_ADVERTISEMENT 130
+#define START_COMPETITORS   131
+#define STOP_COMPETITORS    132
+#define START_WINNER        133
+#define STOP_WINNER         134
+#define SAVED_LAST_NAMES    135
+#define SHOW_MSG            136
+#define SET_SCORE           137
+#define SET_POINTS          138
+#define SET_OSAEKOMI_VALUE  139
+#define SET_TIMER_VALUE     140
+#define SET_TIMER_OSAEKOMI_COLOR 141
+#define SET_TIMER_RUN_COLOR 142
+#define MAX_LABEL_NUMBER    143
 
 #define MATCH_FLAG_BLUE_DELAYED  0x0001
 #define MATCH_FLAG_WHITE_DELAYED 0x0002
@@ -565,7 +592,7 @@ extern const char *round_to_str(int round);
 
 /* websocket-protocol.c */
 extern int websock_encode_msg(struct message *m, unsigned char *buf, int buflen);
-extern int websock_decode_msg(struct message *m, struct cJSON *json);
+extern int websock_decode_msg(struct message *m, struct cJSON *json, gint crc32);
 
 /* ip.c */
 extern struct message *put_to_rec_queue(volatile struct message *m);
@@ -597,5 +624,21 @@ static inline char *full_version(void)
     return buf;
 }
 
+
+static inline void swap32(uint32_t *d) {
+    uint32_t x = *d;
+    uint8_t *p = (uint8_t *)d;
+    p[0] = (x >> 24) & 0xff;
+    p[1] = (x >> 16) & 0xff;
+    p[2] = (x >> 8) & 0xff;
+    p[3] = x & 0xff;
+}
+
+static inline uint32_t hton32(uint32_t x) {
+    uint32_t a = x;
+    swap32(&a);
+    return a;
+}
+#define ntoh32 hton32
 
 #endif

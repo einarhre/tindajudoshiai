@@ -45,11 +45,12 @@
 
 extern const char *round_to_str(int round);
 
-gchar *get_svg_file_name_common(svg_handle *svg, GtkWindow *mainwin, GKeyFile *keyfile, const gchar *keyname)
+gchar *get_svg_file_name_common(GtkWindow *mainwin, GKeyFile *keyfile, const gchar *keyname)
 {
     GtkWidget *dialog;
     static gchar *last_dir = NULL;
     gint response;
+    gchar *svg_file = NULL;
 
     dialog = gtk_file_chooser_dialog_new (_("Open file"),
                                           GTK_WINDOW(mainwin),
@@ -65,21 +66,18 @@ gchar *get_svg_file_name_common(svg_handle *svg, GtkWindow *mainwin, GKeyFile *k
     response = gtk_dialog_run (GTK_DIALOG (dialog));
 
     if (response == GTK_RESPONSE_ACCEPT) {
-        g_free(svg->svg_file);
-        svg->svg_file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+        svg_file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
         g_free(last_dir);
         last_dir = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER (dialog));
-        g_key_file_set_string(keyfile, "preferences", keyname, svg->svg_file);
+        g_key_file_set_string(keyfile, "preferences", keyname, svg_file);
     } else if (response == GTK_RESPONSE_CLOSE) {
-        svg->svg_ok = FALSE;
-        g_free(svg->svg_file);
-        svg->svg_file = NULL;
+        svg_file = NULL;
         g_key_file_set_string(keyfile, "preferences", keyname, "");
     }
 
     gtk_widget_destroy (dialog);
 
-    return svg->svg_file;
+    return svg_file;
 }
 
 void read_svg_file_common(svg_handle *svg, GtkWindow *mainwin)
@@ -305,7 +303,7 @@ gint ask_json_common(const gchar *s, struct svg_memory *chunk)
     if (curl) {
         gchar buf[32];
         snprintf(buf, sizeof(buf), "http://%s:8088/json", inet_ntoa(inaddr));
-        g_print("CURL: %s\n%s\n", buf, s);
+        //g_print("CURL: %s\n%s\n", buf, s);
         curl_easy_setopt(curl, CURLOPT_URL, buf);
         curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 2000L);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, s);

@@ -10,10 +10,10 @@
 
 #define  __USE_W32_SOCKETS
 
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 
 #else /* UNIX */
@@ -76,15 +76,18 @@ static int putstr_esc(char *p, int len, char *s)
 
 static int putdbl1(char *b, int l, double d)
 {
-    int n = snprintf(b, l, "%f,", d);
+    int n = snprintf(b, l, "%f#", d);
     char *c = strchr(b, ',');
     if (c) *c = '.'; // change comma to full stop
+    c = strchr(b, '#');
+    if (c) *c = ','; // change comma to full stop
     return n;
 }
 
 #define put8(_n) len += snprintf(p+len, buflen-len, "%d,", _n)
 #define put16(_n) len += snprintf(p+len, buflen-len, "%d,", _n)
 #define put32(_n) len += snprintf(p+len, buflen-len, "%d,", _n)
+#define put32n(_n) len += snprintf(p+len, buflen-len, "%d,", ntoh32(_n))
 #define putdbl(_n) len += putdbl1(p+len, buflen-len, _n)
 //#define putdbl(_n) len += snprintf(p+len, buflen-len, "%f,", _n)
 #define putstr(_s) len += putstr_esc(p+len, buflen-len, _s)
@@ -206,24 +209,90 @@ int websock_encode_msg(struct message *m, unsigned char *buf, int buflen)
 	put32(m->u.cancel_rest_time.white);
 	break;
     case MSG_UPDATE_LABEL:
-	putstr(m->u.update_label.expose);
-	putstr(m->u.update_label.text);
-	putstr(m->u.update_label.text2);
-	putstr(m->u.update_label.text3);
-	putdbl(m->u.update_label.x);
-	putdbl(m->u.update_label.y);
-	putdbl(m->u.update_label.w);
-	putdbl(m->u.update_label.h);
-	putdbl(m->u.update_label.fg_r);
-	putdbl(m->u.update_label.fg_g);
-	putdbl(m->u.update_label.fg_b);
-	putdbl(m->u.update_label.bg_r);
-	putdbl(m->u.update_label.bg_g);
-	putdbl(m->u.update_label.bg_b);
-	putdbl(m->u.update_label.size);
 	put32(m->u.update_label.label_num);
-	put32(m->u.update_label.xalign);
-	put32(m->u.update_label.round);
+	switch (m->u.update_label.label_num) {
+	case START_COMPETITORS:
+	    putstr(m->u.update_label.expose);
+	    putstr(m->u.update_label.text);
+	    putstr(m->u.update_label.text2);
+	    putstr(m->u.update_label.text3);
+	    put32(m->u.update_label.round);
+	    break;
+	case SET_TIMER_RUN_COLOR:
+	case SET_OSAEKOMI_VALUE:
+	    put32n(m->u.update_label.i1);
+	    put32n(m->u.update_label.i2);
+	    break;
+	case SET_TIMER_OSAEKOMI_COLOR:
+	    put32n(m->u.update_label.i1);
+	    put32n(m->u.update_label.i2);
+	    put32n(m->u.update_label.i3);
+	    break;
+	case SET_TIMER_VALUE:
+	    put32n(m->u.update_label.i1);
+	    put32n(m->u.update_label.i2);
+	    put32n(m->u.update_label.i3);
+	    put32n(m->u.update_label.i4);
+	    put32n(m->u.update_label.i5);
+	    break;
+	case SET_POINTS:
+	    for (i = 0; i < 5; i++)
+		put32n(m->u.update_label.pts1[i]);
+	    for (i = 0; i < 5; i++)
+		put32n(m->u.update_label.pts2[i]);
+	    break;
+	case SET_SCORE:
+	    put32(m->u.update_label.xalign);
+	    break;
+	case SHOW_MSG:
+	    putstr(m->u.update_label.cat_a);
+	    putstr(m->u.update_label.comp1_a);
+	    putstr(m->u.update_label.comp2_a);
+	    putstr(m->u.update_label.cat_b);
+	    putstr(m->u.update_label.comp1_b);
+	    putstr(m->u.update_label.comp2_b);
+	    put32(m->u.update_label.xalign);
+	    put32(m->u.update_label.round);
+	    break;
+	case SAVED_LAST_NAMES:
+	    putstr(m->u.update_label.text);
+	    putstr(m->u.update_label.text2);
+	    putstr(m->u.update_label.text3);
+	    break;
+	case START_WINNER:
+	    putstr(m->u.update_label.text);
+	    putstr(m->u.update_label.text2);
+	    put32(m->u.update_label.text3[0]);
+	    break;
+	case STOP_BIG:
+	case STOP_WINNER:
+	    break;
+	case START_BIG:
+	    putstr(m->u.update_label.text);
+	    break;
+	case STOP_COMPETITORS:
+	    put32(m->u.update_label.xalign);
+	    break;
+	default:
+	    putstr(m->u.update_label.expose);
+	    putstr(m->u.update_label.text);
+	    putstr(m->u.update_label.text2);
+	    putstr(m->u.update_label.text3);
+	    putdbl(m->u.update_label.x);
+	    putdbl(m->u.update_label.y);
+	    putdbl(m->u.update_label.w);
+	    putdbl(m->u.update_label.h);
+	    putdbl(m->u.update_label.fg_r);
+	    putdbl(m->u.update_label.fg_g);
+	    putdbl(m->u.update_label.fg_b);
+	    putdbl(m->u.update_label.bg_r);
+	    putdbl(m->u.update_label.bg_g);
+	    putdbl(m->u.update_label.bg_b);
+	    putdbl(m->u.update_label.size);
+	    put32(m->u.update_label.label_num);
+	    put32(m->u.update_label.xalign);
+	    put32(m->u.update_label.round);
+	}
 	break;
     case MSG_EDIT_COMPETITOR:
 	put32(m->u.edit_competitor.operation);
@@ -292,20 +361,41 @@ int websock_encode_msg(struct message *m, unsigned char *buf, int buflen)
     return len;
 }
 
-#define get8(_n)   if (!val) return -1; if (val->type != cJSON_Number) printf("E:%d\n", __LINE__);_n = val->valueint; val = val->next
-#define get16(_n)  if (!val) return -1; if (val->type != cJSON_Number) printf("E:%d\n", __LINE__); _n = val->valueint; val = val->next
-#define get32(_n)  if (!val) return -1; if (val->type != cJSON_Number) printf("E:%d\n", __LINE__); _n = val->valueint; val = val->next
-#define getdbl(_n) if (!val) return -1; if (val->type != cJSON_Number) printf("E:%d\n", __LINE__); _n = val->valuedouble; val = val->next
-#define getstr(_s) if (!val) return -1; if (val->type != cJSON_String) printf("E:%d\n", __LINE__); strncpy((char *)_s, val->valuestring, sizeof(_s)-1); val = val->next
+#define getbool    if (!val) return -1; \
+    if (val->type == cJSON_False) _n = FALSE; \
+    else if (val->type == cJSON_True) _n = TRUE; \
+    else printf("E:%d\n", __LINE__); \
+    val = val->next  
+#define get8(_n)   if (!val || val->type != cJSON_Number) {printf("E:%d\n", __LINE__); return -1;} _n = val->valueint; val = val->next
+#define get16(_n)  if (!val || val->type != cJSON_Number) {printf("E:%d\n", __LINE__); return -1;} _n = val->valueint; val = val->next
+#define get32(_n)  if (!val || val->type != cJSON_Number) {printf("E:%d\n", __LINE__); return -1;} _n = val->valueint; val = val->next
+#define getdbl(_n) if (!val || val->type != cJSON_Number) {printf("E:%d\n", __LINE__); return -1;} _n = val->valuedouble; val = val->next
+#define getstr(_s) if (!val || val->type != cJSON_String) {printf("E:%d\n", __LINE__); return -1;} strncpy((char *)_s, val->valuestring, sizeof(_s)-1); val = val->next
 
-int websock_decode_msg(struct message *m, cJSON *json)
+int websock_decode_msg(struct message *m, cJSON *json, gint crc32)
 {
     int ver, len, i;
-    cJSON *msg = json->child;
-
-    if (msg->type != cJSON_Array)
+    //cJSON *msg = json->child;
+    cJSON *msg = cJSON_GetObjectItem(json, "msg");
+    
+    char *txt = cJSON_Print(json);
+    g_print("JSON=%s\n", txt);
+    free(txt);
+    
+    if (!msg || msg->type != cJSON_Array)
 	return -1;
 
+    /***
+    if (crc32) {
+        cJSON *pw = cJSON_GetObjectItem(json, "pw");
+        if (!pw || pw->type != cJSON_String) return -1;
+        gint crc = pwcrc32((unsigned char *)pw->valuestring, strlen(pw->valuestring));
+        if (crc != crc32) {
+            return -1;
+        }
+    }
+    ***/
+    
     cJSON *val = msg->child;
 
     get8(ver);
