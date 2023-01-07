@@ -9,12 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="262.20471"
-   height="184.25197"
+   width="74mm"
+   height="52mm"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="weight-label.svg">
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="weight-label.svg"
+   viewBox="0 0 262.20471 184.25197">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -25,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="236.09854"
+     inkscape:cx="99.273381"
      inkscape:cy="116.53938"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -33,11 +34,12 @@
      showborder="true"
      borderlayer="false"
      inkscape:snap-global="false"
-     inkscape:window-width="861"
-     inkscape:window-height="723"
+     inkscape:window-width="1338"
+     inkscape:window-height="845"
      inkscape:window-x="565"
      inkscape:window-y="232"
-     inkscape:window-maximized="0" />
+     inkscape:window-maximized="0"
+     units="mm" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -57,39 +59,40 @@
      transform="translate(0,-868.11014)">
     <text
        xml:space="preserve"
-       style="font-size:14px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="23.334524"
        y="924.37579"
-       id="text2985"
-       sodipodi:linespacing="125%"><tspan
+       id="text2985"><tspan
          sodipodi:role="line"
          id="tspan2987"
          x="23.334524"
          y="924.37579"
-         style="font-size:8px">%c-first-s-last-s-club</tspan><tspan
+         style="font-size:8px;line-height:1.25;font-family:sans-serif">%c-first-s-last-s-club</tspan><tspan
          sodipodi:role="line"
          x="23.334524"
          y="934.37579"
-         id="tspan2989" /></text>
+         id="tspan2989"
+         style="font-size:8px;line-height:1.25;font-family:sans-serif"> </tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:14px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="22.627417"
        y="949.8316"
-       id="text2991"
-       sodipodi:linespacing="125%"><tspan
+       id="text2991"><tspan
          sodipodi:role="line"
          id="tspan2993"
          x="22.627417"
-         y="949.8316">%d</tspan><tspan
+         y="949.8316"
+         style="font-size:14px;line-height:1.25;font-family:sans-serif">%d</tspan><tspan
          sodipodi:role="line"
          x="22.627417"
          y="967.3316"
          id="tspan2995"
-         style="font-weight:bold">%c-weight kg</tspan><tspan
+         style="font-weight:bold;font-size:14px;line-height:1.25;font-family:sans-serif">%c-weight kg</tspan><tspan
          sodipodi:role="line"
          x="22.627417"
          y="984.8316"
-         id="tspan2997" /></text>
+         id="tspan2997"
+         style="font-size:14px;line-height:1.25;font-family:sans-serif"> </tspan></text>
   </g>
 </svg>
