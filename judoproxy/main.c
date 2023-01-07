@@ -75,6 +75,11 @@
 
 #define APPLICATION_TYPE_CAMERA 100
 
+static gchar *ssdp_req_data = NULL;
+static gint   ssdp_req_data_len = 0;
+//static gchar ssdp_id[64];
+//gboolean ssdp_notify = TRUE;
+
 void get_parameters(gint i);
 void send_parameter(gint i, gint j);
 void send_parameter_2(struct sockaddr_in addr, gint port, const gchar *param, const gchar *value);
@@ -944,11 +949,6 @@ struct application *report_to_proxy(gchar *rec, struct sockaddr_in *client, gint
 #define ST "ST" URN
 #define NT "NT" URN
 
-static gchar *ssdp_req_data = NULL;
-static gint   ssdp_req_data_len = 0;
-gchar ssdp_id[64];
-//gboolean ssdp_notify = TRUE;
-
 #define perror(x) do {g_print("ERROR LINE=%d\n", __LINE__); perror(x); } while (0)
 
 gpointer proxy_ssdp_thread(gpointer args)
@@ -1051,7 +1051,7 @@ gpointer proxy_ssdp_thread(gpointer args)
         timeout.tv_usec=0;
         read_fd = fds;
 
-        if (select(32, &read_fd, NULL, NULL, &timeout) < 0) {
+        if (select(128, &read_fd, NULL, NULL, &timeout) < 0) {
             perror("SSDP select");
             continue;
         }
@@ -1274,10 +1274,10 @@ static gpointer connection_thread(gpointer args)
         timeout.tv_sec = 0;
         timeout.tv_usec = 100000;
 
-        r = select(64, &fds, NULL, NULL, &timeout);
+        r = select(128, &fds, NULL, NULL, &timeout);
 
 	if (connections[cn].fd_out > 0 && connections[cn].changed) {
-	    g_print("Closing out connection %d\n", cn);
+	    g_print("Closing out connection %d fd=%d\n", cn, connections[cn].fd_out);
 	    closesocket(connections[cn].fd_out);
 	    connections[cn].fd_out = -1;
 	    connections_updated = TRUE;
