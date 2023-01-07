@@ -52,7 +52,7 @@ msgstr "مسابقه:"
 msgid "Next:"
 msgstr "بعد:"
 
-#: ../judotimer/main.c ../judoinfo/svg.c
+#: ../judotimer/main.c ../judoinfo/svg.c ../common/svg-common.c ../common/svg.c
 msgid "Open file"
 msgstr "باز کردن فایل"
 
@@ -180,6 +180,10 @@ msgstr ""
 #: ../judotimer/menus.c
 msgid "Confirm New Match"
 msgstr "تایید دیدار جدید"
+
+#: ../judotimer/menus.c
+msgid "Confirm SVG File"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "View clocks only"
@@ -363,10 +367,6 @@ msgstr "درباره"
 msgid "CTL"
 msgstr ""
 
-#: ../judotimer/show-ad.c
-msgid "Advertisement"
-msgstr "تبلیغات"
-
 #: ../judotimer/show-ad.c ../judotimer/stopwatch.c ../judoshiai/competitors.c
 #: ../judoshiai/custom-category.c ../judoshiai/db-validate.c
 #: ../judoshiai/httpd.c ../judoweight/main.c ../judojudogi/main.c
@@ -388,6 +388,11 @@ msgstr "اندازه پرچم"
 #: ../judotimer/show-ad.c
 msgid "Name size:"
 msgstr "اندازه نام"
+
+#: ../judotimer/show-ad.c ../judoshiai/menus.c ../judoinfo/menus.c
+#: ../judoweight/menus.c
+msgid "SVG Templates"
+msgstr "قالب اس.وی.جی"
 
 #: ../judotimer/show-ad.c ../judoshiai/custom-category.c
 #: ../judoshiai/menuacts.c ../judoshiai/svg.c ../judoshiai/write-results.c
@@ -1013,16 +1018,12 @@ msgid "Wrong password"
 msgstr "رمز عبور اشتباه است"
 
 #: ../judoshiai/httpd.c
-msgid "Logout"
-msgstr "خروج"
+msgid "No rights to give results"
+msgstr "شما اجازه تغییر نتیجه را ندارید!"
 
 #: ../judoshiai/httpd.c
 msgid "Login"
 msgstr "ورود"
-
-#: ../judoshiai/httpd.c
-msgid "No rights to give results"
-msgstr "شما اجازه تغییر نتیجه را ندارید!"
 
 #: ../judoshiai/httpd.c
 msgid "No competitor found!"
@@ -1736,10 +1737,6 @@ msgstr "نمایش وزن در جدول دوره ای"
 msgid "Sheet Font"
 msgstr "فونت جدول"
 
-#: ../judoshiai/menus.c ../judoinfo/menus.c ../judoweight/menus.c
-msgid "SVG Templates"
-msgstr "قالب اس.وی.جی"
-
 #: ../judoshiai/menus.c
 msgid "Language Selection"
 msgstr "انتخاب زبان"
@@ -2438,6 +2435,10 @@ msgid "is not a valid ASCII string!"
 msgstr "کاراکترهای ASCII قابل قبول نیست!"
 
 #: ../judoshiai/write-results.c
+msgid "Mobile"
+msgstr ""
+
+#: ../judoshiai/write-results.c
 msgid "Automatic Web Page Update"
 msgstr "بروزرسانی خودکار صفحه وب"
 
@@ -2676,6 +2677,12 @@ msgstr ""
 #: ../judoproxy/menus.c
 msgid "About JudoProxy"
 msgstr ""
+
+#~ msgid "Logout"
+#~ msgstr "خروج"
+
+#~ msgid "Advertisement"
+#~ msgstr "تبلیغات"
 
 #~ msgid "----- Men -----"
 #~ msgstr "----- آقایان -----"

@@ -54,7 +54,7 @@ msgstr "Match:"
 msgid "Next:"
 msgstr "Suivant:"
 
-#: ../judotimer/main.c ../judoinfo/svg.c
+#: ../judotimer/main.c ../judoinfo/svg.c ../common/svg-common.c ../common/svg.c
 msgid "Open file"
 msgstr "Ouvrir le fichier"
 
@@ -182,6 +182,10 @@ msgstr "Règles de 2018"
 #: ../judotimer/menus.c
 msgid "Confirm New Match"
 msgstr "Confirmer le nouveau match"
+
+#: ../judotimer/menus.c
+msgid "Confirm SVG File"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "View clocks only"
@@ -365,10 +369,6 @@ msgstr "Au sujet de"
 msgid "CTL"
 msgstr ""
 
-#: ../judotimer/show-ad.c
-msgid "Advertisement"
-msgstr "Annonce"
-
 #: ../judotimer/show-ad.c ../judotimer/stopwatch.c ../judoshiai/competitors.c
 #: ../judoshiai/custom-category.c ../judoshiai/db-validate.c
 #: ../judoshiai/httpd.c ../judoweight/main.c ../judojudogi/main.c
@@ -390,6 +390,11 @@ msgstr "Taille du drapeau:"
 #: ../judotimer/show-ad.c
 msgid "Name size:"
 msgstr "Taille du nom:"
+
+#: ../judotimer/show-ad.c ../judoshiai/menus.c ../judoinfo/menus.c
+#: ../judoweight/menus.c
+msgid "SVG Templates"
+msgstr "Modèles SVG"
 
 #: ../judotimer/show-ad.c ../judoshiai/custom-category.c
 #: ../judoshiai/menuacts.c ../judoshiai/svg.c ../judoshiai/write-results.c
@@ -1017,16 +1022,12 @@ msgid "Wrong password"
 msgstr "Mot de passe incorrect"
 
 #: ../judoshiai/httpd.c
-msgid "Logout"
-msgstr "Sortir"
+msgid "No rights to give results"
+msgstr "Aucun droit de donner des résultats"
 
 #: ../judoshiai/httpd.c
 msgid "Login"
 msgstr "Entrer"
-
-#: ../judoshiai/httpd.c
-msgid "No rights to give results"
-msgstr "Aucun droit de donner des résultats"
 
 #: ../judoshiai/httpd.c
 msgid "No competitor found!"
@@ -1743,10 +1744,6 @@ msgstr "Poids visibles dans les feuilles de pool"
 msgid "Sheet Font"
 msgstr "Fonte de feuilles"
 
-#: ../judoshiai/menus.c ../judoinfo/menus.c ../judoweight/menus.c
-msgid "SVG Templates"
-msgstr "Modèles SVG"
-
 #: ../judoshiai/menus.c
 msgid "Language Selection"
 msgstr "Sélection de la langue"
@@ -2448,6 +2445,10 @@ msgid "is not a valid ASCII string!"
 msgstr "n'est pas une chaîne de caractères ASCII valide!"
 
 #: ../judoshiai/write-results.c
+msgid "Mobile"
+msgstr ""
+
+#: ../judoshiai/write-results.c
 msgid "Automatic Web Page Update"
 msgstr "Mise à jour automatique de la page Web"
 
@@ -2687,6 +2688,12 @@ msgstr "Recharger"
 #: ../judoproxy/menus.c
 msgid "About JudoProxy"
 msgstr "À propos de JudoProxy"
+
+#~ msgid "Logout"
+#~ msgstr "Sortir"
+
+#~ msgid "Advertisement"
+#~ msgstr "Annonce"
 
 #~ msgid "Show competitors..."
 #~ msgstr "Afficher les compétiteurs..."

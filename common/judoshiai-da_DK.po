@@ -52,7 +52,7 @@ msgstr "Kamp:"
 msgid "Next:"
 msgstr "Næste:"
 
-#: ../judotimer/main.c ../judoinfo/svg.c
+#: ../judotimer/main.c ../judoinfo/svg.c ../common/svg-common.c ../common/svg.c
 msgid "Open file"
 msgstr "Åbn fil"
 
@@ -180,6 +180,10 @@ msgstr "2018 Regler"
 #: ../judotimer/menus.c
 msgid "Confirm New Match"
 msgstr "Bekræft Ny Kamp"
+
+#: ../judotimer/menus.c
+msgid "Confirm SVG File"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "View clocks only"
@@ -363,10 +367,6 @@ msgstr "Om"
 msgid "CTL"
 msgstr "CTL"
 
-#: ../judotimer/show-ad.c
-msgid "Advertisement"
-msgstr "Annoncering"
-
 #: ../judotimer/show-ad.c ../judotimer/stopwatch.c ../judoshiai/competitors.c
 #: ../judoshiai/custom-category.c ../judoshiai/db-validate.c
 #: ../judoshiai/httpd.c ../judoweight/main.c ../judojudogi/main.c
@@ -388,6 +388,11 @@ msgstr "Flagstørrelse:"
 #: ../judotimer/show-ad.c
 msgid "Name size:"
 msgstr "Navnestørrelse"
+
+#: ../judotimer/show-ad.c ../judoshiai/menus.c ../judoinfo/menus.c
+#: ../judoweight/menus.c
+msgid "SVG Templates"
+msgstr "SVG Skabeloner"
 
 #: ../judotimer/show-ad.c ../judoshiai/custom-category.c
 #: ../judoshiai/menuacts.c ../judoshiai/svg.c ../judoshiai/write-results.c
@@ -1013,16 +1018,12 @@ msgid "Wrong password"
 msgstr "Forkert kodeord"
 
 #: ../judoshiai/httpd.c
-msgid "Logout"
-msgstr "Log ud"
+msgid "No rights to give results"
+msgstr "Ingen rettigheder til at give resultater"
 
 #: ../judoshiai/httpd.c
 msgid "Login"
 msgstr "Log ind"
-
-#: ../judoshiai/httpd.c
-msgid "No rights to give results"
-msgstr "Ingen rettigheder til at give resultater"
 
 #: ../judoshiai/httpd.c
 msgid "No competitor found!"
@@ -1738,10 +1739,6 @@ msgstr "Vægt Synlig på Puljeark"
 msgid "Sheet Font"
 msgstr "Ark Skrifttype"
 
-#: ../judoshiai/menus.c ../judoinfo/menus.c ../judoweight/menus.c
-msgid "SVG Templates"
-msgstr "SVG Skabeloner"
-
 #: ../judoshiai/menus.c
 msgid "Language Selection"
 msgstr "Sprogvalg"
@@ -2440,6 +2437,10 @@ msgid "is not a valid ASCII string!"
 msgstr "er ikke en gyldig ASCII streng!"
 
 #: ../judoshiai/write-results.c
+msgid "Mobile"
+msgstr ""
+
+#: ../judoshiai/write-results.c
 msgid "Automatic Web Page Update"
 msgstr "Opdater Webside Automatisk"
 
@@ -2678,6 +2679,12 @@ msgstr ""
 #: ../judoproxy/menus.c
 msgid "About JudoProxy"
 msgstr ""
+
+#~ msgid "Logout"
+#~ msgstr "Log ud"
+
+#~ msgid "Advertisement"
+#~ msgstr "Annoncering"
 
 #~ msgid "About JudoTimer"
 #~ msgstr "Om JudoTimer"

@@ -52,7 +52,7 @@ msgstr "Keppni:"
 msgid "Next:"
 msgstr "Næst:"
 
-#: ../judotimer/main.c ../judoinfo/svg.c
+#: ../judotimer/main.c ../judoinfo/svg.c ../common/svg-common.c ../common/svg.c
 msgid "Open file"
 msgstr ""
 
@@ -180,6 +180,10 @@ msgstr ""
 #: ../judotimer/menus.c
 msgid "Confirm New Match"
 msgstr "Staðfesta nýja keppni"
+
+#: ../judotimer/menus.c
+msgid "Confirm SVG File"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "View clocks only"
@@ -363,10 +367,6 @@ msgstr "Útgáfa"
 msgid "CTL"
 msgstr ""
 
-#: ../judotimer/show-ad.c
-msgid "Advertisement"
-msgstr "Auglýsing"
-
 #: ../judotimer/show-ad.c ../judotimer/stopwatch.c ../judoshiai/competitors.c
 #: ../judoshiai/custom-category.c ../judoshiai/db-validate.c
 #: ../judoshiai/httpd.c ../judoweight/main.c ../judojudogi/main.c
@@ -387,6 +387,11 @@ msgstr ""
 
 #: ../judotimer/show-ad.c
 msgid "Name size:"
+msgstr ""
+
+#: ../judotimer/show-ad.c ../judoshiai/menus.c ../judoinfo/menus.c
+#: ../judoweight/menus.c
+msgid "SVG Templates"
 msgstr ""
 
 #: ../judotimer/show-ad.c ../judoshiai/custom-category.c
@@ -1014,16 +1019,12 @@ msgid "Wrong password"
 msgstr "Rangt lykilorð"
 
 #: ../judoshiai/httpd.c
-msgid "Logout"
-msgstr "Skrá út"
+msgid "No rights to give results"
+msgstr "Enginn réttur til að gefa úrslit."
 
 #: ../judoshiai/httpd.c
 msgid "Login"
 msgstr "Skrá inn"
-
-#: ../judoshiai/httpd.c
-msgid "No rights to give results"
-msgstr "Enginn réttur til að gefa úrslit."
 
 #: ../judoshiai/httpd.c
 msgid "No competitor found!"
@@ -1739,10 +1740,6 @@ msgstr "Þyngdir sjáanlegar á Riðla forminu"
 msgid "Sheet Font"
 msgstr "Leturgerð"
 
-#: ../judoshiai/menus.c ../judoinfo/menus.c ../judoweight/menus.c
-msgid "SVG Templates"
-msgstr ""
-
 #: ../judoshiai/menus.c
 msgid "Language Selection"
 msgstr "Velja tungumál"
@@ -2439,6 +2436,10 @@ msgid "is not a valid ASCII string!"
 msgstr "er ekki gildur ASCII strengur!"
 
 #: ../judoshiai/write-results.c
+msgid "Mobile"
+msgstr ""
+
+#: ../judoshiai/write-results.c
 msgid "Automatic Web Page Update"
 msgstr "Sjálfvirk uppfærsla vefsíðu"
 
@@ -2677,6 +2678,12 @@ msgstr ""
 #: ../judoproxy/menus.c
 msgid "About JudoProxy"
 msgstr ""
+
+#~ msgid "Logout"
+#~ msgstr "Skrá út"
+
+#~ msgid "Advertisement"
+#~ msgstr "Auglýsing"
 
 #~ msgid "About JudoTimer"
 #~ msgstr "Úgáfa"
