@@ -40,22 +40,6 @@
 #include "binreloc.h"
 #include "common-utils.h"
 
-static inline void swap32(uint32_t *d) {
-    uint32_t x = *d;
-    uint8_t *p = (uint8_t *)d;
-    p[0] = (x >> 24) & 0xff;
-    p[1] = (x >> 16) & 0xff;
-    p[2] = (x >> 8) & 0xff;
-    p[3] = x & 0xff;
-}
-
-static inline uint32_t hton32(uint32_t x) {
-    uint32_t a = x;
-    swap32(&a);
-    return a;
-}
-#define ntoh32 hton32
-
 static void show_big(void);
 static void expose_label(cairo_t *c, gint w);
 static gboolean expose(GtkWidget *widget, GdkEventExpose *event, gpointer userdata);
@@ -1017,7 +1001,7 @@ void show_message(gchar *cat_1,
         struct message msg;
         memset(&msg, 0, sizeof(msg));
         msg.type = MSG_UPDATE_LABEL;
-        msg.u.update_label.label_num = SHOW_MESSAGE;
+        msg.u.update_label.label_num = SHOW_MSG;
 	STRCPY_UTF8(msg.u.update_label.cat_a, cat_1);
 	STRCPY_UTF8(msg.u.update_label.comp1_a, blue_1);
 	STRCPY_UTF8(msg.u.update_label.comp2_a, white_1);
@@ -2070,7 +2054,7 @@ void update_label(struct msg_update_label *msg)
         STRCPY_UTF8(saved_last1, msg->text);
         STRCPY_UTF8(saved_last2, msg->text2);
         STRCPY_UTF8(saved_cat, msg->text3);
-    } else if (w == SHOW_MESSAGE) {
+    } else if (w == SHOW_MSG) {
 	show_message(msg->cat_a, msg->comp1_a, msg->comp2_a,
 		     msg->cat_b, msg->comp1_b, msg->comp2_b, msg->xalign, msg->round);
     } else if (w == SET_SCORE) {

@@ -461,6 +461,7 @@ MakeMapObject(int ColorCount,
 
     Object->Colors = (GifColorType *)calloc(ColorCount, sizeof(GifColorType));
     if (Object->Colors == (GifColorType *) NULL) {
+	free(Object);
         return ((ColorMapObject *) NULL);
     }
 
@@ -2122,7 +2123,7 @@ void display_ad_window(void)
 
     GtkWindow *window = ad_window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_keep_above(GTK_WINDOW(ad_window), TRUE);
-    gtk_window_set_title(GTK_WINDOW(window), _("Advertisement"));
+    //gtk_window_set_title(GTK_WINDOW(window), _("Advertisement"));
 
     if (fullscreen)
         gtk_window_fullscreen(GTK_WINDOW(window));
@@ -2648,11 +2649,14 @@ static gint svg_attr_cb(svg_handle *svg)
     return 0;
 }
 
-void read_svg_file(gchar *fname)
+void read_svg_file(gchar *fname) // fname must be allocated and free'd
 {
+    if (!fname || fname[0] == 0) return;
+    g_print("fname=%s\n", fname);
+    ad_svg_handle.svg_ok = FALSE;
     ad_svg_handle.imagename = imagename;
     g_free(ad_svg_handle.svg_file);
-    ad_svg_handle.svg_file = strdup(fname);
+    ad_svg_handle.svg_file = fname;
     read_svg_file_common(&ad_svg_handle, GTK_WINDOW(main_window));
     ad_svg_handle.svg_cb = svg_attr_cb;
     ad_svg_handle.img_cb = svg_img_cb;
@@ -2660,8 +2664,14 @@ void read_svg_file(gchar *fname)
 
 void set_svg_file(GtkWidget *menu_item, GdkEventButton *event, gpointer data)
 {
-    get_svg_file_name_common(&ad_svg_handle, GTK_WINDOW(main_window), keyfile, "adsvgfile");
-    read_svg_file(ad_svg_handle.svg_file);
+    gchar *fname = get_svg_file_name_common(GTK_WINDOW(main_window), keyfile, "adsvgfile");
+    g_print("set_svg_file file=%s\n", fname);
+    if (!fname) {
+	ad_svg_handle.svg_ok = FALSE;
+	return;
+    }
+    ad_svg_handle.svg_ok = TRUE;
+    read_svg_file(fname);
 }
 
 static gboolean mouse_click(GtkWidget *window,

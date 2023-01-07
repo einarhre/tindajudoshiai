@@ -643,19 +643,22 @@ void set_preferences(void)
     set_preferences_keyfile(keyfile, TRUE);
 }
 
-#define SET_CHECKBOX(_w, _yes) do {					\
-	if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(_w))) {	\
-	    if (!(_yes)) gtk_menu_item_activate(GTK_MENU_ITEM(_w));	\
-	} else {							\
-	    if (_yes) gtk_menu_item_activate(GTK_MENU_ITEM(_w));	\
-	}} while (0)
+static void set_checkbox(GtkWidget *w, gboolean yes) {
+    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(w))) {
+        if (!yes) gtk_menu_item_activate(GTK_MENU_ITEM(w));
+    } else {
+        if (yes) gtk_menu_item_activate(GTK_MENU_ITEM(w));
+    }
+}
 
-#define READ_BOOL(_s, _w, _d) do {					\
-	error = NULL;							\
-	bool = g_key_file_get_boolean(key_file, "preferences", _s, &error); \
-	if (!error) SET_CHECKBOX(_w, bool);				\
-	else if (defaults) SET_CHECKBOX(_w, _d);			\
-    } while (0)
+static void read_boolean(GKeyFile *key_file, char *s, GtkWidget *w, gboolean default_val, gboolean use_default) {
+    GError *error = NULL;
+    gboolean bool = g_key_file_get_boolean(key_file, "preferences", s, &error);
+    if (!error) set_checkbox(w, bool);
+    else if (use_default) set_checkbox(w, default_val);
+}
+
+#define READ_BOOL(_s, _w, _d) read_boolean(key_file, _s, _w, _d, defaults)
 
 #define READ_BOOL_VAL(_s, _w, _d) do {					\
 	error = NULL;							\
@@ -680,7 +683,7 @@ void set_preferences_keyfile(GKeyFile *key_file, gboolean defaults)
     gboolean bool;
 
     if ((str = g_key_file_get_string(key_file, "preferences", "color", &error))) {
-	SET_CHECKBOX(red_background, !strcmp(str, "red"));
+	set_checkbox(red_background, !strcmp(str, "red"));
         g_free(str);
     }
 

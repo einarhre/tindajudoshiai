@@ -735,14 +735,16 @@ static gint svg_img_cb(svg_handle *svg)
 
 void confirm_match_svg(GtkWidget *menu_item, gpointer data)
 {
-    get_svg_file_name_common(&confirm_svg_handle, GTK_WINDOW(main_window), keyfile, "confirmsvg");
-    read_confirm_svg_file(confirm_svg_handle.svg_file);
+    gchar *fname = get_svg_file_name_common(GTK_WINDOW(main_window), keyfile, "confirmsvg");
+    read_confirm_svg_file(fname);
 }
 
 void read_confirm_svg_file(gchar *fname)
 {
     g_free(confirm_svg_handle.svg_file);
-    confirm_svg_handle.svg_file = strdup(fname);
+    confirm_svg_handle.svg_file = NULL;
+    if (!fname || fname[0] == 0) return;
+    confirm_svg_handle.svg_file = fname;
     read_svg_file_common(&confirm_svg_handle, GTK_WINDOW(main_window));
     confirm_svg_handle.svg_cb = svg_attr_cb;
     confirm_svg_handle.img_cb = svg_img_cb;

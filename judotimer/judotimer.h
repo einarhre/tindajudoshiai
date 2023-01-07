@@ -57,23 +57,6 @@
 #define MODE_MASTER 1
 #define MODE_SLAVE  2
 
-#define START_BIG           128
-#define STOP_BIG            129
-#define START_ADVERTISEMENT 130
-#define START_COMPETITORS   131
-#define STOP_COMPETITORS    132
-#define START_WINNER        133
-#define STOP_WINNER         134
-#define SAVED_LAST_NAMES    135
-#define SHOW_MESSAGE        136
-#define SET_SCORE           137
-#define SET_POINTS          138
-#define SET_OSAEKOMI_VALUE  139
-#define SET_TIMER_VALUE     140
-#define SET_TIMER_OSAEKOMI_COLOR 141
-#define SET_TIMER_RUN_COLOR 142
-#define MAX_LABEL_NUMBER    143
-
 struct paint_data {
     cairo_t *c;
     gint page;
@@ -273,5 +256,8 @@ extern void set_menu_active(void);
 extern void set_menu_white_first(gboolean flag);
 extern void activate_slave_mode(void);
 extern void set_rules_year(gint year);
+
+extern gint websock_send_msg(gint fd, struct message *msg);
+extern void handle_websock(struct jsconn *conn, char *in, gint length, struct message *msg);
 
 #endif

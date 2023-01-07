@@ -288,13 +288,7 @@ void send_packet(struct message *msg)
 }
 
 #define NUM_CONNECTIONS 4
-static struct {
-    guint fd;
-    gulong addr;
-    struct message m;
-    gint ri;
-    gboolean escape;
-} connections[NUM_CONNECTIONS];
+static struct jsconn connections[NUM_CONNECTIONS];
 
 static volatile struct message message_queue[MSG_QUEUE_LEN];
 static volatile gint msg_put = 0, msg_get = 0;
@@ -321,7 +315,7 @@ void send_label_msg(struct message *msg)
 
 gpointer master_thread(gpointer args)
 {
-    SOCKET node_fd, tmp_fd;
+    SOCKET node_fd, tmp_fd, websock_fd;
     socklen_t alen;
     struct sockaddr_in my_addr, caller;
     gint reuse = 1;
@@ -352,10 +346,34 @@ gpointer master_thread(gpointer args)
         return NULL;
     }
 
+    if ((websock_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
+        perror("web socket");
+        g_thread_exit(NULL);    /* not required just good pratice */
+        return NULL;
+    }
+
+    if (setsockopt(websock_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)) < 0) {
+        perror("setsockopt (SO_REUSEADDR)");
+    }
+
+    memset(&my_addr, 0, sizeof(my_addr));
+    my_addr.sin_family = AF_INET;
+    my_addr.sin_port = htons(WEBSOCK_PORT+1);
+    my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    if (bind(websock_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
+        perror("websock bind");
+        g_print("CANNOT BIND websock!\n");
+        g_thread_exit(NULL);    /* not required just good pratice */
+        return NULL;
+    }
+
     listen(node_fd, 5);
+    listen(websock_fd, 5);
 
     FD_ZERO(&read_fd);
     FD_SET(node_fd, &read_fd);
+    FD_SET(websock_fd, &read_fd);
 
     for ( ; *((gboolean *)args) ; )   /* exit loop when flag is cleared */
     {
@@ -373,10 +391,18 @@ gpointer master_thread(gpointer args)
         G_LOCK(msg_mutex);
         if (msg_get != msg_put) {
             for (i = 0; i < NUM_CONNECTIONS; i++) {
+		int ret = 0;
+		
                 if (connections[i].fd == 0)
                     continue;
 
-                if (send_msg(connections[i].fd, (struct message *)&message_queue[msg_get], 0) < 0) {
+		if (connections[i].websock) {
+		    ret = 0;
+		    if (connections[i].websock_ok)
+			ret = websock_send_msg(connections[i].fd, &message_queue[msg_get]);
+		} else
+		    ret = send_msg(connections[i].fd, (struct message *)&message_queue[msg_get], 0);
+		if (ret < 0) {
                     perror("sendto");
                     g_print("Node cannot send: conn=%d fd=%d\n", i, connections[i].fd);
                 }
@@ -429,6 +455,33 @@ gpointer master_thread(gpointer args)
             }
         }
 
+	if (FD_ISSET(websock_fd, &fds)) {
+            alen = sizeof(caller);
+            if ((tmp_fd = accept(websock_fd, (struct sockaddr *)&caller, &alen)) < 0) {
+                perror("websock accept");
+		g_print("websock=%d tmpfd=%d\n", (int)websock_fd, (int)tmp_fd);
+		g_usleep(1000000);
+                continue;
+            }
+
+            for (i = 0; i < NUM_CONNECTIONS; i++)
+                if (connections[i].fd == 0)
+                    break;
+
+            if (i >= NUM_CONNECTIONS) {
+                g_print("Node cannot accept new connections!\n");
+                closesocket(tmp_fd);
+                continue;
+            }
+
+            connections[i].fd = tmp_fd;
+            connections[i].addr = caller.sin_addr.s_addr;
+            connections[i].websock = TRUE;
+            g_print("Node: new websock connection[%d]: fd=%d addr=%s\n",
+                    i, (int)tmp_fd, inet_ntoa(caller.sin_addr));
+            FD_SET(tmp_fd, &read_fd);
+        }
+
         for (i = 0; i < NUM_CONNECTIONS; i++) {
             static guchar inbuf[2000];
 
@@ -444,7 +497,9 @@ gpointer master_thread(gpointer args)
                 closesocket(connections[i].fd);
                 FD_CLR(connections[i].fd, &read_fd);
                 connections[i].fd = 0;
-            }
+            } else if (connections[i].websock) {
+		handle_websock(&connections[i], (gchar *)inbuf, r, NULL);
+	    }
         }
     }
 

@@ -10,11 +10,13 @@ $(OBJDIR):
 OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/stopwatch.o $(OBJDIR)/comm.o \
 	$(OBJDIR)/ip.o $(OBJDIR)/protocol.o $(OBJDIR)/show-ad.o $(OBJDIR)/sound.o \
 	$(OBJDIR)/video.o $(OBJDIR)/language.o $(OBJDIR)/common.o $(OBJDIR)/auto-update.o \
-	$(OBJDIR)/common-utils.o $(OBJDIR)/svg-common.o $(OBJDIR)/cJSON.o
+	$(OBJDIR)/common-utils.o $(OBJDIR)/svg-common.o $(OBJDIR)/cJSON.o \
+	$(OBJDIR)/websock.o $(OBJDIR)/websock-protocol.o $(OBJDIR)/httpp.o \
+	$(OBJDIR)/sha1.o $(OBJDIR)/avl.o
 
 CFLAGS += -DAPPLICATION="\"judotimer\""
 CFLAGS += -DAPP_NUM=2
-CFLAGS += -I../3rdparty/cJSON
+CFLAGS += -I../3rdparty/cJSON -I../3rdparty/httpp
 
 ### WindowsXP executable ###
 ifeq ($(TGT),WIN32OS)
@@ -71,7 +73,19 @@ $(OBJDIR)/common-utils.o: ../common/common-utils.c
 $(OBJDIR)/svg-common.o: ../common/svg-common.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
+$(OBJDIR)/sha1.o: ../common/sha1.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/websock-protocol.o: ../common/websock-protocol.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/avl.o: ../common/avl.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
 $(OBJDIR)/cJSON.o: ../3rdparty/cJSON/cJSON.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/httpp.o: ../3rdparty/httpp/httpp.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: %.c judotimer.h ../common/comm.h
