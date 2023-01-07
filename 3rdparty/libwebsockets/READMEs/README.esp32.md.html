@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README.esp32</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<h1 id="esp32-support">ESP32 Support</h1>
+<p>See esp32 for details on how to build lws as a component in an ESP-IDF project.</p>
+<p>Lws provides a “factory” application</p>
+<p>https://github.com/warmcat/lws-esp32-factory</p>
+<p>and a test application which implements the generic lws server test apps</p>
+<p>https://github.com/warmcat/lws-esp32-test-server-demos</p>
+<p>The behaviours of the generic factory are are quite rich, and cover uploading SSL certs through factory and user configuration, AP selection and passphrase entry, and managing a switch to allow the user to force entry to user setup mode at boot subsequently.</p>
+<p>The factory app comes with partitioning for a 1MB factory partition containing that app and data, and a single 2.9MB OTA partition containing the main app.</p>
+<p>The factory app is able to do OTA updates for both the factory and OTA partition slots; updating the factory slot first writes the new image to the OTA slot and copies it into place at the next boot, after which the user can reload the OTA slot.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>State</th>
+<th>Image</th>
+<th>AP SSID</th>
+<th>Port</th>
+<th>URL</th>
+<th>Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Factory Reset or Uninitialized</td>
+<td>Factory</td>
+<td>AP: ESP_012345</td>
+<td>80</td>
+<td>http://192.168.4.1</td>
+<td>factory.html - to set certificates and serial</td>
+</tr>
+<tr class="even">
+<td>User configuration</td>
+<td>Factory</td>
+<td>AP: config-model-serial</td>
+<td>443</td>
+<td>https://192.168.4.1</td>
+<td>index.html - user set up his AP information</td>
+</tr>
+<tr class="odd">
+<td>Operation</td>
+<td>OTA</td>
+<td>Station only</td>
+<td>443</td>
+<td>https://model-serial.local</td>
+<td>OTA application</td>
+</tr>
+</tbody>
+</table>
+<h2 id="basic-auth">Basic Auth</h2>
+<p>The lws-esp32-test-server-demos app also demos basic auth.</p>
+<p>On a normal platform this is done by binding a mount to a text file somewhere in the filesystem, which contains user:password information one per line.</p>
+<p>On ESP32 there is not necessarily any generic VFS in use. So instead, the basic auth lookup is bound to a given nvs domain, where the username is the key and the password the value. main/main.c in the test demos app shows how to both make the mount use basic auth, and how to set a user:password combination using nvs.</p>
+</body>
+</html>

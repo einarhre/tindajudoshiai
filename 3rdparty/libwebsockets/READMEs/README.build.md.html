@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README.build</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<h1 id="notes-about-building-lws">Notes about building lws</h1>
+<p><span class="citation" data-cites="section">@section</span> cm Introduction to CMake</p>
+<p>CMake is a multi-platform build tool that can generate build files for many different target platforms. See more info at http://www.cmake.org</p>
+<p>CMake also allows/recommends you to do “out of source”-builds, that is, the build files are separated from your sources, so there is no need to create elaborate clean scripts to get a clean source tree, instead you simply remove your build directory.</p>
+<p>Libwebsockets has been tested to build successfully on the following platforms with SSL support (for OpenSSL/wolfSSL/BoringSSL):</p>
+<ul>
+<li>Windows (Visual Studio)</li>
+<li>Windows (MinGW)</li>
+<li>Linux (x86 and ARM)</li>
+<li>OSX</li>
+<li>NetBSD</li>
+</ul>
+<p><span class="citation" data-cites="section">@section</span> build1 Building the library and test apps</p>
+<p>The project settings used by CMake to generate the platform specific build files is called <a href="../CMakeLists.txt">CMakeLists.txt</a>. CMake then uses one of its “Generators” to output a Visual Studio project or Make file for instance. To see a list of the available generators for your platform, simply run the “cmake” command.</p>
+<p>Note that by default OpenSSL will be linked, if you don’t want SSL support see below on how to toggle compile options.</p>
+<p><span class="citation" data-cites="section">@section</span> bu Building on Unix:</p>
+<ol type="1">
+<li><p>Install CMake 2.8 or greater: http://cmake.org/cmake/resources/software.html (Most Unix distributions comes with a packaged version also)</p></li>
+<li><p>Install OpenSSL.</p></li>
+<li>Generate the build files (default is Make files):</li>
+</ol>
+<pre><code>        $ cd /path/to/src
+        $ mkdir build
+        $ cd build
+        $ cmake ..</code></pre>
+<ol start="4" type="1">
+<li>Finally you can build using the generated Makefile:</li>
+</ol>
+<pre><code>    $ make &amp;&amp; sudo make install</code></pre>
+<p><strong>NOTE</strong>: The <code>build/`` directory can have any name and be located anywhere  on your filesystem, and that the argument</code>..` given to cmake is simply the source directory of <strong>libwebsockets</strong> containing the <a href="../CMakeLists.txt">CMakeLists.txt</a> project file. All examples in this file assumes you use “..”</p>
+<p><strong>NOTE2</strong>: A common option you may want to give is to set the install path, same as –prefix= with autotools. It defaults to /usr/local. You can do this by, eg</p>
+<pre><code>    $ cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .</code></pre>
+<p><strong>NOTE3</strong>: On machines that want libraries in lib64, you can also add the following to the cmake line</p>
+<pre><code>    -DLIB_SUFFIX=64</code></pre>
+<p><strong>NOTE4</strong>: If you are building against a non-distro OpenSSL (eg, in order to get access to ALPN support only in newer OpenSSL versions) the nice way to express that in one cmake command is eg,</p>
+<pre><code>    $ cmake .. -DOPENSSL_ROOT_DIR=/usr/local/ssl \
+         -DCMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE=/usr/local/ssl \
+         -DLWS_WITH_HTTP2=1</code></pre>
+<p>When you run the test apps using non-distro SSL, you have to force them to use your libs, not the distro ones</p>
+<pre><code>    $ LD_LIBRARY_PATH=/usr/local/ssl/lib libwebsockets-test-server --ssl</code></pre>
+<p>To get it to build on latest openssl (2016-04-10) it needed this approach</p>
+<pre><code>    cmake .. -DLWS_WITH_HTTP2=1 -DLWS_OPENSSL_INCLUDE_DIRS=/usr/local/include/openssl -DLWS_OPENSSL_LIBRARIES=&quot;/usr/local/lib64/libssl.so;/usr/local/lib64/libcrypto.so&quot;</code></pre>
+<p>Mac users have reported</p>
+<pre><code> $ export OPENSSL_ROOT_DIR=/usr/local/Cellar/openssl/1.0.2k; cmake ..; make -j4</code></pre>
+<p>worked for them when using “homebrew” OpenSSL</p>
+<p><strong>NOTE5</strong>: To build with debug info and _DEBUG for lower priority debug messages compiled in, use</p>
+<pre><code>    $ cmake .. -DCMAKE_BUILD_TYPE=DEBUG</code></pre>
+<p><strong>NOTE6</strong> To build on Solaris the linker needs to be informed to use lib socket and libnsl, and only builds in 64bit mode.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb10-1" title="1">    $ <span class="fu">cmake</span> .. -DCMAKE_C_FLAGS=-m64 -DCMAKE_EXE_LINKER_FLAGS=<span class="st">&quot;-lsocket -lnsl&quot;</span></a></code></pre></div>
+<p><strong>NOTE7</strong></p>
+<p>Build and test flow against boringssl. Notice <code>LWS_WITH_GENHASH</code> is currently unavailable with boringssl due to their removing the necessary apis.</p>
+<p>Build current HEAD boringssl</p>
+<pre><code> $ cd /projects
+ $ git clone https://boringssl.googlesource.com/boringssl
+ $ cd boringssl
+ $ mkdir build
+ $ cd build
+ $ cmake ..  -DBUILD_SHARED_LIBS=1
+ $ make -j8</code></pre>
+<p>Build and test lws against it</p>
+<pre><code> $ cd /projects/libwebsockets/build
+ $ cmake .. -DOPENSSL_LIBRARIES=&quot;/projects/boringssl/build/ssl/libssl.so;\
+   /projects/boringssl/build/crypto/libcrypto.so&quot; \
+   -DOPENSSL_INCLUDE_DIRS=/projects/boringssl/include \
+   -DLWS_WITH_BORINGSSL=1 -DCMAKE_BUILD_TYPE=DEBUG
+ $ make -j8 &amp;&amp; sudo make install
+ $ LD_PRELOAD=&quot;/projects/boringssl/build/ssl/libssl.so \
+   /projects/boringssl/build/crypto/libcrypto.so&quot; \
+   /usr/local/bin/libwebsockets-test-server -s</code></pre>
+<ol start="4" type="1">
+<li>Finally you can build using the generated Makefile:</li>
+</ol>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" title="1">    $ <span class="fu">make</span></a></code></pre></div>
+<p><span class="citation" data-cites="section">@section</span> lcap Linux Capabilities</p>
+<p>On Linux, lws now lets you retain selected root capabilities when dropping privileges. If libcap-dev or similar package is installed providing sys/capabilities.h, and libcap or similar package is installed providing libcap.so, CMake will enable the capability features.</p>
+<p>The context creation info struct .caps[] and .count_caps members can then be set by user code to enable selected root capabilities to survive the transition to running under an unprivileged user.</p>
+<p><span class="citation" data-cites="section">@section</span> cmq Quirk of cmake</p>
+<p>When changing cmake options, for some reason the only way to get it to see the changes sometimes is delete the contents of your build directory and do the cmake from scratch.</p>
+<p>deleting build/CMakeCache.txt may be enough.</p>
+<p><span class="citation" data-cites="section">@section</span> cmw Building on Windows (Visual Studio)</p>
+<ol type="1">
+<li><p>Install CMake 2.6 or greater: http://cmake.org/cmake/resources/software.html</p></li>
+<li><p>Install OpenSSL binaries. https://wiki.openssl.org/index.php/Binaries</p>
+<p>(<strong>NOTE</strong>: Preferably in the default location to make it easier for CMake to find them)</p>
+<p><strong>NOTE2</strong>: Be sure that OPENSSL_CONF environment variable is defined and points at <OpenSSL install location>.cfg</p></li>
+<li><p>Generate the Visual studio project by opening the Visual Studio cmd prompt:</p></li>
+</ol>
+<pre><code>    cd &lt;path to src&gt;
+    md build
+    cd build
+    cmake -G &quot;Visual Studio 10&quot; ..</code></pre>
+<p>(<strong>NOTE</strong>: There is also a cmake-gui available on Windows if you prefer that)</p>
+<p><strong>NOTE2</strong>: See this link to find out the version number corresponding to your Visual Studio edition: http://superuser.com/a/194065</p>
+<ol start="4" type="1">
+<li><p>Now you should have a generated Visual Studio Solution in your <code>&lt;path to src&gt;/build</code> directory, which can be used to build.</p></li>
+<li><p>Some additional deps may be needed</p></li>
+</ol>
+<ul>
+<li>iphlpapi.lib</li>
+<li>psapi.lib</li>
+<li>userenv.lib</li>
+</ul>
+<ol start="6" type="1">
+<li>If you’re using libuv, you must make sure to compile libuv with the same multithread-dll / Mtd attributes as libwebsockets itself</li>
+</ol>
+<p><span class="citation" data-cites="section">@section</span> cmwmgw Building on Windows (MinGW)</p>
+<ol type="1">
+<li><p>Install MinGW</p>
+<p>For Fedora, it’s, eg, <code>dnf install mingw64-gcc</code></p></li>
+<li><p>Install current CMake package</p>
+<p>For Fedora, it’s <code>dnf install cmake</code></p></li>
+<li><p>Instal mingw-built OpenSSL pieces</p>
+<p>For Fedora, it’s <code>mingw64-openssl.noarch mingw64-openssl-static.noarch</code></p>
+<p>mingw64-cmake as described below will auto-find the libs and includes for build. But to execute the apps, they either need to go into the same <code>/usr/x86_64-w64-mingw32/sys-root/mingw/bin/</code> as the dlls are installed to, or the dlls have to be copied into the same dir as your app executable.</p></li>
+<li><p>Generate the build files (default is Make files) using MSYS shell.</p>
+<p>For Fedora, they provide a <code>mingw64-cmake</code> wrapper in the package <code>mingw64-filesystem</code>, with this you can run that instead of cmake directly and don’t have to get involved with setting the cmake generator.</p>
+<p>Otherwise doing it by hand is like this:</p></li>
+</ol>
+<pre><code>    $ cd /drive/path/to/src
+    $ mkdir build
+    $ cd build
+    $ cmake -G &quot;MSYS Makefiles&quot; -DCMAKE_INSTALL_PREFIX=C:/MinGW ..</code></pre>
+<p>To generate build files allowing to create libwebsockets binaries with debug information set the CMAKE_BUILD_TYPE flag to DEBUG:</p>
+<pre><code>    $ cmake -G &quot;MSYS Makefiles&quot; -DCMAKE_INSTALL_PREFIX=C:/MinGW -DCMAKE_BUILD_TYPE=DEBUG ..</code></pre>
+<ol start="5" type="1">
+<li>Finally you can build using the generated Makefile and get the results deployed into your MinGW installation:</li>
+</ol>
+<pre><code>    $ make &amp;&amp; make install</code></pre>
+<p><span class="citation" data-cites="section">@section</span> distro Selecting CMake options useful for distros</p>
+<p>Distro packagers should select the CMake option “LWS_WITH_DISTRO_RECOMMENDED”, which selects common additional options like support for various event libraries, plugins and lwsws.</p>
+<p><span class="citation" data-cites="section">@section</span> ssllib Choosing Your TLS Poison</p>
+<ul>
+<li><p>If you are really restricted on memory, code size, or don’t care about TLS speed, mbedTLS is a good choice: <code>cmake .. -DLWS_WITH_MBEDTLS=1</code></p></li>
+<li><p>If cpu and memory is not super restricted and you care about TLS speed, OpenSSL or a directly compatible variant like Boring SSL is a good choice.</p></li>
+</ul>
+<p>Just building lws against stock Fedora OpenSSL or stock Fedora mbedTLS, for SSL handhake mbedTLS takes ~36ms and OpenSSL takes ~1ms on the same x86_64 build machine here, with everything else the same. Over the 144 connections of h2spec compliance testing for example, this ends up completing in 400ms for OpenSSL and 5.5sec for mbedTLS on x86_64. In other words mbedTLS is very slow compared to OpenSSL under the (fairly typical) conditions I tested it.</p>
+<p>This isn’t an inefficiency in the mbedtls interface implementation, it’s just mbedTLS doing the crypto much slower than OpenSSL, which has accelerated versions of common crypto operations it automatically uses for platforms supporting it. As of Oct 2017 mbedTLS itself has no such optimizations for any platform that I could find. It’s just pure C running on the CPU.</p>
+<p>Lws supports both almost the same, so instead of taking my word for it you are invited to try it both ways and see which the results (including, eg, binary size and memory usage as well as speed) suggest you use.</p>
+<p>NOTE: one major difference with mbedTLS is it does not load the system trust store by default. That has advantages and disadvantages, but the disadvantage is you must provide the CA cert to lws built against mbedTLS for it to be able to validate it, ie, use -A with the test client. The minimal test clients have the CA cert for warmcat.com and libwebsockets.org and use it if they see they were built with mbedTLS.</p>
+<p><span class="citation" data-cites="section">@section</span> optee Building for OP-TEE</p>
+<p>OP-TEE is a “Secure World” Trusted Execution Environment.</p>
+<p>Although lws is only part of the necessary picture to have an https-enabled TA, it does support OP-TEE as a platform and if you provide the other pieces, does work very well.</p>
+<p>Select it in cmake with <code>-DLWS_PLAT_OPTEE=1</code></p>
+<p><span class="citation" data-cites="section">@section</span> cmco Setting compile options</p>
+<p>To set compile time flags you can either use one of the CMake gui applications or do it via the command line.</p>
+<p><span class="citation" data-cites="subsection">@subsection</span> cmcocl Command line</p>
+<p>To list available options (omit the H if you don’t want the help text):</p>
+<pre><code>cmake -LH ..</code></pre>
+<p>Then to set an option and build (for example turn off SSL support):</p>
+<pre><code>cmake -DLWS_WITH_SSL=0 ..</code></pre>
+<p>or cmake -DLWS_WITH_SSL:BOOL=OFF ..</p>
+<p><span class="citation" data-cites="subsection">@subsection</span> cmcoug Unix GUI</p>
+<p>If you have a curses-enabled build you simply type: (not all packages include this, my debian install does not for example).</p>
+<pre><code>ccmake</code></pre>
+<p><span class="citation" data-cites="subsection">@subsection</span> cmcowg Windows GUI</p>
+<p>On windows CMake comes with a gui application: Start -&gt; Programs -&gt; CMake -&gt; CMake (cmake-gui)</p>
+<p><span class="citation" data-cites="section">@section</span> wolf wolfSSL/CyaSSL replacement for OpenSSL</p>
+<p>wolfSSL/CyaSSL is a lightweight SSL library targeted at embedded systems: https://www.wolfssl.com/wolfSSL/Products-wolfssl.html</p>
+<p>It contains a OpenSSL compatibility layer which makes it possible to pretty much link to it instead of OpenSSL, giving a much smaller footprint.</p>
+<p><strong>NOTE</strong>: wolfssl needs to be compiled using the <code>--enable-opensslextra</code> flag for this to work.</p>
+<p><span class="citation" data-cites="section">@section</span> wolf1 Compiling libwebsockets with wolfSSL</p>
+<pre><code>    cmake .. -DLWS_WITH_WOLFSSL=1 \
+         -DLWS_WOLFSSL_INCLUDE_DIRS=/path/to/wolfssl \
+         -DLWS_WOLFSSL_LIBRARIES=/path/to/wolfssl/wolfssl.a ..</code></pre>
+<p><strong>NOTE</strong>: On windows use the .lib file extension for <code>LWS_WOLFSSL_LIBRARIES</code> instead.</p>
+<p><span class="citation" data-cites="section">@section</span> cya Compiling libwebsockets with CyaSSL</p>
+<pre><code>    cmake .. -DLWS_WITH_CYASSL=1 \
+         -DLWS_CYASSL_INCLUDE_DIRS=/path/to/cyassl \
+         -DLWS_CYASSL_LIBRARIES=/path/to/wolfssl/cyassl.a ..</code></pre>
+<p><strong>NOTE</strong>: On windows use the .lib file extension for <code>LWS_CYASSL_LIBRARIES</code> instead.</p>
+<p><span class="citation" data-cites="section">@section</span> gzip Selecting GZIP or MINIZ</p>
+<p>By default lws supports gzip when compression is needed. But you can tell it to use MINIZ instead by using <code>-DLWS_WITH_MINIZ=1</code>.</p>
+<p>For native build cmake will try to find an existing libminiz.so or .a and build against that and the found includes automatically.</p>
+<p>For cross-build or building against local miniz, you need the following kind of cmake to tell it where to get miniz</p>
+<pre><code>cmake .. -DLWS_WITH_MINIZ=1 -DLWS_WITH_ZIP_FOPS=1 -DMINIZ_INCLUDE_DIRS=&quot;/projects/miniz;/projects/miniz/build&quot; -DMINIZ_LIBRARIES=/projects/miniz/build/libminiz.so.2.1.0  </code></pre>
+<p><span class="citation" data-cites="section">@section</span> esp32 Building for ESP32</p>
+<p>Building for ESP32 requires the ESP-IDF framework. It can be built under Linux, OSX or Windows (MSYS2).</p>
+<ol type="1">
+<li>Install ESP-IDF, follow the getting started guide here - http://esp-idf.readthedocs.io/en/latest/get-started/</li>
+<li>Set ESP-IDF to last known working version (assuming ESP-IDF is in <code>~/esp/esp-idf</code>) :</li>
+</ol>
+<pre><code>    cd ~/esp/esp-idf
+    git checkout 0c50b65a34cd6b3954f7435193411a88adb49cb0
+    git submodule update --recursive</code></pre>
+<ol start="3" type="1">
+<li>Add <code>libwebsockets</code> as a submodule in the <code>components</code> folder of your ESP-IDF project:</li>
+</ol>
+<pre><code>    git submodule add https://github.com/warmcat/libwebsockets.git components/libwebsockets</code></pre>
+<ol start="4" type="1">
+<li>If on Windows (MSYS2) you will need to install CMake in the MSYS2 environment:</li>
+</ol>
+<pre><code>    pacman -S mingw-w64-i686-cmake</code></pre>
+<p>If you’re on Linux or OSX ensure CMake version is at least 3.7.</p>
+<p><span class="citation" data-cites="section">@section</span> extplugins Building plugins outside of lws itself</p>
+<p>The directory ./plugin-standalone/ shows how easy it is to create plugins outside of lws itself. First build lws itself with -DLWS_WITH_PLUGINS, then use the same flow to build the standalone plugin</p>
+<pre><code>    cd ./plugin-standalone
+    mkdir build
+    cd build
+    cmake ..
+    make &amp;&amp; sudo make install</code></pre>
+<p>if you changed the default plugin directory when you built lws, you must also give the same arguments to cmake here (eg, <code>-DCMAKE_INSTALL_PREFIX:PATH=/usr/something/else...</code> )</p>
+<p>Otherwise if you run lwsws or libwebsockets-test-server-v2.0, it will now find the additional plugin “libprotocol_example_standalone.so”</p>
+<pre><code>    lwsts[21257]:   Plugins:
+    lwsts[21257]:    libprotocol_dumb_increment.so
+    lwsts[21257]:    libprotocol_example_standalone.so
+    lwsts[21257]:    libprotocol_lws_mirror.so
+    lwsts[21257]:    libprotocol_lws_server_status.so
+    lwsts[21257]:    libprotocol_lws_status.so</code></pre>
+<p>If you have multiple vhosts, you must enable plugins at the vhost additionally, discovered plugins are not enabled automatically for security reasons. You do this using info-&gt;pvo or for lwsws, in the JSON config.</p>
+<p><span class="citation" data-cites="section">@section</span> http2rp Reproducing HTTP/2 tests</p>
+<p>Enable <code>-DLWS_WITH_HTTP2=1</code> in cmake to build with http/2 support enabled.</p>
+<p>You must have built and be running lws against a version of openssl that has ALPN. At the time of writing, recent distros have started upgrading to OpenSSL 1.1+ that supports this already. You’ll know it’s right by seeing</p>
+<pre><code>    lwsts[4752]:  Compiled with OpenSSL support
+    lwsts[4752]:  Using SSL mode
+    lwsts[4752]:  HTTP2 / ALPN enabled</code></pre>
+<p>at lws startup.</p>
+<p>Recent Firefox and Chrome also support HTTP/2 by ALPN, so these should just work with the test server running in -s / ssl mode.</p>
+<p>For testing with nghttp client:</p>
+<pre><code>    $ nghttp -nvas https://localhost:7681/test.html</code></pre>
+<p>Testing with h2spec (https://github.com/summerwind/h2spec)</p>
+<pre><code>        $ h2spec  -h 127.0.0.1 -p 7681 -t -k -v -o 1</code></pre>
+<pre><code>145 tests, 145 passed, 0 skipped, 0 failed
+</code></pre>
+<p><span class="citation" data-cites="section">@section</span> coverage Automated Coverage Testing</p>
+<p>./test-apps/attack.sh contains scripted tests that are the basis of the automated test coverage assessment available for gcc and clang.</p>
+<p>To reproduce</p>
+<p>$ cd build $ cmake .. -DLWS_WITH_GCOV=1 -DCMAKE_BUILD_TYPE=DEBUG $ ../scripts/build-gcov.sh $ ../test-apps/attack.sh $ ../scripts/gcov.sh … Lines executed:51.24% of 8279</p>
+<p><span class="citation" data-cites="section">@section</span> windowsprebuilt Using Windows binary builds on Appveyor</p>
+<p>The CI builds on Appveyor now produce usable binary outputs. Visit</p>
+<p><a href="https://ci.appveyor.com/project/lws-team/libwebsockets">lws on Appveyor</a></p>
+<p>and select one of the builds, then click on ARTIFACTS at the top right. The zip file want to be unpacked into <code>C:\Program Files (x86)/libwebsockets</code>, after that, you should be able to run the test server, by running it from <code>bin/Release/libwebsockets-test-server.exe</code> and opening a browser on http://127.0.0.1:7681</p>
+<p><span class="citation" data-cites="section">@section</span> cross Cross compiling</p>
+<p>To enable cross-compiling <strong>libwebsockets</strong> using CMake you need to create a “Toolchain file” that you supply to CMake when generating your build files. CMake will then use the cross compilers and build paths specified in this file to look for dependencies and such.</p>
+<p><strong>Libwebsockets</strong> includes an example toolchain file <a href="../contrib/cross-arm-linux-gnueabihf.cmake">cross-arm-linux-gnueabihf.cmake</a> you can use as a starting point.</p>
+<p>The commandline to configure for cross with this would look like</p>
+<pre><code>    $ cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/usr/lib/my-cross-root \
+         -DCMAKE_TOOLCHAIN_FILE=../contrib/cross-arm-linux-gnueabihf.cmake \
+         -DLWS_WITHOUT_EXTENSIONS=1 -DLWS_WITH_SSL=0 \
+         -DLWS_WITH_ZIP_FOPS=0 -DLWS_WITH_ZLIB=0</code></pre>
+<p>The example shows how to build with no external cross lib dependencies, you need to provide the cross libraries otherwise.</p>
+<p><strong>NOTE</strong>: start from an EMPTY build directory if you had a non-cross build in there before the settings will be cached and your changes ignored. Delete <code>build/CMakeCache.txt</code> at least before trying a new cmake config to ensure you are really building the options you think you are.</p>
+<p>Additional information on cross compilation with CMake: http://www.vtk.org/Wiki/CMake_Cross_Compiling</p>
+<p><span class="citation" data-cites="section">@section</span> cross_example Complex Cross compiling example</p>
+<p>Here are step by step instructions for cross-building the external projects needed for lws with lwsws + mbedtls as an example.</p>
+<p>In the example, my toolchain lives in <code>/projects/aist-tb/arm-tc</code> and is named <code>arm-linux-gnueabihf</code>. So you will need to adapt those to where your toolchain lives and its name where you see them here.</p>
+<p>Likewise I do all this in /tmp but it has no special meaning, you can adapt that to somewhere else.</p>
+<p>All “foreign” cross-built binaries are sent into <code>/tmp/cross</code> so they cannot be confused for ‘native’ x86_64 stuff on your host machine in /usr/[local/]….</p>
+<h2 id="prepare-the-cmake-toolchain-file">Prepare the cmake toolchain file</h2>
+<ol type="1">
+<li><p><code>cd /tmp</code></p></li>
+<li><p><code>wget -O mytoolchainfile https://raw.githubusercontent.com/warmcat/libwebsockets/master/contrib/cross-arm-linux-gnueabihf.cmake</code></p></li>
+<li><p>Edit <code>/tmp/mytoolchainfile</code> adapting <code>CROSS_PATH</code>, <code>CMAKE_C_COMPILER</code> and <code>CMAKE_CXX_COMPILER</code> to reflect your toolchain install dir and path to your toolchain C and C++ compilers respectively. For my case:</p></li>
+</ol>
+<pre><code>set(CROSS_PATH /projects/aist-tb/arm-tc/)
+set(CMAKE_C_COMPILER &quot;${CROSS_PATH}/bin/arm-linux-gnueabihf-gcc&quot;)
+set(CMAKE_CXX_COMPILER &quot;${CROSS_PATH}/bin/arm-linux-gnueabihf-g++&quot;)</code></pre>
+<h2 id="building-libuv-cross">1/4: Building libuv cross:</h2>
+<ol type="1">
+<li><p><code>export PATH=/projects/aist-tb/arm-tc/bin:$PATH</code> Notice there is a <strong>/bin</strong> on the end of the toolchain path</p></li>
+<li><p><code>cd /tmp ; mkdir cross</code> we will put the cross-built libs in /tmp/cross</p></li>
+<li><p><code>git clone https://github.com/libuv/libuv.git</code> get libuv</p></li>
+<li><p><code>cd libuv</code></p></li>
+<li><p><code>./autogen.sh</code></p></li>
+</ol>
+<pre><code>+ libtoolize --copy
+libtoolize: putting auxiliary files in &#39;.&#39;.
+libtoolize: copying file &#39;./ltmain.sh&#39;
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, &#39;m4&#39;.
+libtoolize: copying file &#39;m4/libtool.m4&#39;
+libtoolize: copying file &#39;m4/ltoptions.m4&#39;
+libtoolize: copying file &#39;m4/ltsugar.m4&#39;
+libtoolize: copying file &#39;m4/ltversion.m4&#39;
+libtoolize: copying file &#39;m4/lt~obsolete.m4&#39;
++ aclocal -I m4
++ autoconf
++ automake --add-missing --copy
+configure.ac:38: installing &#39;./ar-lib&#39;
+configure.ac:25: installing &#39;./compile&#39;
+configure.ac:22: installing &#39;./config.guess&#39;
+configure.ac:22: installing &#39;./config.sub&#39;
+configure.ac:21: installing &#39;./install-sh&#39;
+configure.ac:21: installing &#39;./missing&#39;
+Makefile.am: installing &#39;./depcomp&#39;</code></pre>
+<p>If it has problems, you will need to install <code>automake</code>, <code>libtool</code> etc.</p>
+<ol start="6" type="1">
+<li><p><code>./configure  --host=arm-linux-gnueabihf --prefix=/tmp/cross</code></p></li>
+<li><p><code>make &amp;&amp; make install</code> this will install to <code>/tmp/cross/...</code></p></li>
+<li><code>file /tmp/cross/lib/libuv.so.1.0.0</code> Check it’s really built for ARM</li>
+</ol>
+<pre><code>/tmp/cross/lib/libuv.so.1.0.0: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, BuildID[sha1]=cdde0bc945e51db6001a9485349c035baaec2b46, with debug_info, not stripped</code></pre>
+<h2 id="building-zlib-cross">2/4: Building zlib cross</h2>
+<ol type="1">
+<li><p><code>cd /tmp</code></p></li>
+<li><p><code>git clone https://github.com/madler/zlib.git</code></p></li>
+<li><code>CC=arm-linux-gnueabihf-gcc ./configure --prefix=/tmp/cross</code></li>
+</ol>
+<pre><code>Checking for shared library support...
+Building shared library libz.so.1.2.11 with arm-linux-gnueabihf-gcc.
+Checking for size_t... Yes.
+Checking for off64_t... Yes.
+Checking for fseeko... Yes.
+Checking for strerror... Yes.
+Checking for unistd.h... Yes.
+Checking for stdarg.h... Yes.
+Checking whether to use vs[n]printf() or s[n]printf()... using vs[n]printf().
+Checking for vsnprintf() in stdio.h... Yes.
+Checking for return value of vsnprintf()... Yes.
+Checking for attribute(visibility) support... Yes.</code></pre>
+<ol start="4" type="1">
+<li><code>make &amp;&amp; make install</code></li>
+</ol>
+<pre><code>arm-linux-gnueabihf-gcc -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -c -o example.o test/example.c
+...
+rm -f /tmp/cross/include/zlib.h /tmp/cross/include/zconf.h
+cp zlib.h zconf.h /tmp/cross/include
+chmod 644 /tmp/cross/include/zlib.h /tmp/cross/include/zconf.h</code></pre>
+<ol start="5" type="1">
+<li><code>file /tmp/cross/lib/libz.so.1.2.11</code> This is just to confirm we built an ARM lib as expected</li>
+</ol>
+<pre><code>/tmp/cross/lib/libz.so.1.2.11: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, BuildID[sha1]=6f8ffef84389b1417d2fd1da1bd0c90f748f300d, with debug_info, not stripped</code></pre>
+<h2 id="building-mbedtls-cross">3/4: Building mbedtls cross</h2>
+<ol type="1">
+<li><p><code>cd /tmp</code></p></li>
+<li><p><code>git clone https://github.com/ARMmbed/mbedtls.git</code></p></li>
+<li><p><code>cd mbedtls ; mkdir build ; cd build</code></p></li>
+<li><p><code>cmake .. -DCMAKE_TOOLCHAIN_FILE=/tmp/mytoolchainfile -DCMAKE_INSTALL_PREFIX:PATH=/tmp/cross -DCMAKE_BUILD_TYPE=RELEASE -DUSE_SHARED_MBEDTLS_LIBRARY=1</code> mbedtls also uses cmake, so you can simply reuse the toolchain file you used for libwebsockets. That is why you shouldn’t put project-specific options in the toolchain file, it should just describe the toolchain.</p></li>
+<li><p><code>make &amp;&amp; make install</code></p></li>
+<li><code>file /tmp/cross/lib/libmbedcrypto.so.2.6.0</code></li>
+</ol>
+<pre><code>/tmp/cross/lib/libmbedcrypto.so.2.6.0: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, BuildID[sha1]=bcca195e78bd4fd2fb37f36ab7d72d477d609d87, with debug_info, not stripped</code></pre>
+<h2 id="building-libwebsockets-with-everything">4/4: Building libwebsockets with everything</h2>
+<ol type="1">
+<li><p><code>cd /tmp</code></p></li>
+<li><p><code>git clone ssh://git@github.com/warmcat/libwebsockets</code></p></li>
+<li><p><code>cd libwebsockets ; mkdir build ; cd build</code></p></li>
+<li>(this is all one line on the commandline)</li>
+</ol>
+<pre><code>cmake .. -DCMAKE_TOOLCHAIN_FILE=/tmp/mytoolchainfile \
+-DCMAKE_INSTALL_PREFIX:PATH=/tmp/cross \
+-DLWS_WITH_LWSWS=1 \
+-DLWS_WITH_MBEDTLS=1 \
+-DLWS_MBEDTLS_LIBRARIES=&quot;/tmp/cross/lib/libmbedcrypto.so;/tmp/cross/lib/libmbedtls.so;/tmp/cross/lib/libmbedx509.so&quot; \
+-DLWS_MBEDTLS_INCLUDE_DIRS=/tmp/cross/include \
+-DLWS_LIBUV_LIBRARIES=/tmp/cross/lib/libuv.so \
+-DLWS_LIBUV_INCLUDE_DIRS=/tmp/cross/include \
+-DLWS_ZLIB_LIBRARIES=/tmp/cross/lib/libz.so \
+-DLWS_ZLIB_INCLUDE_DIRS=/tmp/cross/include</code></pre>
+<ol start="3" type="1">
+<li><p><code>make &amp;&amp; make install</code></p></li>
+<li><code>file /tmp/cross/lib/libwebsockets.so.11</code></li>
+</ol>
+<pre><code>/tmp/cross/lib/libwebsockets.so.11: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, BuildID[sha1]=81e59c6534f8e9629a9fc9065c6e955ce96ca690, with debug_info, not stripped</code></pre>
+<ol start="5" type="1">
+<li><code>arm-linux-gnueabihf-objdump -p /tmp/cross/lib/libwebsockets.so.11 | grep NEEDED</code> Confirm that the lws library was linked against everything we expect (libm / libc are provided by your toolchain)</li>
+</ol>
+<pre><code>  NEEDED               libz.so.1
+  NEEDED               libmbedcrypto.so.0
+  NEEDED               libmbedtls.so.10
+  NEEDED               libmbedx509.so.0
+  NEEDED               libuv.so.1
+  NEEDED               libm.so.6
+  NEEDED               libc.so.6</code></pre>
+<p>You will also find the lws test apps in <code>/tmp/cross/bin</code>… to run lws on the target you will need to copy the related things from /tmp/cross… all the .so from /tmp/cross/lib and anything from /tmp/cross/bin you want.</p>
+<p><span class="citation" data-cites="section">@section</span> mem Memory efficiency</p>
+<p>Embedded server-only configuration without extensions (ie, no compression on websocket connections), but with full v13 websocket features and http server, built on ARM Cortex-A9:</p>
+<p>Update at 8dac94d (2013-02-18)</p>
+<pre><code>    $ ./configure --without-client --without-extensions --disable-debug --without-daemonize
+
+    Context Creation, 1024 fd limit[2]:   16720 (includes 12 bytes per fd)
+    Per-connection [3]:                      72 bytes, +1328 during headers
+
+    .text   .rodata .data   .bss
+    11512   2784    288 4</code></pre>
+<p>This shows the impact of the major configuration with/without options at 13ba5bbc633ea962d46d using Ubuntu ARM on a PandaBoard ES.</p>
+<p>These are accounting for static allocations from the library elf, there are additional dynamic allocations via malloc. These are a bit old now but give the right idea for relative “expense” of features.</p>
+<p>Static allocations, ARM9</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>.text</th>
+<th>.rodata</th>
+<th>.data</th>
+<th>.bss</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>All (no without)</td>
+<td>35024</td>
+<td>9940</td>
+<td>336</td>
+<td>4104</td>
+</tr>
+<tr class="even">
+<td>without client</td>
+<td>25684</td>
+<td>7144</td>
+<td>336</td>
+<td>4104</td>
+</tr>
+<tr class="odd">
+<td>without client, exts</td>
+<td>21652</td>
+<td>6288</td>
+<td>288</td>
+<td>4104</td>
+</tr>
+<tr class="even">
+<td>without client, exts, debug[1]</td>
+<td>19756</td>
+<td>3768</td>
+<td>288</td>
+<td>4104</td>
+</tr>
+<tr class="odd">
+<td>without server</td>
+<td>30304</td>
+<td>8160</td>
+<td>336</td>
+<td>4104</td>
+</tr>
+<tr class="even">
+<td>without server, exts</td>
+<td>25382</td>
+<td>7204</td>
+<td>288</td>
+<td>4104</td>
+</tr>
+<tr class="odd">
+<td>without server, exts, debug[1]</td>
+<td>23712</td>
+<td>4256</td>
+<td>288</td>
+<td>4104</td>
+</tr>
+</tbody>
+</table>
+<p>[1] <code>--disable-debug</code> only removes messages below <code>lwsl_notice</code>. Since that is the default logging level the impact is not noticeable, error, warn and notice logs are all still there.</p>
+<p>[2] <code>1024</code> fd per process is the default limit (set by ulimit) in at least Fedora and Ubuntu. You can make significant savings tailoring this to actual expected peak fds, ie, at a limit of <code>20</code>, context creation allocation reduces to <code>4432 + 240 = 4672</code>)</p>
+<p>[3] known header content is freed after connection establishment</p>
+</body>
+</html>

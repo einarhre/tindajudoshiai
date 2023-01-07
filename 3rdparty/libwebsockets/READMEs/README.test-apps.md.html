@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README.test-apps</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<h1 id="overview-of-lws-test-apps">Overview of lws test apps</h1>
+<p>Are you building a client? You just need to look at the test client <a href="../test-apps/test-client.c">libwebsockets-test-client</a>.</p>
+<p>If you are building a standalone server, there are three choices, in order of preferability.</p>
+<ol type="1">
+<li>lwsws + protocol plugins</li>
+</ol>
+<p>Lws provides a generic web server app that can be configured with JSON config files. https://libwebsockets.org itself uses this method.</p>
+<p>With lwsws handling the serving part, you only need to write an lws protocol plugin. See <a href="../plugin-standalone">plugin-standalone</a> for an example of how to do that outside lws itself, using lws public apis.</p>
+<p>$ cmake .. -DLWS_WITH_LWSWS=1</p>
+<p>See <a href="../READMEs/README.lwsws.md">README.lwsws.md</a> for information on how to configure lwsws.</p>
+<p>NOTE this method implies libuv is used by lws, to provide crossplatform implementations of timers, dynamic lib loading etc for plugins and lwsws.</p>
+<ol start="2" type="1">
+<li>test-server-v2.0.c</li>
+</ol>
+<p>This method lets you configure web serving in code, instead of using lwsws.</p>
+<p>Plugins are still used, but you have a choice whether to dynamically load them or statically include them. In this example, they are dynamically loaded.</p>
+<p>$ cmake .. -DLWS_WITH_PLUGINS=1</p>
+<p>See <a href="../test-apps/test-server-v2.0.c">test-server-v2.0.c</a></p>
+<ol start="3" type="1">
+<li>protocols in the server app</li>
+</ol>
+<p>This is the original way lws implemented servers, plugins and libuv are not required, but without plugins separating the protocol code directly, the combined code is all squidged together and is much less maintainable.</p>
+<p>This method is still supported in lws but all ongoing and future work is being done in protocol plugins only.</p>
+<p>You can simply include the plugin contents and have it buit statically into your server, just define this before including the plugin source</p>
+<pre><code>#define LWS_PLUGIN_STATIC</code></pre>
+<p>This gets you most of the advantages without needing dynamic loading + libuv.</p>
+<h1 id="notes-about-lws-test-apps">Notes about lws test apps</h1>
+<p><span class="citation" data-cites="section">@section</span> tsb Testing server with a browser</p>
+<p>If you run <a href="../test-apps/test-server.c">libwebsockets-test-server</a> and point your browser (eg, Chrome) to</p>
+<pre><code>http://127.0.0.1:7681</code></pre>
+<p>It will fetch a script in the form of <code>test.html</code>, and then run the script in there on the browser to open a websocket connection. Incrementing numbers should appear in the browser display.</p>
+<p>By default the test server logs to both stderr and syslog, you can control what is logged using <code>-d &lt;log level&gt;</code>, see later.</p>
+<p><span class="citation" data-cites="section">@section</span> tsd Running test server as a Daemon</p>
+<p>You can use the -D option on the test server to have it fork into the background and return immediately. In this daemonized mode all stderr is disabled and logging goes only to syslog, eg, <code>/var/log/messages</code> or similar.</p>
+<p>The server maintains a lockfile at <code>/tmp/.lwsts-lock</code> that contains the pid of the master process, and deletes this file when the master process terminates.</p>
+<p>To stop the daemon, do</p>
+<pre><code>       $ kill \`cat /tmp/.lwsts-lock\`</code></pre>
+<p>If it finds a stale lock (the pid mentioned in the file does not exist any more) it will delete the lock and create a new one during startup.</p>
+<p>If the lock is valid, the daemon will exit with a note on stderr that it was already running.</p>
+<p><span class="citation" data-cites="section">@section</span> clicert Testing Client Certs</p>
+<p>Here is a very quick way to create a CA, and a client and server cert from it, for testing.</p>
+<pre><code>$ cp -rp ./scripts/client-ca /tmp
+$ cd /tmp/client-ca
+$ ./create-ca.sh
+$ ./create-server-cert.sh server
+$ ./create-client-cert.sh client</code></pre>
+<p>The last step wants an export password, you will need this password again to import the p12 format certificate into your browser.</p>
+<p>This will get you the following</p>
+<table>
+<thead>
+<tr class="header">
+<th>name</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ca.pem</td>
+<td>Your Certificate Authority cert</td>
+</tr>
+<tr class="even">
+<td>ca.key</td>
+<td>Private key for the CA cert</td>
+</tr>
+<tr class="odd">
+<td>client.pem</td>
+<td>Client certificate, signed by your CA</td>
+</tr>
+<tr class="even">
+<td>client.key</td>
+<td>Client private key</td>
+</tr>
+<tr class="odd">
+<td>client.p12</td>
+<td>combined client.pem + client.key in p12 format for browsers</td>
+</tr>
+<tr class="even">
+<td>server.pem</td>
+<td>Server cert, signed by your CA</td>
+</tr>
+<tr class="odd">
+<td>server.key</td>
+<td>Server private key</td>
+</tr>
+</tbody>
+</table>
+<p>You can confirm yourself the client and server certs are signed by the CA.</p>
+<pre><code> $ openssl verify -verbose -trusted ca.pem server.pem
+ $ openssl verify -verbose -trusted ca.pem client.pem</code></pre>
+<p>Import the client.p12 file into your browser. In FFOX57 it’s</p>
+<ul>
+<li>preferences</li>
+<li>Privacy &amp; Security</li>
+<li>Certificates | View Certificates</li>
+<li>Certificate Manager | Your Certificates | Import…</li>
+<li>Enter the password you gave when creating client1.p12</li>
+<li>Click OK.</li>
+</ul>
+<p>You can then run the test server like this:</p>
+<pre><code> $ libwebsockets-test-server -s -A ca.pem -K server.key -C server.pem -v</code></pre>
+<p>When you connect your browser to https://localhost:7681 after accepting the selfsigned server cert, your browser will pop up a prompt to send the server your client cert (the -v switch enables this). The server will only accept a client cert that has been signed by ca.pem.</p>
+<p><span class="citation" data-cites="section">@section</span> sssl Using SSL on the server side</p>
+<p>To test it using SSL/WSS, just run the test server with</p>
+<pre><code>    $ libwebsockets-test-server --ssl</code></pre>
+<p>and use the URL</p>
+<pre><code>    https://127.0.0.1:7681</code></pre>
+<p>The connection will be entirely encrypted using some generated certificates that your browser will not accept, since they are not signed by any real Certificate Authority. Just accept the certificates in the browser and the connection will proceed in first https and then websocket wss, acting exactly the same.</p>
+<p><a href="../test-apps/test-server.c">test-server.c</a> is all that is needed to use libwebsockets for serving both the script html over http and websockets.</p>
+<p><span class="citation" data-cites="section">@section</span> lwstsdynvhost Dynamic Vhosts</p>
+<p>You can send libwebsockets-test-server or libwebsockets-test-server-v2.0 a SIGUSR1 to toggle the creation and destruction of an identical second vhost on port + 1.</p>
+<p>This is intended as a test and demonstration for how to bring up and remove vhosts dynamically.</p>
+<p><span class="citation" data-cites="section">@section</span> unixskt Testing Unix Socket Server support</p>
+<p>Start the test server with -U and the path to create the unix domain socket</p>
+<pre><code> $ libwebsockets-test-server -U /tmp/uds</code></pre>
+<p>On exit, lws will delete the socket inode.</p>
+<p>To test the client side, eg</p>
+<pre><code> $ nc -C -U /tmp/uds -i 30</code></pre>
+<p>and type</p>
+<p><code>GET / HTTP/1.1</code></p>
+<p>followed by two ENTER. The contents of test.html should be returned.</p>
+<p><span class="citation" data-cites="section">@section</span> wscl Testing websocket client support</p>
+<p>If you run the test server as described above, you can also connect to it using the test client as well as a browser.</p>
+<pre><code>    $ libwebsockets-test-client localhost</code></pre>
+<p>will by default connect to the test server on localhost:7681 and print the dumb increment number from the server at the same time as drawing random circles in the mirror protocol; if you connect to the test server using a browser at the same time you will be able to see the circles being drawn.</p>
+<p>The test client supports SSL too, use</p>
+<pre><code>    $ libwebsockets-test-client localhost --ssl -s</code></pre>
+<p>the -s tells it to accept the default self-signed cert from the server, otherwise it will strictly fail the connection if there is no CA cert to validate the server’s certificate.</p>
+<p><span class="citation" data-cites="section">@section</span> choosingts Choosing between test server variations</p>
+<p>If you will be doing standalone serving with lws, ideally you should avoid making your own server at all, and use lwsws with your own protocol plugins.</p>
+<p>The second best option is follow test-server-v2.0.c, which uses a mount to autoserve a directory, and lws protocol plugins for ws, without needing any user callback code (other than what’s needed in the protocol plugin).</p>
+<p>For those two options libuv is needed to support the protocol plugins, if that’s not possible then the other variations with their own protocol code should be considered.</p>
+<p><span class="citation" data-cites="section">@section</span> tassl Testing SSL on the client side</p>
+<p>To test SSL/WSS client action, just run the client test with</p>
+<pre><code>    $ libwebsockets-test-client localhost --ssl</code></pre>
+<p>By default the client test applet is set to accept self-signed certificates used by the test server, this is indicated by the <code>use_ssl</code> var being set to <code>2</code>. Set it to <code>1</code> to reject any server certificate that it doesn’t have a trusted CA cert for.</p>
+<p><span class="citation" data-cites="section">@section</span> taping Using the websocket ping utility</p>
+<p>libwebsockets-test-ping connects as a client to a remote websocket server and pings it like the normal unix ping utility.</p>
+<pre><code>    $ libwebsockets-test-ping localhost
+    handshake OK for protocol lws-mirror-protocol
+    Websocket PING localhost.localdomain (127.0.0.1) 64 bytes of data.
+    64 bytes from localhost: req=1 time=0.1ms
+    64 bytes from localhost: req=2 time=0.1ms
+    64 bytes from localhost: req=3 time=0.1ms
+    64 bytes from localhost: req=4 time=0.2ms
+    64 bytes from localhost: req=5 time=0.1ms
+    64 bytes from localhost: req=6 time=0.2ms
+    64 bytes from localhost: req=7 time=0.2ms
+    64 bytes from localhost: req=8 time=0.1ms
+    ^C
+    --- localhost.localdomain websocket ping statistics ---
+    8 packets transmitted, 8 received, 0% packet loss, time 7458ms
+    rtt min/avg/max = 0.110/0.185/0.218 ms
+    $</code></pre>
+<p>By default it sends 64 byte payload packets using the 04 PING packet opcode type. You can change the payload size using the <code>-s=</code> flag, up to a maximum of 125 mandated by the 04 standard.</p>
+<p>Using the lws-mirror protocol that is provided by the test server, libwebsockets-test-ping can also use larger payload sizes up to 4096 is BINARY packets; lws-mirror will copy them back to the client and they appear as a PONG. Use the <code>-m</code> flag to select this operation.</p>
+<p>The default interval between pings is 1s, you can use the -i= flag to set this, including fractions like <code>-i=0.01</code> for 10ms interval.</p>
+<p>Before you can even use the PING opcode that is part of the standard, you must complete a handshake with a specified protocol. By default lws-mirror-protocol is used which is supported by the test server. But if you are using it on another server, you can specify the protocol to handshake with by <code>--protocol=protocolname</code></p>
+<p><span class="citation" data-cites="section">@section</span> ta fraggle Fraggle test app</p>
+<p>By default it runs in server mode</p>
+<pre><code>    $ libwebsockets-test-fraggle
+    libwebsockets test fraggle
+    (C) Copyright 2010-2011 Andy Green &lt;andy@warmcat.com&gt; licensed under LGPL2.1
+     Compiled with SSL support, not using it
+     Listening on port 7681
+    server sees client connect
+    accepted v06 connection
+    Spamming 360 random fragments
+    Spamming session over, len = 371913. sum = 0x2D3C0AE
+    Spamming 895 random fragments
+    Spamming session over, len = 875970. sum = 0x6A74DA1
+    ...</code></pre>
+<p>You need to run a second session in client mode, you have to give the <code>-c</code> switch and the server address at least:</p>
+<pre><code>    $ libwebsockets-test-fraggle -c localhost
+    libwebsockets test fraggle
+    (C) Copyright 2010-2011 Andy Green &lt;andy@warmcat.com&gt; licensed under LGPL2.1
+     Client mode
+    Connecting to localhost:7681
+    denied deflate-stream extension
+    handshake OK for protocol fraggle-protocol
+    client connects to server
+    EOM received 371913 correctly from 360 fragments
+    EOM received 875970 correctly from 895 fragments
+    EOM received 247140 correctly from 258 fragments
+    EOM received 695451 correctly from 692 fragments
+    ...</code></pre>
+<p>The fraggle test sends a random number up to 1024 fragmented websocket frames each of a random size between 1 and 2001 bytes in a single message, then sends a checksum and starts sending a new randomly sized and fragmented message.</p>
+<p>The fraggle test client receives the same message fragments and computes the same checksum using websocket framing to see when the message has ended. It then accepts the server checksum message and compares that to its checksum.</p>
+<p><span class="citation" data-cites="section">@section</span> taproxy proxy support</p>
+<p>The http_proxy environment variable is respected by the client connection code for both <code>ws://</code> and <code>wss://</code>. It doesn’t support authentication.</p>
+<p>You use it like this</p>
+<pre><code>    $ export http_proxy=myproxy.com:3128
+    $ libwebsockets-test-client someserver.com</code></pre>
+<p><span class="citation" data-cites="section">@section</span> talog debug logging</p>
+<p>By default logging of severity “notice”, “warn” or “err” is enabled to stderr.</p>
+<p>Again by default other logging is compiled in but disabled from printing.</p>
+<p>By default debug logs below “notice” in severity are not compiled in. To get them included, add this option in CMAKE</p>
+<pre><code>    $ cmake .. -DCMAKE_BUILD_TYPE=DEBUG</code></pre>
+<p>If you want to see more detailed debug logs, you can control a bitfield to select which logs types may print using the <code>lws_set_log_level()</code> api, in the test apps you can use <code>-d &lt;number&gt;</code> to control this. The types of logging available are (OR together the numbers to select multiple)</p>
+<ul>
+<li>1 ERR</li>
+<li>2 WARN</li>
+<li>4 NOTICE</li>
+<li>8 INFO</li>
+<li>16 DEBUG</li>
+<li>32 PARSER</li>
+<li>64 HEADER</li>
+<li>128 EXTENSION</li>
+<li>256 CLIENT</li>
+<li>512 LATENCY</li>
+</ul>
+<p><span class="citation" data-cites="section">@section</span> ws13 Websocket version supported</p>
+<p>The final IETF standard is supported for both client and server, protocol version 13.</p>
+<p><span class="citation" data-cites="section">@section</span> latency Latency Tracking</p>
+<p>Since libwebsockets runs using <code>poll()</code> and a single threaded approach, any unexpected latency coming from system calls would be bad news. There’s now a latency tracking scheme that can be built in with <code>-DLWS_WITH_LATENCY=1</code> at cmake, logging the time taken for system calls to complete and if the whole action did complete that time or was deferred.</p>
+<p>You can see the detailed data by enabling logging level 512 (eg, <code>-d 519</code> on the test server to see that and the usual logs), however even without that the “worst” latency is kept and reported to the logs with NOTICE severity when the context is destroyed.</p>
+<p>Some care is needed interpreting them, if the action completed the first figure (in us) is the time taken for the whole action, which may have retried through the poll loop many times and will depend on network roundtrip times. High figures here don’t indicate a problem. The figure in us reported after “lat” in the logging is the time taken by this particular attempt. High figures here may indicate a problem, or if you system is loaded with another app at that time, such as the browser, it may simply indicate the OS gave preferential treatment to the other app during that call.</p>
+<p><span class="citation" data-cites="section">@section</span> autobahn Autobahn Test Suite</p>
+<p>Lws can be tested against the autobahn websocket fuzzer in both client and server modes</p>
+<ol type="1">
+<li><p>pip install autobahntestsuite</p></li>
+<li><p>From your build dir:</p></li>
+</ol>
+<pre><code> $ cmake .. -DLWS_WITHOUT_EXTENSIONS=0 -DLWS_WITH_MINIMAL_EXAMPLES=1 &amp;&amp; make</code></pre>
+<ol start="3" type="1">
+<li><p>../scripts/autobahn-test.sh</p></li>
+<li><p>In a browser go to the directory you ran wstest in (eg, /projects/libwebsockets)</p></li>
+</ol>
+<p>file:///projects/libwebsockets/build/reports/clients/index.html</p>
+<p>to see the results</p>
+<p><span class="citation" data-cites="section">@section</span> autobahnnotes Autobahn Test Notes</p>
+<ol type="1">
+<li>Two of the tests make no sense for Libwebsockets to support and we fail them.</li>
+</ol>
+<ul>
+<li>Tests 2.10 + 2.11: sends multiple pings on one connection. Lws policy is to only allow one active ping in flight on each connection, the rest are dropped. The autobahn test itself admits this is not part of the standard, just someone’s random opinion about how they think a ws server should act. So we will fail this by design and it is no problem about RFC6455 compliance.</li>
+</ul>
+<ol start="2" type="1">
+<li>Currently two parts of autobahn are broken and we skip them</li>
+</ol>
+<p>https://github.com/crossbario/autobahn-testsuite/issues/71</p>
+</body>
+</html>

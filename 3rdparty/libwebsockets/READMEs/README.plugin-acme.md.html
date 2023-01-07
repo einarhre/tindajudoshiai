@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README.plugin-acme</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<h1 id="lws-acme-client-plugin">lws-acme-client Plugin</h1>
+<h2 id="introduction">Introduction</h2>
+<p>lws-acme-client is a protcol plugin for libwebsockets that implements an ACME client able to communicate with let’s encrypt and other certificate providers.</p>
+<p>It implements <code>tls-sni-01</code> challenge, and is able to provision tls certificates “from thin air” that are accepted by all the major browsers. It also manages re-requesting the certificate when it only has two weeks left to run.</p>
+<p>It works with both the OpenSSL and mbedTLS backends.</p>
+<h2 id="overview-for-use">Overview for use</h2>
+<p>You need to:</p>
+<ul>
+<li><p>Provide name resolution to the IP with your server, ie, myserver.com needs to resolve to the IP that hosts your server</p></li>
+<li><p>Enable port forwarding / external firewall access to your port, usually 443</p></li>
+<li><p>Enable the “lws-acme-client” plugin on the vhosts you want it to manage certs for</p></li>
+<li><p>Add per-vhost options describing what should be in the certificate</p></li>
+</ul>
+<p>After that the plugin will sort everything else out.</p>
+<h2 id="example-lwsws-setup">Example lwsws setup</h2>
+<pre><code> &quot;vhosts&quot;: [ {
+    &quot;name&quot;:            &quot;home.warmcat.com&quot;,
+    &quot;port&quot;:            &quot;443&quot;,
+        &quot;host-ssl-cert&quot;:           &quot;/etc/lwsws/acme/home.warmcat.com.crt.pem&quot;,
+        &quot;host-ssl-key&quot;:            &quot;/etc/lwsws/acme/home.warmcat.com.key.pem&quot;,
+        &quot;ignore-missing-cert&quot;:     &quot;1&quot;,
+    &quot;access-log&quot;:          &quot;/var/log/lwsws/test-access-log&quot;,
+        &quot;ws-protocols&quot;: [{
+      &quot;lws-acme-client&quot;: {
+        &quot;auth-path&quot;:       &quot;/etc/lwsws/acme/auth.jwk&quot;,
+        &quot;cert-path&quot;:           &quot;/etc/lwsws/acme/home.warmcat.com.crt.pem&quot;,
+        &quot;key-path&quot;:            &quot;/etc/lwsws/acme/home.warmcat.com.key.pem&quot;,
+        &quot;directory-url&quot;:       &quot;https://acme-staging.api.letsencrypt.org/directory&quot;,
+        &quot;country&quot;:             &quot;TW&quot;,
+        &quot;state&quot;:               &quot;Taipei&quot;,
+        &quot;locality&quot;:            &quot;Xiaobitan&quot;,
+        &quot;organization&quot;:        &quot;Crash Barrier Ltd&quot;,
+        &quot;common-name&quot;:         &quot;home.warmcat.com&quot;,
+        &quot;email&quot;:               &quot;andy@warmcat.com&quot;
+      },
+      ...</code></pre>
+<h2 id="required-pvos">Required PVOs</h2>
+<p>Notice that the <code>"host-ssl-cert"</code> and <code>"host-ssl-key"</code> entries have the same meaning as usual, they point to your certificate and private key. However because the ACME plugin can provision these, you should also mark the vhost with <code>"ignore-missing-cert" : "1"</code>, so lwsws will ignore what will initially be missing certificate / keys on that vhost, and will set about creating the necessary certs and keys instead of erroring out.</p>
+<p>You must make sure the directories mentioned here exist, lws doesn’t create them for you. They should be 0700 root:root, even if you drop lws privileges.</p>
+<p>If you are implementing support in code, this corresponds to making sure the vhost creating <code>info.options</code> has the <code>LWS_SERVER_OPTION_IGNORE_MISSING_CERT</code> bit set.</p>
+<p>Similarly, in code, the each of the per-vhost options shown above can be provided in a linked-list of structs at vhost creation time. See <code>./test-apps/test-server-v2.0.c</code> for example code for providing pvos.</p>
+<h3 id="auth-path">auth-path</h3>
+<p>This is where the plugin will store the auth keys it generated.</p>
+<h3 id="cert-path">cert-path</h3>
+<p>Where the plugin will store the certificate file. Should match <code>host-ssl-cert</code> that the vhost wants to use.</p>
+<p>The path should include at least one 0700 root:root directory.</p>
+<h3 id="key-path">key-path</h3>
+<p>Where the plugin will store the certificate keys. Again it should match <code>host-ssl-key</code> the vhost is trying to use.</p>
+<p>The path should include at least one 0700 root:root directory.</p>
+<h3 id="directory-url">directory-url</h3>
+<p>This defines the URL of the certification server you will get your certificates from. For let’s encrypt, they have a “practice” one</p>
+<ul>
+<li><code>https://acme-staging.api.letsencrypt.org/directory</code></li>
+</ul>
+<p>and they have a “real” one</p>
+<ul>
+<li><code>https://acme-v01.api.letsencrypt.org/directory</code></li>
+</ul>
+<p>the main difference is the CA certificate for the real one is in most browsers already, but the staging one’s CA certificate isn’t. The staging server will also let you abuse it more in terms of repeated testing etc.</p>
+<p>It’s recommended you confirm expected operation with the staging directory-url, and then switch to the “real” URL.</p>
+<h3 id="common-name">common-name</h3>
+<p>Your server DNS name, like “libwebsockets.org”. The remote ACME server will use this to find your server to perform the SNI challenges.</p>
+<h3 id="email">email</h3>
+<p>The contact email address for the certificate.</p>
+<h2 id="optional-pvos">Optional PVOs</h2>
+<p>These are not included in the cert by letsencrypt</p>
+<h3 id="country">country</h3>
+<p>Two-letter country code for the certificate</p>
+<h3 id="state">state</h3>
+<p>State “or province” for the certificate</p>
+<h3 id="locality">locality</h3>
+<p>Locality for the certificate</p>
+<h3 id="organization">organization</h3>
+<p>Your company name</p>
+<h2 id="security-key-storage-considerations">Security / Key storage considerations</h2>
+<p>The <code>lws-acme-client</code> plugin is able to provision and update your certificate and keys in an entirely root-only storage environment, even though lws runs as a different uid / gid with no privileges to access the storage dir.</p>
+<p>It does this by opening and holding two WRONLY fds on “update paths” inside the root directory structure for each cert and key it manages; these are the normal cert and key paths with <code>.upd</code> appended. If during the time the server is up the certs become within two weeks of expiry, the <code>lws-acme-client</code> plugin will negotiate new certs and write them to the file descriptors.</p>
+<p>Next time the server starts, if it sees <code>.upd</code> cert and keys, it will back up the old ones and copy them into place as the new ones, before dropping privs.</p>
+<p>To also handle the long-uptime server case, lws will update the vhost with the new certs using in-memory temporary copies of the cert and key after updating the cert.</p>
+<p>In this way the cert and key live in root-only storage but the vhost is kept up to date dynamically with any cert changes as well.</p>
+<h2 id="multiple-vhosts-using-same-cert">Multiple vhosts using same cert</h2>
+<p>In the case you have multiple vhosts using of the same cert, just attach the <code>lws-acme-client</code> plugin to one instance. When the cert updates, all the vhosts are informed and vhosts using the same filepath to access the cert will be able to update their cert.</p>
+<h2 id="implementation-point">Implementation point</h2>
+<p>You will need to remove the auth keys when switching from OpenSSL to mbedTLS. They will be regenerated automatically. It’s the file at this path:</p>
+<pre><code>&quot;auth-path&quot;:       &quot;/etc/lwsws/acme/auth.jwk&quot;,</code></pre>
+</body>
+</html>
