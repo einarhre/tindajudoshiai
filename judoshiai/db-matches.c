@@ -16,6 +16,7 @@
 #include "sqlite3.h"
 #include "judoshiai.h"
 #include "minilisp.h"
+#include "cJSON.h"
 
 static void db_print_one_match(struct match *m);
 
@@ -102,6 +103,15 @@ static gint current_round = 0;
 struct match *get_cached_next_matches(gint tatami)
 {
     return next_matches[tatami];
+}
+
+void json_add_coach_info(cJSON *c, struct judoka *j)
+{
+    gint ix = j->index;
+    cJSON_AddNumberToObject(c, "tatami", coach_info[ix].tatami);
+    cJSON_AddNumberToObject(c, "waittime", coach_info[ix].waittime);
+    cJSON_AddNumberToObject(c, "matchnum", coach_info[ix].matchnum);
+    cJSON_AddNumberToObject(c, "round", coach_info[ix].round);
 }
 
 int lisp_get_next_match(int tatami, int fight)

@@ -160,7 +160,7 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
     if (flags & (PRINT_COMPETITORS | PRINT_COMPETITORS_BY_CLUB)) {
         if (print_file == NULL)
             return 1;
-        write_competitor(print_file, &j, CLUB_TEXT_ADDRESS, flags & PRINT_COMPETITORS_BY_CLUB);
+        write_competitor(print_file, &j, CLUB_TEXT_ADDRESS, flags & PRINT_COMPETITORS_BY_CLUB, NULL);
         write_competitor_for_coach_display(&j);
         return 0;
     }

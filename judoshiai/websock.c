@@ -45,6 +45,8 @@
 #include "httpp.h"
 #include "cJSON.h"
 
+extern gint webpwcrc32;
+
 #define g_print(_a...) do { } while (0)
 
 /* System-dependent definitions */
@@ -142,7 +144,7 @@ static void websock_message(struct jsconn *conn, unsigned char *p,
 	    return;
 	}
 
-	int r = websock_decode_msg(&msg, json);
+	int r = websock_decode_msg(&msg, json, webpwcrc32);
 	cJSON_Delete(json);
 	if (r < 0) {
 	    g_printerr("decode err: %s\n", p);

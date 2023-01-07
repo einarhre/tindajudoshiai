@@ -9,10 +9,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
+#include <ftw.h>
 
 #include "sqlite3.h"
 #include "judoshiai.h"
 #include "language.h"
+#include "cJSON.h"
 
 void write_results(FILE *f);
 static void write_extra_link_files(void);
@@ -30,7 +33,7 @@ static struct {
     gint flags;
 } extra_links[NUM_EXTRA_LINKS];
 
-static void write_result(FILE *f, gint num, struct judoka *j)
+static void write_result(FILE *f, gint num, struct judoka *j, cJSON *json)
 {
     const gchar *first = j->first, *last = j->last;
     const gchar *club = j->club, *country = j->country;
@@ -61,11 +64,22 @@ static void write_result(FILE *f, gint num, struct judoka *j)
                     utf8_to_html(club_text==CLUB_TEXT_CLUB ? club : country));
     }
 
+    if (json) {
+        cJSON *c = cJSON_CreateObject();
+        cJSON_AddNumberToObject(c, "ix", j->index);
+        cJSON_AddNumberToObject(c, "pos", num);
+        cJSON_AddStringToObject(c, "first", first);
+        cJSON_AddStringToObject(c, "last", last);
+        cJSON_AddStringToObject(c, "club", club);
+        cJSON_AddStringToObject(c, "country", country);
+        cJSON_AddItemToArray(json, c);
+    }
+    
     if (create_statistics)
         club_stat_add(club, country, num);
 }
 
-void write_competitor(FILE *f, struct judoka *j, gint club_flags, gboolean by_club)
+void write_competitor(FILE *f, struct judoka *j, gint club_flags, gboolean by_club, cJSON *json)
 {
     // save last club as a hash
     static gint last_crc = 0;
@@ -86,6 +100,23 @@ void write_competitor(FILE *f, struct judoka *j, gint club_flags, gboolean by_cl
 
     club = get_club_text(j, club_flags);
 
+    // JSON
+    if (json) {
+        gint pos = avl_get_competitor_position(index);
+        cJSON *c = cJSON_CreateObject();
+        cJSON_AddNumberToObject(c, "ix", index);
+        cJSON_AddStringToObject(c, "id", j->id ? j->id : "");
+        cJSON_AddStringToObject(c, "coachid", j->coachid ? j->coachid : "");
+        cJSON_AddNumberToObject(c, "pos", pos);
+        cJSON_AddStringToObject(c, "last", last);
+        cJSON_AddStringToObject(c, "first", first);
+        cJSON_AddStringToObject(c, "club", club);
+        cJSON_AddStringToObject(c, "category", category);
+        cJSON_AddStringToObject(c, "belt", grade_visible ? belt : "");
+        json_add_coach_info(c, j);
+        cJSON_AddItemToArray(json, c);
+    }
+    
     if (by_club) {
         gchar buf[16], buf2[16];
         gint crc = pwcrc32((guchar *)club, strlen(club));
@@ -239,6 +270,9 @@ static gint make_left_frame(FILE *f)
     
     fprintf(f,
 	    "<table class=\"resultslink\"><tr><td class=\"resultslink\">"
+            "<a href=\"index1.html\" target=\"_blank\">%s</a></td></tr></table>\r\n", _("Mobile"));
+    fprintf(f,
+	    "<table class=\"resultslink\"><tr><td class=\"resultslink\">"
             "<a href=\"index.html\">%s</a></td></tr></table>\r\n", _T(results));
     fprintf(f,
             "<table class=\"competitorslink\"><tr><td class=\"competitorslink\">"
@@ -317,7 +351,7 @@ static gint make_left_frame(FILE *f)
 }
 
 
-static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_judokas, gboolean dpool2)
+static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_judokas, gboolean dpool2, cJSON *json)
 {
     struct pool_matches pm;
     gint i;
@@ -341,7 +375,7 @@ static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_ju
         // Spanish have two bronzes in pool system
         if (i <= 4 && prop_get_int_val_cat(PROP_TWO_POOL_BRONZES, category) &&
             (pm.j[pm.c[i]]->deleted & HANSOKUMAKE) == 0) {
-            write_result(f, i == 4 ? 3 : i, pm.j[pm.c[i]]);
+            write_result(f, i == 4 ? 3 : i, pm.j[pm.c[i]], json);
             avl_set_competitor_position(pm.j[pm.c[i]]->index, i == 4 ? 3 : i);
             db_set_category_positions(category, pm.j[pm.c[i]]->index, i);
         } else if (i <= nrprint &&
@@ -351,7 +385,7 @@ static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_ju
 		pm.wins[pm.c[i]] == 0)
                 continue;
 
-            write_result(f, i, pm.j[pm.c[i]]);
+            write_result(f, i, pm.j[pm.c[i]], json);
             avl_set_competitor_position(pm.j[pm.c[i]]->index, i);
             db_set_category_positions(category, pm.j[pm.c[i]]->index, i);
         }
@@ -361,7 +395,7 @@ static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_ju
     empty_pool_struct(&pm);
 }
 
-static void dqpool_results(FILE *f, gint category, struct judoka *ctg, gint num_judokas, struct compsys sys)
+static void dqpool_results(FILE *f, gint category, struct judoka *ctg, gint num_judokas, struct compsys sys, cJSON *json)
 {
     struct pool_matches pm;
     struct judoka *j1 = NULL;
@@ -408,25 +442,25 @@ static void dqpool_results(FILE *f, gint category, struct judoka *ctg, gint num_
     }
 
     if (gold && (j1 = get_data(gold))) {
-        write_result(f, 1, j1);
+        write_result(f, 1, j1, json);
         avl_set_competitor_position(gold, 1);
         db_set_category_positions(category, gold, 1);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(silver))) {
-        write_result(f, 2, j1);
+        write_result(f, 2, j1, json);
         avl_set_competitor_position(silver, 2);
         db_set_category_positions(category, silver, 2);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(bronze1))) {
-        write_result(f, 3, j1);
+        write_result(f, 3, j1, json);
         avl_set_competitor_position(bronze1, 3);
         db_set_category_positions(category, bronze1, 3);
         free_judoka(j1);
     }
     if (sys.system != SYSTEM_DPOOL3 && gold && (j1 = get_data(bronze2))) {
-        write_result(f, 3, j1);
+        write_result(f, 3, j1, json);
         avl_set_competitor_position(bronze2, 3);
         db_set_category_positions(category, bronze2, 4);
         free_judoka(j1);
@@ -461,7 +495,7 @@ static void dqpool_results(FILE *f, gint category, struct judoka *ctg, gint num_
         ((COMP_2_PTS_WIN(m[_w]) && m[_w].blue > GHOST) ? m[_w].blue : 0)
 
 static void french_results(FILE *f, gint category, struct judoka *ctg,
-                           gint num_judokas, struct compsys systm, gint pagenum)
+                           gint num_judokas, struct compsys systm, gint pagenum, cJSON *json)
 {
     struct match m[NUM_MATCHES];
     struct judoka *j1;
@@ -525,66 +559,70 @@ static void french_results(FILE *f, gint category, struct judoka *ctg,
     }
 
     if (gold && (j1 = get_data(gold))) {
-        write_result(f, 1, j1);
+        write_result(f, 1, j1, json);
         avl_set_competitor_position(gold, 1);
         db_set_category_positions(category, gold, 1);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(silver))) {
-        write_result(f, 2, j1);
+        write_result(f, 2, j1, json);
         avl_set_competitor_position(silver, 2);
         db_set_category_positions(category, silver, 2);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(bronze1))) {
-        write_result(f, 3, j1);
+        write_result(f, 3, j1, json);
         avl_set_competitor_position(bronze1, 3);
         db_set_category_positions(category, bronze1, 3);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(bronze2))) {
-        write_result(f, 3, j1);
+        write_result(f, 3, j1, json);
         avl_set_competitor_position(bronze2, 3);
         db_set_category_positions(category, bronze2, 4);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(fourth))) {
-        write_result(f, 4, j1);
+        write_result(f, 4, j1, json);
         avl_set_competitor_position(fourth, 4);
         db_set_category_positions(category, fourth, 4);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(fifth1))) {
-        write_result(f, 5, j1);
+        write_result(f, 5, j1, json);
         avl_set_competitor_position(fifth1, 5);
         db_set_category_positions(category, fifth1, 5);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(fifth2))) {
-        write_result(f, 5, j1);
+        write_result(f, 5, j1, json);
         avl_set_competitor_position(fifth2, 5);
         db_set_category_positions(category, fifth2, 6);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(seventh1))) {
-        write_result(f, 7, j1);
+        write_result(f, 7, j1, json);
         avl_set_competitor_position(seventh1, 7);
         db_set_category_positions(category, seventh1, 7);
         free_judoka(j1);
     }
     if (gold && (j1 = get_data(seventh2))) {
-        write_result(f, 7, j1);
+        write_result(f, 7, j1, json);
         avl_set_competitor_position(seventh2, 7);
         db_set_category_positions(category, seventh2, 8);
         free_judoka(j1);
     }
 }
 
-static void write_cat_result(FILE *f, gint category)
+static void write_cat_result(FILE *f, gint category, cJSON *catlist)
 {
     gint num_judokas;
     struct judoka *ctg = NULL;
     struct compsys sys;
+    cJSON *jsoncat = NULL, *jsoncomp = NULL;
+
+    if (catlist)
+        jsoncat = cJSON_CreateObject();
 
     ctg = get_data(category);
 
@@ -601,17 +639,26 @@ static void write_cat_result(FILE *f, gint category)
     fprintf(f, "<tr><td colspan=\"3\"><b><a href=\"%s.html\">%s</a></b> (%d) </td></tr>\r\n",
             txt2hex(ctg->last), utf8_to_html(ctg->last), num_judokas);
 
+    if (jsoncat) {
+        cJSON_AddStringToObject(jsoncat, "category", ctg->last);
+        cJSON_AddNumberToObject(jsoncat, "numcomp", num_judokas);
+        cJSON_AddNumberToObject(jsoncat, "clubtext", club_text);
+        cJSON_AddNumberToObject(jsoncat, "nameord", firstname_lastname());
+        jsoncomp = cJSON_CreateArray();
+        cJSON_AddItemToObject(jsoncat, "competitors", jsoncomp);
+    }
+    
     switch (sys.system) {
     case SYSTEM_POOL:
     case SYSTEM_DPOOL2:
     case SYSTEM_BEST_OF_3:
-        pool_results(f, category, ctg, num_judokas, sys.system == SYSTEM_DPOOL2);
+        pool_results(f, category, ctg, num_judokas, sys.system == SYSTEM_DPOOL2, jsoncomp);
         break;
 
     case SYSTEM_DPOOL:
     case SYSTEM_DPOOL3:
     case SYSTEM_QPOOL:
-        dqpool_results(f, category, ctg, num_judokas, sys);
+        dqpool_results(f, category, ctg, num_judokas, sys, jsoncomp);
         break;
 
     case SYSTEM_FRENCH_8:
@@ -620,10 +667,13 @@ static void write_cat_result(FILE *f, gint category)
     case SYSTEM_FRENCH_64:
     case SYSTEM_FRENCH_128:
         french_results(f, category, ctg, num_judokas,
-                       sys, 0);
+                       sys, 0, jsoncomp);
         break;
     }
 
+    if (jsoncat && catlist)
+        cJSON_AddItemToArray(catlist, jsoncat);
+    
     /* clean up */
     free_judoka(ctg);
 }
@@ -650,7 +700,7 @@ void write_results(FILE *f)
             gtk_tree_model_get(current_model, &iter,
                                COL_INDEX, &index,
                                -1);
-            write_cat_result(f, index);
+            write_cat_result(f, index, NULL);
         }
 
         ok = gtk_tree_model_iter_next(current_model, &iter);
@@ -810,7 +860,7 @@ out:
     gdpr_enable--;
 }
 
-void match_statistics(FILE *f)
+void match_statistics(FILE *f, cJSON *json)
 {
     extern gint num_categories;
     extern struct cat_def category_definitions[];
@@ -965,6 +1015,34 @@ out:
         }
 
     fprintf(f, "</table></td>\n");
+
+    if (json) {
+        cJSON *e;
+        for (i = 0; i < num_categories; i++) {
+            e = cJSON_CreateObject();
+            cJSON_AddStringToObject(e, "cat", category_definitions[i].agetext);
+            cJSON_AddNumberToObject(e, "competitors", category_definitions[i].stat.comp);
+            cJSON_AddNumberToObject(e, "matches", category_definitions[i].stat.total);
+            cJSON_AddNumberToObject(e, "ippons", category_definitions[i].stat.ippons);
+            cJSON_AddNumberToObject(e, "wazaaris", category_definitions[i].stat.wazaaris);
+            cJSON_AddNumberToObject(e, "shidowins", category_definitions[i].stat.shidowins);
+            cJSON_AddNumberToObject(e, "goldenscores", category_definitions[i].stat.goldenscores);
+            gint tmo = category_definitions[i].stat.total > 0 ?
+                category_definitions[i].stat.time / category_definitions[i].stat.total : 0;
+            cJSON_AddNumberToObject(e, "time", tmo);
+            cJSON_AddItemToArray(json, e);
+        }
+        e = cJSON_CreateObject();
+        cJSON_AddStringToObject(e, "cat", "total");
+        cJSON_AddNumberToObject(e, "competitors", totc);
+        cJSON_AddNumberToObject(e, "matches", tott);
+        cJSON_AddNumberToObject(e, "ippons", toti);
+        cJSON_AddNumberToObject(e, "wazaaris", totw);
+        cJSON_AddNumberToObject(e, "shidowins", totsw);
+        cJSON_AddNumberToObject(e, "goldenscores", totg);
+        cJSON_AddNumberToObject(e, "time", tott > 0 ? (tots/tott) : 0);
+        cJSON_AddItemToArray(json, e);
+    }
 }
 
 void write_comp_stat(gint index)
@@ -1241,9 +1319,43 @@ static gint list_categories(gint *num_comp)
     return competitor_count;
 }
 
+static int copy_file_cb(const char *path,
+       const struct stat *st,
+       int flag)
+{
+    gchar *p = strstr(path, "results");
+    if (p) {
+        gchar *dst = g_build_filename(current_directory, p+8, NULL);
+        if (flag == FTW_D) {
+            g_mkdir_with_parents(dst, 0777);
+        } else if (flag == FTW_F) {
+            gchar *contents = NULL;
+            gsize length;
+            if (g_file_get_contents(path, &contents, &length, NULL)) {
+                g_file_set_contents(dst, contents, length, NULL);
+                g_free(contents);
+            }
+        }
+        g_free(dst);
+    }
+    return 0;
+}
+
+static void write_json(gchar *filename, cJSON *json)
+{
+    char *txt = cJSON_Print(json);
+    if (txt) {
+        gchar *file = g_build_filename(current_directory, filename, NULL);
+        g_file_set_contents(file, txt, -1, NULL);
+        g_free(file);
+        free(txt);
+    }
+}
+
 static gboolean make_png_all_bg(gpointer user_data)
 {
     static FILE *f = NULL;
+    static cJSON *jsonroot = NULL;
     //static gchar fname[1024];
     static gint i, num_cats, num_comps;
 
@@ -1255,11 +1367,38 @@ static gboolean make_png_all_bg(gpointer user_data)
          * clean up
          */
     case MAKE_PNG_STATE_IDLE:
+        {
+            gchar *src = g_build_filename(installation_dir, "etc", "web", "results", NULL);
+            gchar *dst = g_build_filename(current_directory, NULL);
+            g_mkdir_with_parents(dst, 0777);
+            g_free(dst);
+            g_print("COPYING %s\n", src);
+            ftw(src, copy_file_cb, 1);
+            g_free(src);
+            src = g_build_filename(current_directory, "index.html", NULL);
+            dst = g_build_filename(current_directory, "index1.html", NULL);
+            g_rename(src, dst);
+            g_free(src);
+            g_free(dst);
+        }
+    
         if (f) fclose(f);
         f = NULL;
         num_cats = gtk_tree_model_iter_n_children(current_model, NULL);
         make_png_all_state = MAKE_PNG_STATE_INDEX_HTML_1;
 	write_extra_link_files();
+
+        if (jsonroot) cJSON_Delete(jsonroot);
+        jsonroot = cJSON_CreateObject();
+        if (jsonroot) {
+            cJSON_AddStringToObject(jsonroot, "name", prop_get_str_val(PROP_NAME));
+            cJSON_AddStringToObject(jsonroot, "date", prop_get_str_val(PROP_DATE));
+            cJSON_AddStringToObject(jsonroot, "place", prop_get_str_val(PROP_PLACE));
+            write_json("info.json", jsonroot);
+            cJSON_Delete(jsonroot);
+            jsonroot = NULL;
+        }
+        
         return TRUE;
 
         /*
@@ -1268,6 +1407,8 @@ static gboolean make_png_all_bg(gpointer user_data)
     case MAKE_PNG_STATE_INDEX_HTML_1:
         f = open_write("index.html");
         if (!f) return FALSE;
+
+        jsonroot = cJSON_CreateArray();
 
         make_top_frame(f);
         make_left_frame(f);
@@ -1287,7 +1428,7 @@ static gboolean make_png_all_bg(gpointer user_data)
         // print one category result to index.html
         if (i < competitor_count) {
 	    gdpr_enable++;
-            write_cat_result(f, competitor_table[i++]);
+            write_cat_result(f, competitor_table[i++], jsonroot);
 	    gdpr_enable--;
 
             if (create_statistics)
@@ -1306,6 +1447,13 @@ static gboolean make_png_all_bg(gpointer user_data)
         make_bottom_frame(f);
         fclose(f);
         f = NULL;
+
+        if (jsonroot) {
+            write_json("results.json", jsonroot);
+            cJSON_Delete(jsonroot);
+            jsonroot = NULL;
+        }
+        
         make_png_all_state = MAKE_PNG_STATE_NEXT_MATCHES;
         return TRUE;
 
@@ -1351,6 +1499,10 @@ static gboolean make_png_all_bg(gpointer user_data)
     case MAKE_PNG_STATE_COMPETITORS_HTML_1:
         f = open_write("competitors.html");
         if (!f) return FALSE;
+
+        if (jsonroot) cJSON_Delete(jsonroot);
+        jsonroot = cJSON_CreateArray();
+        
         make_top_frame_1(f, "<script type=\"text/javascript\" src=\"coach.js\" charset=\"utf-8\"></script>",
 			 TRUE);
 	gdpr_enable++;
@@ -1377,7 +1529,7 @@ static gboolean make_png_all_bg(gpointer user_data)
             struct judoka *j = get_data(i);
             if (j) {
 		gdpr_enable++;
-                write_competitor(f, j, CLUB_TEXT_ADDRESS, 0);
+                write_competitor(f, j, CLUB_TEXT_ADDRESS, 0, jsonroot);
                 write_competitor_for_coach_display(j);
 		gdpr_enable--;
             }
@@ -1391,6 +1543,13 @@ static gboolean make_png_all_bg(gpointer user_data)
         make_bottom_frame(f);
         fclose(f);
         f = NULL;
+
+        if (jsonroot) {
+            write_json("competitors.json", jsonroot);
+            cJSON_Delete(jsonroot);
+            jsonroot = NULL;
+        }
+        
         make_png_all_state = MAKE_PNG_STATE_COMPETITORS2_HTML_1;
         return TRUE;
 
@@ -1423,7 +1582,7 @@ static gboolean make_png_all_bg(gpointer user_data)
             struct judoka *j = get_data(i);
             if (j) {
 		gdpr_enable++;
-                write_competitor(f, j, CLUB_TEXT_ADDRESS, TRUE);
+                write_competitor(f, j, CLUB_TEXT_ADDRESS, TRUE, NULL);
 		gdpr_enable--;
                 //write_competitor_for_coach_display(j);
             }
@@ -1446,14 +1605,21 @@ static gboolean make_png_all_bg(gpointer user_data)
             /* medal list */
             f = open_write("medals.html");
             if (f) {
+                if (jsonroot) cJSON_Delete(jsonroot);
+                jsonroot = cJSON_CreateArray();
 		gdpr_enable++;
                 make_top_frame(f);
                 make_left_frame(f);
-                club_stat_print(f);
+                club_stat_print(f, jsonroot);
                 make_bottom_frame(f);
 		gdpr_enable--;
                 fclose(f);
                 f = NULL;
+                if (jsonroot) {
+                    write_json("medals.json", jsonroot);
+                    cJSON_Delete(jsonroot);
+                    jsonroot = NULL;
+                }
             }
         }
         i = 0;
@@ -1499,15 +1665,25 @@ static gboolean make_png_all_bg(gpointer user_data)
         if (create_statistics) {
             f = open_write("statistics.html");
             if (f) {
+                if (jsonroot) cJSON_Delete(jsonroot);
+                jsonroot = cJSON_CreateArray();
+
                 make_top_frame(f);
                 make_left_frame(f);
-                match_statistics(f);
+                match_statistics(f, jsonroot);
                 make_bottom_frame(f);
                 fclose(f);
                 f = NULL;
+
+                if (jsonroot) {
+                    write_json("statistics.json", jsonroot);
+                    cJSON_Delete(jsonroot);
+                    jsonroot = NULL;
+                }
             }
         }
 	gdpr_enable--;
+
         make_png_all_state = MAKE_PNG_STATE_IDLE;
 	progress_show(0, "");
 	return FALSE;
@@ -1660,6 +1836,46 @@ void make_next_matches_html(gboolean frame)
 #else
     g_static_mutex_lock(&next_match_mutex);
 #endif
+    // JSON
+    cJSON *jsonroot = cJSON_CreateArray();
+    for (i = 0; i < number_of_tatamis; i++) {
+        struct match *m = get_cached_next_matches(i+1);
+        cJSON *t = cJSON_CreateObject();
+        cJSON_AddNumberToObject(t, "tatami", i+1);
+        cJSON *matches = cJSON_CreateArray();
+
+        for (k = 0; k < INFO_MATCH_NUM; k++) {
+            if (m[k].number >= 1000)
+                continue;
+            struct judoka *cat = get_data(m[k].category);
+            struct judoka *comp1 = get_data(m[k].blue);
+            struct judoka *comp2 = get_data(m[k].white);
+
+            if (cat) {
+                cJSON *e = cJSON_CreateObject();
+                cJSON_AddNumberToObject(e, "num", k+1);
+                cJSON_AddStringToObject(e, "cat", cat->last);
+                cJSON_AddStringToObject(e, "first1", comp1 ? comp1->first : "");
+                cJSON_AddStringToObject(e, "last1", comp1 ? comp1->last : "");
+                cJSON_AddStringToObject(e, "club1", comp1 ? get_club_text(comp1, 0) : "");
+                cJSON_AddStringToObject(e, "first2", comp2 ? comp2->first : "");
+                cJSON_AddStringToObject(e, "last2", comp2 ? comp2->last : "");
+                cJSON_AddStringToObject(e, "club2", comp2 ? get_club_text(comp2, 0) : "");
+                cJSON_AddItemToArray(matches, e);
+            }
+
+            free_judoka(cat);
+            free_judoka(comp1);
+            free_judoka(comp2);
+        }
+        
+        cJSON_AddItemToObject(t, "matches", matches);
+        cJSON_AddItemToArray(jsonroot, t);
+    }
+    write_json("nextmatches.json", jsonroot);
+    cJSON_Delete(jsonroot);
+    // JSON
+
     for (k = 0; k < INFO_MATCH_NUM; k++) {
         //gchar *bgcolor = (k & 1) ? "bgcolor=\"#a0a0a0\"" : "bgcolor=\"#f0f0f0\"";
         gchar *class_ul = (k & 1) ? "class=\"cul1\"" : "class=\"cul2\"";

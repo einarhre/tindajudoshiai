@@ -12,6 +12,7 @@
 #include <assert.h>
 
 #include "judoshiai.h"
+#include "cJSON.h"
 
 struct competitor_hash_data {
     gint hash;
@@ -913,7 +914,7 @@ static int iter_clubs(void *key, void *iter_arg)
     return 0;
 }
 
-void club_stat_print(FILE *f)
+void club_stat_print(FILE *f, cJSON *json)
 {
     struct club_data *p, *prev = NULL;
     gint pos = 0, prpos = 0;
@@ -947,6 +948,17 @@ void club_stat_print(FILE *f)
                 "<td class=\"medalcnt\">%d</td></tr>\n", 
                 prpos, utf8_to_html(get_club_text(&j, CLUB_TEXT_ADDRESS)), 
                 p->gold, p->silver, p->bronze, p->competitors);
+
+        if (json) {
+            cJSON *e = cJSON_CreateObject();
+            cJSON_AddStringToObject(e, "club", get_club_text(&j, CLUB_TEXT_ADDRESS));
+            cJSON_AddNumberToObject(e, "pos", prpos);
+            cJSON_AddNumberToObject(e, "p1", p->gold);
+            cJSON_AddNumberToObject(e, "p2", p->silver);
+            cJSON_AddNumberToObject(e, "p3", p->bronze);
+            cJSON_AddNumberToObject(e, "numcompetitors", p->competitors);
+            cJSON_AddItemToArray(json, e);
+        }
     }
 
     fprintf(f, "</table></td>");

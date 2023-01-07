@@ -854,6 +854,7 @@ static struct player_bare get_player_bare(struct player *c)
     if (c->comp) {
         b.type = COMP_TYPE_COMPETITOR;
         b.num = c->comp;
+	b.pos = 0;
     } else if (get_rr_num(c->match->name)) {
         b.type = COMP_TYPE_ROUND_ROBIN;
         b.num = get_rr_num(c->match->name);

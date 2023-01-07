@@ -20,6 +20,8 @@
 #include "judoshiai.h"
 #include "language.h"
 
+extern gint webpwcrc32;
+
 extern void about_shiai(GtkWidget *w, gpointer data);
 extern void new_shiai(GtkWidget *w, gpointer data);
 extern void open_shiai_from_net(GtkWidget *w, gpointer data);

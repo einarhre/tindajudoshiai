@@ -94,6 +94,8 @@
 #define SYSTEM_QPOOL_Z        (SYSTEM_QPOOL<<SYSTEM_MASK_SHIFT)
 #endif
 
+struct cJSON;
+
 enum tables {
     TABLE_DOUBLE_REPECHAGE = 0,
     TABLE_SWE_DUBBELT_AATERKVAL,
@@ -883,7 +885,6 @@ extern gboolean pool_style;
 extern gboolean belt_colors;
 extern gboolean cleanup_import;
 extern gboolean create_statistics;
-extern gint webpwcrc32;
 extern gboolean use_weights;
 
 extern const char *db_name;
@@ -1049,6 +1050,7 @@ extern struct match *db_next_match(gint category, gint tatami);
 extern void db_write_c_matches(void);
 extern struct match *db_matches_waiting(void);
 extern struct match *get_cached_next_matches(gint tatami);
+extern void json_add_coach_info(struct cJSON *c, struct judoka *j);
 extern void db_freeze_matches(gint tatami, gint category, gint number, gint arg);
 extern void db_set_forced_tatami(gint tatami, gint category, gint number);
 extern void db_change_freezed(gint category, gint number,
@@ -1074,7 +1076,7 @@ extern void db_print_competitors_by_club(FILE *f);
 extern void db_list_competitors(gboolean by_club);
 extern gint db_get_next_listed_competitor(void);
 extern gint db_get_index_by_id(const gchar *id, gboolean *coach);
-extern void write_competitor(FILE *f, struct judoka *j, gint club_flags, gboolean by_club);
+extern void write_competitor(FILE *f, struct judoka *j, gint club_flags, gboolean by_club, struct cJSON *json);
 extern void write_competitor_for_coach_display(struct judoka *j);
 extern int db_get_table(char *command);
 extern void db_close_table(void);
@@ -1305,7 +1307,7 @@ extern gint avl_get_competitor_position(gint index);
 extern void avl_init_competitor_position(void);
 extern void init_club_tree(void);
 extern void club_stat_add(const gchar *club, const gchar *country, gint num);
-extern void club_stat_print(FILE *f);
+extern void club_stat_print(FILE *f, struct cJSON *json);
 extern const gchar *utf8_to_html(const gchar *txt);
 extern void init_club_name_tree(void);
 extern void club_name_set(const gchar *club,

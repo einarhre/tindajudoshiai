@@ -41,11 +41,15 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 
+//#define MYDEBUG 1
+
 #include "judoshiai.h"
 #include "common-utils.h"
 #include "cJSON.h"
 
 #include "microhttpd.h"
+
+extern gint webpwcrc32;
 
 #define httpp_get_query_param(_parser, _str) \
     MHD_lookup_connection_value(_parser, MHD_GET_ARGUMENT_KIND, _str)
@@ -125,21 +129,21 @@ gint mysend(SOCKET s, const gchar *p, gint len)
 {
     gint n;
 #if 0
-    g_print("-->");
+    mylog("-->");
     for (n = 0; n < len; n++)
-        g_print("%c", p[n]);
-    g_print("<--\n");
+        mylog("%c", p[n]);
+    mylog("<--\n");
 #endif
     while (len > 0) {
         n = send(s, p, len, 0);
         if (n < 0) {
-            g_print("mysend: cannot send (%d)\n", n);
+            mylog("mysend: cannot send (%d)\n", n);
             return n;
         }
         len -= n;
         p += n;
         if (len) {
-            g_print("mysend: only %d bytes sent\n", n);
+            mylog("mysend: only %d bytes sent\n", n);
         }
     }
     return len;
@@ -163,7 +167,7 @@ gint www_send(http_parser_t *parser, string *s, const gchar *mime)
     struct MHD_Response *response;
     response = MHD_create_response_from_buffer(s->len, s->buf, MHD_RESPMEM_MUST_FREE);
     if (!response) {
-	g_printerr("ERROR: response\n");
+	mylogerr("ERROR: response\n");
 	string_free(s);
 	return MHD_NO;
     }
@@ -197,7 +201,7 @@ static void add_accepted(gulong addr)
             ipaddresses[i] = addr;
             return;
         }
-    g_print("ERROR: No more space for accepted IP addresses!\n");
+    mylog("ERROR: No more space for accepted IP addresses!\n");
 }
 
 static gboolean is_accepted(http_parser_t *parser)
@@ -287,7 +291,7 @@ int get_categories(http_parser_t *parser)
         gint cat, num, pts;
         gint t = atoi(h_tatami) - 1;
         sscanf(win+1, "-%d-%d-%d", &cat, &num, &pts);
-        //g_print("%d %d %d\n", cat, num, pts);
+        //mylog("%d %d %d\n", cat, num, pts);
 
         if (win[0] == 'R') {
             db_set_comment(next_matches_info[t][1].catnum,
@@ -536,7 +540,7 @@ void set_bracket_status(gint catid, gint c)
             while (j < 5 && g_unlink(filename)) {
                 // cannot rm, wait
                 j++;
-                g_print("Cannot unlink %s, wait (%d)\n", filename, j);
+                mylog("Cannot unlink %s, wait (%d)\n", filename, j);
                 g_usleep(100000);
             }
         }
@@ -552,7 +556,7 @@ gint get_bracket_status(gint catid, gint type)
     if (g_stat(filename, &st) == 0) {
         time_t mtim = st.st_mtime;
         time_t now = time(NULL);
-        //g_print("%s: time st=%d now=%d diff=%d\n", filename, (int)mtim, (int)now, (int)(now - mtim));
+        //mylog("%s: time st=%d now=%d diff=%d\n", filename, (int)mtim, (int)now, (int)(now - mtim));
         if (mtim > now - 10)
             r = 1;
     }
@@ -564,7 +568,7 @@ void get_bracket_2(gint tatami, gint catid, gint svg, gint page, struct msg_web_
 {
     tatami--;
 
-    g_print("get_bracket t=%d cat=%d svg=%d\n", tatami, catid, svg);
+    mylog("get_bracket t=%d cat=%d svg=%d\n", tatami, catid, svg);
     if (catid == 0 && tatami >= 0 && tatami < NUM_TATAMIS)
 	catid = next_matches_info[tatami][0].catnum;
 
@@ -580,7 +584,7 @@ void get_bracket_2(gint tatami, gint catid, gint svg, gint page, struct msg_web_
     snprintf(prefix, sizeof(prefix), "%d", catid);
 
     if (get_bracket_status(catid, svg) == 0) {
-        g_print("*** WRITE %s/%s\n", dir, prefix);
+        mylog("*** WRITE %s/%s\n", dir, prefix);
         if (svg == 2)
             pdf_file(catid, dir, prefix);
         else
@@ -764,31 +768,49 @@ void send_html_top(string *s, http_parser_t *parser, gchar *bodyattr)
     string_concat(s, "<html><head>"
 	  "<meta name=\"viewport\" content=\"width=device-width, "
 	  "target-densitydpi=device-dpi\">\r\n"
-	  "<link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap.css\">"
+          "<link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap.css\">"
 	  "<link rel=\"stylesheet\" type=\"text/css\" href=\"jquery.treetable.theme.default.css\" />\r\n"
 	  "<link rel=\"stylesheet\" type=\"text/css\" href=\"jquery.treetable.css\" />\r\n"
           "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
  	  "<script language=\"JavaScript\" type=\"text/javascript\" src=\"jquery.js\"></script>"
 	  "<script language=\"JavaScript\" type=\"text/javascript\" src=\"bootstrap.min.js\"></script>"
 	  "<script language=\"JavaScript\" type=\"text/javascript\" src=\"jquery.treetable.js\"></script>\r\n"
-          "<title>JudoShiai</title></head><body %s>\r\n", bodyattr);
+          "<title>JudoShiai</title></head><body style=\"font-family: Verdana, Arial\" %s>\r\n", bodyattr);
 
+    /***
     if (webpwcrc32) {
 	if (is_accepted(parser))
 	    string_concat(s, "<a href=\"logout\">%s</a>\r\n", _("Logout"));
 	else
 	    string_concat(s, "<a href=\"login\">%s</a>\r\n", _("Login"));
     }
+    ***/
 
-    string_concat(s, "<a href=\"/web/judoshiai/index.html\"><img src=\"judoshiai.png\"></a>\r\n");
-    string_concat(s, "<a href=\"/web/timer/index.html\"><img src=\"judotimer.png\"></a>\r\n");
-    string_concat(s, "<a href=\"/web/info/index.html\"><img src=\"judoinfo.png\"></a>\r\n");
-    string_concat(s, "<a href=\"/web/weight/index..html\"><img src=\"judoweight.png\"></a>\r\n");
-    string_concat(s, "<p><br><a href=\"competitors.html?g=6\">Competitors by category</a>\r\n");
-    string_concat(s, "<br><a href=\"competitors.html?g=11\">Competitors by country</a>\r\n");
-    string_concat(s, "<br><a href=\"competitors.html?g=5\">Competitors by club</a>\r\n");
-    string_concat(s, "</p><br><p><a href=\"https://sourceforge.net/projects/judoshiai/\">"
-                  "<img src=\"auto-update.png\"><b>Download JudoShiai from Sourceforge.</b></a></p>");
+    string_concat(s, "<h2>JudoShiai Web Interface</h2>");
+    string_concat(s, "<table><tr><td>HTTP</td>");
+    string_concat(s, "<td><a href=\"/web/shiai/index.html\"><img src=\"judoshiai.png\"></a></td>");
+    string_concat(s, "<td><a href=\"/web/timer/index.html\"><img src=\"judotimer.png\"></a></td>");
+    string_concat(s, "<td><a href=\"/web/info/index.html\"><img src=\"judoinfo.png\"></a></td>");
+    string_concat(s, "<td><a href=\"/web/weight/index.html\"><img src=\"judoweight.png\"></a></td></tr></table>");
+
+    const gchar *host = MHD_lookup_connection_value(parser, MHD_HEADER_KIND, "Host");
+    if (host) {
+        gchar host1[128];
+        g_strlcpy(host1,  host, sizeof(host1));
+        gchar *p = strchr(host1, ':');
+        if (p) *p = 0;
+        string_concat(s, "<table><tr><td>HTTPS</td>");
+        string_concat(s, "<td><a href=\"https://%s:8800/web/weight/index.html\"><img src=\"judoweight.png\"></a></td>", host1);
+        string_concat(s, "<td>Https is required to enable web camera for QR scanning.<br>You will get a warning. Ignore it and continue."
+                      "</td></tr></table>");
+    }
+
+    gint pw = webpwcrc32 != 0;
+    string_concat(s, "<p><br><a href=\"competitors.html?g=6&pw=%d\">Competitors by category</a>\r\n", pw);
+    string_concat(s, "<br><a href=\"competitors.html?g=11&pw=%d\">Competitors by country</a>\r\n", pw);
+    string_concat(s, "<br><a href=\"competitors.html?g=5&pw=%d\">Competitors by club</a>", pw);
+    string_concat(s, "<table><tr><td><a href=\"https://sourceforge.net/projects/judoshiai/\">"
+                  "<img src=\"auto-update.png\"></td><td>Download JudoShiai from Sourceforge.</a></td></tr></table>");
 }
 
 void send_html_bottom(string *s, http_parser_t *parser)
@@ -909,7 +931,7 @@ int run_judotimer(http_parser_t *parser)
 
         if (k == 0 && 
             strcmp(next_matches_info[tatami-1][0].blue_first, blue->first))
-            g_print("NEXT MATCH ERR: %s %s\n", 
+            mylog("NEXT MATCH ERR: %s %s\n", 
                     next_matches_info[tatami-1][0].blue_first, blue->first);
 
         string_concat(&s, "%s\r\n", jcat->last);
@@ -1030,7 +1052,7 @@ int get_web(http_parser_t *parser, gint connum)
 	break;
 
     default:
-        g_print("UNKNOWN WEB OP %d\n", op);
+        mylog("UNKNOWN WEB OP %d\n", op);
         goto err;
     }
 
@@ -1044,7 +1066,7 @@ int get_web(http_parser_t *parser, gint connum)
     }
     if (time(NULL) >= start + 5 ||
         g_atomic_int_get(&resp->ready) != MSG_WEB_RESP_OK) {
-        g_printerr("NO WEB REPLY\n");
+        mylogerr("NO WEB REPLY\n");
         return reply_web(parser, NULL);
     }
     
@@ -1058,21 +1080,21 @@ int reply_web(http_parser_t *parser, struct msg_web_resp *resp)
     cJSON *root, *array, *member;
     FSTART;
 
-    g_print("reply_web\n");
+    mylog("reply_web\n");
     if (!resp) {
         FEND_404;
     }
     
     gint op = resp->request, i;
     gint ready = g_atomic_int_get(&resp->ready);
-    g_print("reply_web op=%d ready=%d\n", op, ready);
+    mylog("reply_web op=%d ready=%d\n", op, ready);
 
     resp->request = 0;
 
     if (op == MSG_WEB_GET_BRACKET) {
         GStatBuf st;
         struct MHD_Response *response;
-        g_print("looking for %s\n", resp->u.get_bracket_resp.filename);
+        mylog("looking for %s\n", resp->u.get_bracket_resp.filename);
         HANDLE fd = int_to_handle(g_open(resp->u.get_bracket_resp.filename, O_RDONLY, 0));
         if (fd != INVALID_HANDLE_VALUE) {
             if (g_stat(resp->u.get_bracket_resp.filename, &st) || (!S_ISREG(st.st_mode))) {
@@ -1086,7 +1108,7 @@ int reply_web(http_parser_t *parser, struct msg_web_resp *resp)
         }
 
         if (fd == INVALID_HANDLE_VALUE) {
-            g_print("WEB RESP: FILE %s NOT FOUND!\n", resp->u.get_bracket_resp.filename);
+            mylog("WEB RESP: FILE %s NOT FOUND!\n", resp->u.get_bracket_resp.filename);
             response = MHD_create_response_from_buffer(strlen (PAGE),
                                                        (void *) PAGE,
                                                        MHD_RESPMEM_PERSISTENT);
@@ -1098,7 +1120,7 @@ int reply_web(http_parser_t *parser, struct msg_web_resp *resp)
 
         response = MHD_create_response_from_fd64(st.st_size, handle_to_int(fd));
         if (!response) {
-            g_printerr("response failed\n");
+            mylogerr("response failed\n");
 #ifdef WIN32
             CloseHandle(fd);
 #else
@@ -1714,7 +1736,7 @@ int get_judoshiai(http_parser_t *parser, gchar *txt)
     if (tmp) x = atoi(tmp);
     tmp = httpp_get_query_param(parser, "y");
     if (tmp) y = atoi(tmp);
-    g_print("tab=%d x=%d y=%d\n", tab, x, y);
+    mylog("tab=%d x=%d y=%d\n", tab, x, y);
 
     if (y > 44 && y < 76) {
 	t = (x-14)/125;
@@ -1796,7 +1818,7 @@ int get_next_match(http_parser_t *parser, gchar *txt)
     t = my_atoi(httpp_get_query_param(parser, "t"));
 
     if (t <= 0 || t > NUM_TATAMIS) {
-	g_print("next match t=%d\n", t);
+	mylog("next match t=%d\n", t);
         FEND_404;
     }
 
@@ -1902,8 +1924,6 @@ int get_file(struct MHD_Connection *connection, const char *url)
         } else if (!strcmp(p2, "js") || !strcmp(p2, "mem") || !strcmp(p2, "map")) {
 	    mime = "text/javascript";
 	    dir = "js";
-        } else if (!strcmp(p2, "map")) {
-	    dir = "js";
         } else if (!strcmp(p2, "data")) {
 	    dir = "html";
         } else if (!strcmp(p2, "wasm")) {
@@ -1938,14 +1958,14 @@ int get_file(struct MHD_Connection *connection, const char *url)
     gchar *docfile1 = g_build_filenamev(path);
     gchar *docfile = docfile1;
     GStatBuf st;
-    //g_print("GET1 %s\n", docfile1);
+
+    mylog("GET FULL %s\n", docfile);
     if (g_stat(docfile1, &st) || (!S_ISREG(st.st_mode))) {
-        g_print("FIX\n");
         docfile = g_build_filename(docfile1, "index.html", NULL);
         mime = "text/html";
         g_free(docfile1);
     }
-    //g_print("GET2 %s\n", docfile);
+    mylog("GET FIXED %s\n", docfile);
 
     //FILE *f = fopen(docfile, "rb");
     HANDLE fd = int_to_handle(g_open(docfile, O_RDONLY, 0));
@@ -1953,7 +1973,7 @@ int get_file(struct MHD_Connection *connection, const char *url)
     if (fd != INVALID_HANDLE_VALUE) {
 	if (g_stat(docfile, &st) || (!S_ISREG(st.st_mode))) {
 	    /* not a regular file, refuse to serve */
-            g_printerr("%s is not a regular file %x\n", docfile, st.st_mode);
+            mylogerr("%s is not a regular file %x\n", docfile, st.st_mode);
 #ifdef WIN32
             CloseHandle(fd);
 #else
@@ -1962,7 +1982,7 @@ int get_file(struct MHD_Connection *connection, const char *url)
 	    fd = INVALID_HANDLE_VALUE;
 	}
     }
-    //g_print("FD=%p\n", fd);
+    //mylog("FD=%p\n", fd);
     
     g_strfreev(path1);
     g_free(docfile);
@@ -1979,7 +1999,7 @@ int get_file(struct MHD_Connection *connection, const char *url)
 
     response = MHD_create_response_from_fd64(st.st_size, handle_to_int(fd));
     if (!response) {
-        g_printerr("response failed\n");
+        mylogerr("response failed\n");
 #ifdef WIN32
         CloseHandle(fd);
 #else
@@ -2011,10 +2031,7 @@ struct UploadContext
     int   space;
 };
 
-#define httpp_get_query_param(_parser, _str) \
-    MHD_lookup_connection_value(_parser, MHD_GET_ARGUMENT_KIND, _str)
-
-#define log g_printerr
+#define log mylogerr
 
 #define RETURN_404 \
     response = MHD_create_response_from_buffer(strlen (PAGE), (void *) PAGE, MHD_RESPMEM_PERSISTENT); \
@@ -2029,16 +2046,26 @@ int keyValueIterator(void *cls,
 		     const char *value) {
     struct MHD_Response *response = cls;
 
-    //g_print("KEY=%s VALUE=%s\n", key, value);
+    mylog("KEY=%s VALUE=%s\n", key, value);
 
     if (!strcmp(key, "Access-Control-Request-Method"))
 	MHD_add_response_header(response, "Access-Control-Allow-Methods", "POST, GET, OPTIONS");
     else if (!strcmp(key, "Access-Control-Request-Headers"))
-	MHD_add_response_header(response, "Access-Control-Allow-Headers", value);	
+	MHD_add_response_header(response, "Access-Control-Allow-Headers", value);
     else if (!strcmp(key, "Origin"))
 	MHD_add_response_header(response, "Access-Control-Allow-Origin", value);
 
     return 1;
+}
+
+static int 
+test_values (void *cls,
+	     enum MHD_ValueKind kind,
+	     const char *key,
+	     const char *value)
+{
+    mylog("KEY=%s VALUE=%s\n", key, value);
+    return MHD_YES;
 }
 
 int analyze_http(void *cls,
@@ -2056,7 +2083,7 @@ int analyze_http(void *cls,
     (void)upload_data;       /* Unused. Silent compiler warning. */
     (void)upload_data_size;  /* Unused. Silent compiler warning. */
 
-    //g_printerr("%s %s conn=%p *ptr=%p upload_data=%p upload_data_size=%d\n", method, url, connection, *ptr, upload_data, (int)*upload_data_size);
+    mylog("%s %s conn=%p *ptr=%p upload_data=%p upload_data_size=%d\n", method, url, connection, *ptr, upload_data, (int)*upload_data_size);
 
     if (!strcmp(method, MHD_HTTP_METHOD_POST)) {
         struct UploadContext *uc = *ptr;
@@ -2079,18 +2106,18 @@ int analyze_http(void *cls,
                 while (*upload_data_size >= uc->space - uc->len - 1)
                     uc->space *= 2;
                 uc->data = realloc(uc->data, uc->space);
-                //g_printerr("Realloc space=%d\n", uc->space);
+                //mylogerr("Realloc space=%d\n", uc->space);
             }
             memcpy(uc->data + uc->len, upload_data, *upload_data_size);
             uc->len += *upload_data_size;
             uc->data[uc->len] = 0;
-            //g_printerr("Got %d bytes\n", (int)*upload_data_size);
-            //g_printerr("-- data:\n  %s\n", upload_data);
+            mylogerr("Got %d bytes\n", (int)*upload_data_size);
+            mylogerr("-- data:\n  %s\n", upload_data);
             *upload_data_size = 0;
             return MHD_YES;
         }
 
-        //g_printerr("End of %d bytes of data %s\n", uc->len, uc->data);
+        //mylogerr("End of %d bytes of data %s\n", uc->len, uc->data);
         cJSON *json = cJSON_Parse(uc->data);
         free(uc->data);
         free(uc);
@@ -2123,7 +2150,7 @@ int analyze_http(void *cls,
 
         if (time(NULL) >= start + 10 ||
             g_atomic_int_get(&resp.ready) != MSG_WEB_RESP_OK) {
-            g_printerr("NO JSON REPLY resp.ready=%d\n", resp.ready);
+            mylogerr("NO JSON REPLY resp.ready=%d\n", resp.ready);
             return MHD_NO;
         }
 
@@ -2139,7 +2166,7 @@ int analyze_http(void *cls,
                 }
 
                 char *filename = file->valuestring;
-                g_print("looking for %s / %s\n", filename, mime->valuestring);
+                mylog("looking for %s / %s\n", filename, mime->valuestring);
                 
                 HANDLE fd = int_to_handle(g_open(filename, O_RDONLY, 0));
                 if (fd != INVALID_HANDLE_VALUE) {
@@ -2154,14 +2181,14 @@ int analyze_http(void *cls,
                 }
 
                 if (fd == INVALID_HANDLE_VALUE) {
-                    g_print("WEB RESP: FILE %s NOT FOUND!\n", resp.u.get_bracket_resp.filename);
+                    mylog("WEB RESP: FILE %s NOT FOUND!\n", resp.u.get_bracket_resp.filename);
                     cJSON_Delete(resp.u.json.json);
                     RETURN_404;
                 }
 
                 response = MHD_create_response_from_fd64(st.st_size, handle_to_int(fd));
                 if (!response) {
-                    g_printerr("response failed\n");
+                    mylogerr("response failed\n");
 #ifdef WIN32
                     CloseHandle(fd);
 #else
@@ -2199,14 +2226,16 @@ int analyze_http(void *cls,
 	    *ptr = &aptr;
 	    return MHD_YES;
 	}
+
 	*ptr = NULL;                  /* reset when done */
 
 	struct MHD_Response *response;
 	response = MHD_create_response_from_buffer(0, "", MHD_RESPMEM_PERSISTENT);
 	if (!response) {
-	    g_printerr("ERROR: response\n");
+	    mylogerr("ERROR: response\n");
 	    return MHD_NO;
 	}
+        mylog("XXXXXXX\n");
 	MHD_get_connection_values (connection, 0x1f,
 				   keyValueIterator, response);
 	
@@ -2276,27 +2305,65 @@ int analyze_http(void *cls,
     return MHD_YES;
 }
 
+/*
+  Generate keys:
+    openssl req -sha256 -newkey rsa:4096 -nodes -keyout privkey.pem -x509 -days 3650 -out certificate.pem
+*/
+
+
 void *httpd_thread(void *arg)
 {
-    struct MHD_Daemon *d;
+    struct MHD_Daemon *d1, *d2;
+    gchar *privkey, *certificate;
+    gsize len = 0;
+    gchar *fnamekey = g_build_filename(installation_dir, "etc", "privkey.pem", NULL);
+    g_file_get_contents(fnamekey, &privkey, &len, NULL);
+    mylog("fname=%s len = %ld\n", fnamekey, len);
+    //g_free(fnamekey);
+    gchar *fnamecertificate = g_build_filename(installation_dir, "etc", "certificate.pem", NULL);
+    g_file_get_contents(fnamecertificate, &certificate, &len, NULL);
+    mylog("fname=%s len = %ld\n", fnamecertificate, len);
+    //g_free(fname);
 
-    g_printerr("HTTPD thread started\n");
+    mylogerr("HTTPD thread started\n");
 
     do {
-	d = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD | MHD_USE_ERROR_LOG | MHD_ALLOW_UPGRADE,
+	d1 = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD |
+                              MHD_USE_ERROR_LOG | MHD_ALLOW_UPGRADE,
 			      8088,
-			      NULL, NULL, &analyze_http, PAGE, MHD_OPTION_END);
-	if (!d) g_usleep(2000000);
-    } while (!d);
-    
+			      NULL, NULL, &analyze_http, PAGE,
+                              MHD_OPTION_END);
+	if (!d1) {
+            perror("HTTPD");
+            g_usleep(2000000);
+        }
+    } while (!d1);
+    mylogerr("HTTP running\n");
+
+    do {
+	d2 = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD |
+                              MHD_USE_ERROR_LOG | MHD_ALLOW_UPGRADE | MHD_USE_TLS,
+			      8800,
+			      NULL, NULL, &analyze_http, PAGE,
+                              MHD_OPTION_HTTPS_MEM_KEY, privkey,
+                              MHD_OPTION_HTTPS_MEM_CERT, certificate,
+                              MHD_OPTION_END);
+	if (!d2) {
+            perror("HTTPD");
+            g_usleep(2000000);
+        }
+    } while (!d2);
+    mylogerr("HTTPS running\n");
+
     while (1)   /* exit loop when flag is cleared */
     {
 	g_usleep(100000);
     }
 
-    MHD_stop_daemon(d);
+    MHD_stop_daemon(d2);
+    MHD_stop_daemon(d1);
 
-    g_printerr("httpd exit\n");
+    mylogerr("httpd exit\n");
     g_thread_exit(NULL);    /* not required just good pratice */
     return NULL;
 }

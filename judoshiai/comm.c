@@ -53,6 +53,7 @@
 #include "sha.h"
 #include "cJSON.h"
 
+extern gint webpwcrc32;
 extern gint json_edit_or_create_judoka(cJSON *root);
 
 #define JSON_CHECK(_a) do { if (!(_a)) { ret = MSG_WEB_RESP_ERR; goto json_end; }} while (0)
@@ -360,7 +361,7 @@ static void fill_judoka_edit_competitor(struct message *msg, struct judoka *j)
     SET_J(coachid);
 }
 
-// curl -X POST -H 'Content-Type: application/json' -d '{"op": "getcomp", "ix":23}' http://localhost:8088/json
+// curl -X POST -H 'Content-Type: application/json' -d '{"op": "getcomp", "pw": "PASSWD", "ix":23}' http://localhost:8088/json
 void handle_json(struct message *input_msg)
 {
     struct judoka *j = NULL;
