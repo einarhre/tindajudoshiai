@@ -136,6 +136,7 @@ endif
 ifeq ($(TGT),WIN32OS)
 	mkdir -p $(RELDIR)/share/glib-2.0
 	cp -r $(RUNDIR)/share/glib-2.0/schemas $(RELDIR)/share/glib-2.0/
+	glib-compile-schemas $(RELDIR)/share/glib-2.0/schemas
 	#make -C auto-update install
 	@echo "---------------------------"
 	@echo "Copy DLLs"

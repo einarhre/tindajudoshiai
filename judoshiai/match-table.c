@@ -8,8 +8,6 @@
 #include "common-utils.h"
 #include "match-table.h"
 
-#define mylog(_a...) do { } while (0)
-
 #define get_data(_j) avl_get_competitor(_j)
 #define free_judoka(_j) do { } while (0)
 

@@ -551,7 +551,7 @@ static void create_new_category(GtkWidget *menuitem, gpointer userdata)
     int i;
     gint age = 0, weight = 0;
     gboolean male = FALSE, female = FALSE;
-    gchar cbuf[20];
+    gchar cbuf[64];
 
     GtkTreeView *treeview = GTK_TREE_VIEW(current_view);
     GtkTreeModel *model = current_model;

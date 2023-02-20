@@ -59,8 +59,6 @@
 
 extern gint webpwcrc32;
 
-#define mylog(_a...) do { } while (0)
-
 /* System-dependent definitions */
 #ifndef WIN32
 #define closesocket     close
