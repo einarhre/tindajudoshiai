@@ -93,7 +93,7 @@ gpointer tvlogo_thread(gpointer args)
     glong vlc_addr = 0;
     gint waittime = 1000000;
 
-    g_print("User data dir = %s\n", g_get_user_data_dir());
+    mylog("User data dir = %s\n", g_get_user_data_dir());
 
     strcpy(vlc_host, "localhost");
 
@@ -123,7 +123,7 @@ gpointer tvlogo_thread(gpointer args)
 
         if ((comm_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
             perror("vlc socket");
-            g_print("CANNOT CREATE VLC SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
+            mylog("CANNOT CREATE VLC SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
             g_thread_exit(NULL);    /* not required just good pratice */
             return NULL;
         }
@@ -139,7 +139,7 @@ gpointer tvlogo_thread(gpointer args)
             continue;
         }
 
-        g_print("VLC connection OK.\n");
+        mylog("VLC connection OK.\n");
         vlc_connection_ok = TRUE;
 
         FD_ZERO(&read_fd);
@@ -164,7 +164,7 @@ gpointer tvlogo_thread(gpointer args)
                 gint n = snprintf(buffer, sizeof(buffer), "@name logo-file %s\n", 
                                   tvlogofile[last_update]);
                 send(comm_fd, buffer, n, 0);
-                //g_print("TX: %s\n", buffer);
+                //mylog("TX: %s\n", buffer);
             } else 
                 G_UNLOCK(logofile);
     
@@ -184,14 +184,14 @@ gpointer tvlogo_thread(gpointer args)
                 waittime = 1000000;
                 if (n <= 0)
                     break;
-                //g_print("\nVLC reply: '%s'\n", buffer);
+                //mylog("\nVLC reply: '%s'\n", buffer);
             } // if (FD_ISSET(comm_fd, &fds))
         } // while (current_port == vlc_port)
 
         vlc_connection_ok = FALSE;
         closesocket(comm_fd);
 
-        g_print("VLC connection NOK.\n");
+        mylog("VLC connection NOK.\n");
     }
 
     g_thread_exit(NULL);    /* not required just good pratice */
@@ -377,7 +377,7 @@ gpointer mjpeg_thread(gpointer args)
 
         if (bind(node_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
             perror("Bind");
-            g_print("MJPEG: Cannot bind to port %d (%d), fd=%d\n", tvlogo_port, htons(tvlogo_port), node_fd);
+            mylog("MJPEG: Cannot bind to port %d (%d), fd=%d\n", tvlogo_port, htons(tvlogo_port), node_fd);
             closesocket(node_fd);
             g_usleep(1000000);
             continue;
@@ -408,14 +408,14 @@ gpointer mjpeg_thread(gpointer args)
                                      "X-Timestamp: %d.%06d\r\n"
                                      "\r\n", tvlogo_jpeg_len, (int)timestamp.tv_sec, (int)timestamp.tv_usec);
                         if (write(connections[i].fd, outbuf, n) < 0)
-                            g_print("MJPEG write error 1\n");
+                            mylog("MJPEG write error 1\n");
 
                         if ((n = write(connections[i].fd, tvlogo_jpeg, tvlogo_jpeg_len)) < 0)
-                            g_print("MJPEG write error 2\n");
+                            mylog("MJPEG write error 2\n");
 
                         n = sprintf(outbuf, "\r\n--7b3cc56e5f51db803f790dad720ed50a\r\n");
                         if (write(connections[i].fd, outbuf, n) < 0)
-                            g_print("MJPEG write error 3\n");
+                            mylog("MJPEG write error 3\n");
                     }
                 }
             }
@@ -436,7 +436,7 @@ gpointer mjpeg_thread(gpointer args)
                         break;
 
                 if (i >= NUM_CONNECTIONS) {
-                    g_print("MJPEG cannot accept new connections!\n");
+                    mylog("MJPEG cannot accept new connections!\n");
                     closesocket(tmp_fd);
                     continue;
                 }
@@ -444,7 +444,7 @@ gpointer mjpeg_thread(gpointer args)
                 connections[i].fd = tmp_fd;
                 connections[i].addr = caller.sin_addr.s_addr;
                 connections[i].req = FALSE;
-                g_print("MJPEG: new connection[%d]: fd=%d addr=%x\n", 
+                mylog("MJPEG: new connection[%d]: fd=%d addr=%x\n", 
                         i, tmp_fd, caller.sin_addr.s_addr);
                 FD_SET(tmp_fd, &read_fd);
             }
@@ -460,13 +460,13 @@ gpointer mjpeg_thread(gpointer args)
 
                 r = recv(connections[i].fd, inbuf, sizeof(inbuf), 0);
                 if (r <= 0) {
-                    g_print("MJPEG: connection %d fd=%d closed\n", i, connections[i].fd);
+                    mylog("MJPEG: connection %d fd=%d closed\n", i, connections[i].fd);
                     closesocket(connections[i].fd);
                     FD_CLR(connections[i].fd, &read_fd);
                     connections[i].fd = 0;
                 } else {
                     if (strstr(inbuf, "\r\n\r\n")) {
-                        //g_print("MJPEG Req: %s\n", inbuf);
+                        //mylog("MJPEG Req: %s\n", inbuf);
                         connections[i].req = TRUE;
                         n = snprintf(outbuf, sizeof(outbuf), 
                                      "HTTP/1.0 200 OK\r\n"
@@ -479,7 +479,7 @@ gpointer mjpeg_thread(gpointer args)
                                      "\r\n"
                                      "--7b3cc56e5f51db803f790dad720ed50a\r\n");
                         if (write(connections[i].fd, outbuf, n) < 0)
-                            g_print("MJPEG write error 4\n");
+                            mylog("MJPEG write error 4\n");
                     }
                 }
             }
@@ -547,7 +547,7 @@ void tvlogo_send_new_frame(gchar *frame, gint length)
     
     pb1 = gdk_pixbuf_new_from_file(tvlogofile, NULL);
     if (pb1) {
-        g_print("alpha=%d/%d bits=%d/%d chan=%d/%d\n", gdk_pixbuf_get_has_alpha(pb), gdk_pixbuf_get_has_alpha(pb1),
+        mylog("alpha=%d/%d bits=%d/%d chan=%d/%d\n", gdk_pixbuf_get_has_alpha(pb), gdk_pixbuf_get_has_alpha(pb1),
                 gdk_pixbuf_get_bits_per_sample(pb),  gdk_pixbuf_get_bits_per_sample(pb1),
                 gdk_pixbuf_get_n_channels(pb), gdk_pixbuf_get_n_channels(pb1));
         gdk_pixbuf_copy_area(pb1, 0, 0, gdk_pixbuf_get_width(pb1), gdk_pixbuf_get_height(pb1), pb, tvlogo_x, tvlogo_y);

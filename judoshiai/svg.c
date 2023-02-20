@@ -77,7 +77,7 @@ static RsvgHandle *handle;
 		writebuflen = _l;					\
 	    }								\
 	} else if (!rsvg_handle_write(handle, (guchar *)_s, _l, &err)) { \
-	    g_print("\nERROR in func %s:%d: %s\n",			\
+	    mylog("\nERROR in func %s:%d: %s\n",			\
                     __FUNCTION__, __LINE__, err->message);              \
 	    g_error_free(err); err = NULL;				\
 	    fwrite(_s, 1, _l, stdout);					\
@@ -105,7 +105,7 @@ static RsvgHandle *handle;
 #if 0
     do { if (dfile) fwrite(_a, 1, strlen(_a), dfile);                   \
         if (!rsvg_handle_write(handle, (guchar *)_a, strlen(_a), &err)) { \
-            g_print("\nERROR %s: %s %d\n",                              \
+            mylog("\nERROR %s: %s %d\n",                              \
                     err->message, __FUNCTION__, __LINE__); err = NULL; return TRUE; } } while (0)
 #endif
 
@@ -514,7 +514,7 @@ gint paint_svg(struct paint_data *pd)
 
     if (!svgdata) {
         if (systm.system == SYSTEM_CUSTOM)
-            g_print("ERROR: No svg data. key=0x%x\n", key);
+            mylog("ERROR: No svg data. key=0x%x\n", key);
         return FALSE;
     }
 
@@ -701,11 +701,11 @@ gint paint_svg(struct paint_data *pd)
             }
 
 #if 0
-            g_print("\n");
+            mylog("\n");
             for (i = 0; i < cnt; i++)
-                g_print("i=%d code='%s' val=%d\n",
+                mylog("i=%d code='%s' val=%d\n",
                         i, attr[i].code, attr[i].value);
-            g_print("\n");
+            mylog("\n");
 #endif
 
             if (delayed && attr[0].code[0] != 'h') {
@@ -884,11 +884,11 @@ gint paint_svg(struct paint_data *pd)
                         }
                         // find competitor
                         if (pool) {
-                            //g_print("find pcomp %d index=%d\n", pcomp, pool->competitors[pcomp].index);
+                            //mylog("find pcomp %d index=%d\n", pcomp, pool->competitors[pcomp].index);
                             for (k = 1; k <= cm->num_competitors; k++) {
                                 if (cm->j[k] && cm->j[k]->index == pool->competitors[pcomp].index) {
                                     j = cm->j[k];
-                                    //g_print("FOUND competitor=%d=%s\n", k, j->last);
+                                    //mylog("FOUND competitor=%d=%s\n", k, j->last);
                                     break;
                                 }
                             }
@@ -896,7 +896,7 @@ gint paint_svg(struct paint_data *pd)
                             for (k = 1; k <= cm->num_competitors; k++) {
                                 if (cm->j[k] && cm->j[k]->index == pair->competitors[pcomp].index) {
                                     j = cm->j[k];
-                                    //g_print("FOUND PAIR competitor=%d=%s\n", k, j->last);
+                                    //mylog("FOUND PAIR competitor=%d=%s\n", k, j->last);
                                     break;
                                 }
                             }
@@ -1094,7 +1094,7 @@ gint paint_svg(struct paint_data *pd)
             } else if (attr[0].code[0] == 'r') { // results
                 reset_last_country();
                 gint res = attr[0].value;
-                //g_print("*** RES=%d sys=%d\n",res, systm.system);
+                //mylog("*** RES=%d sys=%d\n",res, systm.system);
                 if (systm.system == SYSTEM_POOL || systm.system == SYSTEM_BEST_OF_3) {
                     struct judoka *j = pm.j[pm.c[res]];
                     if (j) {
@@ -1152,7 +1152,7 @@ gint paint_svg(struct paint_data *pd)
                             write_judoka(handle, 1, j, dfile, 0, write_cb, closure);
                             set_competitor_position(j->index, COMP_POS_DRAWN | real_res);
                             free_judoka(j);
-                            //g_print("pos=%d real=%d\n", res, real_res);
+                            //mylog("pos=%d real=%d\n", res, real_res);
                         }
                     }
                 } else {
@@ -1279,7 +1279,7 @@ gint paint_svg(struct paint_data *pd)
             if (delayed)
                 WRITE1(">", 1);
         } else { // *p != '%'
-            //g_print("%c", *p);
+            //mylog("%c", *p);
             if (strncmp((char *)p, "xlink:href=\"flag", 16) == 0) {
                 p += 16;
                 while (*p && *p != '"') p++;
@@ -1393,7 +1393,7 @@ gint paint_svg(struct paint_data *pd)
     }
 
     if (!rsvg_handle_close(handle, &err)) {
-        g_print("ERROR: rsvg_handle_close: %s\n", err->message);
+        mylog("ERROR: rsvg_handle_close: %s\n", err->message);
         g_error_free(err);
         err = NULL;
     }
@@ -1419,7 +1419,7 @@ gint paint_svg(struct paint_data *pd)
         cairo_save(pd->c);
         cairo_scale(pd->c, pd->paper_width/svgwidth, pd->paper_width/svgwidth);
         if (!rsvg_handle_render_cairo(handle, pd->c)) {
-            g_print("ERROR: rsvg_handle_render_cairo failed\n");
+            mylog("ERROR: rsvg_handle_render_cairo failed\n");
         }
     }
 
@@ -1542,7 +1542,7 @@ void read_lisp_files(gboolean ok)
 		gchar *contents;
 		gsize len;
 		if (!g_file_get_contents(fullname, &contents, &len, NULL))
-		    g_print("CANNOT OPEN '%s'\n", fullname);
+		    mylog("CANNOT OPEN '%s'\n", fullname);
 		else  {
 #if 0
 		    if (!initialized) {
@@ -1550,7 +1550,7 @@ void read_lisp_files(gboolean ok)
 			initialized = TRUE;
 		    }
 #endif
-		    g_print("reading lisp file %s\n", fullname);
+		    mylog("reading lisp file %s\n", fullname);
 		    lisp_exe(contents);
 		    g_free(contents);
 		}
@@ -1597,7 +1597,7 @@ void read_svg_files(gboolean ok)
 		    n = sscanf(fname, "%d-%d-%d.svg", &a, &b, &c);
                 if (n == 3) {
                     if (!g_file_get_contents(fullname, &svg_data[num_svg].data, &svg_data[num_svg].datalen, NULL))
-                        g_print("CANNOT OPEN '%s'\n", fullname);
+                        mylog("CANNOT OPEN '%s'\n", fullname);
                     else  {
                         struct compsys systm = wish_to_system(a, b);
                         gint key = make_key(systm, c-1);
@@ -1645,7 +1645,7 @@ void read_svg_files(gboolean ok)
 				p++;
 			    }
 
-                            g_print("read key=0x%x pos=%d file=%s w=%d h=%d nextmatcgbg=%d\n",
+                            mylog("read key=0x%x pos=%d file=%s w=%d h=%d nextmatcgbg=%d\n",
                                     key, num_svg, fname, svg_data[num_svg].width,
 				    svg_data[num_svg].height, svg_data[num_svg].nextmatchbg);
                             num_svg++;
@@ -1659,7 +1659,7 @@ void read_svg_files(gboolean ok)
                             }
                             info->pages++;
                         } else {
-                            g_print("Cannot open SVG file %s\n", fullname);
+                            mylog("Cannot open SVG file %s\n", fullname);
                         }
                     }
                 }
@@ -1726,7 +1726,7 @@ void add_custom_svg(gchar *data, gsize len, gint table, gint page)
             update = TRUE;
             n = i;
             g_free(svg_data[n].data);
-            g_print("Update i=%d\n", i);
+            mylog("Update i=%d\n", i);
         }
     }
 
@@ -1744,7 +1744,7 @@ void add_custom_svg(gchar *data, gsize len, gint table, gint page)
         g_object_unref(h);
         //rsvg_handle_free(h);
 
-        g_print("custom read key=0x%x pos=%d w=%d h=%d, update=%d\n",
+        mylog("custom read key=0x%x pos=%d w=%d h=%d, update=%d\n",
                 key, n, svg_data[n].width, svg_data[n].height, update);
         if (!update)
             num_svg++;

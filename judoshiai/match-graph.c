@@ -637,7 +637,7 @@ static gboolean expose_scrolled(GtkWidget *widget, GdkEventExpose *event, gpoint
 static gboolean expose(GtkWidget *widget, GdkEventExpose *event, gpointer userdata)
 {
     //static gint cnt = 0;
-    //g_print("MATCH-GRAPH: expose %d\n", cnt++);
+    //mylog("MATCH-GRAPH: expose %d\n", cnt++);
 #if (GTKVER == 3)
     cairo_t *c = (cairo_t *)event;
     cairo_set_source_surface(c, surface, 0, 0);

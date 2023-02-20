@@ -73,7 +73,7 @@ static gboolean delete_event( GtkWidget *widget,
      * This is useful for popping up 'are you sure you want to quit?'
      * type dialogs. */
 
-    g_print ("delete event occurred\n");
+    mylog ("delete event occurred\n");
 
     /* Change TRUE to FALSE and the main window will be destroyed with
      * a "delete_event". */
@@ -203,14 +203,14 @@ static gboolean check_for_connection_status(gpointer data)
 #if 0
 static gboolean do_invalidation(gpointer data)
 {
-    g_print("invalidate\n");
+    mylog("invalidate\n");
     gdk_window_invalidate_rect(gtk_widget_get_window(main_window), NULL, TRUE);
     return FALSE;
 }
 
 static gboolean change_page(GtkNotebook *notebook, gint arg1, gpointer user_data)
 {
-    g_print("notebook page change\n");
+    mylog("notebook page change\n");
     g_timeout_add(1000, do_invalidation, NULL);
     return FALSE;
 }
@@ -361,9 +361,9 @@ int main( int   argc,
 #ifndef WIN32
     struct rlimit rlp;
     getrlimit(RLIMIT_CORE, &rlp);
-    g_print("RLIMIT_CORE: %ld/%ld\n", rlp.rlim_cur, rlp.rlim_max);
+    mylog("RLIMIT_CORE: %ld/%ld\n", rlp.rlim_cur, rlp.rlim_max);
     rlp.rlim_cur = 100000000;
-    g_print("Setting to max: %d\n", setrlimit(RLIMIT_CORE, &rlp));
+    mylog("Setting to max: %d\n", setrlimit(RLIMIT_CORE, &rlp));
 #else
     //SetUnhandledExceptionFilter(&win_exp_filter);
 #endif
@@ -380,7 +380,7 @@ int main( int   argc,
     gbr_init(NULL);
     installation_dir = gbr_find_prefix(NULL);
 #endif
-    g_print("installation_dir=%s\n", installation_dir);
+    mylog("installation_dir=%s\n", installation_dir);
     program_path = argv[0];
 
     current_directory[0] = 0;
@@ -402,10 +402,10 @@ ok:
 
     if (current_directory[0] == 0)
         strcpy(current_directory, ".");
-    g_print("current_directory=%s\n", current_directory);
+    mylog("current_directory=%s\n", current_directory);
 
     conffile = g_build_filename(g_get_user_data_dir(), "judoshiai.ini", NULL);
-    g_print("conf file = %s\n", conffile);
+    mylog("conf file = %s\n", conffile);
     keyfile = g_key_file_new();
     g_key_file_load_from_file(keyfile, conffile, 0, NULL);
 
@@ -416,10 +416,10 @@ ok:
     my_address = now + getpid()*10000;
 	
     lockfile = g_build_filename(g_get_user_data_dir(), "judoshiai.lck", NULL);
-    g_print("lock file = %s\n", lockfile);
+    mylog("lock file = %s\n", lockfile);
     if (g_file_test(lockfile, G_FILE_TEST_EXISTS)) {
         first_instance = FALSE;
-        g_print("Second instance\n");
+        mylog("Second instance\n");
     } else {
         /* create a lock file */
         first_instance = TRUE;
@@ -428,14 +428,14 @@ ok:
             fprintf(f, "%ld\n", now);
             fclose(f);
         }
-        g_print("First instance\n");
+        mylog("First instance\n");
     }
 
     init_print_texts();
     lisp_init(0, NULL);
 
 #if 0
-    g_print("LOCALE = %s homedir=%s configdir=%s\n", 
+    mylog("LOCALE = %s homedir=%s configdir=%s\n", 
             setlocale(LC_ALL, 0), g_get_home_dir(), g_get_user_config_dir());
 #endif
 
@@ -597,7 +597,7 @@ ok:
         
 	g_timeout_add(1000, check_for_connection_status, NULL);
 
-        g_print("Comm threads started\n");
+        mylog("Comm threads started\n");
     }
 
     gint i;

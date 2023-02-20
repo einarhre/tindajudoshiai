@@ -507,7 +507,7 @@ static void widget_to_value(gint i)
             prop_set_val(i, "0", 0);
         break;
     default:
-        g_print("error\n");
+        mylog("error\n");
     }
 }
 
@@ -548,7 +548,7 @@ void init_property(gchar *prop, gchar *val)
                 for (k = 0; k < NUM_BELTS && b[k]; k++)
                     belts[k] = g_strdup(b[k]);
                 g_strfreev(b);
-                //g_print("init prop: %s\n", props[i].value);
+                //mylog("init prop: %s\n", props[i].value);
             }
 
             if (i == PROP_NUM_TATAMIS) {
@@ -577,14 +577,14 @@ void init_property(gchar *prop, gchar *val)
 		    color_dec_to_rgba(a, &color_list_rgba[k]);
 		}
                 g_strfreev(c);
-                g_print("init prop: %s\n", props[i].value);
+                mylog("init prop: %s\n", props[i].value);
             }
 
             return;
         } // if strcmp
 
     }
-    g_print("Unknown property '%s'='%s'\n", prop, val);
+    mylog("Unknown property '%s'='%s'\n", prop, val);
 }
 
 static void values_to_widgets(void)

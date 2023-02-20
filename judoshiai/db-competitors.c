@@ -59,7 +59,7 @@ void comp_index_set(gint ix)
     guint64 m = ((guint64)1) << (ix & INDEX_LIST_MASK);
 
     if (i >= INDEX_LIST_LENGTH) {
-	g_print("ERROR: MAX NUMBER OF COMPETITORS EXCEEDED!\n");
+	mylog("ERROR: MAX NUMBER OF COMPETITORS EXCEEDED!\n");
 	return;
     }
 
@@ -85,7 +85,7 @@ gint comp_index_get_free(void)
 	}
     }
 
-    g_print("ERROR: OUT OF COMPETITOR INDEXES!\n");
+    mylog("ERROR: OUT OF COMPETITOR INDEXES!\n");
     return 0;
 }
 
@@ -98,7 +98,7 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
     memset(&j, 0, sizeof(j));
     
     for(i = 0; i < argc; i++){
-        //g_print("  %s=%s", azColName[i], argv[i] ? argv[i] : "(NULL)");
+        //mylog("  %s=%s", azColName[i], argv[i] ? argv[i] : "(NULL)");
         if (IS(index))
             j.index = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(last))
@@ -134,7 +134,7 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
         else if (IS(coachid))
             j.coachid = argv[i] ? argv[i] : "";
     }
-    //g_print("\n");
+    //mylog("\n");
 
     comp_index_set(j.index);
     
@@ -281,7 +281,7 @@ gint db_add_judoka(int num, struct judoka *j)
         avl_set_competitor(num, j);
         //avl_set_competitor_status(num, j->deleted);
     } else
-        g_print("Error = %d (%s:%d)\n", rc, __FUNCTION__, __LINE__);
+        mylog("Error = %d (%s:%d)\n", rc, __FUNCTION__, __LINE__);
 
     return rc;
 }

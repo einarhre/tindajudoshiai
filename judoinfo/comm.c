@@ -156,7 +156,7 @@ void ask_for_data(gint index)
 
     if (put_ptr < ASK_TABLE_LEN)
 	ask_table[put_ptr++] = index;
-    else g_print("%s:%d queue overflow!\n", __FUNCTION__, __LINE__);
+    else mylog("%s:%d queue overflow!\n", __FUNCTION__, __LINE__);
     G_UNLOCK(req_mutex);
 }
 
@@ -193,7 +193,7 @@ static void handle_info_msg(struct msg_match_info *input_msg)
     match_list[tatami][position].rest_end = input_msg->rest_time + time(NULL);
 
 #if 0    
-	g_print("match info %d:%d b=%d w=%d\n",
+	mylog("match info %d:%d b=%d w=%d\n",
 	match_list[tatami][position].category,
 	match_list[tatami][position].number,
 	match_list[tatami][position].blue,
@@ -250,7 +250,7 @@ void msg_received(struct message *input_msg)
     
     traffic_last_rec_time = time(NULL);
 #if 0
-    g_print("msg type = %d from %d\n",
+    mylog("msg type = %d from %d\n",
             input_msg->type, input_msg->sender);
 #endif
     switch (input_msg->type) {
@@ -276,7 +276,7 @@ void msg_received(struct message *input_msg)
 	answers++;
         //refresh_window();
 #if 0
-        g_print("name info %d: %s %s, %s\n",
+        mylog("name info %d: %s %s, %s\n",
                 input_msg->u.name_info.index,
                 input_msg->u.name_info.first,
                 input_msg->u.name_info.last,
@@ -363,7 +363,7 @@ static void get_bracket(gint tatami, gint category, gint number)
 
     if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
         perror("bracket socket");
-        g_print("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
+        mylog("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
         return;
     }
 
@@ -385,7 +385,7 @@ static void get_bracket(gint tatami, gint category, gint number)
 #endif
     k = strlen(out);
     if ((n = send(fd, (char *)out, k, 0)) != k) {
-        g_print("%s: send error: sent %d/%d octets\n", __FUNCTION__, n, k);
+        mylog("%s: send error: sent %d/%d octets\n", __FUNCTION__, n, k);
         closesocket(fd);
         return;
     }

@@ -942,7 +942,7 @@ void fill_custom_struct(gint category, struct custom_matches *cm)
         }
     }
     if (sys.numcomp != cm->num_competitors)
-        g_print("ERROR: Conflicting comp num sys=%d counted=%d\n", sys.numcomp, cm->num_competitors);
+        mylog("ERROR: Conflicting comp num sys=%d counted=%d\n", sys.numcomp, cm->num_competitors);
 
     // set best of 3 pairs
     for (b3num = 0; b3num < cm->num_best_of_three; b3num++) {
@@ -1338,7 +1338,7 @@ static void update_pool_matches(gint category, gint num)
 
     if (automatic_sheet_update || automatic_web_page_update)
         current_category = category;
-    //g_print("current_category = %d\n", category);
+    //mylog("current_category = %d\n", category);
 
     /* Read matches in. */
     fill_pool_struct(category, num, &pm, FALSE);
@@ -1813,7 +1813,7 @@ static void update_french_matches(gint category, struct compsys systm)
 
     if (automatic_sheet_update || automatic_web_page_update)
         current_category = category;
-    //g_print("current_category = %d\n", category);
+    //mylog("current_category = %d\n", category);
 
     memset(m, 0, sizeof(m));
     db_read_category_matches(category, m);
@@ -2050,22 +2050,22 @@ static void update_custom_matches(gint category, struct compsys systm)
         else if (T(i).c1.type == COMP_TYPE_ROUND_ROBIN) {
             gint poolnum = T(i).c1.num - 1;
             gint pos = T(i).c1.pos;
-            //g_print("1: poolnum=%d pos=%d fin=%d\n", poolnum, pos, cm->pm[poolnum].finished);
+            //mylog("1: poolnum=%d pos=%d fin=%d\n", poolnum, pos, cm->pm[poolnum].finished);
            if (cm->pm[poolnum].finished) {
                gint posix = cm->pm[poolnum].competitors[pos-1].position;
                gint ix = cm->pm[poolnum].competitors[posix].index;
                m[i].blue = ix;
-               //g_print("1: posix=%d white=%d\n", posix, ix);
+               //mylog("1: posix=%d white=%d\n", posix, ix);
             } else
                m[i].blue = 0;
         } // if (T(i).c1.type == COMP_TYPE_ROUND_ROBIN)
         else if (T(i).c1.type == COMP_TYPE_BEST_OF_3) {
             gint pairnum = T(i).c1.num - 1;
             gint pos = T(i).c1.pos;
-            g_print("1: pairnum=%d pos=%d fin=%d\n", pairnum, pos, cm->best_of_three[pairnum].finished);
+            mylog("1: pairnum=%d pos=%d fin=%d\n", pairnum, pos, cm->best_of_three[pairnum].finished);
             if (cm->best_of_three[pairnum].finished) {
                m[i].blue = pos == 1 ? cm->best_of_three[pairnum].winner : cm->best_of_three[pairnum].loser;
-               g_print("1: white=%d\n", m[i].blue);
+               mylog("1: white=%d\n", m[i].blue);
             } else
                m[i].blue = 0;
         } // if (T(i).c1.type == COMP_TYPE_BEST_OF_3) {
@@ -2128,22 +2128,22 @@ static void update_custom_matches(gint category, struct compsys systm)
         else if (T(i).c2.type == COMP_TYPE_ROUND_ROBIN) {
             gint poolnum = T(i).c2.num - 1;
             gint pos = T(i).c2.pos;
-            //g_print("2: poolnum=%d pos=%d fin=%d\n", poolnum, pos, cm->pm[poolnum].finished);
+            //mylog("2: poolnum=%d pos=%d fin=%d\n", poolnum, pos, cm->pm[poolnum].finished);
            if (cm->pm[poolnum].finished) {
                gint posix = cm->pm[poolnum].competitors[pos-1].position;
                gint ix = cm->pm[poolnum].competitors[posix].index;
                m[i].white = ix;
-               //g_print("2: posix=%d blue=%d\n", posix, ix);
+               //mylog("2: posix=%d blue=%d\n", posix, ix);
             } else
                m[i].white = 0;
         } // if (T(i).c1.type == COMP_TYPE_ROUND_ROBIN)
         else if (T(i).c1.type == COMP_TYPE_BEST_OF_3) {
             gint pairnum = T(i).c2.num - 1;
             gint pos = T(i).c2.pos;
-            g_print("2: pairnum=%d pos=%d fin=%d\n", pairnum, pos, cm->best_of_three[pairnum].finished);
+            mylog("2: pairnum=%d pos=%d fin=%d\n", pairnum, pos, cm->best_of_three[pairnum].finished);
             if (cm->best_of_three[pairnum].finished) {
                m[i].white = pos == 1 ? cm->best_of_three[pairnum].winner : cm->best_of_three[pairnum].loser;
-               g_print("2: blue=%d\n", m[i].white);
+               mylog("2: blue=%d\n", m[i].white);
             } else
                m[i].white = 0;
         } // if (T(i).c1.type == COMP_TYPE_BEST_OF_3) {
@@ -4144,7 +4144,7 @@ void change_competitor_names(gint cat, gint num, gint comp1, gint comp2)
                             0,
                             cat,
                             num)) {
-	    g_print("found iter tatami=%d comp=%d-%d\n", i, comp1, comp2);
+	    mylog("found iter tatami=%d comp=%d-%d\n", i, comp1, comp2);
 	    gtk_tree_store_set(GTK_TREE_STORE(model), &iter,
 			       COL_MATCH_BLUE, comp1,
 			       COL_MATCH_WHITE, comp2,
@@ -4211,7 +4211,7 @@ void set_match(struct match *m)
 
     /* Find info about category */
     if (find_iter(&cat, m->category) == FALSE) {
-        g_print("CANNOT FIND CAT %d (num=%d)\n", m->category, m->number);
+        mylog("CANNOT FIND CAT %d (num=%d)\n", m->category, m->number);
         G_UNLOCK(set_match_mutex);
         //assert(0);
         return; /* error */
@@ -4262,7 +4262,7 @@ void set_match(struct match *m)
     }
 
     if (tatami == 0) {
-        //g_print("TATAMI NOT SET\n");
+        //mylog("TATAMI NOT SET\n");
         G_UNLOCK(set_match_mutex);
         return; /* tatami not set */
     }
@@ -4424,7 +4424,7 @@ static gint remove_category_from_matches(gint category)
 
     }
 
-    //g_print("Error: %s %d (cannot remove %d)\n", __FUNCTION__, __LINE__, category);
+    //mylog("Error: %s %d (cannot remove %d)\n", __FUNCTION__, __LINE__, category);
     return 0;
 }
 
@@ -4447,7 +4447,7 @@ void category_refresh(gint category)
 #endif
     /* Find info about category */
     if (find_iter(&cat_iter, category) == FALSE) {
-        g_print("Error: %s %d (cat %d)\n", __FUNCTION__, __LINE__, category);
+        mylog("Error: %s %d (cat %d)\n", __FUNCTION__, __LINE__, category);
         return; /* error */
     }
 
@@ -4504,7 +4504,7 @@ void gategories_refresh(void)
                            -1);
 
         if (!visible) {
-            g_print("refresh cat %d\n", index);
+            mylog("refresh cat %d\n", index);
             category_refresh(index);
         }
 

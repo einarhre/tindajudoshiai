@@ -20,7 +20,7 @@
 #define WRITE2(_s, _l)                                                  \
     do {if (dfile) fwrite(_s, 1, _l, dfile);                            \
         if (!rsvg_handle_write(handle, (guchar *)_s, _l, &err)) {       \
-            g_print("\nERROR %s: %s %d\n",                              \
+            mylog("\nERROR %s: %s %d\n",                              \
                     err->message, __FUNCTION__, __LINE__); err = NULL; return TRUE; } } while (0)
 
 #define WRITE1(_s, _l)                                                  \
@@ -123,7 +123,7 @@ void read_svg_file(void)
         return;
     
     if (!g_file_get_contents(svg_file, &svg_data, &svg_datalen, NULL))
-        g_print("CANNOT OPEN '%s'\n", svg_file);
+        mylog("CANNOT OPEN '%s'\n", svg_file);
     else  {
         RsvgHandle *h = rsvg_handle_new_from_data((guchar *)svg_data, svg_datalen, NULL);
         if (h) {
@@ -134,7 +134,7 @@ void read_svg_file(void)
             g_object_unref(h);
             svg_ok = TRUE;
         } else {
-            g_print("Cannot open SVG file %s\n", svg_file);
+            mylog("Cannot open SVG file %s\n", svg_file);
         }
     }
 
@@ -191,7 +191,7 @@ gint paint_svg(struct paint_data *pd)
     
     guchar *p = (guchar *)svg_data;
 
-    //g_print("Open SVG debug file\n");
+    //mylog("Open SVG debug file\n");
     //dfile = fopen("debug.svg", "w");
 
     while(*p) {
@@ -234,12 +234,12 @@ gint paint_svg(struct paint_data *pd)
             } // while IS_LABEL...
 
 #if 0
-            g_print("\n");
+            mylog("\n");
             gint i;
             for (i = 0; i < cnt; i++)
-                g_print("i=%d code='%s' val=%d\n",
+                mylog("i=%d code='%s' val=%d\n",
                         i, attr[i].code, attr[i].value);
-            g_print("\n");
+            mylog("\n");
 #endif
             if (attr[0].code[0] == 'c') {
                 write_judoka(handle, 1, &(pd->msg));
@@ -278,7 +278,7 @@ gint paint_svg(struct paint_data *pd)
     if (dfile) {
         fclose(dfile);
         dfile = NULL;
-        g_print("SVG debug file closed\n");
+        mylog("SVG debug file closed\n");
     }
 
     return TRUE;

@@ -211,7 +211,7 @@ glong hostname_to_addr(gchar *str)
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;    
     if ((retVal = getaddrinfo(str, NULL, &hints, &list)) != 0) {
-        g_print("getaddrinfo() failed for %s.\n", str);    
+        mylog("getaddrinfo() failed for %s.\n", str);    
     } else {
         addr = (struct sockaddr_in *)list->ai_addr;
         freeaddrinfo(list);
@@ -256,7 +256,7 @@ gpointer video_thread(gpointer args)
 
         if ((comm_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
             perror("video socket");
-            g_print("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
+            mylog("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
             g_thread_exit(NULL);    /* not required just good pratice */
             return NULL;
         }
@@ -277,7 +277,7 @@ gpointer video_thread(gpointer args)
         vb->offset = 0;
         vb->full = FALSE;
 
-        g_print("Video connection OK.\n");
+        mylog("Video connection OK.\n");
 
         /* send http request */
         if (USE_PROXY)
@@ -373,7 +373,7 @@ gpointer video_thread(gpointer args)
                                 header_state = 0;
                         } else if (c <= ' ' || c == ';') {
                             header_found = TRUE;
-                            g_print("found boundary='%s'\n", boundary);
+                            mylog("found boundary='%s'\n", boundary);
                             break;
                         } else {
                             if (header_state - 9 < sizeof(boundary) - 1) {
@@ -401,7 +401,7 @@ gpointer video_thread(gpointer args)
                             } else {
                                 end_state = 0;
                                 header_found = TRUE;
-                                g_print("found boundary2='%s'\n", boundary);
+                                mylog("found boundary2='%s'\n", boundary);
                                 break;
                             }
                         }
@@ -441,7 +441,7 @@ gpointer video_thread(gpointer args)
                             vb->full = TRUE;
                             //vb->duration = now - vb->start;
                             //vb->start = now;
-                            //g_print("current=%d video buf len=%d\n", current, VIDEO_BUF_LEN);
+                            //mylog("current=%d video buf len=%d\n", current, VIDEO_BUF_LEN);
                         }
                     } // if record 
                 } // if (n > 0 && header_found)
@@ -456,7 +456,7 @@ gpointer video_thread(gpointer args)
         connection_ok = FALSE;
         closesocket(comm_fd);
 
-        g_print("Video connection NOK.\n");
+        mylog("Video connection NOK.\n");
     }
 
     for (n = 0; n < NUM_VIDEO_BUFFERS; n++)
@@ -803,7 +803,7 @@ static void open_media(gint num)
     else
         fps = 5;
 
-    //g_print("framecnt=%d tot=%d bps=%d fps=%d\n", framecnt, tot_length, bps, fps);
+    //mylog("framecnt=%d tot=%d bps=%d fps=%d\n", framecnt, tot_length, bps, fps);
     fp = frames.next;
     curpos = 1;
 
@@ -990,7 +990,7 @@ static gboolean expose_video(GtkWidget *widget, GdkEventExpose *event, gpointer 
 
     //GdkPixbuf *pb = gdk_pixbuf_new_from_file("test.jpg", &err);
     if (!pb) {
-        //g_print("\nERROR %s: %s %d\n",
+        //mylog("\nERROR %s: %s %d\n",
         //        err->message, __FUNCTION__, __LINE__);
         //g_file_set_contents("err.jpg", fp->data, fp->length, NULL);
         return FALSE;

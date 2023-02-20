@@ -27,7 +27,7 @@ gint    cumul_db_count = 0;
 
 static void category_prop(sqlite3_context *context, int argc, sqlite3_value **argv)
 {
-    g_print("category_property: argc=%d argtypes=%d,%d\n", argc,
+    mylog("category_property: argc=%d argtypes=%d,%d\n", argc,
 	    sqlite3_value_type(argv[0]), sqlite3_value_type(argv[1]));
     sqlite3_result_int(context, 1);
     return;
@@ -48,7 +48,7 @@ static void category_prop(sqlite3_context *context, int argc, sqlite3_value **ar
 void db_notify_cb(void *arg, int op, char const *db_nam,
 		  char const *table_name, sqlite3_int64 rowid)
 {
-    g_print("db %s table %s op=%d rowid=%d\n",
+    mylog("db %s table %s op=%d rowid=%d\n",
 	    db_nam, table_name, op, (int)rowid);
 }
 
@@ -77,21 +77,21 @@ gint db_exec(const char *dbn, char *cmd, void *data, void *dbcb)
 #ifdef FAST_DB
     rc = sqlite3_exec(db, "PRAGMA synchronous=OFF", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
-	g_print("SQL PRAGMA sync error: %s\n", zErrMsg);
+	mylog("SQL PRAGMA sync error: %s\n", zErrMsg);
     }
     rc = sqlite3_exec(db, "PRAGMA default_cache_size=10000", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
-	g_print("SQL PRAGMA cache error: %s\n", zErrMsg);
+	mylog("SQL PRAGMA cache error: %s\n", zErrMsg);
     }
 #endif
-    //g_print("\nSQL: %s:\n  %s\n", db_name, cmd);
+    //mylog("\nSQL: %s:\n  %s\n", db_name, cmd);
     sqlite3_create_function(db, "category_prop", 2,
 			    SQLITE_UTF8 |  SQLITE_DETERMINISTIC,
 			    NULL, category_prop, NULL, NULL);
     rc = sqlite3_exec(db, cmd, dbcb, data, &zErrMsg);
 
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
-	g_print("SQL error: %s\n%s\n", zErrMsg, cmd);
+	mylog("SQL error: %s\n%s\n", zErrMsg, cmd);
     }
 
     if (zErrMsg)
@@ -126,14 +126,14 @@ static sqlite3 *maindb;
 void db_close(void)
 {
     if (!maindb) {
-	g_print("%s: maindb was not open!\n", __FUNCTION__);
+	mylog("%s: maindb was not open!\n", __FUNCTION__);
 	return;
     }
 #if 0
     char *zErrMsg = NULL;
     gint rc = sqlite3_exec(maindb, "END TRANSACTION", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
-	g_print("SQL END TRANSACTION error: %s\n", zErrMsg);
+	mylog("SQL END TRANSACTION error: %s\n", zErrMsg);
     }
 #endif
     sqlite3_close(maindb);
@@ -146,12 +146,12 @@ gint db_open(void)
     char *zErrMsg = NULL;
 
     if (maindb) {
-	g_print("%s: maindb was already open!\n", __FUNCTION__);
+	mylog("%s: maindb was already open!\n", __FUNCTION__);
 	return -1;
     }
 
     if (!db_name) {
-	g_print("%s: db_name is null!\n", __FUNCTION__);
+	mylog("%s: db_name is null!\n", __FUNCTION__);
 	return -2;
     }
 
@@ -160,7 +160,7 @@ gint db_open(void)
     gint rc = sqlite3_open(db_name, &maindb);
 
     if (rc) {
-	g_print("%s: cannot open maindb (%s)!\n", __FUNCTION__,
+	mylog("%s: cannot open maindb (%s)!\n", __FUNCTION__,
 		sqlite3_errmsg(maindb));
 	sqlite3_close(maindb);
 	maindb = NULL;
@@ -170,17 +170,17 @@ gint db_open(void)
 #ifdef FAST_DB
     rc = sqlite3_exec(maindb, "PRAGMA synchronous=OFF", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
-	g_print("SQL PRAGMA sync error: %s\n", zErrMsg);
+	mylog("SQL PRAGMA sync error: %s\n", zErrMsg);
     }
     rc = sqlite3_exec(maindb, "PRAGMA default_cache_size=10000", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
-	g_print("SQL PRAGMA cache error: %s\n", zErrMsg);
+	mylog("SQL PRAGMA cache error: %s\n", zErrMsg);
     }
 #endif
 #if 0
     rc = sqlite3_exec(maindb, "BEGIN TRANSACTION", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
-	g_print("SQL BEGIN TRANSACTION error: %s\n", zErrMsg);
+	mylog("SQL BEGIN TRANSACTION error: %s\n", zErrMsg);
     }
 #endif
     return rc;
@@ -195,7 +195,7 @@ gint db_cmd(void *data, void *dbcb, gchar *format, ...)
     va_end(args);
 
     if (!maindb) {
-	g_print("db_cmd SQL error: maindb is null\n");
+	mylog("db_cmd SQL error: maindb is null\n");
         g_free(text);
 	return -1;
     }
@@ -203,7 +203,7 @@ gint db_cmd(void *data, void *dbcb, gchar *format, ...)
     gint rc = sqlite3_exec(maindb, text, dbcb, data, &zErrMsg);
 
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
-	g_print("db_cmd SQL error: %s\n%s\n", zErrMsg, text);
+	mylog("db_cmd SQL error: %s\n%s\n", zErrMsg, text);
     }
 
     if (zErrMsg)
@@ -299,7 +299,7 @@ gint db_init(const char *dbname)
         infocols   > 2  ||
         catdefcols > 14) {
         SHOW_MESSAGE("%s", _("Cannot handle: Database created with newer JudoShiai version."));
-        g_print("Number of columns: %d %d %d %d %d\n", compcols, catcols, matchcols,
+        mylog("Number of columns: %d %d %d %d %d\n", compcols, catcols, matchcols,
                 infocols, catdefcols);
         return -2;
     }
@@ -338,26 +338,26 @@ gint db_init(const char *dbname)
             "SELECT sql FROM sqlite_master",
             NULL, db_callback_tables);
     if (!tatami_exists) {
-        g_print("forcedtatami does not exist, add one\n");
+        mylog("forcedtatami does not exist, add one\n");
         db_exec(db_name, "ALTER TABLE matches ADD \"forcedtatami\" INTEGER", NULL, NULL);
         db_exec(db_name, "UPDATE matches SET 'forcedtatami'=0", NULL, NULL);
     }
     if (!number_exists) {
-        g_print("forcednumber does not exist, add one\n");
+        mylog("forcednumber does not exist, add one\n");
         db_exec(db_name, "ALTER TABLE matches ADD \"forcednumber\" INTEGER", NULL, NULL);
         db_exec(db_name, "UPDATE matches SET 'forcednumber'=0", NULL, NULL);
     }
     if (!country_exists) {
-        g_print("country does not exist, add one\n");
+        mylog("country does not exist, add one\n");
         db_exec(db_name, "ALTER TABLE competitors ADD \"country\" TEXT", NULL, NULL);
     }
     if (!id_exists) {
-        g_print("id does not exist, add one\n");
+        mylog("id does not exist, add one\n");
         db_exec(db_name, "ALTER TABLE competitors ADD \"id\" TEXT", NULL, NULL);
     }
 
     if (!seeding_exists) {
-        g_print("seeding does not exist, add one\n");
+        mylog("seeding does not exist, add one\n");
         db_exec(db_name, "ALTER TABLE competitors ADD \"seeding\" INTEGER", NULL, NULL);
         db_exec(db_name, "ALTER TABLE competitors ADD \"clubseeding\" INTEGER", NULL, NULL);
         db_exec(db_name, "UPDATE competitors SET 'seeding'=(\"deleted\">>2)&7 ", NULL, NULL);
@@ -366,7 +366,7 @@ gint db_init(const char *dbname)
     }
 
     if (!numcomp_exists) {
-        g_print("numcomp does not exist, add one\n");
+        mylog("numcomp does not exist, add one\n");
         db_exec(db_name, "ALTER TABLE categories ADD \"numcomp\" INTEGER", NULL, NULL);
         db_exec(db_name, "ALTER TABLE categories ADD \"table\" INTEGER", NULL, NULL);
         db_exec(db_name, "ALTER TABLE categories ADD \"wishsys\" INTEGER", NULL, NULL);
@@ -385,20 +385,20 @@ gint db_init(const char *dbname)
     }
 
     if (!color_exists) {
-        g_print("color does not exist, add one\n");
+        mylog("color does not exist, add one\n");
         db_exec(db_name, "ALTER TABLE categories ADD \"color\" TEXT", NULL, NULL);
         db_exec(db_name, "UPDATE categories SET \"color\"=\"rgb(255,255,255)\" ", NULL, NULL);
     }
     
     if (!comp_comment_exists) {
-        g_print("comment does not exist, add one\n");
+        mylog("comment does not exist, add one\n");
         db_exec(db_name, "ALTER TABLE competitors ADD \"comment\" TEXT", NULL, NULL);
         db_exec(db_name, "ALTER TABLE competitors ADD \"coachid\" TEXT", NULL, NULL);
         db_exec(db_name, "UPDATE competitors SET \"comment\"=\"\", \"coachid\"=\"\" ", NULL, NULL);
     }
 
     if (!match_date_exists) {
-        g_print("date and legend do not exist, add one\n");
+        mylog("date and legend do not exist, add one\n");
         db_exec(db_name, "ALTER TABLE matches ADD \"date\" INTEGER", NULL, NULL);
         db_exec(db_name, "ALTER TABLE matches ADD \"legend\" INTEGER", NULL, NULL);
         db_exec(db_name, "UPDATE matches SET \"date\"=0, \"legend\"=0 ", NULL, NULL);
@@ -660,13 +660,13 @@ gboolean catdef_needs_init(void)
             NULL, db_callback_catdef);
 
     if (!catdef_exists) {
-        g_print("catdef does not exist, create one\n");
+        mylog("catdef does not exist, create one\n");
         db_create_cat_def_table();
         return TRUE;
     }
 
     if (!matchtime_exists) {
-        g_print("catdef matchtime does not exist, add one\n");
+        mylog("catdef matchtime does not exist, add one\n");
 
         db_exec(db_name, "ALTER TABLE catdef ADD \"matchtime\" INTEGER", NULL, NULL);
         db_exec(db_name, "ALTER TABLE catdef ADD \"pintimekoka\" INTEGER", NULL, NULL);
@@ -694,7 +694,7 @@ gboolean catdef_needs_init(void)
     }
 
     if (!gstime_exists) {
-        g_print("catdef gstime does not exist, add one\n");
+        mylog("catdef gstime does not exist, add one\n");
 
         db_exec(db_name, "ALTER TABLE catdef ADD \"gstime\" INTEGER", NULL, NULL);
         db_exec(db_name, "UPDATE catdef SET 'gstime'=300", NULL, NULL);
@@ -702,14 +702,14 @@ gboolean catdef_needs_init(void)
     }
 
     if (!reptime_exists) {
-        g_print("catdef reptime does not exist, add one\n");
+        mylog("catdef reptime does not exist, add one\n");
 
         db_exec(db_name, "ALTER TABLE catdef ADD \"reptime\" INTEGER", NULL, NULL);
         db_exec(db_name, "UPDATE catdef SET 'reptime'=0", NULL, NULL);
     }
 
     if (!layout_exists) {
-        g_print("catdef layout does not exist, add one\n");
+        mylog("catdef layout does not exist, add one\n");
 
         db_exec(db_name, "ALTER TABLE catdef ADD \"layout\" TEXT", NULL, NULL);
         db_exec(db_name, "UPDATE catdef SET 'layout'=\"\"", NULL, NULL);

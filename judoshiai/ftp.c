@@ -415,7 +415,7 @@ int put_using_proto(gint protocol, const char *fullname, const char *fname)
 
     /* get the file size of the local file */
     if (g_stat(fullname, &file_info)) {
-	g_print("Couldnt open '%s': %s\n", fullname, strerror(errno));
+	mylog("Couldnt open '%s': %s\n", fullname, strerror(errno));
 	return 1;
     }
     fsize = (curl_off_t)file_info.st_size;
@@ -756,7 +756,7 @@ static void ftp_log(gchar *format, ...)
                 text);
         fclose(f);
     } else {
-        g_print("Cannot open ftp log file\n");
+        mylog("Cannot open ftp log file\n");
         perror("ftp_logfile_name");
     }
 

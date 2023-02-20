@@ -92,7 +92,7 @@ gint adwin_x = 0, adwin_y = 0, adwin_w = 0, adwin_h = 0;
 gboolean showflags = FALSE, showletter = FALSE;
 gdouble  flagsize = 7.0, namesize = 10.0;
 
-//#define T g_print("Error on line %d\n", __LINE__)
+//#define T mylog("Error on line %d\n", __LINE__)
 #define T do {} while (0)
 
 #define UINT32 uint32_t
@@ -412,9 +412,9 @@ PrintGifError1(int line) {
         break;
     }
     if (Err != NULL)
-        g_print("\n[%d] GIF-LIB error: %s.\n", line, Err);
+        mylog("\n[%d] GIF-LIB error: %s.\n", line, Err);
     else
-        g_print("\n[%d] GIF-LIB undefined error %d.\n", line, _GifError);
+        mylog("\n[%d] GIF-LIB undefined error %d.\n", line, _GifError);
 }
 
 
@@ -1418,7 +1418,7 @@ static gint read_gif(gchar *FileName)
     GifRowType *ScreenBuffer;
     GifFileType *GifFile;
 
-    //g_print("FILE %s\n", FileName);
+    //mylog("FILE %s\n", FileName);
 
     if (num_ads >= NUM_ADS)
         return 0;
@@ -1466,7 +1466,7 @@ static gint read_gif(gchar *FileName)
 #if 0
             GifQprintf("\nImage %d at (%d, %d) [%dx%d]:     ",
                        ++ImageNum, Col, Row, Width, Height);
-            printf("\n\nleft=%d width=%d swidth=%d\ntop=%d height=%d sheight=%d\n\n",
+            mylog("\n\nleft=%d width=%d swidth=%d\ntop=%d height=%d sheight=%d\n\n",
                    GifFile->Image.Left, GifFile->Image.Width, GifFile->SWidth,
                    GifFile->Image.Top, GifFile->Image.Height, GifFile->SHeight);
 #endif
@@ -1481,7 +1481,7 @@ static gint read_gif(gchar *FileName)
                 for (/*Count =*/ i = 0; i < 4; i++)
                     for (j = Row + InterlacedOffset[i]; j < Row + Height;
                          j += InterlacedJumps[i]) {
-                        //GifQprintf("\b\b\b\b%-4d", Count++);
+                        //GifQmylog("\b\b\b\b%-4d", Count++);
                         if (DGifGetLine(GifFile, &ScreenBuffer[j][Col],
                                         Width) == GIF_ERROR) {
                             PrintGifError();
@@ -1491,7 +1491,7 @@ static gint read_gif(gchar *FileName)
             }
             else {
                 for (i = 0; i < Height; i++) {
-                    //GifQprintf("\b\b\b\b%-4d", i);
+                    //GifQmylog("\b\b\b\b%-4d", i);
                     if (DGifGetLine(GifFile, &ScreenBuffer[Row++][Col],
                                     Width) == GIF_ERROR) {
                         PrintGifError();
@@ -2008,7 +2008,7 @@ static void save_advertisement(GifRowType *ScreenBuffer,
     frame->stride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, swidth);
     data = g_malloc(frame->stride*sheight);
 
-    //g_print("\nsave frame=%p x=%d y=%d\n", frame, x, y);
+    //mylog("\nsave frame=%p x=%d y=%d\n", frame, x, y);
 
     for (i = 0; i < sheight; i++) {
         GifRow = ScreenBuffer[i];
@@ -2028,11 +2028,11 @@ static void save_advertisement(GifRowType *ScreenBuffer,
     advertisements[num_ads].swidth = swidth;
     advertisements[num_ads].sheight = sheight;
 
-    //g_print("install num_ads=%d:", num_ads);
+    //mylog("install num_ads=%d:", num_ads);
     struct frame *f = &advertisements[num_ads].frames;
 
     while (f->next) {
-        //g_print(" f=%p->%p", f, f->next);
+        //mylog(" f=%p->%p", f, f->next);
         f = f->next;
     }
 
@@ -2559,7 +2559,7 @@ static gboolean get_json(void)
 
 static gint svg_attr_cb(svg_handle *svg)
 {
-    //g_print("ATTR=%s\n", svg->attr[0].code);
+    //mylog("ATTR=%s\n", svg->attr[0].code);
     if (svg->attr[0].code[0] == 'R') {
         const gchar *rnd = round_to_str(cat_round);
         WRITE(rnd);
@@ -2652,7 +2652,7 @@ static gint svg_attr_cb(svg_handle *svg)
 void read_svg_file(gchar *fname) // fname must be allocated and free'd
 {
     if (!fname || fname[0] == 0) return;
-    g_print("fname=%s\n", fname);
+    mylog("fname=%s\n", fname);
     ad_svg_handle.svg_ok = FALSE;
     ad_svg_handle.imagename = imagename;
     g_free(ad_svg_handle.svg_file);
@@ -2665,7 +2665,7 @@ void read_svg_file(gchar *fname) // fname must be allocated and free'd
 void set_svg_file(GtkWidget *menu_item, GdkEventButton *event, gpointer data)
 {
     gchar *fname = get_svg_file_name_common(GTK_WINDOW(main_window), keyfile, "adsvgfile");
-    g_print("set_svg_file file=%s\n", fname);
+    mylog("set_svg_file file=%s\n", fname);
     if (!fname) {
 	ad_svg_handle.svg_ok = FALSE;
 	return;

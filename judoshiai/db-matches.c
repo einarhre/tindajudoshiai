@@ -24,22 +24,22 @@ static void db_print_one_match(struct match *m);
 #ifdef TATAMI_DEBUG
 #define DEBUG_INSERT(_t) do { \
 	if (m.tatami == TATAMI_DEBUG) {					\
-	    g_print("DEBUG LINE %d: %s\n", __LINE__, _t);		\
+	    mylog("DEBUG LINE %d: %s\n", __LINE__, _t);		\
 	    struct category_data *cd = avl_get_category(next_match[i-1].category); \
 	    if (cd) \
-		g_print("  %d:   %s/%d [%04x]\n", i-1, cd->category,	\
+		mylog("  %d:   %s/%d [%04x]\n", i-1, cd->category,	\
 			next_match[i-1].number, next_match[i-1].round); \
-	    g_print("  this: %s/%d [%04x]\n", catdata->category, m.number, m.round);	\
+	    mylog("  this: %s/%d [%04x]\n", catdata->category, m.number, m.round);	\
 	    cd = avl_get_category(next_match[i].category);		\
 	    if (cd)							\
-		g_print("  %d:   %s/%d [%04x]\n", i, cd->category,	\
+		mylog("  %d:   %s/%d [%04x]\n", i, cd->category,	\
 			next_match[i].number, next_match[i].round);	\
 	}								\
     } while (0)
 
 #define DEBUG_LOG(_f, ...) do {						\
 	if (m.tatami == TATAMI_DEBUG) {					\
-	    g_print("DEBUG LINE %d: " _f "\n", __LINE__, ##__VA_ARGS__);		\
+	    mylog("DEBUG LINE %d: " _f "\n", __LINE__, ##__VA_ARGS__);		\
 	}								\
     } while (0)
 #else
@@ -330,7 +330,7 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
 #ifdef TATAMI_DEBUG
         if (m_static.tatami == TATAMI_DEBUG) {
             struct judoka *cat = get_data(m_static.category);
-            g_print("\nHANDLE MATCH: %s:%d ix=%d=0x%x comment %d\n",
+            mylog("\nHANDLE MATCH: %s:%d ix=%d=0x%x comment %d\n",
                     cat ? cat->last : "?", m_static.number, m_static.category, m_static.category, m_static.comment);
             free_judoka(cat);
         }
@@ -527,7 +527,7 @@ static int db_callback_matches(void *data, int argc, char **argv, char **azColNa
             if (insert) {
 #ifdef TATAMI_DEBUG
 		if (m_static.tatami == TATAMI_DEBUG && i > 0) {
-		    g_print("Inserting %d/%d (%s) between %d/%d and %d/%d\n",
+		    mylog("Inserting %d/%d (%s) between %d/%d and %d/%d\n",
 			    m_static.category, m_static.number, catdata->category,
 			    next_match[i-1].category, next_match[i-1].number,
 			    next_match[i].category, next_match[i].number);
@@ -783,7 +783,7 @@ void db_change_freezed(gint category, gint number,
                 tatami, tatami ? forcedmax : 0, ~MATCH_CATEGORY_CAT_MASK, category, number);
 
 #ifdef TATAMI_DEBUG
-    g_print("%s: %d:%d, move to T%d P%d (after=%d), comment to %d\n",
+    mylog("%s: %d:%d, move to T%d P%d (after=%d), comment to %d\n",
             __FUNCTION__, category, number,
             tatami, position, after, comment);
 #endif
@@ -869,7 +869,7 @@ void db_add_match(struct match *m)
             m->blue_points, m->white_points,
             m->match_time, m->comment, m->deleted, 0, 0, m->date, m->legend);
 
-    //g_print("%s\n", buffer);
+    //mylog("%s\n", buffer);
     db_exec(db_name, buffer, NULL, db_callback_matches);
 }
 
@@ -895,7 +895,7 @@ void db_update_match(struct match *m)
             m->blue_points, m->white_points, m->deleted,
             m->match_time, m->category, m->number);
 
-    //g_print("%s\n", buffer);
+    //mylog("%s\n", buffer);
     db_exec(db_name, buffer, NULL, db_callback_matches);
 }
 
@@ -957,7 +957,7 @@ gint db_category_set_match_status(gint category)
     db_exec(db_name, buffer, NULL, db_callback_matches);
 
     if (matched_matches_count > match_count) {
-        g_print("%s[%d]: ERROR %d %d %d\n", __FUNCTION__, __LINE__,
+        mylog("%s[%d]: ERROR %d %d %d\n", __FUNCTION__, __LINE__,
                 category, matched_matches_count, match_count);
         matched_matches_count = match_count;
     }
@@ -1344,7 +1344,7 @@ static gint competitor_cannot_match(gint index, gint tatami, gint num)
         rest_time = catdata->rest_time;
 
     if (time(NULL) < last_time + rest_time) {
-        //g_print("T%d:%d rested %ld s\n", tatami, num, time(NULL) - last_time);
+        //mylog("T%d:%d rested %ld s\n", tatami, num, time(NULL) - last_time);
         return MATCH_FLAG_REST_TIME;
     }
 
@@ -1364,7 +1364,7 @@ static gint competitor_cannot_match(gint index, gint tatami, gint num)
                 result |= MATCH_FLAG_WHITE_DELAYED;
 
             if (result) {
-                //g_print("T%d:%d matching in T%d:%d\n", tatami, num, i, j);
+                //mylog("T%d:%d matching in T%d:%d\n", tatami, num, i, j);
                 return result;
             }
         }
@@ -1636,15 +1636,15 @@ struct match *db_next_match(gint category, gint tatami)
 
 #ifdef TATAMI_DEBUG
     if (tatami == TATAMI_DEBUG) {
-        g_print("\nNEXT MATCHES ON TATAMI %d\n", tatami);
+        mylog("\nNEXT MATCHES ON TATAMI %d\n", tatami);
         for (i = 0; i < next_match_num; i++) {
 	    struct category_data *cd = avl_get_category(next_match[i].category);
-            g_print("%d: %s:%d %s (%d vs. %d)\n", i,
+            mylog("%d: %s:%d %s (%d vs. %d)\n", i,
                     cd->category, next_match[i].number,
 		    round_name(cd, next_match[i].number),
 		    next_match[i].blue, next_match[i].white);
 	}
-        g_print("\n");
+        mylog("\n");
     }
 #endif
     // coach info and crc
@@ -1726,13 +1726,13 @@ void db_set_comment(gint category, gint number, gint comment)
 
     num_saved_matches = 0;
 #ifdef TATAMI_DEBUG
-    g_print("set comment cat=%d num=%d comm=%d\n", category, number, comment);
+    mylog("set comment cat=%d num=%d comm=%d\n", category, number, comment);
 #endif
     /* remove existing */
     if (comment == COMMENT_MATCH_1 || comment == COMMENT_MATCH_2) {
         gint tatami = db_find_match_tatami(category, number);
 #ifdef TATAMI_DEBUG
-        g_print("%s: tatami=%d\n", __FUNCTION__, tatami);
+        mylog("%s: tatami=%d\n", __FUNCTION__, tatami);
 #endif
 #if 0
         sprintf(buffer, "SELECT * FROM categories WHERE \"category\"=%d", category);
@@ -1979,7 +1979,7 @@ gboolean db_event_matches_update(guint category, struct match *last, gint *weigh
                 "SELECT * FROM matches WHERE \"category\"&%u=%d",
 		~MATCH_CATEGORY_CAT_MASK, category);
 
-    /*g_print("cat=%d/%d nowins=%d t1wins=%d/%d t2wins=%d/%d\n",
+    /*mylog("cat=%d/%d nowins=%d t1wins=%d/%d t2wins=%d/%d\n",
             category1, number,
             no_team_wins, team1_wins, team1_pts, team2_wins, team2_pts);*/
 
@@ -2213,7 +2213,7 @@ static int db_callback_matches_pdf(void *data, int argc, char **argv, char **azC
 #define LINE_LEN 512
 #define LINE_SPACE (LINE_LEN+4)
 
-#define GO_OUT(_s) do { g_print("%s[%d] Error: %s\n", __FUNCTION__, __LINE__, _s); goto out; } while (0)
+#define GO_OUT(_s) do { mylog("%s[%d] Error: %s\n", __FUNCTION__, __LINE__, _s); goto out; } while (0)
 
 #define GETNUM(_a) do {					\
 	if (*p < '0' || *p > '9') p++;			\
@@ -2229,7 +2229,7 @@ static int db_callback_matches_pdf(void *data, int argc, char **argv, char **azC
 	if (r <= 0) GO_OUT("fread");					\
 	buf[r] = buf[r+1] = 0;						\
 	p = strstr(buf, "endobj");					\
-	if (!p) {g_print("obj=%d\n", _n);GO_OUT("no endobj");}		\
+	if (!p) {mylog("obj=%d\n", _n);GO_OUT("no endobj");}		\
 	p[6] = 0;								\
     } while (0)
 
@@ -2245,7 +2245,7 @@ static int db_callback_matches_pdf(void *data, int argc, char **argv, char **azC
     } while (0)
 
 #if 0
-#define goto_out do { g_print("%s[%d] Error\n", __FUNCTION__, __LINE__); goto out; } while (0)
+#define goto_out do { mylog("%s[%d] Error\n", __FUNCTION__, __LINE__); goto out; } while (0)
 
 #define NUM_XREF 1024
 static gint xref[NUM_XREF];
@@ -2280,7 +2280,7 @@ void db_print_category_to_pdf_comments(gint catix, gchar *filename)
 
     pdf = fopen(pdfname, "rb");
     if (!pdf) {
-	g_print("%s[%d]: Cannot open %s\n", __FUNCTION__, __LINE__, pdfname);
+	mylog("%s[%d]: Cannot open %s\n", __FUNCTION__, __LINE__, pdfname);
 	goto_out;
     }
 

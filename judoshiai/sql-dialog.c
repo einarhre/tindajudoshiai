@@ -49,7 +49,7 @@ static void destroy_sql( GtkWidget *widget,
 static void char_typed(GtkWidget *w, gpointer arg) 
 {
     const gchar *txt = gtk_entry_get_text(GTK_ENTRY(w));
-    g_print("txt=%s\n", txt);
+    mylog("txt=%s\n", txt);
 }
 #endif
 

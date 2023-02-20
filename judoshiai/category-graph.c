@@ -788,7 +788,7 @@ static gboolean release_notify(GtkWidget *sheet_page,
         j->birthyear = point_click_areas[t].group;
         db_update_category(j->index, j);
         if (display_one_judoka(j) >= 0)
-            g_print("Error: %s %d\n", __FUNCTION__, __LINE__);
+            mylog("Error: %s %d\n", __FUNCTION__, __LINE__);
 
         category_refresh(j->index);
         update_category_status_info_all();

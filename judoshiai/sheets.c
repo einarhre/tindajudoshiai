@@ -532,7 +532,7 @@ static void create_table(struct paint_data *pd, struct table *t)
     int i;
 
     if (pd->row_height == 0) {
-        g_print("ROW HEIGHT == 0!\n");
+        mylog("ROW HEIGHT == 0!\n");
         pd->row_height = 1;
     }
 
@@ -3463,7 +3463,7 @@ void parse_font_text(gchar *font, gchar *face, gint *slant, gint *weight, gdoubl
     gchar *num = strrchr(font, ' ');
 
     if (!num) {
-        g_print("ERROR: malformed font string '%s'\n", font);
+        mylog("ERROR: malformed font string '%s'\n", font);
         return;
     }
 

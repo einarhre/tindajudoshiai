@@ -47,7 +47,7 @@ static gboolean delete_event( GtkWidget *widget,
      * This is useful for popping up 'are you sure you want to quit?'
      * type dialogs. */
 
-    //g_print ("delete event occurred\n");
+    //mylog ("delete event occurred\n");
 
     /* Change TRUE to FALSE and the main window will be destroyed with
      * a "delete_event". */
@@ -58,7 +58,7 @@ static gboolean delete_event( GtkWidget *widget,
 static void destroy_event( GtkWidget *widget,
 			   gpointer   data )
 {
-    //g_print("destroy\n");
+    //mylog("destroy\n");
 }
 
 static gint set_one_category(GtkTreeModel *model, GtkTreeIter *iter, guint index,
@@ -121,7 +121,7 @@ static gint display_one_competitor(GtkTreeModel *model, struct judoka *j)
 
         if (gtk_tree_model_iter_parent((GtkTreeModel *)model, &parent, &iter) == FALSE) {
             /* illegal situation */
-            g_print("ILLEGAL %s:%d\n", __FILE__, __LINE__);
+            mylog("ILLEGAL %s:%d\n", __FILE__, __LINE__);
             ret = set_one_category(model, &parent, 0,
                                    (gchar *)j->category,
                                    0, 0, (struct compsys){0,0,0,0});
@@ -163,7 +163,7 @@ static int db_competitor_callback(void *data, int argc, char **argv, char **azCo
     memset(&j, 0, sizeof(j));
     
     for(i = 0; i < argc; i++){
-        //g_print("  %s=%s", azColName[i], argv[i] ? argv[i] : "(NULL)");
+        //mylog("  %s=%s", azColName[i], argv[i] ? argv[i] : "(NULL)");
         if (IS(index))
             j.index = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(last))
@@ -220,7 +220,7 @@ static int db_category_callback(void *data, int argc, char **argv, char **azColN
     memset(&j, 0, sizeof(j));
 
     for (i = 0; i < argc; i++) {
-        //g_print(" %s=%s", azColName[i], argv[i]);
+        //mylog(" %s=%s", azColName[i], argv[i]);
         if (IS(index))
             j.index = atoi(argv[i]);
         else if (IS(category))
@@ -264,7 +264,7 @@ static gint find_our_ix(struct shiai_map *mp, gint foreign)
         if (mp->ixmap[i].foreign == foreign)
             return mp->ixmap[i].our;
     }
-    g_print("ERROR %s:%d: Foreign index=%d\n", __FILE__, __LINE__, foreign);
+    mylog("ERROR %s:%d: Foreign index=%d\n", __FILE__, __LINE__, foreign);
     return -1;
 }
 
@@ -356,7 +356,7 @@ static GtkTreeModel *create_and_fill_model(gchar *dbname)
 
     rc = sqlite3_open(dbname, &db);
     if (rc) {
-        g_print("Can't open database: %s\n", sqlite3_errmsg(db));
+        mylog("Can't open database: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
         return model;
     }
@@ -365,7 +365,7 @@ static GtkTreeModel *create_and_fill_model(gchar *dbname)
                       "SELECT * FROM categories WHERE \"deleted\"&1=0 ORDER BY \"category\" ASC",
                       db_category_callback, model, &zErrMsg);
     if (rc != SQLITE_OK && zErrMsg) {
-        g_print("SQL error: %s\n", zErrMsg);
+        mylog("SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
 
@@ -373,7 +373,7 @@ static GtkTreeModel *create_and_fill_model(gchar *dbname)
                       "SELECT * FROM competitors WHERE \"deleted\"&1=0 ORDER BY \"last\" ASC",
                       db_competitor_callback, model, &zErrMsg);
     if (rc != SQLITE_OK && zErrMsg) {
-        g_print("SQL error: %s\n", zErrMsg);
+        mylog("SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
 
@@ -391,7 +391,7 @@ static void read_foreign_matches(gchar *dbname, struct shiai_map *mp)
 
     rc = sqlite3_open(dbname, &db);
     if (rc) {
-        g_print("Can't open database: %s\n", sqlite3_errmsg(db));
+        mylog("Can't open database: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
         return;
     }
@@ -402,7 +402,7 @@ static void read_foreign_matches(gchar *dbname, struct shiai_map *mp)
 
     rc = sqlite3_exec(db, cmd, db_match_callback, mp, &zErrMsg);
     if (rc != SQLITE_OK && zErrMsg) {
-        g_print("SQL error: %s\n", zErrMsg);
+        mylog("SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
 
@@ -480,7 +480,7 @@ void row_activated(GtkTreeView        *treeview,
         }
         mapped = malloc(sizeof(*mapped));
         if (!mapped)
-            g_print("ERROR %s:%d\n", __FILE__, __LINE__);
+            mylog("ERROR %s:%d\n", __FILE__, __LINE__);
 
         mapped->ix_num = 0;
         mapped->foreign_cat = j->index;
@@ -493,7 +493,7 @@ void row_activated(GtkTreeView        *treeview,
             db_add_category(j->index, j);
             db_set_system(j->index, uncompress_system(j->weight));
         } else
-            g_print("ERROR %s:%d\n", __FILE__,__LINE__);
+            mylog("ERROR %s:%d\n", __FILE__,__LINE__);
 
         ok = gtk_tree_model_iter_children(model, &tmp_iter, &iter);
         while (ok) {
@@ -507,7 +507,7 @@ void row_activated(GtkTreeView        *treeview,
             db_add_judoka(j2->index, j2);
             ret = display_one_judoka(j2);
             if (ret >= 0)
-                g_print("ERROR %s:%d\n", __FILE__,__LINE__);
+                mylog("ERROR %s:%d\n", __FILE__,__LINE__);
             free_judoka(j2);
             ok = gtk_tree_model_iter_next(model, &tmp_iter);
         }

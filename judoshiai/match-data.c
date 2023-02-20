@@ -3092,11 +3092,11 @@ void print_rounds(void)
 
     systm.numcomp = 1; /* non-zero */
 
-    g_print("const gint french_rounds[NUM_TABLES][NUM_FRENCH][NUM_MATCHES] = {\n");
+    mylog("const gint french_rounds[NUM_TABLES][NUM_FRENCH][NUM_MATCHES] = {\n");
 
     for (tbl = 0; tbl < NUM_TABLES; tbl++) {
 	systm.table = tbl;
-	g_print("    { /* Table %d */\n", tbl);
+	mylog("    { /* Table %d */\n", tbl);
 	for (sys = 0; sys < NUM_FRENCH; sys++) {
 	    /* Find the last match. */
 	    for (i = NUM_MATCHES-1; i >= 0; i--)
@@ -3107,18 +3107,18 @@ void print_rounds(void)
 		continue;
 
 	    systm.system = SYSTEM_FRENCH_8 + sys;
-	    g_print("        { /* sys %d */", sys);
+	    mylog("        { /* sys %d */", sys);
 	    for (m = 0; m <= i; m++) {
 		gint r = round_number(systm, m);
-		if ((m & 15) == 0) g_print("\n            ");
-		g_print("0x%04x,", r);
+		if ((m & 15) == 0) mylog("\n            ");
+		mylog("0x%04x,", r);
 	    }
-	    g_print("\n        },\n");
+	    mylog("\n        },\n");
 	}
-	g_print("    },\n");
+	mylog("    },\n");
     }
 
-    g_print("};\n");
+    mylog("};\n");
 }
 #endif
 
@@ -3186,7 +3186,7 @@ gint num_matches_estimate(gint index)
     if (systm.system == SYSTEM_CUSTOM) {
         struct custom_data *cd = get_custom_table(systm.table);
         if (cd && cd->num_matches) return mul*cd->num_matches;
-        g_print("ERROR: Custom category %s returned num_matches=0 cd=%p matches=%d\n",
+        mylog("ERROR: Custom category %s returned num_matches=0 cd=%p matches=%d\n",
                 catdata->category, cd, cd ? cd->num_matches : 0);
         assert(cd);
         assert(cd->num_matches > 0);

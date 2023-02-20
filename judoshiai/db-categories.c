@@ -32,7 +32,7 @@ static int db_callback_categories(void *data, int argc, char **argv, char **azCo
     gint i, flags = ptr_to_gint(data);
 
     for (i = 0; i < argc; i++) {
-        //g_print(" %s=%s", azColName[i], argv[i]);
+        //mylog(" %s=%s", azColName[i], argv[i]);
         if (IS(index))
             jud.index = my_atoi(argv[i]);
         else if (IS(category))
@@ -70,7 +70,7 @@ static int db_callback_categories(void *data, int argc, char **argv, char **azCo
         else if (IS(color))
             jud.club = argv[i];
     }
-    //g_print("\n");
+    //mylog("\n");
 
     jud.visible = FALSE;
 
@@ -99,7 +99,7 @@ void db_add_category(int num, struct judoka *j)
     BZERO(cs);
 
     if (num < 10000) {
-        g_print("%s: ERROR, num = %d\n", __FUNCTION__, num);
+        mylog("%s: ERROR, num = %d\n", __FUNCTION__, num);
         return;
     }
     db_exec_str(NULL, db_callback_categories, 
@@ -114,7 +114,7 @@ void db_add_category(int num, struct judoka *j)
 void db_update_category(int num, struct judoka *j)
 {
     if (num < 10000) {
-        g_print("%s: ERROR, num = %d\n", __FUNCTION__, num);
+        mylog("%s: ERROR, num = %d\n", __FUNCTION__, num);
         return;
     }
 
@@ -159,7 +159,7 @@ void db_update_category(int num, struct judoka *j)
         data1->deleted = j->deleted;
         set_category_to_queue(data1);
     } else
-        g_print("Error %s %d (cat %d)\n", __FUNCTION__, __LINE__, num);
+        mylog("Error %s %d (cat %d)\n", __FUNCTION__, __LINE__, num);
 }
 
 void db_set_system(int num, struct compsys sys)
@@ -175,7 +175,7 @@ void db_set_system(int num, struct compsys sys)
         data1->system = sys;
         set_category_to_queue(data1);
     } else
-        g_print("Error %s %d (num=%d sys=%d)\n", __FUNCTION__, __LINE__,
+        mylog("Error %s %d (num=%d sys=%d)\n", __FUNCTION__, __LINE__,
                 num, sys.system);
 }
 
@@ -263,7 +263,7 @@ static int db_callback_team_members(void *data, int argc, char **argv, char **az
     gint i;
 
     for (i = 0; i < argc; i++) {
-        g_print(" %s=%s\n", azColName[i], argv[i]);
+        mylog(" %s=%s\n", azColName[i], argv[i]);
         if (IS(index) && num_team_members < NUM_TEAM_MEMBERS)
             team_members[num_team_members++] = my_atoi(argv[i]);
     }
@@ -275,7 +275,7 @@ static int db_callback_weight_classes(void *data, int argc, char **argv, char **
     gint i;
 
     for (i = 0; i < argc; i++) {
-        g_print(" %s=%s\n", azColName[i], argv[i]);
+        mylog(" %s=%s\n", azColName[i], argv[i]);
         if (IS(weighttext) && num_weights < NUM_CAT_DEF_WEIGHTS)
             snprintf(weighttexts[num_weights++], 16, "%s", argv[i]);
     }
@@ -308,7 +308,7 @@ void db_create_default_teams(gint index)
 
         GtkTreeIter iter;
         if (find_iter_category(&iter, j1->last)) {
-            g_print("team category %s exists already\n", j1->last);
+            mylog("team category %s exists already\n", j1->last);
             continue;
         }
 
@@ -351,7 +351,7 @@ void db_create_default_teams(gint index)
 
             db_add_judoka(j.index, &j);
             ret = display_one_judoka(&j);
-            if (ret >= 0) g_print("display_one_judoka returned %d\n", ret);
+            if (ret >= 0) mylog("display_one_judoka returned %d\n", ret);
         }
 
         free_judoka(j1);

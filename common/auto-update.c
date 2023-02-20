@@ -125,7 +125,7 @@ void check_for_update(gulong addr, gchar *app)
 #ifndef WIN32
     return;
 #endif
-    g_print("Check for version, app=%s\n", app);
+    mylog("Check for version, app=%s\n", app);
     if ((comm_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
 	perror("socket");
 	return;
@@ -159,28 +159,28 @@ void check_for_update(gulong addr, gchar *app)
     if (p) *p = 0;
 
     if (strlen(buf) == 0) {
-	g_print("No version received\n");
+	mylog("No version received\n");
 	return;
     }
 
     p = full_version();
 
-    g_print("Local: %s, remote: %s\n", p, buf);
+    mylog("Local: %s, remote: %s\n", p, buf);
 
     p1 = strstr(p, "Windows");
     if (!p1) {
-	g_print("This is not Windows\n");
+	mylog("This is not Windows\n");
 	return;
     }
 
     p2 = strstr(buf, "Windows");
     if (!p2) {
-	g_print("Remote is not Windows\n");
+	mylog("Remote is not Windows\n");
 	return;
     }
 
     if (strcmp(p1, p2)) {
-	g_print("Different kind Windows'\n");
+	mylog("Different kind Windows'\n");
 	return;
     }
 
@@ -195,7 +195,7 @@ void check_for_update(gulong addr, gchar *app)
     if (strcmp(buf, p) == 0)
 	return;
 
-    g_print("SW NEEDS UPDATE\n");
+    mylog("SW NEEDS UPDATE\n");
 
     GtkWidget *dialog, *hbox, *label;
 

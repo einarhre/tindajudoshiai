@@ -533,7 +533,7 @@ void msg_received(struct message *input_msg)
 
 #if 0
     if (input_msg->type != MSG_HELLO)
-        g_print("msg type = %d from %lx (my addr = %lx)\n", input_msg->type, addr, my_address);
+        mylog("msg type = %d from %lx (my addr = %lx)\n", input_msg->type, addr, my_address);
 #endif
 
     if (input_msg->sender == my_address)
@@ -594,7 +594,7 @@ void msg_received(struct message *input_msg)
             if (input_msg->u.name_req.index & 0xff000000) {
                 gint ageix = find_age_index(j->last);
                 guint n = (guint)input_msg->u.name_req.index >> 24;
-                //g_print("IX=0x%x CAT=%s AGEIX=%d SUB=%d\n", input_msg->u.name_req.index, j->last, ageix, n);
+                //mylog("IX=0x%x CAT=%s AGEIX=%d SUB=%d\n", input_msg->u.name_req.index, j->last, ageix, n);
                 if (ageix >= 0 && n > 0 && n <= NUM_CAT_DEF_WEIGHTS) {
                     snprintf(output_msg.u.name_info.last, sizeof(output_msg.u.name_info.last),
                              "%s (%s)", j->last, 
@@ -611,7 +611,7 @@ void msg_received(struct message *input_msg)
         break;
 
     case MSG_ALL_REQ:
-        g_print("REQUESTING ALL\n");
+        mylog("REQUESTING ALL\n");
         for (i = 1; i <= NUM_TATAMIS; i++)
             send_matches(i);
         break;
@@ -872,7 +872,7 @@ gint timeout_callback(gpointer data)
         */
 
         if (next_match_messages[i].u.next_match.tatami > 0) {
-            //g_print("next match message sent\n");
+            //mylog("next match message sent\n");
             send_packet_1(&next_match_messages[i]);
         }
     }
@@ -888,12 +888,12 @@ void copy_packet(struct message *msg)
 #if 0
     if (msg->type != MSG_HELLO && msg->type != MSG_DUMMY) {
         if (msg->type < 1 || msg->type >= NUM_MESSAGES) {
-            g_print("CORRUPTED MESSAGE %d\n", msg->type);
+            mylog("CORRUPTED MESSAGE %d\n", msg->type);
             return;
         }
 #if 0
         if (msg->type == MSG_NEXT_MATCH && msg->sender != my_address)
-            g_print("next match: sender=%d src_ip_addr=%lx\n",
+            mylog("next match: sender=%d src_ip_addr=%lx\n",
                     msg->sender, msg->src_ip_addr);
 #endif
     }
@@ -907,7 +907,7 @@ void copy_packet(struct message *msg)
         msg_put = 0;
 
     if (msg_put == msg_get)
-        g_print("MSG QUEUE FULL!\n");
+        mylog("MSG QUEUE FULL!\n");
     g_static_mutex_unlock(&msg_mutex);
 #endif
 }
@@ -1042,7 +1042,7 @@ gpointer node_thread(gpointer args)
 
     if (bind(node_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
         perror("serv bind");
-        g_print("CANNOT BIND!\n");
+        mylog("CANNOT BIND!\n");
         g_thread_exit(NULL);    /* not required just good pratice */
         return NULL;
     }
@@ -1065,7 +1065,7 @@ gpointer node_thread(gpointer args)
 
     if (bind(websock_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
         perror("websock bind");
-        g_print("CANNOT BIND websock!\n");
+        mylog("CANNOT BIND websock!\n");
         g_thread_exit(NULL);    /* not required just good pratice */
         return NULL;
     }
@@ -1178,7 +1178,7 @@ gpointer node_thread(gpointer args)
 
                 if (ret < 0) {
                     perror("sendto");
-                    g_print("Node cannot send: conn=%d fd=%d\n", i, connections[i].fd);
+                    mylog("Node cannot send: conn=%d fd=%d\n", i, connections[i].fd);
 
 		    closesock(connections[i].fd);
 		    FD_CLR(connections[i].fd, &read_fd);
@@ -1218,7 +1218,7 @@ gpointer node_thread(gpointer args)
             const int nodelayflag = 1;
             if (setsockopt(tmp_fd, IPPROTO_TCP, TCP_NODELAY,
                            (const void *)&nodelayflag, sizeof(nodelayflag))) {
-                g_print("CANNOT SET TCP_NODELAY (2)\n");
+                mylog("CANNOT SET TCP_NODELAY (2)\n");
             }
 #endif
             for (i = 0; i < NUM_CONNECTIONS; i++)
@@ -1226,7 +1226,7 @@ gpointer node_thread(gpointer args)
                     break;
 
             if (i >= NUM_CONNECTIONS) {
-                g_print("Node cannot accept new connections!\n");
+                mylog("Node cannot accept new connections!\n");
                 closesock(tmp_fd);
                 continue;
             }
@@ -1237,7 +1237,7 @@ gpointer node_thread(gpointer args)
             connections[i].conn_type = 0;
             connections[i].websock = FALSE;
             connections[i].websock_ok = FALSE;
-            g_print("Node: new connection[%d]: fd=%d addr=%s\n",
+            mylog("Node: new connection[%d]: fd=%d addr=%s\n",
                     i, (int)tmp_fd, inet_ntoa(caller.sin_addr));
             FD_SET(tmp_fd, &read_fd);
         }
@@ -1246,7 +1246,7 @@ gpointer node_thread(gpointer args)
             alen = sizeof(caller);
             if ((tmp_fd = accept(websock_fd, (struct sockaddr *)&caller, &alen)) < 0) {
                 perror("websock accept");
-		g_print("websock=%d tmpfd=%d\n", (int)websock_fd, (int)tmp_fd);
+		mylog("websock=%d tmpfd=%d\n", (int)websock_fd, (int)tmp_fd);
 		g_usleep(1000000);
                 continue;
             }
@@ -1256,7 +1256,7 @@ gpointer node_thread(gpointer args)
                     break;
 
             if (i >= NUM_CONNECTIONS) {
-                g_print("Node cannot accept new connections!\n");
+                mylog("Node cannot accept new connections!\n");
                 closesock(tmp_fd);
                 continue;
             }
@@ -1266,7 +1266,7 @@ gpointer node_thread(gpointer args)
             connections[i].id = 0;
             connections[i].conn_type = 0;
             connections[i].websock = TRUE;
-            g_print("Node: new websock connection[%d]: fd=%d addr=%s\n",
+            mylog("Node: new websock connection[%d]: fd=%d addr=%s\n",
                     i, (int)tmp_fd, inet_ntoa(caller.sin_addr));
             FD_SET(tmp_fd, &read_fd);
         }
@@ -1299,7 +1299,7 @@ gpointer node_thread(gpointer args)
 
 		    if (strncmp((gchar *)inbuf, "<policy-file-request/>", 10) == 0) {
 			send(connections[i].fd, xml, xmllen+1, 0);
-			g_print("policy file sent to %d\n", i);
+			mylog("policy file sent to %d\n", i);
 		    }
 
 		    for (j = 0; j < r; j++) {
@@ -1322,14 +1322,14 @@ gpointer node_thread(gpointer args)
 					connections[i].conn_type =
 					    msg.u.dummy.application_type;
 					connections[i].id = msg.sender;
-					g_print("Node: conn=%d type=%d id=%08x\n",
+					mylog("Node: conn=%d type=%d id=%08x\n",
 						i, connections[i].conn_type, connections[i].id);
 				    }
 				} else {
 				    put_to_rec_queue(&msg); // XXX
 				}
 			    } else {
-				g_print("Node: conn %d has wrong char 0x%02x after esc!\n", i, c);
+				mylog("Node: conn %d has wrong char 0x%02x after esc!\n", i, c);
 			    }
 			    connections[i].escape = FALSE;
 			} else if (connections[i].ri < blen) {
@@ -1338,7 +1338,7 @@ gpointer node_thread(gpointer args)
 		    }
 		}
             } else {
-                g_print("Node: connection %d fd=%d closed (r=%d, err=%s)\n",
+                mylog("Node: connection %d fd=%d closed (r=%d, err=%s)\n",
 			i, connections[i].fd, r, strerror(errno));
                 closesock(connections[i].fd);
                 FD_CLR(connections[i].fd, &read_fd);
@@ -1403,13 +1403,13 @@ gpointer server_thread(gpointer args)
                 gint w = send(tmp_fd, buf, n, 0);
 #ifdef WIN32
                 if (w < 0)
-                    g_print("server write: %d\n", WSAGetLastError());
+                    mylog("server write: %d\n", WSAGetLastError());
 #else
                 if (w < 0)
                     perror("server write");
 #endif
 
-                if (w != n) g_print("send problem: %d of %d sent\n", w, n);
+                if (w != n) mylog("send problem: %d of %d sent\n", w, n);
             }
             fclose(db_fd);
         }
@@ -1599,24 +1599,24 @@ static gint read_all_files(SOCKET s, const gchar *subdirname, gint sendnow, gint
 		    g_free(contcopy);
 
 		    gchar *p = "get:";
-		    g_print(" %s", p); p = &buf[n];
+		    mylog(" %s", p); p = &buf[n];
 		    n = snprintf(buf, sizeof(buf), sendnow ? "FILE" : "NAME");
 		    buf[n++] = 0;
-		    g_print(" %s", p); p = &buf[n];
+		    mylog(" %s", p); p = &buf[n];
 		    for (i = 0; i < SHA1_DIGEST_LENGTH; i++)
 			n += snprintf(buf+n, sizeof(buf)-n, "%02x", digest[i]);
 		    buf[n++] = 0;
-		    g_print(" %s", p); p = &buf[n];
+		    mylog(" %s", p); p = &buf[n];
 		    n += snprintf(buf+n, sizeof(buf)-n, "%ld", length);
 		    buf[n++] = 0;
-		    g_print(" %s", p); p = &buf[n];
+		    mylog(" %s", p); p = &buf[n];
 		    n += snprintf(buf+n, sizeof(buf)-n, "%s", subname);
 		    buf[n++] = 0;
-		    g_print(" %s\n", p); p = &buf[n];
+		    mylog(" %s\n", p); p = &buf[n];
 
 		    if (send(s, buf, n, 0) < 0) {
 			g_free(contents);
-			g_print("auto-update send");
+			mylog("auto-update send");
 			return -1;
 		    }
 
@@ -1625,13 +1625,13 @@ static gint read_all_files(SOCKET s, const gchar *subdirname, gint sendnow, gint
 			while (length) {
 			    if ((n = send(s, p1, length, 0)) < 0) {
 				g_free(contents);
-				g_print("auto-update send 2");
+				mylog("auto-update send 2");
 				return -1;
 			    }
 			    p1 += n;
 			    length -= n;
 			    if (n == 0) {
-				g_print("slow down\n");
+				mylog("slow down\n");
 				g_usleep(100000);
 			    }
 			}
@@ -1639,7 +1639,7 @@ static gint read_all_files(SOCKET s, const gchar *subdirname, gint sendnow, gint
 
 		    if ((n = recv(s, buf, 1, 0)) < 0) {
 			g_free(contents);
-			g_print("auto-update recv");
+			mylog("auto-update recv");
 			return -1;
 		    }
 
@@ -1764,11 +1764,11 @@ gpointer get_file_thread(gpointer args)
 	if (p) *p = 0;
 
 	if (!strcmp(buf, "VER")) {
-	    g_print("Get VER\n");
+	    mylog("Get VER\n");
 	    p = full_version();
 	    send(tmp_fd, p, strlen(p), 0);
 	} else if (!strcmp(buf, "ALL")) {
-	    g_print("Get ALL\n");
+	    mylog("Get ALL\n");
 	    read_all_files(tmp_fd, NULL, 1, 0);
 	} else {
 	    gchar *fname = g_build_filename(installation_dir, buf, NULL);

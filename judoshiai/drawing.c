@@ -286,7 +286,7 @@ static gint get_section(gint num, struct mdata *mdata)
             return i;
         sec_max += sec_siz;
     }
-    //g_print("%s:%d: num=%d\n", __FUNCTION__, __LINE__, num);
+    //mylog("%s:%d: num=%d\n", __FUNCTION__, __LINE__, num);
     return 0;
 }
 
@@ -436,10 +436,10 @@ static void calc_place_values(gint *place_values, struct mdata *mdata)
 	}
     } // cust sys
     /***
-    g_print("\nplace values: ");
+    mylog("\nplace values: ");
     for (x = 1; x <= mdata->mpositions; x++)
-        g_print("%d=%d ", x, place_values[x]);
-    g_print("\n");
+        mylog("%d=%d ", x, place_values[x]);
+    mylog("\n");
     ***/
 }
 
@@ -466,7 +466,7 @@ static gint get_free_pos_by_mask(gint mask, struct mdata *mdata)
                 x = 1;
         }
 
-        //g_print("%s:%d: mask=%x\n", __FUNCTION__, __LINE__, mask);
+        //mylog("%s:%d: mask=%x\n", __FUNCTION__, __LINE__, mask);
         return 0;
     }
 
@@ -515,7 +515,7 @@ static gint get_free_pos_by_mask(gint mask, struct mdata *mdata)
     }
 
     if (valid_place == 0) {
-        g_print("%s:%d: no valid position for competitor!\n",
+        mylog("%s:%d: no valid position for competitor!\n",
                 __FUNCTION__, __LINE__);
         return 0;
     }
@@ -672,7 +672,7 @@ static gboolean select_number(GtkWidget *eventbox, GdkEventButton *event, void *
     }
 
     if (mdata->selected == 0 || num == 0) {
-        g_print("error %d\n", __LINE__);
+        mylog("error %d\n", __LINE__);
         return FALSE;
     }
 
@@ -736,7 +736,7 @@ static gboolean select_competitor(GtkWidget *eventbox, GdkEventButton *event, vo
         }
 
     if (index == 0) {
-        g_print("error %d\n", __LINE__);
+        mylog("error %d\n", __LINE__);
         return FALSE;
     }
 
@@ -1563,12 +1563,12 @@ static void calc_distances(struct mdata *mdata)
     memset(&mlist, 0, sizeof(mlist));
 
 #if 0
-    g_print("MATCHES:\n");
+    mylog("MATCHES:\n");
     for (c = 0; c < ct->num_matches; c++) {
 	match_bare_t *m = &ct->matches[c];
 	competitor_bare_t *c1 = &m->c1;
 	competitor_bare_t *c2 = &m->c2;
-	g_print("%d: type=%d num=%d pos=%d - type=%d num=%d pos=%d\n",
+	mylog("%d: type=%d num=%d pos=%d - type=%d num=%d pos=%d\n",
 	  c, c1->type, c1->num, c1->pos, c2->type, c2->num, c2->pos);
     }
 #endif
@@ -1579,11 +1579,11 @@ static void calc_distances(struct mdata *mdata)
 	cmp.type = COMP_TYPE_COMPETITOR;
 	cmp.num = c;
 	cmp.pos = 0;
-	//g_print("\n-- competitor %d\n", c);
+	//mylog("\n-- competitor %d\n", c);
 	while (1) {
 	    gboolean found = FALSE;
 
-	    //g_print("cmp=%d %d:%d:%d\n", c, cmp.type, cmp.num, cmp.pos);
+	    //mylog("cmp=%d %d:%d:%d\n", c, cmp.type, cmp.num, cmp.pos);
 
 	    for (i = 0; i < ct->num_matches && !found; i++) {
 		gint mnum = i + 1;
@@ -1635,20 +1635,20 @@ static void calc_distances(struct mdata *mdata)
 	}
     }
 #if 0
-    g_print("\n");
+    mylog("\n");
     for (c = 1; c <= mdata->mpositions; c++) {
-	g_print("comp=%d:", c);
+	mylog("comp=%d:", c);
 	for (i = 0; i < 16 && mlist[c][i]; i++)
-	    g_print(" %d", mlist[c][i]);
-	g_print("\n");
+	    mylog(" %d", mlist[c][i]);
+	mylog("\n");
     }
 
     for (i = 1; i <= mdata->mpositions; i++) {
-	g_print("i=%d", i);
+	mylog("i=%d", i);
 	for (j = 1; j <= mdata->mpositions; j++) {
-	    g_print(" %d", mdata->mcomp[i].distance[j]);
+	    mylog(" %d", mdata->mcomp[i].distance[j]);
 	}
-	g_print("\n");
+	mylog("\n");
     }
 #endif
 }
@@ -1728,7 +1728,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
         mdata->mfrench_sys = FRENCH_128;
         break;
     default:
-	g_print("UNKNOWN SYSTEM %d\n", mdata->sys.system);
+	mylog("UNKNOWN SYSTEM %d\n", mdata->sys.system);
         g_free(catname);
         g_free(mdata);
 	return NULL;

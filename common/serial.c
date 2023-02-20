@@ -122,7 +122,7 @@ static gchar handle_character(gchar c)
         }
         decimal++;
     }
-    //g_print("weight=%d\n", weight);
+    //mylog("weight=%d\n", weight);
     return 0;
 }
 
@@ -157,7 +157,7 @@ struct baudrates serial_baudrates[NUM_BAUDRATES] = {
     {CBR_115200, "115200,N81"}
 };
 
-#define ERR_SER g_print("Error %s:%d\n", __FUNCTION__, __LINE__)
+#define ERR_SER mylog("Error %s:%d\n", __FUNCTION__, __LINE__)
 
 gpointer serial_thread(gpointer args)
 {
@@ -239,7 +239,7 @@ gpointer serial_thread(gpointer args)
             if (ch) {
                 szBuff[0] = ch;
                 if(!WriteFile(hSerial, szBuff, 1, &dwBytesRead, NULL))
-                    g_print("Cannot write to COM!\n");
+                    mylog("Cannot write to COM!\n");
             }
         }
 

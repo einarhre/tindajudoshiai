@@ -44,7 +44,7 @@ void create_categories(GtkWidget *w, gpointer data)
     GList *node;
 #if 0
     if (db_matches_exists()) {
-        g_print("Otteluita arvottu. Poista arvonnat ensin.\n");
+        mylog("Otteluita arvottu. Poista arvonnat ensin.\n");
         show_message("Otteluita arvottu. Poista arvonnat ensin.");
         return;
     }
@@ -359,7 +359,7 @@ void update_category_status_info(gint category)
     if (avl_get_by_key(categories_tree, &data, (void *)&data1) == 0) {
         data1->match_status = weight;
     } /***else
-          g_print("Error %s %d\n", __FUNCTION__, __LINE__);***/
+          mylog("Error %s %d\n", __FUNCTION__, __LINE__);***/
 #endif
 }
 
@@ -388,11 +388,11 @@ void update_category_status_info_all(void)
             if (avl_get_by_key(categories_tree, &data, (void *)&data1) == 0) {
                 data1->match_status = weight;
             } else
-                g_print("Error %s %d (%d)\n", __FUNCTION__, __LINE__, index);
+                mylog("Error %s %d (%d)\n", __FUNCTION__, __LINE__, index);
 #endif
             ok = gtk_tree_model_iter_next(current_model, &iter);
         } else
-            g_print("ERROR: %s:%d\n", __FUNCTION__, __LINE__);
+            mylog("ERROR: %s:%d\n", __FUNCTION__, __LINE__);
 
     }
 

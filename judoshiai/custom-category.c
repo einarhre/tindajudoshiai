@@ -473,7 +473,7 @@ static struct custom_data *decode_custom_data(unsigned char *buf, int len, struc
             ix += get_groups(&(buf[ix]), d, &err);
             break;
         default:
-            g_print("Unknown CD type %d\n", buf[ix-1]);
+            mylog("Unknown CD type %d\n", buf[ix-1]);
             return NULL;
         }
     }
@@ -675,7 +675,7 @@ void read_custom_from_db(void)
 
         if (custom_brackets[n] == NULL) {
             num_custom_brackets = n;
-            g_print("ERROR: cannot read blob %d\n", n);
+            mylog("ERROR: cannot read blob %d\n", n);
             break;
         }
 
@@ -683,7 +683,7 @@ void read_custom_from_db(void)
             db_read_blob(hash_values[n] | page, &data, &len);
             if (data == NULL) {
                 if (page == 1) {
-                    g_print("ERROR: Cannot read svg data from db\n");
+                    mylog("ERROR: Cannot read svg data from db\n");
                 }
                 break;
             }
@@ -692,9 +692,9 @@ void read_custom_from_db(void)
             gchar buf[32];
             sprintf(buf, "%x.svg", (n << 8) | page);
             if (g_file_set_contents(buf, (gchar *)data, len, NULL))
-                g_print("g_file_set_contents %s OK len=%d\n", buf, len);
+                mylog("g_file_set_contents %s OK len=%d\n", buf, len);
             else
-                g_print("g_file_set_contents %s NOK len=%d\n", buf, len);
+                mylog("g_file_set_contents %s NOK len=%d\n", buf, len);
 #endif
         }
     }
@@ -764,7 +764,7 @@ gint get_custom_pos(struct custom_matches *cm, gint table, gint pos, gint *real_
         return 0;
 
     if (cd->positions[pos-1].type == COMP_TYPE_MATCH) {
-        //g_print("posarg=%d pos=%d match=%d\n", pos, cd->positions[pos-1].pos, cd->positions[pos-1].match);
+        //mylog("posarg=%d pos=%d match=%d\n", pos, cd->positions[pos-1].pos, cd->positions[pos-1].match);
         if (cd->positions[pos-1].pos == 1)
             ix = WINNER(cd->positions[pos-1].match);
         else
@@ -772,9 +772,9 @@ gint get_custom_pos(struct custom_matches *cm, gint table, gint pos, gint *real_
     } else if (cd->positions[pos-1].type == COMP_TYPE_ROUND_ROBIN) {
         gint poolnum = cd->positions[pos-1].match;
         if (poolnum <= 0) return 0;
-        //g_print("*** pos=%d poolnum=%d\n", pos, poolnum);
+        //mylog("*** pos=%d poolnum=%d\n", pos, poolnum);
         struct pool *p = &cm->pm[poolnum-1];
-        //g_print("*** finished=%d\n", p->finished);
+        //mylog("*** finished=%d\n", p->finished);
         if (!p->finished) return 0;
         ix = p->competitors[p->competitors[pos-1].position].index;
     } else if (cd->positions[pos-1].type == COMP_TYPE_BEST_OF_3) {
@@ -801,7 +801,7 @@ static void custlog(gchar *format, ...)
     va_start(args, format);
     gchar *text = g_strdup_vprintf(format, args);
     va_end(args);
-    g_print("CUSTLOG: %s\n", text);
+    mylog("CUSTLOG: %s\n", text);
     g_free(text);
 }
 

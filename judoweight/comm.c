@@ -92,7 +92,7 @@ void msg_received(struct message *input_msg)
 
     traffic_last_rec_time = time(NULL);
 #if 0
-    g_print("msg type = %d from %d\n", 
+    mylog("msg type = %d from %d\n", 
             input_msg->type, input_msg->sender);
 #endif
     switch (input_msg->type) {

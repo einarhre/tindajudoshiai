@@ -8,7 +8,7 @@
 #include "common-utils.h"
 #include "match-table.h"
 
-#define g_print(_a...) do { } while (0)
+#define mylog(_a...) do { } while (0)
 
 #define get_data(_j) avl_get_competitor(_j)
 #define free_judoka(_j) do { } while (0)
@@ -485,7 +485,7 @@ custom_cell_renderer_match_render(GtkCellRenderer      *cell_renderer,
         mlist = get_cached_next_matches(tatami);
 
 #if 0
-    g_print("Render match=%p x=%d y=%d w=%d h=%d tatami=%d position=%d\n", m,
+    mylog("Render match=%p x=%d y=%d w=%d h=%d tatami=%d position=%d\n", m,
             cell_area->x, cell_area->y,
             cell_area->width, cell_area->height, tatami, position);
 
@@ -890,7 +890,7 @@ static guint find_match_data_by_xy_update(gint x, gint y, gboolean update)
     gtk_tree_model_get(model, &iter, tatami, &match_data, -1);
     //position = MATCH_DATA_TO_POSITION(match_data);
     if (match_data & 0xfff00000) {
-        g_print("ERROR: match_data=0x%x\n", match_data);
+        mylog("ERROR: match_data=0x%x\n", match_data);
         return 0;
     }
     
@@ -1094,7 +1094,7 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
         drag_data = match_data;
         gint tatami = MATCH_DATA_TO_TATAMI(match_data);
         gint position = MATCH_DATA_TO_POSITION(match_data);
-        g_print("%s: x,y=%d,%d tatami=%d pos=%d\n", __FUNCTION__, drag_x0, drag_y0,
+        mylog("%s: x,y=%d,%d tatami=%d pos=%d\n", __FUNCTION__, drag_x0, drag_y0,
                 tatami, position);
         
         if (tatami > 0 && tatami <= number_of_tatamis && position == 0) {
@@ -1160,7 +1160,7 @@ create_view_and_model (void)
 
         col = gtk_tree_view_column_new();
         columns[i] = col;
-        g_print("columns[%d]=%p\n", i, col);
+        mylog("columns[%d]=%p\n", i, col);
         gtk_tree_view_column_set_expand(col, TRUE);
         gtk_tree_view_column_pack_start (col, renderer, TRUE);
         gtk_tree_view_column_add_attribute (col, renderer, "match", i);
@@ -1192,7 +1192,7 @@ void update_match_table(void)
     gint i;
     
     for (i = 0; i <= NUM_TATAMIS; i++) {
-        //g_print("update_match_table columns[%d] == %p\n", i, columns[i]);
+        //mylog("update_match_table columns[%d] == %p\n", i, columns[i]);
         if (columns[i])
             gtk_tree_view_column_set_visible(columns[i], i <= number_of_tatamis);
     }
@@ -1203,7 +1203,7 @@ static void target_drag_leave(GtkWidget	     *widget,
                               guint           time)
 {
     have_drag = FALSE;
-    g_print("%s\n", __FUNCTION__);
+    mylog("%s\n", __FUNCTION__);
 }
 
 static gboolean target_drag_motion(GtkWidget	  *widget,
@@ -1245,12 +1245,12 @@ static gboolean target_drag_motion(GtkWidget	  *widget,
     
     drag_x = x;
     drag_y = y;
-    g_print("%s: x,y=%d,%d adj=%d,%d\n", __FUNCTION__, x, y, adj_x, adj_y);
+    mylog("%s: x,y=%d,%d adj=%d,%d\n", __FUNCTION__, x, y, adj_x, adj_y);
     
     if (!have_drag) {
         have_drag = TRUE;
         //drag_data = find_match_data_by_xy(x, y);
-        g_print("%s x=%d y=%d data=%x\n", __FUNCTION__, x, y, drag_data);
+        mylog("%s x=%d y=%d data=%x\n", __FUNCTION__, x, y, drag_data);
 #if 0
         struct match *m = get_match_by_match_data(drag_data);
         if (m) {
@@ -1307,7 +1307,7 @@ static gboolean target_drag_motion(GtkWidget	  *widget,
     tmp_list = gdk_drag_context_list_targets (context);
     while (tmp_list) {
         char *name = gdk_atom_name (GDK_POINTER_TO_ATOM (tmp_list->data));
-        g_print ("%s\n", name);
+        mylog ("%s\n", name);
         g_free (name);
       
         tmp_list = tmp_list->next;
@@ -1324,7 +1324,7 @@ static gboolean target_drag_drop(GtkWidget	*widget,
                                  gint            y,
                                  guint           time)
 {
-    g_print("%s\n", __FUNCTION__);
+    mylog("%s\n", __FUNCTION__);
     have_drag = FALSE;
     return TRUE;
 }
@@ -1342,12 +1342,12 @@ static void target_drag_data_received(GtkWidget        *widget,
     adj_x = (gint)gtk_adjustment_get_value(hadj);
     adj_y = (gint)gtk_adjustment_get_value(vadj);
 
-    g_print("%s x=%d y=%d adjx=%d adjy=%d\n", __FUNCTION__, x, y,
+    mylog("%s x=%d y=%d adjx=%d adjy=%d\n", __FUNCTION__, x, y,
             adj_x, adj_y);
 
     if (gtk_selection_data_get_length (selection_data) >= 0 &&
         gtk_selection_data_get_format (selection_data) == 8) {
-        g_print ("Received \"%s\" in label\n", (gchar *) gtk_selection_data_get_data (selection_data));
+        mylog ("Received \"%s\" in label\n", (gchar *) gtk_selection_data_get_data (selection_data));
         gtk_drag_finish (context, TRUE, FALSE, time);
 
         guint match_data = find_match_data_by_xy(x + adj_x, y);
@@ -1355,7 +1355,7 @@ static void target_drag_data_received(GtkWidget        *widget,
         gint pos = MATCH_DATA_TO_POSITION(match_data);
         struct match *m = get_match_by_match_data(drag_data);
 
-        g_print("Match %d:%d to T=%d pos=%d\n", m->category, m->number, tatami, pos);
+        mylog("Match %d:%d to T=%d pos=%d\n", m->category, m->number, tatami, pos);
         if (pos > 0 && m)
             db_change_freezed(m->category,
                               m->number,
@@ -1375,9 +1375,9 @@ static void source_drag_data_get(GtkWidget        *widget,
                                  guint             time,
                                  gpointer          data)
 {
-    g_print("%s\n", __FUNCTION__);
+    mylog("%s\n", __FUNCTION__);
     if (info == TARGET_ROOTWIN)
-        g_print ("I was dropped on the rootwin\n");
+        mylog ("I was dropped on the rootwin\n");
     else
         gtk_selection_data_set (selection_data,
                                 gtk_selection_data_get_target (selection_data),
@@ -1388,8 +1388,8 @@ static void source_drag_data_delete(GtkWidget      *widget,
                                     GdkDragContext *context,
                                     gpointer        data)
 {
-    g_print("%s\n", __FUNCTION__);
-    g_print ("Delete the data!\n");
+    mylog("%s\n", __FUNCTION__);
+    mylog ("Delete the data!\n");
 }
 
 static GtkTargetEntry target_table[] = {

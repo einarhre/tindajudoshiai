@@ -379,7 +379,7 @@ int websock_decode_msg(struct message *m, cJSON *json, gint crc32)
     cJSON *msg = cJSON_GetObjectItem(json, "msg");
     
     char *txt = cJSON_Print(json);
-    g_print("JSON=%s\n", txt);
+    mylog("JSON=%s\n", txt);
     free(txt);
     
     if (!msg || msg->type != cJSON_Array)

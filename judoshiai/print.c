@@ -228,7 +228,7 @@ void pdf_file(gint ctg, const gchar *dir, const gchar *prefix)
             snprintf(buf, sizeof(buf), "%s-%d.pdf", prefix, pd.page);
 
         pdfname = g_build_filename(dir, buf, NULL);
-        g_print("PDF=%s\n", pdfname);
+        mylog("PDF=%s\n", pdfname);
         cs_pdf = cairo_pdf_surface_create(pdfname, pd.paper_width, pd.paper_height);
         c_pdf = cairo_create(cs_pdf);
         pd.c = c_pdf;
@@ -539,7 +539,7 @@ static void get_code_39_extended(gchar key, gchar *c1, gchar *c2)
     else if (key >= 97 && key <= 122) { *c1 = '+'; *c2 = key - 97 + 'A'; }
     else if (key >= 123 && key <= 126) { *c1 = '%'; *c2 = key - 123 + 'P'; }
     else {
-        g_print("Error %s:%d: key=%d\n", __FUNCTION__, __LINE__, key);
+        mylog("Error %s:%d: key=%d\n", __FUNCTION__, __LINE__, key);
         *c1 = 0;
         *c2 = 0;
     }
@@ -748,7 +748,7 @@ static gboolean word_in_list(gchar *word, const gchar **list)
 	if (!g_strcmp0(word, list[i]))
 	    return TRUE;
     }
-    g_print("Cannot find word '%s'\n", word);
+    mylog("Cannot find word '%s'\n", word);
     return FALSE;
 }
 
@@ -993,7 +993,7 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
 		    show_message("%s: Error on line %d", templatefile, linenum);
 		}
 		g_strfreev(list);
-		g_print("order='%s'\n", order);
+		mylog("order='%s'\n", order);
             } else { // error
                 ok = FALSE;
                 break;
@@ -1192,7 +1192,7 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page, GSLi
     gint start = get_starting_judoka(pd, what, page, list);
     gint stop = get_starting_judoka(pd, what, page+1, list);
 
-    g_print("\nlistlen=%d page=%d start=%d stop=%d\n", g_slist_length(list), page, start, stop);
+    mylog("\nlistlen=%d page=%d start=%d stop=%d\n", g_slist_length(list), page, start, stop);
 
     for (row = start; row < stop; row++) {
         struct category_data *catdata = NULL;
@@ -1314,13 +1314,13 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page, GSLi
                     } else if (IS_STR("%ID%")) {
                         d += sprintf(buf + d, "%s", id);
                     } else if (IS_STR("%ID-BARCODE%")) {
-                        //g_print("id-barcode found, len=%d\n", len);
+                        //mylog("id-barcode found, len=%d\n", len);
                         draw_code_39_string(id, pd, bar_height, FALSE);
                     } else if (IS_STR("%ID-BARCODE-EXT%")) {
-                        //g_print("id-barcode-ext found, len=%d\n", len);
+                        //mylog("id-barcode-ext found, len=%d\n", len);
                         draw_code_39_string(id, pd, bar_height, TRUE);
                     } else if (IS_STR("%BARCODE%")) {
-                        //g_print("barcode found, len=%d\n", len);
+                        //mylog("barcode found, len=%d\n", len);
                         draw_code_39_string(id_str, pd, bar_height, FALSE);
                     } else if (IS_STR("%COMMENT%")) {
                         gint a = 0;

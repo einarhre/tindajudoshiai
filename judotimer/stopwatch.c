@@ -1139,7 +1139,7 @@ void reset(guint key, struct msg_next_match *msg0)
     switch (key) {
     case GDK_0:
         if (msg0) {
-            /*g_print("is-gs=%d match=%d gs=%d rep=%d flags=0x%x rest=%d\n",
+            /*mylog("is-gs=%d match=%d gs=%d rep=%d flags=0x%x rest=%d\n",
               golden_score, msg0->match_time, msg0->gs_time, msg0->rep_time, msg0->flags, msg0->rest_time);*/
             if ((msg0->flags & MATCH_FLAG_REPECHAGE) && msg0->rep_time) {
                 total = msg0->rep_time;
@@ -1804,7 +1804,7 @@ void judotimer_log(gchar *format, ...)
 	                tm->tm_sec);
 	        logfile_name = g_build_filename(g_get_user_data_dir(), buf, NULL);
 	    }
-        g_print("logfile_name=%s\n", logfile_name);
+        mylog("logfile_name=%s\n", logfile_name);
     }
 
     FILE *f = fopen(logfile_name, "a");
@@ -1844,7 +1844,7 @@ void judotimer_log(gchar *format, ...)
 #endif
         fclose(f);
     } else {
-        g_print("Cannot open log file\n");
+        mylog("Cannot open log file\n");
         perror("logfile_name");
     }
 

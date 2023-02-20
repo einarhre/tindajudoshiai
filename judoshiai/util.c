@@ -320,7 +320,7 @@ void put_data_by_iter(struct judoka *j, GtkTreeIter *iter)
 void put_data_by_iter_model(struct judoka *j, GtkTreeIter *iter, GtkTreeModel *model)
 {
     if (j->index < 10)
-        g_print("****** ERROR %s ******\n", __FUNCTION__);
+        mylog("****** ERROR %s ******\n", __FUNCTION__);
 
     if (!model)
         return;
@@ -479,7 +479,7 @@ void print_time(gchar *fname, gint lineno)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    g_print("%ld.%06ld %s:%d\n", tv.tv_sec, tv.tv_usec, fname, lineno);
+    mylog("%ld.%06ld %s:%d\n", tv.tv_sec, tv.tv_usec, fname, lineno);
 }
 
 gint timeval_subtract(GTimeVal *result, GTimeVal *x, GTimeVal *y)

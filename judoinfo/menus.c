@@ -156,7 +156,7 @@ static gint light_callback(gpointer data)
         msg.type = MSG_ALL_REQ;
         msg.sender = my_address;
         send_packet(&msg);
-	g_print("JudoInfo connection ok: requesting all\n");
+	mylog("JudoInfo connection ok: requesting all\n");
 
         set_menu_item_picture(GTK_IMAGE_MENU_ITEM(menu_light), "greenlight.png");
     } else

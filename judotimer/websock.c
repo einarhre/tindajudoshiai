@@ -114,7 +114,7 @@ static void websock_message(struct jsconn *conn, unsigned char *p,
 	}
     }
 
-    //g_print("OP CODE %d\n", opcode);
+    //mylog("OP CODE %d\n", opcode);
 
     if (opcode == OP_CODE_PING) {
 	out[0] = 0x80 | OP_CODE_PONG;
@@ -138,14 +138,14 @@ static void websock_message(struct jsconn *conn, unsigned char *p,
 
 	json = cJSON_Parse((char *)p + data);
 	if (!json) {
-	    g_print("json err: %s\n", p+data);
+	    mylog("json err: %s\n", p+data);
 	    return;
 	}
 
 	int r = websock_decode_msg(&msg, json);
 	cJSON_Delete(json);
 	if (r < 0) {
-	    g_print("decode err: %s\n", p);
+	    mylog("decode err: %s\n", p);
 	    return;
 	}
 
@@ -153,14 +153,14 @@ static void websock_message(struct jsconn *conn, unsigned char *p,
 	    if (msg.u.dummy.application_type != conn->conn_type) {
 		conn->conn_type = msg.u.dummy.application_type;
 		conn->id = msg.sender;
-		g_print("Node: conn=%d type=%d id=%08x\n",
+		mylog("Node: conn=%d type=%d id=%08x\n",
 			i, conn->conn_type, conn->id);
 	    }
 	} else if (msg_out) {
 	    *msg_out = msg;
 	} else {
 #if (APP_NUM == APPLICATION_TYPE_SERVER)
-	    g_print("%s: %s from web, conn type = %d, port = %d\n", __FUNCTION__,
+	    mylog("%s: %s from web, conn type = %d, port = %d\n", __FUNCTION__,
 		    msg_name(msg.type), conn->websock, conn->listen_port);
 	    if (msg.type == MSG_DUMMY) {
 		msg.u.dummy.application_type = application_type();
@@ -174,10 +174,10 @@ static void websock_message(struct jsconn *conn, unsigned char *p,
 #endif
 	}
 #if 0
-	g_print("Text len=%d:\n  ", len);
+	mylog("Text len=%d:\n  ", len);
 	for (i = 0; i < len; i++)
-	    g_print("%c", p[data+i]);
-	g_print("\n");
+	    mylog("%c", p[data+i]);
+	mylog("\n");
 #endif
     }
 #endif
@@ -194,7 +194,7 @@ static void websock_handshake(struct jsconn *conn, char *in, gint length)
     httpp_initialize(parser, NULL);
 
     if (httpp_parse(parser, in, length) == 0) {
-	g_print("websock parse error\n");
+	mylog("websock parse error\n");
 	httpp_destroy(parser);
 	return;
     }
@@ -226,8 +226,8 @@ static void websock_handshake(struct jsconn *conn, char *in, gint length)
 	n += snprintf(buf+n, sizeof(buf)-n, "Sec-WebSocket-Accept: ");
 
 	for (i = 0; i < SHA1_DIGEST_LENGTH; i++)
-		g_print(" %02x", digest[i]);
-	g_print("\n");
+		mylog(" %02x", digest[i]);
+	mylog("\n");
 
 	for (i = 0; i < SHA1_DIGEST_LENGTH; i += 3) {
 	    encodeblock(&digest[i], out, SHA1_DIGEST_LENGTH - i);
@@ -235,7 +235,7 @@ static void websock_handshake(struct jsconn *conn, char *in, gint length)
 	}
 	n += snprintf(buf+n, sizeof(buf)-n, "\r\n\r\n");
 
-	g_print("KEY=%s REPLY %d bytes:\n%s\n", key, n, buf);
+	mylog("KEY=%s REPLY %d bytes:\n%s\n", key, n, buf);
 	send(s, buf, n, 0);
 	conn->websock_ok = TRUE;
 
@@ -262,7 +262,7 @@ gint websock_send_msg(gint fd, struct message *msg)
     guchar buf[1024], *p = buf + 16;
     gint len = websock_encode_msg(msg, p, sizeof(buf)-16);
 
-    //g_print("%s: %s to web\n", __FUNCTION__, msg_name(msg->type));
+    //mylog("%s: %s to web\n", __FUNCTION__, msg_name(msg->type));
 
     if (len < 0) {
 	return 0;

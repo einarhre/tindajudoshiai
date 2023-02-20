@@ -92,7 +92,7 @@ static void draw_page_svg(GtkPrintOperation *operation,
     pd->paper_width = gtk_print_context_get_width(context);
     pd->paper_height = gtk_print_context_get_height(context);
 #if 0
-    g_print("SVG DRAW nomarg=%d scale=%d page=%fx%f Margins=%f-%f/%f-%f\n", 
+    mylog("SVG DRAW nomarg=%d scale=%d page=%fx%f Margins=%f-%f/%f-%f\n", 
             nomarg, scale, pd->paper_width, pd->paper_height, top,bot, left,right);
 #endif
     paint_svg(pd);

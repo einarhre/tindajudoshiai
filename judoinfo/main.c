@@ -636,12 +636,12 @@ void paint_bracket(cairo_t *c, gdouble paper_width, gdouble paper_height)
 	    cairo_surface_destroy(image);
 	    cairo_restore(c);
 	} else
-	    g_print("image fails\n");
+	    mylog("image fails\n");
     } else if (bracket_type() == BRACKET_TYPE_SVG) {
 	GError *err = NULL;
 	RsvgHandle *handle = rsvg_handle_new();
 	if (!rsvg_handle_write(handle, bracket_start, bracket_len, &err)) {
-	    g_print("\nJudoInfo: SVG error %s: %s %d\n",
+	    mylog("\nJudoInfo: SVG error %s: %s %d\n",
 		    err->message, __FUNCTION__, __LINE__);
 	}
 	rsvg_handle_close(handle, NULL);
@@ -658,11 +658,11 @@ void paint_bracket(cairo_t *c, gdouble paper_width, gdouble paper_height)
 			(gdouble)(bracket_y*paper_height)/(double)bracket_space_h);
 	cairo_scale(c, scale, scale);
 	if (!rsvg_handle_render_cairo(handle, c))
-	    g_print("SVG rendering failed\n");
+	    mylog("SVG rendering failed\n");
 	cairo_restore(c);
 	g_object_unref(handle);
     } else
-	g_print("BRACKET TYPE error\n");
+	mylog("BRACKET TYPE error\n");
 }
 
 /* This is called when we need to draw the windows contents */
@@ -698,7 +698,7 @@ static gboolean write_mjpeg_mem(const gchar *buf, gsize count, GError **error, g
     while (mjpeg_size + count >= mjpeg_space) {
 	mjpeg_space *= 2;
 	mjpeg_image = g_realloc(mjpeg_image, mjpeg_space);
-	g_printerr("mjpeg_space=%d\n", mjpeg_space);
+	mylogerr("mjpeg_space=%d\n", mjpeg_space);
     }
     memcpy(mjpeg_image + mjpeg_size, buf, count);
     mjpeg_size += count;

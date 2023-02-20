@@ -229,7 +229,7 @@ gint encode_msg(struct message *m, guchar *buf, gint buflen)
     return len;
 
  out:
-    g_print("%s:%d: Too short buffer %d\n",
+    mylog("%s:%d: Too short buffer %d\n",
 	    __FUNCTION__, __LINE__, buflen);
     return -1;
 }
@@ -242,7 +242,7 @@ gint decode_msg(struct message *m, guchar *buf, gint buflen)
     get8(ver);
 
     if (ver != COMM_VERSION) {
-	g_print("%s:%d: Wrong message version %d (%d expected)\n",
+	mylog("%s:%d: Wrong message version %d (%d expected)\n",
 		__FUNCTION__, __LINE__, ver, COMM_VERSION);
 	return -1;
     }
@@ -250,7 +250,7 @@ gint decode_msg(struct message *m, guchar *buf, gint buflen)
     get16(len);
 
     if (len > buflen) {
-	g_print("%s:%d: Buffer length too small %d (needed %d)\n",
+	mylog("%s:%d: Buffer length too small %d (needed %d)\n",
 		__FUNCTION__, __LINE__, buflen, len);
 	return -1;
     }
@@ -441,7 +441,7 @@ gint decode_msg(struct message *m, guchar *buf, gint buflen)
     }
 
     if ((gint)(p - buf) != len) {
-	g_print("%s:%d: Wrong message length %d (expected %d bytes)\n",
+	mylog("%s:%d: Wrong message length %d (expected %d bytes)\n",
 		__FUNCTION__, __LINE__, (gint)(p - buf), len);
 	return -1;
     }
@@ -449,7 +449,7 @@ gint decode_msg(struct message *m, guchar *buf, gint buflen)
     return len;
 
  out:
-    g_print("%s:%d: Too short buflen=%d len=%d type=%d buf=%p p=%p end=%p\n",
+    mylog("%s:%d: Too short buflen=%d len=%d type=%d buf=%p p=%p end=%p\n",
 	    __FUNCTION__, __LINE__, buflen, len, m->type, buf, p, end);
     return -1;
 }

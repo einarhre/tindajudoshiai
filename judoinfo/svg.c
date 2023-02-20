@@ -21,7 +21,7 @@
 #define WRITE2(_s, _l)                                                  \
     do {                                                                \
         if (!rsvg_handle_write(handle, (guchar *)_s, _l, &err)) {       \
-            g_print("\nERROR %s: %s %d\n",                              \
+            mylog("\nERROR %s: %s %d\n",                              \
                     err->message, __FUNCTION__, __LINE__); err = NULL; return TRUE; } } while (0)
 
 #define WRITE1(_s, _l)                                                  \
@@ -121,7 +121,7 @@ void read_svg_file(void)
         return;
 
     if (!g_file_get_contents(svg_file, &svg_data, &svg_datalen, NULL))
-        g_print("CANNOT OPEN '%s'\n", svg_file);
+        mylog("CANNOT OPEN '%s'\n", svg_file);
     else  {
 		datamax = svg_data + svg_datalen;
         RsvgHandle *h = rsvg_handle_new_from_data((guchar *)svg_data, svg_datalen, NULL);
@@ -133,7 +133,7 @@ void read_svg_file(void)
             g_object_unref(h);
             svg_ok = TRUE;
         } else {
-            g_print("Cannot open SVG file %s\n", svg_file);
+            mylog("Cannot open SVG file %s\n", svg_file);
         }
     }
 }

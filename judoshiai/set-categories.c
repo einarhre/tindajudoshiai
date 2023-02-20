@@ -1025,7 +1025,7 @@ void read_cat_definitions(void)
 
     numrows = db_get_table("select * from catdef order by \"age\", \"weight\", \"flags\" asc");
     if (numrows < 0) {
-        g_print("FATAL ERROR: CANNOT OPEN CAT DEF TABLE!\n");
+        mylog("FATAL ERROR: CANNOT OPEN CAT DEF TABLE!\n");
         goto out;
     }
 
@@ -1057,7 +1057,7 @@ void read_cat_definitions(void)
         gint pintimewazaari = ATOI(pintimewazaaristr);
         gint pintimeippon = ATOI(pintimeipponstr);
 
-        //g_print("CAT DEF LINE: %s %d %s %d %d matchtime=%d\n",
+        //mylog("CAT DEF LINE: %s %d %s %d %d matchtime=%d\n",
         //	agetext, age, weighttxt, weight, flags, matchtime);
 
         /* find existing category line */
@@ -1373,7 +1373,7 @@ void set_categories_dialog(GtkWidget *w, gpointer arg)
 	    } else {
 		cat_opts[i] = (optlist[prop-1] << 2) |
 		    (val == 0 ? 1 : 2);
-		g_print("selected %s\n", get_prop_name(optlist[i]));
+		mylog("selected %s\n", get_prop_name(optlist[i]));
 	    }
 	    j += snprintf(buf+j, sizeof(buf)-j, "%d%s", cat_opts[i],
 		     i < NUM_CAT_OPTS-1 ? ";" : "");

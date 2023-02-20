@@ -78,7 +78,7 @@ gint display_one_judoka(struct judoka *j)
 
         if (gtk_tree_model_iter_parent((GtkTreeModel *)current_model, &parent, &iter) == FALSE) {
             /* illegal situation */
-            g_print("ILLEGAL\n");
+            mylog("ILLEGAL\n");
             if (j->category)
                 ret = set_category(&parent, 0, 
                                    (gchar *)j->category, 

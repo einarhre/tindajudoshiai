@@ -50,7 +50,7 @@ void read_svg_file(svg_handle *svg)
         return;
 
     if (!g_file_get_contents(svg->svg_file, &svg->svg_data, &svg->svg_datalen, NULL))
-        g_print("CANNOT OPEN '%s'\n", svg_file);
+        mylog("CANNOT OPEN '%s'\n", svg_file);
     else  {
         datamax = svg->svg_data + svg->svg_datalen;
         RsvgHandle *h = rsvg_handle_new_from_data((guchar *)svg->svg_data, svg->svg_datalen, NULL);
@@ -108,7 +108,7 @@ void read_svg_file(svg_handle *svg)
             g_object_unref(h);
             svg->svg_ok = TRUE;
         } else {
-            g_print("Cannot open SVG file %s\n", svg->svg_file);
+            mylog("Cannot open SVG file %s\n", svg->svg_file);
         }
     }
 }

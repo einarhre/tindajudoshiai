@@ -98,7 +98,7 @@ void lang_dialog_cb(GtkWidget *w, void *param)
             return;
         }
     }
-    g_print("ERROR %s\n", __FUNCTION__);
+    mylog("ERROR %s\n", __FUNCTION__);
     g_free(data);
     gtk_widget_destroy(data->dialog);
 }

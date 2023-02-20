@@ -254,7 +254,7 @@ void font_dialog(GtkWidget *w, gpointer data)
         set_font(font);
 	g_key_file_set_string(keyfile, "preferences", "sheetfont", font);
 	draw_match_graph();
-        g_print("font=%s\n", font);
+        mylog("font=%s\n", font);
     }
 
     gtk_widget_destroy(dialog);
@@ -621,14 +621,14 @@ gint json_edit_or_create_judoka(cJSON *root)
     gboolean is_new = json_fill_judoka_struct(root, &j);
 
     if (is_new) {
-        g_print("Adding [%d] %s\n", j.index, j.last);
+        mylog("Adding [%d] %s\n", j.index, j.last);
         gint rc = db_add_judoka(j.index, &j);
         if (rc == SQLITE_OK)
             display_one_judoka(&j);
         else
-            g_print("Could not add [%d] %s\n", j.index, j.last);
+            mylog("Could not add [%d] %s\n", j.index, j.last);
     } else {
-        g_print("Update [%d] %s\n", j.index, j.last);
+        mylog("Update [%d] %s\n", j.index, j.last);
         db_update_judoka(j.index, &j);
         display_one_judoka(&j);
     }
@@ -679,12 +679,12 @@ void json_create_new_judoka(cJSON *root, gboolean ok)
     }
 
     if (ok || ok_all) {
-        g_print("Adding [%d] %s\n", j1.index, j1.last);
+        mylog("Adding [%d] %s\n", j1.index, j1.last);
         gint rc = db_add_judoka(j1.index, &j1);
         if (rc == SQLITE_OK)
             display_one_judoka(&j1);
         else
-            g_print("Could not add [%d] %s\n", j1.index, j1.last);
+            mylog("Could not add [%d] %s\n", j1.index, j1.last);
     }
 }
 
@@ -695,7 +695,7 @@ void json_set_weight(cJSON *root)
     JSON_GET_INT(root, weight);
     if (!id && ix == 0)
         return;
-    g_print("json id=%s ix=%d weight=%d\n", id ? id : "NULL", ix, weight);
+    mylog("json id=%s ix=%d weight=%d\n", id ? id : "NULL", ix, weight);
     
     struct judoka *j = NULL;
     if (ix) j = get_data(ix);

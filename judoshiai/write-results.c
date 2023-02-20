@@ -1261,7 +1261,7 @@ static void init_club_data(void)
     db_close_table();
 }
 
-#define T g_print("LINE=%d t=%ld\n", __LINE__, time(NULL))
+#define T mylog("LINE=%d t=%ld\n", __LINE__, time(NULL))
 
 static gint make_png_all_id = 0;
 
@@ -1372,7 +1372,7 @@ static gboolean make_png_all_bg(gpointer user_data)
             gchar *dst = g_build_filename(current_directory, NULL);
             g_mkdir_with_parents(dst, 0777);
             g_free(dst);
-            g_print("COPYING %s\n", src);
+            mylog("COPYING %s\n", src);
             ftw(src, copy_file_cb, 1);
             g_free(src);
             src = g_build_filename(current_directory, "index.html", NULL);
@@ -1746,7 +1746,7 @@ void make_png_all(GtkWidget *w, gpointer data)
                 }
                 fclose(sf);
             } else
-		g_print("Cannot read %s/%s\n", files_to_copy[i].dir, files_to_copy[i].file);
+		mylog("Cannot read %s/%s\n", files_to_copy[i].dir, files_to_copy[i].file);
             fclose(f);
         }
     }

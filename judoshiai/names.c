@@ -503,7 +503,7 @@ gint find_gender(const gchar *name)
         }
     }
 
-    //g_print("name=%s hash=0x08%d res=%d\n", name, h, res);
+    //mylog("name=%s hash=0x08%d res=%d\n", name, h, res);
 
     return res;
 }
@@ -534,11 +534,11 @@ int main(int argc, char *argv[])
                 }
             }
 
-            g_print("/* %s */ 0x%08x, ", buf, hash(buf));
+            mylog("/* %s */ 0x%08x, ", buf, hash(buf));
             i++;
             if (i >= 4) {
                 i = 0;
-                g_print("\n");
+                mylog("\n");
             }
             tot++;
         }
@@ -546,7 +546,7 @@ int main(int argc, char *argv[])
 
     fclose(f);
 
-    g_print("\ntotal %d names\n", tot);
+    mylog("\ntotal %d names\n", tot);
 
     return 0;
 }

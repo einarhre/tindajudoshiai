@@ -1670,7 +1670,7 @@ void cell_edited_callback(GtkCellRendererText *cell,
                           gchar               *new_text,
                           gpointer             user_data)
 {
-    //g_print("new text=%s to %s\n", new_text, path_string);
+    //mylog("new text=%s to %s\n", new_text, path_string);
 }
 
 static gboolean view_key_press(GtkWidget *widget, GdkEventKey *event, gpointer userdata)
@@ -2608,7 +2608,7 @@ static void on_enter(GtkEntry *entry, gpointer user_data)  {
 
 #if 0
 static void on_expose(GtkEntry *dialog, gpointer user_data)  {
-    //g_print("expose\n");
+    //mylog("expose\n");
     //gtk_window_present(GTK_WINDOW(dialog));
     //gtk_widget_grab_focus(GTK_WIDGET(dialog));
 }
@@ -2677,7 +2677,7 @@ static void set_col_title(gint column, gchar *title)
     if (col)
         gtk_tree_view_column_set_title(col, title);
     else
-        g_print("No column for '%s'!\n", title);
+        mylog("No column for '%s'!\n", title);
 }
 
 void set_competitors_col_titles(void)

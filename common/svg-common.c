@@ -42,6 +42,7 @@
 #endif
 
 #include "svg-common.h"
+#include "comm.h"
 
 extern const char *round_to_str(int round);
 
@@ -93,7 +94,7 @@ void read_svg_file_common(svg_handle *svg, GtkWindow *mainwin)
         return;
 
     if (!g_file_get_contents(svg->svg_file, &svg->svg_data, &svg->svg_datalen, NULL))
-        g_print("CANNOT OPEN SVG '%s'\n", svg->svg_file);
+        mylog("CANNOT OPEN SVG '%s'\n", svg->svg_file);
     else  {
         svg->datamax = svg->svg_data + svg->svg_datalen;
         RsvgHandle *h = rsvg_handle_new_from_data((guchar *)svg->svg_data, svg->svg_datalen, NULL);
@@ -145,7 +146,7 @@ void read_svg_file_common(svg_handle *svg, GtkWindow *mainwin)
             g_object_unref(h);
             svg->svg_ok = TRUE;
         } else {
-            g_print("Cannot open SVG file %s\n", svg->svg_file);
+            mylog("Cannot open SVG file %s\n", svg->svg_file);
         }
     }
 }
@@ -303,7 +304,7 @@ gint ask_json_common(const gchar *s, struct svg_memory *chunk)
     if (curl) {
         gchar buf[32];
         snprintf(buf, sizeof(buf), "http://%s:8088/json", inet_ntoa(inaddr));
-        //g_print("CURL: %s\n%s\n", buf, s);
+        //mylog("CURL: %s\n%s\n", buf, s);
         curl_easy_setopt(curl, CURLOPT_URL, buf);
         curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 2000L);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, s);

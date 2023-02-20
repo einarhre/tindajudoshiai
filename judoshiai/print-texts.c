@@ -67,7 +67,7 @@ static void get_print_texts(gchar a, gchar b, gchar *filename)
         if (linenum-2 < numprinttexts)
             print_texts[linenum-2][num_print_lang] = g_strdup(line);
         else
-            g_print("Extra lines in %s\n", filename);
+            mylog("Extra lines in %s\n", filename);
     }
 
     fclose(f);

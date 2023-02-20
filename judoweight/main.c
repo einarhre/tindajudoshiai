@@ -647,7 +647,7 @@ void judoweight_log(gchar *format, ...)
                 tm->tm_min,
                 tm->tm_sec);
         logfile_name = g_build_filename(g_get_user_data_dir(), buf, NULL);
-        g_print("logfile_name=%s\n", logfile_name);
+        mylog("logfile_name=%s\n", logfile_name);
     }
 
     FILE *f = fopen(logfile_name, "a");
@@ -675,7 +675,7 @@ void judoweight_log(gchar *format, ...)
 #endif
         fclose(f);
     } else {
-        g_print("Cannot open log file\n");
+        mylog("Cannot open log file\n");
         perror("logfile_name");
     }
 

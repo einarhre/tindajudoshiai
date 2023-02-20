@@ -296,7 +296,7 @@ struct category_data *avl_get_category(gint index)
         return data1;
     }
     if (index) {
-        //g_print("cannot find category index %d!\n", index);
+        //mylog("cannot find category index %d!\n", index);
         //assert(0);
     }
     return NULL;
@@ -315,7 +315,7 @@ struct category_dataxxx!!! *avl_get_competitor(gint index)
     if (avl_get_by_key(competitors_tree, &data, &data1) == 0) {
         return data1;
     }
-    g_print("cannot find competitor index %d!\n", index);
+    mylog("cannot find competitor index %d!\n", index);
     //assert(0);
     return NULL;
 }
@@ -337,7 +337,7 @@ gint avl_get_competitor_hash(gint index)
         return ((struct competitor_data *)data1)->hash;
     }
 
-    g_print("cannot find index %d!\n", index);
+    mylog("cannot find index %d!\n", index);
     return 0;
 }
 

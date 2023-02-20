@@ -197,7 +197,7 @@ static void set_calibration_dialog(GtkWidget *w, gpointer data)
 		    break;
 
 		if (scale_calib[i].display >= scale_calib[i+1].display) {
-		    g_print("ERROR in calibration list!\n");
+		    mylog("ERROR in calibration list!\n");
 		    gtk_label_set_text(GTK_LABEL(note), _("ERROR"));
 		    error = TRUE;
 		    break;

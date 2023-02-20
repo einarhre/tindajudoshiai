@@ -83,7 +83,7 @@ static gboolean print_item(gint item, gchar **tokens, gint num_cols, struct i_te
     }
 
     gtk_label_set_text(GTK_LABEL(d->labels[item]), tokens[d->columns[item] - 1]);
-    //g_print("Item %d = %s\n", item, tokens[d->columns[item]-1]);
+    //mylog("Item %d = %s\n", item, tokens[d->columns[item]-1]);
     return TRUE;
 }
 

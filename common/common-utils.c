@@ -28,6 +28,7 @@
 #endif
 
 #include "common-utils.h"
+#include "comm.h"
 
 static gint current_x, current_y;
 
@@ -53,8 +54,8 @@ void write_text(cairo_t *cr,
     gint width, height;
 
     if (!g_utf8_validate(txt, -1, NULL)) {
-	g_print("NOT VALID UTF-8: %s\n", txt);
-	g_print("STRLEN=%d\n", (int)strlen(txt));
+	mylog("NOT VALID UTF-8: %s\n", txt);
+	mylog("STRLEN=%d\n", (int)strlen(txt));
 	txt = "NOT UTF-8";
     }
 
@@ -298,7 +299,7 @@ void print_trace(void)
     while (ebp) {
         /* the return address is 1 word past the saved base pointer */
         eip = *( (guint32 *)ebp + 1 );
-        g_print("- ebp=%p eip=%p\n", (void *)ebp, (void *)eip);
+        mylog("- ebp=%p eip=%p\n", (void *)ebp, (void *)eip);
         ebp = *(guint32 *)ebp;
     }
 }
@@ -317,20 +318,20 @@ void print_trace(void)
     size = backtrace (array, 16);
     strings = backtrace_symbols(array, size);
 
-    g_print("--- Obtained %zd stack frames.", size);
+    mylog("--- Obtained %zd stack frames.", size);
 
     char name_buf[512];
     name_buf[readlink("/proc/self/exe", name_buf, 511)] = 0;
 
     for (i = 0; i < size; i++) {
         if (strncmp(strings[i], "judoshiai", 4)) continue;
-        g_print("\n%ld\n%s\n", i, strings[i]);
+        mylog("\n%ld\n%s\n", i, strings[i]);
 
         char syscom[256];
         sprintf(syscom, "addr2line %p -e %s", array[i], name_buf);
         system(syscom);
     }
-    g_print("---\n");
+    mylog("---\n");
 
     free (strings);
 }

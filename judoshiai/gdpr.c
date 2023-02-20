@@ -58,7 +58,7 @@ gboolean gdpr_ok(struct judoka *j)
 	return TRUE;
 
     if (gdpr_enable < 0) {
-	g_print("%s:%d Error, gdpr_enable=%d\n", __FUNCTION__, __LINE__, gdpr_enable);
+	mylog("%s:%d Error, gdpr_enable=%d\n", __FUNCTION__, __LINE__, gdpr_enable);
 	gdpr_enable = 0;
 	return TRUE;
     }

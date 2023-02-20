@@ -138,7 +138,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
     char buf[32];
     int m;
 
-    printf("WS CB reason=%d vhd=%p\n", reason, vhd);
+    //printf("WS CB reason=%d vhd=%p\n", reason, vhd);
     switch (reason) {
     case LWS_CALLBACK_PROTOCOL_INIT:
         vhd = lws_protocol_vh_priv_zalloc(lws_get_vhost(wsi),
@@ -157,7 +157,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         }
 
         g_vhd = vhd;
-        g_print("CREATED VHD=%p\n", vhd);
+        mylog("CREATED VHD=%p\n", vhd);
 
         if (!vhd->ring)
             return 1;
@@ -175,7 +175,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         pss->passwdcrc = 0;
 
         if (lws_hdr_copy(wsi, buf, sizeof(buf), WSI_TOKEN_GET_URI) > 0) {
-            printf("BROKER URL = %s\n", buf);
+            //printf("BROKER URL = %s\n", buf);
             if (!strncmp(buf, "/tm", 3)) {
                 pss->type = APPLICATION_TYPE_TIMER;
                 pss->tatami = atoi(buf + 3);
@@ -250,20 +250,20 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
 	cJSON *json;
 
         if (webpwcrc32 != 0 && webpwcrc32 != pss->passwdcrc) {
-	    g_printerr("password error\n");
+	    mylogerr("password error\n");
 	    break;
         }
         
 	json = cJSON_Parse((char *)in);
 	if (!json) {
-	    g_printerr("json err: %s\n", (char *)in);
+	    mylogerr("json err: %s\n", (char *)in);
 	    break;
 	}
 
 	int r = websock_decode_msg(&msg, json, webpwcrc32);
 	cJSON_Delete(json);
 	if (r < 0) {
-	    g_printerr("decode err: %s\n", (char *)in);
+	    mylogerr("decode err: %s\n", (char *)in);
 	    break;
 	}
         put_to_rec_queue(&msg);

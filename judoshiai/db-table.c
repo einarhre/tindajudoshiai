@@ -87,7 +87,7 @@ int db_get_table(char *command)
     g_static_mutex_lock(&table_mutex);
 #endif
     if (tablep) {
-        g_print("ERROR: TABLE NOT CLOSED BEFORE OPENING!\n");
+        mylog("ERROR: TABLE NOT CLOSED BEFORE OPENING!\n");
         sqlite3_free_table(tablep);
     }
     tablep = NULL;
@@ -110,10 +110,10 @@ int db_get_table(char *command)
     sqlite3_create_function(db, "utf8error", 1, SQLITE_UTF8, NULL, utf8error, NULL, NULL);
     sqlite3_create_function(db, "getweight", 1, SQLITE_UTF8, NULL, getweight, NULL, NULL);
 
-    //g_print("\nSQL: %s:\n  %s\n", db_name, cmd);
+    //mylog("\nSQL: %s:\n  %s\n", db_name, cmd);
     rc = sqlite3_get_table(db, command, &tablep, &tablerows, &tablecols, &zErrMsg);
     if (rc != SQLITE_OK && zErrMsg) {
-        g_print("SQL error: %s\n", zErrMsg);
+        mylog("SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
         sqlite3_close(db);
         G_UNLOCK(db);
@@ -136,7 +136,7 @@ void db_close_table(void)
     if (tablep)
         sqlite3_free_table(tablep);
     else
-        g_print("ERROR: TABLE CLOSED TWICE!\n");
+        mylog("ERROR: TABLE CLOSED TWICE!\n");
     tablep = NULL;
 #if (GTKVER == 3)
     G_UNLOCK(table_mutex);
@@ -194,10 +194,10 @@ char **db_get_table_copy(const char *command, int *tablerows1, int *tablecols1)
     sqlite3_create_function(db, "utf8error", 1, SQLITE_UTF8, NULL, utf8error, NULL, NULL);
     sqlite3_create_function(db, "getweight", 1, SQLITE_UTF8, NULL, getweight, NULL, NULL);
 
-    //g_print("\nSQL: %s:\n  %s\n", db_name, cmd);
+    //mylog("\nSQL: %s:\n  %s\n", db_name, cmd);
     rc = sqlite3_get_table(db, command, &tablep1, tablerows1, tablecols1, &zErrMsg);
     if (rc != SQLITE_OK && zErrMsg) {
-        g_print("SQL error: %s\n", zErrMsg);
+        mylog("SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
         sqlite3_close(db);
         G_UNLOCK(db);

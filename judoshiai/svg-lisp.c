@@ -21,7 +21,7 @@
 #define WRITE2(_s, _l)                                                  \
     do {if (dfile) fwrite(_s, 1, _l, dfile);                            \
         if (!rsvg_handle_write(handle, (guchar *)_s, _l, &err)) {       \
-            g_print("\nERROR %s: %s %d\n",                              \
+            mylog("\nERROR %s: %s %d\n",                              \
                     err->message, __FUNCTION__, __LINE__); err = NULL; return TRUE; } } while (0)
 
 static FILE *dfile = NULL;
@@ -49,7 +49,7 @@ static void svg_read_lisp_files(gchar *dirname, GtkTextBuffer *buffer)
     if (dirname == NULL)
         return;
 
-    g_print("scanning dir %s for lisp files\n", dirname);
+    mylog("scanning dir %s for lisp files\n", dirname);
     GDir *dir = g_dir_open(dirname, 0, NULL);
     if (dir) {
         const gchar *fname = g_dir_read_name(dir);
@@ -60,10 +60,10 @@ static void svg_read_lisp_files(gchar *dirname, GtkTextBuffer *buffer)
 		gchar *contents;
 		gsize len;
 		if (!g_file_get_contents(fullname, &contents, &len, NULL))
-		    g_print("CANNOT OPEN '%s'\n", fullname);
+		    mylog("CANNOT OPEN '%s'\n", fullname);
 		else  {
 		    gchar *r;
-		    g_print("reading lisp file %s\n", fullname);
+		    mylog("reading lisp file %s\n", fullname);
 		    if ((r = lisp_exe(contents))) {
 			if (buffer) {
 			    gtk_text_buffer_insert_at_cursor(buffer, r, strlen(r));
@@ -105,7 +105,7 @@ static void svg_lisp_read_file(gchar *filename, GtkTextBuffer *buffer)
 	g_free(dname);
 
     if (!g_file_get_contents(filename, &svg_data, &svg_datalen, NULL)) {
-        g_print("CANNOT OPEN '%s'\n", filename);
+        mylog("CANNOT OPEN '%s'\n", filename);
 	return;
     }
 
@@ -131,7 +131,7 @@ static void svg_lisp_read_file(gchar *filename, GtkTextBuffer *buffer)
 	g_object_unref(h);
 	svg_ok = TRUE;
     } else {
-	g_print("Cannot open SVG file %s\n", filename);
+	mylog("Cannot open SVG file %s\n", filename);
     }
 }
 
@@ -155,7 +155,7 @@ gint paint_svg_lisp(struct paint_data *pd)
     gchar *lisp_end_code_b = NULL;
     gchar *lisp_end_code_e = NULL;
 
-    //g_print("Open SVG debug file\n");
+    //mylog("Open SVG debug file\n");
     //dfile = fopen("debug.svg", "w");
 
     while (*p && p < limit) {
@@ -232,7 +232,7 @@ gint paint_svg_lisp(struct paint_data *pd)
     if (dfile) {
         fclose(dfile);
         dfile = NULL;
-        g_print("SVG debug file closed\n");
+        mylog("SVG debug file closed\n");
     }
 
     return TRUE;

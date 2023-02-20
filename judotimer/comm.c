@@ -90,7 +90,7 @@ void cancel_rest_time(gboolean blue, gboolean white)
     msg.u.cancel_rest_time.blue = blue;
     msg.u.cancel_rest_time.white = white;
     send_packet(&msg);
-    g_print("timer: cancel blue=%d white=%d\n", blue, white);
+    mylog("timer: cancel blue=%d white=%d\n", blue, white);
 
     judotimer_log("No rest time for %d:%d %s %s",
                   current_category, current_match,
@@ -170,7 +170,7 @@ void msg_received(struct message *input_msg)
    return;
     **/
 #if 0
-    g_print("msg type = %d from %d\n",
+    mylog("msg type = %d from %d\n",
             input_msg->type, input_msg->sender);
 #endif
     switch (input_msg->type) {
@@ -196,7 +196,7 @@ void msg_received(struct message *input_msg)
                      input_msg->u.next_match.flags,
 		     input_msg->u.next_match.round);
 
-        //g_print("minutes=%d auto=%d\n", input_msg->u.next_match.minutes, automatic);
+        //mylog("minutes=%d auto=%d\n", input_msg->u.next_match.minutes, automatic);
         if (input_msg->u.next_match.minutes && automatic)
             reset(((input_msg->u.next_match.round & ROUND_GOLDEN_SCORE) && IS_NEW_MATCH) ? GDK_9 : GDK_0,
 		  &input_msg->u.next_match);
@@ -206,7 +206,7 @@ void msg_received(struct message *input_msg)
 
         if (IS_NEW_MATCH) {
             /***
-            g_print("current=%d/%d new=%d/%d\n",
+            mylog("current=%d/%d new=%d/%d\n",
                     current_category, current_match,
                     input_msg->u.next_match.category, input_msg->u.next_match.match);
             ***/
@@ -244,7 +244,7 @@ void msg_received(struct message *input_msg)
 
                 /*judotimer_log("Resend result %d:%d",
                   current_category, current_match);*/
-                g_print("resend result %d:%d\n", current_category, current_match);
+                mylog("resend result %d:%d\n", current_category, current_match);
             }
         }
 
@@ -272,7 +272,7 @@ void send_packet(struct message *msg)
 
 #if 0
     if (msg->type == MSG_RESULT) {
-        printf("tatami=%d cat=%d match=%d min=%d blue=%x white=%x bv=%d wv=%d\n",
+        mylog("tatami=%d cat=%d match=%d min=%d blue=%x white=%x bv=%d wv=%d\n",
                msg->u.result.tatami,
                msg->u.result.category,
                msg->u.result.match,
@@ -309,7 +309,7 @@ void send_label_msg(struct message *msg)
         msg_put = 0;
 
     if (msg_put == msg_get)
-        g_print("MASTER MSG QUEUE FULL!\n");
+        mylog("MASTER MSG QUEUE FULL!\n");
     G_UNLOCK(msg_mutex);
 }
 
@@ -341,7 +341,7 @@ gpointer master_thread(gpointer args)
 
     if (bind(node_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
         perror("master bind");
-        g_print("CANNOT BIND!\n");
+        mylog("CANNOT BIND!\n");
         g_thread_exit(NULL);    /* not required just good pratice */
         return NULL;
     }
@@ -363,7 +363,7 @@ gpointer master_thread(gpointer args)
 
     if (bind(websock_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
         perror("websock bind");
-        g_print("CANNOT BIND websock!\n");
+        mylog("CANNOT BIND websock!\n");
         g_thread_exit(NULL);    /* not required just good pratice */
         return NULL;
     }
@@ -404,7 +404,7 @@ gpointer master_thread(gpointer args)
 		    ret = send_msg(connections[i].fd, (struct message *)&message_queue[msg_get], 0);
 		if (ret < 0) {
                     perror("sendto");
-                    g_print("Node cannot send: conn=%d fd=%d\n", i, connections[i].fd);
+                    mylog("Node cannot send: conn=%d fd=%d\n", i, connections[i].fd);
                 }
             }
 
@@ -428,7 +428,7 @@ gpointer master_thread(gpointer args)
             const int nodelayflag = 1;
             if (setsockopt(tmp_fd, IPPROTO_TCP, TCP_NODELAY,
                            (const void *)&nodelayflag, sizeof(nodelayflag))) {
-                g_print("CANNOT SET TCP_NODELAY (2)\n");
+                mylog("CANNOT SET TCP_NODELAY (2)\n");
             }
 #endif
             for (i = 0; i < NUM_CONNECTIONS; i++)
@@ -436,14 +436,14 @@ gpointer master_thread(gpointer args)
                     break;
 
             if (i >= NUM_CONNECTIONS) {
-                g_print("Master cannot accept new connections!\n");
+                mylog("Master cannot accept new connections!\n");
                 closesocket(tmp_fd);
                 continue;
             }
 
             connections[i].fd = tmp_fd;
             connections[i].addr = caller.sin_addr.s_addr;
-            g_print("Master: new connection[%d]: fd=%d addr=%s\n",
+            mylog("Master: new connection[%d]: fd=%d addr=%s\n",
                     i, (int)tmp_fd, inet_ntoa(caller.sin_addr));
             FD_SET(tmp_fd, &read_fd);
 
@@ -459,7 +459,7 @@ gpointer master_thread(gpointer args)
             alen = sizeof(caller);
             if ((tmp_fd = accept(websock_fd, (struct sockaddr *)&caller, &alen)) < 0) {
                 perror("websock accept");
-		g_print("websock=%d tmpfd=%d\n", (int)websock_fd, (int)tmp_fd);
+		mylog("websock=%d tmpfd=%d\n", (int)websock_fd, (int)tmp_fd);
 		g_usleep(1000000);
                 continue;
             }
@@ -469,7 +469,7 @@ gpointer master_thread(gpointer args)
                     break;
 
             if (i >= NUM_CONNECTIONS) {
-                g_print("Node cannot accept new connections!\n");
+                mylog("Node cannot accept new connections!\n");
                 closesocket(tmp_fd);
                 continue;
             }
@@ -477,7 +477,7 @@ gpointer master_thread(gpointer args)
             connections[i].fd = tmp_fd;
             connections[i].addr = caller.sin_addr.s_addr;
             connections[i].websock = TRUE;
-            g_print("Node: new websock connection[%d]: fd=%d addr=%s\n",
+            mylog("Node: new websock connection[%d]: fd=%d addr=%s\n",
                     i, (int)tmp_fd, inet_ntoa(caller.sin_addr));
             FD_SET(tmp_fd, &read_fd);
         }
@@ -493,7 +493,7 @@ gpointer master_thread(gpointer args)
 
             r = recv(connections[i].fd, (char *)inbuf, sizeof(inbuf), 0);
             if (r <= 0) {
-                g_print("Master: connection %d fd=%d closed\n", i, connections[i].fd);
+                mylog("Master: connection %d fd=%d closed\n", i, connections[i].fd);
                 closesocket(connections[i].fd);
                 FD_CLR(connections[i].fd, &read_fd);
                 connections[i].fd = 0;

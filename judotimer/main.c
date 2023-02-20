@@ -530,7 +530,7 @@ static gint num_labels = 0;
 		labels[num_labels].desc = pango_font_description_copy(pfont); \
 		_w = num_labels;					\
 		num_labels++;						\
-                printf("%d = %s\n", _w, #_w); } while (0)
+                mylog("%d = %s\n", _w, #_w); } while (0)
 
 static void set_fg_color(gint w, gint s, GdkColor *c)
 {
@@ -1730,7 +1730,7 @@ static gboolean button_pressed(GtkWidget *widget,
 
     if (event->x > allocw - 30 && event->x < allocw &&
 	event->y > alloch - 30 && event->y < alloch) {
-	g_print("xy=%f/%f alloc=%d/%d\n", event->x, event->y,
+	mylog("xy=%f/%f alloc=%d/%d\n", event->x, event->y,
 		allocw, alloch);
 	mouse_start_x = event->x;
 	mouse_start_y = event->y;
@@ -1894,7 +1894,7 @@ static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userda
     else
         demo = 0;
 
-    //g_print("key=%x stat=%x\n", event->keyval, event->state);
+    //mylog("key=%x stat=%x\n", event->keyval, event->state);
     if (menu_hidden && ACTIVE)
 	clock_key(event->keyval, event->state);
     else if ((event->keyval < GDK_0 || event->keyval > GDK_9 || event->keyval == GDK_6 || ctl) &&
@@ -2126,10 +2126,10 @@ void dump_screen(void)
 {
     gint i;
 
-    printf("# num x y width height size xalign fg-red fg-green fg-blue bg-red bg-green bg-blue wrap");
+    mylog("# num x y width height size xalign fg-red fg-green fg-blue bg-red bg-green bg-blue wrap");
     for (i = 0; i < num_labels; i++) {
-        printf("%d %1.3f %1.3f %1.3f %1.3f ", i, labels[i].x, labels[i].y, labels[i].w, labels[i].h);
-        printf("%1.3f %d %1.3f %1.3f %1.3f %1.3f %1.3f %1.3f %d\n", labels[i].size, labels[i].xalign,
+        mylog("%d %1.3f %1.3f %1.3f %1.3f ", i, labels[i].x, labels[i].y, labels[i].w, labels[i].h);
+        mylog("%1.3f %d %1.3f %1.3f %1.3f %1.3f %1.3f %1.3f %d\n", labels[i].size, labels[i].xalign,
                labels[i].fg_r, labels[i].fg_g, labels[i].fg_b,
                labels[i].bg_r, labels[i].bg_g, labels[i].bg_b, labels[i].wrap);
     }
@@ -2192,9 +2192,9 @@ int main( int   argc,
 
     if (current_directory[0] == 0)
         strcpy(current_directory, ".");
-    g_print("current_directory=%s\n", current_directory);
+    mylog("current_directory=%s\n", current_directory);
     conffile = g_build_filename(g_get_user_data_dir(), "judotimer.ini", NULL);
-    g_print("conf file = %s\n", conffile);
+    mylog("conf file = %s\n", conffile);
 
     keyfile = g_key_file_new();
     g_key_file_load_from_file(keyfile, conffile, 0, NULL);
@@ -2205,7 +2205,7 @@ int main( int   argc,
     srand(now); //srandom(now);
     my_address = now + getpid()*10000;
 
-    g_print("LOCALE = %s homedir=%s configdir=%s instdir=%s\n",
+    mylog("LOCALE = %s homedir=%s configdir=%s instdir=%s\n",
             setlocale(LC_ALL, 0),
             g_get_home_dir(),
             g_get_user_config_dir(),
@@ -2297,11 +2297,11 @@ int main( int   argc,
 	GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
 
 	if (!visual) {
-	    g_print("Screen does not support alpha channels!\n");
+	    mylog("Screen does not support alpha channels!\n");
 	    judotimer_log("Screen does not support alpha channels!\n");
 	    visual = gdk_screen_get_system_visual(screen);
 	} else {
-	    g_print("Screen supports alpha channels\n");
+	    mylog("Screen supports alpha channels\n");
 	    judotimer_log("Screen supports alpha channels\n");
 	    gtk_widget_set_app_paintable(window, TRUE);
 	    gtk_widget_set_visual(window, visual);
@@ -3334,7 +3334,7 @@ void select_display_layout(GtkWidget *menu_item, gpointer data)
 		    case CAIRO_STATUS_NO_MEMORY:
 		    case CAIRO_STATUS_FILE_NOT_FOUND:
 		    case CAIRO_STATUS_READ_ERROR:
-			g_print("background_image %s read error %d\n", p,
+			mylog("background_image %s read error %d\n", p,
 				cairo_surface_status(background_image));
 			cairo_surface_destroy(background_image);
 			background_image = NULL;
@@ -3355,7 +3355,7 @@ void select_display_layout(GtkWidget *menu_item, gpointer data)
 		    set_preferences_keyfile(key_file, FALSE);
 		    g_key_file_free(key_file);
 		} else
-		    g_print("Read error in file %s, num = %d\n", custom_layout_file, num);
+		    mylog("Read error in file %s, num = %d\n", custom_layout_file, num);
 	    }
 	    fclose(f);
 	} else {
@@ -3577,7 +3577,7 @@ void parse_font_text(gchar *font1, gchar *face, gint *slant, gint *weight, gdoub
     gchar *num = strrchr(font1, ' ');
 
     if (!num) {
-        g_print("ERROR: malformed font string '%s'\n", font1);
+        mylog("ERROR: malformed font string '%s'\n", font1);
         return;
     }
 

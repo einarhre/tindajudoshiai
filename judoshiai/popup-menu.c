@@ -249,7 +249,7 @@ void view_popup_menu_move_matches(GtkWidget *menuitem, gpointer userdata)
     for (i = 1; i < NUM_MATCHES; i++) {
 	gint n = round_to_pos(round_number(catdata, i));
 	if (n < MMLEN) r[n].round++;
-	else g_print("ERROR %s:%d\n", __FUNCTION__, __LINE__);
+	else mylog("ERROR %s:%d\n", __FUNCTION__, __LINE__);
     }
 
     SNPRINTF_UTF8(buf, "%s (%s)", _("Move Matches"), catdata->category);
@@ -320,7 +320,7 @@ void view_popup_menu_move_matches(GtkWidget *menuitem, gpointer userdata)
 	    if (r[n].sel_w && r[n].t_w &&
 		gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(r[n].sel_w))) {
 		gint dst_tatami = gtk_combo_box_get_active(GTK_COMBO_BOX(r[n].t_w));
-		g_print("cat %d match %d to tatami %d\n",
+		mylog("cat %d match %d to tatami %d\n",
 			ptr_to_gint(userdata), i, dst_tatami);
 		db_set_forced_tatami(dst_tatami, ptr_to_gint(userdata), i);
 	    }

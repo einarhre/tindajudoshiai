@@ -160,7 +160,7 @@ gint nodescan(guint network) // addr in network byte order
 
         if (ret > 0) {
             dst.sin_addr.s_addr = htonl(addr + last);
-            g_print("%s: node found\n", inet_ntoa(dst.sin_addr));
+            mylog("%s: node found\n", inet_ntoa(dst.sin_addr));
             return dst.sin_addr.s_addr;
         }
 
@@ -223,7 +223,7 @@ gint nodescan(guint network) // addr in network byte order
 
         if (found) {
             dst.sin_addr.s_addr = found;
-            g_print("%s: node found\n", inet_ntoa(dst.sin_addr));
+            mylog("%s: node found\n", inet_ntoa(dst.sin_addr));
             return found;
         }
     }
@@ -285,7 +285,7 @@ gulong get_my_address()
     for (i = 0; i < nNumInterfaces; ++i) {
         struct sockaddr_in *pAddress;
         pAddress = (struct sockaddr_in *) & (InterfaceList[i].iiAddress);
-        g_print("Interface %s\n", inet_ntoa(pAddress->sin_addr));
+        mylog("Interface %s\n", inet_ntoa(pAddress->sin_addr));
 
         //u_long nFlags = InterfaceList[i].iiFlags;
         if (/*(nFlags & IFF_UP) &&*/ (addrcnt < 16))
@@ -499,7 +499,7 @@ static gboolean already_in_rec_queue(volatile struct message *msg)
 
     while (i != rec_msg_queue_put) {
         if (memcmp((struct message *)&msg->u.result, &rec_msgs[i].u.result, sizeof(msg->u.result)) == 0) {
-            g_print("resend: tatami=%d cat=%d num=%d\n",
+            mylog("resend: tatami=%d cat=%d num=%d\n",
                     msg->u.result.tatami, msg->u.result.category, msg->u.result.match);
             return TRUE;
         }
@@ -621,7 +621,7 @@ void open_comm_socket(void)
     }
 #endif
     my_ip_address = get_my_address();
-    g_print("My address = %ld.%ld.%ld.%ld\n",
+    mylog("My address = %ld.%ld.%ld.%ld\n",
             (my_ip_address)&0xff,
             (my_ip_address>>8)&0xff,
             (my_ip_address>>16)&0xff,
@@ -713,7 +713,7 @@ gint send_msg(gint fd, struct message *msg, gint mcastport)
     out[k++] = COMM_END;
 
     if ((err = send(fd, (char *)out, k, 0)) != k) {
-        g_print("send_msg error: sent %d/%d octets\n", err, k);
+        mylog("send_msg error: sent %d/%d octets\n", err, k);
         return -1;
     }
 
@@ -729,12 +729,12 @@ void print_stat(void)
     if (elapsed == 0)
         elapsed = 1;
 
-    g_print("Messages in %d s: rx: %d (%d/s) tx: %d (%d/s)\n",
+    mylog("Messages in %d s: rx: %d (%d/s) tx: %d (%d/s)\n",
             elapsed, msg_stat.rx, msg_stat.rx/elapsed,
             msg_stat.tx, msg_stat.tx/elapsed);
 
     for (i = 1; i < NUM_MESSAGES; i++) {
-        g_print("  %2d: rx: %d (%d/s) tx: %d (%d/s)\n", i,
+        mylog("  %2d: rx: %d (%d/s) tx: %d (%d/s)\n", i,
                 msg_stat.rxtype[i], msg_stat.rxtype[i]/elapsed,
                 msg_stat.txtype[i], msg_stat.txtype[i]/elapsed);
     }
@@ -773,14 +773,14 @@ gpointer client_thread(gpointer args)
 	if (multicast) {
 	    if ((comm_fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
 		perror("client udp socket");
-		g_print("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
+		mylog("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
 		g_thread_exit(NULL);    /* not required just good pratice */
 		return NULL;
 	    }
 	} else {
 	    if ((comm_fd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
 		perror("client tcp socket");
-		g_print("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
+		mylog("CANNOT CREATE SOCKET (%s:%d)!\n", __FUNCTION__, __LINE__);
 		g_thread_exit(NULL);    /* not required just good pratice */
 		return NULL;
 	    }
@@ -825,7 +825,7 @@ gpointer client_thread(gpointer args)
 	    }
 	}
 
-        g_print("Connection OK.\n");
+        mylog("Connection OK.\n");
 
 	/* send something to keep the connection open */
 	input_msg.type = MSG_DUMMY;
@@ -838,7 +838,7 @@ gpointer client_thread(gpointer args)
 	msg.type = MSG_ALL_REQ;
 	msg.sender = my_address;
 	send_packet(&msg);
-	g_print("JudoInfo connection ok: requesting all\n");
+	mylog("JudoInfo connection ok: requesting all\n");
 #endif
 	
         connection_ok = TRUE;
@@ -852,7 +852,7 @@ gpointer client_thread(gpointer args)
             gint r;
 
             if (old_port != get_port()) {
-                g_print("oldport=%d newport=%d\n", old_port, get_port());
+                mylog("oldport=%d newport=%d\n", old_port, get_port());
                 old_port = get_port();
                 ssdp_ip_addr = 0;
                 break;
@@ -925,7 +925,7 @@ gpointer client_thread(gpointer args)
 					G_UNLOCK(rec_mutex);
 				    }
 				} else {
-				    g_print("Wrong char 0x%02x after esc!\n", c);
+				    mylog("Wrong char 0x%02x after esc!\n", c);
 				}
 				escape = FALSE;
 			    } else if (ri < sizeof(p)) {
@@ -943,7 +943,7 @@ gpointer client_thread(gpointer args)
 
         closesocket(comm_fd);
 
-        g_print("Connection NOK.\n");
+        mylog("Connection NOK.\n");
     }
 
     g_thread_exit(NULL);    /* not required just good pratice */
@@ -992,7 +992,7 @@ static void analyze_ssdp(gchar *rec, struct sockaddr_in *client)
 #if (APP_NUM == APPLICATION_TYPE_INFO) || (APP_NUM == APPLICATION_TYPE_WEIGHT) || (APP_NUM == APPLICATION_TYPE_JUDOGI)
     if (strncmp(p+9, "JudoShiai", 9) == 0) {
         ssdp_ip_addr = client->sin_addr.s_addr;
-        //g_print("SSDP %s: judoshiai addr=%lx\n", APPLICATION, ssdp_ip_addr);
+        //mylog("SSDP %s: judoshiai addr=%lx\n", APPLICATION, ssdp_ip_addr);
     }
 #elif (APP_NUM == APPLICATION_TYPE_TIMER)
 #define MODE_SLAVE  2
@@ -1005,13 +1005,13 @@ static void analyze_ssdp(gchar *rec, struct sockaddr_in *client)
                 gint t = atoi(p1+7);
                 if (t == tatami) {
                     ssdp_ip_addr = client->sin_addr.s_addr;
-                    //g_print("SSDP %s: master timer addr=%lx\n", APPLICATION, ssdp_ip_addr);
+                    //mylog("SSDP %s: master timer addr=%lx\n", APPLICATION, ssdp_ip_addr);
                 }
             }
         }
     } else if (strncmp(p+9, "JudoShiai", 9) == 0) {
         ssdp_ip_addr = client->sin_addr.s_addr;
-        //g_print("SSDP %s: judoshiai addr=%lx\n", APPLICATION, ssdp_ip_addr);
+        //mylog("SSDP %s: judoshiai addr=%lx\n", APPLICATION, ssdp_ip_addr);
     }
 #endif
 }
@@ -1184,7 +1184,7 @@ gpointer ssdp_thread(gpointer args)
                     analyze_ssdp(inbuf, &clientsock);
                 else if (strncmp(inbuf, "M-SEARCH", 8) == 0 &&
                          strstr(inbuf, "ST:urn:judoshiai:service:all:")) {
-                    //g_print("SSDP %s rec: '%s'\n\n", APPLICATION, inbuf);
+                    //mylog("SSDP %s rec: '%s'\n\n", APPLICATION, inbuf);
                     struct sockaddr_in addr;
                     addr.sin_addr.s_addr = my_ip_address;
 
@@ -1202,7 +1202,7 @@ gpointer ssdp_thread(gpointer args)
                                                   SHIAI_VERSION, my_address,
                                                   application_type(), (int)(htonl(my_ip_address)));
 
-                    //g_print("SSDP %s send: '%s'\n", APPLICATION, resp);
+                    //mylog("SSDP %s send: '%s'\n", APPLICATION, resp);
                     ret = sendto(sock_out, resp, strlen(resp), 0, (struct sockaddr *)&clientsock, socklen);
                     (void)ret; // make compiler happy
                     g_free(resp);
@@ -1300,7 +1300,7 @@ gpointer ssdp_thread(gpointer args)
                 resplen = strlen(resp);
             }
 
-            //g_print("SSDP %s send: '%s'\n", APPLICATION, resp);
+            //mylog("SSDP %s send: '%s'\n", APPLICATION, resp);
             ret = sendto(sock_out, resp, resplen, 0, (struct sockaddr *)&name_out, sizeof(struct sockaddr_in));
             ssdp_notify = FALSE;
             last_notify = now;
@@ -1312,7 +1312,7 @@ gpointer ssdp_thread(gpointer args)
             last_time = now;
             ret = sendto(sock_out, ssdp_req_data, ssdp_req_data_len, 0, (struct sockaddr*) &name_out,
                          sizeof(struct sockaddr_in));
-            //g_print("SSDP %s REQ SEND by timeout\n\n", APPLICATION);
+            //mylog("SSDP %s REQ SEND by timeout\n\n", APPLICATION);
             if (ret != ssdp_req_data_len) {
                 perror("SSDP send req");
             }
@@ -1321,7 +1321,7 @@ gpointer ssdp_thread(gpointer args)
     }
 
  out:
-    g_print("SSDP OUT!\n");
+    mylog("SSDP OUT!\n");
     g_thread_exit(NULL);    /* not required just good pratice */
     return NULL;
 }
