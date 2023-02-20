@@ -27,6 +27,10 @@ Next some libraries:
 
 $ sudo apt-get install librsvg2-dev libao-dev libmpg123-dev libcurl4-openssl-dev libssh2-1-dev
 
+Libwebsockets needs additional libraries:
+
+$ sudo apt-get install cmake libuv1-dev libcap-dev
+
 For judoproxy:
 
 $ sudo apt-get install libavcodec-dev libavformat-dev libavresample-dev libavutil-dev libswscale-dev
@@ -102,9 +106,7 @@ $ make appimage
 
 =======================================
 
-There are three version for Windows:
-- WinXP runs everywhere, but is slow.
-- Win32 and Win64 are fast, but do not run in WinXP.
+There are two versions for Windows, Win32 and Win64.
 
 Cross compilation for Windows requires more software:
 
@@ -114,42 +116,28 @@ Some programs need Windows emulator to run:
 
 $ sudo apt-get install wine
 
-There exist still lots of required libraries and run time DLL's that are not in
-any package. Many DLL's have incompatible versions around and finding the correct one 
-may take time. To make life easier you can fetch a ready made set of Windows XP software.
-Get it using command line or your favorite browser:
-
-$ wget http://judoshiai.sourceforge.net/win32-gtk3.tgz
-
-Extract it under the /opt directory:
-
-$ sudo tar xvzf win32-gtk3.tgz -C /opt
-
 Win32 and Win64 use MXE:
 
-git clone https://github.com/mxe/mxe.git
+$ git clone https://github.com/mxe/mxe.git
 $ cd ~/mxe
-$ make MXE_TARGETS='i686-w64-mingw32.shared x86_64-w64-mingw32.shared' gtk3 curl librsvg libao mpg123
+$ make MXE_TARGETS='i686-w64-mingw32.shared x86_64-w64-mingw32.shared' gtk3 curl librsvg libao mpg123 pthreads libuv gnutls
 
 Compilation will take time.
 
 Start cross compilation:
 
-$ make TARGETOS=WINXP
 $ make TARGETOS=WIN32
 $ make TARGETOS=WIN64
 
 Make a package:
 
-$ make setup TARGETOS=WINXP
 $ make setup TARGETOS=WIN32
 $ make setup TARGETOS=WIN64
 
-Results will be in judoshiai-code/release-win{xp,32,64} directories.
+Results will be in judoshiai-code/release-win{32,64} directories.
 Clean everything with commands
 
 $ make clean
 and
-$ make clean TARGETOS=WINXP
 $ make clean TARGETOS=WIN32
 $ make clean TARGETOS=WIN64

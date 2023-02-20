@@ -2,21 +2,20 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="297mm"
    height="167mm"
    viewBox="0 0 297 167"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="timer-competitors.svg">
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="timer-competitors.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <clipPath
@@ -35,18 +34,19 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="541.71035"
-     inkscape:cy="303.53263"
+     inkscape:cx="541.78571"
+     inkscape:cy="303.21429"
      inkscape:document-units="mm"
      inkscape:current-layer="layer6"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="3436"
-     inkscape:window-height="1365"
+     inkscape:window-width="3440"
+     inkscape:window-height="1363"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="0">
     <sodipodi:guide
        position="-8.5044645,178.59375"
        orientation="0,1"
@@ -66,7 +66,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -98,7 +97,7 @@
        y="100.41253" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:bold;font-size:11.28888893px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:bold;font-size:11.2889px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="13.758302"
        y="23.860382"
        id="text9430"><tspan
@@ -106,14 +105,14 @@
          id="tspan9428"
          x="13.758302"
          y="23.860382"
-         style="font-size:19.75555611px;fill:#ffffff;stroke-width:0.26458332">%C</tspan></text>
+         style="font-size:19.7556px;fill:#ffffff;stroke-width:0.264583">%C</tspan></text>
     <text
        id="text9434"
        y="23.860382"
        x="264.58179"
-       style="font-style:normal;font-weight:bold;font-size:11.28888893px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:bold;font-size:11.2889px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583"
        xml:space="preserve"><tspan
-         style="font-size:19.75555611px;text-anchor:end;fill:#ffffff;stroke-width:0.26458332"
+         style="font-size:19.7556px;text-anchor:end;fill:#ffffff;stroke-width:0.264583"
          y="23.860382"
          x="264.58179"
          id="tspan9432"
@@ -122,16 +121,16 @@
        id="text9438"
        y="55.610413"
        x="66.145844"
-       style="font-style:normal;font-weight:bold;font-size:11.28888893px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:bold;font-size:11.2889px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
        xml:space="preserve"><tspan
-         style="font-size:19.75555611px;fill:#000000;stroke-width:0.26458332"
+         style="font-size:19.7556px;fill:#000000;stroke-width:0.264583"
          y="55.610413"
          x="66.145844"
          id="tspan9436"
          sodipodi:role="line">%country-1</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:bold;font-size:11.28888893px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:bold;font-size:11.2889px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="66.145844"
        y="121.75629"
        id="text9442"><tspan
@@ -139,10 +138,10 @@
          id="tspan9440"
          x="66.145844"
          y="121.75629"
-         style="font-size:19.75555611px;fill:#ffffff;stroke-width:0.26458332">%country-2</tspan></text>
+         style="font-size:19.7556px;fill:#ffffff;stroke-width:0.264583">%country-2</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:bold;font-size:11.28888893px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:bold;font-size:11.2889px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="5.8208013"
        y="88.947945"
        id="text9450"><tspan
@@ -150,39 +149,34 @@
          id="tspan9448"
          x="5.8208013"
          y="88.947945"
-         style="font-size:19.75555611px;fill:#000000;stroke-width:0.26458332">%last-1 %f-1.</tspan></text>
+         style="font-size:19.7556px;fill:#000000;stroke-width:0.264583">%last-1 %f-1.</tspan></text>
     <text
        id="text9454"
        y="154.0351"
        x="5.8208013"
-       style="font-style:normal;font-weight:bold;font-size:11.28888893px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:bold;font-size:11.2889px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583"
        xml:space="preserve"><tspan
-         style="font-size:19.75555611px;fill:#ffffff;stroke-width:0.26458332"
+         style="font-size:19.7556px;fill:#ffffff;stroke-width:0.264583"
          y="154.0351"
          x="5.8208013"
          id="tspan9452"
          sodipodi:role="line">%last-2 %f-2.</tspan></text>
-    <image
-       sodipodi:absref="/home/hjokinen/Dropbox/judoshiai-dev/git/judoshiai/etc/flags-ioc/AFG.png"
-       xlink:href="flags-ioc/FLAG1.png"
-       inkscape:label="#image927"
-       width="35.277775"
-       height="24.694445"
-       preserveAspectRatio="none"
+    <rect
+       inkscape:label="#rect9444"
+       y="37.147476"
+       x="5.425807"
+       height="23.623512"
+       width="23.623512"
        id="flag1"
-       x="5.1026778"
-       y="38.110119" />
-    <image
-       sodipodi:absref="/home/hjokinen/Dropbox/judoshiai-dev/git/judoshiai/etc/flags-ioc/AFG.png"
-       xlink:href="flags-ioc/FLAG2.png"
-       style="display:inline"
-       y="105.32688"
-       x="5.6066484"
+       style="display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.343;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       inkscape:label="#rect9444"
+       y="105.03041"
+       x="5.4380145"
+       height="23.623512"
+       width="23.623512"
        id="flag2"
-       preserveAspectRatio="none"
-       height="24.694445"
-       width="35.277775"
-       inkscape:label="#image927" />
+       style="display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.343;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
   <g
      id="g6691" />

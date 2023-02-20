@@ -83,7 +83,7 @@ $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.dll.a:
 	tar xf $(MHD_SRC) -C $(OBJDIR)/microhttpd --strip-components 1
 	PKG_CONFIG_PATH=$(MXEDIR)/$(MXE_CPU)-w64-mingw32.$(MXE_DYN)/lib/pkgconfig \
 	cd $(OBJDIR)/microhttpd \
-	&& ./configure --with-gnutls --host=$(MXE_CPU)-w64-mingw32.$(MXE_DYN) --disable-examples \
+	&& ./configure --with-gnutls --host=$(MXE_CPU)-w64-mingw32.$(MXE_DYN) --disable-examples --disable-doc \
 	&& make
 
 CFLAGS += -I$(MINGW)/include
@@ -113,7 +113,7 @@ $(OBJDIR)/wsbuild/lib/libwebsockets.a:
 $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a:
 	mkdir -p $(OBJDIR)/microhttpd
 	tar xf $(MHD_SRC) -C $(OBJDIR)/microhttpd --strip-components 1
-	cd $(OBJDIR)/microhttpd && ./configure && make
+	cd $(OBJDIR)/microhttpd && ./configure --disable-examples --disable-doc && make
 
 $(OBJDIR)/ws-broker.o: ws-broker.c $(OBJDIR)/wsbuild/lib/libwebsockets.a
 	${CC} $(PROF) -g $(CFLAGS) -c ws-broker.c -o $@

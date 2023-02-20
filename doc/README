@@ -27,6 +27,47 @@ Please report your experiences to oh2ncp @ gmail . com
 
 ==============================================
 RELEASE NOTE
+VERSION 4.0
+
+Common
+------
++ License changed to GPLv3
++ Number of supported languages decremented by one.
+
+Web browser
+-----------
++ Enhanced support for web browsers.
++ Connect to url
+  - http://IP_ADDRESS:8088/
+  The following url may work, too:
+  http://judoshiai.local:8088/
++ Http connection is faster, but JudoWeight with camera requires https. Your browser will
+  complain that the https connection is not secure, since the certificates are
+  self signed. Just allow connection.
++ Supported functionality:
+  - JudoShiai is only for experimental usage.
+  - JudoTimer: May be used as a master for another web timer.
+    May be used as a slave for JudoTimer application or another web timer.
+  - JudoInfo: Hint: Use web browser of a modern TV and save one laptop.
+  - JudoWeight: Saves weights locally. Save to a local json file or upload to JudoTimer.
+    Scan competitor's QR codes with a webcam.
++ Use password if your network is open.
+
+JudoShiai
+---------
++ Mobile optimized results pages.
++ Customized system's max. number of pools increased to 64.
+
+JudoTimer
+---------
++ SVG support for competitor names display.
++ SVG support for winner display.
++ Display for team event current points after each match.
++ Slave functionality enhanced for video usage.
++ New IJF style looks for stream overlay.
+
+==============================================
+RELEASE NOTE
 VERSION 3.3
 
 JudoShiai
