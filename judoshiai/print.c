@@ -131,7 +131,7 @@ static void write_map_file(const gchar *catname, gint page)
     }
 }
 
-void png_file(gint ctg, const gchar *dir, const gchar *prefix)
+void png_file(gint ctg, const gchar *dir, const gchar *prefix, gboolean big)
 {
     gint i;
     gchar buf[200];
@@ -141,33 +141,35 @@ void png_file(gint ctg, const gchar *dir, const gchar *prefix)
     struct judoka *ctgdata = get_data(ctg);
     struct compsys sys = db_get_system(ctg);
     struct paint_data pd;
+    int sizex = big ? 2*SIZEX : SIZEX;
+    int sizey = big ? 2*SIZEY : SIZEY;
 
     if (!ctgdata)
         return;
-    
+
     memset(&pd, 0, sizeof(pd));
 
     gint svgw, svgh;
     if (get_svg_page_size(ctg, 0, &svgw, &svgh)) {
         if (svgw < svgh) {
-            pd.paper_height = SIZEY;
-            pd.paper_width = SIZEX;
+            pd.paper_height = sizey;
+            pd.paper_width = sizex;
         } else {
-            pd.paper_height = SIZEX;
-            pd.paper_width = SIZEY;
+            pd.paper_height = sizex;
+            pd.paper_width = sizey;
             pd.landscape = TRUE;
         }
     } else if (print_landscape(ctg)) {
-        pd.paper_height = SIZEX;
-        pd.paper_width = SIZEY;
+        pd.paper_height = sizex;
+        pd.paper_width = sizey;
         pd.landscape = TRUE;
     } else {
-        pd.paper_height = SIZEY;
-        pd.paper_width = SIZEX;
+        pd.paper_height = sizey;
+        pd.paper_width = sizex;
     }
     pd.total_width = 0;
     pd.category = ctg;
-    
+
     cs_png = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                         pd.paper_width, pd.paper_height);
     c_png = cairo_create(cs_png);
@@ -209,7 +211,7 @@ void pdf_file(gint ctg, const gchar *dir, const gchar *prefix)
 
     if (!ctgdata)
         return;
-    
+
     memset(&pd, 0, sizeof(pd));
 
     if (get_svg_page_size(ctg, 0, &svgw, &svgh)) {
@@ -309,6 +311,9 @@ void write_png(GtkWidget *menuitem, gpointer userdata)
             paint_category(&pd);
             g_free(pd.filename);
         }
+
+        // always print png
+        png_file(ctg, current_directory, txt2hex(ctgdata->last), TRUE);
     } else if (print_svg) {
         // print pdf and svg files
         snprintf(buf, sizeof(buf), "%s.pdf", txt2hex(ctgdata->last));
@@ -336,6 +341,9 @@ void write_png(GtkWidget *menuitem, gpointer userdata)
 
         cairo_destroy(c_pdf);
         cairo_surface_destroy(cs_pdf);
+
+        // always print png
+        png_file(ctg, current_directory, txt2hex(ctgdata->last), TRUE);
 
 	//db_print_category_to_pdf_comments(ctg, NULL);
     } else if (automatic_web_page_update) {

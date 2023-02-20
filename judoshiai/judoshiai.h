@@ -1353,7 +1353,7 @@ extern struct compsys get_system_for_category(gint index, gint competitors);
 extern void make_backup(void);
 
 /* print */
-extern void png_file(gint ctg, const gchar *dir, const gchar *prefix);
+extern void png_file(gint ctg, const gchar *dir, const gchar *prefix, gboolean big);
 extern void pdf_file(gint ctg, const gchar *dir, const gchar *prefix);
 extern void write_png(GtkWidget *menuitem, gpointer userdata);
 extern void do_print(GtkWidget *menuitem, gpointer userdata);

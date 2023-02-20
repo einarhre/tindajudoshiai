@@ -600,7 +600,7 @@ void get_bracket_2(gint tatami, gint catid, gint svg, gint page, struct msg_web_
         if (svg == 2)
             pdf_file(catid, dir, prefix);
         else
-            png_file(catid, dir, prefix);
+            png_file(catid, dir, prefix, FALSE);
     }
 
     gchar buf[200];
