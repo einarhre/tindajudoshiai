@@ -402,10 +402,10 @@ void set_preferences(void)
 
     error = NULL;
     i = g_key_file_get_integer(keyfile, "preferences", "language", &error);
-    if (!error)
+    if (!error && i < NUM_LANGS)
         language = i;
     else
-        language = LANG_FI;
+        language = LANG_EN;
 
     error = NULL;
     str = g_key_file_get_string(keyfile, "preferences", "serialdevice", &error);
@@ -497,6 +497,8 @@ extern gchar *menu_text_with_dots(gchar *text);
 gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param)
 {
     language = ptr_to_gint(param);
+    if (language >= NUM_LANGS) language = LANG_EN;
+
     set_gui_language(language);
 
     change_menu_label(preferences,  _("Preferences"));

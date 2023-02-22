@@ -11,7 +11,6 @@ Raspberry Pi: judoshiai_n.n-1_armhf.deb
 
 NOTE for Windows:
   Default installation directories are JudoShiai32 and JudoShiai64.
-  Support for WinXP has ended. WinXP release is possible if requested.
   Consider installing 32 bit Linux to your old computers.
 
 NOTE for Linux:
@@ -49,7 +48,7 @@ Web browser
   - JudoTimer: May be used as a master for another web timer.
     May be used as a slave for JudoTimer application or another web timer.
   - JudoInfo: Hint: Use web browser of a modern TV and save one laptop.
-  - JudoWeight: Saves weights locally. Save to a local json file or upload to JudoTimer.
+  - JudoWeight: Saves weights locally. Save to a local json file or upload to JudoShiai.
     Scan competitor's QR codes with a webcam.
 + Use password if your network is open.
 

@@ -626,7 +626,7 @@ void set_preferences(void)
 
     error = NULL;
     x1 = g_key_file_get_integer(keyfile, "preferences", "language", &error);
-    if (!error)
+    if (!error && x1 < NUM_LANGS)
         language = x1;
     else
         language = LANG_EN;
@@ -831,6 +831,8 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     gchar buf[64];
 
     language = ptr_to_gint(param);
+    if (language >= NUM_LANGS) language = LANG_EN;
+
     set_gui_language(language);
 
     change_menu_label(tournament_menu_item , _("Tournament"));
