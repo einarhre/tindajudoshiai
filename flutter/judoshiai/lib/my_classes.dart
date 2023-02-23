@@ -195,7 +195,6 @@ class JSCategory {
   }
 
   void sort() {
-    print('SORTING $category');
     competitors.sort((a, b) {
       if (a.last == b.last)
         return a.first.compareTo(b.first);

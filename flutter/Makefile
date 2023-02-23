@@ -11,7 +11,6 @@ all: $(WEBDIR) \
      $(WEBDIR)/info/index.html \
      $(WEBDIR)/timer/index.html \
      $(WEBDIR)/results/index.html
-	sudo cp -r $(WEBDIR) /var/www/html/
 
 $(WEBDIR):
 	mkdir -p $(WEBDIR)
@@ -61,5 +60,3 @@ test:
 	cd results && $(FLUTTER) build web --web-renderer html
 	mv results/build/web/index.html results/build/web/index1.html
 	cp -a results/build/web/* $(HOME)/0tulokset/
-	#sudo -u r951 cp -a $(HOME)/0tulokset/* /var/www/mysite/contdata/contests/r951/files/
-	#sudo systemctl reload apache2.service

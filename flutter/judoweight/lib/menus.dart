@@ -87,7 +87,7 @@ Future<void> showPopupMenu(context) async {
 Future<void> loadCompetitors(context) async {
   var host = await getHostName('jsip');
   try {
-    print('WEB REQ host=$host');
+    //print('WEB REQ host=$host');
     var response = await http.post(
       Uri.parse('http://$host:8088/json'),
       body: '{"op":"sql", "pw": "${jspassword}", "cmd":"select * from competitors"}',

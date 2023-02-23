@@ -68,11 +68,10 @@ class CompetitorsState extends State<Competitors> {
       if (response.statusCode == 200) {
         //print('RESP1=${response.body}');
         var json = jsonDecode(utf8.decode(response.bodyBytes));
-        //print('json=$json');
         //_cats = JSCategories() as Future<JSCategories>?;
         var len = json.length;
         int i;
-        for (i = 1; i < len; i++) {
+        for (i = 0; i < len; i++) {
           var lst = json[i];
           //print('lst=$lst');
           JSCategory cat = JSCategory(
@@ -97,7 +96,7 @@ class CompetitorsState extends State<Competitors> {
         body: '{"op":"sql", "pw": "$jspassword", "cmd":"select * from competitors"}',
       );
       if (response.statusCode == 200) {
-        final catslen = jscats.categories.length;
+        //final catslen = jscats.categories.length;
         //print('RESP1=${response.body}');
         var json = jsonDecode(utf8.decode(response.bodyBytes));
         //print('json=$json');

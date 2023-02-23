@@ -51,14 +51,13 @@ class _ResultsState extends State<Results> {
     if (competition == null) return rows;
 
     var catlen = competition.categories.length;
-    for (var i = 1; i < catlen; i++) {
+    for (var i = 0; i < catlen; i++) {
       var cat = competition.categories[i];
       var catname = cat.category;
       var numcomp = cat.numcomp;
       var firstlast = cat.firstlast;
       var comps = cat.competitors;
       var complen = comps.length;
-
       rows.add(Card(
         //color: Colors.blue,
         child: ListTile(
@@ -120,7 +119,7 @@ class _ResultsState extends State<Results> {
     if (competition == null) return panels;
 
     var catlen = competition.categories.length;
-    for (var i = 1; i < catlen; i++) {
+    for (var i = 0; i < catlen; i++) {
       var rows = <Card>[];
       var cat = competition.categories[i];
       var catname = cat.category;

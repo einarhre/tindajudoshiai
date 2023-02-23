@@ -192,7 +192,7 @@ Future<void> getResults(Competition competition) async {
     if (response.statusCode == 200) {
       var json = jsonDecode(utf8.decode(response.bodyBytes));
       var catlen = json.length;
-      for (var i = 1; i < catlen; i++) {
+      for (var i = 0; i < catlen; i++) {
         var cat = json[i];
         var catname = cat['category'];
         var numcomp = cat['numcomp'];
