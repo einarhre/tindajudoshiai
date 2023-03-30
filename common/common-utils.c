@@ -278,7 +278,7 @@ int string_clone(string *dst, string *src)
 }
 
 static gchar *legends[] =
-{"?", "(T)", "(H)", "(C)", "(L)", "(TH)", "(HT)", "(TT)", "(HH)", "FG",
+{"?", "(T)", "(H)", "(C)", "(L)", "TH", "HT", "TT", "HH", "FG",
  "HM", "/HM\\", "KG", "/P\\", "T", "H", "S", NULL};
 
 GtkWidget *get_legends_widget(void)

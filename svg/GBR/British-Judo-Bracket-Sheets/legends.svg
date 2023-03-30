@@ -11,7 +11,7 @@
    viewBox="0 0 42.479 51.711"
    enable-background="new 0 0 42.479 51.711"
    xml:space="preserve"
-   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
    sodipodi:docname="legends.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -79,15 +79,15 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1366"
-   inkscape:window-height="705"
+   inkscape:window-width="1920"
+   inkscape:window-height="991"
    id="namedview88"
    showgrid="false"
-   inkscape:zoom="1.1409565"
-   inkscape:cx="-222.62023"
-   inkscape:cy="-176.60621"
-   inkscape:window-x="-8"
-   inkscape:window-y="-8"
+   inkscape:zoom="4.563826"
+   inkscape:cx="-176.82532"
+   inkscape:cy="458.05865"
+   inkscape:window-x="-9"
+   inkscape:window-y="-9"
    inkscape:window-maximized="1"
    inkscape:current-layer="Layer_1"
    inkscape:pagecheckerboard="0" />
@@ -294,8 +294,8 @@
 
 </g>
 <g
-   id="legend13"
-   inkscape:label="#legend13">
+   id="legend13xx"
+   inkscape:label="#legend13xx">
 	<g
    id="g63">
 		<line
@@ -359,39 +359,35 @@
 
 
 <g
-   id="legend11"
-   inkscape:label="#legend11"><g
-     id="g63-7"
-     transform="translate(0,54)"><line
-       style="fill:none;stroke:#000000;stroke-width:2"
-       x1="-209.80099"
-       y1="397.23401"
-       x2="-196.55499"
-       y2="420.11801"
-       id="line65-4" /><line
-       style="fill:none;stroke:#000000;stroke-width:2"
-       x1="-196.55499"
-       y1="420.11801"
-       x2="-222.067"
-       y2="420.11801"
-       id="line67-0" /><line
-       style="fill:none;stroke:#000000;stroke-width:2"
-       x1="-222.067"
-       y1="420.11801"
-       x2="-209.80099"
-       y2="397.23401"
-       id="line69-9" /></g><text
+   id="legend11xx"
+   inkscape:label="#legend11xx"><line
+     style="fill:none;stroke:#000000;stroke-width:2"
+     x1="-209.80099"
+     y1="451.23401"
+     x2="-196.55499"
+     y2="474.11801"
+     id="line65-4" /><line
+     style="fill:none;stroke:#000000;stroke-width:2"
+     x1="-196.55499"
+     y1="474.11801"
+     x2="-222.067"
+     y2="474.11801"
+     id="line67-0" /><line
+     style="fill:none;stroke:#000000;stroke-width:2"
+     x1="-222.067"
+     y1="474.11801"
+     x2="-209.80099"
+     y2="451.23401"
+     id="line69-9" /><text
      style="font-size:18px;line-height:0%;font-family:MyriadPro-Bold"
      font-size="18"
      id="text71-4"
-     x="-214.73253"
+     x="-216.73253"
      y="470.63638"><tspan
        style="font-size:10px"
        id="tspan3102">HM</tspan></text></g><g
    id="legend8"
-   inkscape:label="#legend8"><g
-     id="HH"
-     inkscape:label="#HH">
+   inkscape:label="#legend8">
 	<rect
    x="-221.632"
    y="-36.743"
@@ -412,21 +408,9 @@
 
 
 </g><g
-     id="g670"
-     inkscape:label="#legend6"
-     transform="translate(1.7529152,-0.8764576)"><circle
-       fill="none"
-       stroke="#000000"
-       stroke-width="3"
-       cx="-213.41742"
-       cy="-24.979042"
-       id="ellipse30-2"
-       r="12.756" /></g></g><g
    id="legend5"
-   inkscape:label="#legend5"><g
-     id="legend144"
-     inkscape:label="#legend144"
-     transform="matrix(0.91737422,0,0,0.91737422,-12.993667,-27.582765)">
+   inkscape:label="#legend5"
+   transform="matrix(0.91737422,0,0,0.91737422,-12.993667,-27.582765)">
 	<rect
    x="-162.558"
    y="-347.082"
@@ -447,21 +431,9 @@
 
 
 </g><g
-     id="g670-0"
-     inkscape:label="#legend6"
-     transform="translate(62.009371,-311.7998)"><circle
-       fill="none"
-       stroke="#000000"
-       stroke-width="3"
-       cx="-213.41742"
-       cy="-24.979042"
-       id="ellipse30-2-9"
-       r="12.756" /></g></g><g
    id="legend7"
-   inkscape:label="#legend7"><g
-     id="legend133"
-     inkscape:label="#legend133"
-     transform="matrix(0.90819357,0,0,0.90819357,-13.701448,-24.200789)">
+   inkscape:label="#legend7"
+   transform="matrix(0.90819357,0,0,0.90819357,-13.701448,-24.200789)">
 	<rect
    x="-163.558"
    y="-285.082"
@@ -482,42 +454,54 @@
 
 
 </g><g
-     id="g670-0-7"
-     inkscape:label="#legend6"
-     transform="translate(62.228485,-248.47572)"><circle
-       fill="none"
-       stroke="#000000"
-       stroke-width="3"
-       cx="-213.41742"
-       cy="-24.979042"
-       id="ellipse30-2-9-4"
-       r="12.756" /></g></g><g
    id="legend6"
-   inkscape:label="#legend6"><g
-     id="legend144-1"
-     inkscape:label="#legend144"
-     transform="matrix(0.91737422,0,0,0.91737422,-8.8304956,92.711045)"><rect
-       x="-162.558"
-       y="-347.082"
-       fill="none"
-       stroke="#000000"
-       stroke-width="0.01"
-       width="23.857"
-       height="24.938"
-       id="rect84-7" /><text
-       transform="scale(0.89994444,1.1111797)"
-       font-size="22.9852"
-       id="text86-2"
-       style="font-size:18.8945px;line-height:0%;font-family:MyriadPro-Bold;stroke-width:0.899944"
-       x="-178.33469"
-       y="-295.28546">HT</text></g><g
-     id="g670-0-2"
-     inkscape:label="#legend6"
-     transform="translate(67.048999,-190.62953)"><circle
-       fill="none"
-       stroke="#000000"
-       stroke-width="3"
-       cx="-213.41742"
-       cy="-24.979042"
-       id="ellipse30-2-9-6"
-       r="12.756" /></g></g></svg>
+   inkscape:label="#legend6"
+   transform="matrix(0.91737422,0,0,0.91737422,-8.8304956,92.711045)"><rect
+     x="-162.558"
+     y="-347.082"
+     fill="none"
+     stroke="#000000"
+     stroke-width="0.01"
+     width="23.857"
+     height="24.938"
+     id="rect84-7" /><text
+     transform="scale(0.89994444,1.1111797)"
+     font-size="22.9852"
+     id="text86-2"
+     style="font-size:18.8945px;line-height:0%;font-family:MyriadPro-Bold;stroke-width:0.899944"
+     x="-178.33469"
+     y="-295.28546">HT</text></g><g
+   id="legend11"
+   inkscape:label="#legend11"><path
+     id="rect1595"
+     style="fill:none;fill-opacity:0.333333;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="m -176.68341,444.70762 12.8105,20.95579 h -25.55675 z"
+     sodipodi:nodetypes="cccc" /><text
+     xml:space="preserve"
+     style="font-size:10.6667px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px"
+     x="-184.49033"
+     y="464.27704"
+     id="text4515"><tspan
+       sodipodi:role="line"
+       id="tspan4513"
+       x="-184.49033"
+       y="464.27704"
+       dx="-0.38345021"
+       dy="0.054778602"
+       style="font-size:10.6667px">HM</tspan></text></g><g
+   id="legend13"
+   inkscape:label="legend13"><path
+     id="rect1595-6"
+     style="fill:none;fill-opacity:0.333333;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="m -171.88367,399.39909 12.8105,20.95579 h -25.55675 z"
+     sodipodi:nodetypes="cccc" /><text
+     xml:space="preserve"
+     style="font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px"
+     x="-176.48544"
+     y="418.91373"
+     id="text4515-7"><tspan
+       sodipodi:role="line"
+       id="tspan4513-5"
+       x="-176.48544"
+       y="418.91373"
+       style="font-size:16px">P</tspan></text></g></svg>
