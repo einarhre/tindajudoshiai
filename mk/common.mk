@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=4.0b
+SHIAI_VER_NUM=4.1-alpha2
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 LASTPART := $(shell basename $(CURDIR))
 GTKVER=3
