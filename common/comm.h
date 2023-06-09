@@ -94,6 +94,7 @@ struct cJSON;
 #define SERIAL_PORT         2316
 #define BROKER_PORT         2317
 #define WS_COMM_PORT        2318
+#define UNQLITE_PORT        2319
 #define JUDOSERVER_PORT     5000
 #define WEBSOCK_INFO_PORT   5030
 #define WEBSOCK_TIMER_PORT  5001
