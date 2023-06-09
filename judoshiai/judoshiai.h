@@ -1239,6 +1239,7 @@ extern gpointer ssdp_thread(gpointer args);
 extern gpointer auto_update_thread(gpointer args);
 extern gpointer get_file_thread(gpointer args);
 extern gpointer ws_broker_thread(gpointer args);
+extern gpointer ws_unqlite_thread(gpointer args);
 extern gpointer ws_comm_thread(gpointer args);
 struct sockaddr_in;
 extern void add_client_ssdp_info(gchar *p, struct sockaddr_in *client);
