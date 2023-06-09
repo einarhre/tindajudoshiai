@@ -31,6 +31,7 @@
 extern gint webpwcrc32;
 extern int pwcrc32(const unsigned char *str, int len);
 
+#define QUEUE_LEN 256
 
 /* one of these created for each message */
 
@@ -49,6 +50,11 @@ struct per_session_data__minimal {
     int type;
     int tatami;
     int passwdcrc;
+    struct wsmsg queue[QUEUE_LEN];
+    int qget, qput, qlen;
+    char *indata_p;
+    int indata_space;
+    int position_tx, position_rx;
 };
 
 /* one of these is created for each vhost our protocol is used with */
@@ -66,6 +72,63 @@ struct per_vhost_data__minimal {
 
 static struct per_vhost_data__minimal *g_vhd = NULL;
 
+static int qlenmax = 0;
+
+static void put_data(struct per_session_data__minimal *pss,
+                     void *data, int len)
+{
+    struct wsmsg *m = &pss->queue[pss->qput];
+    m->payload = malloc(LWS_PRE + len);
+    memcpy(m->payload + LWS_PRE, data, len);
+    m->len = len;
+
+    int old = pss->qput;
+    pss->qput++;
+    if (pss->qput >= QUEUE_LEN) pss->qput = 0;
+    if (pss->qput == pss->qget) {
+        g_print("QUEUE FULL!\n");
+        pss->qput = old;
+    }
+    pss->qlen++;
+    if (pss->qlen > qlenmax) {
+        qlenmax = pss->qlen;
+        g_print("pss=%p QLEN = %d put=%d get=%d\n",
+                pss, pss->qlen, pss->qput, pss->qget);
+    }
+}
+
+static struct wsmsg *get_data(struct per_session_data__minimal *pss)
+{
+    if (pss->qget == pss->qput) return NULL;
+    return &pss->queue[pss->qget];
+}
+
+static void rm_data(struct per_session_data__minimal *pss)
+{
+    if (pss->qget == pss->qput) return;
+    struct wsmsg *m = &pss->queue[pss->qget];
+
+    pss->qget++;
+    if (pss->qget >= QUEUE_LEN) pss->qget = 0;
+
+    free(m->payload);
+    m->payload = NULL;
+    pss->qlen--;
+}
+
+static void rm_queue(struct per_session_data__minimal *pss)
+{
+    int i;
+    for (i = 0; i < QUEUE_LEN; i++) {
+        if (pss->queue[i].payload) {
+            free(pss->queue[i].payload);
+            pss->queue[i].payload = NULL;
+        }
+    }
+    pss->qput = pss->qget = 0;
+}
+
+
 static void
 __minimal_destroy_message(void *_msg)
 {
@@ -80,9 +143,6 @@ gint ws_send_msg(struct message *msg)
 {
     guchar buf[2048];
 
-    struct wsmsg amsg;
-    int n;
-
     if (!g_vhd || !g_vhd->pss_list)
         return 0;
 
@@ -92,32 +152,12 @@ gint ws_send_msg(struct message *msg)
 
     pthread_mutex_lock(&g_vhd->lock_ring);
 
-    n = (int)lws_ring_get_count_free_elements(g_vhd->ring);
-    if (!n) {
-        lwsl_user("dropping 1!\n");
-        goto wait_unlock;
-    }
+    lws_start_foreach_llp(struct per_session_data__minimal **,
+                          ppss, g_vhd->pss_list) {
+        put_data(*ppss, buf, len);
+        lws_callback_on_writable((*ppss)->wsi);
+    } lws_end_foreach_llp(ppss, pss_list);
 
-    amsg.payload = malloc(LWS_PRE + len);
-    if (!amsg.payload) {
-        lwsl_user("OOM: dropping 2\n");
-        goto wait_unlock;
-    }
-    amsg.len = len;
-    memcpy(amsg.payload + LWS_PRE, buf, len);
-    
-    n = lws_ring_insert(g_vhd->ring, &amsg, 1);
-    if (n != 1) {
-        __minimal_destroy_message(&amsg);
-        lwsl_user("dropping 3!\n");
-    } else
-        /*
-         * This will cause a LWS_CALLBACK_EVENT_WAIT_CANCELLED
-         * in the lws service thread context.
-         */
-        lws_cancel_service(g_vhd->context);
-
-wait_unlock:
     pthread_mutex_unlock(&g_vhd->lock_ring);
 
     return 0;
@@ -135,8 +175,9 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         lws_protocol_vh_priv_get(lws_get_vhost(wsi),
                                  lws_get_protocol(wsi));
     const struct wsmsg *pmsg;
-    char buf[32];
+    char buf[64];
     int m;
+    char *data = NULL;
 
     //printf("WS CB reason=%d vhd=%p\n", reason, vhd);
     switch (reason) {
@@ -174,6 +215,13 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         pss->wsi = wsi;
         pss->passwdcrc = 0;
 
+        memset(&pss->queue, 0, sizeof(pss->queue));
+        pss->indata_space = 8*1024;
+        pss->indata_p = malloc(pss->indata_space);
+        pss->position_rx = 0;
+        pss->wsi = wsi;
+        pss->qlen = 0;
+
         if (lws_hdr_copy(wsi, buf, sizeof(buf), WSI_TOKEN_GET_URI) > 0) {
             //printf("BROKER URL = %s\n", buf);
             if (!strncmp(buf, "/tm", 3)) {
@@ -201,6 +249,8 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         break;
 
     case LWS_CALLBACK_CLOSED:
+        free(pss->indata_p);
+        rm_queue(pss);
         /* remove our closing pss from the list of live pss */
         lws_ll_fwd_remove(struct per_session_data__minimal, pss_list,
                           pss, vhd->pss_list);
@@ -208,8 +258,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
 
     case LWS_CALLBACK_SERVER_WRITEABLE:
         pthread_mutex_lock(&vhd->lock_ring);
-
-        pmsg = lws_ring_get_element(vhd->ring, &pss->tail);
+        pmsg = get_data(pss);
         if (!pmsg) {
             pthread_mutex_unlock(&vhd->lock_ring);
             break;
@@ -226,20 +275,9 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
             }
         }
 
-        lws_ring_consume_and_update_oldest_tail(
-            vhd->ring,	/* lws_ring object */
-            struct per_session_data__minimal, /* type of objects with tails */
-            &pss->tail,	/* tail of guy doing the consuming */
-            1,		/* number of payload objects being consumed */
-            vhd->pss_list,	/* head of list of objects with tails */
-            tail,		/* member name of tail in objects with tails */
-            pss_list	/* member name of next object in objects with tails */
-            );
-
-        /* more to do? */
-        if (lws_ring_get_element(vhd->ring, &pss->tail))
-            /* come back as soon as we can write more */
-            lws_callback_on_writable(pss->wsi);
+        rm_data(pss);
+        if (pss->qget != pss->qput)
+             lws_callback_on_writable(pss->wsi);
 
         pthread_mutex_unlock(&vhd->lock_ring);
         break;
@@ -253,8 +291,22 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
 	    mylogerr("password error\n");
 	    break;
         }
-        
-	json = cJSON_Parse((char *)in);
+
+        if (pss->indata_space <= pss->position_rx + len) {
+            pss->indata_space = 2*pss->indata_space;
+            pss->indata_p = realloc(pss->indata_p, pss->indata_space);
+        }
+        memcpy(pss->indata_p + pss->position_rx, in, len);
+        pss->position_rx += len;
+
+        if (!lws_is_final_fragment(wsi))
+            break;
+
+        len = pss->position_rx;
+        pss->position_rx = 0;
+        data = pss->indata_p;
+
+	json = cJSON_Parse((char *)data);
 	if (!json) {
 	    mylogerr("json err: %s\n", (char *)in);
 	    break;
