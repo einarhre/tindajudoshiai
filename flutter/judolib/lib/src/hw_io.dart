@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<String> getHostName(String key) async {
@@ -67,4 +68,17 @@ void showPdf(List<int> pdf) {
 
 void saveTextFile(String text, String filename) {
 
+}
+
+void readTextFileDialog(cb) async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+  if (result != null && result.files.single.path != null) {
+    File file = File(result.files.single.path!);
+    final contents = await file.readAsString();
+    cb(contents);
+  } else {
+    // User canceled the picker
+    cb(null);
+  }
 }

@@ -33,3 +33,6 @@ void showPdf(List<int> pdf) {
 void saveTextFile(String text, String filename) {
 
 }
+
+void readTextFileDialog(cb) async {
+}
