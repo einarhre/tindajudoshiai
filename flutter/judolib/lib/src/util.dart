@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:judolib/judolib.dart';
 
@@ -179,4 +180,44 @@ String categoryToUrl(String cat, int page, String suffix) {
 
 String categoryToIframeElement(String cat, int page, String suffix) {
   return 'ifr${str2hex(cat)}${page}${suffix}';
+}
+
+void mylog(String filename, int linenum, String txt) {
+  print('$filename[$linenum]: $txt');
+}
+
+void showAlertDialog(BuildContext context, String title, String descr, String sYes, String sNo, fYes, fNo) {
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text(sNo),
+    onPressed:  () {
+      Navigator.of(context).pop();
+      fNo();
+    },
+  );
+  Widget continueButton = TextButton(
+    child: Text(sYes),
+    onPressed:  () {
+      Navigator.of(context).pop();
+      fYes();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text(title),
+    content: Text(descr),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
