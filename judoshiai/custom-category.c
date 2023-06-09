@@ -36,7 +36,7 @@
 
 static void custlog(gchar *format, ...);
 
-#define NUM_CUSTOM_BRACKETS 32
+#define NUM_CUSTOM_BRACKETS 64
 static gchar *custom_directory = NULL;
 static struct custom_data *custom_brackets[NUM_CUSTOM_BRACKETS];
 static guint hash_values[NUM_CUSTOM_BRACKETS];
