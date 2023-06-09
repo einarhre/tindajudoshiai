@@ -135,7 +135,7 @@ static struct {
 } attr[16];
 static gint cnt = 0;
 
-#define NUM_SVG 200
+#define NUM_SVG 512
 
 static struct svg_cache {
     gint key;
