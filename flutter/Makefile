@@ -10,6 +10,7 @@ all: $(WEBDIR) \
      $(WEBDIR)/weight/index.html \
      $(WEBDIR)/info/index.html \
      $(WEBDIR)/timer/index.html \
+     $(WEBDIR)/referee/index.html \
      $(WEBDIR)/results/index.html
 
 $(WEBDIR):
@@ -41,6 +42,12 @@ $(WEBDIR)/timer/index.html: $(wildcard judotimer/lib/*.dart)
 	cd judotimer && $(FLUTTER) build web --base-href=/web/timer/ $(FLAGS)
 	mkdir -p $(WEBDIR)/timer
 	cp -a judotimer/build/web/* $(WEBDIR)/timer/
+
+$(WEBDIR)/referee/index.html: $(wildcard judoreferee/lib/*.dart)
+	cd judoreferee && $(FLUTTER) pub get
+	cd judoreferee && $(FLUTTER) build web --base-href=/web/referee/ $(FLAGS)
+	mkdir -p $(WEBDIR)/referee
+	cp -a judoreferee/build/web/* $(WEBDIR)/referee/
 
 $(WEBDIR)/results/index.html: $(wildcard results/lib/*.dart)
 	cd results && $(FLUTTER) pub get
