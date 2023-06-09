@@ -803,7 +803,8 @@ void send_html_top(string *s, http_parser_t *parser, gchar *bodyattr)
     string_concat(s, "<td><a href=\"/web/shiai/index.html\"><img src=\"judoshiai.png\"></a></td>");
     string_concat(s, "<td><a href=\"/web/timer/index.html\"><img src=\"judotimer.png\"></a></td>");
     string_concat(s, "<td><a href=\"/web/info/index.html\"><img src=\"judoinfo.png\"></a></td>");
-    string_concat(s, "<td><a href=\"/web/weight/index.html\"><img src=\"judoweight.png\"></a></td></tr></table>");
+    string_concat(s, "<td><a href=\"/web/weight/index.html\"><img src=\"judoweight.png\"></a></td>");
+    string_concat(s, "<td><a href=\"/web/referee/index.html\"><img src=\"judoreferee.png\"></a></td></tr></table>");
 
     const gchar *host = MHD_lookup_connection_value(parser, MHD_HEADER_KIND, "Host");
     if (host) {
