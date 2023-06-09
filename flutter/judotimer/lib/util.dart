@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:judolib/judolib.dart';
 import 'package:judotimer/label.dart';
 import 'package:judotimer/layout.dart';
@@ -86,6 +89,11 @@ const char2key = {
 Future<List<Label>> getTimerCustom() async {
   var host = await getHostName('jsip');
   var lbs = <Label>[];
+  background_image = null;
+
+  await readSettings();
+
+  await Hive.initFlutter();
 
   try {
     /***
@@ -93,7 +101,8 @@ Future<List<Label>> getTimerCustom() async {
         Uri.parse('http://$host:8088/timer-custom.txt'),
         );
      ***/
-    var response = await rootBundle.loadString('assets/timer-custom.txt');
+    //var response = await rootBundle.loadString('assets/timer-custom.txt');
+    var response = await rootBundle.loadString(tv_logo ? 'assets/timer-tv-logo.txt' : 'assets/timer-custom.txt');
     if (response.length > 0) {
       LineSplitter ls = new LineSplitter();
       List<String> lines = ls.convert(response);
@@ -104,8 +113,9 @@ Future<List<Label>> getTimerCustom() async {
         final pattern = RegExp('\\s+');
         final l2 = l.replaceAll(pattern, ' ');
         var a = l2.split(' ');
+        //print('LINE=$l len=${a.length}');
         var num = int.parse(a[0]);
-        if (num < 100) {
+        if (num < 100 && a.length >= 13) {
           var label = Label(
               num,
               double.parse(a[1]),
@@ -121,6 +131,32 @@ Future<List<Label>> getTimerCustom() async {
               double.parse(a[11]),
               double.parse(a[12]));
           lbs.add(label);
+        } else if (num == Label.misc_settings) {
+          hide_clock_if_osaekomi = a[1] == '1';
+          no_frames = a[2] == '1';
+          hide_zero_osaekomi_points = int.parse(a[3]);
+          activate_slave_mode = a[4] == '1';
+          hide_scores_if_zero = a[5] == '1';
+          show_shido_cards = a[6] == '1';
+          if (activate_slave_mode) mode_slave = true;
+        } else if (num == Label.window_layout) {
+          window_layout_x = int.parse(a[1]);
+          window_layout_y = int.parse(a[2]);
+          window_layout_w = int.parse(a[3]);
+          window_layout_h = int.parse(a[4]);
+        } else if (num == Label.bg_image) {
+          if (window_layout_w > 0 && window_layout_h > 0) {
+            background_image = Image(
+              image: AssetImage('assets/${a[1]}'),
+              width: window_layout_w as double,
+              height: window_layout_h as double,
+            );
+          } else {
+            background_image = Image(
+              image: AssetImage('assets/${a[1]}'),
+              fit: BoxFit.fill,
+            );
+          }
         }
       }
     }
@@ -128,6 +164,9 @@ Future<List<Label>> getTimerCustom() async {
     print("HTTP get timer_custom.txt error $e");
     //rethrow;
   }
+
+  box = await Hive.openBox('timer');
+
   return lbs;
 }
 
@@ -245,6 +284,7 @@ void handle_message(LayoutState layout, Message msg) {
         break;
       case SET_TIMER_RUN_COLOR:
         SetTimerRunColor m = ml.set_timer_run_color;
+        //mylog('util.dart', 249, 'MSG SET_TIMER_RUN_COLOR running=${m.running}, rest=${m.resttime}');
         layout.set_timer_run_color(m.running, m.resttime);
         break;
     }

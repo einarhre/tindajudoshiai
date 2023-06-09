@@ -14,9 +14,8 @@ import 'package:judotimer/stopwatch.dart';
 import 'package:judotimer/util.dart';
 import 'package:judotimer/websocket.dart';
 import 'package:judotimer/winner_window.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:just_audio_libwinmedia/just_audio_libwinmedia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -42,16 +41,6 @@ class LayoutState extends State<Layout> {
       bgcolor_pts = Colors.black,
       bgcolor_points = Colors.black;
   static var current_osaekomi_state = 0;
-  static Color clock_run = Colors.white,
-      clock_stop = Colors.yellow,
-      clock_bg = Colors.black;
-  static Color oclock_run = Colors.green,
-      oclock_stop = Colors.grey,
-      oclock_bg = Colors.black;
-  static var hide_clock_if_osaekomi = false,
-      hide_zero_osaekomi_points = false,
-      show_shido_cards = false,
-      hide_scores_if_zero = false;
   static const List<String> num2str = [
     "0",
     "1",
@@ -76,7 +65,7 @@ class LayoutState extends State<Layout> {
   var websockJs = null;
   var websockBroker;
   String big_text = '';
-  double toolbarheight = 40;
+  double toolbarheight = no_frames ? 0 : 40;
   bool shifted = false;
   late FocusNode node;
   bool mainScreen = true;
@@ -88,7 +77,7 @@ class LayoutState extends State<Layout> {
   var oldPw = jspassword;
 
   String getUrl() {
-    if (mode_slave) return 'ws://${master_name}:$JUDOTIMER_PORT';
+    if (mode_slave) return 'ws://${master_name}:${WEBSOCK_PORT + 1}';
     if (kIsWeb) {
       final n = getLocation();
       return 'ws://${n}:$WS_COMM_PORT/tm${tatami}_pw_$jspassword';
@@ -110,7 +99,7 @@ class LayoutState extends State<Layout> {
     print('*** INIT ***');
     //kIsWeb
     super.initState();
-    readSettings();
+    //readSettings();
     initPlayer();
     readCompetitorsSvgString();
     readWinnerSvgStrings();
@@ -128,16 +117,20 @@ class LayoutState extends State<Layout> {
             var json = jsonDecode(event);
             var jsonmsg = json['msg'];
             Message msg = Message(jsonmsg);
+            //mylog('layout', 160, 'TIMER MSG');
             handle_message(this, msg);
           }, onError: (error) {
+            print('websockjs error $error');
             if (websockJs != null) websockJs.sink.close();
             websockJs = null;
           }, onDone: () {
+            print('websockjs done');
             if (websockJs != null) websockJs.sink.close();
             websockJs = null;
           });
         } else if (websockJs != null) {
           if (oldPw != jspassword) {
+            print('websockjs password change');
             oldPw = jspassword;
             websockJs.sink.close();
             websockJs = null;
@@ -153,6 +146,7 @@ class LayoutState extends State<Layout> {
             var json = jsonDecode(event);
             var jsonmsg = json['msg'];
             Message msg = Message(jsonmsg);
+            //mylog('layout', 160, 'BROKER MSG');
             handle_message(this, msg);
           }, onError: (error) {
             print('BROKER ERROR $error');
@@ -174,6 +168,7 @@ class LayoutState extends State<Layout> {
     _nodeAttachment = node.attach(context, onKey: _handleKeyPress);
 
     ssdp('JudoShiai');
+
   }
 
   @override
@@ -197,7 +192,7 @@ class LayoutState extends State<Layout> {
         appBar: AppBar(
           toolbarHeight: toolbarheight,
           backgroundColor: Colors.black,
-          title: Text('JudoTimer'),
+          title: Text(toolbarheight > 0 ? 'JudoTimer' : ''),
           leading: Builder(
             builder: (context) => ElevatedButton(
               child: Icon(Icons.menu),
@@ -301,10 +296,13 @@ class LayoutState extends State<Layout> {
 
   Future<void> initPlayer() async {
     player = AudioPlayer();
+    /*
     player.playbackEventStream.listen((event) {},
         onError: (Object e, StackTrace stackTrace) {
       print('A stream error occurred: $e');
     });
+
+     */
     /*
     String audioasset = "assets/audio/$soundFile.mp3";
     ByteData bytes = await rootBundle.load(audioasset); //load sound from assets
@@ -355,6 +353,8 @@ class LayoutState extends State<Layout> {
     if (!mode_slave)
       send_label_msg(
           this, SET_TIMER_OSAEKOMI_COLOR, [osaekomi_state, pts, orun ? 1 : 0]);
+
+    current_orun = orun;
 
     widget.labels[Label.w1].hide = false;
     widget.labels[Label.y1].hide = false;
@@ -466,6 +466,7 @@ class LayoutState extends State<Layout> {
 
   void setScore(int score) {
     if (!mode_slave) send_label_msg(this, SET_SCORE, [score]);
+
     //print('score: $score');
     widget.labels[Label.points].text = ptsToStr(score);
     setState(() {});
@@ -473,12 +474,22 @@ class LayoutState extends State<Layout> {
 
   List<Widget> getLabels() {
     double w = widget.width;
-    double h = widget.height - toolbarheight;
+    double h = widget.height;
+    if (window_layout_w <= 0 || window_layout_h <= 0)
+      h -= toolbarheight;
 
     List<Widget> l = [];
     int i;
-    for (i = Label.padding1; i <= Label.padding3; i++) {
+    int wlen = widget.labels.length;
+
+    if (background_image != null) {
+      l.add(background_image!);
+    }
+
+    for (i = 0; i < wlen; i++) {
       var a = widget.labels[i];
+      if (a.num < Label.padding1 || a.num > Label.padding3)
+        continue;
       var wdg = Positioned(
           left: a.x * w,
           top: a.y * h,
@@ -493,9 +504,14 @@ class LayoutState extends State<Layout> {
       l.add(wdg);
     }
 
-    for (i = 0; i < Label.padding1; i++) {
+    for (i = 0; i < wlen; i++) {
+      //for (i = 0; i < Label.padding1; i++) {
       var a = widget.labels[i];
+      if (a.num >= Label.padding1 && a.num <= Label.padding3)
+        continue;
       if (a.w < 0.01 || a.h < 0.01) continue;
+      bool hd = a.hide || (hide_clock_if_osaekomi && current_orun && i >= Label.t_min && i <= Label.t_sec);
+      hd = hd || (hide_clock_if_osaekomi && !current_orun && i >= Label.o_tsec && i <= Label.o_sec);
       var wdg = Positioned(
           left: a.x * w,
           top: a.y * h,
@@ -517,28 +533,37 @@ class LayoutState extends State<Layout> {
               },
               child: ColoredBox(
                   color: a.bg,
-                  child: (i != Label.flag_comp1 && i != Label.flag_comp2)
-                      ? Align(
+                  child: (i == Label.flag_comp1 || i == Label.flag_comp2)
+                    ? ((a.text != null && a.text.length == 3)
+                        ? Image(
+                            image:
+                            AssetImage('packages/judolib/assets/flags-ioc/${a.text}.png'),
+                            fit: BoxFit.fitHeight,
+                            alignment: Alignment.topLeft,
+                          )
+                        : Text(''))
+                    : (show_shido_cards && (i == Label.s1 || i == Label.s2))
+                    ? Image(
+                        image: AssetImage(i == Label.s1 ? shido1_png : shido2_png),
+                        fit: BoxFit.fitHeight,
+                        alignment: Alignment.topLeft,
+                      )
+                    : Align(
                           alignment: a.xalign < 0
                               ? Alignment.centerLeft
                               : (a.xalign > 0
                                   ? Alignment.centerRight
                                   : Alignment.center),
-                          child: Text(a.hide ? '' : a.text,
+                          child: Text(hd ? '' : a.text,
                               style: TextStyle(
+                                fontWeight: FontWeight.bold,
                                 fontSize:
                                     a.h * (a.size == 0.0 ? 0.7 : a.size) * h,
                                 color: a.fg,
                                 //backgroundColor: a.bg,
                               )))
-                      : ((a.text != null && a.text.length == 3)
-                          ? Image(
-                              image:
-                                  AssetImage('packages/judolib/assets/flags-ioc/${a.text}.png'),
-                              fit: BoxFit.fitHeight,
-                              alignment: Alignment.topLeft,
-                            )
-                          : Text('')))));
+
+              )));
       l.add(wdg);
     }
 
@@ -555,7 +580,7 @@ class LayoutState extends State<Layout> {
         ))));
      */
 
-    if (big_text != '') {
+    if (big_text != '' && !no_big_text) {
       l.add(Positioned(
           left: 0,
           top: 0,
@@ -566,6 +591,7 @@ class LayoutState extends State<Layout> {
               child: Center(
                   child: Text(big_text,
                       style: TextStyle(
+                        fontWeight: FontWeight.bold,
                         fontSize: 0.16 * h,
                         color: Colors.black,
                       ))))));
@@ -579,7 +605,7 @@ class LayoutState extends State<Layout> {
         top: 0,
         width: w,
         height: h,
-        child: ShowCompetitors(this, widget.width, widget.height),
+        child: ShowCompetitors(this, w, h),
       ));
     } else if (showWinner) {
       l.add(Positioned(
@@ -587,7 +613,7 @@ class LayoutState extends State<Layout> {
         top: 0,
         width: w,
         height: h,
-        child: ShowWinner(this, widget.width, widget.height),
+        child: ShowWinner(this, w, h),
       ));
     }
 
@@ -717,7 +743,8 @@ class LayoutState extends State<Layout> {
     timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        updateClock(this, timer.tick);
+        global_tick = timer.tick;
+        updateClock(this, global_tick);
         if (playsound) {
           play_sound();
           playsound = false;
@@ -784,6 +811,19 @@ class LayoutState extends State<Layout> {
     set_number(Label.y2, white[1]);
     set_number(Label.k2, white[2]);
     set_number(Label.s2, white[3]);
+
+    switch (blue[3]) {
+      case 0: shido1_png = 'assets/shido-none.png'; break;
+      case 1: shido1_png = 'assets/shido-yellow1.png'; break;
+      case 2: shido1_png = 'assets/shido-yellow2.png'; break;
+      case 3: shido1_png = 'assets/shido-red.png'; break;
+    }
+    switch (white[3]) {
+      case 0: shido2_png = 'assets/shido-none.png'; break;
+      case 1: shido2_png = 'assets/shido-yellow1.png'; break;
+      case 2: shido2_png = 'assets/shido-yellow2.png'; break;
+      case 3: shido2_png = 'assets/shido-red.png'; break;
+    }
 
     if (use_ger_u12_rules > 0) {
       widget.labels[Label.comp1_leg_grab].fg = Colors.black;
@@ -998,6 +1038,7 @@ class LayoutState extends State<Layout> {
   }
 
   void reset_display(Keys key) {
+    //mylog('layout.dart', 1005, 'reset_display');
     set_timer_run_color(FALSE, FALSE);
     set_timer_osaekomi_color(OSAEKOMI_DSP_NO, 0, FALSE);
     set_osaekomi_value(0, 0);
@@ -1006,10 +1047,13 @@ class LayoutState extends State<Layout> {
   }
 
   void set_timer_run_color(bool running, bool resttime) {
-    if (!mode_slave)
+    if (!mode_slave) {
+      //mylog('layout', 1017, 'Sending run color message');
       send_label_msg(
           this, SET_TIMER_RUN_COLOR, [running ? 1 : 0, resttime ? 1 : 0]);
+    }
 
+    //mylog('layout.dart', 1019, 'RUN COLOR running=$running rest=$resttime');
     Color color = clock_stop;
     if (running) {
       if (resttime)
@@ -1030,9 +1074,10 @@ class LayoutState extends State<Layout> {
     playing = true;
     playnum += 1;
     soundFile = await getVal('sound', 'AirHorn');
+    /****
     try {
       var duration = await player
-          .setAsset('assets/audio/$soundFile.mp3')
+          .setSource(AssetSource('audio/$soundFile.mp3'))
           .catchError((error) {
         //print('SET ASSET $playnum: $error');
       });
@@ -1040,7 +1085,8 @@ class LayoutState extends State<Layout> {
     } catch (e) {
       //print("Error loading audio source: $e");
     }
-    player.play();
+        ****/
+    player.play(AssetSource('audio/$soundFile.mp3'));
     playnum -= 1;
     playing = false;
   }

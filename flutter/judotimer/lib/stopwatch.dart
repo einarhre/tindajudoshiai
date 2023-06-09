@@ -42,6 +42,7 @@ void update_display(LayoutState layout) {
   }
 
   if (running != last_m_run) {
+    //mylog('stopwatch.dart', 47, 'update_display $running $last_m_run');
     last_m_run = running;
     layout.set_timer_run_color(last_m_run, rest_time);
   }
@@ -101,6 +102,7 @@ void updateClock(LayoutState layout, int tick) {
       //running = false;
       elap = total;
       if (!oRunning) {
+        //mylog('stopwatch.dart', 104, 'running=false');
         running = false;
         if (rest_time == false) show_soremade = true;
         if (rest_time) {
@@ -121,6 +123,7 @@ void updateClock(LayoutState layout, int tick) {
       if (((osaekomi_winner == 1 && comp1pts[W] > 0) ||
           (osaekomi_winner == 2 && comp2pts[W] > 0))) {
         running = false;
+        //mylog('stopwatch.dart', 125, 'running=false');
         oRunning = false;
         give_osaekomi_score();
         approve_osaekomi_score(layout, 0);
@@ -129,6 +132,7 @@ void updateClock(LayoutState layout, int tick) {
     if (oElap >= ippon) {
       score = 4;
       running = false;
+      //mylog('stopwatch.dart', 134, 'running=false');
       oRunning = false;
       int tmp = osaekomi_winner;
       give_osaekomi_score();
@@ -144,6 +148,7 @@ void updateClock(LayoutState layout, int tick) {
 void toggle(LayoutState layout) {
   if (running) {
     running = false;
+    //mylog('stopwatch.dart', 150, 'running=false');
     elap = now - startTime;
     if (total > 0 && elap >= total) elap = total;
     if (oRunning) {
@@ -167,6 +172,9 @@ void toggle(LayoutState layout) {
     }
     update_display(layout);
   }
+  box?.put('total', total);
+  box?.put('elap', elap);
+  box?.put('oelap', oElap);
 }
 
 void oToggle(LayoutState layout) {
@@ -186,6 +194,8 @@ void oToggle(LayoutState layout) {
     oStartTime = now;
     update_display(layout);
   }
+  box?.put('elap', elap);
+  box?.put('oelap', oElap);
 }
 
 bool set_osaekomi_winner(LayoutState layout, int who) {
@@ -629,6 +639,7 @@ Future<void> reset(LayoutState layout, Keys key, MsgNextMatch? msg0) async {
   big_displayed = FALSE;
 
   running = FALSE;
+  //mylog('stopwatch.dart', 636, 'running=false');
   elap = 0;
   oRunning = FALSE;
   oElap = 0;

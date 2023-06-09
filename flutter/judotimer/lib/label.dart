@@ -48,6 +48,13 @@ class Label {
   static const padding1 = 42;
   static const padding2 = 43;
   static const padding3 = 44;
+  static const screen_bg_color = 100;
+  static const clock_colors = 101;
+  static const osaekomi_colors = 102;
+  static const misc_settings = 103;
+  static const window_layout = 104;
+  static const bg_image = 105;
+  static const display_font = 106;
 
   int num;
   double x, y;

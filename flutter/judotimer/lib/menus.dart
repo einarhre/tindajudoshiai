@@ -68,11 +68,10 @@ Future<void> showPopupMenu(LayoutState layout) async {
           child: Text(t?.showCompetitors83b3 ?? ''), value: 'showcomp'),
       PopupMenuItem<String>(
           height: 12,
-          child: const Divider(), value: 'x2'),
-      CheckedPopupMenuItem<String>(
+          child: const Divider(), value: 'x3'),
+      PopupMenuItem<String>(
         height: h,
-        checked: layout.setClocks,
-        child: Text(t?.setClocks81f5 ?? ''), value: 'setclocks'),
+        child: Text('Recover'), value: 'recover'),
     ],
     elevation: 8.0,
   ).then((value) async {
@@ -153,6 +152,22 @@ Future<void> showPopupMenu(LayoutState layout) async {
         break;
       case 'setclocks':
         layout.adjustClocks();
+        break;
+      case 'recover':
+        print('RECOVER PUSHED');
+        if (box != null) {
+          var elap_x = box!.get('elap');
+          var oelap_x = box!.get('oelap');
+          var total_x = box!.get('total');
+          if (elap != null && oelap_x != null && total_x != null) {
+            elap = elap_x;
+            startTime = global_tick - elap;
+            oElap = oelap_x;
+            oStartTime = global_tick - oElap;
+            total = total_x;
+          }
+        }
+        break;
     }
   });
 }

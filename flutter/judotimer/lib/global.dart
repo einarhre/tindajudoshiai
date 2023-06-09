@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:judolib/judolib.dart';
 import 'package:judotimer/util.dart';
 
@@ -123,6 +126,34 @@ int msg_out_start_time = 0, msg_out_err_time = 0;
 int msg_out_addr = 0;
 int msg_out_text_set_tmo = 0;
 
+bool tv_logo = false;
+bool current_orun = false;
+
+Color clock_run = Colors.white;
+Color clock_stop = Colors.yellow;
+Color? clock_bg = Colors.black;
+
+Color oclock_run = Colors.green;
+Color oclock_stop = Colors.black;
+Color? oclock_bg = Colors.black;
+
+bool hide_clock_if_osaekomi = false;
+bool no_frames = false;
+int show_shidos = 0;
+bool activate_slave_mode = false;
+bool hide_scores_if_zero = false;
+int hide_zero_osaekomi_points = 0;
+bool show_shido_cards = false;
+int window_layout_x = -1;
+int window_layout_y = -1;
+int window_layout_w = -1;
+int window_layout_h = -1;
+Image? background_image = null;
+String display_font = 'Arial Bold';
+String shido1_png = 'assets/shido-none.png';
+String shido2_png = 'assets/shido-none.png';
+
+int global_tick = 0;
 
 /* settings */
 int mode = 0;
@@ -147,3 +178,6 @@ String master_name = 'judotimer1.local';
 String sound = 'IndutrialAlarm';
 var jspassword = '';
 /*****/
+
+// Hive
+Box? box = null;

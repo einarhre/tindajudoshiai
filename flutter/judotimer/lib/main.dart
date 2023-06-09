@@ -138,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // Height (without status bar)
     double height2 = height - padding.top;
     // Height (without status and toolbar)
-    double height3 = height - padding.top - kToolbarHeight;
+    //double height3 = height - padding.top - kToolbarHeight;
 
     return FutureBuilder<List<Label>>(
         //initialData: null,
@@ -151,6 +151,9 @@ class _MyHomePageState extends State<MyHomePage> {
               print('ERROR ${snapshot.error}');
               return const Text('Error');
             } else if (snapshot.hasData) {
+              if (window_layout_w > 0 && window_layout_h > 0) {
+                return Layout(window_layout_w as double, window_layout_h as double, snapshot.data!);
+              }
               return Layout(width, height2, snapshot.data!);
             }
           }

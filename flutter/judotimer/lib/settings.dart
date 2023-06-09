@@ -28,6 +28,7 @@ Future<void> readSettings() async {
   selected_name_layout = await getValInt('namelayout', 7);
   languageCode = await getVal('languageCode', 'en');
   countryCode = await getVal('countryCode', '');
+  tv_logo = await getValBool('tvlogo', false);
 
   oldCategory = await getValInt('category', 0);
   oldNumber = await getValInt('number', 0);
@@ -69,6 +70,7 @@ final GlobalKey<FormState> _masterNameKey = GlobalKey<FormState>();
 final GlobalKey<FormState> _nameLayoutKey = GlobalKey<FormState>();
 final GlobalKey<FormState> _tatamiKey = GlobalKey<FormState>();
 final GlobalKey<FormState> _modeslaveKey = GlobalKey<FormState>();
+final GlobalKey<FormState> _tvlogoKey = GlobalKey<FormState>();
 
 class _SettingsScreenState extends State<SettingsScreen> {
   Future<CardSettingsSection>? _settings;
@@ -187,6 +189,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
               setValBool('nobigtext', value ?? false);
               setState(() {
                 no_big_text = value ?? false;
+              });
+            },
+          ),
+          CardSettingsSwitch(
+            key: _tvlogoKey,
+            label: 'TV logo',
+            initialValue: tv_logo,
+            onSaved: (value) {
+              setValBool('tvlogo', value ?? false);
+              setState(() {
+                tv_logo = value ?? false;
               });
             },
           ),
