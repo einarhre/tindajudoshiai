@@ -34,7 +34,8 @@ OBJS += $(OBJDIR)/main.o $(OBJDIR)/competitors.o $(OBJDIR)/sheets.o $(OBJDIR)/se
 	$(OBJDIR)/custom-category-svg-template.o $(OBJDIR)/common.o $(OBJDIR)/sha1.o \
 	$(OBJDIR)/websock.o $(OBJDIR)/websock-protocol.o  $(OBJDIR)/cJSON.o $(OBJDIR)/minilisp.o \
 	$(OBJDIR)/svg-lisp.o $(OBJDIR)/auto-update.o $(OBJDIR)/common-utils.o \
-	$(OBJDIR)/gdpr.o $(OBJDIR)/qrcode.o $(OBJDIR)/ws-broker.o $(OBJDIR)/ws-comm.o
+	$(OBJDIR)/gdpr.o $(OBJDIR)/qrcode.o $(OBJDIR)/ws-broker.o $(OBJDIR)/ws-comm.o \
+	$(OBJDIR)/unqlite.o $(OBJDIR)/ws-unqlite.o
 
 ifeq ($(MATCH_TABLE),yes)
     OBJS += $(OBJDIR)/match-table.o
@@ -49,7 +50,8 @@ CFLAGS += -DAPPLICATION="\"judoshiai\""
 CFLAGS += -DAPP_NUM=1
 CFLAGS += -I../3rdparty/httpp -I../3rdparty/sqlite3 -I../3rdparty/cJSON -I../3rdparty/lisp \
 	  -I../3rdparty/QRCode/src -I/usr/include/p11-kit-1 \
-	  -I$(OBJDIR)/wsbuild/include 
+	  -I../3rdparty/unqlite \
+	  -I$(OBJDIR)/wsbuild/include
 	  #-I$(MHD_SRC)/../include
 
 LIBS += -lgnutls -lssl -lcrypto
@@ -165,6 +167,9 @@ $(OBJDIR)/cJSON.o: ../3rdparty/cJSON/cJSON.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/httpp.o: ../3rdparty/httpp/httpp.c
+	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/unqlite.o: ../3rdparty/unqlite/unqlite.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/minilisp.o: ../3rdparty/lisp/minilisp.c
