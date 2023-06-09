@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:html';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:file_picker/file_picker.dart';
 
 Future<String> getHostName(String key) async {
   /*
@@ -77,3 +77,13 @@ void saveTextFile(String text, String filename) {
     ..click();
 }
 
+void readTextFileDialog(cb) async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false);
+  if (result != null && result.files.isNotEmpty) {
+    final fileBytes = result.files.first.bytes;
+    cb(Utf8Decoder().convert(fileBytes!));
+  } else {
+    // User canceled the picker
+    cb(null);
+  }
+}
