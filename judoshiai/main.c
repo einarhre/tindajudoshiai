@@ -602,11 +602,15 @@ ok:
 	gth = g_thread_new("Ws-broker",
 			   (GThreadFunc)ws_broker_thread,
 			   (gpointer)&run_flag);
-        
+
 	gth = g_thread_new("Ws-comm",
 			   (GThreadFunc)ws_comm_thread,
 			   (gpointer)&run_flag);
-        
+
+	gth = g_thread_new("Ws-unqlite",
+			   (GThreadFunc)ws_unqlite_thread,
+			   (gpointer)&run_flag);
+
 	g_timeout_add(1000, check_for_connection_status, NULL);
 
         mylog("Comm threads started\n");
