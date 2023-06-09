@@ -99,3 +99,4 @@ const WEBSOCK_PORT       = 2315;
 const SERIAL_PORT        = 2316;
 const BROKER_PORT        = 2317;
 const WS_COMM_PORT       = 2318;
+const WS_UNQLITE_PORT    = 2319;
