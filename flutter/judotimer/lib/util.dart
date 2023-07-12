@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
@@ -12,6 +13,8 @@ import 'package:judotimer/stopwatch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'global.dart';
+
+import 'dart:js' as js;
 
 enum Keys {
   None,
@@ -91,18 +94,27 @@ Future<List<Label>> getTimerCustom() async {
   var lbs = <Label>[];
   background_image = null;
 
+  var uri = Uri.tryParse(js.context['location']['href']);
   await readSettings();
-
   await Hive.initFlutter();
 
   try {
-    /***
-        var response = await http.get(
-        Uri.parse('http://$host:8088/timer-custom.txt'),
-        );
-     ***/
-    //var response = await rootBundle.loadString('assets/timer-custom.txt');
-    var response = await rootBundle.loadString(tv_logo ? 'assets/timer-tv-logo.txt' : 'assets/timer-custom.txt');
+    var response = '';
+
+    if (uri != null) {
+      String myurl = uri.toString();
+      var ix = myurl.indexOf('config=');
+      if (ix > 0) {
+        var configfile = myurl.substring(ix + 7);
+        response = await rootBundle.loadString('assets/config/$configfile');
+      }
+    }
+
+    if (response == '') {
+      response = await rootBundle.loadString(
+          tv_logo ? 'assets/timer-tv-logo.txt' : 'assets/timer-custom.txt');
+    }
+
     if (response.length > 0) {
       LineSplitter ls = new LineSplitter();
       List<String> lines = ls.convert(response);
@@ -157,6 +169,11 @@ Future<List<Label>> getTimerCustom() async {
               fit: BoxFit.fill,
             );
           }
+        } else if (num == Label.option) {
+          var opt = a[1].split('=');
+          var optname = opt[0];
+          var optval = opt[1];
+          parse_opt(optname, optval);
         }
       }
     }
@@ -168,6 +185,95 @@ Future<List<Label>> getTimerCustom() async {
   box = await Hive.openBox('timer');
 
   return lbs;
+}
+
+bool str2bool(String s) {
+  return s != 'false' && s != '0';
+}
+
+void parse_opt(String optname, String optval) {
+  switch (optname) {
+    case 'tatami':
+      {
+        tatami = int.parse(optval);
+      }
+      break;
+    case 'modeslave':
+      {
+        mode_slave = str2bool(optval);
+      }
+      break;
+    case 'rulesstopippon':
+      {
+        rules_stop_ippon_2 = str2bool(optval);
+      }
+      break;
+    case 'rulesconfirm':
+      {
+        rules_confirm_match = str2bool(optval);
+      }
+      break;
+    case 'judogicontrol':
+      {
+        require_judogi_ok = str2bool(optval);
+      }
+      break;
+    case 'nobigtext':
+      {
+        no_big_text = str2bool(optval);
+      }
+      break;
+    case 'masterip':
+      {
+        master_name = optval;
+      }
+      break;
+    case 'jsip':
+      {
+        node_name = optval;
+      }
+      break;
+    case 'jspassword':
+      {
+        jspassword = optval;
+      }
+      break;
+    case 'sound':
+      {
+        sound = optval;
+      }
+      break;
+    case 'namelayout':
+      {
+        selected_name_layout = int.parse(optval);
+      }
+      break;
+    case 'languagecode':
+      {
+        languageCode = optval;
+      }
+      break;
+    case 'countrycode':
+      {
+        countryCode = optval;
+      }
+      break;
+    case 'tvlogo':
+      {
+        tv_logo = str2bool(optval);
+      }
+      break;
+    case 'showcompetitors':
+      {
+        showcompetitors = str2bool(optval);
+      }
+      break;
+    case 'showwinner':
+      {
+        showwinner = str2bool(optval);
+      }
+      break;
+  }
 }
 
 void handle_message(LayoutState layout, Message msg) {
@@ -221,34 +327,40 @@ void handle_message(LayoutState layout, Message msg) {
       case START_ADVERTISEMENT:
         break;
       case START_COMPETITORS:
-        print('START COMP');
-        StartCompetitors m = ml.start_competitors;
-        layout.display_comp_window(
-            m.cat_1, m.blue_1, m.white_1, '', '', '', '', m.round);
+        if (showcompetitors) {
+          StartCompetitors m = ml.start_competitors;
+          layout.display_comp_window(
+              m.cat_1, m.blue_1, m.white_1, '', '', '', '', m.round);
+        }
         break;
       case STOP_COMPETITORS:
-        print('STOP COMP');
-        StopCompetitors m = ml.stop_competitors;
-        layout.displayMainScreen();
-        //Navigator.pop(layout.context);
+        if (showcompetitors) {
+          StopCompetitors m = ml.stop_competitors;
+          layout.displayMainScreen();
+          //Navigator.pop(layout.context);
+        }
         break;
       case START_WINNER:
-        print('START WINNER rules_confirm_match=$rules_confirm_match');
-        StartWinner m = ml.start_winner;
-        if (rules_confirm_match)
-          layout.display_winner_window(m.cat, m.last, m.first, m.winner);
-        /*
+        if (showwinner) {
+          print('START WINNER rules_confirm_match=$rules_confirm_match');
+          StartWinner m = ml.start_winner;
+          if (rules_confirm_match)
+            layout.display_winner_window(m.cat, m.last, m.first, m.winner);
+          /*
           Navigator.push(layout.context,
           MaterialPageRoute(builder: (context) {
               return ShowWinner(layout, layout.widget.width, layout.widget.height, m.cat, m.last, m.first);
           }));
          */
+        }
         break;
       case STOP_WINNER:
-        print('STOP WINNER');
-        layout.displayMainScreen();
-        /*if (Navigator.canPop(layout.context))
+        if (showwinner) {
+          print('STOP WINNER');
+          layout.displayMainScreen();
+          /*if (Navigator.canPop(layout.context))
           Navigator.pop(layout.context);*/
+        }
         break;
       case SAVED_LAST_NAMES:
         SavedLastNames m = ml.saved_last_names;
@@ -297,17 +409,20 @@ String get_name_by_layout(
     case 0:
       if (country == null || country.length == 0)
         return '$first $last, $club';
-      else if (club == null || club.length == 0) return '$first $last, $country';
+      else if (club == null || club.length == 0)
+        return '$first $last, $country';
       return '$first $last, $country/$club';
     case 1:
-      if (country == null ||  country.length == 0)
+      if (country == null || country.length == 0)
         return '$last, $first, $club';
-      else if (club == null || club.length == 0) return '$last, $first, $country';
+      else if (club == null || club.length == 0)
+        return '$last, $first, $country';
       return '$last, $first, $country/$club';
     case 2:
       if (country == null || country.length == 0)
         return '$club, $last, $first';
-      else if (club == null || club.length == 0) return '$country $last, $first';
+      else if (club == null || club.length == 0)
+        return '$country $last, $first';
       return '$country/$club $last, $first';
     case 3:
       return '$country $last, $first';

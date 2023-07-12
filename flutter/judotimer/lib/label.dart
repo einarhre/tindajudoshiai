@@ -54,7 +54,7 @@ class Label {
   static const misc_settings = 103;
   static const window_layout = 104;
   static const bg_image = 105;
-  static const display_font = 106;
+  static const option = 106;
 
   int num;
   double x, y;

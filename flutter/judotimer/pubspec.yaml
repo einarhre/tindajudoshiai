@@ -84,6 +84,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/audio/
+    - assets/config/
     - assets/timer-custom.txt
     - assets/timer-tv-logo.txt
     - assets/timer-tv-logo.png

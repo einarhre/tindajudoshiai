@@ -177,6 +177,8 @@ String node_name = 'judoshiai.local';
 String master_name = 'judotimer1.local';
 String sound = 'IndutrialAlarm';
 var jspassword = '';
+bool showcompetitors = true;
+bool showwinner = true;
 /*****/
 
 // Hive
