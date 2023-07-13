@@ -104,7 +104,7 @@ static void put_data(struct per_session_data__minimal *pss,
     pss->qlen++;
     if (pss->qlen > qlenmax) {
         qlenmax = pss->qlen;
-        g_print("pss=%p QLEN = %d put=%d get=%d\n",
+        g_print("pss=%p QLEN ws-unqlite = %d put=%d get=%d\n",
                 pss, pss->qlen, pss->qput, pss->qget);
     }
 }
