@@ -128,6 +128,18 @@ class LayoutState extends State<Layout> {
             if (websockJs != null) websockJs.sink.close();
             websockJs = null;
           });
+
+          if (websockJs != null) {
+            var msgout = {
+              'msg': [
+                COMM_VERSION,
+                MSG_ALL_REQ,
+                0,
+                7777
+              ]
+            };
+            sendMsgToJs(msgout);
+          }
         } else if (websockJs != null) {
           if (oldPw != jspassword) {
             print('websockjs password change');
