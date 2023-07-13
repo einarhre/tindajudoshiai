@@ -94,7 +94,6 @@ static void encodeblock( unsigned char *in, unsigned char *out, int len )
 static void websock_message(struct jsconn *conn, unsigned char *p,
 			    gint length, struct message *msg_out)
 {
-#if 0
     SOCKET s = conn->fd;
     gint i;
     //gboolean fin = (p[0] & 0x80) != 0;
@@ -154,7 +153,7 @@ static void websock_message(struct jsconn *conn, unsigned char *p,
 	    return;
 	}
 
-	int r = websock_decode_msg(&msg, json);
+	int r = websock_decode_msg(&msg, json, 0);
 	cJSON_Delete(json);
 	if (r < 0) {
 	    mylog("decode err: %s\n", p);
@@ -171,19 +170,7 @@ static void websock_message(struct jsconn *conn, unsigned char *p,
 	} else if (msg_out) {
 	    *msg_out = msg;
 	} else {
-#if (APP_NUM == APPLICATION_TYPE_SERVER)
-	    mylog("%s: %s from web, conn type = %d, port = %d\n", __FUNCTION__,
-		    msg_name(msg.type), conn->websock, conn->listen_port);
-	    if (msg.type == MSG_DUMMY) {
-		msg.u.dummy.application_type = application_type();
-	    }
-	    if (conn->websock == APPLICATION_TYPE_INFO)
-		msg_to_queue(&msg);
-	    else if (conn->websock == APPLICATION_TYPE_TIMER)
-		web_to_timer_rec_queue(conn, &msg);
-#else
 	    put_to_rec_queue(&msg);
-#endif
 	}
 #if 0
 	mylog("Text len=%d:\n  ", len);
@@ -192,7 +179,6 @@ static void websock_message(struct jsconn *conn, unsigned char *p,
 	mylog("\n");
 #endif
     }
-#endif
 }
 
 static void websock_handshake(struct jsconn *conn, char *in, gint length)
