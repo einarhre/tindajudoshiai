@@ -505,12 +505,21 @@ gpointer master_thread(gpointer args)
 
             r = recv(connections[i].fd, (char *)inbuf, sizeof(inbuf), 0);
             if (r <= 0) {
-                mylog("Master: connection %d fd=%d closed\n", i, connections[i].fd);
+                mylog("Master: connection %d fd=%d closed, r=%d\n", i, connections[i].fd, r);
                 closesocket(connections[i].fd);
                 FD_CLR(connections[i].fd, &read_fd);
                 connections[i].fd = 0;
             } else if (connections[i].websock) {
-		handle_websock(&connections[i], (gchar *)inbuf, r, NULL);
+                struct message msg;
+		handle_websock(&connections[i], (gchar *)inbuf, r, &msg);
+                if (msg.type == MSG_ALL_REQ) {
+                    for (i = 0; i < MAX_LABEL_NUMBER; i++) {
+                        if (last_labels_sent[i].u.update_label.label_num == i &&
+                            last_labels_sent[i].type == MSG_UPDATE_LABEL)
+                            if (websock_send_msg(tmp_fd, &last_labels_sent[i]) < 0)
+                                perror("Send to slave");
+                    }
+                }
 	    }
         }
     }
