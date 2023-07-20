@@ -286,36 +286,39 @@ ifeq ($(TGT),WIN32OS)
 endif
 
 install:
-	cp -r $(RELDIR) /usr/lib/
-	ln -sf /usr/lib/judoshiai/bin/judoshiai /usr/bin/judoshiai
-	ln -sf /usr/lib/judoshiai/bin/judotimer /usr/bin/judotimer
-	ln -sf /usr/lib/judoshiai/bin/judoinfo /usr/bin/judoinfo
-	ln -sf /usr/lib/judoshiai/bin/judoweight /usr/bin/judoweight
-	ln -sf /usr/lib/judoshiai/bin/judojudogi /usr/bin/judojudogi
-	ln -sf /usr/lib/judoshiai/bin/judoproxy /usr/bin/judoproxy
+	cp -r $(RELDIR) /opt/
+	ln -sf /opt/judoshiai/bin/judoshiai /usr/local/bin/judoshiai
+	ln -sf /opt/judoshiai/bin/judotimer /usr/local/bin/judotimer
+	ln -sf /opt/judoshiai/bin/judoinfo /usr/local/bin/judoinfo
+	ln -sf /opt/judoshiai/bin/judoweight /usr/local/bin/judoweight
+	ln -sf /opt/judoshiai/bin/judojudogi /usr/local/bin/judojudogi
+	ln -sf /opt/judoshiai/bin/judoproxy /usr/local/bin/judoproxy
 ifeq ($(JUDOHTTPD),YES)
-	ln -sf /usr/lib/judoshiai/bin/judohttpd /usr/bin/judohttpd
+	ln -sf /opt/judoshiai/bin/judohttpd /usr/local/bin/judohttpd
 	cp gnome/judohttpd.desktop /usr/share/applications/
 	cp etc/png/judohttpd.png /usr/share/pixmaps/
+	cp etc/png/judohttpd.png /usr/share/icons/hicolor/48x48/apps/
 endif
-	cp gnome/judoshiai.desktop /usr/share/applications/
-	cp gnome/judotimer.desktop /usr/share/applications/
-	cp gnome/judoinfo.desktop /usr/share/applications/
-	cp gnome/judoweight.desktop /usr/share/applications/
-	cp gnome/judojudogi.desktop /usr/share/applications/
-	cp gnome/judoproxy.desktop /usr/share/applications/
+	desktop-file-install --rebuild-mime-info-cache --dir=/usr/local/share/applications gnome/judo*.desktop
 	cp etc/png/judoshiai.png /usr/share/pixmaps/
 	cp etc/png/judotimer.png /usr/share/pixmaps/
 	cp etc/png/judoinfo.png /usr/share/pixmaps/
 	cp etc/png/judoweight.png /usr/share/pixmaps/
 	cp etc/png/judojudogi.png /usr/share/pixmaps/
 	cp etc/png/judoproxy.png /usr/share/pixmaps/
-	cp gnome/judoshiai.mime /usr/share/mime-info/
-	cp gnome/judoshiai.keys /usr/share/mime-info/
-	cp gnome/judoshiai.applications /usr/share/application-registry/
-	cp gnome/judoshiai.packages /usr/lib/mime/packages/judoshiai
+	for pn in 16 24 32 48
+	do
+	  p="share/icons/hicolor/${pn}x${pn}/apps"
+	  cp ${p}/judo*.png /usr/${p}/
+	done
+	gtk-update-icon-cache --force /usr/share/icons/hicolor
+	#cp gnome/judoshiai.mime /usr/share/mime-info/
+	#cp gnome/judoshiai.keys /usr/share/mime-info/
+	#cp gnome/judoshiai.applications /usr/share/application-registry/
+	#cp gnome/judoshiai.packages /usr/lib/mime/packages/judoshiai
 	cp gnome/judoshiai.xml /usr/share/mime/packages/
-	cp gnome/judoshiai.menu /usr/share/menu/judoshiai
+	update-mime-database /usr/share/mime
+	#cp gnome/judoshiai.menu /usr/share/menu/judoshiai
 
 debian:
 	rm -rf $(RELEASEDIR)/pkg

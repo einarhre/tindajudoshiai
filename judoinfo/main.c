@@ -85,7 +85,7 @@ gchar         *conffile;
 GdkCursor     *cursor = NULL;
 guint          current_year;
 static GtkWidget *darea = NULL;
-gint           language = LANG_EN;
+gint           language = LANG_IS;
 gint           num_lines = NUM_LINES;
 gint           display_type = NORMAL_DISPLAY;
 gboolean       mirror_display = FALSE;

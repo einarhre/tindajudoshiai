@@ -748,10 +748,10 @@ void set_preferences_keyfile(GKeyFile *key_file, gboolean defaults)
     if (!error && i) {
         language = i;
 	if (language < 0 || language >= NUM_LANGS)
-	    language = LANG_EN;
+	    language = LANG_IS;
 	if (!defaults) change_language(NULL, NULL, gint_to_ptr(language));
     } else if (defaults)
-        language = LANG_EN;
+        language = LANG_IS;
 
     error = NULL;
     d = g_key_file_get_double(key_file, "preferences", "flagsize", &error);
@@ -902,7 +902,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     gint i;
 
     language = ptr_to_gint(param);
-    if (language >= NUM_LANGS) language = LANG_EN;
+    if (language >= NUM_LANGS) language = LANG_IS;
 
     set_gui_language(language);
 

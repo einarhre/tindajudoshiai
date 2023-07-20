@@ -839,6 +839,10 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
             default_cats[2] = (struct default_cat){0, 6, 0, CAT_SYSTEM_GBR_KNOCK_OUT};
             default_cats[3] = (struct default_cat){0, 0, 0, 0};
             break;
+        case DRAW_ICELANDIC:
+            default_cats[2] = (struct default_cat){0, 6, 0, CAT_IJF_DOUBLE_REPECHAGE};
+            default_cats[3] = (struct default_cat){0, 0, 0, 0};
+            break;
         }
 
         for (i = 0; i < NUM_DEFAULT_CATS; i++) {
@@ -885,7 +889,7 @@ static void reset_props1(GtkWidget *button, void *data)
 static const gchar *draw_system_names[NUM_DRAWS] =
     {N_("International System"), N_("Finnish System"), N_("Swedish System"), N_("Estonian System"), N_("Spanish System"),
      N_("Norwegian System"), N_("British System"), N_("Australian System"), N_("Danish System"),
-     N_("Polish System"), N_("Slovakian System"), N_("Ukrainian System"), N_("German System")};
+     N_("Polish System"), N_("Slovakian System"), N_("Ukrainian System"), N_("German System"), N_("Icelandic System")};
 
 static void update_match_order(void)
 {

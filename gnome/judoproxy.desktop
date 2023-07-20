@@ -2,7 +2,7 @@
 Name=JudoProxy
 Comment=Connects networks
 Exec=judoproxy
-Icon=judoproxy.png
+Icon=judoproxy
 Terminal=false
 Type=Application
 Categories=Utility;Sports;

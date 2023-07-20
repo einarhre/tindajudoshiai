@@ -58,7 +58,7 @@ static gboolean expose(GtkWidget *widget, GdkEventExpose *event, gpointer userda
 static void init_display(void);
 gboolean delete_big(gpointer data);
 void update_one_label(gint num, const gchar *txt);
-gint language = LANG_EN;
+gint language = LANG_IS;
 
 //#define TABLE_PARAM (GTK_EXPAND)
 #define TABLE_PARAM (GTK_EXPAND|GTK_FILL)

@@ -629,7 +629,7 @@ void set_preferences(void)
     if (!error && x1 < NUM_LANGS)
         language = x1;
     else
-        language = LANG_EN;
+        language = LANG_IS;
 
     error = NULL;
     if (g_key_file_get_boolean(keyfile, "preferences", "mirror", &error)) {
@@ -648,7 +648,7 @@ void set_preferences(void)
     if (!error)
         l = str;
     else 
-        l = g_strdup("en");
+        l = g_strdup("is");
 
     for (i = 0; i < NUM_PRINT_LANGS; i++) {
         if (print_lang_names[i][0] == l[0] && print_lang_names[i][1] == l[1]) {
@@ -831,7 +831,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     gchar buf[64];
 
     language = ptr_to_gint(param);
-    if (language >= NUM_LANGS) language = LANG_EN;
+    if (language >= NUM_LANGS) language = LANG_IS;
 
     set_gui_language(language);
 

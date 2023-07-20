@@ -4,10 +4,10 @@ LASTPART := $(shell basename $(CURDIR))
 GTKVER=3
 OBJS=
 WARNINGS = -Wall -Wshadow
-JUDOPROXY=NO
+JUDOPROXY=YES
 JUDOHTTPD=NO
 LIBREOFFICE=libreoffice
-FLUTTER=$(HOME)/src/flutter/bin/flutter
+FLUTTER=flutter
 
 ifneq ("$(wildcard $(CURDIR)/judohttpd)","")
     JUDOHTTPD=NO

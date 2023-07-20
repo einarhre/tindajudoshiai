@@ -52,7 +52,7 @@ GKeyFile      *keyfile;
 gchar         *conffile;
 GdkCursor     *cursor = NULL;
 guint          current_year;
-gint           language = LANG_EN;
+gint           language = LANG_IS;
 static GtkWidget *name_box;
 static GtkWidget *id_box;
 static GtkWidget *weight_box;

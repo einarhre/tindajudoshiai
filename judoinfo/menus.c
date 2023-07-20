@@ -392,7 +392,7 @@ void set_preferences(void)
     if (!error && i < NUM_LANGS)
         language = i;
     else
-        language = LANG_EN;
+        language = LANG_IS;
 
     error = NULL;
     str = g_key_file_get_string(keyfile, "preferences", "svgfile", &error);
@@ -410,7 +410,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     gint i;
 
     language = ptr_to_gint(param);
-    if (language >= NUM_LANGS) language = LANG_EN;
+    if (language >= NUM_LANGS) language = LANG_IS;
 
     set_gui_language(language);
 
