@@ -2176,7 +2176,7 @@ void draw_all(GtkWidget *w, gpointer data)
 #else
     gdk_window_set_cursor(GTK_WIDGET(main_window)->window, NULL);
 #endif
-    SYS_LOG_INFO(_("All the categories has been drawn"));
+    SYS_LOG_INFO(_("All the categories have been drawn"));
 
     for (i = 1; i <= NUM_TATAMIS; i++) {
         progress_show(1.0*i/NUM_TATAMIS, "");

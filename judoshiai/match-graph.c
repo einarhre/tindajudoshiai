@@ -518,7 +518,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
         if (i == 0)
             sprintf(buf, _("Delayed"));
         else
-            sprintf(buf, "Tatami %d", i);
+            sprintf(buf, "%s %d", _("Tatami"), i);
 #ifdef USE_PANGO
 	WRITE_TEXT(10 + left, 0, buf, desc);
 #else

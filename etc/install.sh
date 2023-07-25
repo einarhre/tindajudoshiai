@@ -1,5 +1,5 @@
 #!/bin/sh
-DIR=$HOME/bin
+DIR=/opt
 echo -n "Installation directory [$DIR]: "
 read answer
 if [ "X$answer" != "X" ] ; then

@@ -42,8 +42,8 @@ static void about_judotimer( GtkWidget *w,
     //GtkWidget *dialog;
 
     gtk_show_about_dialog (NULL,
-                           "name", "Judotimer",
-                           "title", _("About Judotimer"),
+                           "name", "JudoTimer",
+                           "title", _("About JudoTimer"),
                            "copyright", "Copyright 2006-2023 Hannu Jokinen",
                            "version", full_version(),
                            "website", "https://www.judoshiai.org/",
@@ -242,7 +242,7 @@ static void change_menu_label(GtkWidget *item, const gchar *new_text)
     gtk_label_set_text(GTK_LABEL(menu_label), new_text);
 }
 
-#define NUM_NAME_LAYOUTS 11
+#define NUM_NAME_LAYOUTS 20
 
 static GtkWidget *menubar, *match, *preferences, *help, *matchmenu, *preferencesmenu, *helpmenu;
 static GtkWidget *separator1, *separator2, *quit, *viewlog, *showcomp_act, *show_video;
@@ -959,15 +959,24 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(name_layout,   _("Name format"));
     change_menu_label(name_layouts[0], _("Name Surname, Country/Club"));
     change_menu_label(name_layouts[1], _("Surname, Name, Country/Club"));
-    change_menu_label(name_layouts[2], _("Country/Club  Surname, Name"));
-    change_menu_label(name_layouts[3], _("Country  Surname, Name"));
-    change_menu_label(name_layouts[4], _("Club  Surname, Name"));
-    change_menu_label(name_layouts[5], _("Country Surname"));
-    change_menu_label(name_layouts[6], _("Club Surname"));
-    change_menu_label(name_layouts[7], _("Surname, Name"));
-    change_menu_label(name_layouts[8], _("Surname"));
-    change_menu_label(name_layouts[9], _("Country"));
-    change_menu_label(name_layouts[10], _("Club"));
+    change_menu_label(name_layouts[2], _("Name Surname, Club"));
+    change_menu_label(name_layouts[3], _("Surname, Name, Club"));
+    change_menu_label(name_layouts[4], _("Country/Club  Name Surname"));
+    change_menu_label(name_layouts[5], _("Country/Club  Surname, Name"));
+    change_menu_label(name_layouts[6], _("Country  Name Surname"));
+    change_menu_label(name_layouts[7], _("Country  Surname, Name"));
+    change_menu_label(name_layouts[8], _("Club  Name Surname"));
+    change_menu_label(name_layouts[9], _("Club  Surname, Name"));
+    change_menu_label(name_layouts[10], _("Country Name"));
+    change_menu_label(name_layouts[11], _("Country Surname"));
+    change_menu_label(name_layouts[12], _("Club Name"));
+    change_menu_label(name_layouts[13], _("Club Surname"));
+    change_menu_label(name_layouts[14], _("Name Surname"));
+    change_menu_label(name_layouts[15], _("Surname, Name"));
+    change_menu_label(name_layouts[16], _("Name"));
+    change_menu_label(name_layouts[17], _("Surname"));
+    change_menu_label(name_layouts[18], _("Country"));
+    change_menu_label(name_layouts[19], _("Club"));
 
     change_menu_label(tatami_sel,   _("Contest area"));
     change_menu_label(tatami_sel_none, _("Contest area not chosen"));

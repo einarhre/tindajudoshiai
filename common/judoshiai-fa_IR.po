@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "انتخاب فونت"
 
 #: ../judotimer/menus.c
-msgid "About Judotimer"
-msgstr "درباره جودو تایمر"
+msgid "About JudoTimer"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -250,28 +250,64 @@ msgid "Surname, Name, Country/Club"
 msgstr "نام خانوادگی, نام, کشور/باشگاه"
 
 #: ../judotimer/menus.c
+msgid "Name Surname, Club"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "Surname, Name, Club"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "Country/Club  Name Surname"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Country/Club  Surname, Name"
 msgstr "کشور/باشگاه نام خانوادگی, نام"
+
+#: ../judotimer/menus.c
+msgid "Country  Name Surname"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "Country  Surname, Name"
 msgstr "کشور نام خانوادگی, نام"
 
 #: ../judotimer/menus.c
+msgid "Club  Name Surname"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Club  Surname, Name"
 msgstr "باشگاه نام خانوادگی, نام"
+
+#: ../judotimer/menus.c
+msgid "Country Name"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "Country Surname"
 msgstr "کشور نام خانوادگی"
 
 #: ../judotimer/menus.c
+msgid "Club Name"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Club Surname"
 msgstr "نام باشگاه"
 
 #: ../judotimer/menus.c
+msgid "Name Surname"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Surname, Name"
 msgstr "نام خانوادگی, نام"
+
+#: ../judotimer/menus.c ../judoshiai/httpd.c ../judoshiai/write-results.c
+msgid "Name"
+msgstr "نام"
 
 #: ../judotimer/menus.c ../judoshiai/httpd.c
 msgid "Surname"
@@ -419,6 +455,10 @@ msgstr "همه فایل ها"
 #: ../judotimer/stopwatch.c
 msgid "Start Golden Score?"
 msgstr "وقت طلایی شروع شود؟"
+
+#: ../judotimer/stopwatch.c
+msgid "Auto"
+msgstr ""
 
 #: ../judotimer/stopwatch.c
 msgid "No Limit"
@@ -611,8 +651,15 @@ msgstr "همه اوزان دارای تاتامی است"
 msgid "Unlocated"
 msgstr "اختصاص داده نشده"
 
+#: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c ../judoshiai/matches.c
+#: ../judoshiai/medal-matches.c ../judoshiai/sheets.c ../judoinfo/main.c
+#: ../judojudogi/main.c
+msgid "Tatami"
+msgstr "تاتامی"
+
 #: ../judoshiai/category-graph.c ../judoshiai/httpd.c ../judoshiai/menus.c
-#: ../judoshiai/set-categories.c
+#: ../judoshiai/properties.c ../judoshiai/set-categories.c
 msgid "Categories"
 msgstr "دسته بندی ها"
 
@@ -941,8 +988,8 @@ msgid "Select first a competitor and then a number."
 msgstr "ابتدا یک ورزشکار و سپس یک شماره را انتخاب کنید"
 
 #: ../judoshiai/drawing.c
-msgid "All the categories has been drawn"
-msgstr "همه اوزان قرعه کشی شدند"
+msgid "All the categories have been drawn"
+msgstr ""
 
 #: ../judoshiai/ftp.c
 msgid "Server URL"
@@ -1032,10 +1079,6 @@ msgstr "ورزشکاری یافت نشد"
 #: ../judoshiai/httpd.c
 msgid "Add"
 msgstr "اضافه کردن"
-
-#: ../judoshiai/httpd.c ../judoshiai/write-results.c
-msgid "Name"
-msgstr "نام"
 
 #: ../judoshiai/httpd.c
 msgid "Reg.Cat"
@@ -1135,9 +1178,9 @@ msgstr "بله،جودو شیایی دیگری در حال اجراست"
 
 #: ../judoshiai/main.c
 msgid ""
-"No, this the only JudoShiai program. \n"
+"No, this is the only JudoShiai program. \n"
 "Purge erroneous lock file."
-msgstr " نه این تنها برنامه جودوشیایی در حال اجراست"
+msgstr ""
 
 #: ../judoshiai/main.c
 msgid ""
@@ -1450,7 +1493,7 @@ msgstr ""
 msgid "delay"
 msgstr ""
 
-#: ../judoshiai/medal-matches.c ../common/common.c
+#: ../judoshiai/medal-matches.c ../judoshiai/properties.c ../common/common.c
 msgid "Final"
 msgstr "فینال"
 
@@ -1926,12 +1969,16 @@ msgid "Color..."
 msgstr ""
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Finnish"
-msgstr "Results in Finnish"
+msgid "Results in Czech"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Swedish"
-msgstr "Results in Swedish"
+msgid "Results in Danish"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in German"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in English"
@@ -1946,19 +1993,39 @@ msgid "Results in Estonian"
 msgstr "Results in Estonian"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Ukrainian"
-msgstr "Results in Ukrainian"
+msgid "نتایج به فارسی"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Finnish"
+msgstr "Results in Finnish"
+
+#: ../judoshiai/print-texts.c
+msgid "Résultats en français"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Hebrew"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Úrslit á íslensku"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Norwegian"
 msgstr "Results in Norwegian"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Icelandic"
-msgstr "Results in Icelandic"
+msgid "Resultaten in het Nederlands"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Polish"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Russian"
 msgstr ""
 
 #: ../judoshiai/print-texts.c
@@ -1966,15 +2033,11 @@ msgid "Results in Slovak"
 msgstr ""
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Dutch"
-msgstr ""
+msgid "Results in Swedish"
+msgstr "Results in Swedish"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in German"
-msgstr ""
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Russian"
+msgid "Результати Українською"
 msgstr ""
 
 #: ../judoshiai/print.c ../judoinfo/main.c ../judojudogi/main.c
@@ -2062,6 +2125,30 @@ msgstr "قالب"
 msgid "One Card Per Page"
 msgstr "یک کارت در هر صفحه"
 
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Round"
+msgstr "دور"
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Repechage"
+msgstr "شانس مجدد"
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Round Robin"
+msgstr "مسابقه دوره ای"
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Semifinal"
+msgstr "نیمه نهایی"
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Bronze"
+msgstr "برنز"
+
+#: ../judoshiai/properties.c
+msgid "Silver"
+msgstr ""
+
 #: ../judoshiai/properties.c
 msgid "Tournament:"
 msgstr "مسابقه:"
@@ -2103,8 +2190,8 @@ msgid "Use the first places only:"
 msgstr ""
 
 #: ../judoshiai/properties.c
-msgid "Win in Golden Score gives 1 point"
-msgstr "برنده شدن در تایم طلایی با 1 امتیاز"
+msgid "Win in Golden Score gives 1 point:"
+msgstr ""
 
 #: ../judoshiai/properties.c
 msgid "2017 Rules:"
@@ -2239,6 +2326,10 @@ msgid "German System"
 msgstr ""
 
 #: ../judoshiai/properties.c
+msgid "Icelandic System"
+msgstr ""
+
+#: ../judoshiai/properties.c
 msgid "Tournament properties"
 msgstr "تنظیمات مسابقه"
 
@@ -2367,6 +2458,10 @@ msgid "Weight text:"
 msgstr "متن وزن:"
 
 #: ../judoshiai/set-categories.c
+msgid "Properties:"
+msgstr ""
+
+#: ../judoshiai/set-categories.c
 msgid "Copy"
 msgstr ""
 
@@ -2474,10 +2569,6 @@ msgstr ""
 msgid "Category starts"
 msgstr "شروع دسته بندی"
 
-#: ../judoinfo/main.c
-msgid "Tatami"
-msgstr "تاتامی"
-
 #: ../judoinfo/menus.c
 msgid "About JudoInfo"
 msgstr "درباره جودو اینفو"
@@ -2525,26 +2616,6 @@ msgstr ""
 #: ../common/auto-update.c
 msgid "Update to new version?"
 msgstr ""
-
-#: ../common/common.c
-msgid "Round"
-msgstr "دور"
-
-#: ../common/common.c
-msgid "Round Robin"
-msgstr "مسابقه دوره ای"
-
-#: ../common/common.c
-msgid "Repechage"
-msgstr "شانس مجدد"
-
-#: ../common/common.c
-msgid "Semifinal"
-msgstr "نیمه نهایی"
-
-#: ../common/common.c
-msgid "Bronze"
-msgstr "برنز"
 
 #: ../common/ip.c
 msgid "Address of the communication node"
@@ -2678,6 +2749,37 @@ msgstr ""
 msgid "About JudoProxy"
 msgstr ""
 
+#: ../judoproxy/menus.c
+msgid "Advertise addresses"
+msgstr ""
+
+#: ../judoproxy/menus.c
+msgid "Show video"
+msgstr ""
+
+#~ msgid "About Judotimer"
+#~ msgstr "درباره جودو تایمر"
+
+#~ msgid "Results in Icelandic"
+#~ msgstr "Results in Icelandic"
+
+#~ msgid "Results in Ukrainian"
+#~ msgstr "Results in Ukrainian"
+
+#~ msgid "Master mode"
+#~ msgstr "حالت حرفه ای"
+
+#~ msgid "All the categories has been drawn"
+#~ msgstr "همه اوزان قرعه کشی شدند"
+
+#~ msgid "Win in Golden Score gives 1 point"
+#~ msgstr "برنده شدن در تایم طلایی با 1 امتیاز"
+
+#~ msgid ""
+#~ "No, this the only JudoShiai program. \n"
+#~ "Purge erroneous lock file."
+#~ msgstr " نه این تنها برنامه جودوشیایی در حال اجراست"
+
 #~ msgid "Logout"
 #~ msgstr "خروج"
 
@@ -2749,9 +2851,6 @@ msgstr ""
 
 #~ msgid "Leave points for GS"
 #~ msgstr "Залишити оцінки при ГС"
-
-#~ msgid "Master mode"
-#~ msgstr "حالت حرفه ای"
 
 #~ msgid "Match duration: 2 min E-juniors"
 #~ msgstr "مدت مسابقه 2 دقیقه, اوسای کومی15 ثانیه"

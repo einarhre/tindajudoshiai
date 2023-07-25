@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Valitse kirjasin"
 
 #: ../judotimer/menus.c
-msgid "About Judotimer"
-msgstr "Tietoja Judotimerista"
+msgid "About JudoTimer"
+msgstr "Tietoja JudoTimerista"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -250,28 +250,64 @@ msgid "Surname, Name, Country/Club"
 msgstr "Suku, Etu, Maa/Seura"
 
 #: ../judotimer/menus.c
+msgid "Name Surname, Club"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "Surname, Name, Club"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "Country/Club  Name Surname"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Country/Club  Surname, Name"
 msgstr "Maa/Seura  Suku, Etu"
+
+#: ../judotimer/menus.c
+msgid "Country  Name Surname"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "Country  Surname, Name"
 msgstr "Maa  Sukunimi, Etunimi"
 
 #: ../judotimer/menus.c
+msgid "Club  Name Surname"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Club  Surname, Name"
 msgstr "Seura Sukunimi, Etunimi"
+
+#: ../judotimer/menus.c
+msgid "Country Name"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "Country Surname"
 msgstr "Maa Sukunimi"
 
 #: ../judotimer/menus.c
+msgid "Club Name"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Club Surname"
 msgstr "Seura Sukunimi"
 
 #: ../judotimer/menus.c
+msgid "Name Surname"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Surname, Name"
 msgstr "Sukunimi, Etunimi"
+
+#: ../judotimer/menus.c ../judoshiai/httpd.c ../judoshiai/write-results.c
+msgid "Name"
+msgstr "Nimi"
 
 #: ../judotimer/menus.c ../judoshiai/httpd.c
 msgid "Surname"
@@ -419,6 +455,10 @@ msgstr "Kaikki tiedostot"
 #: ../judotimer/stopwatch.c
 msgid "Start Golden Score?"
 msgstr "Aloitetaanko jatkoaika?"
+
+#: ../judotimer/stopwatch.c
+msgid "Auto"
+msgstr ""
 
 #: ../judotimer/stopwatch.c
 msgid "No Limit"
@@ -611,8 +651,15 @@ msgstr "Kaikki sarjat sijoitettu tatameille"
 msgid "Unlocated"
 msgstr "Sijoittamattomat"
 
+#: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c ../judoshiai/matches.c
+#: ../judoshiai/medal-matches.c ../judoshiai/sheets.c ../judoinfo/main.c
+#: ../judojudogi/main.c
+msgid "Tatami"
+msgstr "Matto"
+
 #: ../judoshiai/category-graph.c ../judoshiai/httpd.c ../judoshiai/menus.c
-#: ../judoshiai/set-categories.c
+#: ../judoshiai/properties.c ../judoshiai/set-categories.c
 msgid "Categories"
 msgstr "Sarjat"
 
@@ -941,8 +988,8 @@ msgid "Select first a competitor and then a number."
 msgstr "Valitse ensin ottelija ja sitten numero."
 
 #: ../judoshiai/drawing.c
-msgid "All the categories has been drawn"
-msgstr "Kaikki sarjat arvottu"
+msgid "All the categories have been drawn"
+msgstr ""
 
 #: ../judoshiai/ftp.c
 msgid "Server URL"
@@ -1032,10 +1079,6 @@ msgstr "Kilpailijaa ei löytynyt!"
 #: ../judoshiai/httpd.c
 msgid "Add"
 msgstr "Lisää"
-
-#: ../judoshiai/httpd.c ../judoshiai/write-results.c
-msgid "Name"
-msgstr "Nimi"
 
 #: ../judoshiai/httpd.c
 msgid "Reg.Cat"
@@ -1137,11 +1180,9 @@ msgstr ""
 
 #: ../judoshiai/main.c
 msgid ""
-"No, this the only JudoShiai program. \n"
+"No, this is the only JudoShiai program. \n"
 "Purge erroneous lock file."
 msgstr ""
-"Ei, tämä on ainut JudoShiai-ohjelma. \n"
-"Pura virheellinen lukitus."
 
 #: ../judoshiai/main.c
 msgid ""
@@ -1454,7 +1495,7 @@ msgstr "matolle"
 msgid "delay"
 msgstr "viivytä"
 
-#: ../judoshiai/medal-matches.c ../common/common.c
+#: ../judoshiai/medal-matches.c ../judoshiai/properties.c ../common/common.c
 msgid "Final"
 msgstr "Finaali"
 
@@ -1932,12 +1973,16 @@ msgid "Color..."
 msgstr "Väri..."
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Finnish"
-msgstr "Tulostus suomeksi"
+msgid "Results in Czech"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Swedish"
-msgstr "Tulostus ruotsiksi"
+msgid "Results in Danish"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in German"
+msgstr "Tulokset saksaksi"
 
 #: ../judoshiai/print-texts.c
 msgid "Results in English"
@@ -1952,36 +1997,52 @@ msgid "Results in Estonian"
 msgstr "Tulostus viroksi"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Ukrainian"
-msgstr "Tulostus ukrainaksi"
+msgid "نتایج به فارسی"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Finnish"
+msgstr "Tulostus suomeksi"
+
+#: ../judoshiai/print-texts.c
+msgid "Résultats en français"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Hebrew"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Úrslit á íslensku"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Norwegian"
 msgstr "Tulostus norjaksi"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Icelandic"
-msgstr "Tulostus islanniksi"
+msgid "Resultaten in het Nederlands"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Polish"
 msgstr "Tulostus puolaksi"
 
 #: ../judoshiai/print-texts.c
+msgid "Results in Russian"
+msgstr "Tulokset venäjäksi"
+
+#: ../judoshiai/print-texts.c
 msgid "Results in Slovak"
 msgstr "Tulostus slovakiaksi"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Dutch"
-msgstr "Tulostus hollanniksi"
+msgid "Results in Swedish"
+msgstr "Tulostus ruotsiksi"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in German"
-msgstr "Tulokset saksaksi"
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Russian"
-msgstr "Tulokset venäjäksi"
+msgid "Результати Українською"
+msgstr ""
 
 #: ../judoshiai/print.c ../judoinfo/main.c ../judojudogi/main.c
 #: ../judoproxy/main.c
@@ -2068,6 +2129,30 @@ msgstr "Malline"
 msgid "One Card Per Page"
 msgstr "Yksi kortti sivulle"
 
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Round"
+msgstr "Kierros"
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Repechage"
+msgstr "Keräily"
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Round Robin"
+msgstr "Pooli"
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Semifinal"
+msgstr "Semifinaali"
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Bronze"
+msgstr "Pronssi"
+
+#: ../judoshiai/properties.c
+msgid "Silver"
+msgstr ""
+
 #: ../judoshiai/properties.c
 msgid "Tournament:"
 msgstr "Kilpailu:"
@@ -2109,8 +2194,8 @@ msgid "Use the first places only:"
 msgstr "Käytä vain ensimmäisiä paikkoja"
 
 #: ../judoshiai/properties.c
-msgid "Win in Golden Score gives 1 point"
-msgstr "Voittopiste jatkoajalla aina 1"
+msgid "Win in Golden Score gives 1 point:"
+msgstr ""
 
 #: ../judoshiai/properties.c
 msgid "2017 Rules:"
@@ -2253,6 +2338,10 @@ msgid "German System"
 msgstr "Saksalainen järjestelmä"
 
 #: ../judoshiai/properties.c
+msgid "Icelandic System"
+msgstr ""
+
+#: ../judoshiai/properties.c
 msgid "Tournament properties"
 msgstr "Kilpailun tiedot"
 
@@ -2381,6 +2470,10 @@ msgid "Weight text:"
 msgstr "Painoteksti:"
 
 #: ../judoshiai/set-categories.c
+msgid "Properties:"
+msgstr ""
+
+#: ../judoshiai/set-categories.c
 msgid "Copy"
 msgstr "Kopioi"
 
@@ -2488,10 +2581,6 @@ msgstr "Uusi ikkuna"
 msgid "Category starts"
 msgstr "Sarja alkaa"
 
-#: ../judoinfo/main.c
-msgid "Tatami"
-msgstr "Matto"
-
 #: ../judoinfo/menus.c
 msgid "About JudoInfo"
 msgstr "Tietoja JudoInfosta"
@@ -2539,26 +2628,6 @@ msgstr "Nykyinen versio:"
 #: ../common/auto-update.c
 msgid "Update to new version?"
 msgstr "Päivitä uuteen versioon?"
-
-#: ../common/common.c
-msgid "Round"
-msgstr "Kierros"
-
-#: ../common/common.c
-msgid "Round Robin"
-msgstr "Pooli"
-
-#: ../common/common.c
-msgid "Repechage"
-msgstr "Keräily"
-
-#: ../common/common.c
-msgid "Semifinal"
-msgstr "Semifinaali"
-
-#: ../common/common.c
-msgid "Bronze"
-msgstr "Pronssi"
 
 #: ../common/ip.c
 msgid "Address of the communication node"
@@ -2692,14 +2761,47 @@ msgstr "Lataa uudelleen"
 msgid "About JudoProxy"
 msgstr ""
 
+#: ../judoproxy/menus.c
+msgid "Advertise addresses"
+msgstr ""
+
+#: ../judoproxy/menus.c
+msgid "Show video"
+msgstr ""
+
+#~ msgid "About Judotimer"
+#~ msgstr "Tietoja Judotimerista"
+
+#~ msgid "Results in Icelandic"
+#~ msgstr "Tulostus islanniksi"
+
+#~ msgid "Results in Dutch"
+#~ msgstr "Tulostus hollanniksi"
+
+#~ msgid "Results in Ukrainian"
+#~ msgstr "Tulostus ukrainaksi"
+
+#~ msgid "Master mode"
+#~ msgstr "Isäntä"
+
+#~ msgid "All the categories has been drawn"
+#~ msgstr "Kaikki sarjat arvottu"
+
+#~ msgid "Win in Golden Score gives 1 point"
+#~ msgstr "Voittopiste jatkoajalla aina 1"
+
+#~ msgid ""
+#~ "No, this the only JudoShiai program. \n"
+#~ "Purge erroneous lock file."
+#~ msgstr ""
+#~ "Ei, tämä on ainut JudoShiai-ohjelma. \n"
+#~ "Pura virheellinen lukitus."
+
 #~ msgid "Logout"
 #~ msgstr "Kirjaudu ulos"
 
 #~ msgid "Advertisement"
 #~ msgstr "Mainos"
-
-#~ msgid "About JudoTimer"
-#~ msgstr "Tietoja JudoTimerista"
 
 #~ msgid "Hansokumake to white"
 #~ msgstr "Hansoku-make valkoiselle"
@@ -2832,9 +2934,6 @@ msgstr ""
 
 #~ msgid "Contest area 8"
 #~ msgstr "Matto 8"
-
-#~ msgid "Master mode"
-#~ msgstr "Isäntä"
 
 #~ msgid "----- Men -----"
 #~ msgstr "----- Miehet -----"

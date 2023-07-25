@@ -166,13 +166,13 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     my_ip   = create_menu_item(preferencesmenu, show_my_ip_addresses, 0);
     create_separator(preferencesmenu);
 
-    advertise = gtk_check_menu_item_new_with_label("Advertise addresses");
+    advertise = gtk_check_menu_item_new_with_label(_("Advertise addresses"));
     gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), advertise);
     g_signal_connect(G_OBJECT(advertise), "activate",
 		     G_CALLBACK(toggle_advertise), NULL);
 
 #ifdef VIDEO
-    video = gtk_check_menu_item_new_with_label("Show video");
+    video = gtk_check_menu_item_new_with_label(_("Show video"));
     gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), video);
     g_signal_connect(G_OBJECT(video), "activate",
 		     G_CALLBACK(toggle_video), NULL);
@@ -245,8 +245,8 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(node_ip,      _("Communication node"));
     change_menu_label(my_ip,        _("Own IP addresses"));
 
-    change_menu_label(advertise,    "Advertise addresses");
-    change_menu_label(video,        "Show video");
+    change_menu_label(advertise,    _("Advertise addresses"));
+    change_menu_label(video,        _("Show video"));
 
     change_menu_label(manual,       _("Manual"));
     change_menu_label(about,        _("About"));

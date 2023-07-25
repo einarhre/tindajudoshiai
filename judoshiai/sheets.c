@@ -2723,7 +2723,7 @@ void paint_next_matches(struct paint_data *pd)
 
     for (i = 0; i < number_of_tatamis/*NUM_TATAMIS*/; i++) {
         gdouble verpos = 0.03 + (gdouble)i/(gdouble)(number_of_tatamis);
-        snprintf(buf, sizeof(buf)-1, "Tatami %d", i+1);
+        snprintf(buf, sizeof(buf)-1, "%s %d", _("Tatami"), i+1);
 #ifdef USE_PANGO
 	_x = W(1.4); _y = H(verpos);
 	write_text(pd->c, buf,

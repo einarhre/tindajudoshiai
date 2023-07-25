@@ -185,7 +185,7 @@ void move_medal_matches(GtkWidget *menuitem, gpointer userdata)
             gchar text[32];
             struct category_data *catdata = category_queue[i].next;
 
-            snprintf(text, sizeof(text), "Tatami %d", i);
+            snprintf(text, sizeof(text), "%s %d", _("Tatami"), i);
             progress_show((gdouble)i/(gdouble)NUM_TATAMIS, text);
 
             while (catdata) {

@@ -367,10 +367,10 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
     for (tatami = 0; tatami <= number_of_tatamis; tatami++) {
 	set_left_right(tatami);
 
-        if (i == 0)
+        if (tatami == 0)
             sprintf(buf, "%s  [%d]", _("Unlocated"), matches_left[tatami]);
         else
-            sprintf(buf, "Tatami %d  [%d]", tatami, matches_left[tatami]);
+            sprintf(buf, "%s %d  [%d]", _("Tatami"), tatami, matches_left[tatami]);
 #ifdef USE_PANGO
 	WRITE_TEXT(10 + left, 0, buf, desc);
 #else

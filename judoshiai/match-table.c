@@ -1151,7 +1151,7 @@ create_view_and_model (void)
 
     for (i = 0; i <= NUM_TATAMIS; i++) {
         if (i == 0) snprintf(buf, sizeof(buf), "%s", _("Delayed"));
-        else snprintf(buf, sizeof(buf), "Tatami %d", i);
+        else snprintf(buf, sizeof(buf), "%s %d", _("Tatami"), i);
 
         renderer = custom_cell_renderer_match_new();
         //g_object_set(renderer,  "tatami", i, NULL);

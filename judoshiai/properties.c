@@ -31,6 +31,7 @@
 
 #define NUM_DEFAULT_CATS 6
 #define NUM_TBLS 4
+#define gettext_noop(String) String
 
 enum properties;
 static GtkWidget *get_prop_widget(enum properties num, gboolean label);
@@ -80,14 +81,14 @@ struct color_table {
     gint start;
     gint len;
 } color_tables[] = {
-    {"Categories",   0, 16},
-    {"Round",       16,  8},
-    {"Repechage",   24,  1},	
-    {"Round Robin", 32,  1},
-    {"Semifinal",   33,  1},	
-    {"Bronze",      34,  1},	
-    {"Silver",      35,  1},	
-    {"Final",       36,  1},	
+    {N_("Categories"),   0, 16},
+    {N_("Round"),       16,  8},
+    {N_("Repechage"),   24,  1},
+    {N_("Round Robin"), 32,  1},
+    {N_("Semifinal"),   33,  1},
+    {N_("Bronze"),      34,  1},
+    {N_("Silver"),      35,  1},
+    {N_("Final"),       36,  1},
     {NULL, 0, 0}
 };
 
@@ -199,7 +200,7 @@ static struct property {
 */
     {
         .name = "GoldenScoreWinGives1Point",
-        .label = N_("Win in Golden Score gives 1 point"),
+        .label = N_("Win in Golden Score gives 1 point:"),
         .type = PROP_TYPE_CHECK,
         .table = 3,
     },
@@ -1026,7 +1027,7 @@ void open_properties(GtkWidget *w, gpointer data)
 
 
     // table4: category properties button
-    gtk_grid_attach(GTK_GRID(table2), gtk_label_new("Categories"), 2, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table2), gtk_label_new(_("Categories")), 2, 0, 1, 1);
     tmp = properties_button = gtk_button_new_with_label(_("Properties"));
     gtk_grid_attach(GTK_GRID(table2), tmp, 2, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table2), gtk_label_new(" "), 1, 0, 1, 1);

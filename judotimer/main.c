@@ -965,26 +965,52 @@ static gchar *get_name_by_layout(gchar *first, gchar *last, gchar *club, gchar *
             return g_strconcat(last, ", ", first, ", ", country, NULL);
         return g_strconcat(last, ", ", first, ", ", country, "/", club, NULL);
     case 2:
+        if (club == NULL || club[0] == 0)
+            return g_strconcat(first, " ", last, NULL);
+        return g_strconcat(first, " ", last, ", ", club, NULL);
+    case 3:
+        if (club == NULL || club[0] == 0)
+            return g_strconcat(last, ", ", first, NULL);
+        return g_strconcat(last, ", ", first, ", ", club, NULL);
+    case 4:
+        if (country == NULL || country[0] == 0)
+            return g_strconcat(club, "  ", first, " ", last, NULL);
+        else if (club == NULL || club[0] == 0)
+            return g_strconcat(country, "  ", first, " ", last, NULL);
+        return g_strconcat(country, "/", club, "  ", first, " ", last, NULL);
+    case 5:
         if (country == NULL || country[0] == 0)
             return g_strconcat(club, "  ", last, ", ", first, NULL);
         else if (club == NULL || club[0] == 0)
             return g_strconcat(country, "  ", last, ", ", first, NULL);
         return g_strconcat(country, "/", club, "  ", last, ", ", first, NULL);
-    case 3:
-        return g_strconcat(country, "  ", last, ", ", first, NULL);
-    case 4:
-        return g_strconcat(club, "  ", last, ", ", first, NULL);
-    case 5:
-        return g_strconcat(country, "  ", last, NULL);
     case 6:
-        return g_strconcat(club, "  ", last, NULL);
+        return g_strconcat(country, "  ", first, " ", last, NULL);
     case 7:
-        return g_strconcat(last, ", ", first, NULL);
+        return g_strconcat(country, "  ", last, ", ", first, NULL);
     case 8:
-        return g_strdup(last);
+        return g_strconcat(club, "  ", first, " ", last, NULL);
     case 9:
-        return g_strdup(country);
+        return g_strconcat(club, "  ", last, ", ", first, NULL);
     case 10:
+        return g_strconcat(country, "  ", first, NULL);
+    case 11:
+        return g_strconcat(country, "  ", last, NULL);
+    case 12:
+        return g_strconcat(club, "  ", first, NULL);
+    case 13:
+        return g_strconcat(club, "  ", last, NULL);
+    case 14:
+        return g_strconcat(first, ", ", last, NULL);
+    case 15:
+        return g_strconcat(last, ", ", first, NULL);
+    case 16:
+        return g_strdup(first);
+    case 17:
+        return g_strdup(last);
+    case 18:
+        return g_strdup(country);
+    case 19:
         return g_strdup(club);
     }
 

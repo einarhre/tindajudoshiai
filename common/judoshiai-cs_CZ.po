@@ -65,8 +65,8 @@ msgid "Select font"
 msgstr "Výběr fontu"
 
 #: ../judotimer/menus.c
-msgid "About Judotimer"
-msgstr "Info Judotimerist"
+msgid "About JudoTimer"
+msgstr "Info JudoTimerist"
 
 #: ../judotimer/menus.c
 msgid "Set clocks"
@@ -250,28 +250,64 @@ msgid "Surname, Name, Country/Club"
 msgstr "Jméno, Příjmení, Země/Klub"
 
 #: ../judotimer/menus.c
+msgid "Name Surname, Club"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "Surname, Name, Club"
+msgstr ""
+
+#: ../judotimer/menus.c
+msgid "Country/Club  Name Surname"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Country/Club  Surname, Name"
 msgstr "Zemé/Klub Příjmení,Jméno"
+
+#: ../judotimer/menus.c
+msgid "Country  Name Surname"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "Country  Surname, Name"
 msgstr "Země  Příjmení,Jméno"
 
 #: ../judotimer/menus.c
+msgid "Club  Name Surname"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Club  Surname, Name"
 msgstr "Klub  Příjmení, Jméno"
+
+#: ../judotimer/menus.c
+msgid "Country Name"
+msgstr ""
 
 #: ../judotimer/menus.c
 msgid "Country Surname"
 msgstr "Země Příjmení"
 
 #: ../judotimer/menus.c
+msgid "Club Name"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Club Surname"
 msgstr "Klub Příjmení"
 
 #: ../judotimer/menus.c
+msgid "Name Surname"
+msgstr ""
+
+#: ../judotimer/menus.c
 msgid "Surname, Name"
 msgstr "Příjmení, Jméno"
+
+#: ../judotimer/menus.c ../judoshiai/httpd.c ../judoshiai/write-results.c
+msgid "Name"
+msgstr ""
 
 #: ../judotimer/menus.c ../judoshiai/httpd.c
 msgid "Surname"
@@ -419,6 +455,10 @@ msgstr "Všechny soubory"
 #: ../judotimer/stopwatch.c
 msgid "Start Golden Score?"
 msgstr "Začít zlaté skóre?"
+
+#: ../judotimer/stopwatch.c
+msgid "Auto"
+msgstr ""
 
 #: ../judotimer/stopwatch.c
 msgid "No Limit"
@@ -611,8 +651,15 @@ msgstr "Všechny kategorie byly umístěny na tatami"
 msgid "Unlocated"
 msgstr "Neumístěno"
 
+#: ../judoshiai/category-graph.c ../judoshiai/match-graph.c
+#: ../judoshiai/match-table.c ../judoshiai/matches.c
+#: ../judoshiai/medal-matches.c ../judoshiai/sheets.c ../judoinfo/main.c
+#: ../judojudogi/main.c
+msgid "Tatami"
+msgstr ""
+
 #: ../judoshiai/category-graph.c ../judoshiai/httpd.c ../judoshiai/menus.c
-#: ../judoshiai/set-categories.c
+#: ../judoshiai/properties.c ../judoshiai/set-categories.c
 msgid "Categories"
 msgstr "Kategorie"
 
@@ -941,8 +988,8 @@ msgid "Select first a competitor and then a number."
 msgstr "Vyber nejdřív závodníka a potom číslo."
 
 #: ../judoshiai/drawing.c
-msgid "All the categories has been drawn"
-msgstr "Všechny kategorie byly rozlosovány"
+msgid "All the categories have been drawn"
+msgstr ""
 
 #: ../judoshiai/ftp.c
 msgid "Server URL"
@@ -1032,10 +1079,6 @@ msgstr "Nenalezen závodník"
 #: ../judoshiai/httpd.c
 msgid "Add"
 msgstr "Vlož"
-
-#: ../judoshiai/httpd.c ../judoshiai/write-results.c
-msgid "Name"
-msgstr ""
 
 #: ../judoshiai/httpd.c
 msgid "Reg.Cat"
@@ -1135,7 +1178,7 @@ msgstr "Ano, další JudoShiai už běží"
 
 #: ../judoshiai/main.c
 msgid ""
-"No, this the only JudoShiai program. \n"
+"No, this is the only JudoShiai program. \n"
 "Purge erroneous lock file."
 msgstr ""
 
@@ -1449,7 +1492,7 @@ msgstr "na tatami"
 msgid "delay"
 msgstr "přestávka"
 
-#: ../judoshiai/medal-matches.c ../common/common.c
+#: ../judoshiai/medal-matches.c ../judoshiai/properties.c ../common/common.c
 msgid "Final"
 msgstr "Finále"
 
@@ -1925,12 +1968,16 @@ msgid "Color..."
 msgstr ""
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Finnish"
-msgstr "Výsledky Finsky"
+msgid "Results in Czech"
+msgstr "Výsledky Česky"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Swedish"
-msgstr "Výsledky Švédsky"
+msgid "Results in Danish"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in German"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in English"
@@ -1945,19 +1992,39 @@ msgid "Results in Estonian"
 msgstr "Výsledky Estonsky"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Ukrainian"
-msgstr "Výsledky ukrajinsky"
+msgid "نتایج به فارسی"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Finnish"
+msgstr "Výsledky Finsky"
+
+#: ../judoshiai/print-texts.c
+msgid "Résultats en français"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Hebrew"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Úrslit á íslensku"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Norwegian"
 msgstr "Výsledky Norsky"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Icelandic"
-msgstr "Výsledky v islandštině"
+msgid "Resultaten in het Nederlands"
+msgstr ""
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Polish"
+msgstr ""
+
+#: ../judoshiai/print-texts.c
+msgid "Results in Russian"
 msgstr ""
 
 #: ../judoshiai/print-texts.c
@@ -1965,15 +2032,11 @@ msgid "Results in Slovak"
 msgstr ""
 
 #: ../judoshiai/print-texts.c
-msgid "Results in Dutch"
-msgstr ""
+msgid "Results in Swedish"
+msgstr "Výsledky Švédsky"
 
 #: ../judoshiai/print-texts.c
-msgid "Results in German"
-msgstr ""
-
-#: ../judoshiai/print-texts.c
-msgid "Results in Russian"
+msgid "Результати Українською"
 msgstr ""
 
 #: ../judoshiai/print.c ../judoinfo/main.c ../judojudogi/main.c
@@ -2061,6 +2124,30 @@ msgstr "Šablona"
 msgid "One Card Per Page"
 msgstr "Jednu kartu na stránku"
 
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Round"
+msgstr ""
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Repechage"
+msgstr ""
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Round Robin"
+msgstr ""
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Semifinal"
+msgstr "Semifinále"
+
+#: ../judoshiai/properties.c ../common/common.c
+msgid "Bronze"
+msgstr "Bronzový"
+
+#: ../judoshiai/properties.c
+msgid "Silver"
+msgstr ""
+
 #: ../judoshiai/properties.c
 msgid "Tournament:"
 msgstr "Turnaj:"
@@ -2100,7 +2187,7 @@ msgid "Use the first places only:"
 msgstr ""
 
 #: ../judoshiai/properties.c
-msgid "Win in Golden Score gives 1 point"
+msgid "Win in Golden Score gives 1 point:"
 msgstr ""
 
 #: ../judoshiai/properties.c
@@ -2236,6 +2323,10 @@ msgid "German System"
 msgstr ""
 
 #: ../judoshiai/properties.c
+msgid "Icelandic System"
+msgstr ""
+
+#: ../judoshiai/properties.c
 msgid "Tournament properties"
 msgstr "Nastavení turnaje"
 
@@ -2364,6 +2455,10 @@ msgid "Weight text:"
 msgstr "Váha:"
 
 #: ../judoshiai/set-categories.c
+msgid "Properties:"
+msgstr ""
+
+#: ../judoshiai/set-categories.c
 msgid "Copy"
 msgstr ""
 
@@ -2471,10 +2566,6 @@ msgstr ""
 msgid "Category starts"
 msgstr "Start kategorie"
 
-#: ../judoinfo/main.c
-msgid "Tatami"
-msgstr ""
-
 #: ../judoinfo/menus.c
 msgid "About JudoInfo"
 msgstr "O JudoInfo"
@@ -2522,26 +2613,6 @@ msgstr ""
 #: ../common/auto-update.c
 msgid "Update to new version?"
 msgstr ""
-
-#: ../common/common.c
-msgid "Round"
-msgstr ""
-
-#: ../common/common.c
-msgid "Round Robin"
-msgstr ""
-
-#: ../common/common.c
-msgid "Repechage"
-msgstr ""
-
-#: ../common/common.c
-msgid "Semifinal"
-msgstr "Semifinále"
-
-#: ../common/common.c
-msgid "Bronze"
-msgstr "Bronzový"
 
 #: ../common/ip.c
 msgid "Address of the communication node"
@@ -2675,14 +2746,34 @@ msgstr ""
 msgid "About JudoProxy"
 msgstr ""
 
+#: ../judoproxy/menus.c
+msgid "Advertise addresses"
+msgstr ""
+
+#: ../judoproxy/menus.c
+msgid "Show video"
+msgstr ""
+
+#~ msgid "About Judotimer"
+#~ msgstr "Info Judotimerist"
+
+#~ msgid "Results in Icelandic"
+#~ msgstr "Výsledky v islandštině"
+
+#~ msgid "Results in Ukrainian"
+#~ msgstr "Výsledky ukrajinsky"
+
+#~ msgid "Master mode"
+#~ msgstr "Master mód"
+
+#~ msgid "All the categories has been drawn"
+#~ msgstr "Všechny kategorie byly rozlosovány"
+
 #~ msgid "Logout"
 #~ msgstr "Odhlásit"
 
 #~ msgid "Advertisement"
 #~ msgstr "Reklama"
-
-#~ msgid "About JudoTimer"
-#~ msgstr "Info JudoTimerist"
 
 #~ msgid "Hansokumake to white"
 #~ msgstr "Hansoku-make červený"
@@ -2771,9 +2862,6 @@ msgstr ""
 #~ msgid "Contest area 8"
 #~ msgstr "Tatami 8"
 
-#~ msgid "Master mode"
-#~ msgstr "Master mód"
-
 #~ msgid "Year 2009 rules"
 #~ msgstr "pravidla 2009"
 
@@ -2788,9 +2876,6 @@ msgstr ""
 
 #~ msgid "Best of Three"
 #~ msgstr "Nejlepší tři"
-
-#~ msgid "Results in Czech"
-#~ msgstr "Výsledky Česky"
 
 #~ msgid "No, this the only JudoShiai program. \n"
 #~ msgstr "Ne, toto je jediný JudoShiai \n"

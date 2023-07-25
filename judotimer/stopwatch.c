@@ -534,7 +534,7 @@ gboolean ask_for_golden_score(void)
                                           NULL,
                                           GTK_DIALOG_MODAL,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                          "Auto",           Q_GS_AUTO,
+                                          _("Auto"),           Q_GS_AUTO,
                                           _("No Limit"),    Q_GS_NO_LIMIT,
                                           "1:00 min",       Q_GS_1_00,
                                           "1:30 min",       Q_GS_1_30,

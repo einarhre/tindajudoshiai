@@ -521,7 +521,7 @@ int main( int   argc,
     row++;
 #endif
 
-    tmp = w_ok = gtk_button_new_with_label(_("OK"));
+    tmp = w_ok = gtk_button_new_with_label("OK");
     gtk_grid_attach(GTK_GRID(table), tmp, c2, row, 1, 1);
     g_signal_connect(G_OBJECT(tmp),
                      "clicked", G_CALLBACK(on_ok), NULL);
@@ -700,7 +700,7 @@ void change_language_1(void)
     gtk_label_set_label(GTK_LABEL(w_name), _("Name:"));
     gtk_label_set_label(GTK_LABEL(w_weight), _("Weight:"));
     gtk_label_set_label(GTK_LABEL(w_control), _("Control:"));
-    gtk_button_set_label(GTK_BUTTON(w_ok), _("OK"));
+    gtk_button_set_label(GTK_BUTTON(w_ok), "OK");
     gtk_label_set_label(GTK_LABEL(w_confirm), _("Confirm:"));
 }
 

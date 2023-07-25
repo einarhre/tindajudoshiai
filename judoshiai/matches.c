@@ -3518,7 +3518,7 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->shido), score&7);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(s->gs), (legend & 0x100) != 0); // bit 8 is gs
     gtk_combo_box_set_active(GTK_COMBO_BOX(s->legend), legend & 0xff);             // bits 0-7 are legend
-    
+
     gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        table, FALSE, FALSE, 0);
     gtk_widget_show_all(dialog);
@@ -4028,7 +4028,7 @@ void set_match_pages(GtkWidget *nb)
         gtk_scrolled_window_add_with_viewport(
             GTK_SCROLLED_WINDOW(scrolled_window), view);
 #endif
-        sprintf(buffer, "Tatami %d", i+1);
+        sprintf(buffer, "%s %d", _("Tatami"), i+1);
         label = gtk_label_new (buffer);
 
         next_match[i][0] = match1 = gtk_label_new(_("Match:"));

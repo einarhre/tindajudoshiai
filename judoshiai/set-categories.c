@@ -1403,7 +1403,7 @@ void set_categories_dialog(GtkWidget *w, gpointer arg)
         }
 
 	/* Options */
-        gtk_grid_attach(GTK_GRID(tables[i]), gtk_label_new(_("Properties")), 8, 2, 1, 1);
+        gtk_grid_attach(GTK_GRID(tables[i]), gtk_label_new(_("Properties:")), 8, 2, 1, 1);
 	for (j = 0; j < NUM_CAT_OPTS; j++) {
 	    gchar buf[8];
 	    snprintf(buf, sizeof(buf), "%d", j+1);
@@ -1774,7 +1774,7 @@ void edit_category_dialog(gint ix, gboolean is_new_team)
     ATTACH_LABEL(_("Pin times (IWYK):"), 0, 2);
     ATTACH_LABEL(_("Gender:"),           0, 5);
     ATTACH_LABEL(_("Layout:"),           0, 6);
-    ATTACH_LABEL_W(_("Properties"),      2, 5, 2);
+    ATTACH_LABEL_W(_("Properties:"),      2, 5, 2);
 
     /* age */
     ATTACH_ENTRY2(age, 4, 4, 4, 0);

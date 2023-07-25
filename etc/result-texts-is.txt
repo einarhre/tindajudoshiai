@@ -1,5 +1,5 @@
 ### First line is the menu text
-Results in Icelandic
+Úrslit á íslensku
 ### 1: Competitors
 Keppendur
 ### 2: Competitors A (for double and quadruple pools)
@@ -49,17 +49,17 @@ Sæti
 ### 24: Previous winner
 Fyrri sigurvegari
 ### 25: Next (competitors who have the next fight)
-Næsta
+Næst
 ### 26: Weight:
-Þyngd
+Þyngd:
 ### 27: PRELIMINARY SCHEDULE
-Bráðabirgða áætlun
+BRÁÐABIRGÐA DAGSKRÁ
 ### 28: weighin-notes.pdf (file name)
-vigtunnar-listi
+vigtunarlisti.pdf
 ### 29: schedule.pdf (file name)
-áætlun
+dagskrá.pdf
 ### 30: categories.pdf (file name)
-flokkar
+flokkar.pdf
 ### 31: Category
 Þyngdarflokkur
 ### 32: Next fights (for a list of fights)
@@ -75,25 +75,25 @@ Samtals
 ### 37: Country
 Land
 ### 38: Not drawn
-Not drawn
+Ekki dreginn
 ### 39: Finished
-Finished
+Klárað
 ### 40: Match ongoing
-Match ongoing
+Viðureign í gangi
 ### 41: Started (category has started)
-Started
+Hafist
 ### 42: Drawing ready
-Drawing ready
+Dráttur tilbúinn
 ### 43: Coach
-Coach
+Þjálfari
 ### 44: Surname
-Surname
+Kenninafn
 ### 45: Status
-Status
+Staða
 ### 46: Display
-Display
+Skjámynd
 ### 47: "Match after n matches" divided in two parts
 ###     Match after ("Match after" n matches)
-Match after
+Viðureign eftir
 ### 48: matches (Match after n "matches")
-matches
+viðureignir

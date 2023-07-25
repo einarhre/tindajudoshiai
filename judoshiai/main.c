@@ -547,7 +547,7 @@ ok:
 					GTK_WINDOW(main_window),
                                         GTK_DIALOG_MODAL,
                                         _("Yes, another JudoShiai program is running"), 1000,
-                                        _("No, this the only JudoShiai program. \nPurge erroneous lock file."), 1001,
+                                        _("No, this is the only JudoShiai program. \nPurge erroneous lock file."), 1001,
                                         NULL);
         gtk_widget_show_all(dialog);
         gint response = gtk_dialog_run (GTK_DIALOG (dialog));
