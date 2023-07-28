@@ -103,6 +103,8 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
 {
     gchar *newcat = NULL;
     gchar *lastname = NULL;
+    gchar *firstname = NULL;
+        
     struct judoka j;
 
     if (!valid_data(TXT_LAST, tokens, num_cols, d))
@@ -120,10 +122,37 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
     j.comment = "";
     j.coachid = "";
 
-    lastname = g_utf8_strup(tokens[d->columns[TXT_LAST] - 1], -1);
-    j.last = lastname;
+//    lastname = g_utf8_strup(tokens[d->columns[TXT_LAST] - 1], -1);
+    lastname = tokens[d->columns[TXT_LAST] - 1];
+//    j.last = lastname;
+    
+    
+    
+    if (draw_system == DRAW_ICELANDIC) {
+	gchar *letter = g_utf8_strup(lastname, 1);
+	lastname = g_strdup_printf("%s%s", letter, g_utf8_next_char(lastname));
+	g_free((void *)letter);
+//	j.last = lastname;
+//	lastname = g_utf8_strup(lastname, -1);
 
-    j.first = tokens[d->columns[TXT_FIRST] - 1];
+
+    }
+    else {
+//	lastname = g_utf8_strup(tokens[d->columns[TXT_LAST] - 1], -1);
+	lastname = g_utf8_strup(lastname, -1);
+//	j.last = lastname;
+    }
+    
+    j.last = lastname;
+    
+    firstname = tokens[d->columns[TXT_FIRST] - 1];
+    
+    gchar *letter2 = g_utf8_strup(firstname, 1);
+    firstname = g_strdup_printf("%s%s", letter2, g_utf8_next_char(firstname));
+    g_free((void *)letter2);
+
+    j.first = firstname;
+//    j.first = tokens[d->columns[TXT_FIRST] - 1];
 
     /* year of birth. 0 == unknown */
     if (valid_data(TXT_BIRTH, tokens, num_cols, d))
@@ -206,6 +235,7 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
         shiai_log(0, 0, "Competitor exists: %s %s, %s %s", j.last, j.first, j.country, j.club);
 	g_free((gpointer)j.comment);
         g_free(lastname);
+	g_free(firstname);        
         g_free(newcat);
         return FALSE;
     }
@@ -218,6 +248,7 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
         shiai_log(0, 0, "Syntax error: %s %s, %s %s", j.last, j.first, j.country, j.club);
 	g_free((gpointer)j.comment);
         g_free(lastname);
+        g_free(firstname);
         g_free(newcat);
         return FALSE;
     }
@@ -226,6 +257,7 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
 
     g_free((gpointer)j.comment);
     g_free(lastname);
+    g_free(firstname);
     g_free(newcat);
     return TRUE;
 }

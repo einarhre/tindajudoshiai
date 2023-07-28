@@ -348,12 +348,23 @@ static void judoka_edited_callback(GtkWidget *widget,
         const gchar *firstname = edited.first;
         gchar *letter = g_utf8_strup(firstname, 1);
 
-        edited.first = g_strdup_printf("%s%s", letter,
-                                       g_utf8_next_char(firstname));
+        edited.first = g_strdup_printf("%s%s", letter, g_utf8_next_char(firstname));
         g_free((void *)firstname);
         g_free((void *)letter);
+        
+        if (draw_system == DRAW_ICELANDIC) {
+	    
+	    gchar *letter2 = g_utf8_strup(lastname, 1);
 
-        edited.last = g_utf8_strup(lastname, -1);
+	    edited.last = g_strdup_printf("%s%s", letter2, g_utf8_next_char(lastname));
+	    
+	    g_free((void *)letter2);
+
+
+	}
+	else {
+	    edited.last = g_utf8_strup(lastname, -1);
+	   }
         g_free((void *)lastname);
 
         edited.index = comp_index_get_free();//current_index++;
