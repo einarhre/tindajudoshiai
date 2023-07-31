@@ -1,5 +1,8 @@
 HOW TO MAKE A BUILD
 
+This is a version of the Judoshai software (https://sourceforge.net/projects/judoshiai/) customized with Icelandic translations and name conventions for a local icelandic judo club, Júdódeild Tindastóls.
+
+----------------------------------------------------------------------------------
 Linux and Windows are the supported operating systems.
 
 Development work is done in Linux environment. For Windows users it is recommended
