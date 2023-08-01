@@ -1941,7 +1941,7 @@ msgstr "Fjarlægja drátt"
 
 #: ../judoshiai/popup-menu.c
 msgid "Edit Drawing"
-msgstr "Breyta drátt"
+msgstr "Breyta drætti"
 
 #: ../judoshiai/popup-menu.c
 msgid "Copy Competitors"
