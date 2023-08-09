@@ -2711,6 +2711,9 @@ void set_competitors_col_titles(void)
     set_col_title(COL_VISIBLE_LAST_NAME, _("Last Name"));
     set_col_title(COL_VISIBLE_FIRST_NAME, _("First Name"));
     set_col_title(COL_VISIBLE_BIRTHYEAR, _("Year of Birth"));
+    set_col_title(COL_VISIBLE_COMMENT1, _("Comment"));
+    set_col_title(COL_VISIBLE_COMMENT2, _("Comment"));
+    set_col_title(COL_VISIBLE_COMMENT3, _("Comment"));
     set_col_title(COL_VISIBLE_BELT, _("Grade"));
     set_col_title(COL_VISIBLE_CLUB, _("Club"));
     set_col_title(COL_VISIBLE_COUNTRY, _("Country"));

@@ -127,7 +127,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     group = gtk_accel_group_new ();
     menubar = gtk_menu_bar_new ();
 
-    tournament_menu_item     = gtk_menu_item_new_with_label (_("Tournament"));
+    tournament_menu_item  = gtk_menu_item_new_with_label (_("Tournament"));
     competitors_menu_item = gtk_menu_item_new_with_label (_("Competitors"));
     categories_menu_item  = gtk_menu_item_new_with_label (_("Categories"));
     drawing_menu_item     = gtk_menu_item_new_with_label (_("Drawing"));
