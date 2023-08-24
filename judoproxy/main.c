@@ -22,10 +22,10 @@
 #define  __USE_W32_SOCKETS
 //#define Win32_Winsock
 
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 #define in_addr_t uint32_t
 #else /* UNIX */
@@ -1005,7 +1005,7 @@ gpointer proxy_ssdp_thread(gpointer args)
             perror("setsockopt (SO_REUSEADDR)");
         }
 
-#if 1 // SO_BINDTODEVICE requires root privileges
+#ifndef WIN32 // SO_BINDTODEVICE requires root privileges
         struct ifreq ifr;
         memset(&ifr, 0, sizeof(ifr));
         snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), "%s", iface[i].name);
@@ -1035,7 +1035,7 @@ gpointer proxy_ssdp_thread(gpointer args)
             continue;
         }
 
-#if 1 // SO_BINDTODEVICE requires root privileges
+#ifndef WIN32 // SO_BINDTODEVICE requires root privileges
         memset(&ifr, 0, sizeof(ifr));
         snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), "%s", iface[i].name);
         if (setsockopt(iface[i].fdout, SOL_SOCKET, SO_BINDTODEVICE, (void *)&ifr, sizeof(ifr)) < 0) {

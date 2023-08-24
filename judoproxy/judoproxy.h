@@ -20,8 +20,6 @@
 #ifndef _JUDOJUDOGI_H_
 #define _JUDOJUDOGI_H_
 
-#include <netinet/in.h>
-
 #include "comm.h"
 
 #ifdef ENABLE_NLS

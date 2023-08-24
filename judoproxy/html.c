@@ -22,10 +22,10 @@
 #define  __USE_W32_SOCKETS
 //#define Win32_Winsock
 
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <initguid.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 #define in_addr_t uint32_t
 #else /* UNIX */
@@ -267,9 +267,9 @@ GtkWidget *create_html_page(void)
 
 static gint write_ix = 0;
 
-static uint write_cb(char *in, size_t size, size_t nmemb, char *out)
+static guint write_cb(char *in, size_t size, size_t nmemb, char *out)
 {
-    uint r = size * nmemb;
+    guint r = size * nmemb;
 
     if (sizeof(docbuf) - write_ix < r + 1)
 	return 0;
