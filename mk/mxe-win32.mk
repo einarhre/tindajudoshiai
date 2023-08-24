@@ -1,17 +1,17 @@
-MXEDIR=/home/$(USER)/mxe/usr
+MXEDIR=$(HOME)/src/mxe/usr
 MXE_CPU=i686
 MXE_DYN=shared
 WIN32_DIR=$(MXEDIR)
-JS_BUILD_DIR=/home/$(USER)/js-build
-WIN32_BASE=$(HOME)/Dropbox/judoshiai-dev/win32
-MINGWDIR=/home/$(USER)/mingw32
+JS_BUILD_DIR=$(HOME)/src/tindajudoshiai/tindajudoshiai-build
+WIN32_BASE=$(HOME)/src/tindajudoshiai/tindajudoshiai-dev/win32
+#MINGWDIR=/home/$(USER)/mingw32
 TGT=WIN32OS
 TOOL=MXE
 TGTEXT=32
 SUFF=.exe
 ZIP=.zip
 RESHACKER = wine "C:\\bin\\ResHacker.exe"
-INNOSETUP = wine "$(WIN32_BASE)/Inno Setup 5/ISCC.exe"
+INNOSETUP=wine "$(WIN32_BASE)/Innosetup_6.0.5/app/ISCC.exe"
 OBJDIR=obj-win32
 RELEASEDIR=$(JS_BUILD_DIR)/release-win32
 WARNINGS += -Wjump-misses-init
@@ -36,14 +36,12 @@ CFLAGS = $(WARNINGS) -g \
          -I$(DEVELDIR)/include/gdk-pixbuf-2.0 \
          -I$(DEVELDIR)/include/librsvg-2.0 \
          -I$(DEVELDIR)/include/harfbuzz \
-         -I$(MINGWDIR)/include \
          -I../common -mms-bitfields \
          -Wno-deprecated-declarations
 
 LIBS = -lusp10 -lws2_32 -mwindows \
-	$(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0) \
-        $(shell $(DEVELDIR)/bin/curl-config --libs) -lssh2 \
-        -L$(MINGWDIR)/lib
+	$(shell $(PKGCONFIGPATH) $(PKGCONFIG) \
+	  --libs gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0 libwebsockets) \
+    $(shell $(DEVELDIR)/bin/curl-config --libs) -lssh2
 # To add console out:
 # -mconsole
-

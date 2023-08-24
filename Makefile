@@ -19,29 +19,29 @@ ifeq ($(TOOL),MXE)
     DLLS = libao-4.dll libatk-1.0-0.dll libbz2.dll
     DLLS += libcairo-2.dll libcairo-gobject-2.dll libcroco-0.6-3.dll
     DLLS += libcurl-4.dll libepoxy-0.dll libexpat-1.dll
-    DLLS += libffi-7.dll libfontconfig-1.dll libfreetype-6.dll
+    DLLS += libffi-8.dll libfontconfig-1.dll libfreetype-6.dll
     DLLS += libgcrypt-20.dll libgdk-3-0.dll
     DLLS += libgdk_pixbuf-2.0-0.dll libgio-2.0-0.dll libglib-2.0-0.dll
-    DLLS += libgmodule-2.0-0.dll 
+    DLLS += libgmodule-2.0-0.dll
     DLLS += libgobject-2.0-0.dll libgthread-2.0-0.dll
     DLLS += libgtk-3-0.dll libharfbuzz-0.dll
     DLLS += libiconv-2.dll libidn2-0.dll libintl-8.dll
     DLLS += libjpeg-9.dll liblzma-5.dll libmpg123-0.dll
     DLLS += libpango-1.0-0.dll libpangocairo-1.0-0.dll
-    DLLS += libpangoft2-1.0-0.dll libpangowin32-1.0-0.dll libpcre-1.dll
+    DLLS += libpangowin32-1.0-0.dll libpcre-1.dll
     DLLS += libpixman-1-0.dll libpng16-16.dll librsvg-2-2.dll
-    DLLS += libssh2-1.dll libtiff-5.dll libunistring-2.dll
+    DLLS += libssh2-1.dll libtiff-6.dll libunistring-5.dll
     DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll libwebp-7.dll
     DLLS += libgpg-error-0.dll libgnutls-30.dll libgmp-10.dll
     DLLS += libhogweed-6.dll libnettle-8.dll libuv-1.dll
-    DLLS += libfribidi-0.dll libtasn1-6.dll
+    DLLS += libfribidi-0.dll libtasn1-6.dll libwebsockets.dll
 
     ifeq ($(TARGETOS),WIN32)
-        DLLS += libgcc_s_sjlj-1.dll
+        DLLS += libssl-3.dll libcrypto-3.dll libgcc_s_sjlj-1.dll
         DLLS += gspawn-win32-helper-console.exe
         DLLS += gspawn-win32-helper.exe
     else
-        DLLS += libgcc_s_seh-1.dll
+        DLLS += libssl-3-x64.dll libcrypto-3-x64.dll libgcc_s_seh-1.dll
         DLLS += gspawn-win64-helper-console.exe
         DLLS += gspawn-win64-helper.exe
     endif
@@ -144,8 +144,7 @@ ifeq ($(TGT),WIN32OS)
   ifeq ($(TOOL),MXE)
 	#cp $(DLLS) $(RELDIR)/bin/
 	cp $(foreach dll,$(DLLS),$(DEVELDIR)/bin/$(dll)) $(RELDIR)/bin/
-	cp $(JS_BUILD_DIR)/judoshiai/$(OBJDIR)/wsbuild/bin/libwebsockets.dll $(RELDIR)/bin/
-	cp $(MINGWDIR)/bin/libmicrohttpd-12.dll $(RELDIR)/bin/
+	cp $(JS_BUILD_DIR)/judoshiai/$(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd-12.dll $(RELDIR)/bin/
   else # Not MXE, winxp or mingw
     ifeq ($(TARGETOS),WIN64) # mingw64
 	cat mk/mingw-win64-dll.txt | while read LINE; do cp $$LINE $(RELDIR)/bin/; done
@@ -161,15 +160,15 @@ ifeq ($(TGT),WIN32OS)
 	cp $(RSVGDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(CURLDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(SSH2DIR)/bin/*.dll $(RELDIR)/bin/
-        ifeq ($(JUDOPROXY),YES)
+          ifeq ($(JUDOPROXY),YES)
 	  cp $(WEBKITDIR)/bin/*.dll $(RELDIR)/bin/
 	  cp $(SOAPDIR)/bin/*.dll $(RELDIR)/bin/
+          endif # judoproxy
         endif # MINGW
-      endif # WIN32
 	cp -r $(RUNDIR)/lib/gtk-$(GTKVER).0 $(RELDIR)/lib/
+      endif # WIN32
     endif # WIN64
   endif # MXE
-endif # WIN32OS
 
 	@echo "---------------------------"
 	@echo "Copy share files"
@@ -200,7 +199,7 @@ endif # WIN32OS
 	echo '[Settings]' >$(RELDIR)/etc/gtk-3.0/settings.ini
 	echo '#gtk-theme-name=Adwaita' >>$(RELDIR)/etc/gtk-3.0/settings.ini
 	echo '#gtk-theme-name=win32' >>$(RELDIR)/etc/gtk-3.0/settings.ini
-endif # WIN32
+endif # WIN32OS
 	@echo "---------------------------"
 	@echo "Copy documents"
 	@echo "---------------------------"

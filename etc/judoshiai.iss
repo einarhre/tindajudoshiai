@@ -20,6 +20,7 @@ ARCHMODE
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: "icelandic"; MessagesFile: "compiler:Languages\Icelandic.isl"
 Name: "finnish"; MessagesFile: "compiler:Languages\Finnish.isl"
 ;Name: "swedish"; MessagesFile: "compiler:Languages\Swedish.isl"
 ;Name: "estonian"; MessagesFile: "compiler:Languages\Estonian.isl"
@@ -27,6 +28,7 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [Messages]
 english.BeveledLabel=English
+icelandic.BeveledLabel=Íslenska
 finnish.BeveledLabel=Suomi
 ;swedish.BeveledLabel=Svenska
 ;estonian.BeveledLabel=Eesti
