@@ -239,7 +239,7 @@ msgstr "Skrá fyrir sérsniðið útlit"
 
 #: ../judotimer/menus.c
 msgid "Name format"
-msgstr "Nafnasnið"
+msgstr "Nafnasnið keppenda"
 
 #: ../judotimer/menus.c ../judoshiai/menus.c
 msgid "Name Surname, Country/Club"
@@ -1622,7 +1622,7 @@ msgstr "Sannreyna gagnagrunn"
 
 #: ../judoshiai/menus.c
 msgid "Load Custom Systems"
-msgstr "Hlaða inn sérsniðnu kerfi"
+msgstr "Hlaða inn sérsniðin kerfi"
 
 #: ../judoshiai/menus.c
 msgid "SQL Dialog"
@@ -1674,7 +1674,7 @@ msgstr "Endurheimta fjarlægða"
 
 #: ../judoshiai/menus.c
 msgid "Delete Removed"
-msgstr "Eyða fjarlægðum"
+msgstr "Eyða fjarlægða"
 
 #: ../judoshiai/menus.c
 msgid "Bar Code Search"
@@ -1829,7 +1829,7 @@ msgstr "Gráða sjáanleg"
 
 #: ../judoshiai/menus.c
 msgid "Name Format"
-msgstr "Nafnasnið"
+msgstr "Nafnasnið keppenda"
 
 #: ../judoshiai/menus.c
 msgid "Surname Name, Country/Club"
