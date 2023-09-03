@@ -1,0 +1,10 @@
+Júdódeild Ármanns=ÁRMANN>Reykjavík
+Júdódeild Grindavíkur=JG>Suðurnes
+Júdódeild ÍR=ÍR>Reykjavík
+Júdódeild KA=KA>Norðurland
+Júdódeild Selfoss=SELFOSS>Suðurland
+Júdódeild Tindastóls=TINDASTÓLL>Norðurland
+Júdódeild Þróttar Vogum=ÞRÓTTUR>Suðurnes
+Júdófélag Reykjanesbæjar=NJARÐVÍK>Suðurnes
+Júdófélag Reykjavíkur=JR>Reykjavík
+Júdófélagið Pardus=PARDUS>Norðurland
