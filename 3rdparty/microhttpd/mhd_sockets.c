@@ -17,18 +17,12 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
-
 /**
  * @file microhttpd/mhd_sockets.c
  * @brief  Implementation for sockets functions
  * @author Karlson2k (Evgeny Grin)
  */
-
 #include "mhd_sockets.h"
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif /* HAVE_UNISTD_H */
-#include <fcntl.h>
 
 #ifdef MHD_WINSOCK_SOCKETS
 
@@ -37,10 +31,11 @@
  * @param err the WinSock error code.
  * @return pointer to string description of specified WinSock error.
  */
-const char* MHD_W32_strerror_winsock_(int err)
+const char *
+MHD_W32_strerror_winsock_ (int err)
 {
   switch (err)
-    {
+  {
   case 0:
     return "No error";
   case WSA_INVALID_HANDLE:
@@ -233,7 +228,7 @@ const char* MHD_W32_strerror_winsock_(int err)
     return "Invalid QoS shaping rate object";
   case WSA_QOS_RESERVED_PETYPE:
     return "Reserved policy QoS element type";
-    }
+  }
   return "Unknown winsock error";
 }
 
@@ -246,116 +241,128 @@ const char* MHD_W32_strerror_winsock_(int err)
  * @return non-zero if succeeded, zero otherwise
  */
 int
-MHD_W32_socket_pair_(SOCKET sockets_pair[2], int non_blk)
+MHD_W32_socket_pair_ (SOCKET sockets_pair[2], int non_blk)
 {
   int i;
 
   if (! sockets_pair)
-    {
-      WSASetLastError (WSAEFAULT);
-      return 0;
-    }
+  {
+    WSASetLastError (WSAEFAULT);
+    return 0;
+  }
 
 #define PAIRMAXTRYIES 800
   for (i = 0; i < PAIRMAXTRYIES; i++)
+  {
+    struct sockaddr_in listen_addr;
+    SOCKET listen_s;
+    static const int c_addinlen = sizeof(struct sockaddr_in);   /* help compiler to optimize */
+    int addr_len = c_addinlen;
+    unsigned long on_val = 1;
+    unsigned long off_val = 0;
+
+    listen_s = socket (AF_INET,
+                       SOCK_STREAM,
+                       IPPROTO_TCP);
+    if (INVALID_SOCKET == listen_s)
+      break;   /* can't create even single socket */
+
+    listen_addr.sin_family = AF_INET;
+    listen_addr.sin_port = 0;   /* same as htons(0) */
+    listen_addr.sin_addr.s_addr = htonl (INADDR_LOOPBACK);
+    if ( ((0 == bind (listen_s,
+                      (struct sockaddr *) &listen_addr,
+                      c_addinlen)) &&
+          (0 == listen (listen_s,
+                        1) ) &&
+          (0 == getsockname (listen_s,
+                             (struct sockaddr *) &listen_addr,
+                             &addr_len))) )
     {
-      struct sockaddr_in listen_addr;
-      SOCKET listen_s;
-      static const int c_addinlen = sizeof(struct sockaddr_in); /* help compiler to optimize */
-      int addr_len = c_addinlen;
-      unsigned long on_val = 1;
-      unsigned long off_val = 0;
+      SOCKET client_s = socket (AF_INET,
+                                SOCK_STREAM,
+                                IPPROTO_TCP);
+      struct sockaddr_in accepted_from_addr;
+      struct sockaddr_in client_addr;
+      SOCKET server_s;
 
-      listen_s = socket (AF_INET,
-                         SOCK_STREAM,
-                         IPPROTO_TCP);
-      if (INVALID_SOCKET == listen_s)
-        break; /* can't create even single socket */
+      if (INVALID_SOCKET == client_s)
+      {
+        /* try again */
+        closesocket (listen_s);
+        continue;
+      }
 
-      listen_addr.sin_family = AF_INET;
-      listen_addr.sin_port = 0; /* same as htons(0) */
-      listen_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-      if ( (0 == bind (listen_s,
-                       (struct sockaddr*) &listen_addr,
-                       c_addinlen) &&
-            (0 == listen (listen_s,
-                          1) ) &&
-            (0 == getsockname (listen_s,
-                               (struct sockaddr*) &listen_addr,
-                               &addr_len))) )
-        {
-          SOCKET client_s = socket(AF_INET,
-                                   SOCK_STREAM,
-                                   IPPROTO_TCP);
-          struct sockaddr_in accepted_from_addr;
-          struct sockaddr_in client_addr;
-          SOCKET server_s;
+      if ( (0 != ioctlsocket (client_s,
+                              (int) FIONBIO,
+                              &on_val)) ||
+           ( (0 != connect (client_s,
+                            (struct sockaddr *) &listen_addr,
+                            c_addinlen)) &&
+             (WSAGetLastError () != WSAEWOULDBLOCK)) )
+      {
+        /* try again */
+        closesocket (listen_s);
+        closesocket (client_s);
+        continue;
+      }
 
-          if (INVALID_SOCKET == client_s)
-            {
-              /* try again */
-              closesocket (listen_s);
-              continue;
-            }
+      addr_len = c_addinlen;
+      server_s = accept (listen_s,
+                         (struct sockaddr *) &accepted_from_addr,
+                         &addr_len);
+      if (INVALID_SOCKET == server_s)
+      {
+        /* try again */
+        closesocket (listen_s);
+        closesocket (client_s);
+        continue;
+      }
 
-          if ( (0 != ioctlsocket (client_s,
-                                  FIONBIO,
-                                  &on_val)) ||
-               ( (0 != connect (client_s,
-                                (struct sockaddr*) &listen_addr,
-                                c_addinlen)) &&
-                 (WSAGetLastError() != WSAEWOULDBLOCK)) )
-            {
-              /* try again */
-              closesocket (listen_s);
-              closesocket (client_s);
-              continue;
-            }
-
-          addr_len = c_addinlen;
-          server_s = accept (listen_s,
-                             (struct sockaddr*) &accepted_from_addr,
-                             &addr_len);
-          if (INVALID_SOCKET == server_s)
-            {
-              /* try again */
-              closesocket (listen_s);
-              closesocket (client_s);
-              continue;
-            }
-
-          addr_len = c_addinlen;
-          if ( (0 == getsockname (client_s,
-                                  (struct sockaddr*) &client_addr,
-                                  &addr_len)) &&
-               (accepted_from_addr.sin_family == client_addr.sin_family) &&
-               (accepted_from_addr.sin_port == client_addr.sin_port) &&
-               (accepted_from_addr.sin_addr.s_addr == client_addr.sin_addr.s_addr) &&
-               ( (0 != non_blk) ?
-                    (0 == ioctlsocket(server_s,
-                                      FIONBIO,
-                                      &on_val)) :
-                    (0 == ioctlsocket(client_s,
-                                      FIONBIO,
-                                      &off_val)) ) )
-            {
-              closesocket (listen_s);
-              sockets_pair[0] = server_s;
-              sockets_pair[1] = client_s;
-              return !0;
-            }
-          closesocket (server_s);
-          closesocket (client_s);
-        }
-      closesocket(listen_s);
+      addr_len = c_addinlen;
+      if ( (0 == getsockname (client_s,
+                              (struct sockaddr *) &client_addr,
+                              &addr_len)) &&
+           (accepted_from_addr.sin_port == client_addr.sin_port) &&
+           (accepted_from_addr.sin_addr.s_addr ==
+            client_addr.sin_addr.s_addr) &&
+           (accepted_from_addr.sin_family == client_addr.sin_family) &&
+           ( (0 != non_blk) ?
+             (0 == ioctlsocket (server_s,
+                                (int) FIONBIO,
+                                &on_val)) :
+             (0 == ioctlsocket (client_s,
+                                (int) FIONBIO,
+                                &off_val)) ) &&
+           (0 == setsockopt (server_s,
+                             IPPROTO_TCP,
+                             TCP_NODELAY,
+                             (const void *) (&on_val),
+                             sizeof (on_val))) &&
+           (0 == setsockopt (client_s,
+                             IPPROTO_TCP,
+                             TCP_NODELAY,
+                             (const void *) (&on_val),
+                             sizeof (on_val))) )
+      {
+        closesocket (listen_s);
+        sockets_pair[0] = server_s;
+        sockets_pair[1] = client_s;
+        return ! 0;
+      }
+      closesocket (server_s);
+      closesocket (client_s);
     }
+    closesocket (listen_s);
+  }
 
   sockets_pair[0] = INVALID_SOCKET;
   sockets_pair[1] = INVALID_SOCKET;
-  WSASetLastError(WSAECONNREFUSED);
+  WSASetLastError (WSAECONNREFUSED);
 
   return 0;
 }
+
 
 #endif /* MHD_WINSOCK_SOCKETS */
 
@@ -383,9 +390,9 @@ MHD_add_to_fd_set_ (MHD_socket fd,
                                          set,
                                          fd_setsize))
     return 0;
-  MHD_SCKT_ADD_FD_TO_FDSET_SETSIZE_(fd,
-                                    set,
-                                    fd_setsize);
+  MHD_SCKT_ADD_FD_TO_FDSET_SETSIZE_ (fd,
+                                     set,
+                                     fd_setsize);
   if ( (NULL != max_fd) &&
        ( (fd > *max_fd) ||
          (MHD_INVALID_SOCKET == *max_fd) ) )
@@ -420,11 +427,11 @@ MHD_socket_nonblocking_ (MHD_socket sock)
   unsigned long flags = 1;
 
   if (0 != ioctlsocket (sock,
-                        FIONBIO,
+                        (int) FIONBIO,
                         &flags))
     return 0;
 #endif /* MHD_WINSOCK_SOCKETS */
-  return !0;
+  return ! 0;
 }
 
 
@@ -452,47 +459,43 @@ MHD_socket_noninheritable_ (MHD_socket sock)
                     flags | FD_CLOEXEC)) )
     return 0;
 #elif defined(MHD_WINSOCK_SOCKETS)
-  if (! SetHandleInformation ((HANDLE)sock,
+  if (! SetHandleInformation ((HANDLE) sock,
                               HANDLE_FLAG_INHERIT,
                               0))
     return 0;
 #endif /* MHD_WINSOCK_SOCKETS */
-  return !0;
+  return ! 0;
 }
 
 
 /**
- * Change socket buffering mode to default.
+ * Disable Nagle's algorithm on @a sock.  This is what we do by default for
+ * all TCP sockets in MHD, unless the platform does not support the MSG_MORE
+ * or MSG_CORK or MSG_NOPUSH options.
  *
  * @param sock socket to manipulate
- * @return non-zero if succeeded, zero otherwise
+ * @param on value to use
+ * @return 0 on success
  */
 int
-MHD_socket_buffering_reset_ (MHD_socket sock)
+MHD_socket_set_nodelay_ (MHD_socket sock,
+                         bool on)
 {
-  int res = !0;
-#if defined(TCP_NODELAY) || defined(MHD_TCP_CORK_NOPUSH)
-  const MHD_SCKT_OPT_BOOL_ off_val = 0;
-#if defined(MHD_TCP_CORK_NOPUSH)
-  /* Disable extra buffering */
-  res = (0 == setsockopt (sock,
-                          IPPROTO_TCP,
-                          MHD_TCP_CORK_NOPUSH,
-                          (const void *) &off_val,
-                          sizeof (off_val))) && res;
-#endif /* MHD_TCP_CORK_NOPUSH */
-#if defined(TCP_NODELAY)
-  /* Enable Nagle's algorithm for normal buffering */
-  res = (0 == setsockopt (sock,
-                          IPPROTO_TCP,
-                          TCP_NODELAY,
-                          (const void *) &off_val,
-                          sizeof (off_val))) && res;
-#endif /* TCP_NODELAY */
-#else  /* !TCP_NODELAY && !MHD_TCP_CORK_NOPUSH */
+#ifdef TCP_NODELAY
+  {
+    const MHD_SCKT_OPT_BOOL_ off_val = 0;
+    const MHD_SCKT_OPT_BOOL_ on_val = 1;
+    /* Disable Nagle's algorithm for normal buffering */
+    return setsockopt (sock,
+                       IPPROTO_TCP,
+                       TCP_NODELAY,
+                       (const void *) ((on) ? &on_val : &off_val),
+                       sizeof (on_val));
+  }
+#else
   (void) sock;
-#endif /* !TCP_NODELAY && !MHD_TCP_CORK_NOPUSH */
-  return res;
+  return 0;
+#endif /* TCP_NODELAY */
 }
 
 
@@ -507,41 +510,61 @@ MHD_socket_create_listen_ (int pf)
 {
   MHD_socket fd;
   int cloexec_set;
+#if defined(SOCK_NOSIGPIPE) || defined(MHD_socket_nosignal_)
+  int nosigpipe_set;
+#endif /* SOCK_NOSIGPIPE ||  MHD_socket_nosignal_ */
 
-#if defined(MHD_POSIX_SOCKETS) && defined(SOCK_CLOEXEC)
+#if defined(MHD_POSIX_SOCKETS) && (defined(SOCK_CLOEXEC) || \
+  defined(SOCK_NOSIGPIPE) )
   fd = socket (pf,
-               SOCK_STREAM | SOCK_CLOEXEC,
+               SOCK_STREAM | SOCK_CLOEXEC | SOCK_NOSIGPIPE_OR_ZERO,
                0);
-  cloexec_set = !0;
-#elif defined(MHD_WINSOCK_SOCKETS) && defined (WSA_FLAG_NO_HANDLE_INHERIT)
+  if (MHD_INVALID_SOCKET != fd)
+  {
+    cloexec_set = (SOCK_CLOEXEC_OR_ZERO != 0);
+#if defined(SOCK_NOSIGPIPE) || defined(MHD_socket_nosignal_)
+    nosigpipe_set = (SOCK_NOSIGPIPE_OR_ZERO != 0);
+#endif /* SOCK_NOSIGPIPE ||  MHD_socket_nosignal_ */
+  }
+#elif defined(MHD_WINSOCK_SOCKETS) && defined(WSA_FLAG_NO_HANDLE_INHERIT)
   fd = WSASocketW (pf,
                    SOCK_STREAM,
                    0,
                    NULL,
                    0,
                    WSA_FLAG_OVERLAPPED | WSA_FLAG_NO_HANDLE_INHERIT);
-  cloexec_set = !0;
+  cloexec_set = ! 0;
 #else  /* !SOCK_CLOEXEC */
   fd = MHD_INVALID_SOCKET;
 #endif /* !SOCK_CLOEXEC */
   if (MHD_INVALID_SOCKET == fd)
-    {
-      fd = socket (pf,
-                   SOCK_STREAM,
-                   0);
-      cloexec_set = 0;
-    }
+  {
+    fd = socket (pf,
+                 SOCK_STREAM,
+                 0);
+    cloexec_set = 0;
+#if defined(SOCK_NOSIGPIPE) || defined(MHD_socket_nosignal_)
+    nosigpipe_set = 0;
+#endif /* SOCK_NOSIGPIPE ||  MHD_socket_nosignal_ */
+  }
   if (MHD_INVALID_SOCKET == fd)
     return MHD_INVALID_SOCKET;
-#ifdef MHD_socket_nosignal_
-  if(! MHD_socket_nosignal_(fd))
-    {
-      const int err = MHD_socket_get_error_ ();
-      (void) MHD_socket_close_ (fd);
-      MHD_socket_fset_error_ (err);
-      return MHD_INVALID_SOCKET;
-    }
-#endif /* MHD_socket_nosignal_ */
+
+#if defined(MHD_socket_nosignal_)
+  if ( (! nosigpipe_set) &&
+       (0 == MHD_socket_nosignal_ (fd)) &&
+       (0 == MSG_NOSIGNAL_OR_ZERO) )
+  {
+    /* SIGPIPE disable is possible on this platform
+     * (so application expect that it will be disabled),
+     * but failed to be disabled here and it is not
+     * possible to disable SIGPIPE by MSG_NOSIGNAL. */
+    const int err = MHD_socket_get_error_ ();
+    (void) MHD_socket_close_ (fd);
+    MHD_socket_fset_error_ (err);
+    return MHD_INVALID_SOCKET;
+  }
+#endif /* defined(MHD_socket_nosignal_) */
   if (! cloexec_set)
     (void) MHD_socket_noninheritable_ (fd);
 

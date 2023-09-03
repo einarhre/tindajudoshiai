@@ -1,6 +1,7 @@
 /*
   This file is part of libmicrohttpd
   Copyright (C) 2007-2018 Daniel Pittman and Christian Grothoff
+  Copyright (C) 2014-2021 Evgeny Grin (Karlson2k)
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,9 +20,10 @@
 
 /**
  * @file microhttpd/internal.h
- * @brief  internal shared structures
+ * @brief  MHD internal shared structures
  * @author Daniel Pittman
  * @author Christian Grothoff
+ * @author Karlson2k (Evgeny Grin)
  */
 
 #ifndef INTERNAL_H
@@ -43,6 +45,13 @@
 #include <stdbool.h>
 #endif
 
+#ifdef HAVE_INTTYPES_H
+#include <inttypes.h>
+#endif /* HAVE_INTTYPES_H */
+
+#ifndef PRIu64
+#define PRIu64  "llu"
+#endif /* ! PRIu64 */
 
 #ifdef MHD_PANIC
 /* Override any defined MHD_PANIC macro with proper one */
@@ -55,45 +64,82 @@
  *
  * @param msg error message (const char *)
  */
-#define MHD_PANIC(msg) do { mhd_panic (mhd_panic_cls, __FILE__, __LINE__, msg); BUILTIN_NOT_REACHED; } while (0)
+#define MHD_PANIC(msg) do { mhd_panic (mhd_panic_cls, __FILE__, __LINE__, msg); \
+                            BUILTIN_NOT_REACHED; } while (0)
 #else
 /**
  * Trigger 'panic' action based on fatal errors.
  *
  * @param msg error message (const char *)
  */
-#define MHD_PANIC(msg) do { mhd_panic (mhd_panic_cls, __FILE__, __LINE__, NULL); BUILTIN_NOT_REACHED; } while (0)
+#define MHD_PANIC(msg) do { mhd_panic (mhd_panic_cls, __FILE__, __LINE__, NULL); \
+                            BUILTIN_NOT_REACHED; } while (0)
 #endif
 
 #if defined(MHD_USE_POSIX_THREADS) || defined(MHD_USE_W32_THREADS)
 #include "mhd_threads.h"
-#include "mhd_locks.h"
 #endif
+#include "mhd_locks.h"
 #include "mhd_sockets.h"
 #include "mhd_itc_types.h"
 
 
 /**
+ * @def _MHD_MACRO_NO
+ * "Negative answer"/"false" for use in macros, meaningful for precompiler
+ */
+#define _MHD_MACRO_NO   0
+
+/**
+ * @def _MHD_MACRO_YES
+ * "Positive answer"/"true" for use in macros, meaningful for precompiler
+ */
+#define _MHD_MACRO_YES  1
+
+/**
  * Close FD and abort execution if error is detected.
  * @param fd the FD to close
  */
-#define MHD_fd_close_chk_(fd) do {             \
-    if (0 == close ((fd)) && (EBADF == errno)) \
-      MHD_PANIC(_("Failed to close FD.\n"));   \
-  } while(0)
+#define MHD_fd_close_chk_(fd) do {                      \
+    if ( (0 != close ((fd)) && (EBADF == errno)) ) {    \
+      MHD_PANIC (_ ("Failed to close FD.\n"));          \
+    }                                                   \
+} while (0)
 
-/**
- * Should we perform additional sanity checks at runtime (on our internal
- * invariants)?  This may lead to aborts, but can be useful for debugging.
+/*
+#define EXTRA_CHECKS _MHD_MACRO_NO
+ * Not used. Behaviour is controlled by _DEBUG/NDEBUG macros.
  */
-#define EXTRA_CHECKS MHD_NO
+
+#ifndef _MHD_DEBUG_CONNECT
+/**
+ * Print extra messages when establishing
+ * connections? (only adds non-error messages).
+ */
+#define _MHD_DEBUG_CONNECT _MHD_MACRO_NO
+#endif /* ! _MHD_DEBUG_CONNECT */
+
+#ifndef _MHD_DEBUG_SEND_DATA
+/**
+ * Should all data send be printed to stderr?
+ */
+#define _MHD_DEBUG_SEND_DATA _MHD_MACRO_NO
+#endif /* ! _MHD_DEBUG_SEND_DATA */
+
+#ifndef _MHD_DEBUG_CLOSE
+/**
+ * Add extra debug messages with reasons for closing connections
+ * (non-error reasons).
+ */
+#define _MHD_DEBUG_CLOSE _MHD_MACRO_NO
+#endif /* ! _MHD_DEBUG_CLOSE */
 
 #define MHD_MAX(a,b) (((a)<(b)) ? (b) : (a))
 #define MHD_MIN(a,b) (((a)<(b)) ? (a) : (b))
 
 
 /**
- * Minimum size by which MHD tries to increment read/write buffers.
+ * Minimum reasonable size by which MHD tries to increment read/write buffers.
  * We usually begin with half the available pool space for the
  * IO-buffer, but if absolutely needed we additively grow by the
  * number of bytes given here (up to -- theoretically -- the full pool
@@ -112,11 +158,12 @@ extern MHD_PanicCallback mhd_panic;
  */
 extern void *mhd_panic_cls;
 
-/* If we have Clang or gcc >= 4.5, use __buildin_unreachable() */
-#if defined(__clang__) || (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)
-#define BUILTIN_NOT_REACHED __builtin_unreachable()
+/* If we have Clang or gcc >= 4.5, use __builtin_unreachable() */
+#if defined(__clang__) || (__GNUC__ > 4) || \
+  (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)
+#define BUILTIN_NOT_REACHED __builtin_unreachable ()
 #elif defined(_MSC_FULL_VER)
-#define BUILTIN_NOT_REACHED __assume(0)
+#define BUILTIN_NOT_REACHED __assume (0)
 #else
 #define BUILTIN_NOT_REACHED
 #endif
@@ -125,8 +172,21 @@ extern void *mhd_panic_cls;
 /**
  * Determine length of static string / macro strings at compile time.
  */
-#define MHD_STATICSTR_LEN_(macro) (sizeof(macro)/sizeof(char) - 1)
+#define MHD_STATICSTR_LEN_(macro) (sizeof(macro) / sizeof(char) - 1)
 #endif /* ! MHD_STATICSTR_LEN_ */
+
+
+/**
+ * Tri-state on/off/unknown
+ */
+enum MHD_tristate
+{
+  _MHD_UNKNOWN = -1,    /**< State is not yet checked nor set */
+  _MHD_OFF     = false, /**< State is "off" / "disabled" */
+  _MHD_NO      = false, /**< State is "off" / "disabled" */
+  _MHD_ON      = true,  /**< State is "on"  / "enabled" */
+  _MHD_YES     = true   /**< State is "on"  / "enabled" */
+} _MHD_FIXED_ENUM;
 
 
 /**
@@ -172,7 +232,7 @@ enum MHD_EpollState
    * Is this connection in some error state?
    */
   MHD_EPOLL_STATE_ERROR = 128
-};
+} _MHD_FIXED_FLAGS_ENUM;
 
 
 /**
@@ -199,7 +259,7 @@ enum MHD_ConnectionEventLoopInfo
    * We are finished and are awaiting cleanup.
    */
   MHD_EVENT_LOOP_INFO_CLEANUP = 3
-};
+} _MHD_FIXED_ENUM;
 
 
 /**
@@ -250,8 +310,9 @@ struct MHD_NonceNc
  */
 void
 MHD_DLOG (const struct MHD_Daemon *daemon,
-	  const char *format,
+          const char *format,
           ...);
+
 #endif
 
 
@@ -261,9 +322,14 @@ MHD_DLOG (const struct MHD_Daemon *daemon,
 struct MHD_HTTP_Header
 {
   /**
-   * Headers are kept in a linked list.
+   * Headers are kept in a double-linked list.
    */
   struct MHD_HTTP_Header *next;
+
+  /**
+   * Headers are kept in a double-linked list.
+   */
+  struct MHD_HTTP_Header *prev;
 
   /**
    * The name of the header (key), without the colon.
@@ -271,9 +337,19 @@ struct MHD_HTTP_Header
   char *header;
 
   /**
+   * The length of the @a header, not including the final zero termination.
+   */
+  size_t header_size;
+
+  /**
    * The value of the header.
    */
   char *value;
+
+  /**
+   * The length of the @a value, not including the final zero termination.
+   */
+  size_t value_size;
 
   /**
    * Type of the header (where in the HTTP protocol is this header
@@ -285,17 +361,87 @@ struct MHD_HTTP_Header
 
 
 /**
+ * Automatically assigned flags
+ */
+enum MHD_ResponseAutoFlags
+{
+  MHD_RAF_NO_FLAGS = 0,                   /**< No auto flags */
+  MHD_RAF_HAS_CONNECTION_HDR = 1 << 0,    /**< Has "Connection" header */
+  MHD_RAF_HAS_CONNECTION_CLOSE = 1 << 1,  /**< Has "Connection: close" */
+  MHD_RAF_HAS_TRANS_ENC_CHUNKED = 1 << 2, /**< Has "Transfer-Encoding: chunked */
+  MHD_RAF_HAS_DATE_HDR = 1 << 3           /**< Has "Date" header */
+} _MHD_FIXED_FLAGS_ENUM;
+
+
+#if defined(MHD_WINSOCK_SOCKETS)
+/**
+ * Internally used I/O vector type for use with winsock.
+ * Binary matches system "WSABUF".
+ */
+typedef struct _MHD_W32_iovec
+{
+  unsigned long iov_len;
+  char *iov_base;
+} MHD_iovec_;
+#define MHD_IOV_ELMN_MAX_SIZE    ULONG_MAX
+typedef unsigned long MHD_iov_size_;
+#elif defined(HAVE_SENDMSG) || defined(HAVE_WRITEV)
+/**
+ * Internally used I/O vector type for use when writev or sendmsg
+ * is available. Matches system "struct iovec".
+ */
+typedef struct iovec MHD_iovec_;
+#define MHD_IOV_ELMN_MAX_SIZE    SIZE_MAX
+typedef size_t MHD_iov_size_;
+#else
+/**
+ * Internally used I/O vector type for use when writev or sendmsg
+ * is not available.
+ */
+typedef struct MHD_IoVec MHD_iovec_;
+#define MHD_IOV_ELMN_MAX_SIZE    SIZE_MAX
+typedef size_t MHD_iov_size_;
+#endif
+
+
+struct MHD_iovec_track_
+{
+  /**
+   * The copy of array of iovec elements.
+   * The copy of elements are updated during sending.
+   * The number of elements is not changed during lifetime.
+   */
+  MHD_iovec_ *iov;
+
+  /**
+   * The number of elements in @iov.
+   * This value is not changed during lifetime.
+   */
+  size_t cnt;
+
+  /**
+   * The number of sent elements.
+   * At the same time, it is the index of the next (or current) element
+   * to send.
+   */
+  size_t sent;
+};
+
+/**
  * Representation of a response.
  */
 struct MHD_Response
 {
 
   /**
-   * Headers to send for the response.  Initially
-   * the linked list is created in inverse order;
-   * the order should be inverted before sending!
+   * Head of double-linked list of headers to send for the response.
    */
   struct MHD_HTTP_Header *first_header;
+
+  /**
+   * Tail of double-linked list of headers to send for the response.
+   */
+  struct MHD_HTTP_Header *last_header;
 
   /**
    * Buffer pointing to data that we are supposed
@@ -344,6 +490,7 @@ struct MHD_Response
 #endif
 
   /**
+   * The size of the response body.
    * Set to #MHD_SIZE_UNKNOWN if size is not known.
    */
   uint64_t total_size;
@@ -366,7 +513,7 @@ struct MHD_Response
   size_t data_size;
 
   /**
-   * Size of the data buffer @e data.
+   * Size of the writable data buffer @e data.
    */
   size_t data_buffer_size;
 
@@ -386,6 +533,25 @@ struct MHD_Response
    */
   enum MHD_ResponseFlags flags;
 
+  /**
+   * Automatic flags set for the MHD response.
+   */
+  enum MHD_ResponseAutoFlags flags_auto;
+
+  /**
+   * If the @e fd is a pipe (no sendfile()).
+   */
+  bool is_pipe;
+
+  /**
+   * I/O vector used with MHD_create_response_from_iovec.
+   */
+  MHD_iovec_ *data_iov;
+
+  /**
+   * Number of elements in data_iov.
+   */
+  unsigned int data_iovcnt;
 };
 
 
@@ -413,101 +579,119 @@ enum MHD_CONNECTION_STATE
   MHD_CONNECTION_INIT = 0,
 
   /**
-   * 1: We got the URL (and request type and version).  Wait for a header line.
+   * Part of the request line was received.
+   * Wait for complete line.
    */
-  MHD_CONNECTION_URL_RECEIVED = MHD_CONNECTION_INIT + 1,
+  MHD_CONNECTION_REQ_LINE_RECEIVING = MHD_CONNECTION_INIT + 1,
 
   /**
-   * 2: We got part of a multi-line request header.  Wait for the rest.
+   * We got the URL (and request type and version).  Wait for a header line.
+   */
+  MHD_CONNECTION_URL_RECEIVED = MHD_CONNECTION_REQ_LINE_RECEIVING + 1,
+
+  /**
+   * We got part of a multi-line request header.  Wait for the rest.
    */
   MHD_CONNECTION_HEADER_PART_RECEIVED = MHD_CONNECTION_URL_RECEIVED + 1,
 
   /**
-   * 3: We got the request headers.  Process them.
+   * We got the request headers.  Process them.
    */
   MHD_CONNECTION_HEADERS_RECEIVED = MHD_CONNECTION_HEADER_PART_RECEIVED + 1,
 
   /**
-   * 4: We have processed the request headers.  Send 100 continue.
+   * We have processed the request headers.  Send 100 continue.
    */
   MHD_CONNECTION_HEADERS_PROCESSED = MHD_CONNECTION_HEADERS_RECEIVED + 1,
 
   /**
-   * 5: We have processed the headers and need to send 100 CONTINUE.
+   * We have processed the headers and need to send 100 CONTINUE.
    */
   MHD_CONNECTION_CONTINUE_SENDING = MHD_CONNECTION_HEADERS_PROCESSED + 1,
 
   /**
-   * 6: We have sent 100 CONTINUE (or do not need to).  Read the message body.
+   * We have sent 100 CONTINUE (or do not need to).  Read the message body.
    */
   MHD_CONNECTION_CONTINUE_SENT = MHD_CONNECTION_CONTINUE_SENDING + 1,
 
   /**
-   * 7: We got the request body.  Wait for a line of the footer.
+   * We got the request body.  Wait for a line of the footer.
    */
   MHD_CONNECTION_BODY_RECEIVED = MHD_CONNECTION_CONTINUE_SENT + 1,
 
   /**
-   * 8: We got part of a line of the footer.  Wait for the
+   * We got part of a line of the footer.  Wait for the
    * rest.
    */
   MHD_CONNECTION_FOOTER_PART_RECEIVED = MHD_CONNECTION_BODY_RECEIVED + 1,
 
   /**
-   * 9: We received the entire footer.  Wait for a response to be queued
-   * and prepare the response headers.
+   * We received the entire footer.
    */
   MHD_CONNECTION_FOOTERS_RECEIVED = MHD_CONNECTION_FOOTER_PART_RECEIVED + 1,
 
   /**
-   * 10: We have prepared the response headers in the writ buffer.
-   * Send the response headers.
+   * We received the entire request.
+   * Wait for a response to be queued.
    */
-  MHD_CONNECTION_HEADERS_SENDING = MHD_CONNECTION_FOOTERS_RECEIVED + 1,
+  MHD_CONNECTION_FULL_REQ_RECEIVED = MHD_CONNECTION_FOOTERS_RECEIVED + 1,
 
   /**
-   * 11: We have sent the response headers.  Get ready to send the body.
+   * Finished reading of the request and the response is ready.
+   * Switch internal logic from receiving to sending, prepare connection
+   * sending the reply and build the reply header.
+   */
+  MHD_CONNECTION_START_REPLY = MHD_CONNECTION_FULL_REQ_RECEIVED + 1,
+
+  /**
+   * We have prepared the response headers in the write buffer.
+   * Send the response headers.
+   */
+  MHD_CONNECTION_HEADERS_SENDING = MHD_CONNECTION_START_REPLY + 1,
+
+  /**
+   * We have sent the response headers.  Get ready to send the body.
    */
   MHD_CONNECTION_HEADERS_SENT = MHD_CONNECTION_HEADERS_SENDING + 1,
 
   /**
-   * 12: We are ready to send a part of a non-chunked body.  Send it.
-   */
-  MHD_CONNECTION_NORMAL_BODY_READY = MHD_CONNECTION_HEADERS_SENT + 1,
-
-  /**
-   * 13: We are waiting for the client to provide more
+   * We are waiting for the client to provide more
    * data of a non-chunked body.
    */
-  MHD_CONNECTION_NORMAL_BODY_UNREADY = MHD_CONNECTION_NORMAL_BODY_READY + 1,
+  MHD_CONNECTION_NORMAL_BODY_UNREADY = MHD_CONNECTION_HEADERS_SENT + 1,
 
   /**
-   * 14: We are ready to send a chunk.
+   * We are ready to send a part of a non-chunked body.  Send it.
    */
-  MHD_CONNECTION_CHUNKED_BODY_READY = MHD_CONNECTION_NORMAL_BODY_UNREADY + 1,
+  MHD_CONNECTION_NORMAL_BODY_READY = MHD_CONNECTION_NORMAL_BODY_UNREADY + 1,
 
   /**
-   * 15: We are waiting for the client to provide a chunk of the body.
+   * We are waiting for the client to provide a chunk of the body.
    */
-  MHD_CONNECTION_CHUNKED_BODY_UNREADY = MHD_CONNECTION_CHUNKED_BODY_READY + 1,
+  MHD_CONNECTION_CHUNKED_BODY_UNREADY = MHD_CONNECTION_NORMAL_BODY_READY + 1,
 
   /**
-   * 16: We have sent the response body. Prepare the footers.
+   * We are ready to send a chunk.
    */
-  MHD_CONNECTION_BODY_SENT = MHD_CONNECTION_CHUNKED_BODY_UNREADY + 1,
+  MHD_CONNECTION_CHUNKED_BODY_READY = MHD_CONNECTION_CHUNKED_BODY_UNREADY + 1,
 
   /**
-   * 17: We have prepared the response footer.  Send it.
+   * We have sent the response body. Prepare the footers.
+   */
+  MHD_CONNECTION_BODY_SENT = MHD_CONNECTION_CHUNKED_BODY_READY + 1,
+
+  /**
+   * We have prepared the response footer.  Send it.
    */
   MHD_CONNECTION_FOOTERS_SENDING = MHD_CONNECTION_BODY_SENT + 1,
 
   /**
-   * 18: We have sent the response footer.  Shutdown or restart.
+   * We have sent the response footer.  Shutdown or restart.
    */
   MHD_CONNECTION_FOOTERS_SENT = MHD_CONNECTION_FOOTERS_SENDING + 1,
 
   /**
-   * 19: This connection is to be closed.
+   * This connection is to be closed.
    */
   MHD_CONNECTION_CLOSED = MHD_CONNECTION_FOOTERS_SENT + 1,
 
@@ -519,7 +703,7 @@ enum MHD_CONNECTION_STATE
   MHD_CONNECTION_UPGRADE
 #endif /* UPGRADE_SUPPORT */
 
-};
+} _MHD_FIXED_ENUM;
 
 
 /**
@@ -537,18 +721,19 @@ enum MHD_TLS_CONN_STATE
   MHD_TLS_CONN_TLS_CLOSED,  /**< TLS session is terminated.             */
   MHD_TLS_CONN_TLS_FAILED,  /**< TLS session failed.                    */
   MHD_TLS_CONN_INVALID_STATE/**< Sentinel. Not a valid value.           */
-};
+} _MHD_FIXED_ENUM;
 
 /**
  * Should all state transitions be printed to stderr?
  */
-#define DEBUG_STATES MHD_NO
+#define DEBUG_STATES _MHD_MACRO_NO
 
 
 #ifdef HAVE_MESSAGES
 #if DEBUG_STATES
 const char *
 MHD_state_to_string (enum MHD_CONNECTION_STATE state);
+
 #endif
 #endif
 
@@ -598,9 +783,127 @@ enum MHD_ConnKeepAlive
   /**
    * Connection can be used for serving next request
    */
-  MHD_CONN_USE_KEEPALIVE = 1
-};
+  MHD_CONN_USE_KEEPALIVE = 1,
 
+  /**
+   * Connection will be upgraded
+   */
+  MHD_CONN_MUST_UPGRADE = 2
+} _MHD_FIXED_ENUM;
+
+enum MHD_HTTP_Version
+{
+  /**
+   * Not a HTTP protocol or HTTP version is invalid.
+   */
+  MHD_HTTP_VER_INVALID = -1,
+
+  /**
+   * HTTP version is not yet received from the client.
+   */
+  MHD_HTTP_VER_UNKNOWN = 0,
+
+  /**
+   * HTTP version before 1.0, unsupported.
+   */
+  MHD_HTTP_VER_TOO_OLD = 1,
+
+  /**
+   * HTTP version 1.0
+   */
+  MHD_HTTP_VER_1_0 = 2,
+
+  /**
+   * HTTP version 1.1
+   */
+  MHD_HTTP_VER_1_1 = 3,
+
+  /**
+   * HTTP version 1.2-1.9, must be used as 1.1
+   */
+  MHD_HTTP_VER_1_2__1_9 = 4,
+
+  /**
+   * HTTP future version. Unsupported.
+   */
+  MHD_HTTP_VER_FUTURE = 100
+} _MHD_FIXED_ENUM;
+
+/**
+ * Returns boolean 'true' if HTTP version is supported by MHD
+ */
+#define MHD_IS_HTTP_VER_SUPPORTED(ver) (MHD_HTTP_VER_1_0 <= (ver) && \
+    MHD_HTTP_VER_1_2__1_9 >= (ver))
+
+/**
+ * Protocol should be used as HTTP/1.1 protocol.
+ *
+ * See the last paragraph of
+ * https://datatracker.ietf.org/doc/html/rfc7230#section-2.6
+ */
+#define MHD_IS_HTTP_VER_1_1_COMPAT(ver) (MHD_HTTP_VER_1_1 == (ver) || \
+    MHD_HTTP_VER_1_2__1_9 == (ver))
+
+/**
+ * The HTTP method.
+ *
+ * Only primary methods (specified in RFC7231) are defined here.
+ */
+enum MHD_HTTP_Method
+{
+  /**
+   * No request string has been received yet
+   */
+  MHD_HTTP_MTHD_NO_METHOD = 0,
+  /**
+   * HTTP method GET
+   */
+  MHD_HTTP_MTHD_GET = 1,
+  /**
+   * HTTP method HEAD
+   */
+  MHD_HTTP_MTHD_HEAD = 2,
+  /**
+   * HTTP method POST
+   */
+  MHD_HTTP_MTHD_POST = 3,
+  /**
+   * HTTP method PUT
+   */
+  MHD_HTTP_MTHD_PUT = 4,
+  /**
+   * HTTP method DELETE
+   */
+  MHD_HTTP_MTHD_DELETE = 5,
+  /**
+   * HTTP method CONNECT
+   */
+  MHD_HTTP_MTHD_CONNECT = 6,
+  /**
+   * HTTP method OPTIONS
+   */
+  MHD_HTTP_MTHD_OPTIONS = 7,
+  /**
+   * HTTP method TRACE
+   */
+  MHD_HTTP_MTHD_TRACE = 8,
+  /**
+   * Other HTTP method. Check the string value.
+   */
+  MHD_HTTP_MTHD_OTHER = 1000
+} _MHD_FIXED_ENUM;
+
+
+/**
+ * Reply-specific properties.
+ */
+struct MHD_Reply_Properties
+{
+  bool set; /**< Indicates that other members are set and valid */
+  bool use_reply_body_headers; /**< Use reply body-specific headers */
+  bool send_reply_body; /**< Send reply body (can be zero-sized) */
+  bool chunked; /**< Use chunked encoding for reply */
+};
 
 /**
  * State kept for each HTTP request.
@@ -697,6 +1000,11 @@ struct MHD_Connection
   char *method;
 
   /**
+   * The request method as enum.
+   */
+  enum MHD_HTTP_Method http_mthd;
+
+  /**
    * Requested URL (everything after "GET" only).  Allocated
    * in pool.
    */
@@ -707,6 +1015,11 @@ struct MHD_Connection
    * in pool.
    */
   char *version;
+
+  /**
+   * HTTP protocol version as enum.
+   */
+  enum MHD_HTTP_Version http_ver;
 
   /**
    * Close connection after sending response?
@@ -760,16 +1073,15 @@ struct MHD_Connection
 #endif
 
   /**
-   * Size of @e read_buffer (in bytes).  This value indicates
-   * how many bytes we're willing to read into the buffer;
-   * the real buffer is one byte longer to allow for
-   * adding zero-termination (when needed).
+   * Size of @e read_buffer (in bytes).
+   * This value indicates how many bytes we're willing to read
+   * into the buffer.
    */
   size_t read_buffer_size;
 
   /**
-   * Position where we currently append data in
-   * @e read_buffer (last valid position).
+   * Position where we currently append data in @e read_buffer (the
+   * next char after the last valid position).
    */
   size_t read_buffer_offset;
 
@@ -808,6 +1120,15 @@ struct MHD_Connection
    */
   uint64_t response_write_position;
 
+  /**
+   * The copy of iov response.
+   * Valid if iovec response is used.
+   * Updated during send.
+   * Members are allocated in the pool.
+   */
+  struct MHD_iovec_track_ resp_iov;
+
+
 #if defined(_MHD_HAVE_SENDFILE)
   enum MHD_resp_sender_
   {
@@ -831,13 +1152,14 @@ struct MHD_Connection
    * Last time this connection had any activity
    * (reading or writing).
    */
-  time_t last_activity;
+  uint64_t last_activity;
 
   /**
-   * After how many seconds of inactivity should
-   * this connection time out?  Zero for no timeout.
+   * After how many milliseconds of inactivity should
+   * this connection time out?
+   * Zero for no timeout.
    */
-  time_t connection_timeout;
+  uint64_t connection_timeout_ms;
 
   /**
    * Special member to be returned by #MHD_get_connection_info()
@@ -859,21 +1181,30 @@ struct MHD_Connection
   MHD_socket socket_fd;
 
   /**
+   * true if @e socket_fd is not TCP/IP (a UNIX domain socket, a pipe),
+   * false (TCP/IP) otherwise.
+   */
+  enum MHD_tristate is_nonip;
+
+  /**
    * true if #socket_fd is non-blocking, false otherwise.
    */
   bool sk_nonblck;
 
   /**
-   * Indicate whether connection socket has TCP_NODELAY turned on / Nagle’s algorithm turned off.
-   * TCP_NODELAY should not be turned on when TCP_CORK/TCP_NOPUSH is turned off.
+   * true if connection socket has set SIGPIPE suppression
    */
-  bool sk_tcp_nodelay_on;
+  bool sk_spipe_suppress;
 
   /**
-   * Indicate whether connection socket has TCP_CORK/TCP_NOPUSH turned on.
-   * TCP_CORK/TCP_NOPUSH should not be turned on when TCP_NODELAY is turned off.
+   * Tracks TCP_CORK / TCP_NOPUSH of the connection socket.
    */
-  bool sk_tcp_cork_nopush_on;
+  enum MHD_tristate sk_corked;
+
+  /**
+   * Tracks TCP_NODELAY state of the connection socket.
+   */
+  enum MHD_tristate sk_nodelay;
 
   /**
    * Has this socket been closed for reading (i.e.  other side closed
@@ -882,6 +1213,24 @@ struct MHD_Connection
    * from this socket).
    */
   bool read_closed;
+
+  /**
+   * Some error happens during processing the connection therefore this
+   * connection must be closed.
+   * The error may come from the client side (like wrong request format),
+   * from the application side (like data callback returned error), or from
+   * the OS side (like out-of-memory).
+   */
+  bool stop_with_error;
+
+  /**
+   * Response queued early, before the request is fully processed,
+   * the client upload is rejected.
+   * The connection cannot be reused for additional requests as the current
+   * request is incompletely read and it is unclear where is the initial
+   * byte of the next request.
+   */
+  bool discard_request;
 
 #if defined(MHD_USE_POSIX_THREADS) || defined(MHD_USE_W32_THREADS)
   /**
@@ -897,8 +1246,7 @@ struct MHD_Connection
   bool in_idle;
 
   /**
-   * Are we currently inside the "idle" handler (to avoid recursively
-   * invoking it).
+   * Connection is in the cleanup DL-linked list.
    */
   bool in_cleanup;
 
@@ -926,19 +1274,28 @@ struct MHD_Connection
   unsigned int responseCode;
 
   /**
-   * Are we receiving with chunked encoding?  This will be set to
-   * #MHD_YES after we parse the headers and are processing the body
-   * with chunks.  After we are done with the body and we are
-   * processing the footers; once the footers are also done, this will
-   * be set to #MHD_NO again (before the final call to the handler).
+   * Reply-specific properties
+   */
+  struct MHD_Reply_Properties rp_props;
+
+  /**
+   * Are we receiving with chunked encoding?
+   * This will be set to #MHD_YES after we parse the headers and
+   * are processing the body with chunks.
+   * After we are done with the body and we are processing the footers;
+   * once the footers are also done, this will be set to #MHD_NO again
+   * (before the final call to the handler).
+   * It is used only for requests, chunked encoding for response is
+   * indicated by @a rp_props.
    */
   bool have_chunked_upload;
 
   /**
    * If we are receiving with chunked encoding, where are we right
-   * now?  Set to 0 if we are waiting to receive the chunk size;
-   * otherwise, this is the size of the current chunk.  A value of
-   * zero is also used when we're at the end of the chunks.
+   * now?
+   * Set to 0 if we are waiting to receive the chunk size;
+   * otherwise, this is the size of the current chunk.
+   * A value of zero is also used when we're at the end of the chunks.
    */
   uint64_t current_chunk_size;
 
@@ -952,11 +1309,6 @@ struct MHD_Connection
    * Function used for reading HTTP request stream.
    */
   ReceiveCallback recv_cls;
-
-  /**
-   * Function used for writing HTTP response stream.
-   */
-  TransmitCallback send_cls;
 
 #ifdef UPGRADE_SUPPORT
   /**
@@ -1010,7 +1362,7 @@ struct MHD_Connection
   /**
    * Is the connection wanting to resume?
    */
-  bool resuming;
+  volatile bool resuming;
 };
 
 
@@ -1051,7 +1403,7 @@ struct UpgradeEpollHandle
    *
    * Similarly, for writing to TLS, this epoll() will be on the
    * connection's `socket_fd`, and this will merely be the FD which
-   * the applicatio would write to.  Hence this struct must always be
+   * the application would write to.  Hence this struct must always be
    * interpreted based on which field in `struct
    * MHD_UpgradeResponseHandle` it is (`app` or `mhd`).
    */
@@ -1205,7 +1557,7 @@ struct MHD_UpgradeResponseHandle
    * @remark This flag could be changed from thread that process
    * connection's recv(), send() and response.
    */
-  bool clean_ready;
+  volatile bool clean_ready;
 };
 #endif /* UPGRADE_SUPPORT */
 
@@ -1259,6 +1611,24 @@ struct MHD_Daemon
   void *default_handler_cls;
 
   /**
+   * Daemon's flags (bitfield).
+   *
+   * @remark Keep this member after pointer value to keep it
+   * properly aligned as it will be used as member of union MHD_DaemonInfo.
+   */
+  enum MHD_FLAG options;
+
+  /**
+   * Head of doubly-linked list of new, externally added connections.
+   */
+  struct MHD_Connection *new_connections_head;
+
+  /**
+   * Tail of doubly-linked list of new, externally added connections.
+   */
+  struct MHD_Connection *new_connections_tail;
+
+  /**
    * Head of doubly-linked list of our current, active connections.
    */
   struct MHD_Connection *connections_head;
@@ -1288,6 +1658,11 @@ struct MHD_Daemon
    */
   struct MHD_Connection *cleanup_tail;
 
+  /**
+   * _MHD_YES if the @e listen_fd socket is a UNIX domain socket.
+   */
+  enum MHD_tristate listen_is_unix;
+
 #ifdef EPOLL_SUPPORT
   /**
    * Head of EDLL of connections ready for processing (in epoll mode).
@@ -1299,7 +1674,35 @@ struct MHD_Daemon
    */
   struct MHD_Connection *eready_tail;
 
+  /**
+   * File descriptor associated with our epoll loop.
+   *
+   * @remark Keep this member after pointer value to keep it
+   * properly aligned as it will be used as member of union MHD_DaemonInfo.
+   */
+  int epoll_fd;
+
+  /**
+   * true if the @e listen_fd socket is in the 'epoll' set,
+   * false if not.
+   */
+  bool listen_socket_in_epoll;
+
 #ifdef UPGRADE_SUPPORT
+#ifdef HTTPS_SUPPORT
+  /**
+   * File descriptor associated with the #run_epoll_for_upgrade() loop.
+   * Only available if #MHD_USE_HTTPS_EPOLL_UPGRADE is set.
+   */
+  int epoll_upgrade_fd;
+
+  /**
+   * true if @e epoll_upgrade_fd is in the 'epoll' set,
+   * false if not.
+   */
+  bool upgrade_fd_in_epoll;
+#endif /* HTTPS_SUPPORT */
+
   /**
    * Head of EDLL of upgraded connections ready for processing (in epoll mode).
    */
@@ -1321,7 +1724,7 @@ struct MHD_Daemon
    * moved back to the tail of the list.
    *
    * All connections by default start in this list; if a custom
-   * timeout that does not match @e connection_timeout is set, they
+   * timeout that does not match @e connection_timeout_ms is set, they
    * are moved to the @e manual_timeout_head-XDLL.
    * Not used in MHD_USE_THREAD_PER_CONNECTION mode as each thread
    * needs only one connection-specific timeout.
@@ -1407,12 +1810,20 @@ struct MHD_Daemon
    */
   void *unescape_callback_cls;
 
+  /**
+   * Listen port.
+   *
+   * @remark Keep this member after pointer value to keep it
+   * properly aligned as it will be used as member of union MHD_DaemonInfo.
+   */
+  uint16_t port;
+
 #ifdef HAVE_MESSAGES
   /**
    * Function for logging error messages (if we
    * support error reporting).
    */
-  void (*custom_error_log) (void *cls, const char *fmt, va_list va);
+  MHD_LogCallback custom_error_log;
 
   /**
    * Closure argument to @e custom_error_log.
@@ -1425,6 +1836,19 @@ struct MHD_Daemon
    */
   struct MHD_Daemon *master;
 
+  /**
+   * Listen socket.
+   *
+   * @remark Keep this member after pointer value to keep it
+   * properly aligned as it will be used as member of union MHD_DaemonInfo.
+   */
+  MHD_socket listen_fd;
+
+  /**
+   * Listen socket is non-blocking.
+   */
+  bool listen_nonblk;
+
 #if defined(MHD_USE_POSIX_THREADS) || defined(MHD_USE_W32_THREADS)
   /**
    * Worker daemons (one per thread)
@@ -1436,6 +1860,14 @@ struct MHD_Daemon
    * Table storing number of connections per IP
    */
   void *per_ip_connection_count;
+
+  /**
+   * Number of active parallel connections.
+   *
+   * @remark Keep this member after pointer value to keep it
+   * properly aligned as it will be used as member of union MHD_DaemonInfo.
+   */
+  unsigned int connections;
 
   /**
    * Size of the per-connection memory pools.
@@ -1473,12 +1905,18 @@ struct MHD_Daemon
    * "manual_timeout" DLLs.
    */
   MHD_mutex_ cleanup_connection_mutex;
+
+  /**
+   * Mutex for any access to the "new connections" DL-list.
+   */
+  MHD_mutex_ new_connections_mutex;
 #endif
 
   /**
-   * Listen socket.
+   * Our #MHD_OPTION_SERVER_INSANITY level, bits indicating
+   * which sanity checks are off.
    */
-  MHD_socket listen_fd;
+  enum MHD_DisableSanityCheck insanity_level;
 
   /**
    * Whether to allow/disallow/ignore reuse of listening address.
@@ -1491,33 +1929,6 @@ struct MHD_Daemon
    */
   int listening_address_reuse;
 
-#ifdef EPOLL_SUPPORT
-  /**
-   * File descriptor associated with our epoll loop.
-   */
-  int epoll_fd;
-
-  /**
-   * true if the listen socket is in the 'epoll' set,
-   * false if not.
-   */
-  bool listen_socket_in_epoll;
-
-#if defined(HTTPS_SUPPORT) && defined(UPGRADE_SUPPORT)
-  /**
-   * File descriptor associated with the #run_epoll_for_upgrade() loop.
-   * Only available if #MHD_USE_HTTPS_EPOLL_UPGRADE is set.
-   */
-  int epoll_upgrade_fd;
-
-  /**
-   * true if @e epoll_upgrade_fd is in the 'epoll' set,
-   * false if not.
-   */
-  bool upgrade_fd_in_epoll;
-#endif /* HTTPS_SUPPORT && UPGRADE_SUPPORT */
-
-#endif
 
   /**
    * Inter-thread communication channel (also used to unblock
@@ -1531,7 +1942,7 @@ struct MHD_Daemon
   volatile bool shutdown;
 
   /**
-   * Has this deamon been quiesced via #MHD_quiesce_daemon()?
+   * Has this daemon been quiesced via #MHD_quiesce_daemon()?
    * If so, we should no longer use the @e listen_fd (including
    * removing it from the @e epoll_fd when possible).
    */
@@ -1549,7 +1960,13 @@ struct MHD_Daemon
   /*
    * Do we need to process resuming connections?
    */
-  bool resuming;
+  volatile bool resuming;
+
+  /**
+   * Indicate that new connections in @e new_connections_head list
+   * need to be processed.
+   */
+  volatile bool have_new;
 
   /**
    * 'True' if some data is already waiting to be processed.
@@ -1563,20 +1980,16 @@ struct MHD_Daemon
   bool data_already_pending;
 
   /**
-   * Number of active parallel connections.
-   */
-  unsigned int connections;
-
-  /**
    * Limit on the number of parallel connections.
    */
   unsigned int connection_limit;
 
   /**
-   * After how many seconds of inactivity should
-   * connections time out?  Zero for no timeout.
+   * After how many milliseconds of inactivity should
+   * this connection time out?
+   * Zero for no timeout.
    */
-  time_t connection_timeout;
+  uint64_t connection_timeout_ms;
 
   /**
    * Maximum number of connections per IP, or 0 for
@@ -1585,19 +1998,14 @@ struct MHD_Daemon
   unsigned int per_ip_connection_limit;
 
   /**
-   * Daemon's flags (bitfield).
-   */
-  enum MHD_FLAG options;
-
-  /**
-   * Listen port.
-   */
-  uint16_t port;
-
-  /**
    * Be neutral (zero), strict (1) or permissive (-1) to client.
    */
   int strict_for_client;
+
+  /**
+   * True if SIGPIPE is blocked
+   */
+  bool sigpipe_blocked;
 
 #ifdef HTTPS_SUPPORT
 #ifdef UPGRADE_SUPPORT
@@ -1660,6 +2068,14 @@ struct MHD_Daemon
   void *cred_callback_cls;
 #endif
 
+#if GNUTLS_VERSION_NUMBER >= 0x030603
+  /**
+   * Function that can be used to obtain the certificate.  Needed
+   * for OCSP stapling support.  See #MHD_OPTION_HTTPS_CERT_CALLBACK2.
+   */
+  gnutls_certificate_retrieve_function3 *cert_callback2;
+#endif
+
   /**
    * Pointer to our SSL/TLS key (in ASCII) in memory.
    */
@@ -1690,7 +2106,12 @@ struct MHD_Daemon
    */
   bool have_dhparams;
 
-#endif /* HTTPS_SUPPORT */
+  /**
+   * true if ALPN is disabled.
+   */
+  bool disable_alpn;
+
+  #endif /* HTTPS_SUPPORT */
 
 #ifdef DAUTH_SUPPORT
 
@@ -1734,6 +2155,15 @@ struct MHD_Daemon
    * The size of queue for listen socket.
    */
   unsigned int listen_backlog_size;
+
+  /**
+   * The number of user options used.
+   *
+   * Contains number of only meaningful options, i.e. #MHD_OPTION_END
+   * and #MHD_OPTION_ARRAY are not counted, while options inside
+   * #MHD_OPTION_ARRAY are counted.
+   */
+  size_t num_opts;
 };
 
 
@@ -1746,15 +2176,16 @@ struct MHD_Daemon
  * @param element element to insert
  */
 #define DLL_insert(head,tail,element) do { \
-  mhd_assert (NULL == (element)->next); \
-  mhd_assert (NULL == (element)->prev); \
-  (element)->next = (head); \
-  (element)->prev = NULL; \
-  if ((tail) == NULL) \
-    (tail) = element; \
-  else \
-    (head)->prev = element; \
-  (head) = (element); } while (0)
+    mhd_assert (NULL == (element)->next); \
+    mhd_assert (NULL == (element)->prev); \
+    (element)->next = (head);       \
+    (element)->prev = NULL;         \
+    if ((tail) == NULL) {           \
+      (tail) = element;             \
+    } else {                        \
+      (head)->prev = element;       \
+    }                               \
+    (head) = (element); } while (0)
 
 
 /**
@@ -1767,19 +2198,20 @@ struct MHD_Daemon
  * @param element element to remove
  */
 #define DLL_remove(head,tail,element) do { \
-  mhd_assert ( (NULL != (element)->next) || ((element) == (tail)));  \
-  mhd_assert ( (NULL != (element)->prev) || ((element) == (head)));  \
-  if ((element)->prev == NULL) \
-    (head) = (element)->next;  \
-  else \
-    (element)->prev->next = (element)->next; \
-  if ((element)->next == NULL) \
-    (tail) = (element)->prev;  \
-  else \
-    (element)->next->prev = (element)->prev; \
-  (element)->next = NULL; \
-  (element)->prev = NULL; } while (0)
-
+    mhd_assert ( (NULL != (element)->next) || ((element) == (tail)));  \
+    mhd_assert ( (NULL != (element)->prev) || ((element) == (head)));  \
+    if ((element)->prev == NULL) {                                     \
+      (head) = (element)->next;                \
+    } else {                                   \
+      (element)->prev->next = (element)->next; \
+    }                                          \
+    if ((element)->next == NULL) {             \
+      (tail) = (element)->prev;                \
+    } else {                                   \
+      (element)->next->prev = (element)->prev; \
+    }                                          \
+    (element)->next = NULL;                    \
+    (element)->prev = NULL; } while (0)
 
 
 /**
@@ -1791,15 +2223,16 @@ struct MHD_Daemon
  * @param element element to insert
  */
 #define XDLL_insert(head,tail,element) do { \
-  mhd_assert (NULL == (element)->nextX); \
-  mhd_assert (NULL == (element)->prevX); \
-  (element)->nextX = (head); \
-  (element)->prevX = NULL; \
-  if (NULL == (tail)) \
-    (tail) = element; \
-  else \
-    (head)->prevX = element; \
-  (head) = (element); } while (0)
+    mhd_assert (NULL == (element)->nextX); \
+    mhd_assert (NULL == (element)->prevX); \
+    (element)->nextX = (head);     \
+    (element)->prevX = NULL;       \
+    if (NULL == (tail)) {          \
+      (tail) = element;            \
+    } else {                       \
+      (head)->prevX = element;     \
+    }                              \
+    (head) = (element); } while (0)
 
 
 /**
@@ -1812,18 +2245,20 @@ struct MHD_Daemon
  * @param element element to remove
  */
 #define XDLL_remove(head,tail,element) do { \
-  mhd_assert ( (NULL != (element)->nextX) || ((element) == (tail)));  \
-  mhd_assert ( (NULL != (element)->prevX) || ((element) == (head)));  \
-  if (NULL == (element)->prevX) \
-    (head) = (element)->nextX;  \
-  else \
-    (element)->prevX->nextX = (element)->nextX; \
-  if (NULL == (element)->nextX) \
-    (tail) = (element)->prevX;  \
-  else \
-    (element)->nextX->prevX = (element)->prevX; \
-  (element)->nextX = NULL; \
-  (element)->prevX = NULL; } while (0)
+    mhd_assert ( (NULL != (element)->nextX) || ((element) == (tail)));  \
+    mhd_assert ( (NULL != (element)->prevX) || ((element) == (head)));  \
+    if (NULL == (element)->prevX) {                                     \
+      (head) = (element)->nextX;                  \
+    } else {                                      \
+      (element)->prevX->nextX = (element)->nextX; \
+    }                                             \
+    if (NULL == (element)->nextX) {               \
+      (tail) = (element)->prevX;                  \
+    } else {                                      \
+      (element)->nextX->prevX = (element)->prevX; \
+    }                                             \
+    (element)->nextX = NULL;                      \
+    (element)->prevX = NULL; } while (0)
 
 
 /**
@@ -1835,13 +2270,14 @@ struct MHD_Daemon
  * @param element element to insert
  */
 #define EDLL_insert(head,tail,element) do { \
-  (element)->nextE = (head); \
-  (element)->prevE = NULL; \
-  if ((tail) == NULL) \
-    (tail) = element; \
-  else \
-    (head)->prevE = element; \
-  (head) = (element); } while (0)
+    (element)->nextE = (head); \
+    (element)->prevE = NULL;   \
+    if ((tail) == NULL) {      \
+      (tail) = element;        \
+    } else {                   \
+      (head)->prevE = element; \
+    }                          \
+    (head) = (element); } while (0)
 
 
 /**
@@ -1853,17 +2289,19 @@ struct MHD_Daemon
  * @param tail pointer to the tail of the EDLL
  * @param element element to remove
  */
-#define EDLL_remove(head,tail,element) do { \
-  if ((element)->prevE == NULL) \
-    (head) = (element)->nextE;  \
-  else \
-    (element)->prevE->nextE = (element)->nextE; \
-  if ((element)->nextE == NULL) \
-    (tail) = (element)->prevE;  \
-  else \
-    (element)->nextE->prevE = (element)->prevE; \
-  (element)->nextE = NULL; \
-  (element)->prevE = NULL; } while (0)
+#define EDLL_remove(head,tail,element) do {       \
+    if ((element)->prevE == NULL) {               \
+      (head) = (element)->nextE;                  \
+    } else {                                      \
+      (element)->prevE->nextE = (element)->nextE; \
+    }                                             \
+    if ((element)->nextE == NULL) {               \
+      (tail) = (element)->prevE;                  \
+    } else {                                      \
+      (element)->nextE->prevE = (element)->prevE; \
+    }                                             \
+    (element)->nextE = NULL;                      \
+    (element)->prevE = NULL; } while (0)
 
 
 /**
@@ -1881,16 +2319,20 @@ MHD_unescape_plus (char *arg);
  *
  * @param connection context of the iteration
  * @param key 0-terminated key string, never NULL
- * @param value 0-terminated value string, may be NULL
+ * @param key_size number of bytes in key
+ * @param value 0-terminated binary data, may include binary zeros, may be NULL
+ * @param value_size number of bytes in value
  * @param kind origin of the key-value pair
  * @return #MHD_YES on success (continue to iterate)
  *         #MHD_NO to signal failure (and abort iteration)
  */
-typedef int
+typedef enum MHD_Result
 (*MHD_ArgumentIterator_)(struct MHD_Connection *connection,
-			 const char *key,
-			 const char *value,
-			 enum MHD_ValueKind kind);
+                         const char *key,
+                         size_t key_size,
+                         const char *value,
+                         size_t value_size,
+                         enum MHD_ValueKind kind);
 
 
 /**
@@ -1907,23 +2349,26 @@ typedef int
  *         #MHD_YES for success (parsing succeeded, @a cb always
  *                               returned #MHD_YES)
  */
-int
+enum MHD_Result
 MHD_parse_arguments_ (struct MHD_Connection *connection,
-		      enum MHD_ValueKind kind,
-		      char *args,
-		      MHD_ArgumentIterator_ cb,
-		      unsigned int *num_headers);
+                      enum MHD_ValueKind kind,
+                      char *args,
+                      MHD_ArgumentIterator_ cb,
+                      unsigned int *num_headers);
 
 
 /**
- * Check whether response header contains particular @a token.
+ * Check whether response header contains particular token.
  *
  * Token could be surrounded by spaces and tabs and delimited by comma.
  * Case-insensitive match used for header names and tokens.
+ *
  * @param response  the response to query
  * @param key       header name
+ * @param key_len   the length of @a key, not including optional
+ *                  terminating null-character.
  * @param token     the token to find
- * @param token_len the length of token, not including optional
+ * @param token_len the length of @a token, not including optional
  *                  terminating null-character.
  * @return true if token is found in specified header,
  *         false otherwise
@@ -1931,6 +2376,7 @@ MHD_parse_arguments_ (struct MHD_Connection *connection,
 bool
 MHD_check_response_header_token_ci (const struct MHD_Response *response,
                                     const char *key,
+                                    size_t key_len,
                                     const char *token,
                                     size_t token_len);
 
@@ -1946,8 +2392,18 @@ MHD_check_response_header_token_ci (const struct MHD_Response *response,
  *         false otherwise
  */
 #define MHD_check_response_header_s_token_ci(r,k,tkn) \
-    MHD_check_response_header_token_ci((r),(k),(tkn),MHD_STATICSTR_LEN_(tkn))
+  MHD_check_response_header_token_ci ((r),(k),MHD_STATICSTR_LEN_ (k), \
+                                      (tkn),MHD_STATICSTR_LEN_ (tkn))
 
+/**
+ * Trace up to and return master daemon. If the supplied daemon
+ * is a master, then return the daemon itself.
+ *
+ * @param daemon handle to a daemon
+ * @return master daemon handle
+ */
+struct MHD_Daemon *
+MHD_get_master (struct MHD_Daemon *daemon);
 
 /**
  * Internal version of #MHD_suspend_connection().
@@ -1960,5 +2416,20 @@ MHD_check_response_header_token_ci (const struct MHD_Response *response,
  */
 void
 internal_suspend_connection_ (struct MHD_Connection *connection);
+
+
+#ifdef UPGRADE_SUPPORT
+/**
+ * Mark upgraded connection as closed by application.
+ *
+ * The @a connection pointer must not be used after call of this function
+ * as it may be freed in other thread immediately.
+ * @param connection the upgraded connection to mark as closed by application
+ */
+void
+MHD_upgraded_connection_mark_app_closed_ (struct MHD_Connection *connection);
+
+#endif /* UPGRADE_SUPPORT */
+
 
 #endif

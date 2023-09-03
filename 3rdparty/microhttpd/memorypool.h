@@ -1,6 +1,7 @@
 /*
      This file is part of libmicrohttpd
-     Copyright (C) 2007, 2009 Daniel Pittman and Christian Grothoff
+     Copyright (C) 2007--2019 Daniel Pittman, Christian Grothoff and
+     Karlson2k (Evgeny Grin)
 
      This library is free software; you can redistribute it and/or
      modify it under the terms of the GNU Lesser General Public
@@ -23,12 +24,19 @@
  *        for each connection and bounding memory use for each
  *        request
  * @author Christian Grothoff
+ * @author Karlson2k (Evgeny Grin)
  */
 
 #ifndef MEMORYPOOL_H
 #define MEMORYPOOL_H
 
-#include "internal.h"
+#include "mhd_options.h"
+#ifdef HAVE_STDDEF_H
+#include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+#ifdef HAVE_STDBOOL_H
+#include <stdbool.h>
+#endif
 
 /**
  * Opaque handle for a memory pool.
@@ -36,6 +44,12 @@
  * by multiple threads.
  */
 struct MemoryPool;
+
+/**
+ * Initialize values for memory pools
+ */
+void
+MHD_init_mem_pools_ (void);
 
 
 /**
@@ -62,7 +76,7 @@ MHD_pool_destroy (struct MemoryPool *pool);
  *
  * @param pool memory pool to use for the operation
  * @param size number of bytes to allocate
- * @param from_end allocate from end of pool (set to #MHD_YES);
+ * @param from_end allocate from end of pool (set to 'true');
  *        use this for small, persistent allocations that
  *        will never be reallocated
  * @return NULL if the pool cannot support size more
@@ -70,8 +84,33 @@ MHD_pool_destroy (struct MemoryPool *pool);
  */
 void *
 MHD_pool_allocate (struct MemoryPool *pool,
-		   size_t size,
-                   int from_end);
+                   size_t size,
+                   bool from_end);
+
+
+/**
+ * Try to allocate @a size bytes memory area from the @a pool.
+ *
+ * If allocation fails, @a required_bytes is updated with size required to be
+ * freed in the @a pool from relocatable area to allocate requested number
+ * of bytes.
+ * Allocated memory area is always not rellocatable ("from end").
+ *
+ * @param pool memory pool to use for the operation
+ * @param size the size of memory in bytes to allocate
+ * @param[out] required_bytes the pointer to variable to be updated with
+ *                            the size of the required additional free
+ *                            memory area, not updated if function succeed.
+ *                            Cannot be NULL.
+ * @return the pointer to allocated memory area if succeed,
+ *         NULL if the pool doesn't have enough space, required_bytes is updated
+ *         with amount of space needed to be freed in relocatable area or
+ *         set to SIZE_MAX if requested size is too large for the pool.
+ */
+void *
+MHD_pool_try_alloc (struct MemoryPool *pool,
+                    size_t size,
+                    size_t *required_bytes);
 
 
 /**
@@ -80,22 +119,22 @@ MHD_pool_allocate (struct MemoryPool *pool,
  * shrinking the block that was last (re)allocated.
  * If the given block is not the most recently
  * (re)allocated block, the memory of the previous
- * allocation may be leaked until the pool is
- * destroyed (and copying the data maybe required).
+ * allocation may be not released until the pool is
+ * destroyed or reset.
  *
  * @param pool memory pool to use for the operation
  * @param old the existing block
  * @param old_size the size of the existing block
  * @param new_size the new size of the block
  * @return new address of the block, or
- *         NULL if the pool cannot support new_size
- *         bytes (old continues to be valid for old_size)
+ *         NULL if the pool cannot support @a new_size
+ *         bytes (old continues to be valid for @a old_size)
  */
 void *
 MHD_pool_reallocate (struct MemoryPool *pool,
-		     void *old,
-		     size_t old_size,
-		     size_t new_size);
+                     void *old,
+                     size_t old_size,
+                     size_t new_size);
 
 
 /**
@@ -123,8 +162,8 @@ MHD_pool_get_free (struct MemoryPool *pool);
  */
 void *
 MHD_pool_reset (struct MemoryPool *pool,
-		void *keep,
-		size_t copy_bytes,
+                void *keep,
+                size_t copy_bytes,
                 size_t new_size);
 
 #endif

@@ -1,6 +1,6 @@
 /*
   This file is part of libmicrohttpd
-  Copyright (C) 2016 Karlson2k (Evgeny Grin)
+  Copyright (C) 2016-2021 Karlson2k (Evgeny Grin)
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -42,10 +42,9 @@
 #define _(String) (String)
 
 
-
 #ifndef _MHD_EXTERN
 #if defined(BUILDING_MHD_LIB) && defined(_WIN32) && \
-    (defined(DLL_EXPORT) || defined(MHD_W32DLL))
+  (defined(DLL_EXPORT) || defined(MHD_W32DLL))
 #define _MHD_EXTERN __declspec(dllexport) extern
 #else   /* !BUILDING_MHD_LIB || !_WIN32 || (!DLL_EXPORT && !MHD_W32DLL) */
 #define _MHD_EXTERN extern
@@ -66,7 +65,7 @@
 #endif /* !FD_SETSIZE && !W32 */
 
 #if defined(HAVE_LINUX_SENDFILE) || defined(HAVE_FREEBSD_SENDFILE) || \
-    defined(HAVE_DARWIN_SENDFILE) || defined(HAVE_SOLARIS_SENDFILE)
+  defined(HAVE_DARWIN_SENDFILE) || defined(HAVE_SOLARIS_SENDFILE)
 /* Have any supported sendfile() function. */
 #define _MHD_HAVE_SENDFILE
 #endif /* HAVE_LINUX_SENDFILE || HAVE_FREEBSD_SENDFILE ||
@@ -74,6 +73,12 @@
 #if defined(HAVE_LINUX_SENDFILE) || defined(HAVE_SOLARIS_SENDFILE)
 #define MHD_LINUX_SOLARIS_SENDFILE 1
 #endif /* HAVE_LINUX_SENDFILE || HAVE_SOLARIS_SENDFILE */
+
+#if defined(MHD_USE_POSIX_THREADS) || defined(MHD_USE_W32_THREADS)
+#  ifndef MHD_USE_THREADS
+#    define MHD_USE_THREADS 1
+#  endif
+#endif /* MHD_USE_POSIX_THREADS || MHD_USE_W32_THREADS */
 
 #if OS390
 #define _OPEN_THREADS
@@ -83,8 +88,12 @@
 #endif
 
 #if defined(_WIN32) && ! defined(__CYGWIN__)
+/* Declare POSIX-compatible names */
+#define _CRT_DECLARE_NONSTDC_NAMES 1
+/* Do not warn about POSIX name usage */
+#define _CRT_NONSTDC_NO_WARNINGS 1
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0501
+#define _WIN32_WINNT 0x0600
 #else /* _WIN32_WINNT */
 #if _WIN32_WINNT < 0x0501
 #error "Headers for Windows XP or later are required"
@@ -100,7 +109,8 @@
 #define RESTRICT __restrict__
 #endif /* __VXWORKS__ || __vxworks || OS_VXWORKS */
 
-#if LINUX+0 && (defined(HAVE_SENDFILE64) || defined(HAVE_LSEEK64)) && ! defined(_LARGEFILE64_SOURCE)
+#if LINUX + 0 && (defined(HAVE_SENDFILE64) || defined(HAVE_LSEEK64)) && \
+  ! defined(_LARGEFILE64_SOURCE)
 /* On Linux, special macro is required to enable definitions of some xxx64 functions */
 #define _LARGEFILE64_SOURCE 1
 #endif
@@ -111,12 +121,13 @@
 #endif /* HAVE_C11_GMTIME_S */
 
 #if defined(MHD_FAVOR_FAST_CODE) && defined(MHD_FAVOR_SMALL_CODE)
-#error MHD_FAVOR_FAST_CODE and MHD_FAVOR_SMALL_CODE are both defined. Cannot favor speed and size at the same time.
+#error \
+  MHD_FAVOR_FAST_CODE and MHD_FAVOR_SMALL_CODE are both defined. Cannot favor speed and size at the same time.
 #endif /* MHD_FAVOR_FAST_CODE && MHD_FAVOR_SMALL_CODE */
 
 /* Define MHD_FAVOR_FAST_CODE to force fast code path or
    define MHD_FAVOR_SMALL_CODE to choose compact code path */
-#if !defined(MHD_FAVOR_FAST_CODE) && !defined(MHD_FAVOR_SMALL_CODE)
+#if ! defined(MHD_FAVOR_FAST_CODE) && ! defined(MHD_FAVOR_SMALL_CODE)
 /* Try to detect user preferences */
 /* Defined by GCC and many compatible compilers */
 #if defined(__OPTIMIZE_SIZE__)
@@ -126,9 +137,48 @@
 #endif /* __OPTIMIZE__ */
 #endif /* !MHD_FAVOR_FAST_CODE && !MHD_FAVOR_SMALL_CODE */
 
-#if !defined(MHD_FAVOR_FAST_CODE) && !defined(MHD_FAVOR_SMALL_CODE)
+#if ! defined(MHD_FAVOR_FAST_CODE) && ! defined(MHD_FAVOR_SMALL_CODE)
 /* Use faster code by default */
 #define MHD_FAVOR_FAST_CODE 1
 #endif /* !MHD_FAVOR_FAST_CODE && !MHD_FAVOR_SMALL_CODE */
+
+#ifndef MHD_ASAN_ACTIVE
+#if (defined(__GNUC__) || defined(_MSC_VER)) && defined(__SANITIZE_ADDRESS__)
+#define MHD_ASAN_ACTIVE 1
+#elif defined(__has_feature)
+#if __has_feature (address_sanitizer)
+#define MHD_ASAN_ACTIVE 1
+#endif /* __has_feature(address_sanitizer) */
+#endif /* __has_feature */
+#endif /* MHD_ASAN_ACTIVE */
+
+#if defined(MHD_ASAN_ACTIVE) && defined(HAVE_SANITIZER_ASAN_INTERFACE_H) && \
+  (defined(FUNC_ATTR_PTRCOMPARE_WOKRS) || defined(FUNC_ATTR_NOSANITIZE_WORKS))
+#ifndef MHD_ASAN_POISON_ACTIVE
+/* Manual ASAN poisoning could be used */
+#warning User memory poisoning is not active
+#endif /* ! MHD_ASAN_POISON_ACTIVE */
+#else  /* ! (MHD_ASAN_ACTIVE && HAVE_SANITIZER_ASAN_INTERFACE_H &&
+           (FUNC_ATTR_PTRCOMPARE_WOKRS || FUNC_ATTR_NOSANITIZE_WORKS))   */
+#ifdef MHD_ASAN_POISON_ACTIVE
+#error User memory poisoning is active, but conditions are not suitable
+#endif /* MHD_ASAN_POISON_ACTIVE */
+#endif /* ! (MHD_ASAN_ACTIVE && HAVE_SANITIZER_ASAN_INTERFACE_H &&
+           (FUNC_ATTR_PTRCOMPARE_WOKRS || FUNC_ATTR_NOSANITIZE_WORKS))   */
+
+
+/**
+ * Automatic string with the name of the current function
+ */
+#if defined(HAVE___FUNC__)
+#define MHD_FUNC_       __func__
+#elif defined(HAVE___FUNCTION__)
+#define MHD_FUNC_       __FUNCTION__
+#elif defined(HAVE___PRETTY_FUNCTION__)
+#define MHD_FUNC_       __PRETTY_FUNCTION__
+#else
+#define MHD_FUNC_       "**name unavailable**"
+#endif
+
 
 #endif /* MHD_OPTIONS_H */

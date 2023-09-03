@@ -61,14 +61,20 @@
  */
 #define MHD_ERR_INVAL_ (-3078)
 
-
-#ifdef HAVE_FREEBSD_SENDFILE
 /**
- * Initialises static variables
+ * Argument values are not supported
  */
-void
-MHD_conn_init_static_ (void);
-#endif /* HAVE_FREEBSD_SENDFILE */
+#define MHD_ERR_OPNOTSUPP_ (-3079)
+
+/**
+ * Socket is shut down for writing or no longer connected
+ */
+#define MHD_ERR_PIPE_ (-3080)
+
+/**
+ * General TLS encryption or decryption error
+ */
+#define MHD_ERR_TLS_ (-4097)
 
 
 /**
@@ -83,13 +89,15 @@ MHD_set_http_callbacks_ (struct MHD_Connection *connection);
 /**
  * This function handles a particular connection when it has been
  * determined that there is data to be read off a socket. All
- * implementations (multithreaded, external select, internal select)
+ * implementations (multithreaded, external polling, internal polling)
  * call this function to handle reads.
  *
  * @param connection connection to handle
+ * @param socket_error set to true if socket error was detected
  */
 void
-MHD_connection_handle_read (struct MHD_Connection *connection);
+MHD_connection_handle_read (struct MHD_Connection *connection,
+                            bool socket_error);
 
 
 /**
@@ -113,10 +121,10 @@ MHD_connection_handle_write (struct MHD_Connection *connection);
  * recv(), send() and response.
  *
  * @param connection connection to handle
- * @return MHD_YES if we should continue to process the
- *         connection (not dead yet), MHD_NO if it died
+ * @return #MHD_YES if we should continue to process the
+ *         connection (not dead yet), #MHD_NO if it died
  */
-int
+enum MHD_Result
 MHD_connection_handle_idle (struct MHD_Connection *connection);
 
 
@@ -152,8 +160,9 @@ MHD_connection_close_ (struct MHD_Connection *connection,
  */
 void
 MHD_connection_finish_forward_ (struct MHD_Connection *connection);
+
 #else  /* ! HTTPS_SUPPORT */
-#define MHD_connection_finish_forward_(conn) (void)conn
+#define MHD_connection_finish_forward_(conn) (void) conn
 #endif /* ! HTTPS_SUPPORT */
 
 
@@ -163,11 +172,12 @@ MHD_connection_finish_forward_ (struct MHD_Connection *connection);
  * the epoll set if needed.
  *
  * @param connection connection to process
- * @return MHD_YES if we should continue to process the
- *         connection (not dead yet), MHD_NO if it died
+ * @return #MHD_YES if we should continue to process the
+ *         connection (not dead yet), #MHD_NO if it died
  */
-int
+enum MHD_Result
 MHD_connection_epoll_update_ (struct MHD_Connection *connection);
+
 #endif
 
 /**

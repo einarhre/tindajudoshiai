@@ -39,6 +39,8 @@
 
 #include "mhd_options.h"
 
+#ifdef MHD_USE_THREADS
+
 #if defined(MHD_USE_W32_THREADS)
 #  define MHD_W32_MUTEX_ 1
 #  ifndef WIN32_LEAN_AND_MEAN
@@ -56,17 +58,20 @@
 
 #ifndef MHD_PANIC
 #  include <stdio.h>
-#  include <stdlib.h>
+#  ifdef HAVE_STDLIB_H
+#    include <stdlib.h>
+#  endif /* HAVE_STDLIB_H */
 /* Simple implementation of MHD_PANIC, to be used outside lib */
 #  define MHD_PANIC(msg) do { fprintf (stderr,           \
-     "Abnormal termination at %d line in file %s: %s\n", \
-     (int)__LINE__, __FILE__, msg); abort();} while(0)
+                                       "Abnormal termination at %d line in file %s: %s\n", \
+                                       (int) __LINE__, __FILE__, msg); abort (); \
+} while (0)
 #endif /* ! MHD_PANIC */
 
 #if defined(MHD_PTHREAD_MUTEX_)
-  typedef pthread_mutex_t MHD_mutex_;
+typedef pthread_mutex_t MHD_mutex_;
 #elif defined(MHD_W32_MUTEX_)
-  typedef CRITICAL_SECTION MHD_mutex_;
+typedef CRITICAL_SECTION MHD_mutex_;
 #endif
 
 #if defined(MHD_PTHREAD_MUTEX_)
@@ -75,14 +80,15 @@
  * @param pmutex pointer to the mutex
  * @return nonzero on success, zero otherwise
  */
-#define MHD_mutex_init_(pmutex) (!(pthread_mutex_init((pmutex), NULL)))
+#define MHD_mutex_init_(pmutex) (! (pthread_mutex_init ((pmutex), NULL)))
 #elif defined(MHD_W32_MUTEX_)
 /**
  * Initialise new mutex.
  * @param pmutex pointer to mutex
  * @return nonzero on success, zero otherwise
  */
-#define MHD_mutex_init_(pmutex) (InitializeCriticalSectionAndSpinCount((pmutex),16))
+#define MHD_mutex_init_(pmutex) (InitializeCriticalSectionAndSpinCount ( \
+                                   (pmutex),16))
 #endif
 
 #if defined(MHD_PTHREAD_MUTEX_)
@@ -90,7 +96,8 @@
 /**
  *  Define static mutex and statically initialise it.
  */
-#    define MHD_MUTEX_STATIC_DEFN_INIT_(m) static MHD_mutex_ m = PTHREAD_MUTEX_INITIALIZER
+#    define MHD_MUTEX_STATIC_DEFN_INIT_(m) static MHD_mutex_ m = \
+  PTHREAD_MUTEX_INITIALIZER
 #  endif /* PTHREAD_MUTEX_INITIALIZER */
 #endif
 
@@ -100,14 +107,14 @@
  * @param pmutex pointer to mutex
  * @return nonzero on success, zero otherwise
  */
-#define MHD_mutex_destroy_(pmutex) (!(pthread_mutex_destroy((pmutex))))
+#define MHD_mutex_destroy_(pmutex) (! (pthread_mutex_destroy ((pmutex))))
 #elif defined(MHD_W32_MUTEX_)
 /**
  * Destroy previously initialised mutex.
  * @param pmutex pointer to mutex
  * @return Always nonzero
  */
-#define MHD_mutex_destroy_(pmutex) (DeleteCriticalSection((pmutex)), !0)
+#define MHD_mutex_destroy_(pmutex) (DeleteCriticalSection ((pmutex)), ! 0)
 #endif
 
 /**
@@ -116,9 +123,9 @@
  * @param pmutex pointer to mutex
  */
 #define MHD_mutex_destroy_chk_(pmutex) do {       \
-    if (!MHD_mutex_destroy_(pmutex))              \
-      MHD_PANIC(_("Failed to destroy mutex.\n")); \
-  } while(0)
+    if (! MHD_mutex_destroy_ (pmutex))              \
+      MHD_PANIC (_ ("Failed to destroy mutex.\n")); \
+} while (0)
 
 
 #if defined(MHD_PTHREAD_MUTEX_)
@@ -129,7 +136,7 @@
  * @param pmutex pointer to mutex
  * @return nonzero on success, zero otherwise
  */
-#define MHD_mutex_lock_(pmutex) (!(pthread_mutex_lock((pmutex))))
+#define MHD_mutex_lock_(pmutex) (! (pthread_mutex_lock ((pmutex))))
 #elif defined(MHD_W32_MUTEX_)
 /**
  * Acquire lock on previously initialised mutex.
@@ -138,7 +145,7 @@
  * @param pmutex pointer to mutex
  * @return Always nonzero
  */
-#define MHD_mutex_lock_(pmutex) (EnterCriticalSection((pmutex)), !0)
+#define MHD_mutex_lock_(pmutex) (EnterCriticalSection ((pmutex)), ! 0)
 #endif
 
 /**
@@ -149,9 +156,9 @@
  * @param pmutex pointer to mutex
  */
 #define MHD_mutex_lock_chk_(pmutex) do {       \
-    if (!MHD_mutex_lock_(pmutex))              \
-      MHD_PANIC(_("Failed to lock mutex.\n")); \
-  } while(0)
+    if (! MHD_mutex_lock_ (pmutex))              \
+      MHD_PANIC (_ ("Failed to lock mutex.\n")); \
+} while (0)
 
 #if defined(MHD_PTHREAD_MUTEX_)
 /**
@@ -159,14 +166,14 @@
  * @param pmutex pointer to mutex
  * @return nonzero on success, zero otherwise
  */
-#define MHD_mutex_unlock_(pmutex) (!(pthread_mutex_unlock((pmutex))))
+#define MHD_mutex_unlock_(pmutex) (! (pthread_mutex_unlock ((pmutex))))
 #elif defined(MHD_W32_MUTEX_)
 /**
  * Unlock previously initialised and locked mutex.
  * @param pmutex pointer to mutex
  * @return Always nonzero
  */
-#define MHD_mutex_unlock_(pmutex) (LeaveCriticalSection((pmutex)), !0)
+#define MHD_mutex_unlock_(pmutex) (LeaveCriticalSection ((pmutex)), ! 0)
 #endif
 
 /**
@@ -175,9 +182,20 @@
  * @param pmutex pointer to mutex
  */
 #define MHD_mutex_unlock_chk_(pmutex) do {       \
-    if (!MHD_mutex_unlock_(pmutex))              \
-      MHD_PANIC(_("Failed to unlock mutex.\n")); \
-  } while(0)
+    if (! MHD_mutex_unlock_ (pmutex))              \
+      MHD_PANIC (_ ("Failed to unlock mutex.\n")); \
+} while (0)
 
+#else  /* ! MHD_USE_THREADS */
+
+#define MHD_mutex_init_(ignore) (! 0)
+#define MHD_mutex_destroy_(ignore) (! 0)
+#define MHD_mutex_destroy_chk_(ignore) (void)0
+#define MHD_mutex_lock_(ignore) (! 0)
+#define MHD_mutex_lock_chk_(ignore) (void)0
+#define MHD_mutex_unlock_(ignore) (! 0)
+#define MHD_mutex_unlock_chk_(ignore) (void)0
+
+#endif /* ! MHD_USE_THREADS */
 
 #endif /* ! MHD_LOCKS_H */

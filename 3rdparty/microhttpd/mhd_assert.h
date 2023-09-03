@@ -1,6 +1,6 @@
 /*
   This file is part of libmicrohttpd
-  Copyright (C) 2017 Karlson2k (Evgeny Grin)
+  Copyright (C) 2017-2021 Karlson2k (Evgeny Grin)
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -23,26 +23,40 @@
  * @author Karlson2k (Evgeny Grin)
  */
 
+/* Unlike POSIX version of 'assert.h', MHD version of 'assert' header
+ * does not allow multiple redefinition of 'mhd_assert' macro within single
+ * source file. */
 #ifndef MHD_ASSERT_H
 #define MHD_ASSERT_H 1
 
 #include "mhd_options.h"
+
+#if ! defined(_DEBUG) && ! defined(NDEBUG)
+#ifndef DEBUG /* Used by some toolchains */
+#define NDEBUG 1 /* Use NDEBUG by default */
+#else  /* DEBUG */
+#define _DEBUG 1
+#endif /* DEBUG */
+#endif /* !_DEBUG && !NDEBUG */
+#if defined(_DEBUG) && defined(NDEBUG)
+#error Both _DEBUG and NDEBUG are defined
+#endif /* _DEBUG && NDEBUG */
 #ifdef NDEBUG
-#  define mhd_assert(ignore) ((void)0)
+#  define mhd_assert(ignore) ((void) 0)
 #else  /* _DEBUG */
 #  ifdef HAVE_ASSERT
 #    include <assert.h>
-#    define mhd_assert(CHK) assert(CHK)
+#    define mhd_assert(CHK) assert (CHK)
 #  else  /* ! HAVE_ASSERT */
 #    include <stdio.h>
 #    include <stdlib.h>
 #    define mhd_assert(CHK) \
-       do { \
-           if (!(CHK)) { \
-             fprintf(stderr, "%s:%u Assertion failed: %s\nProgram aborted.\n", \
-                     __FILE__, (unsigned)__LINE__, #CHK); \
-             fflush(stderr); abort(); } \
-          } while(0)
+  do { \
+    if (! (CHK)) { \
+      fprintf (stderr, "%s:%u Assertion failed: %s\nProgram aborted.\n", \
+               __FILE__, (unsigned) __LINE__, #CHK); \
+      fflush (stderr); abort (); } \
+  } while (0)
 #  endif /* ! HAVE_ASSERT */
 #endif /* _DEBUG */
 

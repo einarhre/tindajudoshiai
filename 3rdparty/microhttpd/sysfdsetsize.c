@@ -33,7 +33,9 @@
 #undef FD_SETSIZE
 #endif /* FD_SETSIZE */
 
+#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
+#endif /* HAVE_STDLIB_H */
 #if defined(__VXWORKS__) || defined(__vxworks) || defined(OS_VXWORKS)
 #include <sockLib.h>
 #endif /* OS_VXWORKS */
@@ -56,7 +58,7 @@
 #include <sys/socket.h>
 #endif /* HAVE_SYS_SOCKET_H */
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && ! defined(__CYGWIN__)
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN 1
 #endif /* !WIN32_LEAN_AND_MEAN */
@@ -73,7 +75,7 @@
  * Get system default value of FD_SETSIZE
  * @return system default value of FD_SETSIZE
  */
-int
+unsigned int
 get_system_fdsetsize_value (void)
 {
   return FD_SETSIZE;
