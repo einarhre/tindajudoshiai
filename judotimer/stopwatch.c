@@ -48,6 +48,7 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #if (GTKVER == 3)
 #include <gdk/gdkkeysyms-compat.h>
@@ -1819,7 +1820,7 @@ void judotimer_log(gchar *format, ...)
         mylog("logfile_name=%s\n", logfile_name);
     }
 
-    FILE *f = fopen(logfile_name, "a");
+    FILE *f = g_fopen(logfile_name, "a");
     if (f) {
         struct tm *tm = localtime(&now);
 

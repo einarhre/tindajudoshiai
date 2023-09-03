@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <math.h>
 #include <assert.h>
 
@@ -638,11 +639,11 @@ gint paint_svg(struct paint_data *pd)
     }
 
     if (pd->filename) {
-        dfile = fopen(pd->filename, "w");
+        dfile = g_fopen(pd->filename, "w");
         if (!dfile)
             perror("svgout");
     } else if (debug)
-        dfile = fopen("debug.svg", "w");
+        dfile = g_fopen("debug.svg", "w");
 
     guchar *p = (guchar *)svgdata;
 
@@ -1304,7 +1305,7 @@ gint paint_svg(struct paint_data *pd)
                 gchar flagfile[32];
                 snprintf(flagfile, sizeof(flagfile), "%s.png", last_country ? last_country : "empty");
                 gchar *file = g_build_filename(installation_dir, "etc", "flags-ioc", flagfile, NULL);
-                FILE *f = fopen(file, "rb");
+                FILE *f = g_fopen(file, "rb");
                 g_free(file);
                 if (f) {
                     gint n, k;
@@ -1819,7 +1820,7 @@ FILE *lisp_get_file_name(void)
 
     filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
     if (filename)
-	res = fopen(filename, "w");
+	res = g_fopen(filename, "w");
 
     gtk_widget_destroy(dialog);
     return res;

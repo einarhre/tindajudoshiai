@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <assert.h>
 
 #include "sqlite3.h"
@@ -590,7 +591,7 @@ void write_competitor_for_coach_display(struct judoka *j)
     gchar *file = g_build_filename(current_directory, "c-ids.txt", NULL);
 
     if (j == NULL) { // initialize file
-        f = fopen(file, "wb");
+        f = g_fopen(file, "wb");
         g_free(file);
         if (!f)
             return;
@@ -602,7 +603,7 @@ void write_competitor_for_coach_display(struct judoka *j)
     }
 
     // list of ids
-    f = fopen(file, "r+b");
+    f = g_fopen(file, "r+b");
     g_free(file);
     if (!f)
         return;
@@ -622,7 +623,7 @@ void write_competitor_for_coach_display(struct judoka *j)
     // individual file for competitor
     snprintf(buf, sizeof(buf), "c-%d.txt", j->index);
     file = g_build_filename(current_directory, buf, NULL);
-    f = fopen(file, "wb");
+    f = g_fopen(file, "wb");
     g_free(file);
     if (!f)
         return;

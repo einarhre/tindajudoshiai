@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <gdk/gdkkeysyms.h>
 
 #ifdef WIN32
@@ -184,7 +185,7 @@ club_completer_new(void)
 
     gchar line[256];
     gchar *file = g_build_filename(installation_dir, "etc", "clubs.txt", NULL);
-    FILE *f = fopen(file, "r");
+    FILE *f = g_fopen(file, "r");
     g_free(file);
 
     if (!f)

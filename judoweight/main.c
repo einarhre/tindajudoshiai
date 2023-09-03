@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <gdk/gdkkeysyms.h>
 #ifdef WIN32
 #include <process.h>
@@ -662,7 +663,7 @@ void judoweight_log(gchar *format, ...)
         mylog("logfile_name=%s\n", logfile_name);
     }
 
-    FILE *f = fopen(logfile_name, "a");
+    FILE *f = g_fopen(logfile_name, "a");
     if (f) {
         struct tm *tm = localtime((time_t *)&t);
 #ifdef USE_ISO_8859_1

@@ -818,7 +818,7 @@ void put_comp_data_to_json_file(GtkWidget *w, gpointer data)
 
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
         gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-        FILE *f = fopen(filename, "w");
+        FILE *f = g_fopen(filename, "w");
         if (f) {
             cJSON *root = cJSON_CreateArray();
             db_comp_print_json(root);
@@ -962,10 +962,10 @@ void make_backup(void)
 
     filenames[ix] = g_build_filename(backup_directory, buf, NULL);
 
-    FILE *f = fopen(filenames[ix], "wb");
+    FILE *f = g_fopen(filenames[ix], "wb");
     if (f) {
         gint n;
-        FILE *db = fopen(database_name, "rb");
+        FILE *db = g_fopen(database_name, "rb");
         if (!db) {
             fclose(f);
             return;

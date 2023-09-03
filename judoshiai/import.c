@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "sqlite3.h"
@@ -266,7 +267,7 @@ static gint file_is_utf8(gchar *fname)
 {
     gchar line[256];
     const gchar *end;
-    FILE *f = fopen(fname, "r");
+    FILE *f = g_fopen(fname, "r");
     if (!f)
         return -1;
 
@@ -330,7 +331,7 @@ static void import_txt(gchar *fname, gboolean test, struct i_text *d)
     if (d->separator[0] == 0)
         return;
 
-    FILE *f = fopen(fname, "r");
+    FILE *f = g_fopen(fname, "r");
     if(f == NULL)
         return;
 

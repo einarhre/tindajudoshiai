@@ -363,8 +363,12 @@ int main( int   argc,
 
 #ifdef WIN32
     if (argc >= 2 && !strcmp(argv[1], "-console")) {
-	AllocConsole();
-	freopen("CON", "w", stdout);
+	      if(AllocConsole()) {
+            FILE *f;
+            freopen_s(&f, "CONIN$", "r", stdin);
+            freopen_s(&f, "CONOUT$", "w", stderr);
+            freopen_s(&f, "CONOUT$", "w", stdout);
+        }
     }
 #endif
 
@@ -435,7 +439,7 @@ ok:
     } else {
         /* create a lock file */
         first_instance = TRUE;
-        FILE *f = fopen(lockfile, "w");
+        FILE *f = g_fopen(lockfile, "w");
         if (f) {
             fprintf(f, "%ld\n", now);
             fclose(f);

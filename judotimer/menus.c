@@ -22,6 +22,7 @@
 #include <string.h>
 #include <locale.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 #if (GTKVER == 3)
 #include <gdk/gdkkeysyms-compat.h>
@@ -1176,7 +1177,7 @@ static void destroy_log_view(GtkWidget *widget,
 void start_log_view(GtkWidget *w, gpointer data)
 {
     gchar line[256];
-    FILE *f = fopen(logfile_name, "r");
+    FILE *f = g_fopen(logfile_name, "r");
     if (!f)
         return;
 

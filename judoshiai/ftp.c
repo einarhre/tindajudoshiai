@@ -433,7 +433,7 @@ int put_using_proto(gint protocol, const char *fullname, const char *fname)
     fsize = (curl_off_t)file_info.st_size;
 
     /* get a FILE * of the same file */
-    hd_src = fopen(fullname, "rb");
+    hd_src = g_fopen(fullname, "rb");
     if (!hd_src)
 	return -1;
 
@@ -602,7 +602,7 @@ int put_using_put(const char *fullname, const char *fname)
     /* get a FILE * of the same file, could also be made with
        fdopen() from the previous descriptor, but hey this is just
        an example! */
-    hd_src = fopen(fullname, "rb");
+    hd_src = g_fopen(fullname, "rb");
     if (!hd_src)
 	return -1;
 
@@ -757,7 +757,7 @@ static void ftp_log(gchar *format, ...)
         }
     }
 
-    FILE *f = fopen(ftp_logfile_name, "a");
+    FILE *f = g_fopen(ftp_logfile_name, "a");
     if (f) {
         struct tm *tm = localtime(&t);
 

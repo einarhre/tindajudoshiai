@@ -21,6 +21,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+#include <glib/gstdio.h>
 #include <locale.h>
 
 #include <sys/types.h>
@@ -123,7 +124,7 @@ int process_exists(int id)
 
 static void set_progress(int pr)
 {
-    FILE *progrfile = fopen("progr.txt", "w");
+    FILE *progrfile = g_fopen("progr.txt", "w");
     if (progrfile) {
 	fprintf(progrfile, "%d", pr);
 	fclose(progrfile);
@@ -182,7 +183,7 @@ int restore_auto_update(void)
 static FILE *open_file_w(char *file)
 {
     log("%s\n", file);
-    FILE *outfile = fopen(file, "wb");
+    FILE *outfile = g_fopen(file, "wb");
     // if directory doesn't exist create it
     if (!outfile) {
 	strcpy(filebuf, file);
@@ -199,7 +200,7 @@ static FILE *open_file_w(char *file)
 		*p1 = DIRSEP;
 	    }
 	}
-	outfile = fopen(file, "wb");
+	outfile = g_fopen(file, "wb");
 	if (!outfile)
 	    log("Cannot write to file %s\n", file);
     }
@@ -220,14 +221,14 @@ static int get_file(struct in_addr addr, char *name, long length)
 	filespace = 1024;
 	files = malloc(filespace*sizeof(struct fileinfo));
 
-	f = fopen(TMP_FILE, "wb");
+	f = g_fopen(TMP_FILE, "wb");
 	if (!f) {
 	    perror("temporary file");
 	    RETURN(-1);
 	}
 	tmp_file_len = 0;
     } else {
-	f = fopen(TMP_FILE, "ab");
+	f = g_fopen(TMP_FILE, "ab");
 	if (!f) {
 	    perror("temporary file");
 	    RETURN(-1);
@@ -292,7 +293,7 @@ static int get_file(struct in_addr addr, char *name, long length)
 
 int save_files(void)
 {
-    FILE *tmp_file = fopen(TMP_FILE, "rb");
+    FILE *tmp_file = g_fopen(TMP_FILE, "rb");
     if (!tmp_file) {
 	perror("temporary file");
 	RETURN(-1);
@@ -311,7 +312,7 @@ int save_files(void)
 		continue;
 	    log("File %s\n", files[i].filename);
 
-	    FILE *outfile = fopen(files[i].filename, "wb");
+	    FILE *outfile = g_fopen(files[i].filename, "wb");
 	    // if directory doesn't exist create it
 	    if (!outfile) {
 		strcpy(filebuf, files[i].filename);
@@ -328,7 +329,7 @@ int save_files(void)
 			*p1 = DIRSEP;
 		    }
 		}
-		outfile = fopen(files[i].filename, "wb");
+		outfile = g_fopen(files[i].filename, "wb");
 		if (!outfile) {
 		    log("Cannot write to file %s\n", files[i].filename);
 		    if (!strstr(files[i].filename, "auto-update"))
@@ -388,7 +389,7 @@ int compare_file(char *file, long length, char *cksum)
 	return -1;
     }
 
-    FILE *f = fopen(file, "rb");
+    FILE *f = g_fopen(file, "rb");
     if (!f) {
 	log("File %s doesn't exist\n", file);
 	return -1;
@@ -444,7 +445,7 @@ int main(int argc, char *argv[])
 
     chdir(argv[2]);
 
-    logfile = fopen("log.txt", "w");
+    logfile = g_fopen("log.txt", "w");
 
     log("Command line:\n");
     for (i = 0; i < argc; i++)

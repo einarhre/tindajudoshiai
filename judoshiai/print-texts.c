@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 #include "judoshiai.h"
 
@@ -56,7 +57,7 @@ const gchar *for_xgettext[] = {
 static void get_print_texts(gchar a, gchar b, gchar *filename)
 {
     gint linenum = 0;
-    FILE *f = fopen(filename, "r");
+    FILE *f = g_fopen(filename, "r");
     if (!f)
         return;
 

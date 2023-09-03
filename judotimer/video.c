@@ -78,6 +78,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <librsvg/rsvg.h>
 //#include <librsvg/rsvg-cairo.h>
 
@@ -363,7 +364,7 @@ gpointer video_thread(gpointer args)
                     last_time = now;
                 }
 #if 0
-                FILE *f = fopen("get.log", "a");
+                FILE *f = g_fopen("get.log", "a");
                 if (f) {
                     fwrite(vb->buffer + vb->offset, 1, n, f);
                     fclose(f);

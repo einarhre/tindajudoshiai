@@ -46,6 +46,7 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <librsvg/rsvg.h>
 
 #if (GTKVER == 3)
@@ -1154,7 +1155,7 @@ void write_matches(void)
     if (t >= NUM_TATAMIS)
         return;
 
-    FILE *fout = fopen(filename, "w");
+    FILE *fout = g_fopen(filename, "w");
     if (!fout)
         return;
 

@@ -59,6 +59,7 @@
 
 #include <sys/time.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 #include "sqlite3.h"
 #include "judoshiai.h"
@@ -1410,7 +1411,7 @@ gpointer server_thread(gpointer args)
         }
 
         G_LOCK(db);
-        if ((db_fd = fopen(database_name, "rb"))) {
+        if ((db_fd = g_fopen(database_name, "rb"))) {
             while ((n = fread(buf, 1, sizeof(buf), db_fd)) > 0) {
                 gint w = send(tmp_fd, buf, n, 0);
 #ifdef WIN32
@@ -1452,7 +1453,7 @@ gint read_file_from_net(gchar *filename, gint num)
     server.sin_port        = htons(SHIAI_PORT+1);
     server.sin_addr.s_addr = others[num].addr;
 
-    f = fopen(filename, "wb");
+    f = g_fopen(filename, "wb");
     if (f == NULL) {
         perror("file open");
         closesock(client_fd);

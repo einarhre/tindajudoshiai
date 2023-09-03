@@ -21,6 +21,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+#include <glib/gstdio.h>
 #include <locale.h>
 
 #ifdef WIN32
@@ -80,7 +81,7 @@ static FILE *f;
 
 typedef enum {
     dummy, rr, ko, b3, match, dot, colon, prev, ident, number,
-    competitor, eol, eof, pos, dash, lparen, rparen, order,
+    competitor, eol, eod, pos, dash, lparen, rparen, order,
     page, svg, info, err, id, group
 } Symbol;
 
@@ -256,7 +257,7 @@ static void getsym(void)
     int c;
 
     if (stop) {
-        sym = eof;
+        sym = eod;
         goto out;
     }
 
@@ -277,7 +278,7 @@ again:
     }
 
     if (c < 0 || c > 255) {
-        sym = eof;
+        sym = eod;
         goto out;
     }
 
@@ -826,7 +827,7 @@ static void sort_matches(void) {
 
 static void program(void) {
     getsym();
-    while (sym != eof) {
+    while (sym != eod) {
         if (block() == 0) return;
     }
 }
@@ -922,7 +923,7 @@ char *read_custom_category(char *name, struct custom_data *data)
     for (i = 0; i < NUM_CUSTOM_MATCHES; i++)
         match_list[i] = i;
 
-    f = fopen(name, "r");
+    f = g_fopen(name, "r");
     if (!f) {
         snprintf(message, sizeof(message), "Cannot read %s", name);
         return message;

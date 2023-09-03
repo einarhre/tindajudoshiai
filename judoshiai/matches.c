@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <assert.h>
 
 #include "sqlite3.h"
@@ -87,7 +88,7 @@ void write_competitor_positions(void)
 
     FILE *f;
     gchar *file = g_build_filename(current_directory, "c-winners.txt", NULL);
-    f = fopen(file, "wb");
+    f = g_fopen(file, "wb");
     g_free(file);
     if (!f)
         return;

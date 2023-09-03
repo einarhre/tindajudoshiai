@@ -1980,7 +1980,7 @@ int get_file(struct MHD_Connection *connection, const char *url)
     }
     mylog("GET FIXED %s\n", docfile);
 
-    //FILE *f = fopen(docfile, "rb");
+    //FILE *f = g_fopen(docfile, "rb");
     HANDLE fd = int_to_handle(g_open(docfile, O_RDONLY, 0));
     
     if (fd != INVALID_HANDLE_VALUE) {

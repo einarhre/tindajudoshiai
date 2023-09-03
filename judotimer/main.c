@@ -25,6 +25,7 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #include <curl/curl.h>
 
@@ -3255,10 +3256,10 @@ void select_display_layout(GtkWidget *menu_item, gpointer data)
 		newbase = g_strconcat(fbase, custom_layout_file_ext, NULL);
 	    }
 	    gchar *newfile = g_build_filename(fdir, newbase, NULL);
-	    f = fopen(newfile, "r");
+	    f = g_fopen(newfile, "r");
 	    if (!f) {
 		judotimer_log("%s: %s", newbase, strerror(errno));
-		f = fopen(custom_layout_file, "r");
+		f = g_fopen(custom_layout_file, "r");
 		custom_layout_file_ext[0] = 0;
 	    }
 	    g_free(newfile);
@@ -3266,7 +3267,7 @@ void select_display_layout(GtkWidget *menu_item, gpointer data)
 	    g_free(fbase);
 	    g_free(fdir);
 	} else {
-	    f = fopen(custom_layout_file, "r");
+	    f = g_fopen(custom_layout_file, "r");
 	}
 
         if (f) {

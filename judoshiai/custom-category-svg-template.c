@@ -739,7 +739,7 @@ int make_svg_file(int argc, char *argv[])
     if (p) *p = 0;
     strcat(template, ".svg");
 
-    fout = fopen(template, "w");
+    fout = g_fopen(template, "w");
     if (!fout) {
         perror(template);
         return 1;

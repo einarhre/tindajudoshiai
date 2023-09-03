@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <math.h>
 
 #include <cairo.h>
@@ -204,7 +205,7 @@ gint paint_svg(struct paint_data *pd)
     guchar *p = (guchar *)svg_data;
 
     //mylog("Open SVG debug file\n");
-    //dfile = fopen("debug.svg", "w");
+    //dfile = g_fopen("debug.svg", "w");
 
     while(*p) {
         if (*p == '%' && IS_LABEL_CHAR(p[1])) {

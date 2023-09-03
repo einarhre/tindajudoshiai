@@ -22,6 +22,7 @@
 #include <string.h>
 #include <time.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include "sqlite3.h"
 #include "judoshiai.h"
 
@@ -232,7 +233,7 @@ void shiai_log(guint severity, guint tatami, gchar *format, ...)
     num_log_lines++;
 
     if (logfile_name[0]) {
-        FILE *f = fopen(logfile_name, "a");
+        FILE *f = g_fopen(logfile_name, "a");
         if (f) {
             struct tm *tm = localtime(&t);
             gsize x;

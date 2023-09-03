@@ -22,6 +22,7 @@
 #include <string.h>
 #include <math.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 #include <cairo.h>
 #include <cairo-pdf.h>
@@ -117,7 +118,7 @@ static void write_map_file(const gchar *catname, gint page)
         snprintf(buf, sizeof(buf), "%s-%d.map", txt2hex(catname), page);
 
     gchar *mapname = g_build_filename(current_directory, buf, NULL);
-    FILE *map = fopen(mapname, "wb");
+    FILE *map = g_fopen(mapname, "wb");
     g_free(mapname);
     if (map) {
         int i;
@@ -844,7 +845,7 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
 
     FILE *f = NULL;
     if (templatefile)
-        f = fopen(templatefile, "r");
+        f = g_fopen(templatefile, "r");
     if (f) {
         gint slant = CAIRO_FONT_SLANT_NORMAL;
         gint weight = CAIRO_FONT_WEIGHT_NORMAL;
@@ -2546,7 +2547,7 @@ void print_matches(GtkWidget *menuitem, gpointer userdata)
 
         valid_ascii_string(name1);
 
-        FILE *f = fopen(name1, "w");
+        FILE *f = g_fopen(name1, "w");
 
         g_free (name);
         g_free (name1);

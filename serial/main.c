@@ -24,6 +24,7 @@
 #include <locale.h>
 
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #ifdef WIN32
 
@@ -182,7 +183,7 @@ void judoweight_log(gchar *format, ...)
         g_print("logfile_name=%s\n", logfile_name);
     }
 
-    FILE *f = fopen(logfile_name, "a");
+    FILE *f = g_fopen(logfile_name, "a");
     if (f) {
         struct tm *tm = localtime((time_t *)&t);
 #ifdef USE_ISO_8859_1

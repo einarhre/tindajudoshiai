@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <assert.h>
 
 #include "sqlite3.h"
@@ -272,7 +273,7 @@ gint db_init(const char *dbname)
     gint r = 0;
 
     // try to open db
-    FILE *f = fopen(dbname, "rb");
+    FILE *f = g_fopen(dbname, "rb");
     if (f)
         fclose(f);
     else
@@ -469,7 +470,7 @@ void db_new(const char *dbname)
         "\"item\" TEXT, \"value\" TEXT, UNIQUE(\"item\"))";
 
     db_name = dbname;
-    if ((f = fopen(db_name, "rb"))) {
+    if ((f = g_fopen(db_name, "rb"))) {
         /* exists */
         fclose(f);
         return;

@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <gdk/gdkkeysyms.h>
 #ifdef WIN32
 #include <process.h>
@@ -1018,7 +1019,7 @@ void write_matches(void)
     if (t >= NUM_TATAMIS)
         return;
 
-    FILE *fout = fopen(filename, "w");
+    FILE *fout = g_fopen(filename, "w");
     if (!fout)
         return;
 

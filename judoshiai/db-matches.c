@@ -1021,7 +1021,7 @@ gint db_category_set_match_status(gint category)
             n += sprintf(buf + n, ".txt");
 
             gchar *file = g_build_filename(current_directory, buf, NULL);
-            FILE *f = fopen(file, "wb");
+            FILE *f = g_fopen(file, "wb");
             g_free(file);
             if (f) {
                 fprintf(f, "%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n",
@@ -1964,7 +1964,7 @@ void update_next_matches_coach_info(void)
         return;
 
     gchar *file = g_build_filename(current_directory, "c-matches.txt", NULL);
-    FILE *f = fopen(file, "wb");
+    FILE *f = g_fopen(file, "wb");
     g_free(file);
 
     if (f) {
@@ -2290,7 +2290,7 @@ void db_print_category_to_pdf_comments(gint catix, gchar *filename)
     } else
 	return;
 
-    pdf = fopen(pdfname, "rb");
+    pdf = g_fopen(pdfname, "rb");
     if (!pdf) {
 	mylog("%s[%d]: Cannot open %s\n", __FUNCTION__, __LINE__, pdfname);
 	goto_out;
@@ -2337,7 +2337,7 @@ void db_print_category_to_pdf_comments(gint catix, gchar *filename)
     fclose(pdf);
 
     // append to pdf file
-    pdf = fopen(pdfname, "ab");
+    pdf = g_fopen(pdfname, "ab");
     if (!pdf) goto_out;
 
     fseek(pdf, 0, SEEK_END);

@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 #include "judoshiai.h"
 
@@ -532,7 +533,7 @@ int main(int argc, char *argv[])
     if (argc < 2)
         return 1;
 
-    f = fopen(argv[1], "r");
+    f = g_fopen(argv[1], "r");
     if (!f)
         return 1;
 

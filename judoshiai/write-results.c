@@ -723,7 +723,7 @@ void write_results(FILE *f)
 static FILE *open_write(gchar *filename)
 {
     gchar *file = g_build_filename(current_directory, filename, NULL);
-    FILE *f = fopen(file, "wb");
+    FILE *f = g_fopen(file, "wb");
     g_free(file);
     return f;
 }
@@ -731,7 +731,7 @@ static FILE *open_write(gchar *filename)
 static FILE *open_read(gchar *filename)
 {
     gchar *file = g_build_filename(current_directory, filename, NULL);
-    FILE *f = fopen(file, "rb");
+    FILE *f = g_fopen(file, "rb");
     g_free(file);
     return f;
 }
@@ -1749,7 +1749,7 @@ void make_png_all(GtkWidget *w, gpointer data)
 					  files_to_copy[i].dir,
 					  files_to_copy[i].file,
 					  NULL);
-            FILE *sf = fopen(src, "rb");
+            FILE *sf = g_fopen(src, "rb");
             g_free(src);
 
             if (sf) {

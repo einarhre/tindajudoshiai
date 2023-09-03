@@ -77,6 +77,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include "judoshiai.h"
 
 void yyerror(char *s);
@@ -1229,7 +1230,7 @@ void doopen(char *file, int mode, int no,int len)
     } 
     sprintf(bf,"%c",md[mode]);
     if ((no>0)&&(no<MAX_FILES)) {
-        fnum[no].fp=fopen(file,bf);    
+        fnum[no].fp=g_fopen(file,bf);
         if (fnum[no].fp==NULL) {
             sprintf(er,"Cannot open file (%s)",strerror(errno));
             yyerror(er);
@@ -2133,7 +2134,7 @@ int run_basic_script(char *file, GtkTextBuffer *buffer)
         memset(dim_d_vars[count].dim,0,sizeof(dim_d_vars[count].dim));
         dim_d_vars[count].values=NULL;
     }
-    yyin=fopen(file,"r"); 
+    yyin=g_fopen(file,"r");
     if (yyin!=NULL) {
         yyrestart(yyin);
         if (preparse()>=0) yyparse();

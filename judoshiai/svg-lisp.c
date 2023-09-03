@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+//#include <glib/gstdio.h>
 #include <math.h>
 
 #include <cairo.h>
@@ -168,7 +169,7 @@ gint paint_svg_lisp(struct paint_data *pd)
     gchar *lisp_end_code_e = NULL;
 
     //mylog("Open SVG debug file\n");
-    //dfile = fopen("debug.svg", "w");
+    //dfile = g_fopen("debug.svg", "w");
 
     while (*p && p < limit) {
         if ((*p == '%' && p[1] == '(') ||
