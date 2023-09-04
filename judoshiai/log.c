@@ -236,6 +236,8 @@ void shiai_log(guint severity, guint tatami, gchar *format, ...)
         FILE *f = g_fopen(logfile_name, "a");
         if (f) {
             struct tm *tm = localtime(&t);
+
+#ifdef USE_ISO_8859_1
             gsize x;
 
             gchar *text_ISO_8859_1 = 
@@ -251,6 +253,17 @@ void shiai_log(guint severity, guint tatami, gchar *format, ...)
                         tm->tm_sec,
                         severity, tatami, text_ISO_8859_1);
             g_free(text_ISO_8859_1);
+#else
+            if (tm)
+                fprintf(f, "%04d-%02d-%02d %02d:%02d:%02d %d %d %s\n",
+                        tm->tm_year+1900, 
+                        tm->tm_mon+1,
+                        tm->tm_mday,
+                        tm->tm_hour,
+                        tm->tm_min,
+                        tm->tm_sec,
+                        severity, tatami, text);
+#endif
             fclose(f);
         }
     }
