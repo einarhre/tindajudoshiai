@@ -21,6 +21,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+#include <glib/gstdio.h>
 #include <locale.h>
 
 #ifdef WIN32
@@ -100,7 +101,7 @@ static double rr_num_w = 25.0, rr_name_w = 120.0, rr_club_w = 90.0, rr_res_w = 5
 static char match_flags[NUM_CUSTOM_MATCHES];
 #define MATCH_FLAG_DRAWN 1
 
-#define MAX(a, b) (a > b ? a : b)
+#define MAX(a, b)  (((a) > (b)) ? (a) : (b))
 
 static void draw_match(struct custom_data *cd,
                        double x, double y, allocated_space_t *space, int num)
