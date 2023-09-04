@@ -94,7 +94,8 @@ static GtkWidget *menubar,
     *preference_comm, *preference_comm_node, *preference_own_ip_addr, *preference_show_connections,
     *preference_auto_sheet_update, *preference_result_languages[NUM_PRINT_LANGS], *preference_langsel,
     *preference_weights_to_pool_sheets, 
-    *preference_grade_visible, *preference_name_layout, *preference_name_layout_0, *preference_name_layout_1, *preference_name_layout_2, 
+    *preference_grade_visible, *preference_name_layout, *preference_name_layout_0, *preference_name_layout_1,
+    *preference_name_layout_2, *preference_name_layout_3,
     *preference_layout, *preference_pool_style, *preference_belt_colors,
     *preference_columns, *preference_show_defaults, *preference_show_col[NUM_COMP_COLS],
     *preference_sheet_font, *preference_svg, *preference_password, *judotimer_control[NUM_TATAMIS],
@@ -382,6 +383,8 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
         (gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_0)), "");
     preference_name_layout_2          = gtk_radio_menu_item_new_with_label
         (gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_1)), "");
+    preference_name_layout_3          = gtk_radio_menu_item_new_with_label
+        (gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_2)), "");
 
     preference_pool_style             = gtk_check_menu_item_new_with_label("");
     preference_belt_colors            = gtk_check_menu_item_new_with_label("");
@@ -436,6 +439,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_name_layout_0);
     gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_name_layout_1);
     gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_name_layout_2);
+    gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_name_layout_3);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), gtk_separator_menu_item_new());
 
@@ -500,7 +504,8 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(preference_grade_visible),          "activate", G_CALLBACK(toggle_grade_visible), 0);
     g_signal_connect(G_OBJECT(preference_name_layout_0),          "activate", G_CALLBACK(toggle_name_layout), (gpointer)NAME_LAYOUT_N_S_C);
     g_signal_connect(G_OBJECT(preference_name_layout_1),          "activate", G_CALLBACK(toggle_name_layout), (gpointer)NAME_LAYOUT_S_N_C);
-    g_signal_connect(G_OBJECT(preference_name_layout_2),          "activate", G_CALLBACK(toggle_name_layout), (gpointer)NAME_LAYOUT_C_S_N);
+    g_signal_connect(G_OBJECT(preference_name_layout_2),          "activate", G_CALLBACK(toggle_name_layout), (gpointer)NAME_LAYOUT_C_N_S);
+    g_signal_connect(G_OBJECT(preference_name_layout_3),          "activate", G_CALLBACK(toggle_name_layout), (gpointer)NAME_LAYOUT_C_S_N);
     g_signal_connect(G_OBJECT(preference_pool_style),             "activate", G_CALLBACK(toggle_pool_style), 0);
     g_signal_connect(G_OBJECT(preference_belt_colors),            "activate", G_CALLBACK(toggle_belt_colors), 0);
     g_signal_connect(G_OBJECT(preference_sheet_font),             "activate", G_CALLBACK(font_dialog), 0);
@@ -691,8 +696,10 @@ void set_preferences(void)
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_0), TRUE);
     else if (name_layout == NAME_LAYOUT_S_N_C)
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_1), TRUE);
-    else if (name_layout == NAME_LAYOUT_C_S_N)
+    else if (name_layout == NAME_LAYOUT_C_N_S)
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_2), TRUE);
+    else if (name_layout == NAME_LAYOUT_C_S_N)
+        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_3), TRUE);
 
     error = NULL;
     x1 = g_key_file_get_integer(keyfile, "preferences", "drawsystem", &error);
@@ -927,7 +934,8 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(preference_name_layout           , _("Name Format"));
     change_menu_label(preference_name_layout_0         , _("Name Surname, Country/Club"));
     change_menu_label(preference_name_layout_1         , _("Surname Name, Country/Club"));
-    change_menu_label(preference_name_layout_2         , _("Country/Club,  Surname Name"));
+    change_menu_label(preference_name_layout_2         , _("Country/Club,  Name Surname"));
+    change_menu_label(preference_name_layout_3         , _("Country/Club,  Surname Name"));
     change_menu_label(preference_pool_style            , _("Pool Style 2"));
     change_menu_label(preference_belt_colors           , _("Use Belt Colors"));
     change_menu_label(preference_sheet_font            , _("Sheet Font"));

@@ -1831,6 +1831,10 @@ msgid "Surname Name, Country/Club"
 msgstr "שם משפחה פרטי, מדינה/ אגודה"
 
 #: ../judoshiai/menus.c
+msgid "Country/Club,  Name Surname"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Country/Club,  Surname Name"
 msgstr "מדינה/ אגודה, משפחה פרטי"
 

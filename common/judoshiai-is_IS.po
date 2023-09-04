@@ -1836,6 +1836,10 @@ msgid "Surname Name, Country/Club"
 msgstr "Kenninafn Eiginnafn, Land/Félag"
 
 #: ../judoshiai/menus.c
+msgid "Country/Club,  Name Surname"
+msgstr "Land/Félag,  Eiginnafn Kenninafn"
+
+#: ../judoshiai/menus.c
 msgid "Country/Club,  Surname Name"
 msgstr "Land/Félag,  Kenninafn Eiginnafn"
 

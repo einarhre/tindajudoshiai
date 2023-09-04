@@ -496,6 +496,7 @@ enum {
     NAME_LAYOUT_N_S_C = 0,
     NAME_LAYOUT_S_N_C,
     NAME_LAYOUT_C_S_N,
+    NAME_LAYOUT_C_N_S,
     NUM_NAME_LAYOUTS
 };
 

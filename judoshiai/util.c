@@ -549,6 +549,7 @@ const gchar *get_name_and_club_text(struct judoka *j, gint flags)
 
         switch (name_layout) {
         case NAME_LAYOUT_N_S_C:
+        case NAME_LAYOUT_C_N_S:
             SNPRINTF_UTF8(buffers[n], "%s %s", j->first, j->last);
             break;
         case NAME_LAYOUT_S_N_C:
@@ -568,6 +569,10 @@ const gchar *get_name_and_club_text(struct judoka *j, gint flags)
         case NAME_LAYOUT_S_N_C:
             SNPRINTF_UTF8(buffers[n], "%s %s, %s",
                      j->last, j->first, get_club_text(j, flags));
+            break;
+        case NAME_LAYOUT_C_N_S:
+            SNPRINTF_UTF8(buffers[n], "%s, %s %s",
+                     get_club_text(j, flags), j->first, j->last);
             break;
         case NAME_LAYOUT_C_S_N:
             SNPRINTF_UTF8(buffers[n], "%s, %s %s",
@@ -650,6 +655,7 @@ gboolean firstname_lastname(void)
 
     switch (name_layout) {
     case NAME_LAYOUT_N_S_C:
+    case NAME_LAYOUT_C_N_S:
         return TRUE;
     case NAME_LAYOUT_S_N_C:
     case NAME_LAYOUT_C_S_N:

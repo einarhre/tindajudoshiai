@@ -1833,6 +1833,10 @@ msgid "Surname Name, Country/Club"
 msgstr "نام خانوادگی, کشور/باشگاه"
 
 #: ../judoshiai/menus.c
+msgid "Country/Club,  Name Surname"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Country/Club,  Surname Name"
 msgstr "کشور/باشگاه, نام خانوادگی "
 
