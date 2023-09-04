@@ -786,8 +786,13 @@ void json_add_judoka(cJSON *root, struct judoka *j)
     cJSON *c = cJSON_CreateObject();
     cJSON_AddItemToArray(root, c);
     JSON_PUT_DST_INT(c, j->index, ix);
-    JSON_PUT_DST_STR(c, j->last, last);
-    JSON_PUT_DST_STR(c, j->first, first);
+    if (IS_LANG_IS) {
+        JSON_PUT_DST_STR(c, j->first, first);
+        JSON_PUT_DST_STR(c, j->last, last);
+    } else {
+        JSON_PUT_DST_STR(c, j->last, last);
+        JSON_PUT_DST_STR(c, j->first, first);
+    }
     JSON_PUT_DST_STR(c, j->club, club);
     JSON_PUT_DST_STR(c, j->regcategory, regcat);
     JSON_PUT_DST_STR(c, j->category, category);

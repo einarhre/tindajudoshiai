@@ -389,25 +389,43 @@ void db_list_competitors(gboolean by_club)
     if (by_club) {
         if (club_text & CLUB_TEXT_COUNTRY) {
             if (club_text & CLUB_TEXT_CLUB)
-                db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"club\" ASC, \"last\" ASC, \"first\" ASC", 
-                        (void *)LIST_COMPETITORS, 
-                        db_callback);
+                if (IS_LANG_IS) {
+                    db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"club\" ASC, \"first\" ASC, \"last\" ASC",
+                            (void *)LIST_COMPETITORS,
+                            db_callback);
+                } else {
+                    db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"club\" ASC, \"last\" ASC, \"first\" ASC",
+                            (void *)LIST_COMPETITORS,
+                            db_callback);
+                }
             else
-                db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"last\" ASC, \"first\" ASC", 
-                        (void *)LIST_COMPETITORS, 
-                        db_callback);
+                if (IS_LANG_IS) {
+                    db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"first\" ASC, \"last\" ASC",
+                            (void *)LIST_COMPETITORS,
+                            db_callback);
+                } else {
+                    db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"last\" ASC, \"first\" ASC",
+                            (void *)LIST_COMPETITORS,
+                            db_callback);
+                }
         } else
-            db_exec(db_name, "SELECT * FROM competitors ORDER BY \"club\" ASC, \"last\" ASC, \"first\" ASC", 
-                    (void *)LIST_COMPETITORS, 
-                    db_callback);
+            if (IS_LANG_IS) {
+                db_exec(db_name, "SELECT * FROM competitors ORDER BY \"club\" ASC, \"first\" ASC, \"last\" ASC",
+                        (void *)LIST_COMPETITORS,
+                        db_callback);
+            } else {
+                db_exec(db_name, "SELECT * FROM competitors ORDER BY \"club\" ASC, \"last\" ASC, \"first\" ASC",
+                        (void *)LIST_COMPETITORS,
+                        db_callback);
+            }
     } else {
         if (IS_LANG_IS)
-            db_exec(db_name, "SELECT * FROM competitors ORDER BY \"first\" ASC, \"last\" ASC", 
-                    (void *)LIST_COMPETITORS, 
+            db_exec(db_name, "SELECT * FROM competitors ORDER BY \"first\" ASC, \"last\" ASC",
+                    (void *)LIST_COMPETITORS,
                     db_callback);
         else
-            db_exec(db_name, "SELECT * FROM competitors ORDER BY \"last\" ASC, \"first\" ASC", 
-                    (void *)LIST_COMPETITORS, 
+            db_exec(db_name, "SELECT * FROM competitors ORDER BY \"last\" ASC, \"first\" ASC",
+                    (void *)LIST_COMPETITORS,
                     db_callback);
     }
 }
@@ -433,17 +451,35 @@ void db_print_competitors_by_club(FILE *f)
 
     if (club_text & CLUB_TEXT_COUNTRY) {
         if (club_text & CLUB_TEXT_CLUB)
-            db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"club\" ASC, \"last\" ASC, \"first\" ASC", 
-                    (void *)PRINT_COMPETITORS_BY_CLUB, 
-                    db_callback);
+            if (IS_LANG_IS) {
+                db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"club\" ASC, \"first\" ASC, \"last\" ASC",
+                        (void *)PRINT_COMPETITORS_BY_CLUB,
+                        db_callback);
+            } else {
+                db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"club\" ASC, \"last\" ASC, \"first\" ASC",
+                        (void *)PRINT_COMPETITORS_BY_CLUB,
+                        db_callback);
+            }
         else
-            db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"last\" ASC, \"first\" ASC", 
-                    (void *)PRINT_COMPETITORS_BY_CLUB, 
-                    db_callback);
+            if (IS_LANG_IS) {
+                db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"first\" ASC, \"last\" ASC",
+                        (void *)PRINT_COMPETITORS_BY_CLUB,
+                        db_callback);
+            } else {
+                db_exec(db_name, "SELECT * FROM competitors ORDER BY \"country\" ASC, \"last\" ASC, \"first\" ASC",
+                        (void *)PRINT_COMPETITORS_BY_CLUB,
+                        db_callback);
+            }
     } else
-        db_exec(db_name, "SELECT * FROM competitors ORDER BY \"club\" ASC, \"last\" ASC, \"first\" ASC", 
-                (void *)PRINT_COMPETITORS_BY_CLUB, 
-                db_callback);
+        if (IS_LANG_IS) {
+            db_exec(db_name, "SELECT * FROM competitors ORDER BY \"club\" ASC, \"first\" ASC, \"last\" ASC",
+                    (void *)PRINT_COMPETITORS_BY_CLUB,
+                    db_callback);
+        } else {
+            db_exec(db_name, "SELECT * FROM competitors ORDER BY \"club\" ASC, \"last\" ASC, \"first\" ASC",
+                    (void *)PRINT_COMPETITORS_BY_CLUB,
+                    db_callback);
+        }
 
     fprintf(print_file, "</table></td>\n");
 }
@@ -632,7 +668,9 @@ void write_competitor_for_coach_display(struct judoka *j)
 
     fprintf(f, "%s\n%s\n%d\n%s\n%s\n%s\n%d\n"
             "%s\n%d\n%s\n%s\n%d\n%d\n%s\n%s",
-            X(j->last), X(j->first), j->birthyear,
+            IS_LANG_IS ? X(j->first) : X(j->last),
+            IS_LANG_IS ? X(j->last) : X(j->first),
+            j->birthyear,
             belts[j->belt], X(j->club), X(j->regcategory),
             j->weight, X(j->category), j->deleted,
             X(j->country), X(j->id), j->seeding, j->clubseeding,
@@ -648,7 +686,13 @@ void db_comp_print_json(cJSON *root)
 {
     json_root = root;
 
-    db_exec(db_name, "SELECT * FROM competitors ORDER BY \"last\" ASC, \"first\" ASC", 
-            (void *)PRINT_COMPETITORS_JSON, 
-            db_callback);
+    if (IS_LANG_IS) {
+        db_exec(db_name, "SELECT * FROM competitors ORDER BY \"first\" ASC, \"last\" ASC",
+                (void *)PRINT_COMPETITORS_JSON,
+                db_callback);
+    } else {
+        db_exec(db_name, "SELECT * FROM competitors ORDER BY \"last\" ASC, \"first\" ASC",
+                (void *)PRINT_COMPETITORS_JSON,
+                db_callback);
+    }
 }
