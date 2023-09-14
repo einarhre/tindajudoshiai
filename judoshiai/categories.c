@@ -87,7 +87,7 @@ void create_categories(GtkWidget *w, gpointer data)
                 struct judoka *j = get_data_by_iter(&iter);
                 gint r;
 
-                if (j && j->visible && j->category && j->category[0] == '?'&& j->category[1] == 0) {
+                if (j && j->visible && j->category && j->category[0] == '?' && j->category[1] == 0) {
                     g_free((void *)j->category);
                     j->category = NULL;
 
@@ -99,7 +99,7 @@ void create_categories(GtkWidget *w, gpointer data)
                         else if (j->deleted & GENDER_FEMALE)
                             gender = IS_FEMALE;
                         else
-                            gender = find_gender(j->first);
+                            gender = find_gender(j->first, j->country ? j->country : NULL);
 
                         j->category = find_correct_category(current_year - j->birthyear, 
                                                             j->weight, 

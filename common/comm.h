@@ -20,12 +20,16 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#ifdef MYDEBUG
+#include <glib/gprintf.h>
+#endif
+
 #include "round.h"
 
 struct cJSON;
 
 #ifdef MYDEBUG
-#define mylog(_f, _a...) g_print(_f, ##_a)
+#define mylog(_f, _a...) g_printf(_f, ##_a)
 #define mylogerr(_f, _a...) g_printerr(_f, ##_a)
 #else
 #define mylog(_f, _a...) do {} while (0)

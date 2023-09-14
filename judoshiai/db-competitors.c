@@ -278,7 +278,7 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
     avl_set_competitor(j.index, &j);
     //avl_set_competitor_status(j.index, j.deleted);
 
-    //find_gender(j.first);
+    //find_gender(j.first, j.country);
 
     return 0;
 }

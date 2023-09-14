@@ -1238,7 +1238,7 @@ extern const gchar *get_font_props(gint *weight, gint *slant);
 /* names */
 #define IS_MALE   1
 #define IS_FEMALE 2
-gint find_gender(const gchar *name);
+gint find_gender(const gchar *name, const gchar *country);
 
 /* comm */
 extern void toggle_tatami_1(gpointer callback_data,

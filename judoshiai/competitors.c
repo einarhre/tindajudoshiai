@@ -354,7 +354,7 @@ static void judoka_edited_callback(GtkWidget *widget,
             else if (edited.deleted & GENDER_FEMALE)
                 gender = IS_FEMALE;
             else
-                gender = find_gender(edited.first);
+                gender = find_gender(edited.first, edited.country);
 
             if (edited.regcategory)
                 g_free((gchar *)edited.regcategory);
