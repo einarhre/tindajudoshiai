@@ -858,7 +858,11 @@ void view_popup_menu(GtkWidget *treeview,
 
     /* Note: event can be NULL here when called from view_onPopupMenu;
      *  gdk_event_get_time() accepts a NULL argument */
+#if (GTKVER == 3)
+    gtk_menu_popup_at_pointer(GTK_MENU(menu), (GdkEvent*)event);
+#else
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
                    (event != NULL) ? event->button : 0,
                    gdk_event_get_time((GdkEvent*)event));
+#endif
 }
