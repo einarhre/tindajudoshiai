@@ -2,7 +2,7 @@
 
 /*
  * Copyright 2006-2023 Hannu Jokinen
- * 
+ *
  * This file is part of JudoShiai.
  *
  * JudoShiai is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -98,13 +98,17 @@ static gboolean traverse_rows_for_name(GtkTreeModel *model,
 
     if (names[4] && id && id[0] && (strcmp(id, names[4]) == 0))
         goto ok;
-    if (names[0] && (lastname == NULL || strcmp(lastname, names[0])))
+    if (names[0] && (lastname == NULL ||
+                     strcmp(g_utf8_strdown(lastname, -1), g_utf8_strdown(names[0], -1))))
         goto out;
-    if (names[1] && (firstname == NULL || strcmp(firstname, names[1])))
+    if (names[1] && (firstname == NULL ||
+                     strcmp(g_utf8_strdown(firstname, -1), g_utf8_strdown(names[1], -1))))
         goto out;
-    if (names[2] && (clubname == NULL || strcmp(clubname, names[2])))
+    if (names[2] && (clubname == NULL ||
+                     strcmp(g_utf8_strdown(clubname, -1), g_utf8_strdown(names[2], -1))))
         goto out;
-    if (names[3] && (regcat == NULL || strcmp(regcat, names[3])))
+    if (names[3] && (regcat == NULL ||
+                     strcmp(g_utf8_strdown(regcat, -1), g_utf8_strdown(names[3], -1))))
         goto out;
  ok:
     name_found = TRUE;
@@ -689,4 +693,43 @@ const gchar *esc_quote(const gchar *txt)
 	n = 0;
 
     return p;
+}
+
+gchar *convert_name(const gchar *name, const gboolean uc) {
+    const char *space = " ";
+    // return a space for NULL strings
+    if (name == NULL || name[0] == 0) return g_strdup(space);
+    gchar **names = g_strsplit(name, space, -1);
+    guint len = g_strv_length(names);
+    gchar **plcname;
+    plcname = g_malloc((len+1)*sizeof(*plcname));
+    gint i = 0, j = 0;
+    for(gchar **p = names; i < len; i++, p++) {
+        // *p points to name part number i and non-empty name part number j
+        const gchar *lcname = *p;
+        if (g_utf8_strlen(lcname, -1) <= 0) continue;
+        if (uc == 1) { // capitalised
+            // Need 4 bytes for largest possible UTF8 character + terminating NUL
+            gchar *letter = malloc(5*sizeof(gchar));
+            gchar *Cletter = g_utf8_strup(g_utf8_strncpy(letter,lcname,1), -1);
+            *(plcname + j++) = g_strdup_printf("%s%s", Cletter,
+                                               g_utf8_strdown(g_utf8_next_char(lcname), -1));
+            g_free((gpointer)letter);
+            g_free((gpointer)Cletter);
+        } else if (uc == 2) { // uppercase
+            *(plcname + j++) = g_utf8_strup(lcname, -1);
+        } else { // only remove spaces
+            *(plcname + j++) = g_strdup(lcname);
+        }
+    }
+    g_strfreev(names);
+    if (j <= 0) {
+      // return a space for empty (with spaces) names
+      g_free((gpointer)plcname);
+      return g_strdup(space);
+    }
+    if (j <= len) *(plcname + j) = NULL;
+    gchar *nm = g_strjoinv(space, plcname);
+    g_strfreev(plcname);
+    return nm;
 }

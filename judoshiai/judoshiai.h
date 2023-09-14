@@ -492,12 +492,26 @@ enum button_responses {
 
 #define NUM_COMMENT_COLS 3
 
+#define DEFAULT_SHOW_COLUMNS 0xffe3
+
 enum {
     NAME_LAYOUT_N_S_C = 0,
     NAME_LAYOUT_S_N_C,
     NAME_LAYOUT_C_S_N,
     NAME_LAYOUT_C_N_S,
     NUM_NAME_LAYOUTS
+};
+
+enum {
+    NAME_LAYOUT_FORMAT_FIRST_UNCHANGED = 0,
+    NAME_LAYOUT_FORMAT_FIRST_FIRST_UPPERCASE,
+    NAME_LAYOUT_FORMAT_FIRST_ALL_UPPERCASE
+};
+
+enum {
+    NAME_LAYOUT_FORMAT_LAST_UNCHANGED = 0,
+    NAME_LAYOUT_FORMAT_LAST_FIRST_UPPERCASE,
+    NAME_LAYOUT_FORMAT_LAST_ALL_UPPERCASE
 };
 
 // Default drawing system
@@ -566,8 +580,8 @@ enum properties {
 
 struct judoka {
     gint          index;
-    const  gchar *last;
-    const  gchar *first;
+    gchar         *last; // can be updated via format settings
+    gchar         *first; // can be updated via format settings
     gint          birthyear;
     gint          belt;
     const  gchar *club;
@@ -898,6 +912,8 @@ extern gboolean print_svg;
 extern gboolean weights_in_sheets;
 extern gboolean grade_visible;
 extern gint     name_layout;
+extern gint     name_layout_format_first;
+extern gint     name_layout_format_last;
 extern gboolean pool_style;
 extern gboolean belt_colors;
 extern gboolean cleanup_import;
@@ -941,6 +957,8 @@ extern GtkWidget *get_menubar_menu( GtkWidget  *window );
 extern void open_shiai_display(void);
 extern void new_judoka(GtkWidget *w, gpointer   data );
 extern void new_regcategory(GtkWidget *w, gpointer   data );
+extern void update_judoka_name_layout_format_first(void);
+extern void update_judoka_name_layout_format_last(void);
 extern void show_category_window(GtkWidget *menuitem, gpointer userdata);
 extern void view_popup_menu(GtkWidget *treeview,
                             GdkEventButton *event,
@@ -999,6 +1017,7 @@ extern const gchar *get_club_text(struct judoka *j, gint flags);
 extern const gchar *get_name_and_club_text(struct judoka *j, gint flags);
 extern gboolean firstname_lastname(void);
 extern const gchar *esc_quote(const gchar *txt);
+extern gchar *convert_name(const gchar *name, const gboolean uc);
 
 
 /* db */
@@ -1028,6 +1047,9 @@ extern gint db_add_judoka(int num, struct judoka *j);
 extern void db_update_judoka(int num, struct judoka *j);
 extern void db_restore_removed_competitors(void);
 extern void db_delete_removed_competitors(void);
+
+extern gchar *db_get_first_name_by_index(gint index);
+extern gchar *db_get_last_name_by_index(gint index);
 
 extern void db_add_category(int num, struct judoka *j);
 extern void db_update_category(int num, struct judoka *j);
@@ -1312,6 +1334,8 @@ extern gint avl_get_category_status_by_name(const gchar *name);
 extern void set_category_to_queue(struct category_data *data);
 extern void avl_set_competitor(gint index, struct judoka *j);
 extern struct judoka *avl_get_competitor(gint index);
+extern void avl_update_competitor_first_name(gint index, gchar *first);
+extern void avl_update_competitor_last_name(gint index, gchar *last);
 extern gint avl_get_competitor_hash(gint index);
 extern void avl_set_competitor_last_match_time(gint index);
 extern void avl_reset_competitor_last_match_time(gint index);

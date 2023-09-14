@@ -217,10 +217,12 @@ static void judoka_edited_callback(GtkWidget *widget,
     edited.category = judoka_tmp->category;
 
     if (judoka_tmp->last)
-        edited.last        = g_strdup(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->last)));
+        // remove extra spaces from name with convert_name(x, 0)
+        edited.last        = convert_name(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->last)), 0);
 
     if (judoka_tmp->first)
-        edited.first       = g_strdup(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->first)));
+        // remove extra spaces from name with convert_name(x, 0)
+        edited.first       = convert_name(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->first)), 0);
 
     if (judoka_tmp->club)
         edited.club        = g_strdup(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->club)));
@@ -340,33 +342,6 @@ static void judoka_edited_callback(GtkWidget *widget,
     complete_add_if_not_exist(club_completer, edited.club);
 
     if (ix == NEW_JUDOKA) {
-        const gchar *lastname = edited.last;
-
-        if (edited.first == NULL || edited.first[0] == 0)
-            edited.first = g_strdup(" ");
-
-        const gchar *firstname = edited.first;
-        gchar *letter = g_utf8_strup(firstname, 1);
-
-        edited.first = g_strdup_printf("%s%s", letter, g_utf8_next_char(firstname));
-        g_free((void *)firstname);
-        g_free((void *)letter);
-        
-        if (draw_system == DRAW_ICELANDIC) {
-	    
-	    gchar *letter2 = g_utf8_strup(lastname, 1);
-
-	    edited.last = g_strdup_printf("%s%s", letter2, g_utf8_next_char(lastname));
-	    
-	    g_free((void *)letter2);
-
-
-	}
-	else {
-	    edited.last = g_utf8_strup(lastname, -1);
-	   }
-        g_free((void *)lastname);
-
         edited.index = comp_index_get_free();//current_index++;
 
         if ((edited.regcategory == NULL || edited.regcategory[0] == 0) &&
@@ -2345,6 +2320,158 @@ void remove_empty_regcategories(GtkWidget *w, gpointer data)
 }
 
 /************************************************/
+
+typedef struct _edit_info {
+    GtkTreeRowReference *rowref;
+    guint index;
+    gchar *converted_name;
+} edit_info;
+
+static gboolean foreach_firstname(GtkTreeModel *model,
+                                   GtkTreePath  *path,
+                                   GtkTreeIter  *iter,
+                                   GList **rowref_list)
+{
+    gchar *first_name = NULL;
+    guint index;
+    gboolean visible;
+    edit_info *edit_node;
+
+    g_assert ( rowref_list != NULL );
+
+    gtk_tree_model_get(model, iter,
+                       COL_INDEX, &index,
+                       COL_VISIBLE, &visible,
+                       COL_FIRST_NAME, &first_name,
+                       -1);
+
+    if (visible) {
+
+        edit_node = malloc(sizeof(edit_info));
+        edit_node->index = index;
+
+        if (name_layout_format_first) {
+            edit_node->converted_name = convert_name(first_name, name_layout_format_first);
+        } else {
+            edit_node->converted_name = db_get_first_name_by_index(index);
+        }
+
+        edit_node->rowref = gtk_tree_row_reference_new(GTK_TREE_MODEL(current_model), path);
+        *rowref_list = g_list_prepend(*rowref_list, edit_node);
+    }
+
+    g_free(first_name);
+
+    return FALSE; /* do not stop walking the store, call us with next row */
+}
+
+static gboolean foreach_lastname(GtkTreeModel  *model,
+                                   GtkTreePath  *path,
+                                   GtkTreeIter  *iter,
+                                   GList **rowref_list)
+{
+    gchar *last_name = NULL;
+    guint index;
+    gboolean visible;
+    edit_info *edit_node;
+
+    g_assert ( rowref_list != NULL );
+
+    gtk_tree_model_get(model, iter,
+                       COL_INDEX, &index,
+                       COL_VISIBLE, &visible,
+                       COL_LAST_NAME, &last_name,
+                       -1);
+
+    if (visible) {
+
+        edit_node = malloc(sizeof(edit_info));
+        edit_node->index = index;
+
+        if (name_layout_format_last) {
+            edit_node->converted_name = convert_name(last_name, name_layout_format_last);
+        } else {
+            edit_node->converted_name = db_get_last_name_by_index(index);
+        }
+
+        edit_node->rowref = gtk_tree_row_reference_new(GTK_TREE_MODEL(current_model), path);
+        *rowref_list = g_list_prepend(*rowref_list, edit_node);
+    }
+
+    g_free(last_name);
+
+    return FALSE; /* do not stop walking the store, call us with next row */
+}
+
+void update_judoka_name_layout_format_first(void) {
+    GList *rr_list = NULL;    /* list of GtkTreeRowReferences to remove */
+    GList *node = NULL;
+
+    if (current_model) {
+        gtk_tree_model_foreach(GTK_TREE_MODEL(current_model),
+                               (GtkTreeModelForeachFunc) foreach_firstname,
+                               &rr_list);
+
+        for (node = rr_list; node != NULL; node = node->next) {
+            GtkTreePath *path;
+            edit_info *edit_node = (edit_info *)node->data;
+
+            path = gtk_tree_row_reference_get_path(edit_node->rowref);
+            gtk_tree_row_reference_free(edit_node->rowref);
+
+            if (path) {
+                GtkTreeIter  iter;
+
+                if (gtk_tree_model_get_iter(GTK_TREE_MODEL(current_model), &iter, path)) {
+                    gtk_tree_store_set(GTK_TREE_STORE(current_model), &iter,
+                                       COL_FIRST_NAME, edit_node->converted_name,
+                                       -1);
+                    avl_update_competitor_first_name(edit_node->index, edit_node->converted_name);
+                }
+            }
+            g_free(edit_node->converted_name);
+            gtk_tree_path_free(path);
+        }
+
+        g_list_foreach(rr_list, (GFunc) g_free, NULL);
+        g_list_free(rr_list);
+    }
+}
+
+void update_judoka_name_layout_format_last(void) {
+    GList *rr_list = NULL;    /* list of GtkTreeRowReferences to remove */
+    GList *node = NULL;
+
+    if (current_model) {
+        gtk_tree_model_foreach(GTK_TREE_MODEL(current_model),
+                               (GtkTreeModelForeachFunc) foreach_lastname,
+                               &rr_list);
+
+        for (node = rr_list; node != NULL; node = node->next) {
+            GtkTreePath *path;
+            edit_info *edit_node = (edit_info *)node->data;
+
+            path = gtk_tree_row_reference_get_path(edit_node->rowref);
+            gtk_tree_row_reference_free(edit_node->rowref);
+
+            if (path) {
+                GtkTreeIter  iter;
+
+                if (gtk_tree_model_get_iter(GTK_TREE_MODEL(current_model), &iter, path)) {
+                    gtk_tree_store_set(GTK_TREE_STORE(current_model), &iter,
+                                       COL_LAST_NAME, edit_node->converted_name,
+                                       -1);
+                    avl_update_competitor_last_name(edit_node->index, edit_node->converted_name);
+                }
+            }
+            g_free(edit_node->converted_name);
+            gtk_tree_path_free(path);
+        }
+
+        g_list_foreach(rr_list, (GFunc) g_free, NULL);
+        g_list_free(rr_list);
+    }
+}
 
 static gboolean foreach_competitor(GtkTreeModel *model,
                                    GtkTreePath  *path,

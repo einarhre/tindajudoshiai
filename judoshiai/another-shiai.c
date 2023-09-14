@@ -89,7 +89,7 @@ static gint set_one_category(GtkTreeModel *model, GtkTreeIter *iter, guint index
     gtk_tree_store_append((GtkTreeStore *)model, iter, NULL);
 
     j.index = index; // ? index : current_category_index++;
-    j.last = category;
+    j.last = (gchar *)category;
     j.first = "";
     j.birthyear = group;
     j.club = "";

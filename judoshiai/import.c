@@ -103,14 +103,11 @@ static gboolean print_item(gint item, gchar **tokens, gint num_cols, struct i_te
 static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
 {
     gchar *newcat = NULL;
-    gchar *lastname = NULL;
-    gchar *firstname = NULL;
-        
     struct judoka j;
 
-    if (!valid_data(TXT_LAST, tokens, num_cols, d))
-        return FALSE;
     if (!valid_data(TXT_FIRST, tokens, num_cols, d))
+        return FALSE;
+    if (!valid_data(TXT_LAST, tokens, num_cols, d))
         return FALSE;
 
     memset(&j, 0, sizeof(j));
@@ -123,37 +120,11 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
     j.comment = "";
     j.coachid = "";
 
-//    lastname = g_utf8_strup(tokens[d->columns[TXT_LAST] - 1], -1);
-    lastname = tokens[d->columns[TXT_LAST] - 1];
-//    j.last = lastname;
-    
-    
-    
-    if (draw_system == DRAW_ICELANDIC) {
-	gchar *letter = g_utf8_strup(lastname, 1);
-	lastname = g_strdup_printf("%s%s", letter, g_utf8_next_char(lastname));
-	g_free((void *)letter);
-//	j.last = lastname;
-//	lastname = g_utf8_strup(lastname, -1);
+    // remove extra spaces with convert_name(x, 0)
+    j.first = convert_name(tokens[d->columns[TXT_FIRST] - 1], 0);
 
-
-    }
-    else {
-//	lastname = g_utf8_strup(tokens[d->columns[TXT_LAST] - 1], -1);
-	lastname = g_utf8_strup(lastname, -1);
-//	j.last = lastname;
-    }
-    
-    j.last = lastname;
-    
-    firstname = tokens[d->columns[TXT_FIRST] - 1];
-    
-    gchar *letter2 = g_utf8_strup(firstname, 1);
-    firstname = g_strdup_printf("%s%s", letter2, g_utf8_next_char(firstname));
-    g_free((void *)letter2);
-
-    j.first = firstname;
-//    j.first = tokens[d->columns[TXT_FIRST] - 1];
+    // remove extra spaces with convert_name(x, 0)
+    j.last = convert_name(tokens[d->columns[TXT_LAST] - 1], 0);
 
     /* year of birth. 0 == unknown */
     if (valid_data(TXT_BIRTH, tokens, num_cols, d))
@@ -235,8 +206,6 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
         d->comp_exists++;
         shiai_log(0, 0, "Competitor exists: %s %s, %s %s", j.last, j.first, j.country, j.club);
 	g_free((gpointer)j.comment);
-        g_free(lastname);
-	g_free(firstname);        
         g_free(newcat);
         return FALSE;
     }
@@ -248,8 +217,6 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
         d->comp_syntax++;
         shiai_log(0, 0, "Syntax error: %s %s, %s %s", j.last, j.first, j.country, j.club);
 	g_free((gpointer)j.comment);
-        g_free(lastname);
-        g_free(firstname);
         g_free(newcat);
         return FALSE;
     }
@@ -257,8 +224,6 @@ static gboolean add_competitor(gchar **tokens, gint num_cols, struct i_text *d)
     //matches_refresh();
 
     g_free((gpointer)j.comment);
-    g_free(lastname);
-    g_free(firstname);
     g_free(newcat);
     return TRUE;
 }
@@ -620,7 +585,7 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     g_signal_connect(G_OBJECT(tmp), "changed", G_CALLBACK(selecter), data);
     gtk_grid_attach(GTK_GRID(table), tmp, 1, 0, 1, 1);
     //HAS HEADER
-    tmp = gtk_check_button_new_with_label(_("First line is header"));;
+    tmp = gtk_check_button_new_with_label(_("First line is header"));
     data->setting_fields[BOOL_HASHEADER]=tmp;
     g_signal_connect(G_OBJECT(tmp), "toggled", G_CALLBACK(selecter), data);
     gtk_grid_attach(GTK_GRID(table), tmp, 2, 0, 2, 1);

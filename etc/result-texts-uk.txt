@@ -1,5 +1,5 @@
 ### First line is the menu text
-Результати Українською
+Results in Ukranian
 ### 1: Competitors
 Учасники 
 ### 2: Competitors A (for double and quadruple pools)

@@ -1,5 +1,5 @@
 ### First line is the menu text
-Résultats en français
+Results in French
 ### 1: Competitors
 Compétiteurs
 ### 2: Competitors A (for double and quadruple pools)

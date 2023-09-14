@@ -1,5 +1,5 @@
 ### First line is the menu text
-Resultaten in het Nederlands
+Results in Dutch
 ### 1: Competitors
 Judokas
 ### 2: Competitors A (for double and quadruple pools)

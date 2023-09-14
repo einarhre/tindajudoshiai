@@ -40,18 +40,18 @@ const gchar *for_xgettext[] = {
     N_("Results in English"),
     N_("Results in Spanish"),
     N_("Results in Estonian"),
-    N_("نتایج به فارسی"),
+    N_("Results in Persian"),
     N_("Results in Finnish"),
-    N_("Résultats en français"),
+    N_("Results in French"),
     N_("Results in Hebrew"),
-    N_("Úrslit á íslensku"),
+    N_("Results in Icelandic"),
     N_("Results in Norwegian"),
-    N_("Resultaten in het Nederlands"),
+    N_("Results in Dutch"),
     N_("Results in Polish"),
     N_("Results in Russian"),
     N_("Results in Slovak"),
     N_("Results in Swedish"),
-    N_("Результати Українською")
+    N_("Results in Ukranian")
 };
 
 static void get_print_texts(gchar a, gchar b, gchar *filename)

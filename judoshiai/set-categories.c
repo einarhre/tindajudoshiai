@@ -1905,7 +1905,7 @@ static void teams_dialog_callback(GtkWidget *widget,
 	judoka_defaults(&j);
 
 	// add team as competitor
-	j.last = name;
+	j.last = (gchar *)name;
 	j.category = comps->eventname;
         j.visible = TRUE;
         j.index = comp_index_get_free();//current_index++;
@@ -1918,7 +1918,7 @@ static void teams_dialog_callback(GtkWidget *widget,
 
 	// add team
         j.index = 0;
-	j.last = name;
+	j.last = (gchar *)name;
 	j.deleted = TEAM;
         j.weight = compress_system(system);
 	j.category = "";
@@ -1941,8 +1941,8 @@ static void teams_dialog_callback(GtkWidget *widget,
         gint k;
         for (k = 0; k < comps->numw; k++) {
             j.index = comp_index_get_free();//current_index++;
-            j.first = gtk_entry_get_text(GTK_ENTRY(comps->names[k].first));
-            j.last = gtk_entry_get_text(GTK_ENTRY(comps->names[k].last));
+            j.first = (gchar *)gtk_entry_get_text(GTK_ENTRY(comps->names[k].first));
+            j.last = (gchar *)gtk_entry_get_text(GTK_ENTRY(comps->names[k].last));
             j.category = name;
             j.regcategory = comps->names[k].cat;
 

@@ -2,7 +2,7 @@
 
 /*
  * Copyright 2006-2023 Hannu Jokinen
- * 
+ *
  * This file is part of JudoShiai.
  *
  * JudoShiai is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License along with JudoShiai. If not, see
  * <https://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,6 +47,8 @@ extern void toggle_automatic_web_page_update(GtkWidget *menu_item, gpointer data
 extern void toggle_weights_in_sheets(GtkWidget *menu_item, gpointer data);
 extern void toggle_grade_visible(GtkWidget *menu_item, gpointer data);
 extern void toggle_name_layout(GtkWidget *menu_item, gpointer data);
+extern void toggle_name_layout_format_first(GtkWidget *menu_item, gpointer data);
+extern void toggle_name_layout_format_last(GtkWidget *menu_item, gpointer data);
 extern void toggle_pool_style(GtkWidget *menu_item, gpointer data);
 extern void toggle_belt_colors(GtkWidget *menu_item, gpointer data);
 extern void toggle_col_visible(GtkWidget *menu_item, gpointer data);
@@ -71,14 +73,14 @@ extern void ftp_to_server(GtkWidget *w, gpointer data);
 extern void select_custom_dir(GtkWidget *menu_item, gpointer data);
 extern void toggle_show_colors(GtkWidget *menu_item, gpointer data);
 
-static GtkWidget *menubar, 
-    *tournament_menu_item, *competitors_menu_item, 
-    *categories_menu_item, *drawing_menu_item, *results_menu_item, 
+static GtkWidget *menubar, *submenu, *subsubmenu, *jsonsubmenu,
+    *tournament_menu_item, *competitors_menu_item,
+    *categories_menu_item, *drawing_menu_item, *results_menu_item,
     *judotimer_menu_item, *preferences_menu_item, *help_menu_item, *lang_menu_item,
-    *tournament_menu, *competitors_menu, 
-    *categories_menu, *drawing_menu, *results_menu, 
+    *tournament_menu, *competitors_menu,
+    *categories_menu, *drawing_menu, *results_menu,
     *judotimer_menu, *preferences_menu, *help_menu, *sql_dialog,
-    *tournament_new, *tournament_choose, *tournament_choose_net, *tournament_properties, 
+    *tournament_new, *tournament_choose, *tournament_choose_net, *tournament_properties,
     *tournament_quit, *tournament_backup, *tournament_validation, *tournament_custom,
     *competitor_new, *competitor_search, *competitor_select_from_tournament, *competitor_add_from_text_file,
     *competitor_add_all_from_shiai, *competitor_update_weights, *competitor_remove_unweighted,
@@ -88,14 +90,17 @@ static GtkWidget *menubar,
     *category_colorize, *category_show_colors,
     *category_print_all, *category_print_all_pdf, *category_print_matches,
     *category_properties, *category_to_tatamis[NUM_TATAMIS],
-    *draw_all_categories, 
+    *draw_all_categories,
     *results_print_all, *results_print_schedule_printer, *results_print_schedule_pdf,
     *results_ftp, *results_gdpr,
     *preference_comm, *preference_comm_node, *preference_own_ip_addr, *preference_show_connections,
     *preference_auto_sheet_update, *preference_result_languages[NUM_PRINT_LANGS], *preference_langsel,
-    *preference_weights_to_pool_sheets, 
+    *preference_weights_to_pool_sheets,
     *preference_grade_visible, *preference_name_layout, *preference_name_layout_0, *preference_name_layout_1,
     *preference_name_layout_2, *preference_name_layout_3,
+    *preference_name_layout_first_format, *preference_name_layout_last_format,
+    *preference_name_layout_first_uc, *preference_name_layout_first_fu, *preference_name_layout_first_au,
+    *preference_name_layout_last_uc, *preference_name_layout_last_fu, *preference_name_layout_last_au,
     *preference_layout, *preference_pool_style, *preference_belt_colors,
     *preference_columns, *preference_show_defaults, *preference_show_col[NUM_COMP_COLS],
     *preference_sheet_font, *preference_svg, *preference_password, *judotimer_control[NUM_TATAMIS],
@@ -105,13 +110,14 @@ static GtkWidget *menubar,
     *preference_serial, *preference_medal_matches,
     *help_manual, *help_about;
 
-static GSList *lang_group = NULL, *club_group = NULL;
+static GSList *lang_group = NULL, *club_group = NULL, *name_group = NULL,
+              *first_name_group = NULL, *last_name_group = NULL;
 
 void set_col_defaults(GtkWidget *menu_item, gpointer data)
 {
     gint i;
-    show_columns = 0xffe3;
-    
+    show_columns = DEFAULT_SHOW_COLUMNS;
+
     for (i = 0; i < NUM_COMP_COLS; i++) {
 	gboolean new_state = show_columns & (1 << i);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_show_col[i]), new_state);
@@ -147,24 +153,24 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     preferences_menu = gtk_menu_new();
     help_menu        = gtk_menu_new();
 
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(tournament_menu_item), tournament_menu); 
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(competitors_menu_item), competitors_menu); 
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(categories_menu_item), categories_menu); 
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(drawing_menu_item), drawing_menu); 
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(results_menu_item), results_menu); 
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(judotimer_menu_item), judotimer_menu); 
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(preferences_menu_item), preferences_menu); 
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(help_menu_item), help_menu); 
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(tournament_menu_item), tournament_menu);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(competitors_menu_item), competitors_menu);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(categories_menu_item), categories_menu);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(drawing_menu_item), drawing_menu);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(results_menu_item), results_menu);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(judotimer_menu_item), judotimer_menu);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(preferences_menu_item), preferences_menu);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(help_menu_item), help_menu);
 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), tournament_menu_item); 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), competitors_menu_item); 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), categories_menu_item); 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), drawing_menu_item); 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), results_menu_item); 
-    //gtk_menu_shell_append(GTK_MENU_SHELL(menubar), judotimer_menu_item); 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), preferences_menu_item); 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), help_menu_item); 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), lang_menu_item); 
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), tournament_menu_item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), competitors_menu_item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), categories_menu_item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), drawing_menu_item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), results_menu_item);
+    //gtk_menu_shell_append(GTK_MENU_SHELL(menubar), judotimer_menu_item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), preferences_menu_item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), help_menu_item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), lang_menu_item);
 
     /* Create the Tournament menu content. */
     tournament_new        = gtk_menu_item_new_with_label(_("New Tournament"));
@@ -236,7 +242,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), gtk_separator_menu_item_new());
 
     gtk_menu_shell_append(GTK_MENU_SHELL(competitors_menu), competitor_json);
-    GtkWidget *jsonsubmenu = gtk_menu_new();
+    jsonsubmenu = gtk_menu_new();
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(competitor_json), jsonsubmenu);
     gtk_menu_shell_append(GTK_MENU_SHELL(jsonsubmenu), competitor_read_json);
     gtk_menu_shell_append(GTK_MENU_SHELL(jsonsubmenu), competitor_write_json);
@@ -306,16 +312,16 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(category_create_official), "activate", G_CALLBACK(create_categories), 0);
     g_signal_connect(G_OBJECT(category_colorize)       , "activate", G_CALLBACK(colorize_categories), 0);
     g_signal_connect(G_OBJECT(category_show_colors)    , "activate", G_CALLBACK(toggle_show_colors), 0);
-    g_signal_connect(G_OBJECT(category_print_all),       "activate", G_CALLBACK(print_doc), 
+    g_signal_connect(G_OBJECT(category_print_all),       "activate", G_CALLBACK(print_doc),
                      (gpointer)(PRINT_ALL_CATEGORIES | PRINT_TO_PRINTER));
-    g_signal_connect(G_OBJECT(category_print_all_pdf),   "activate", G_CALLBACK(print_doc), 
+    g_signal_connect(G_OBJECT(category_print_all_pdf),   "activate", G_CALLBACK(print_doc),
                      (gpointer)(PRINT_ALL_CATEGORIES | PRINT_TO_PDF));
-    g_signal_connect(G_OBJECT(category_print_matches),   "activate", G_CALLBACK(print_matches), 
+    g_signal_connect(G_OBJECT(category_print_matches),   "activate", G_CALLBACK(print_matches),
                      (gpointer)(PRINT_ALL_CATEGORIES | PRINT_TO_PDF));
     g_signal_connect(G_OBJECT(category_properties),      "activate", G_CALLBACK(set_categories_dialog), 0);
 
     for (i = 0; i < NUM_TATAMIS; i++)
-        g_signal_connect(G_OBJECT(category_to_tatamis[i]), "activate", G_CALLBACK(locate_to_tatamis), 
+        g_signal_connect(G_OBJECT(category_to_tatamis[i]), "activate", G_CALLBACK(locate_to_tatamis),
                          gint_to_ptr(i+1));
 
     /* Create the Drawing menu content. */
@@ -349,7 +355,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
         SPRINTF(buf, "%s %d", _("Control Tatami"), i+1);
         judotimer_control[i] = gtk_check_menu_item_new_with_label(buf);
         gtk_menu_shell_append(GTK_MENU_SHELL(judotimer_menu), judotimer_control[i]);
-        g_signal_connect(G_OBJECT(judotimer_control[i]), "activate", G_CALLBACK(set_tatami_state), 
+        g_signal_connect(G_OBJECT(judotimer_control[i]), "activate", G_CALLBACK(set_tatami_state),
                          gint_to_ptr(i+1));
     }
 
@@ -378,13 +384,33 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     preference_weights_to_pool_sheets = gtk_check_menu_item_new_with_label(_("Weights Visible in Pool Sheets"));
     preference_grade_visible          = gtk_check_menu_item_new_with_label("");
 
-    preference_name_layout_0          = gtk_radio_menu_item_new_with_label(NULL, "");
-    preference_name_layout_1          = gtk_radio_menu_item_new_with_label
-        (gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_0)), "");
-    preference_name_layout_2          = gtk_radio_menu_item_new_with_label
-        (gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_1)), "");
-    preference_name_layout_3          = gtk_radio_menu_item_new_with_label
-        (gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_2)), "");
+    preference_name_layout_0          = gtk_radio_menu_item_new_with_label(name_group,
+                                                                           _("Name Surname, Country/Club"));
+    name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_0));
+    preference_name_layout_1          = gtk_radio_menu_item_new_with_label(name_group,
+                                                                           _("Surname Name, Country/Club"));
+    name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_1));
+    preference_name_layout_2          = gtk_radio_menu_item_new_with_label(name_group,
+                                                                          _("Country/Club,  Name Surname"));
+    name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_2));
+    preference_name_layout_3          = gtk_radio_menu_item_new_with_label(name_group,
+                                                                           _("Country/Club,  Surname Name"));
+    preference_name_layout_first_uc   = gtk_radio_menu_item_new_with_label(first_name_group,
+                                                                           _("Unchanged from registration"));
+    first_name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_first_uc));
+    preference_name_layout_first_fu   = gtk_radio_menu_item_new_with_label(first_name_group,
+                                                                           _("First Letter Uppercase"));
+    first_name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_first_fu));
+    preference_name_layout_first_au   = gtk_radio_menu_item_new_with_label(first_name_group,
+                                                                           _("All Letters Uppercase"));
+    preference_name_layout_last_uc    = gtk_radio_menu_item_new_with_label(last_name_group,
+                                                                           _("Unchanged from registration"));
+    last_name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_last_uc));
+    preference_name_layout_last_fu    = gtk_radio_menu_item_new_with_label(last_name_group,
+                                                                           _("First Letter Uppercase"));
+    last_name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_last_fu));
+    preference_name_layout_last_au    = gtk_radio_menu_item_new_with_label(last_name_group,
+                                                                           _("All Letters Uppercase"));
 
     preference_pool_style             = gtk_check_menu_item_new_with_label("");
     preference_belt_colors            = gtk_check_menu_item_new_with_label("");
@@ -400,7 +426,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     //gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_comm_node);
     preference_comm = gtk_menu_item_new_with_label("");
-    GtkWidget *submenu = gtk_menu_new();
+    submenu = gtk_menu_new();
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_comm);
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(preference_comm), submenu);
     gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_own_ip_addr);
@@ -441,6 +467,22 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_name_layout_2);
     gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_name_layout_3);
 
+    preference_name_layout_first_format = gtk_menu_item_new_with_label(_(""));
+    subsubmenu = gtk_menu_new();
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(preference_name_layout_first_format), subsubmenu);
+    gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_name_layout_first_format);
+    gtk_menu_shell_append(GTK_MENU_SHELL(subsubmenu), preference_name_layout_first_uc);
+    gtk_menu_shell_append(GTK_MENU_SHELL(subsubmenu), preference_name_layout_first_fu);
+    gtk_menu_shell_append(GTK_MENU_SHELL(subsubmenu), preference_name_layout_first_au);
+
+    preference_name_layout_last_format = gtk_menu_item_new_with_label(_(""));
+    subsubmenu = gtk_menu_new();
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(preference_name_layout_last_format), subsubmenu);
+    gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_name_layout_last_format);
+    gtk_menu_shell_append(GTK_MENU_SHELL(subsubmenu), preference_name_layout_last_uc);
+    gtk_menu_shell_append(GTK_MENU_SHELL(subsubmenu), preference_name_layout_last_fu);
+    gtk_menu_shell_append(GTK_MENU_SHELL(subsubmenu), preference_name_layout_last_au);
+
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), gtk_separator_menu_item_new());
 
     preference_layout = gtk_menu_item_new_with_label("");
@@ -469,7 +511,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 	preference_show_col[i] = gtk_check_menu_item_new_with_label("");
 	gtk_menu_shell_append(GTK_MENU_SHELL(submenu), preference_show_col[i]);
     }
-    
+
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), gtk_separator_menu_item_new());
 
     gtk_menu_shell_append(GTK_MENU_SHELL(preferences_menu), preference_auto_sheet_update);
@@ -491,13 +533,13 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
             g_signal_connect(G_OBJECT(preference_result_languages[i]), "activate", G_CALLBACK(set_lang), gint_to_ptr(i));
     }
 
-    g_signal_connect(G_OBJECT(preference_club_text_club),    "activate", 
+    g_signal_connect(G_OBJECT(preference_club_text_club),    "activate",
 		     G_CALLBACK(set_club_text), (gpointer)CLUB_TEXT_CLUB);
-    g_signal_connect(G_OBJECT(preference_club_text_country), "activate", 
+    g_signal_connect(G_OBJECT(preference_club_text_country), "activate",
 		     G_CALLBACK(set_club_text), (gpointer)CLUB_TEXT_COUNTRY);
-    g_signal_connect(G_OBJECT(preference_club_text_both),    "activate", 
+    g_signal_connect(G_OBJECT(preference_club_text_both),    "activate",
 		     G_CALLBACK(set_club_text), (gpointer)(CLUB_TEXT_CLUB|CLUB_TEXT_COUNTRY));
-    g_signal_connect(G_OBJECT(preference_club_text_abbr),    "activate", 
+    g_signal_connect(G_OBJECT(preference_club_text_abbr),    "activate",
 		     G_CALLBACK(set_club_abbr), (gpointer)NULL);
 
     g_signal_connect(G_OBJECT(preference_weights_to_pool_sheets), "activate", G_CALLBACK(toggle_weights_in_sheets), 0);
@@ -506,6 +548,12 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(preference_name_layout_1),          "activate", G_CALLBACK(toggle_name_layout), (gpointer)NAME_LAYOUT_S_N_C);
     g_signal_connect(G_OBJECT(preference_name_layout_2),          "activate", G_CALLBACK(toggle_name_layout), (gpointer)NAME_LAYOUT_C_N_S);
     g_signal_connect(G_OBJECT(preference_name_layout_3),          "activate", G_CALLBACK(toggle_name_layout), (gpointer)NAME_LAYOUT_C_S_N);
+    g_signal_connect(G_OBJECT(preference_name_layout_first_uc),   "activate", G_CALLBACK(toggle_name_layout_format_first), (gpointer)NAME_LAYOUT_FORMAT_FIRST_UNCHANGED);
+    g_signal_connect(G_OBJECT(preference_name_layout_first_fu),   "activate", G_CALLBACK(toggle_name_layout_format_first), (gpointer)NAME_LAYOUT_FORMAT_FIRST_FIRST_UPPERCASE);
+    g_signal_connect(G_OBJECT(preference_name_layout_first_au),   "activate", G_CALLBACK(toggle_name_layout_format_first), (gpointer)NAME_LAYOUT_FORMAT_FIRST_ALL_UPPERCASE);
+    g_signal_connect(G_OBJECT(preference_name_layout_last_uc),    "activate", G_CALLBACK(toggle_name_layout_format_last), (gpointer)NAME_LAYOUT_FORMAT_LAST_UNCHANGED);
+    g_signal_connect(G_OBJECT(preference_name_layout_last_fu),    "activate", G_CALLBACK(toggle_name_layout_format_last), (gpointer)NAME_LAYOUT_FORMAT_LAST_FIRST_UPPERCASE);
+    g_signal_connect(G_OBJECT(preference_name_layout_last_au),    "activate", G_CALLBACK(toggle_name_layout_format_last), (gpointer)NAME_LAYOUT_FORMAT_LAST_ALL_UPPERCASE);
     g_signal_connect(G_OBJECT(preference_pool_style),             "activate", G_CALLBACK(toggle_pool_style), 0);
     g_signal_connect(G_OBJECT(preference_belt_colors),            "activate", G_CALLBACK(toggle_belt_colors), 0);
     g_signal_connect(G_OBJECT(preference_sheet_font),             "activate", G_CALLBACK(font_dialog), 0);
@@ -515,7 +563,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     for (i = 0; i < NUM_COMP_COLS; i++)
 	g_signal_connect(G_OBJECT(preference_show_col[i]),        "activate",
 			 G_CALLBACK(toggle_col_visible), gint_to_ptr(i));
-    
+
     g_signal_connect(G_OBJECT(preference_password),               "activate", G_CALLBACK(set_webpassword_dialog), 0);
     g_signal_connect(G_OBJECT(preference_mirror),                 "activate", G_CALLBACK(toggle_mirror), 0);
     g_signal_connect(G_OBJECT(preference_auto_arrange),           "activate", G_CALLBACK(toggle_auto_arrange), 0);
@@ -599,12 +647,13 @@ void set_preferences(void)
 
     error = NULL;
     x1 = g_key_file_get_integer(keyfile, "preferences", "showcolumns", &error);
-    if (!error) {
-	show_columns = x1;
-	for (i = 0; i < NUM_COMP_COLS; i++) {
-	    if (show_columns & (1 << i))
-		gtk_menu_item_activate(GTK_MENU_ITEM(preference_show_col[i]));
-	}
+    if (!error)
+        show_columns = x1;
+    else
+        show_columns = DEFAULT_SHOW_COLUMNS;
+    for (i = 0; i < NUM_COMP_COLS; i++) {
+        if (show_columns & (1 << i))
+            gtk_menu_item_activate(GTK_MENU_ITEM(preference_show_col[i]));
     }
 
     error = NULL;
@@ -652,7 +701,7 @@ void set_preferences(void)
     str = g_key_file_get_string(keyfile, "preferences", "printlanguagestr", &error);
     if (!error)
         l = str;
-    else 
+    else
         l = g_strdup("is");
 
     for (i = 0; i < NUM_PRINT_LANGS; i++) {
@@ -700,6 +749,34 @@ void set_preferences(void)
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_2), TRUE);
     else if (name_layout == NAME_LAYOUT_C_S_N)
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_3), TRUE);
+
+    error = NULL;
+    x1 = g_key_file_get_integer(keyfile, "preferences", "namelayout_format_first", &error);
+    if (!error)
+        name_layout_format_first = x1;
+    else
+        name_layout_format_first = NAME_LAYOUT_FORMAT_FIRST_UNCHANGED;
+
+    if (name_layout_format_first == NAME_LAYOUT_FORMAT_FIRST_UNCHANGED)
+        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_first_uc), TRUE);
+    else if (name_layout_format_first == NAME_LAYOUT_FORMAT_FIRST_FIRST_UPPERCASE)
+        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_first_fu), TRUE);
+    else if (name_layout_format_first == NAME_LAYOUT_FORMAT_FIRST_ALL_UPPERCASE)
+        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_first_au), TRUE);
+
+    error = NULL;
+    x1 = g_key_file_get_integer(keyfile, "preferences", "namelayout_format_last", &error);
+    if (!error)
+        name_layout_format_last = x1;
+    else
+        name_layout_format_last = NAME_LAYOUT_FORMAT_LAST_UNCHANGED;
+
+    if (name_layout_format_last == NAME_LAYOUT_FORMAT_LAST_UNCHANGED)
+        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_last_uc), TRUE);
+    else if (name_layout_format_last == NAME_LAYOUT_FORMAT_LAST_FIRST_UPPERCASE)
+        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_last_fu), TRUE);
+    else if (name_layout_format_last == NAME_LAYOUT_FORMAT_LAST_ALL_UPPERCASE)
+        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(preference_name_layout_last_au), TRUE);
 
     error = NULL;
     x1 = g_key_file_get_integer(keyfile, "preferences", "drawsystem", &error);
@@ -775,7 +852,7 @@ void set_preferences(void)
 static void change_menu_label(GtkWidget *item, const gchar *new_text)
 {
     GtkWidget *menu_label = gtk_bin_get_child(GTK_BIN(item));
-    gtk_label_set_text(GTK_LABEL(menu_label), new_text); 
+    gtk_label_set_text(GTK_LABEL(menu_label), new_text);
 }
 
 #define DB_OK (db_name != NULL)
@@ -936,6 +1013,15 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(preference_name_layout_1         , _("Surname Name, Country/Club"));
     change_menu_label(preference_name_layout_2         , _("Country/Club,  Name Surname"));
     change_menu_label(preference_name_layout_3         , _("Country/Club,  Surname Name"));
+    change_menu_label(preference_name_layout_first_format  , _("First Name Format"));
+    change_menu_label(preference_name_layout_last_format  , _("Last Name Format"));
+    change_menu_label(preference_name_layout_first_uc  , _("Unchanged from registration"));
+    change_menu_label(preference_name_layout_first_fu  , _("First Letter Uppercase"));
+    change_menu_label(preference_name_layout_first_au  , _("All Letters Uppercase"));
+    change_menu_label(preference_name_layout_last_uc   , _("Unchanged from registration"));
+    change_menu_label(preference_name_layout_last_fu   , _("First Letter Uppercase"));
+    change_menu_label(preference_name_layout_last_au   , _("All Letters Uppercase"));
+
     change_menu_label(preference_pool_style            , _("Pool Style 2"));
     change_menu_label(preference_belt_colors           , _("Use Belt Colors"));
     change_menu_label(preference_sheet_font            , _("Sheet Font"));
@@ -949,7 +1035,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(preference_show_defaults         , _("Reset to Defaults"));
     for (i = 0; i < NUM_COMP_COLS; i++)
 	change_menu_label(preference_show_col[i]       , _(competitor_column_names[i]));
-    
+
     change_menu_label(preference_serial                , _("Scale Serial Interface..."));
     change_menu_label(preference_medal_matches         , _("Medal Matches..."));
 

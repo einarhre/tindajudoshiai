@@ -1,5 +1,5 @@
 ### First line is the menu text
-نتایج به فارسی
+Results in Persian
 ### 1: Competitors
 ورزشکاران
 ### 2: Competitors A (for double and quadruple pools)

@@ -1,5 +1,5 @@
 ### First line is the menu text
-Úrslit á íslensku
+Results in Icelandic
 ### 1: Competitors
 Keppendur
 ### 2: Competitors A (for double and quadruple pools)

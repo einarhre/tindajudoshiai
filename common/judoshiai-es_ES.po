@@ -1,3 +1,4 @@
+#: ../judoshiai/menus.c
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -1779,6 +1780,30 @@ msgid "Weights Visible in Pool Sheets"
 msgstr "Pesos visibles en las ligas"
 
 #: ../judoshiai/menus.c
+msgid "Surname Name, Country/Club"
+msgstr "Apellidos Nombre, País/Club"
+
+#: ../judoshiai/menus.c
+msgid "Country/Club,  Name Surname"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "Country/Club,  Surname Name"
+msgstr "País/Club,  Apellidos Nombre"
+
+#: ../judoshiai/menus.c
+msgid "Unchanged from registration"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "First Letter Uppercase"
+msgstr ""
+
+#: ../judoshiai/menus.c
+msgid "All Letters Uppercase"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Sheet Font"
 msgstr "Fuente de las hojas"
 
@@ -1831,16 +1856,12 @@ msgid "Name Format"
 msgstr "Formato de Nombre"
 
 #: ../judoshiai/menus.c
-msgid "Surname Name, Country/Club"
-msgstr "Apellidos Nombre, País/Club"
-
-#: ../judoshiai/menus.c
-msgid "Country/Club,  Name Surname"
+msgid "First Name Format"
 msgstr ""
 
 #: ../judoshiai/menus.c
-msgid "Country/Club,  Surname Name"
-msgstr "País/Club,  Apellidos Nombre"
+msgid "Last Name Format"
+msgstr ""
 
 #: ../judoshiai/menus.c
 msgid "Pool Style 2"
@@ -1999,7 +2020,7 @@ msgid "Results in Estonian"
 msgstr "Resultados en Estonio"
 
 #: ../judoshiai/print-texts.c
-msgid "نتایج به فارسی"
+msgid "Results in Persian"
 msgstr ""
 
 #: ../judoshiai/print-texts.c
@@ -2007,7 +2028,7 @@ msgid "Results in Finnish"
 msgstr "Resultados en Finlandés"
 
 #: ../judoshiai/print-texts.c
-msgid "Résultats en français"
+msgid "Results in French"
 msgstr ""
 
 #: ../judoshiai/print-texts.c
@@ -2015,15 +2036,15 @@ msgid "Results in Hebrew"
 msgstr ""
 
 #: ../judoshiai/print-texts.c
-msgid "Úrslit á íslensku"
-msgstr ""
+msgid "Results in Icelandic"
+msgstr "Resultados en Islandes"
 
 #: ../judoshiai/print-texts.c
 msgid "Results in Norwegian"
 msgstr "Resultados en Noruego"
 
 #: ../judoshiai/print-texts.c
-msgid "Resultaten in het Nederlands"
+msgid "Results in Dutch"
 msgstr ""
 
 #: ../judoshiai/print-texts.c
@@ -2043,7 +2064,7 @@ msgid "Results in Swedish"
 msgstr "Resultados en Suizo"
 
 #: ../judoshiai/print-texts.c
-msgid "Результати Українською"
+msgid "Results in Ukranian"
 msgstr ""
 
 #: ../judoshiai/print.c ../judoinfo/main.c ../judojudogi/main.c
@@ -2765,9 +2786,6 @@ msgstr ""
 
 #~ msgid "About Judotimer"
 #~ msgstr "Acerca de Judotimer"
-
-#~ msgid "Results in Icelandic"
-#~ msgstr "Resultados en Islandes"
 
 #~ msgid "Results in Ukrainian"
 #~ msgstr "Resultados en Ucraniano"

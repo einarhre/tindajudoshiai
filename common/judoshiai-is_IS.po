@@ -1,3 +1,4 @@
+#: ../judoshiai/menus.c
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -397,7 +398,7 @@ msgstr "Leiðbeiningar"
 #: ../judotimer/menus.c ../judoshiai/menus.c ../judoinfo/menus.c
 #: ../judoweight/menus.c ../judojudogi/menus.c ../judoproxy/menus.c
 msgid "About"
-msgstr "Útgáfa"
+msgstr "Um hugbúnaðinn"
 
 #: ../judotimer/show-ad.c
 msgid "CTL"
@@ -1780,6 +1781,30 @@ msgid "Weights Visible in Pool Sheets"
 msgstr "Þyngdir sjáanlegar á riðlaörkum"
 
 #: ../judoshiai/menus.c
+msgid "Surname Name, Country/Club"
+msgstr "Kenninafn Eiginnafn, Land/Félag"
+
+#: ../judoshiai/menus.c
+msgid "Country/Club,  Name Surname"
+msgstr "Land/Félag,  Eiginnafn Kenninafn"
+
+#: ../judoshiai/menus.c
+msgid "Country/Club,  Surname Name"
+msgstr "Land/Félag,  Kenninafn Eiginnafn"
+
+#: ../judoshiai/menus.c
+msgid "Unchanged from registration"
+msgstr "Óbreytt frá skráningu"
+
+#: ../judoshiai/menus.c
+msgid "First Letter Uppercase"
+msgstr "Fyrsti stafur hástafur"
+
+#: ../judoshiai/menus.c
+msgid "All Letters Uppercase"
+msgstr "Allir stafir hástafir"
+
+#: ../judoshiai/menus.c
 msgid "Sheet Font"
 msgstr "Leturgerð arkar"
 
@@ -1832,16 +1857,12 @@ msgid "Name Format"
 msgstr "Nafnasnið keppenda"
 
 #: ../judoshiai/menus.c
-msgid "Surname Name, Country/Club"
-msgstr "Kenninafn Eiginnafn, Land/Félag"
+msgid "First Name Format"
+msgstr "Snið eiginnafns"
 
 #: ../judoshiai/menus.c
-msgid "Country/Club,  Name Surname"
-msgstr "Land/Félag,  Eiginnafn Kenninafn"
-
-#: ../judoshiai/menus.c
-msgid "Country/Club,  Surname Name"
-msgstr "Land/Félag,  Kenninafn Eiginnafn"
+msgid "Last Name Format"
+msgstr "Snið kenninafns"
 
 #: ../judoshiai/menus.c
 msgid "Pool Style 2"
@@ -2000,7 +2021,7 @@ msgid "Results in Estonian"
 msgstr "Úrslit á eistnesku"
 
 #: ../judoshiai/print-texts.c
-msgid "نتایج به فارسی"
+msgid "Results in Persian"
 msgstr "Úrslit á persnesku"
 
 #: ../judoshiai/print-texts.c
@@ -2008,7 +2029,7 @@ msgid "Results in Finnish"
 msgstr "Úrslit á finnsku"
 
 #: ../judoshiai/print-texts.c
-msgid "Résultats en français"
+msgid "Results in French"
 msgstr "Úrslit á frönsku"
 
 #: ../judoshiai/print-texts.c
@@ -2016,7 +2037,7 @@ msgid "Results in Hebrew"
 msgstr "Úrslit á hebresku"
 
 #: ../judoshiai/print-texts.c
-msgid "Úrslit á íslensku"
+msgid "Results in Icelandic"
 msgstr "Úrslit á íslensku"
 
 #: ../judoshiai/print-texts.c
@@ -2024,7 +2045,7 @@ msgid "Results in Norwegian"
 msgstr "Úrslit á norsku"
 
 #: ../judoshiai/print-texts.c
-msgid "Resultaten in het Nederlands"
+msgid "Results in Dutch"
 msgstr "Úrslit á hollensku"
 
 #: ../judoshiai/print-texts.c
@@ -2044,7 +2065,7 @@ msgid "Results in Swedish"
 msgstr "Úrslit á sænsku"
 
 #: ../judoshiai/print-texts.c
-msgid "Результати Українською"
+msgid "Results in Ukranian"
 msgstr "Úrslit á úkraínsku"
 
 #: ../judoshiai/print.c ../judoinfo/main.c ../judojudogi/main.c

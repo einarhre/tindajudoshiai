@@ -44,7 +44,7 @@ static gint set_category(GtkTreeIter *iter, guint index,
 
     memset(&j, 0, sizeof(j));
     j.index = index ? index : current_category_index++;
-    j.last = category;
+    j.last = (gchar *)category;
     j.first = "";
     j.birthyear = group;
     j.club = (color && color[0]) ? color : "rgb(255,255,255)";
@@ -81,7 +81,7 @@ gint display_one_judoka(struct judoka *j)
             return -1;
         }
 
-        return set_category(&parent, j->index, (gchar *)j->last, 
+        return set_category(&parent, j->index, j->last,
                             j->belt, j->birthyear, j->deleted, j->club);
     }
 
@@ -93,7 +93,7 @@ gint display_one_judoka(struct judoka *j)
             mylog("ILLEGAL\n");
             if (j->category)
                 ret = set_category(&parent, 0, 
-                                   (gchar *)j->category, 
+                                   j->category,
                                    0, 0, 0, NULL);
         } 
 
@@ -102,7 +102,7 @@ gint display_one_judoka(struct judoka *j)
         if (j->category && strcmp(parent_data->last, j->category)) {
             /* category has changed */
             gtk_tree_store_remove((GtkTreeStore *)current_model, &iter);
-            ret = set_category(&parent, 0, (gchar *)j->category, 0, 0, 0, NULL);
+            ret = set_category(&parent, 0, j->category, 0, 0, 0, NULL);
             gtk_tree_store_append((GtkTreeStore *)current_model, 
                                   &iter, &parent);
             put_data_by_iter(j, &iter);
@@ -114,7 +114,7 @@ gint display_one_judoka(struct judoka *j)
         free_judoka(parent_data);
     } else {
         /* new judoka */
-        ret = set_category(&parent, 0, (gchar *)j->category, 0, 0, 0, NULL);
+        ret = set_category(&parent, 0, j->category, 0, 0, 0, NULL);
 
         gtk_tree_store_append((GtkTreeStore *)current_model, 
                               &child, &parent);

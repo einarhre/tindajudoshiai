@@ -393,6 +393,28 @@ void toggle_name_layout(GtkWidget *menu_item, gpointer data)
     g_key_file_set_integer(keyfile, "preferences", "namelayout", name_layout);
 }
 
+void toggle_name_layout_format_first(GtkWidget *menu_item, gpointer data)
+{
+    name_layout_format_first = ptr_to_gint(data);
+    gint x1 = g_key_file_get_integer(keyfile, "preferences", "namelayout_format_first", NULL);
+
+    if (x1 != name_layout_format_first) {
+        g_key_file_set_integer(keyfile, "preferences", "namelayout_format_first", name_layout_format_first);
+        update_judoka_name_layout_format_first();
+    }
+}
+
+void toggle_name_layout_format_last(GtkWidget *menu_item, gpointer data)
+{
+    name_layout_format_last = ptr_to_gint(data);
+    gint x1 = g_key_file_get_integer(keyfile, "preferences", "namelayout_format_last", NULL);
+
+    if (x1 != name_layout_format_last) {
+        g_key_file_set_integer(keyfile, "preferences", "namelayout_format_last", name_layout_format_last);
+        update_judoka_name_layout_format_last();
+    }
+}
+
 void toggle_pool_style(GtkWidget *menu_item, gpointer data)
 {
 #if (GTKVER == 3)

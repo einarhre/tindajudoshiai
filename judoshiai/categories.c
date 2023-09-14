@@ -132,7 +132,7 @@ void create_categories(GtkWidget *w, gpointer data)
 			struct judoka e;
 			memset(&e, 0, sizeof(e));
                         e.index = r;
-                        e.last = j->category;
+                        e.last = (gchar *)j->category;
                         e.belt = 0;
                         e.deleted = 0;
                         e.birthyear = 0;

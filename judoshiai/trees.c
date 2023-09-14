@@ -377,8 +377,8 @@ void avl_set_competitor(gint index, struct judoka *j)
 	
     data->index = index;
     data->status = j->deleted;
-    gint crc1 = pwcrc32((guchar *)last, strlen(last));
-    gint crc2 = pwcrc32((guchar *)first, strlen(first));
+    gint crc1 = pwcrc32((guchar *)g_utf8_strup(last, -1), strlen(last));
+    gint crc2 = pwcrc32((guchar *)g_utf8_strdown(first, -1), strlen(first));
     data->hash = crc1 ^ crc2;
     data->j = *j;
     STRDUP(last); STRDUP(first); STRDUP(club);
@@ -418,6 +418,34 @@ struct judoka *avl_get_competitor(gint index)
     }
 
     return NULL;
+}
+
+void avl_update_competitor_first_name(gint index, char *first)
+{
+    struct competitor_data data, *data1;
+
+    if (!competitors_tree)
+        return;
+
+    data.index = index;
+    if (avl_get_by_key(competitors_tree, &data, (void **)&data1) == 0) {
+        g_free(data1->j.first);
+        data1->j.first = g_strdup(first);
+    }
+}
+
+void avl_update_competitor_last_name(gint index, char *last)
+{
+    struct competitor_data data, *data1;
+
+    if (!competitors_tree)
+        return;
+
+    data.index = index;
+    if (avl_get_by_key(competitors_tree, &data, (void **)&data1) == 0) {
+        g_free(data1->j.last);
+        data1->j.last = g_strdup(last);
+    }
 }
 
 void avl_set_competitor_last_match_time(gint index)

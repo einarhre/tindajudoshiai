@@ -41,12 +41,16 @@
 #define UPDATE_WEIGHTS              512
 #define LIST_COMPETITORS           1024
 #define PRINT_COMPETITORS_JSON     2048
+#define FIND_FIRST_NAME_BY_INDEX   4096
+#define FIND_LAST_NAME_BY_INDEX    8192
 
 static cJSON *json_root = NULL;
 static FILE *print_file = NULL;
 static gint num_competitors;
 static gint num_weighted_competitors;
 static gint competitors_not_added, competitors_added;
+static const gchar *competitor_first_name;
+static const gchar *competitor_last_name;
 static gint competitor_by_id;
 static gboolean competitor_by_coach;
 static gint weights_updated;
@@ -115,9 +119,9 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
         if (IS(index))
             j.index = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(last))
-            j.last = argv[i] ? argv[i] : "?";
+            j.last = argv[i] ? convert_name(argv[i], name_layout_format_last) : "?";
         else if (IS(first))
-            j.first = argv[i] ? argv[i] : "?";
+            j.first = argv[i] ? convert_name(argv[i], name_layout_format_first) : "?";
         else if (IS(birthyear))
             j.birthyear = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(club))
@@ -162,6 +166,16 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
             //avl_set_competitor_status(j.index, j.deleted);
         }
         return 0;
+    }
+
+    if (flags & FIND_FIRST_NAME_BY_INDEX) {
+        competitor_first_name = g_strdup(j.first);
+        return 1;
+    }
+
+    if (flags & FIND_LAST_NAME_BY_INDEX) {
+        competitor_last_name = g_strdup(j.last);
+        return 1;
     }
 
     if ((j.deleted & DELETED) || j.visible == 0) {
@@ -598,6 +612,24 @@ void db_set_match_hansokumake(gint category, gint number, gint blue, gint white)
                 category, number);
         db_exec(db_name, buffer, NULL, db_callback);
     }
+}
+
+gchar *db_get_first_name_by_index(gint index) {
+    gchar *first;
+    db_exec_str((gpointer)FIND_FIRST_NAME_BY_INDEX, db_callback,
+                "SELECT \"first\" FROM competitors WHERE \"index\"=\"%d\"", index);
+    first = g_strdup(competitor_first_name);
+    g_free((gpointer)competitor_first_name);
+    return  first;
+}
+
+gchar *db_get_last_name_by_index(gint index) {
+    gchar *last;
+    db_exec_str((gpointer)FIND_LAST_NAME_BY_INDEX, db_callback,
+                "SELECT \"last\" FROM competitors WHERE \"index\"=\"%d\"", index);
+    last = g_strdup(competitor_last_name);
+    g_free((gpointer)competitor_last_name);
+    return  last;
 }
 
 gint db_get_index_by_id(const gchar *id, gboolean *coach)
