@@ -727,16 +727,17 @@ void json_set_weight(cJSON *root)
     JSON_GET_STR(root, id);
     JSON_GET_INT(root, ix);
     JSON_GET_INT(root, weight);
-    if (!id && ix == 0)
-        return;
-    mylog("json id=%s ix=%d weight=%d\n", id ? id : "NULL", ix, weight);
-    
+
     struct judoka *j = NULL;
-    if (ix) j = get_data(ix);
-    else {
-        gboolean coach;
-        gint indx = db_get_index_by_id(id, &coach);
-        if (indx) j = get_data(indx);
+    if (id || ix != 0) {
+        mylog("json id=%s ix=%d weight=%d\n", id ? id : "NULL", ix, weight);
+
+        if (ix) j = get_data(ix);
+        else {
+            gboolean coach;
+            gint indx = db_get_index_by_id(id, &coach);
+            if (indx) j = get_data(indx);
+        }
     }
     if (!j) {
         /* This is a new judoka */
