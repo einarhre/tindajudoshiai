@@ -576,7 +576,7 @@ void read_custom_files(void)
                     g_free(fullname);
                     fname = g_dir_read_name(dir);
                     show_msg(msgbuf, "red", "  %s\n", msg);
-                    //show_message(msg);
+                    //show_message(main_window, msg);
                     continue;
                 }
                 guint hash = g_str_hash(d->name_short) << 5;

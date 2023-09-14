@@ -57,7 +57,7 @@ void create_categories(GtkWidget *w, gpointer data)
 #if 0
     if (db_matches_exists()) {
         mylog("Otteluita arvottu. Poista arvonnat ensin.\n");
-        show_message("Otteluita arvottu. Poista arvonnat ensin.");
+        show_message(main_window, "Otteluita arvottu. Poista arvonnat ensin.");
         return;
     }
 #endif
@@ -117,7 +117,7 @@ void create_categories(GtkWidget *w, gpointer data)
                     }
 
                     if (avl_get_category_status_by_name(j->category) & REAL_MATCH_EXISTS) {
-                        SHOW_MESSAGE("%s %s %s -> %s.",
+                        SHOW_MESSAGE(main_window, "%s %s %s -> %s.",
                                      _("Cannot move"),
                                      j->first, j->last, j->category);
                         g_free((void *)j->category);

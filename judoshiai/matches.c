@@ -578,7 +578,7 @@ static gint loser_1(struct match *m) {
 	if (!MATCHED(_to))						\
 	    m[_to]._which = _from;					\
 	else if (m[_to]._which != _from) {				\
-            SHOW_MESSAGE("%s #%d (%d-%d) %s!", _("Match"),              \
+            SHOW_MESSAGE(main_window, "%s #%d (%d-%d) %s!", _("Match"),              \
                          _to, m[_to].blue_points, m[_to].white_points,  \
                          _("canceled"));                                \
 	    m[_to]._which = _from;					\
@@ -1890,7 +1890,7 @@ static void update_french_matches(gint category, struct compsys systm)
                     if (m[i].blue &&
                         m[i].blue != WINNER_OR_LOSER(prev_match_blue) &&
                         (m[i].blue_points || m[i].white_points)) {
-                        SHOW_MESSAGE("%s %s:%d (%d-%d) %s!", _("Match"),
+                        SHOW_MESSAGE(main_window, "%s %s:%d (%d-%d) %s!", _("Match"),
                                      g && g->last ? g->last : "?",
                                      i, m[i].blue_points, m[i].white_points,
                                      _("canceled"));
@@ -1906,13 +1906,13 @@ static void update_french_matches(gint category, struct compsys systm)
 
                 } else if (m[i].blue) {
                     if (MATCHED(i))
-                        SHOW_MESSAGE("%s %s:%d (%s-%s) %s!", _("Match"),
+                        SHOW_MESSAGE(main_window, "%s %s:%d (%s-%s) %s!", _("Match"),
                                      g && g->last ? g->last : "?",
                                      i, get_points_str(m[i].blue_points, m[i].category),
 				     get_points_str(m[i].white_points, m[i].category),
                                      _("canceled"));
                     else
-                        SHOW_MESSAGE("%s %s:%d %s!", _("Match"),
+                        SHOW_MESSAGE(main_window, "%s %s:%d %s!", _("Match"),
                                      g && g->last ? g->last : "?", i, _("changed"));
 
                     m[i].blue = 0;
@@ -1935,7 +1935,7 @@ static void update_french_matches(gint category, struct compsys systm)
                     if (m[i].white &&
                         m[i].white != WINNER_OR_LOSER(prev_match_white) &&
                         (m[i].blue_points || m[i].white_points)) {
-                        SHOW_MESSAGE("%s %s:%d (%s-%s) %s!", _("Match"),
+                        SHOW_MESSAGE(main_window, "%s %s:%d (%s-%s) %s!", _("Match"),
                                      g && g->last ? g->last : "?",
                                      i, get_points_str(m[i].blue_points, m[i].category),
 				     get_points_str(m[i].white_points, m[i].category),
@@ -1952,13 +1952,13 @@ static void update_french_matches(gint category, struct compsys systm)
 
                 } else if (m[i].white) {
                     if (MATCHED(i))
-                        SHOW_MESSAGE("%s %s:%d (%s-%s) %s!", _("Match"),
+                        SHOW_MESSAGE(main_window, "%s %s:%d (%s-%s) %s!", _("Match"),
                                      g && g->last ? g->last : "?",
                                      i, get_points_str(m[i].blue_points, m[i].category),
 				     get_points_str(m[i].white_points, m[i].category),
                                      _("canceled"));
                     else
-                        SHOW_MESSAGE("%s %s:%d %s!", _("Match"),
+                        SHOW_MESSAGE(main_window, "%s %s:%d %s!", _("Match"),
                                      g && g->last ? g->last : "?", i,
                                      _("changed"));
                     m[i].white = 0;
@@ -2032,7 +2032,7 @@ static void update_custom_matches(gint category, struct compsys systm)
                 if (m[i].blue &&
                     m[i].blue != WINNER_OR_LOSER(prevm) &&
                     (m[i].blue_points || m[i].white_points)) {
-                    SHOW_MESSAGE("%s %s:%d (%s-%s) %s!", _("Match"),
+                    SHOW_MESSAGE(main_window, "%s %s:%d (%s-%s) %s!", _("Match"),
                                  g && g->last ? g->last : "?",
                                  i, get_points_str(m[i].blue_points, m[i].category),
 				 get_points_str(m[i].white_points, m[i].category),
@@ -2046,13 +2046,13 @@ static void update_custom_matches(gint category, struct compsys systm)
                     m[i].blue = GHOST;
             } else if (m[i].blue) {
                 if (MATCHED(i))
-                    SHOW_MESSAGE("%s %s:%d (%s-%s) %s!", _("Match"),
+                    SHOW_MESSAGE(main_window, "%s %s:%d (%s-%s) %s!", _("Match"),
                                  g && g->last ? g->last : "?",
                                  i, get_points_str(m[i].blue_points, m[i].category),
 				 get_points_str(m[i].white_points, m[i].category),
                                  _("canceled"));
                 else
-                    SHOW_MESSAGE("%s %s:%d %s!", _("Match"),
+                    SHOW_MESSAGE(main_window, "%s %s:%d %s!", _("Match"),
                                  g && g->last ? g->last : "?", i, _("changed"));
 
                 m[i].blue = 0;
@@ -2110,7 +2110,7 @@ static void update_custom_matches(gint category, struct compsys systm)
                 if (m[i].white &&
                     m[i].white != WINNER_OR_LOSER(prevm) &&
                     (m[i].white_points || m[i].white_points)) {
-                    SHOW_MESSAGE("%s %s:%d (%s-%s) %s!", _("Match"),
+                    SHOW_MESSAGE(main_window, "%s %s:%d (%s-%s) %s!", _("Match"),
                                  g && g->last ? g->last : "?",
                                  i, get_points_str(m[i].blue_points, m[i].category),
 				 get_points_str(m[i].white_points, m[i].category),
@@ -2124,13 +2124,13 @@ static void update_custom_matches(gint category, struct compsys systm)
                     m[i].white = GHOST;
             } else if (m[i].white) {
                 if (MATCHED(i))
-                    SHOW_MESSAGE("%s %s:%d (%s-%s) %s!", _("Match"),
+                    SHOW_MESSAGE(main_window, "%s %s:%d (%s-%s) %s!", _("Match"),
                                  g && g->last ? g->last : "?",
                                  i, get_points_str(m[i].blue_points, m[i].category),
 				 get_points_str(m[i].white_points, m[i].category),
                                  _("canceled"));
                 else
-                    SHOW_MESSAGE("%s %s:%d %s!", _("Match"),
+                    SHOW_MESSAGE(main_window, "%s %s:%d %s!", _("Match"),
                                  g && g->last ? g->last : "?", i, _("changed"));
 
                 m[i].white = 0;

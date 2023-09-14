@@ -498,7 +498,7 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
     if (!name)
         return;
 
-    valid_ascii_string(name);
+    //valid_ascii_string(name);
 
     /* settings */
 
@@ -653,7 +653,7 @@ void import_txt_dialog(GtkWidget *w, gpointer arg)
 
     gtk_widget_destroy(dialog);
 
-    SHOW_MESSAGE("%d %s, %d %s (%d %s, %d %s).",
+    SHOW_MESSAGE(main_window, "%d %s, %d %s (%d %s, %d %s).",
                  data->comp_added, _("competitors added"),
                  data->errors, _("errors"),
                  data->comp_exists, _("competitors existed already"),

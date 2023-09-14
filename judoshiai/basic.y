@@ -2069,7 +2069,7 @@ void yyerror(char *s)
 {
     extern char *yytext;
     print_text_buffer("\n*** Error on line %d: %s (0x%x)\n",cmdcnt+1,s, *yytext);
-    //SHOW_MESSAGE("Error line %d: %s (0x%x)\n",cmdcnt+1,s, *yytext);
+    //SHOW_MESSAGE(main_window, "Error line %d: %s (0x%x)\n",cmdcnt+1,s, *yytext);
     //HJo fprintf(stderr,"Error line %d: %s\n",cmdcnt,s);
     fseek(yyin,0,SEEK_END); /* place seek on end, so lex could clean it up */
 }

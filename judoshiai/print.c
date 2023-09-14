@@ -485,7 +485,7 @@ static gchar *get_save_as_name(const gchar *dflt, gboolean opendialog, gboolean 
 
     gtk_widget_destroy (dialog);
 
-    valid_ascii_string(filename);
+    //valid_ascii_string(filename);
 
     return filename;
 }
@@ -1011,7 +1011,7 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
 		    }
 		    order = g_strdup(buf);
 		} else {
-		    show_message("%s: Error on line %d", templatefile, linenum);
+		    show_message(main_window, "%s: Error on line %d", templatefile, linenum);
 		}
 		g_strfreev(list);
 		mylog("order='%s'\n", order);
@@ -1024,7 +1024,7 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
         g_free(font);
         fclose(f);
         if (!ok) {
-            SHOW_MESSAGE("%s %d: %s", _("Line"), linenum, _("Syntax error"));
+            SHOW_MESSAGE(main_window, "%s %d: %s", _("Line"), linenum, _("Syntax error"));
             return;
         }
     }
@@ -2545,7 +2545,7 @@ void print_matches(GtkWidget *menuitem, gpointer userdata)
         else
             name1 = g_strdup_printf("%s.csv", name);
 
-        valid_ascii_string(name1);
+        //valid_ascii_string(name1);
 
         FILE *f = g_fopen(name1, "w");
 

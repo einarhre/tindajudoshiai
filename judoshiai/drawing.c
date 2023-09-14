@@ -1290,7 +1290,7 @@ static void make_manual_matches_callback(GtkWidget *widget,
     /* check drawing is complete */
     for (i = 1; i <= mdata->mjudokas; i++) {
         if (mdata->mcomp[i].index && mdata->mcomp[i].pos == 0) {
-            show_message(_("Drawing not finished!"));
+            show_message(main_window, _("Drawing not finished!"));
             return;
         }
     }
@@ -1749,7 +1749,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
     struct category_data *catdata = avl_get_category(mdata->mcategory_ix);
     if ((catname && (catname[0] == '?' || catname[0] == '_')) ||
         (catdata && (catdata->deleted & TEAM))) {
-        //SHOW_MESSAGE("Cannot draw %s", catname);
+        //SHOW_MESSAGE(main_window, "Cannot draw %s", catname);
         g_free(catname);
         g_free(mdata);
         return NULL;
@@ -1761,7 +1761,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
         // Cannot draw again.
 #if 0
         struct judoka *j = get_data(mdata->mcategory_ix);
-        SHOW_MESSAGE("%s %s. %s.",
+        SHOW_MESSAGE(main_window, "%s %s. %s.",
                      _("Matches matched in category"),
                      j ? j->last : "?", _("Clear the results first"));
         free_judoka(j);

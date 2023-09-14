@@ -311,7 +311,7 @@ gint db_init(const char *dbname)
         matchcols  > 15 ||
         infocols   > 2  ||
         catdefcols > 14) {
-        SHOW_MESSAGE("%s", _("Cannot handle: Database created with newer JudoShiai version."));
+        SHOW_MESSAGE(main_window, "%s", _("Cannot handle: Database created with newer JudoShiai version."));
         mylog("Number of columns: %d %d %d %d %d\n", compcols, catcols, matchcols,
                 infocols, catdefcols);
         return -2;
@@ -420,7 +420,7 @@ gint db_init(const char *dbname)
     if (!tatami_exists || !number_exists || !country_exists || !id_exists || !numcomp_exists || !seeding_exists ||
         !comp_comment_exists || !match_date_exists) {
         r = 55555;
-        SHOW_MESSAGE("%s", _("Database tables updated."));
+        SHOW_MESSAGE(main_window, "%s", _("Database tables updated."));
     }
 
     if (prop_get_int_val(PROP_THREE_MATCHES_FOR_TWO)) {
@@ -432,7 +432,6 @@ gint db_init(const char *dbname)
                     SYSTEM_BEST_OF_3, CAT_SYSTEM_BEST_OF_3,
                     SYSTEM_POOL);
     }
-
 
     set_menu_active();
 

@@ -326,7 +326,7 @@ static void judoka_edited_callback(GtkWidget *widget,
             free_judoka(g);
 
             if (ix != gix) {
-                SHOW_MESSAGE("%s %s %s", _("Category"), edited.last, _("already exists!"));
+                SHOW_MESSAGE(main_window, "%s %s %s", _("Category"), edited.last, _("already exists!"));
                 goto out;
             }
         }
@@ -431,11 +431,11 @@ static void judoka_edited_callback(GtkWidget *widget,
         }
 
         if (!ok) {
-            SHOW_MESSAGE("Error!");
+            SHOW_MESSAGE(main_window, "Error!");
         } else if (db_category_get_match_status(index1) & REAL_MATCH_EXISTS) {
-            SHOW_MESSAGE("%s: %s", realcategory, _("Remove drawing first"));
+            SHOW_MESSAGE(main_window, "%s: %s", realcategory, _("Remove drawing first"));
         } else if (db_competitor_match_status(edited.index) & MATCH_EXISTS) {
-            SHOW_MESSAGE("%s %s: %s.",
+            SHOW_MESSAGE(main_window, "%s %s: %s.",
                          edited.first, edited.last, _("Remove drawing first"));
         } else {
             g_free((gpointer)edited.category);
@@ -2580,7 +2580,7 @@ void remove_competitors(GtkWidget *w, gpointer data)
                 struct judoka *j = get_data_by_iter(&iter);
 
                 if (j && (db_competitor_match_status(j->index) & MATCH_EXISTS)) {
-                    SHOW_MESSAGE("%s %s: %s",
+                    SHOW_MESSAGE(main_window, "%s %s: %s",
                                  j->first, j->last, _("Matches exist. Undo the drawing first."));
                     free_judoka(j);
                 } else if (j) {

@@ -396,15 +396,16 @@ void free_judoka(struct judoka *j)
     g_free(j);
 }
 
-void show_message(const gchar *fmt, ...)
+void show_message(GtkWidget *parent, const gchar *fmt, ...)
 {
-    GtkWidget *dialog;
+    GtkWidget *dialog, *parent_window = parent;
     va_list args;
     va_start(args, fmt);
     gchar *text = g_strdup_vprintf(fmt, args);
     va_end(args);
 
-    dialog = gtk_message_dialog_new (GTK_WINDOW(main_window),
+    if (!parent_window) parent_window = main_window;
+    dialog = gtk_message_dialog_new (GTK_WINDOW(parent_window),
                                      0 /*GTK_DIALOG_DESTROY_WITH_PARENT*/,
                                      GTK_MESSAGE_INFO,
                                      GTK_BUTTONS_OK,

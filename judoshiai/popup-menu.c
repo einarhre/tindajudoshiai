@@ -98,7 +98,7 @@ static void view_popup_menu_move_judoka(GtkWidget *menuitem, gpointer userdata)
             continue;
 
         if (db_competitor_match_status(j->index) & MATCH_EXISTS) {
-            SHOW_MESSAGE("%s %s: %s.",
+            SHOW_MESSAGE(main_window, "%s %s: %s.",
                          j->first, j->last, _("Remove drawing first"));
         } else {
             if (j->category)
@@ -190,7 +190,7 @@ static void view_popup_menu_change_category(GtkWidget *menuitem, gpointer userda
 static void view_popup_menu_remove_draw(GtkWidget *menuitem, gpointer userdata)
 {
     if (db_category_get_match_status(ptr_to_gint(userdata)) & MATCH_MATCHED) {
-        SHOW_MESSAGE(_("Matches matched. Clear the results first."));
+        SHOW_MESSAGE(main_window, _("Matches matched. Clear the results first."));
         return;
     }
 
@@ -629,7 +629,7 @@ static void create_new_category(GtkWidget *menuitem, gpointer userdata)
 
     GtkTreeIter tmp_iter;
     if (find_iter_category(&tmp_iter, cbuf)) {
-        SHOW_MESSAGE("%s %s!", cbuf, _("already exists"));
+        SHOW_MESSAGE(main_window, "%s %s!", cbuf, _("already exists"));
         return;
     }
 
@@ -641,7 +641,7 @@ static void create_new_category(GtkWidget *menuitem, gpointer userdata)
             continue;
 
         if (db_competitor_match_status(j->index) & MATCH_EXISTS) {
-            SHOW_MESSAGE("%s %s: %s.",
+            SHOW_MESSAGE(main_window, "%s %s: %s.",
                          j->first, j->last, _("Remove drawing first"));
         } else {
             if (j->category)

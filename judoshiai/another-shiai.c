@@ -49,6 +49,11 @@ struct shiai_map {
     struct ix_map ixmap[NUM_IX_MAPPED];
 };
 
+struct data_arg {
+  gchar *dbname;
+  GtkWidget *window;
+};
+
 static gboolean delete_event( GtkWidget *widget,
                               GdkEvent  *event,
                               gpointer   data )
@@ -71,6 +76,7 @@ static void destroy_event( GtkWidget *widget,
 			   gpointer   data )
 {
     //mylog("destroy\n");
+    g_free(data);
 }
 
 static gint set_one_category(GtkTreeModel *model, GtkTreeIter *iter, guint index,
@@ -433,6 +439,7 @@ void row_activated(GtkTreeView        *treeview,
 {
     GtkTreeModel *model;
     GtkTreeIter   iter, iter2;
+    struct data_arg *usd = (struct data_arg *)userdata;
     struct judoka *j;
     struct shiai_map *mapped = NULL;
 
@@ -449,7 +456,7 @@ void row_activated(GtkTreeView        *treeview,
         gint ret;
 
         if (find_iter_name_2(&iter2, j->last, j->first, j->club, j->regcategory)) {
-            show_message(_("Competitor already exists!"));
+            show_message(usd->window, _("Competitor already exists!"));
             goto out;
         }
 
@@ -487,7 +494,7 @@ void row_activated(GtkTreeView        *treeview,
         gint ret;
 
         if (find_iter_category(&iter2, j->last)) {
-            show_message(_("Category already exists!"));
+            show_message(usd->window, _("Category already exists!"));
             goto out;
         }
         mapped = malloc(sizeof(*mapped));
@@ -524,7 +531,7 @@ void row_activated(GtkTreeView        *treeview,
             ok = gtk_tree_model_iter_next(model, &tmp_iter);
         }
 
-        read_foreign_matches(userdata, mapped);
+        read_foreign_matches(usd->dbname, mapped);
         matches_refresh();
         update_category_status_info(j->index);
 
@@ -538,7 +545,7 @@ out:
         free(mapped);
 }
 
-static GtkWidget *create_view_and_model(gchar *dbname)
+static GtkWidget *create_view_and_model(struct data_arg *da)
 {
     GtkTreeViewColumn   *col;
     GtkCellRenderer     *renderer;
@@ -685,7 +692,7 @@ static GtkWidget *create_view_and_model(gchar *dbname)
 
     /*****/
 
-    model = create_and_fill_model(dbname);
+    model = create_and_fill_model(da->dbname);
     gtk_tree_view_set_model(GTK_TREE_VIEW(view), model);
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
     /*
@@ -697,7 +704,7 @@ static GtkWidget *create_view_and_model(gchar *dbname)
     gtk_tree_selection_set_mode(gtk_tree_view_get_selection(GTK_TREE_VIEW(view)),
                                 GTK_SELECTION_SINGLE);
 
-    g_signal_connect(view, "row-activated", (GCallback) row_activated, dbname);
+    g_signal_connect(view, "row-activated", (GCallback) row_activated, da);
     //g_signal_connect(view, "button-press-event", (GCallback) view_onButtonPressed, NULL);
     //g_signal_connect(view, "popup-menu", (GCallback) view_onPopupMenu, NULL);
 
@@ -789,7 +796,7 @@ void set_old_shiai_display(GtkWidget *w, gpointer data)
     if (!dbname)
         goto out;
 
-    valid_ascii_string(dbname);
+    //valid_ascii_string(dbname);
 
     /* Create window */
 
@@ -797,18 +804,21 @@ void set_old_shiai_display(GtkWidget *w, gpointer data)
     gtk_window_set_title(GTK_WINDOW(window), dbname);
     gtk_widget_set_size_request(window, FRAME_WIDTH, FRAME_HEIGHT);
 
+    struct data_arg *da = g_malloc(sizeof(struct data_arg));
+    da->dbname=dbname; da->window=window;
+
     g_signal_connect (G_OBJECT (window), "delete_event",
                       G_CALLBACK (delete_event), NULL);
 
     g_signal_connect (G_OBJECT (window), "destroy",
-                      G_CALLBACK (destroy_event), NULL);
+                      G_CALLBACK (destroy_event), da);
 
     judokas_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(judokas_scrolled_window), 10);
 
 	/* Create view and model */
 
-        view = create_view_and_model(dbname);
+        view = create_view_and_model(da);
 
     	/* pack the table into the scrolled window */
 #if (GTKVER == 3) && GTK_CHECK_VERSION(3,8,0)
@@ -822,7 +832,7 @@ void set_old_shiai_display(GtkWidget *w, gpointer data)
 
 
 out:
-	/* release resources */
+       /* release resources */
 
 	/* intentional memory leak */
 	//g_free(dbname); /* shiai database name */

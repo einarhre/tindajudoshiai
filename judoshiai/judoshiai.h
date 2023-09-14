@@ -217,7 +217,7 @@ enum special_match_types {
         _obj = gtk_widget_get_accessible(_widget);      \
         atk_object_set_name(_obj, _name); } while (0)
 
-#define SHOW_MESSAGE(_a...) do {gchar _b[256]; snprintf(_b, sizeof(_b), _a); show_message(_b); } while (0)
+#define SHOW_MESSAGE(_a, _b...) do {gchar _c[256]; snprintf(_c, sizeof(_c), _b); show_message(_a, _c); } while (0)
 
 #define MATCHED_POOL(_a) (pm.m[_a].blue_points || pm.m[_a].white_points || \
                           pm.m[_a].blue == GHOST || pm.m[_a].white == GHOST)
@@ -1006,13 +1006,13 @@ extern struct judoka *get_data_by_iter(GtkTreeIter *iter);
 extern struct judoka *get_data_by_iter_model(GtkTreeIter *iter, GtkTreeModel *model);
 extern void put_data_by_iter_model(struct judoka *j, GtkTreeIter *iter, GtkTreeModel *model);
 extern void free_judoka(struct judoka *j);
-extern void show_message(const gchar *msg, ...);
+extern void show_message(GtkWidget *parent, const gchar *msg, ...);
 extern gint ask_question(gchar *message);
 extern gint weight_grams(const gchar *s);
 extern void show_note(gchar *format, ...);
 extern void print_time(gchar *fname, gint lineno);
 extern gint timeval_subtract(GTimeVal *result, GTimeVal *x, GTimeVal *y);
-extern gboolean valid_ascii_string(const gchar *s);
+//extern gboolean valid_ascii_string(const gchar *s);
 extern const gchar *get_club_text(struct judoka *j, gint flags);
 extern const gchar *get_name_and_club_text(struct judoka *j, gint flags);
 extern gboolean firstname_lastname(void);

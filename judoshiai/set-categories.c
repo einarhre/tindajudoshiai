@@ -1897,7 +1897,7 @@ static void teams_dialog_callback(GtkWidget *widget,
             free_judoka(g);
 
             if (gix) {
-                SHOW_MESSAGE("%s %s %s", _("Team"), name, _("already exists!"));
+                SHOW_MESSAGE(main_window, "%s %s %s", _("Team"), name, _("already exists!"));
                 return;
             }
         }

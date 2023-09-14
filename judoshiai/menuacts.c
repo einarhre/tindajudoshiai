@@ -94,7 +94,7 @@ void new_shiai(GtkWidget *w, gpointer data)
 
         g_free (name);
 
-        valid_ascii_string(database_name);
+        //valid_ascii_string(database_name);
 
         db_new(database_name);
 
@@ -177,7 +177,7 @@ void open_shiai_from_net(GtkWidget *w, gpointer data)
 
         g_free (name);
 
-        valid_ascii_string(database_name);
+        //valid_ascii_string(database_name);
 
         if (read_file_from_net(database_name, i))
             goto out;
@@ -240,7 +240,7 @@ void open_shiai(GtkWidget *w, gpointer data)
         open_shiai_display();
         gdk_window_set_cursor(GTK_WIDGET(dialog)->window, NULL);
 #endif
-        valid_ascii_string(database_name);
+        //valid_ascii_string(database_name);
     }
 
     gtk_widget_destroy (dialog);
@@ -515,14 +515,14 @@ static void get_competitors(void)
                            gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(only_weighted)), 
                            gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cleanup)), 
                            &added, &not_added);
-        valid_ascii_string(name);
+        //valid_ascii_string(name);
         g_free (name);
 
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cleanup)))
-            SHOW_MESSAGE("%d %s (%d %s).", 
+            SHOW_MESSAGE(main_window, "%d %s (%d %s).",
                          added, _("competitors added and updated"), not_added, _("competitors already existed"));
         else
-            SHOW_MESSAGE("%d %s.", added, _("competitors added unchanged"));
+            SHOW_MESSAGE(main_window, "%d %s.", added, _("competitors added unchanged"));
     }
 
     gtk_widget_destroy (dialog);        
@@ -568,10 +568,10 @@ void get_weights_from_old_competition(GtkWidget *w, gpointer data)
     {
         gchar *name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
         db_update_weights(name, &weight_updated);
-        valid_ascii_string(name);
+        //valid_ascii_string(name);
         g_free (name);
 
-        SHOW_MESSAGE("%d %s.", weight_updated, _("weights updated"));
+        SHOW_MESSAGE(main_window, "%d %s.", weight_updated, _("weights updated"));
     }
 
     gtk_widget_destroy (dialog);        
@@ -959,7 +959,7 @@ void backup_shiai(GtkWidget *w, gpointer data)
     } else
         show_note(" ");
 
-    valid_ascii_string(backup_directory);
+    //valid_ascii_string(backup_directory);
 
     gtk_widget_destroy (dialog);
 }

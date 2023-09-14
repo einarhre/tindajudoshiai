@@ -227,7 +227,7 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
                     db_update_judoka(j1->index, j1);
                     weights_updated++;
                 } else if (j1->weight && j.weight && j1->weight != j.weight) {
-                    SHOW_MESSAGE("%s %s: %s!", j1->first, j1->last, _("Weights do not match"));
+                    SHOW_MESSAGE(main_window, "%s %s: %s!", j1->first, j1->last, _("Weights do not match"));
                 }
 
                 free_judoka(j1);

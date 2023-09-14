@@ -247,7 +247,7 @@ void open_shiai_display(void)
 
     r = db_init(database_name);
     if (r != 0 && r != 55555) {
-        SHOW_MESSAGE("%s: %s", _("Cannot open"), database_name);
+        SHOW_MESSAGE(main_window, "%s: %s", _("Cannot open"), database_name);
         return;
     }
 
@@ -562,7 +562,7 @@ ok:
         if (response == 1001)
             first_instance = TRUE;
         else
-            show_message(_("Communication is blocked! \nYou can still use the program to create categories etc."));
+            show_message(window, _("Communication is blocked! \nYou can still use the program to create categories etc."));
     }
 
     if (first_instance) {

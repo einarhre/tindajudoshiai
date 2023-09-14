@@ -2067,7 +2067,7 @@ int get_output_directory(void)
     strcpy(current_directory, name);
     g_free (name);
 
-    valid_ascii_string(current_directory);
+    //valid_ascii_string(current_directory);
 
     automatic_web_page_update = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(auto_update));
     create_statistics = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(statistics));
