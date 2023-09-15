@@ -1788,15 +1788,15 @@ msgid "Country/Club,  Surname Name"
 msgstr "מדינה/ אגודה, משפחה פרטי"
 
 #: ../judoshiai/menus.c
-msgid "Unchanged from registration"
+msgid "As Registered"
 msgstr ""
 
 #: ../judoshiai/menus.c
-msgid "First Letter Uppercase"
+msgid "Capitalised"
 msgstr ""
 
 #: ../judoshiai/menus.c
-msgid "All Letters Uppercase"
+msgid "UPPERCASE"
 msgstr ""
 
 #: ../judoshiai/menus.c
@@ -1848,15 +1848,15 @@ msgid "Grade Visible"
 msgstr "דרגה נראית"
 
 #: ../judoshiai/menus.c
+msgid "Name Layout Selection"
+msgstr ""
+
+#: ../judoshiai/menus.c
 msgid "Name Format"
 msgstr "תצורת שם"
 
 #: ../judoshiai/menus.c
-msgid "First Name Format"
-msgstr ""
-
-#: ../judoshiai/menus.c
-msgid "Last Name Format"
+msgid "Surname Format"
 msgstr ""
 
 #: ../judoshiai/menus.c

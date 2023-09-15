@@ -1793,16 +1793,16 @@ msgid "Country/Club,  Surname Name"
 msgstr "Land/Félag,  Kenninafn Eiginnafn"
 
 #: ../judoshiai/menus.c
-msgid "Unchanged from registration"
-msgstr "Óbreytt frá skráningu"
+msgid "As Registered"
+msgstr "Eins og skráð"
 
 #: ../judoshiai/menus.c
-msgid "First Letter Uppercase"
-msgstr "Fyrsti stafur hástafur"
+msgid "Capitalised"
+msgstr "Fyrsti Stafur Stór"
 
 #: ../judoshiai/menus.c
-msgid "All Letters Uppercase"
-msgstr "Allir stafir hástafir"
+msgid "UPPERCASE"
+msgstr "HÁSTAFIR"
 
 #: ../judoshiai/menus.c
 msgid "Sheet Font"
@@ -1853,15 +1853,15 @@ msgid "Grade Visible"
 msgstr "Gráða sjáanleg"
 
 #: ../judoshiai/menus.c
-msgid "Name Format"
+msgid "Name Layout Selection"
 msgstr "Nafnasnið keppenda"
 
 #: ../judoshiai/menus.c
-msgid "First Name Format"
+msgid "Name Format"
 msgstr "Snið eiginnafns"
 
 #: ../judoshiai/menus.c
-msgid "Last Name Format"
+msgid "Surname Format"
 msgstr "Snið kenninafns"
 
 #: ../judoshiai/menus.c

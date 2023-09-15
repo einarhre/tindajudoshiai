@@ -396,21 +396,21 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     preference_name_layout_3          = gtk_radio_menu_item_new_with_label(name_group,
                                                                            _("Country/Club,  Surname Name"));
     preference_name_layout_first_uc   = gtk_radio_menu_item_new_with_label(first_name_group,
-                                                                           _("Unchanged from registration"));
+                                                                           _("As Registered"));
     first_name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_first_uc));
     preference_name_layout_first_fu   = gtk_radio_menu_item_new_with_label(first_name_group,
-                                                                           _("First Letter Uppercase"));
+                                                                           _("Capitalised"));
     first_name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_first_fu));
     preference_name_layout_first_au   = gtk_radio_menu_item_new_with_label(first_name_group,
-                                                                           _("All Letters Uppercase"));
+                                                                           _("UPPERCASE"));
     preference_name_layout_last_uc    = gtk_radio_menu_item_new_with_label(last_name_group,
-                                                                           _("Unchanged from registration"));
+                                                                           _("As Registered"));
     last_name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_last_uc));
     preference_name_layout_last_fu    = gtk_radio_menu_item_new_with_label(last_name_group,
-                                                                           _("First Letter Uppercase"));
+                                                                           _("Capitalised"));
     last_name_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(preference_name_layout_last_fu));
     preference_name_layout_last_au    = gtk_radio_menu_item_new_with_label(last_name_group,
-                                                                           _("All Letters Uppercase"));
+                                                                           _("UPPERCASE"));
 
     preference_pool_style             = gtk_check_menu_item_new_with_label("");
     preference_belt_colors            = gtk_check_menu_item_new_with_label("");
@@ -1008,19 +1008,19 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(preference_layout                , _("Sheet Layout"));
     change_menu_label(preference_weights_to_pool_sheets, _("Weights Visible"));
     change_menu_label(preference_grade_visible         , _("Grade Visible"));
-    change_menu_label(preference_name_layout           , _("Name Format"));
+    change_menu_label(preference_name_layout           , _("Name Layout Selection"));
     change_menu_label(preference_name_layout_0         , _("Name Surname, Country/Club"));
     change_menu_label(preference_name_layout_1         , _("Surname Name, Country/Club"));
     change_menu_label(preference_name_layout_2         , _("Country/Club,  Name Surname"));
     change_menu_label(preference_name_layout_3         , _("Country/Club,  Surname Name"));
-    change_menu_label(preference_name_layout_first_format  , _("First Name Format"));
-    change_menu_label(preference_name_layout_last_format  , _("Last Name Format"));
-    change_menu_label(preference_name_layout_first_uc  , _("Unchanged from registration"));
-    change_menu_label(preference_name_layout_first_fu  , _("First Letter Uppercase"));
-    change_menu_label(preference_name_layout_first_au  , _("All Letters Uppercase"));
-    change_menu_label(preference_name_layout_last_uc   , _("Unchanged from registration"));
-    change_menu_label(preference_name_layout_last_fu   , _("First Letter Uppercase"));
-    change_menu_label(preference_name_layout_last_au   , _("All Letters Uppercase"));
+    change_menu_label(preference_name_layout_first_format  , _("Name Format"));
+    change_menu_label(preference_name_layout_last_format  , _("Surname Format"));
+    change_menu_label(preference_name_layout_first_uc  , _("As Registered"));
+    change_menu_label(preference_name_layout_first_fu  , _("Capitalised"));
+    change_menu_label(preference_name_layout_first_au  , _("UPPERCASE"));
+    change_menu_label(preference_name_layout_last_uc   , _("As Registered"));
+    change_menu_label(preference_name_layout_last_fu   , _("Capitalised"));
+    change_menu_label(preference_name_layout_last_au   , _("UPPERCASE"));
 
     change_menu_label(preference_pool_style            , _("Pool Style 2"));
     change_menu_label(preference_belt_colors           , _("Use Belt Colors"));
