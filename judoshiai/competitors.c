@@ -896,7 +896,8 @@ struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
         row++;
 
 	gtk_grid_attach(GTK_GRID(table), gtk_label_new(_("Comment:")), 0, row, 1, 1);
-	gchar **list = g_strsplit(comment, "#~", NUM_COMMENT_COLS);
+	gchar **list = NULL;
+	if (comment) list = g_strsplit(comment, "#~", NUM_COMMENT_COLS);
 	ok = list != NULL;
 	
 	for (i = 0; i < NUM_COMMENT_COLS; i++) {
@@ -1415,7 +1416,8 @@ void comment_cell_data_func (GtkTreeViewColumn *col,
                        COL_VISIBLE, &visible,
 		       -1);
 
-    gchar **list = g_strsplit(comment, "#~", NUM_COMMENT_COLS);
+    gchar **list = NULL;
+    if (comment) list = g_strsplit(comment, "#~", NUM_COMMENT_COLS);
     for (i = 0; i < num; i++)
 	if (!list[i]) {
 	    ok = FALSE;
