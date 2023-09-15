@@ -537,11 +537,23 @@ static GtkWidget *set_entry(GtkWidget *table, int row,
  * Activations
  */
 
+struct actrow_args {
+    gpointer userdata;
+    GtkWidget *window;
+};
+
 struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
                                             GtkTreePath        *path,
                                             GtkTreeViewColumn  *col,
                                             gpointer            userdata)
 {
+    GtkWidget *parent = main_window;
+    gpointer usd = NULL;
+    if (userdata) {
+        struct actrow_args *acr = (struct actrow_args *)userdata;
+        if (acr->window) parent = acr->window;
+        if (acr->userdata) usd = acr->userdata;
+    }
     GtkTreeModel *model = NULL;
     GtkTreeIter   iter;
     int i;
@@ -595,13 +607,13 @@ struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
             snprintf(clubseeding_s, sizeof(clubseeding_s), "%d", clubseeding);
 	}
     } else {
-        visible = (gboolean) (ptr_to_gint(userdata) == NEW_JUDOKA ? TRUE : FALSE);
+        visible = (gboolean) (ptr_to_gint(usd) == NEW_JUDOKA ? TRUE : FALSE);
         category = strdup("?");
         deleted = 0;
         sprintf(weight_s, "0");
         sprintf(birthyear_s, "0");
         belt = 0;
-        index = ptr_to_gint(userdata);
+        index = ptr_to_gint(usd);
         strcpy(clubseeding_s, "0");
     }
 
@@ -617,13 +629,13 @@ struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
 
     competitor_dialog =
         dialog = gtk_dialog_new_with_buttons (titlebuf,
-                                              GTK_WINDOW(main_window),
+                                              GTK_WINDOW(parent),
                                               GTK_DIALOG_DESTROY_WITH_PARENT,
                                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                               GTK_STOCK_PRINT, RESPONSE_PRINT,
                                               NULL);
 
-    if (treeview && userdata) {
+    if (treeview && usd) {
         // coach dialog
         GtkWidget *coach_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
                                                          GTK_STOCK_PRINT,
@@ -912,7 +924,7 @@ struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
         catdata = avl_get_category(index);
 
         if ((catdata && (catdata->deleted & TEAM)) ||
-            ptr_to_gint(userdata) == NEW_WCLASS+1) {
+            ptr_to_gint(usd) == NEW_WCLASS+1) {
             judoka_tmp->last = set_entry(table, 0, _("Team:"), last ? last : "");
         } else {
             judoka_tmp->last = set_entry(table, 0, _("Category:"), last ? last : "");
@@ -980,7 +992,7 @@ struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
 #else
                 gtk_table_attach_defaults(GTK_TABLE(table), judoka_tmp->hansokumake, 1, 2, 4, 5);
 #endif
-                gint n = gtk_tree_model_iter_n_children(model, &iter);
+                gint n = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(model), &iter);
                 if (n <= 1) {
                     gtk_widget_set_sensitive(tmp, FALSE);
                     gtk_widget_set_sensitive(judoka_tmp->hansokumake, FALSE);
@@ -1007,12 +1019,20 @@ struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
 
 void new_judoka(GtkWidget *w, gpointer data)
 {
-    view_on_row_activated(NULL, NULL, NULL, gint_to_ptr(NEW_JUDOKA));
+    struct actrow_args args = {
+        .userdata = gint_to_ptr(NEW_JUDOKA),
+        .window = NULL
+    };
+    view_on_row_activated(NULL, NULL, NULL, &args);
 }
 
 void new_regcategory(GtkWidget *w, gpointer data)
 {
-    view_on_row_activated(NULL, NULL, NULL, gint_to_ptr(NEW_WCLASS+ptr_to_gint(data)));
+    struct actrow_args args = {
+        .userdata = gint_to_ptr(NEW_WCLASS+ptr_to_gint(data)),
+        .window = NULL
+    };
+    view_on_row_activated(NULL, NULL, NULL, &args);
 }
 
 static void print_competitors_callback(GtkWidget *widget,
@@ -2623,7 +2643,11 @@ static gboolean foreach_comp_dsp(GtkTreeModel *model,
                        -1);
 
     if (id == lookfor) {
-        d->j = view_on_row_activated(GTK_TREE_VIEW(current_view), path, NULL, gint_to_ptr(d->indx & 0x10000));
+        struct actrow_args args = {
+            .userdata = gint_to_ptr(d->indx & 0x10000),
+            .window = NULL
+        };
+        d->j = view_on_row_activated(GTK_TREE_VIEW(current_view), path, NULL, &args);
 
         return TRUE;
     }

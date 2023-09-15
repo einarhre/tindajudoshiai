@@ -76,7 +76,9 @@ static void destroy_event( GtkWidget *widget,
 			   gpointer   data )
 {
     //mylog("destroy\n");
-    g_free(data);
+    struct data_arg *da = (struct data_arg *)data;
+	  g_free(da->dbname); /* shiai database name */
+	  g_free(data);
 }
 
 static gint set_one_category(GtkTreeModel *model, GtkTreeIter *iter, guint index,
@@ -427,12 +429,18 @@ static void read_foreign_matches(gchar *dbname, struct shiai_map *mp)
     sqlite3_close(db);
 }
 
+extern struct actrow_args {
+    gpointer userdata;
+    GtkWidget *window;
+};
+
 extern struct judoka_widget *view_on_row_activated (GtkTreeView        *treeview,
                                                     GtkTreePath        *path,
                                                     GtkTreeViewColumn  *col,
                                                     gpointer            userdata);
 
-void row_activated(GtkTreeView        *treeview,
+void row_activated(
+       GtkTreeView        *treeview,
 		   GtkTreePath        *path,
 		   GtkTreeViewColumn  *col,
 		   gpointer            userdata)
@@ -485,7 +493,11 @@ void row_activated(GtkTreeView        *treeview,
 
         if (find_iter(&iter, j->index)) {
             GtkTreePath *path1 = gtk_tree_model_get_path(current_model, &iter);
-            view_on_row_activated(GTK_TREE_VIEW(current_view), path1, NULL, NULL);
+            struct actrow_args args = {
+                .userdata = NULL,
+                .window = usd->window
+            };
+            view_on_row_activated(GTK_TREE_VIEW(current_view), path1, NULL, &args);
             gtk_tree_path_free(path1);
         }
     } else { // category
@@ -757,6 +769,7 @@ void set_old_shiai_display(GtkWidget *w, gpointer data)
 {
     GtkWidget *judokas_scrolled_window;
     GtkWidget *view;
+    struct data_arg *da = g_malloc(sizeof(struct data_arg));
 
     /* Open shiai file */
 
@@ -804,7 +817,6 @@ void set_old_shiai_display(GtkWidget *w, gpointer data)
     gtk_window_set_title(GTK_WINDOW(window), dbname);
     gtk_widget_set_size_request(window, FRAME_WIDTH, FRAME_HEIGHT);
 
-    struct data_arg *da = g_malloc(sizeof(struct data_arg));
     da->dbname=dbname; da->window=window;
 
     g_signal_connect (G_OBJECT (window), "delete_event",
@@ -832,9 +844,6 @@ void set_old_shiai_display(GtkWidget *w, gpointer data)
 
 
 out:
-       /* release resources */
-
-	/* intentional memory leak */
-	//g_free(dbname); /* shiai database name */
-	return;
+    /* resources are released in destroy callback function */
+    return;
 }
