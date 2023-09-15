@@ -125,9 +125,9 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
         else if (IS(birthyear))
             j.birthyear = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(club))
-            j.club = argv[i] ? argv[i] : "?";
+            j.club = argv[i] ? convert_name(argv[i], 0) : "?";
         else if (IS(regcategory) || IS(wclass))
-            j.regcategory = argv[i] ? argv[i] : "?";
+            j.regcategory = argv[i] ? convert_name(argv[i], 0) : "?";
         else if (IS(belt))
             j.belt = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(weight))
@@ -139,17 +139,17 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
         else if (IS(deleted))
             j.deleted = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(country))
-            j.country = argv[i] ? argv[i] : "";
+            j.country = argv[i] ? convert_name(argv[i], 0) : "";
         else if (IS(id))
-            j.id = argv[i] ? argv[i] : "";
+            j.id = argv[i] ? convert_name(argv[i], 0) : "";
         else if (IS(seeding))
             j.seeding = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(clubseeding))
             j.clubseeding = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(comment))
-            j.comment = argv[i] ? argv[i] : "";
+            j.comment = argv[i] ? g_strdup(argv[i]) : "";
         else if (IS(coachid))
-            j.coachid = argv[i] ? argv[i] : "";
+            j.coachid = argv[i] ? convert_name(argv[i], 0) : "";
     }
     //mylog("\n");
 

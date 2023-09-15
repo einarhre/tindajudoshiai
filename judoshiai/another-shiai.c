@@ -132,7 +132,7 @@ static gint display_one_competitor(GtkTreeModel *model, struct judoka *j)
             return -1;
         }
 
-        return set_one_category(model, &parent, j->index, (gchar *)j->last,
+        return set_one_category(model, &parent, j->index, j->last,
                                 j->belt, j->birthyear, uncompress_system(j->weight));
     }
 
@@ -143,7 +143,7 @@ static gint display_one_competitor(GtkTreeModel *model, struct judoka *j)
             /* illegal situation */
             mylog("ILLEGAL %s:%d\n", __FILE__, __LINE__);
             ret = set_one_category(model, &parent, 0,
-                                   (gchar *)j->category,
+                                   j->category,
                                    0, 0, (struct compsys){0,0,0,0});
         }
 
@@ -152,7 +152,7 @@ static gint display_one_competitor(GtkTreeModel *model, struct judoka *j)
         if (strcmp(parent_data->last, j->category)) {
             /* category has changed */
             gtk_tree_store_remove((GtkTreeStore *)model, &iter);
-            ret = set_one_category(model, &parent, 0, (gchar *)j->category, 0, 0, (struct compsys){0,0,0,0});
+            ret = set_one_category(model, &parent, 0, j->category, 0, 0, (struct compsys){0,0,0,0});
             gtk_tree_store_append((GtkTreeStore *)model, &iter, &parent);
             put_data_by_iter_model(j, &iter, model);
         } else {
@@ -163,7 +163,7 @@ static gint display_one_competitor(GtkTreeModel *model, struct judoka *j)
         free_judoka(parent_data);
     } else {
         /* new judoka */
-        ret = set_one_category(model, &parent, 0, (gchar *)j->category, 0, 0, (struct compsys){0,0,0,0});
+        ret = set_one_category(model, &parent, 0, j->category, 0, 0, (struct compsys){0,0,0,0});
 
         gtk_tree_store_append((GtkTreeStore *)model, &child, &parent);
         put_data_by_iter_model(j, &child, model);
@@ -186,18 +186,20 @@ static int db_competitor_callback(void *data, int argc, char **argv, char **azCo
         //mylog("  %s=%s", azColName[i], argv[i] ? argv[i] : "(NULL)");
         if (IS(index))
             j.index = argv[i] ? atoi(argv[i]) : 0;
-        else if (IS(last))
-            j.last = argv[i] ? argv[i] : "?";
-        else if (IS(first))
-            j.first = argv[i] ? argv[i] : "?";
+        else if (IS(last)) {
+            j.last = argv[i] ? convert_name(argv[i], 0) : "?";
+        }
+        else if (IS(first)) {
+            j.first = argv[i] ? convert_name(argv[i], 0) : "?";
+        }
         else if (IS(birthyear))
             j.birthyear = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(club))
-            j.club = argv[i] ? argv[i] : "?";
+            j.club = argv[i] ? g_strdup(argv[i]) : "?";
         else if (IS(country))
-            j.country = argv[i] ? argv[i] : "";
+            j.country = argv[i] ? g_strdup(argv[i]) : "";
         else if (IS(regcategory) || IS(wclass))
-            j.regcategory = argv[i] ? argv[i] : "?";
+            j.regcategory = argv[i] ? g_strdup(argv[i]) : "?";
         else if (IS(belt))
             j.belt = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(weight))
@@ -205,19 +207,19 @@ static int db_competitor_callback(void *data, int argc, char **argv, char **azCo
         else if (IS(visible))
             j.visible = argv[i] ? atoi(argv[i]) : 1;
         else if (IS(category))
-            j.category = argv[i] ? argv[i] : "?";
+            j.category = argv[i] ? g_strdup(argv[i]) : "?";
         else if (IS(deleted))
             j.deleted = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(id))
-            j.id = argv[i] ? argv[i] : "";
+            j.id = argv[i] ? g_strdup(argv[i]) : "";
         else if (IS(seeding))
             j.seeding = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(clubseeding))
             j.clubseeding = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(comment))
-            j.comment = argv[i] ? argv[i] : "";
+            j.comment = argv[i] ? g_strdup(argv[i]) : "";
         else if (IS(coachid))
-            j.coachid = argv[i] ? argv[i] : "";
+            j.coachid = argv[i] ? g_strdup(argv[i]) : "";
     }
 
     if ((j.deleted & DELETED))
@@ -244,7 +246,7 @@ static int db_category_callback(void *data, int argc, char **argv, char **azColN
         if (IS(index))
             j.index = atoi(argv[i]);
         else if (IS(category))
-            j.last = argv[i];
+            j.last = convert_name(argv[i], 0);
         else if (IS(tatami))
             j.belt = atoi(argv[i]);
         else if (IS(deleted))
@@ -469,7 +471,7 @@ void row_activated(
         }
 
         j->index = comp_index_get_free();//current_index++;
-        g_free((void *)j->category);
+        g_free((gpointer)j->category);
         j->category = g_strdup("?");
         db_add_judoka(j->index, j);
         ret = display_one_judoka(j);

@@ -48,7 +48,7 @@ static int db_callback_categories(void *data, int argc, char **argv, char **azCo
         if (IS(index))
             jud.index = my_atoi(argv[i]);
         else if (IS(category))
-            jud.last = argv[i];
+            jud.last = convert_name(argv[i], 0);
         else if (IS(tatami))
             jud.belt = my_atoi(argv[i]);
         else if (IS(deleted))
@@ -80,7 +80,7 @@ static int db_callback_categories(void *data, int argc, char **argv, char **azCo
         else if (IS(pos8))
             positions[7] = my_atoi(argv[i]);
         else if (IS(color))
-            jud.club = argv[i];
+            jud.club = convert_name(argv[i], 0);
     }
     //mylog("\n");
 
