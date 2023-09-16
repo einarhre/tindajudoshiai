@@ -86,6 +86,8 @@ int did_jump=0;
 int state=LNUM_STATE;
 int result;
 
+void yyerror(const char *s);
+
 /* just change state, this function is called to provida a debug hook */
 
 void chstate(int newstate) 

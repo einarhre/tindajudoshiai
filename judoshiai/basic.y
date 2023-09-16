@@ -80,7 +80,8 @@
 #include <glib/gstdio.h>
 #include "judoshiai.h"
 
-void yyerror(char *s);
+int yylex(void);
+void yyerror(const char *s);
 
 static GtkTextBuffer *gtkbuf;
 static void print_text_buffer(char *format, ...);
@@ -887,6 +888,7 @@ int while_push(int line)
     return -1;
 }
 
+extern void yyrestart ( FILE *input_file  );
 
 void dojumpidx(int idx) 
 {
@@ -1712,7 +1714,7 @@ expression: expression '+' expression     {$$=$1+$3;}
             int c1=$1;
             int c3=$3;
             if ((($1==B_TRUE)&&($1==B_FALSE))||(($3==B_TRUE)&&($3==B_FALSE))) {
-                $$=($1==$3==B_TRUE)?B_TRUE:B_FALSE;
+                $$=(($1==$3)==B_TRUE)?B_TRUE:B_FALSE;
             } else {
                 $$=c1&c3;
             }
@@ -2065,7 +2067,7 @@ int preparse() {
     return 1;
 }
 
-void yyerror(char *s) 
+void yyerror(const char *s) 
 {
     extern char *yytext;
     print_text_buffer("\n*** Error on line %d: %s (0x%x)\n",cmdcnt+1,s, *yytext);
