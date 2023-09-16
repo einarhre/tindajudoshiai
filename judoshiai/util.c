@@ -697,9 +697,21 @@ const gchar *esc_quote(const gchar *txt)
 }
 
 gchar *convert_name(const gchar *name, const gboolean uc) {
+    // uc == 1: Capitalise (First Letter Uppercase) (if name is empty then return one space)
+    // uc == 2: UPPERCASE (if name is empty then return one space)
+    // uc != 1 && uc !=2: Only remove extra spaces
+    //     if name is empty:
+    //         1) uc == 3: return NULL
+    //         1) uc == 4: return empty string
+    //         2) uc != 3 && uc !=4: return string with one space
+    const char *empty= "";
     const char *space = " ";
-    // return a space for NULL strings
-    if (name == NULL || name[0] == 0) return g_strdup(space);
+    // return a space/NULL/empty string for empty (NULL) names
+    if (name == NULL || name[0] == 0) {
+        if (uc == 3) return NULL;
+        if (uc == 4) return g_strdup(empty);
+        return g_strdup(space);
+    }
     gchar **names = g_strsplit(name, space, -1);
     guint len = g_strv_length(names);
     gchar **plcname;
@@ -725,8 +737,10 @@ gchar *convert_name(const gchar *name, const gboolean uc) {
     }
     g_strfreev(names);
     if (j <= 0) {
-      // return a space for empty (with spaces) names
+      // return a space/NULL/empty string for empty (NULL) names
       g_free((gpointer)plcname);
+      if (uc == 3) return NULL;
+      if (uc == 4) return g_strdup(empty);
       return g_strdup(space);
     }
     if (j <= len) *(plcname + j) = NULL;

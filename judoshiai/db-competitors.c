@@ -113,9 +113,9 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
     gchar *newcat = NULL;
 
     memset(&j, 0, sizeof(j));
-    
-    for(i = 0; i < argc; i++){
-        //mylog("  %s=%s", azColName[i], argv[i] ? argv[i] : "(NULL)");
+
+    for(i = 0; i < argc; i++) {
+        //mylog("  \"%s\"='%s',  ", azColName[i], argv[i] ? argv[i] : "(NULL)");
         if (IS(index))
             j.index = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(last))
@@ -125,9 +125,9 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
         else if (IS(birthyear))
             j.birthyear = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(club))
-            j.club = argv[i] ? convert_name(argv[i], 0) : "?";
+            j.club = argv[i] ? convert_name(argv[i], 3) : "?";
         else if (IS(regcategory) || IS(wclass))
-            j.regcategory = argv[i] ? convert_name(argv[i], 0) : "?";
+            j.regcategory = argv[i] ? convert_name(argv[i], 3) : "?";
         else if (IS(belt))
             j.belt = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(weight))
@@ -135,13 +135,13 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
         else if (IS(visible))
             j.visible = argv[i] ? atoi(argv[i]) : 1;
         else if (IS(category))
-            j.category = argv[i] ? argv[i] : "?";
+            j.category = argv[i] ? convert_name(argv[i], 3) : "?";
         else if (IS(deleted))
             j.deleted = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(country))
-            j.country = argv[i] ? convert_name(argv[i], 0) : "";
+            j.country = argv[i] ? convert_name(argv[i], 3) : "";
         else if (IS(id))
-            j.id = argv[i] ? convert_name(argv[i], 0) : "";
+            j.id = argv[i] ? convert_name(argv[i], 3) : "";
         else if (IS(seeding))
             j.seeding = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(clubseeding))
@@ -149,12 +149,12 @@ static int db_callback(void *data, int argc, char **argv, char **azColName)
         else if (IS(comment))
             j.comment = argv[i] ? g_strdup(argv[i]) : "";
         else if (IS(coachid))
-            j.coachid = argv[i] ? convert_name(argv[i], 0) : "";
+            j.coachid = argv[i] ? convert_name(argv[i], 3) : "";
     }
     //mylog("\n");
 
     comp_index_set(j.index);
-    
+
     if (flags & ADD_DELETED_COMPETITORS) {
         if ((j.deleted & DELETED) && j.visible) {
             j.deleted &= ~DELETED;

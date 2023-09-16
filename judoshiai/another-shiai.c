@@ -195,11 +195,11 @@ static int db_competitor_callback(void *data, int argc, char **argv, char **azCo
         else if (IS(birthyear))
             j.birthyear = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(club))
-            j.club = argv[i] ? g_strdup(argv[i]) : "?";
+            j.club = argv[i] ? convert_name(argv[i], 3) : "?";
         else if (IS(country))
-            j.country = argv[i] ? g_strdup(argv[i]) : "";
+            j.country = argv[i] ? convert_name(argv[i], 3) : "";
         else if (IS(regcategory) || IS(wclass))
-            j.regcategory = argv[i] ? g_strdup(argv[i]) : "?";
+            j.regcategory = argv[i] ? convert_name(argv[i], 3) : "?";
         else if (IS(belt))
             j.belt = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(weight))
@@ -207,11 +207,11 @@ static int db_competitor_callback(void *data, int argc, char **argv, char **azCo
         else if (IS(visible))
             j.visible = argv[i] ? atoi(argv[i]) : 1;
         else if (IS(category))
-            j.category = argv[i] ? g_strdup(argv[i]) : "?";
+            j.category = argv[i] ? convert_name(argv[i], 3) : "?";
         else if (IS(deleted))
             j.deleted = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(id))
-            j.id = argv[i] ? g_strdup(argv[i]) : "";
+            j.id = argv[i] ? convert_name(argv[i], 3) : "";
         else if (IS(seeding))
             j.seeding = argv[i] ? atoi(argv[i]) : 0;
         else if (IS(clubseeding))
@@ -219,7 +219,7 @@ static int db_competitor_callback(void *data, int argc, char **argv, char **azCo
         else if (IS(comment))
             j.comment = argv[i] ? g_strdup(argv[i]) : "";
         else if (IS(coachid))
-            j.coachid = argv[i] ? g_strdup(argv[i]) : "";
+            j.coachid = argv[i] ? convert_name(argv[i], 3) : "";
     }
 
     if ((j.deleted & DELETED))
@@ -246,7 +246,7 @@ static int db_category_callback(void *data, int argc, char **argv, char **azColN
         if (IS(index))
             j.index = atoi(argv[i]);
         else if (IS(category))
-            j.last = convert_name(argv[i], 0);
+            j.last = convert_name(argv[i], 3);
         else if (IS(tatami))
             j.belt = atoi(argv[i]);
         else if (IS(deleted))
