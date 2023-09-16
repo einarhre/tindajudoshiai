@@ -431,11 +431,6 @@ static void read_foreign_matches(gchar *dbname, struct shiai_map *mp)
     sqlite3_close(db);
 }
 
-extern struct actrow_args {
-    gpointer userdata;
-    GtkWidget *window;
-};
-
 extern struct judoka_widget *view_on_row_activated (GtkTreeView        *treeview,
                                                     GtkTreePath        *path,
                                                     GtkTreeViewColumn  *col,

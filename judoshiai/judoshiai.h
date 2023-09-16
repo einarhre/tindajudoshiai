@@ -815,6 +815,11 @@ struct paint_data {
     gboolean svg_printed;
 };
 
+struct actrow_args {
+    gpointer userdata;
+    GtkWidget *window;
+};
+
 struct judoka_rectangle {
     gint judoka;
     gint x1, y1, x2, y2;

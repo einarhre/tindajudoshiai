@@ -537,11 +537,6 @@ static GtkWidget *set_entry(GtkWidget *table, int row,
  * Activations
  */
 
-struct actrow_args {
-    gpointer userdata;
-    GtkWidget *window;
-};
-
 struct judoka_widget *view_on_row_activated(GtkTreeView        *treeview,
                                             GtkTreePath        *path,
                                             GtkTreeViewColumn  *col,
