@@ -426,7 +426,7 @@ void handle_json(struct message *input_msg)
         int numrows, numcols;
         JSON_GET_STR(root, cmd);
 
-        const char **tablecopy = db_get_table_copy(cmd, &numrows, &numcols);
+        const char **tablecopy = (const char **)db_get_table_copy(cmd, &numrows, &numcols);
         if (tablecopy == NULL)
             goto json_end;
 
@@ -437,7 +437,7 @@ void handle_json(struct message *input_msg)
             cJSON_AddItemToArray(out, jsonrow);
         }        
 
-        db_close_table_copy(tablecopy);
+        db_close_table_copy((char **)tablecopy);
         resp->u.json.json = out;
     } else if (JSON_OP(matches)) {
         JSON_GET_INT(root, tatami);
