@@ -1119,8 +1119,7 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
     return FALSE; /* we did not handle this */
 }
 
-GtkWidget *
-create_view_and_model (void)
+static GtkWidget *create_view_and_model (void)
 {
     GtkTreeViewColumn   *col;
     GtkCellRenderer     *renderer;
