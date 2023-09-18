@@ -136,6 +136,7 @@ ALPHA [a-zA-Z]
 VARIABLE [a-zA-Z][a-zA-Z0-9]*
 STRING [a-zA-Z][a-zA-Z0-9]*\$
 NL \n
+NEWLINE (\r\n?|\n)
 SEMICOLON \;
 DQUOTE \"
 COLON \:
@@ -238,18 +239,18 @@ XOR       [Xx][Oo][Rr]
 %x QUITFLEX
 %%
 
-<QUITFLEX>.|\n  {   //fprintf(stderr,"\n***** CHARACTER 0x%x ign=%d *****\n", yytext[0], ignore_end);
-                    if (yytext[0] == 0x0a) return NL;
+<QUITFLEX>.|{NEWLINE}  {   //fprintf(stderr,"\n***** CHARACTER 0x%x ign=%d *****\n", yytext[0], ignore_end);
+                    if (yytext[0] == 0x0a || yytext[0] == 0x0d) return NL;
 		    else yyterminate(); 
                 }
 
-"!".*{NL} { cmdcnt++;             
+"!".*{NEWLINE} { cmdcnt++;
             chstate(LNUM_STATE);
             return NL; }
 
-"\\"{NL} { cmdcnt++; }
+"\\"{NEWLINE} { cmdcnt++; }
 
-{NL} {
+{NEWLINE} {
 #ifdef RULE_DEBUG
     fprintf(stderr," ***** checking rule NL cmdcnt=%d->%d *****\n", cmdcnt, cmdcnt+1);
 #endif
@@ -267,7 +268,7 @@ XOR       [Xx][Oo][Rr]
     return NL;
 }
 
-^{LNUMBERX}.*{NL} {
+^{LNUMBERX}.*{NEWLINE} {
 #ifdef RULE_DEBUG
     fprintf(stderr,"checking rule LNUMBER SP .* NL\n");
 #endif
@@ -1346,7 +1347,9 @@ XOR       [Xx][Oo][Rr]
 
 <<EOF>> {
     /* the end of the ride */
-   yyterminate();
+    static int once = 0;
+    /* add newline once at end of file */
+    if( (once = !once)) {return NL; } else { yyterminate(); }
 }
 %%
 
