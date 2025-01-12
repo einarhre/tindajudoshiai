@@ -28,7 +28,8 @@ ifeq ($(TOOL),MXE)
     DLLS += libiconv-2.dll libidn2-0.dll libintl-8.dll
     DLLS += libjpeg-9.dll liblzma-5.dll libmpg123-0.dll
     DLLS += libpango-1.0-0.dll libpangocairo-1.0-0.dll
-    DLLS += libpangowin32-1.0-0.dll libpcre-1.dll
+    DLLS += libpangowin32-1.0-0.dll
+    DLLS += libpcre2-posix-3.dll libpcre2-8-0.dll libpcre2-16-0.dll
     DLLS += libpixman-1-0.dll libpng16-16.dll librsvg-2-2.dll
     DLLS += libssh2-1.dll libtiff-6.dll libunistring-5.dll
     DLLS += libwinpthread-1.dll libxml2-2.dll zlib1.dll libwebp-7.dll

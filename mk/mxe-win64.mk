@@ -1,4 +1,4 @@
-MXEDIR=$(HOME)/src/mxe/usr
+MXEDIR=$(HOME)/src/mxe/mxe/usr
 MXE_CPU=x86_64
 MXE_DYN=shared
 MXE_BIN=$(MXEDIR)/$(MXE_CPU)-w64-mingw32.$(MXE_DYN)/bin

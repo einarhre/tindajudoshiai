@@ -34,7 +34,9 @@
 /c/msys64/mingw32/bin/libpangocairo-1.0-0.dll
 /c/msys64/mingw32/bin/libpangoft2-1.0-0.dll
 /c/msys64/mingw32/bin/libpangowin32-1.0-0.dll
-/c/msys64/mingw32/bin/libpcre-1.dll
+/c/msys64/mingw32/bin/libpcre2-posix-3.dll
+/c/msys64/mingw32/bin/libpcre2-8-0.dll
+/c/msys64/mingw32/bin/libpcre2-16-0.dll
 /c/msys64/mingw32/bin/libpixman-1-0.dll
 /c/msys64/mingw32/bin/libpng16-16.dll
 /c/msys64/mingw32/bin/libpsl-5.dll

@@ -1,4 +1,4 @@
-MXEDIR=$(HOME)/src/mxe/usr
+MXEDIR=$(HOME)/src/mxe/mxe/usr
 MXE_CPU=i686
 MXE_DYN=shared
 WIN32_DIR=$(MXEDIR)
