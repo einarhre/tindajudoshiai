@@ -18,7 +18,6 @@
 #include <string.h>
 #include <signal.h>
 #include <glib.h>
-#include <pthread.h>
 
 
 #define LWS_PLUGIN_STATIC
@@ -65,7 +64,7 @@ struct per_vhost_data__minimal {
     const struct lws_protocols *protocol;
     struct per_session_data__minimal *pss_list; /* linked-list of live pss*/
 
-    pthread_mutex_t lock_ring; /* serialize access to the ring buffer */
+    GMutex lock_ring; /* serialize access to the ring buffer */
     struct lws_ring *ring; /* ringbuffer holding unsent messages */
     uint32_t tail;
 };
@@ -150,7 +149,7 @@ gint ws_send_msg(struct message *msg)
     //int len = sprintf(buf, "{\"msg\":[1, 2, 3]}");
     //printf("SEND WS MSG g_vhd=%p %s\n", g_vhd, buf);
 
-    pthread_mutex_lock(&g_vhd->lock_ring);
+    g_mutex_lock(&g_vhd->lock_ring);
 
     lws_start_foreach_llp(struct per_session_data__minimal **,
                           ppss, g_vhd->pss_list) {
@@ -158,7 +157,7 @@ gint ws_send_msg(struct message *msg)
         lws_callback_on_writable((*ppss)->wsi);
     } lws_end_foreach_llp(ppss, pss_list);
 
-    pthread_mutex_unlock(&g_vhd->lock_ring);
+    g_mutex_unlock(&g_vhd->lock_ring);
 
     return 0;
 }
@@ -185,7 +184,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         vhd = lws_protocol_vh_priv_zalloc(lws_get_vhost(wsi),
                                           lws_get_protocol(wsi),
                                           sizeof(struct per_vhost_data__minimal));
-        pthread_mutex_init(&vhd->lock_ring, NULL);
+        g_mutex_init(&vhd->lock_ring);
         vhd->context = lws_get_context(wsi);
         vhd->protocol = lws_get_protocol(wsi);
         vhd->vhost = lws_get_vhost(wsi);
@@ -207,7 +206,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
     case LWS_CALLBACK_PROTOCOL_DESTROY:
         if (vhd->ring)
             lws_ring_destroy(vhd->ring);
-        pthread_mutex_destroy(&vhd->lock_ring);
+        g_mutex_clear(&vhd->lock_ring);
         break;
 
     case LWS_CALLBACK_ESTABLISHED:
@@ -257,10 +256,10 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         break;
 
     case LWS_CALLBACK_SERVER_WRITEABLE:
-        pthread_mutex_lock(&vhd->lock_ring);
+        g_mutex_lock(&vhd->lock_ring);
         pmsg = get_data(pss);
         if (!pmsg) {
-            pthread_mutex_unlock(&vhd->lock_ring);
+            g_mutex_unlock(&vhd->lock_ring);
             break;
         }
 
@@ -269,7 +268,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
             m = lws_write(wsi, ((unsigned char *)pmsg->payload) + LWS_PRE,
                           pmsg->len, LWS_WRITE_TEXT);
             if (m < (int)pmsg->len) {
-                pthread_mutex_unlock(&vhd->lock_ring);
+                g_mutex_unlock(&vhd->lock_ring);
                 lwsl_err("ERROR %d writing to ws socket\n", m);
                 return -1;
             }
@@ -279,7 +278,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         if (pss->qget != pss->qput)
              lws_callback_on_writable(pss->wsi);
 
-        pthread_mutex_unlock(&vhd->lock_ring);
+        g_mutex_unlock(&vhd->lock_ring);
         break;
 
     case LWS_CALLBACK_RECEIVE:
@@ -365,23 +364,23 @@ static struct lws_protocols protocols[] = {
 static int interrupted;
 
 static const struct lws_http_mount mount = {
-	/* .mount_next */		NULL,		/* linked-list "next" */
-	/* .mountpoint */		"/",		/* mountpoint URL */
-	/* .origin */			"./mount-origin", /* serve from dir */
-	/* .def */			"index.html",	/* default filename */
-	/* .protocol */			NULL,
-	/* .cgienv */			NULL,
-	/* .extra_mimetypes */		NULL,
-	/* .interpret */		NULL,
-	/* .cgi_timeout */		0,
-	/* .cache_max_age */		0,
-	/* .auth_mask */		0,
-	/* .cache_reusable */		0,
-	/* .cache_revalidate */		0,
-	/* .cache_intermediaries */	0,
-	/* .origin_protocol */		LWSMPRO_FILE,	/* files in a dir */
-	/* .mountpoint_len */		1,		/* char count */
-	/* .basic_auth_login_file */	NULL,
+	.mount_next            = NULL,              /* linked-list "next" */
+	.mountpoint            = "/",               /* mountpoint URL */
+	.origin                = "./mount-origin",  /* serve from dir */
+	.def                   = "index.html",      /* default filename */
+	.protocol              = NULL,
+	.cgienv                = NULL,
+	.extra_mimetypes       = NULL,
+	.interpret             = NULL,
+	.cgi_timeout           = 0,
+	.cache_max_age         = 0,
+	.auth_mask             = 0,
+	.cache_reusable        = 0,
+	.cache_revalidate      = 0,
+	.cache_intermediaries  = 0,
+	.origin_protocol       = LWSMPRO_FILE,      /* files in a dir */
+	.mountpoint_len        = 1,                 /* char count */
+	.basic_auth_login_file = NULL,
 };
 
 gpointer ws_comm_thread(gpointer args)
@@ -414,8 +413,13 @@ gpointer ws_comm_thread(gpointer args)
         LWS_SERVER_OPTION_DISABLE_IPV6;
 
     info.options |= LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+
+#if defined(LWS_WITH_SSL)
     info.ssl_cert_filepath = cert_filepath;
     info.ssl_private_key_filepath = private_key_filepath;
+#endif
+
+
 
     context = lws_create_context(&info);
     if (!context) {

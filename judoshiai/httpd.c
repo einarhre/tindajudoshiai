@@ -2053,7 +2053,7 @@ struct UploadContext
     MHD_destroy_response(response);                                     \
     return ret
 
-int keyValueIterator(void *cls,
+static enum MHD_Result keyValueIterator(void *cls,
 		     enum MHD_ValueKind kind,
 		     const char *key,
 		     const char *value) {
@@ -2081,7 +2081,7 @@ test_values (void *cls,
     return MHD_YES;
 }
 
-int analyze_http(void *cls,
+static enum MHD_Result analyze_http(void *cls,
 		 struct MHD_Connection *connection,
 		 const char *url,
 		 const char *method,

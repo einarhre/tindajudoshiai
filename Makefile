@@ -14,7 +14,7 @@ RELFILE=$(RELDIR)/bin/judoshiai$(SUFF)
 RUNDIR=$(DEVELDIR)
 
 ifeq ($(TOOL),MXE)
-    #DLLS = $(wildcard $(MXE_BIN)/*.dll)
+    #DLLS = $(wildcard $(CRS_BIN)/*.dll)
 
     DLLS = libao-4.dll libatk-1.0-0.dll libbz2.dll
     DLLS += libcairo-2.dll libcairo-gobject-2.dll libcroco-0.6-3.dll
@@ -46,10 +46,11 @@ ifeq ($(TOOL),MXE)
         DLLS += gspawn-win64-helper-console.exe
         DLLS += gspawn-win64-helper.exe
     endif
-endif
-
-ifeq ($(TOOL),MINGW)
-    DLLS=$(shell ldd.exe /c/js-build/judoshiai/obj-win64/judoshiai.exe | grep mingw | awk '{print $3;}')
+else ifeq ($(TOOL),CRS)
+	# For static linking
+	DLL=
+else ifeq ($(TOOL),MINGW)
+    DLLS=$(shell ldd.exe /c/js-build/judoshiai/obj-win64/judoshiai.exe | grep mingw | awk '{print $$3;}')
 endif
 
 $(info --- MAKE VARIABLES: ---)
@@ -62,13 +63,12 @@ $(info Work directory:          $(CURDIR))
 $(info Build JudoHttpd:         $(JUDOHTTPD))
 $(info Build JudoProxy:         $(JUDOPROXY))
 $(info Used tool for Windowns:  $(TOOL))
-$(info MXE directory:           $(MXEDIR))
+$(info CRS directory:           $(CRSDIR))
 $(info WIN32 base directory:    $(WIN32_BASE))
 $(info Development directory:   $(DEVELDIR))
 $(info Build directory:         $(JS_BUILD_DIR))
 $(info Object directory:        $(OBJ_DIR))
 $(info Release directory:       $(RELEASEDIR))
-$(info WIN32 base directory:    $(WIN32_BASE))
 $(info -----------------------)
 
 all:
@@ -99,7 +99,7 @@ all:
 	@echo "---------------------------"
 	@echo "Run make in subdirectories"
 	@echo "---------------------------"
-	make -C flutter
+	#make -C flutter
 	make -C common
 	make -C judoshiai
 	make -C judotimer
@@ -142,34 +142,36 @@ ifeq ($(TGT),WIN32OS)
 	@echo "---------------------------"
 	@echo "Copy DLLs"
 	@echo "---------------------------"
-  ifeq ($(TOOL),MXE)
+ifeq ($(TOOL),CRS)
+	@echo "CRS static build: skipping DLL copy"
+else ifeq ($(TOOL),MXE)
 	#cp $(DLLS) $(RELDIR)/bin/
 	cp $(foreach dll,$(DLLS),$(DEVELDIR)/bin/$(dll)) $(RELDIR)/bin/
 	cp $(JS_BUILD_DIR)/judoshiai/$(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd-12.dll $(RELDIR)/bin/
-  else # Not MXE, winxp or mingw
-    ifeq ($(TARGETOS),WIN64) # mingw64
+else # Not CRS, winxp or mingw
+ifeq ($(TARGETOS),WIN64) # mingw64
 	cat mk/mingw-win64-dll.txt | while read LINE; do cp $$LINE $(RELDIR)/bin/; done
-    else # WIN64
-      ifeq ($(TARGETOS),WIN32) # mingw32
+else # WIN64
+ifeq ($(TARGETOS),WIN32) # mingw32
 	cat mk/mingw-win32-dll.txt | while read LINE; do cp $$LINE $(RELDIR)/bin/; done
-      else # WIN32 winxp
-        ifeq ($(TOOL),MINGW)
+else # WIN32 winxp
+ifeq ($(TOOL),MINGW)
 	cat mk/mingw-winxp-dll.txt | while read LINE; do cp $$LINE $(RELDIR)/bin/; done
-        else
+else
 	cp $(RUNDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(SOUNDDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(RSVGDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(CURLDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(SSH2DIR)/bin/*.dll $(RELDIR)/bin/
-          ifeq ($(JUDOPROXY),YES)
+ifeq ($(JUDOPROXY),YES)
 	  cp $(WEBKITDIR)/bin/*.dll $(RELDIR)/bin/
 	  cp $(SOAPDIR)/bin/*.dll $(RELDIR)/bin/
-          endif # judoproxy
-        endif # MINGW
+endif # judoproxy
+endif # MINGW
 	cp -r $(RUNDIR)/lib/gtk-$(GTKVER).0 $(RELDIR)/lib/
-      endif # WIN32
-    endif # WIN64
-  endif # MXE
+endif # WIN32
+endif # WIN64
+endif # CRS
 
 	@echo "---------------------------"
 	@echo "Copy share files"
@@ -194,7 +196,7 @@ ifeq ($(TGT),WIN32OS)
 	cp -r share/themes $(RELDIR)/share/
 	cp -r share/icons $(RELDIR)/share/
 	cp -r $(RUNDIR)/etc $(RELDIR)/
-	cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
+	#cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
 
 	mkdir -p $(RELDIR)/etc/gtk-3.0
 	echo '[Settings]' >$(RELDIR)/etc/gtk-3.0/settings.ini
@@ -232,7 +234,7 @@ endif # WIN32OS
 	cp -r svg $(RELDIR)/
 	cp -r custom-examples $(RELDIR)/
 	cp -r svg-lisp $(RELDIR)/
-	cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
+	#cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
 	# Copy these manually before make. Distributed make doesn't provide the files automatically.
 	#cp $(OBJDIR)/serial/$(OBJDIR)/websock-serial-pkg/websock-serial $(RELDIR)/etc/html/
 	#cp $(JS_BUILD_DIR)/serial/obj-winxp/websock-serial-pkg.zip $(RELDIR)/etc/html/
@@ -245,36 +247,73 @@ endif # WIN32OS
 	@echo "To make a Debian package run (Linux only)"
 	@echo "  make debian"
 
-build_flutter:
-	make -C flutter
-	cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
+#build_flutter:
+#	make -C flutter
+#	cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
 
 setup:
 ifeq ($(TGT),WIN32OS)
-	sed "s/AppVerName=.*/AppVerName=Shiai $(SHIAI_VER_NUM)/" etc/judoshiai.iss >judoshiai1.iss
-	sed "s/OutputBaseFilename=.*/OutputBaseFilename=judoshiai-setup-$(SHIAI_VER_NUM)-$(TGTEXT)/" judoshiai1.iss >judoshiai2.iss
-	sed "s/TGTEXT/$(TGTEXT)/" judoshiai2.iss >judoshiai1.iss
-ifeq ($(TGTEXT),64)
-	sed "s/ARCHMODE/ArchitecturesInstallIn64BitMode=x64/" judoshiai1.iss >judoshiai2.iss
-else
-	sed "s/ARCHMODE//" judoshiai1.iss >judoshiai2.iss
-endif
-	sed "s,RELDIR,$(RELEASEDIR)," judoshiai2.iss | tr '/' '\\' >judoshiai1.iss
-ifeq ($(TOOL),MINGW)
-	echo "MINGW_DIR=$(MINGW_DIR)"
-	sed "s,\(.home\),$(MINGW_DIR)\1," judoshiai1.iss >judoshiai2.iss
-	cp judoshiai2.iss judoshiai1.iss
-endif
-	$(INNOSETUP) judoshiai1.iss
-	rm -f judoshiai*.iss
-else
+	@echo "Creating portable Windows ZIP package"
+
+	@if [ -d "$(RELEASEDIR)/judoshiai/etc/fonts/conf.d" ]; then \
+		find "$(RELEASEDIR)/judoshiai/etc/fonts/conf.d" -xtype l -delete; \
+	fi
+
+	@echo "Creating Windows README"
+
+	@echo "Judoshiai portable Windows package" > $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "Installation:" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "  1. Extract this ZIP file." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "  2. Open the judoshiai/bin folder." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "  3. Start judoshiai.exe, judotimer.exe, judoinfo.exe," >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "     judoweight.exe, judojudogi.exe, or judoproxy.exe." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "Desktop shortcuts:" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "  Create shortcuts manually if desired." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "File association:" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "  Run bin/register-file-association.bat to associate" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "  .shi files with judoshiai.exe." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "Firewall/network:" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "  Windows may ask whether to allow network access." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@echo "  Choose 'Allow access' on trusted/private networks." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+
+	@echo "Creating file association helper"
+
+	@echo "@echo off" > $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
+	@echo "set APPDIR=%%~dp0" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
+	@echo "reg add HKCU\Software\Classes\.shi /ve /d JudoShiaiDatabaseFile /f" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
+	@echo "reg add HKCU\Software\Classes\JudoShiaiDatabaseFile /ve /d \"JudoShiai Database File\" /f" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
+	@echo "reg add HKCU\Software\Classes\JudoShiaiDatabaseFile\DefaultIcon /ve /d \"%%APPDIR%%judoshiai.exe,0\" /f" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
+	@echo "reg add HKCU\Software\Classes\JudoShiaiDatabaseFile\shell\open\command /ve /d \"\\\"%%APPDIR%%judoshiai.exe\\\" \\\"%%1\\\"\" /f" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
+	@echo "echo .shi files are now associated with JudoShiai." >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
+	@echo "pause" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
+
+	@echo "Creating ZIP package"
+
+	cd $(RELEASEDIR) && \
+	zip -rq judoshiai-$(SHIAI_VER_NUM)-win$(TGTEXT).zip judoshiai
+
+	@echo ""
+	@echo "Created:"
+	@echo "  $(RELEASEDIR)/judoshiai-$(SHIAI_VER_NUM)-win$(TGTEXT).zip"
+	@echo ""
+
+else # LINUXOS
+
 	tar -C $(RELEASEDIR) -cf judoshiai.tar judoshiai
 	tar -C etc -rf judoshiai.tar install.sh
 	gzip judoshiai.tar
 	cat etc/header.sh judoshiai.tar.gz >$(RELEASEDIR)/judoshiai-setup-$(SHIAI_VER_NUM).bin
 	chmod a+x $(RELEASEDIR)/judoshiai-setup-$(SHIAI_VER_NUM).bin
 	rm -f judoshiai.tar.gz
+
 endif
+
+
+
 
 $(RELEASEDIR)/judoshiai/etc/remote-install.exe:
 ifeq ($(TGT),WIN32OS)
@@ -295,29 +334,33 @@ install:
 	ln -sf /opt/judoshiai/bin/judoproxy /usr/local/bin/judoproxy
 ifeq ($(JUDOHTTPD),YES)
 	ln -sf /opt/judoshiai/bin/judohttpd /usr/local/bin/judohttpd
-	cp gnome/judohttpd.desktop /usr/share/applications/
-	cp etc/png/judohttpd.png /usr/share/pixmaps/
-	cp etc/png/judohttpd.png /usr/share/icons/hicolor/48x48/apps/
+	cp gnome/judohttpd.desktop /opt/judoshiai/share/applications/
+	cp etc/png/judohttpd.png /opt/judoshiai/share/pixmaps/
 endif
-	desktop-file-install --rebuild-mime-info-cache --dir=/usr/local/share/applications gnome/judo*.desktop
-	cp etc/png/judoshiai.png /usr/share/pixmaps/
-	cp etc/png/judotimer.png /usr/share/pixmaps/
-	cp etc/png/judoinfo.png /usr/share/pixmaps/
-	cp etc/png/judoweight.png /usr/share/pixmaps/
-	cp etc/png/judojudogi.png /usr/share/pixmaps/
-	cp etc/png/judoproxy.png /usr/share/pixmaps/
-	for pn in 16 24 32 48
-	do
-	  p="share/icons/hicolor/${pn}x${pn}/apps"
-	  cp ${p}/judo*.png /usr/${p}/
+	ln -sf /opt/judoshiai/share/applications/*.desktop /usr/local/share/applications/.
+	desktop-file-install --rebuild-mime-info-cache /usr/local/share/applications/judo*.desktop
+	cp etc/png/judoshiai.png /opt/judoshiai/share/pixmaps/
+	cp etc/png/judotimer.png /opt/judoshiai/share/pixmaps/
+	cp etc/png/judoinfo.png /opt/judoshiai/share/pixmaps/
+	cp etc/png/judoweight.png /opt/judoshiai/share/pixmaps/
+	cp etc/png/judojudogi.png /opt/judoshiai/share/pixmaps/
+	cp etc/png/judoproxy.png /opt/judoshiai/share/pixmaps/
+	ln -sf /opt/judoshiai/share/pixmaps/*.png /usr/local/share/pixmaps/.
+	for pn in 16 24 32 48; do \
+	  p="share/icons/hicolor/$${pn}x$${pn}/apps"; \
+	  mkdir -p /opt/judoshiai/$${p}/; \
+	  cp $${p}/judo*.png /opt/judoshiai/$${p}/; \
+	  mkdir -p /usr/local/$${p}/; \
+	  ln -sf /opt/judoshiai/$${p}/judo*.png /usr/local/$${p}/.; \
 	done
-	gtk-update-icon-cache --force /usr/share/icons/hicolor
+	gtk-update-icon-cache --force --ignore-theme-index /usr/local/share/icons/hicolor
 	#cp gnome/judoshiai.mime /usr/share/mime-info/
 	#cp gnome/judoshiai.keys /usr/share/mime-info/
 	#cp gnome/judoshiai.applications /usr/share/application-registry/
 	#cp gnome/judoshiai.packages /usr/lib/mime/packages/judoshiai
-	cp gnome/judoshiai.xml /usr/share/mime/packages/
-	update-mime-database /usr/share/mime
+	cp gnome/judoshiai.xml /opt/judoshiai/share/mime/packages/
+	ln -sf /opt/judoshiai/share/mime/packages/judoshiai.xml /usr/local/share/mime/packages/.
+	update-mime-database /usr/local/share/mime
 	#cp gnome/judoshiai.menu /usr/share/menu/judoshiai
 
 debian:

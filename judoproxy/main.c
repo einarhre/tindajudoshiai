@@ -87,6 +87,12 @@
 
 #define APPLICATION_TYPE_CAMERA 100
 
+#ifdef WIN32
+#define sleep_sec(x) Sleep((x) * 1000)
+#else
+#define sleep_sec(x) sleep(x)
+#endif
+
 static gchar *ssdp_req_data = NULL;
 static gint   ssdp_req_data_len = 0;
 //static gchar ssdp_id[64];
@@ -1025,7 +1031,13 @@ gpointer proxy_ssdp_thread(gpointer args)
         memset(&mreq, 0, sizeof(mreq));
         mreq.imr_multiaddr.s_addr = inet_addr(SSDP_MULTICAST);
         mreq.imr_interface.s_addr = iface[i].addr;
-        if (setsockopt(iface[i].fdin, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) == -1) {
+        if (setsockopt(iface[i].fdin, IPPROTO_IP, IP_ADD_MEMBERSHIP,
+#ifdef WIN32
+               (const char *)&mreq,
+#else
+               &mreq,
+#endif
+              sizeof(mreq)) == -1) {
             perror("SSDP setsockopt");
         }
 
@@ -1184,7 +1196,7 @@ void scan_interfaces(void)
 
     SOCKET sd = WSASocket(AF_INET, SOCK_DGRAM, 0, 0, 0, 0);
     if (sd == SOCKET_ERROR) {
-        return 0;
+        return;
     }
 
     INTERFACE_INFO InterfaceList[20];
@@ -1192,7 +1204,7 @@ void scan_interfaces(void)
     if (WSAIoctl(sd, SIO_GET_INTERFACE_LIST, 0, 0, &InterfaceList,
                  sizeof(InterfaceList), &nBytesReturned, 0, 0) == SOCKET_ERROR) {
         closesocket(sd);
-        return 0;
+        return;
     }
 
     gint nNumInterfaces = nBytesReturned / sizeof(INTERFACE_INFO);
@@ -1311,7 +1323,7 @@ static gpointer connection_thread(gpointer args)
 		closesocket(connections[cn].fd_out);
 		connections[cn].fd_out = -1;
 		g_print("Connection out %d to %s failed!\n", cn, inet_ntoa(node.sin_addr));
-		sleep(2);
+		sleep_sec(2);
 	    } else {
 		FD_SET(connections[cn].fd_out, &read_fd);
 		g_print("Out connection %d (fd=%d) to %s\n", cn,

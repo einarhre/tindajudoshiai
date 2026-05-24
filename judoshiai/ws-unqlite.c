@@ -18,7 +18,6 @@
 #include <string.h>
 #include <signal.h>
 #include <glib.h>
-#include <pthread.h>
 
 #define LWS_PLUGIN_STATIC
 
@@ -71,7 +70,7 @@ struct per_vhost_data__minimal {
     struct per_session_data__minimal *pss_list; /* linked-list of live pss*/
 
     struct lws_ring *ring; /* ringbuffer holding unsent messages */
-    pthread_mutex_t lock_ring; /* serialize access to the ring buffer */
+    GMutex lock_ring; /* serialize access to the ring buffer */
 
     struct wsmsg amsg; /* the one pending message... */
     int current; /* the current message number we are caching */
@@ -168,7 +167,7 @@ static void tell_others(struct per_vhost_data__minimal *vhd,
      * on them as soon as they are ready
      */
 
-    pthread_mutex_lock(&vhd->lock_ring);
+    g_mutex_lock(&vhd->lock_ring);
 
     lws_start_foreach_llp(struct per_session_data__minimal **,
                           ppss, vhd->pss_list) {
@@ -178,7 +177,7 @@ static void tell_others(struct per_vhost_data__minimal *vhd,
         }
     } lws_end_foreach_llp(ppss, pss_list);
 
-    pthread_mutex_unlock(&vhd->lock_ring);
+    g_mutex_unlock(&vhd->lock_ring);
 }
 
 static int
@@ -205,11 +204,11 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         vhd->context = lws_get_context(wsi);
         vhd->protocol = lws_get_protocol(wsi);
         vhd->vhost = lws_get_vhost(wsi);
-        pthread_mutex_init(&vhd->lock_ring, NULL);
+        g_mutex_init(&vhd->lock_ring);
         break;
 
     case LWS_CALLBACK_PROTOCOL_DESTROY:
-        pthread_mutex_destroy(&vhd->lock_ring);
+        g_mutex_clear(&vhd->lock_ring);
         break;
 
     case LWS_CALLBACK_ESTABLISHED:
@@ -234,10 +233,10 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         break;
 
     case LWS_CALLBACK_SERVER_WRITEABLE:
-        pthread_mutex_lock(&vhd->lock_ring);
+        g_mutex_lock(&vhd->lock_ring);
         pmsg = get_data(pss);
         if (!pmsg) {
-            pthread_mutex_unlock(&vhd->lock_ring);
+            g_mutex_unlock(&vhd->lock_ring);
             break;
         }
 
@@ -246,7 +245,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
                       pmsg->len, LWS_WRITE_TEXT);
         if (m < (int)pmsg->len) {
             lwsl_err("ERROR %d writing to ws socket\n", m);
-            pthread_mutex_unlock(&vhd->lock_ring);
+            g_mutex_unlock(&vhd->lock_ring);
             return -1;
         }
 
@@ -254,7 +253,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         if (pss->qget != pss->qput)
              lws_callback_on_writable(pss->wsi);
 
-        pthread_mutex_unlock(&vhd->lock_ring);
+        g_mutex_unlock(&vhd->lock_ring);
         break;
 
     case LWS_CALLBACK_RECEIVE:
@@ -336,7 +335,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
             unqlite_kv_cursor *pCursor;
             int rc = unqlite_kv_cursor_init(pDb, &pCursor);
             if( rc != UNQLITE_OK || len < 2)
-                return;
+                return 0;
 
             for( unqlite_kv_cursor_first_entry(pCursor) ;
                  unqlite_kv_cursor_valid_entry(pCursor) ;
@@ -357,7 +356,7 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
             unqlite_kv_cursor *pCursor;
             int rc = unqlite_kv_cursor_init(pDb, &pCursor);
             if( rc != UNQLITE_OK)
-                return;
+                return 0;
             printf("ALL KEYS:\n");
             for( unqlite_kv_cursor_first_entry(pCursor) ;
                  unqlite_kv_cursor_valid_entry(pCursor) ;
@@ -406,23 +405,23 @@ static struct lws_protocols protocols[] = {
 static int interrupted;
 
 static const struct lws_http_mount mount = {
-	/* .mount_next */		NULL,		/* linked-list "next" */
-	/* .mountpoint */		"/",		/* mountpoint URL */
-	/* .origin */			"./mount-origin", /* serve from dir */
-	/* .def */			"index.html",	/* default filename */
-	/* .protocol */			NULL,
-	/* .cgienv */			NULL,
-	/* .extra_mimetypes */		NULL,
-	/* .interpret */		NULL,
-	/* .cgi_timeout */		0,
-	/* .cache_max_age */		0,
-	/* .auth_mask */		0,
-	/* .cache_reusable */		0,
-	/* .cache_revalidate */		0,
-	/* .cache_intermediaries */	0,
-	/* .origin_protocol */		LWSMPRO_FILE,	/* files in a dir */
-	/* .mountpoint_len */		1,		/* char count */
-	/* .basic_auth_login_file */	NULL,
+	.mount_next            = NULL,              /* linked-list "next" */
+	.mountpoint            = "/",               /* mountpoint URL */
+	.origin                = "./mount-origin",  /* serve from dir */
+	.def                   = "index.html",      /* default filename */
+	.protocol              = NULL,
+	.cgienv                = NULL,
+	.extra_mimetypes       = NULL,
+	.interpret             = NULL,
+	.cgi_timeout           = 0,
+	.cache_max_age         = 0,
+	.auth_mask             = 0,
+	.cache_reusable        = 0,
+	.cache_revalidate      = 0,
+	.cache_intermediaries  = 0,
+	.origin_protocol       = LWSMPRO_FILE,      /* files in a dir */
+	.mountpoint_len        = 1,                 /* char count */
+	.basic_auth_login_file = NULL,
 };
 
 static void sigint_handler(int sig)

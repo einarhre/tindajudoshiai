@@ -49,12 +49,12 @@ else
     endif
   endif
   ifeq ($(TARGETOS),WIN32)
-    -include ../mk/mxe-win32.mk
-    -include mk/mxe-win32.mk
+    -include ../mk/crs-win32.mk
+    -include mk/crs-win32.mk
   endif
   ifeq ($(TARGETOS),WIN64)
-    -include ../mk/mxe-win64.mk
-    -include mk/mxe-win64.mk
+    -include ../mk/crs-win64.mk
+    -include mk/crs-win64.mk
   endif
   ifeq ($(TARGETOS),WINXP)
     -include ../mk/winxp.mk

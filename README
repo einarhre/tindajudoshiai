@@ -119,8 +119,9 @@ Some programs need Windows emulator to run:
 
 $ sudo apt-get install wine
 
-Win32 and Win64 use MXE:
+Win32 and Win64 use CRS (custom compiled cross compiler):
 
+Add the cross compiler to a repository later
 $ git clone https://github.com/mxe/mxe.git
 $ cd ~/mxe
 $ make MXE_TARGETS='i686-w64-mingw32.shared x86_64-w64-mingw32.shared' gtk3 curl librsvg libao mpg123 pthreads libuv gnutls

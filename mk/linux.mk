@@ -1,4 +1,4 @@
-JS_BUILD_DIR=$(HOME)/src/tindajudoshiai/tindajudoshiai-build
+JS_BUILD_DIR=/home/eoh/src/PRG/tindajudoshiai/build
 CC=gcc
 LD=gcc
 PKGCONFIG=pkg-config
@@ -18,6 +18,6 @@ CFLAGS= -g $(WARNINGS) \
 
 LIBS=$(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs \
 		   gtk+-$(GTKVER).0 gthread-2.0 cairo librsvg-2.0 glib-2.0 libwebsockets) \
-     $(shell curl-config --libs) -lssh2 -ldl
+     $(shell curl-config --libs) -lssh2 -ldl -lm
 
 OBJS += $(OBJDIR)/binreloc.o

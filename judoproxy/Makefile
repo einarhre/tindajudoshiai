@@ -26,7 +26,7 @@ endif
 
 CFLAGS += -DAPPLICATION="\"judoproxy\""
 CFLAGS += -DAPP_NUM=6
-CFLAGS += -I/usr/include/libxml2
+CFLAGS += $(shell $(PC_ENV) pkg-config --cflags libxml-2.0)
 
 ifeq ($(VIDEO),yes)
 CFLAGS += -DVIDEO

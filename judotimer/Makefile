@@ -23,13 +23,14 @@ ifeq ($(TGT),WIN32OS)
   CFLAGS += -I$(SOUNDDIR)/include
   ifeq ($(TOOL),MXE)
     LIBS += -lmpg123 -lao
-  else # MXE
-    ifeq ($(TOOL),MINGW)
-      LIBS += $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs libmpg123) -lao
-    else # MINGW
-      LIBS += -L$(SOUNDDIR)/bin -lmpg123-0 -lao-4
-    endif # MINGW
-  endif # MXE
+  else ifeq ($(TOOL),CRS)
+    LIBS += -lmpg123 -lao
+    LIBS += -lshlwapi -lwinmm -lksguid
+	else ifeq ($(TOOL),MINGW)
+    LIBS += $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --libs libmpg123) -lao
+  else
+    LIBS += -L$(SOUNDDIR)/bin -lmpg123-0 -lao-4
+  endif
 
   RPATH =
   OBJS += $(OBJDIR)/judotimer-icon.res

@@ -54,17 +54,28 @@ CFLAGS += -I../3rdparty/httpp -I../3rdparty/sqlite3 -I../3rdparty/cJSON -I../3rd
 	  -I$(OBJDIR)/wsbuild/include
 	  #-I$(MHD_SRC)/../include
 
+ifneq ($(TGT),WIN32OS)
 LIBS += -lgnutls -lssl -lcrypto
+endif
 
 ############################################
 ############ Windows executable ############
 ############################################
 
 ifeq ($(TGT),WIN32OS)
+
+ifeq ($(TOOL),CRS)
+export PATH := $(CRSDIR)/bin:$(PATH)
+else
 export PATH := $(MXEDIR)/bin:$(PATH)
+endif
 
 OBJS += $(OBJDIR)/judoshiai-icon.res
-OBJS += $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.dll.a
+ifeq ($(TOOL),CRS)
+MHDLIB = $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a
+else
+MHDLIB = $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.dll.a
+endif
 
 $(OBJDIR)/judoshiai-icon.res: judoshiai-icon.rc
 	$(WINDRES) -O coff judoshiai-icon.rc $(OBJDIR)/judoshiai-icon.res
@@ -72,12 +83,24 @@ $(OBJDIR)/judoshiai-icon.res: judoshiai-icon.rc
 judoshiai-icon.rc: ../etc/judoshiai.ico
 	echo "APPICONS ICON \"../etc/judoshiai.ico\"" >judoshiai-icon.rc
 
-$(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.dll.a:
+ifeq ($(TOOL),CRS)
+MHDLIB = $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a
+MHD_HOST = $(TRG)
+MHD_PC_ENV = PKG_CONFIG_LIBDIR="$(PKG_CONFIG_LIBDIR)" PKG_CONFIG_PATH=""
+#MHD_CONFIGURE_FLAGS = --host=$(MHD_HOST) --disable-shared --enable-static --with-gnutls --disable-examples --disable-doc
+MHD_CONFIGURE_FLAGS = --host=$(MHD_HOST) --disable-shared --enable-static --without-gnutls --disable-https --disable-examples --disable-doc
+else
+MHDLIB = $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.dll.a
+MHD_HOST = $(MXE_CPU)-w64-mingw32.$(MXE_DYN)
+MHD_PC_ENV = PKG_CONFIG_PATH=$(MXEDIR)/$(MHD_HOST)/lib/pkgconfig
+MHD_CONFIGURE_FLAGS = --host=$(MHD_HOST) --with-gnutls --disable-examples --disable-doc
+endif
+
+$(MHDLIB):
 	mkdir -p $(OBJDIR)/microhttpd
 	tar xf $(MHD_SRC) -C $(OBJDIR)/microhttpd --strip-components 1
-	PKG_CONFIG_PATH=$(MXEDIR)/$(MXE_CPU)-w64-mingw32.$(MXE_DYN)/lib/pkgconfig \
 	cd $(OBJDIR)/microhttpd \
-	&& ./configure --with-gnutls --host=$(MXE_CPU)-w64-mingw32.$(MXE_DYN) --disable-examples --disable-doc \
+	&& $(MHD_PC_ENV) ./configure $(MHD_CONFIGURE_FLAGS) \
 	&& make
 
 $(OBJDIR)/ws-broker.o: ws-broker.c
@@ -87,14 +110,14 @@ $(OBJDIR)/ws-broker.o: ws-broker.c
 ############ Linux executable ##############
 ############################################
 
-else
+else # LINUXOS
 
-OBJS += $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a
+MHDLIB = $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a
 LIBS += -luv -lcap
 
 PROF += -rdynamic
 
-$(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a:
+$(MHDLIB):
 	mkdir -p $(OBJDIR)/microhttpd
 	tar xf $(MHD_SRC) -C $(OBJDIR)/microhttpd --strip-components 1
 	cd $(OBJDIR)/microhttpd && ./configure --disable-examples --disable-doc && make
@@ -108,9 +131,12 @@ endif
 ############ Common ########################
 ############################################
 
+#$(OBJDIR)/judoshiai$(SUFF): $(OBJS) $(MHDLIB)
+#	$(LD) $(PROF) -g $(RPATH) -o $(OBJDIR)/judoshiai$(SUFF) \
+#	  -Wl,--start-group $(OBJS) $(MHDLIB) $(LIBS) -Wl,--end-group
 
-$(OBJDIR)/judoshiai$(SUFF): $(OBJS)
-	$(LD) $(PROF) -g -Wl,-rpath -Wl,bin $(OBJS) -o $(OBJDIR)/judoshiai$(SUFF) $(LIBS)
+$(OBJDIR)/judoshiai$(SUFF): $(OBJS) $(MHDLIB)
+	$(LD) $(PROF) -g -Wl,-rpath -Wl,bin $(OBJS) $(MHDLIB) -o $(OBJDIR)/judoshiai$(SUFF) $(LIBS)
 
 $(OBJDIR)/avl.o: ../common/avl.c
 	${CC} $(PROF) -g $(CFLAGS) -c $< -o $@
