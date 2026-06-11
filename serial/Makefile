@@ -26,8 +26,8 @@ $(OBJDIR)/$(APP): $(OBJDIR)/$(EXE)
 	mkdir -p $(OBJDIR)/$(APP)
 	cp $(OBJDIR)/$(EXE) $(OBJDIR)/$(APP)/
 else
-$(OBJDIR)/$(APP):
-	-cp $(OBJDIR)/../obj-winxp/$(APP) $(OBJDIR)/
+$(OBJDIR)/$(APP): | $(OBJDIR)
+	@echo "Skipping $(APP): Windows non-XP serial package is not built here."
 endif
 
 $(OBJDIR):

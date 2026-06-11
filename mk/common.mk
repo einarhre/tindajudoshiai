@@ -49,12 +49,12 @@ else
     endif
   endif
   ifeq ($(TARGETOS),WIN32)
-    -include ../mk/crs-win32.mk
-    -include mk/crs-win32.mk
+    -include ../mk/crs-win.mk
+    -include mk/crs-win.mk
   endif
   ifeq ($(TARGETOS),WIN64)
-    -include ../mk/crs-win64.mk
-    -include mk/crs-win64.mk
+    -include ../mk/crs-win.mk
+    -include mk/crs-win.mk
   endif
   ifeq ($(TARGETOS),WINXP)
     -include ../mk/winxp.mk
@@ -74,7 +74,6 @@ else
     -include mk/linux-armhf.mk
   endif
 endif
-
 TGTEXT_S = "\"$(TGTEXT)\""
 RELDIR = $(RELEASEDIR)/judoshiai
 CFLAGS += -I../common -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S)

@@ -48,7 +48,7 @@ ifeq ($(TOOL),MXE)
     endif
 else ifeq ($(TOOL),CRS)
 	# For static linking
-	DLL=
+	DLLS=
 else ifeq ($(TOOL),MINGW)
     DLLS=$(shell ldd.exe /c/js-build/judoshiai/obj-win64/judoshiai.exe | grep mingw | awk '{print $$3;}')
 endif
@@ -67,7 +67,7 @@ $(info CRS directory:           $(CRSDIR))
 $(info WIN32 base directory:    $(WIN32_BASE))
 $(info Development directory:   $(DEVELDIR))
 $(info Build directory:         $(JS_BUILD_DIR))
-$(info Object directory:        $(OBJ_DIR))
+$(info Object directory:        $(OBJDIR))
 $(info Release directory:       $(RELEASEDIR))
 $(info -----------------------)
 
@@ -142,8 +142,16 @@ ifeq ($(TGT),WIN32OS)
 	@echo "---------------------------"
 	@echo "Copy DLLs"
 	@echo "---------------------------"
+
 ifeq ($(TOOL),CRS)
+ifeq ($(BUILD_KIND),static)
 	@echo "CRS static build: skipping DLL copy"
+else
+	@# Later this can be replaced by a dependency scanner using $(OBJDUMP) -p.
+	@echo "CRS shared build: copying DLLs"
+	cp $(DEVELDIR)/bin/*.dll $(RELDIR)/bin/
+	-cp $(DEVELDIR)/bin/gspawn-win*-helper*.exe $(RELDIR)/bin/
+endif
 else ifeq ($(TOOL),MXE)
 	#cp $(DLLS) $(RELDIR)/bin/
 	cp $(foreach dll,$(DLLS),$(DEVELDIR)/bin/$(dll)) $(RELDIR)/bin/

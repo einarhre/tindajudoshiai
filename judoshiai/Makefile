@@ -65,16 +65,18 @@ endif
 ifeq ($(TGT),WIN32OS)
 
 ifeq ($(TOOL),CRS)
+MHD_HOST = $(TRG)
+MHD_PC_ENV = PKG_CONFIG_LIBDIR="$(PKG_CONFIG_LIBDIR)" PKG_CONFIG_PATH=""
 export PATH := $(CRSDIR)/bin:$(PATH)
-else
-export PATH := $(MXEDIR)/bin:$(PATH)
-endif
 
 OBJS += $(OBJDIR)/judoshiai-icon.res
-ifeq ($(TOOL),CRS)
+
+ifeq ($(BUILD_KIND),static)
 MHDLIB = $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a
+MHD_CONFIGURE_FLAGS = --host=$(MHD_HOST) --disable-shared --enable-static --without-gnutls --disable-https --disable-examples --disable-doc
 else
 MHDLIB = $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.dll.a
+MHD_CONFIGURE_FLAGS = --host=$(MHD_HOST) --enable-shared --disable-static --without-gnutls --disable-https --disable-examples --disable-doc
 endif
 
 $(OBJDIR)/judoshiai-icon.res: judoshiai-icon.rc
@@ -83,13 +85,8 @@ $(OBJDIR)/judoshiai-icon.res: judoshiai-icon.rc
 judoshiai-icon.rc: ../etc/judoshiai.ico
 	echo "APPICONS ICON \"../etc/judoshiai.ico\"" >judoshiai-icon.rc
 
-ifeq ($(TOOL),CRS)
-MHDLIB = $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.a
-MHD_HOST = $(TRG)
-MHD_PC_ENV = PKG_CONFIG_LIBDIR="$(PKG_CONFIG_LIBDIR)" PKG_CONFIG_PATH=""
-#MHD_CONFIGURE_FLAGS = --host=$(MHD_HOST) --disable-shared --enable-static --with-gnutls --disable-examples --disable-doc
-MHD_CONFIGURE_FLAGS = --host=$(MHD_HOST) --disable-shared --enable-static --without-gnutls --disable-https --disable-examples --disable-doc
 else
+export PATH := $(MXEDIR)/bin:$(PATH)
 MHDLIB = $(OBJDIR)/microhttpd/src/microhttpd/.libs/libmicrohttpd.dll.a
 MHD_HOST = $(MXE_CPU)-w64-mingw32.$(MXE_DYN)
 MHD_PC_ENV = PKG_CONFIG_PATH=$(MXEDIR)/$(MHD_HOST)/lib/pkgconfig
