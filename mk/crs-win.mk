@@ -1,4 +1,21 @@
 # mk/crs-win.mk
+#
+# Common CRS Windows cross-build settings for both WIN32 and WIN64.
+#
+# BUILD_KIND:
+#   static  - link CRS-built third-party libraries statically where possible
+#   shared  - use CRS shared libraries and copy DLLs to the release tree
+#
+# Windows subsystem:
+#   GUI applications can set:
+#
+#       WINDOWS_GUI = YES
+#
+#   in their own Makefile.  This adds -mwindows at link time, which prevents
+#   Windows from opening a console window before starting the GTK GUI.
+#
+#   The default is console, because command-line tools such as db-convert.exe
+#   should keep stdout/stderr and a normal console subsystem.
 
 TOOL = CRS
 TGT = WIN32OS
@@ -64,6 +81,8 @@ else
   LWS_PC = libwebsockets
 endif
 
+# Most source code still tests WIN32 for the Windows API, even for 64-bit
+# builds. TARGETOS_WIN32 is kept for compatibility with the existing code.
 CFLAGS += -std=gnu17
 CFLAGS += -I../common -DWIN32 -DTARGETOS_WIN32=1 -mms-bitfields
 CFLAGS += $(CURL_STATIC_DEFINE)
@@ -76,11 +95,25 @@ CFLAGS += $(shell $(PKGCONFIG) --cflags $(CRS_PC_PKGS))
 CRS_PC_LIBS := $(shell $(PKGCONFIG) $(PC_STATIC) --libs $(CRS_PC_PKGS))
 
 ifeq ($(BUILD_KIND),static)
-  CRS_PC_LIBS := $(filter-out -lstdc++,$(CRS_PC_LIBS))
+  # pkg-config --static may pull in -lstdc++.  If left untouched, MinGW can
+  # choose libstdc++-6.dll.  Remove it here and add it explicitly below inside
+  # a -Bstatic/-Bdynamic pair.
+  #
+  # The x86_64 static libcurl.pc currently also emits -lnetio, which creates
+  # an invalid user-mode runtime import on NETIO.SYS.  User-mode networking
+  # should use normal Windows DLLs such as WS2_32/IPHLPAPI, not NETIO.SYS.
+  CRS_PC_LIBS := $(filter-out -lstdc++ -lnetio,$(CRS_PC_LIBS))
 endif
 
+# GUI programs may set WINDOWS_GUI=YES in their own Makefile.  Keep this as a
+# recursively-expanded variable so the application Makefile may set it either
+# before or after including the common makefiles.
+WINDOWS_GUI ?= NO
+WIN_GUI_LDFLAG = $(if $(filter YES yes 1 true TRUE,$(WINDOWS_GUI)),-mwindows,)
+
 LIBS += $(CRS_PC_LIBS)
-LIBS += -lhid -lws2_32 -lbcrypt -ladvapi32 -lcrypt32 -lole32 -luuid -lshlwapi
+LIBS += -lhid -lws2_32 -liphlpapi -lbcrypt -ladvapi32 -lcrypt32 -lole32 -luuid -lshlwapi
+LIBS += $(WIN_GUI_LDFLAG)
 
 ifeq ($(BUILD_KIND),static)
   LIBS += -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic

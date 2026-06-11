@@ -58,6 +58,12 @@ ifneq ($(TGT),WIN32OS)
 LIBS += -lgnutls -lssl -lcrypto
 endif
 
+# Build the Windows executable as a GUI application instead of opening
+# an extra console window before the GTK interface starts.
+ifeq ($(findstring WIN,$(TARGETOS)),WIN)
+  WINDOWS_GUI = YES
+endif
+
 ############################################
 ############ Windows executable ############
 ############################################

@@ -15,6 +15,12 @@ OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/comm.o $(OBJDIR)/ip.o \
 CFLAGS += -DAPPLICATION="\"judoinfo\""
 CFLAGS += -DAPP_NUM=3
 
+# Build the Windows executable as a GUI application instead of opening
+# an extra console window before the GTK interface starts.
+ifeq ($(findstring WIN,$(TARGETOS)),WIN)
+  WINDOWS_GUI = YES
+endif
+
 ### Windows executable ###
 ifeq ($(TGT),WIN32OS)
 OBJS += $(OBJDIR)/judoinfo-icon.res
