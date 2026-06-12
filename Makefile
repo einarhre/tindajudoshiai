@@ -246,6 +246,22 @@ endif # WIN32OS
 	@echo "Copy other files"
 	@echo "---------------------------"
 	cp -r etc $(RELDIR)/
+	@if [ "$(TGT)" = "LINUXOS" ]; then \
+		echo "---------------------------"; \
+		echo "Copy Linux desktop integration files"; \
+		echo "---------------------------"; \
+		mkdir -p "$(RELDIR)/share/applications"; \
+		mkdir -p "$(RELDIR)/share/pixmaps"; \
+		mkdir -p "$(RELDIR)/share/mime/packages"; \
+		cp gnome/judo*.desktop "$(RELDIR)/share/applications/"; \
+		cp gnome/judoshiai.xml "$(RELDIR)/share/mime/packages/"; \
+		cp etc/png/judo*.png "$(RELDIR)/share/pixmaps/"; \
+		for pn in 16 24 32 48; do \
+			p="share/icons/hicolor/$${pn}x$${pn}/apps"; \
+			mkdir -p "$(RELDIR)/$${p}"; \
+			cp "$${p}"/judo*.png "$(RELDIR)/$${p}/"; \
+		done; \
+	fi
 	cp licenses/* $(RELDIR)/licenses
 	cp -r svg $(RELDIR)/
 	cp -r custom-examples $(RELDIR)/
@@ -400,44 +416,13 @@ else
 	@echo "windows-installer is only meaningful for Windows builds"
 endif
 
+.PHONY: install
 install:
-	cp -r $(RELDIR) /opt/
-	ln -sf /opt/judoshiai/bin/judoshiai /usr/local/bin/judoshiai
-	ln -sf /opt/judoshiai/bin/judotimer /usr/local/bin/judotimer
-	ln -sf /opt/judoshiai/bin/judoinfo /usr/local/bin/judoinfo
-	ln -sf /opt/judoshiai/bin/judoweight /usr/local/bin/judoweight
-	ln -sf /opt/judoshiai/bin/judojudogi /usr/local/bin/judojudogi
-	ln -sf /opt/judoshiai/bin/judoproxy /usr/local/bin/judoproxy
-ifeq ($(JUDOHTTPD),YES)
-	ln -sf /opt/judoshiai/bin/judohttpd /usr/local/bin/judohttpd
-	cp gnome/judohttpd.desktop /opt/judoshiai/share/applications/
-	cp etc/png/judohttpd.png /opt/judoshiai/share/pixmaps/
+ifneq ($(filter LINUX LINUX32 LINUXARM,$(TARGETOS)),)
+	/bin/sh etc/install.sh "$(abspath $(RELDIR))"
+else
+	@echo "install is only meaningful for Linux builds"
 endif
-	ln -sf /opt/judoshiai/share/applications/*.desktop /usr/local/share/applications/.
-	desktop-file-install --rebuild-mime-info-cache /usr/local/share/applications/judo*.desktop
-	cp etc/png/judoshiai.png /opt/judoshiai/share/pixmaps/
-	cp etc/png/judotimer.png /opt/judoshiai/share/pixmaps/
-	cp etc/png/judoinfo.png /opt/judoshiai/share/pixmaps/
-	cp etc/png/judoweight.png /opt/judoshiai/share/pixmaps/
-	cp etc/png/judojudogi.png /opt/judoshiai/share/pixmaps/
-	cp etc/png/judoproxy.png /opt/judoshiai/share/pixmaps/
-	ln -sf /opt/judoshiai/share/pixmaps/*.png /usr/local/share/pixmaps/.
-	for pn in 16 24 32 48; do \
-	  p="share/icons/hicolor/$${pn}x$${pn}/apps"; \
-	  mkdir -p /opt/judoshiai/$${p}/; \
-	  cp $${p}/judo*.png /opt/judoshiai/$${p}/; \
-	  mkdir -p /usr/local/$${p}/; \
-	  ln -sf /opt/judoshiai/$${p}/judo*.png /usr/local/$${p}/.; \
-	done
-	gtk-update-icon-cache --force --ignore-theme-index /usr/local/share/icons/hicolor
-	#cp gnome/judoshiai.mime /usr/share/mime-info/
-	#cp gnome/judoshiai.keys /usr/share/mime-info/
-	#cp gnome/judoshiai.applications /usr/share/application-registry/
-	#cp gnome/judoshiai.packages /usr/lib/mime/packages/judoshiai
-	cp gnome/judoshiai.xml /opt/judoshiai/share/mime/packages/
-	ln -sf /opt/judoshiai/share/mime/packages/judoshiai.xml /usr/local/share/mime/packages/.
-	update-mime-database /usr/local/share/mime
-	#cp gnome/judoshiai.menu /usr/share/menu/judoshiai
 
 debian:
 	rm -rf $(RELEASEDIR)/pkg
