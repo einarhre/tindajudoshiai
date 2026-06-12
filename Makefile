@@ -327,7 +327,37 @@ else # LINUXOS
 	rm -f judoshiai.tar.gz
 
 endif
+MAKENSIS ?= makensis
 
+WINDOWS_INSTALLER = $(RELEASEDIR)/judoshiai-$(SHIAI_VER_NUM)-win$(TGTEXT)-$(BUILD_KIND)-setup.exe
+
+.PHONY: windows-installer
+windows-installer: all
+ifeq ($(TGT),WIN32OS)
+	@if [ ! -d "$(RELEASEDIR)/judoshiai/bin" ]; then \
+		echo "Missing release tree: $(RELEASEDIR)/judoshiai"; \
+		echo "Run make TARGETOS=$(TARGETOS) BUILD_KIND=$(BUILD_KIND) first."; \
+		exit 1; \
+	fi
+	@if [ -d "$(RELEASEDIR)/judoshiai/etc/fonts/conf.d" ]; then \
+		find "$(RELEASEDIR)/judoshiai/etc/fonts/conf.d" -xtype l -delete; \
+	fi
+	@if find "$(RELEASEDIR)/judoshiai/bin" -maxdepth 1 -type f -name '*.dll' -size 0 -print | grep -q .; then \
+		echo "ERROR: zero-size DLLs found in $(RELEASEDIR)/judoshiai/bin:" >&2; \
+		find "$(RELEASEDIR)/judoshiai/bin" -maxdepth 1 -type f -name '*.dll' -size 0 -print >&2; \
+		exit 1; \
+	fi
+	@echo "Creating $(WINDOWS_INSTALLER)"
+	$(MAKENSIS) \
+		-DSHIAI_VER_NUM="$(SHIAI_VER_NUM)" \
+		-DTGTEXT="$(TGTEXT)" \
+		-DBUILD_KIND="$(BUILD_KIND)" \
+		-DRELEASEDIR="$(abspath $(RELEASEDIR))" \
+		-DOUTFILE="$(abspath $(WINDOWS_INSTALLER))" \
+		etc/judoshiai.nsi
+else
+	@echo "windows-installer is only meaningful for Windows builds"
+endif
 
 
 
