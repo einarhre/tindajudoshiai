@@ -71,6 +71,30 @@ PKG_CONFIG_PATH =
 PC_ENV = PKG_CONFIG_LIBDIR="$(PKG_CONFIG_LIBDIR)" PKG_CONFIG_PATH=""
 PKGCONFIG = $(PC_ENV) pkg-config
 
+ifeq ($(BUILD_KIND),shared)
+  ifeq ($(TARGETOS),WIN32)
+    CRS_GCC_RUNTIME_DLL = libgcc_s_sjlj-1.dll
+  else
+    CRS_GCC_RUNTIME_DLL = libgcc_s_seh-1.dll
+  endif
+
+  # GCC runtime DLLs live in the GCC runtime library directory.
+  CRS_GCC_RUNTIME_DLLS = $(foreach dll,$(CRS_GCC_RUNTIME_DLL) libstdc++-6.dll,$(shell $(CC) -print-file-name=$(dll)))
+  CRS_GCC_RUNTIME_DLLS := $(filter /%,$(CRS_GCC_RUNTIME_DLLS))
+
+  # libwinpthread-1.dll lives in the target bin directory, not where
+  # gcc -print-file-name finds libgcc/libstdc++.
+  CRS_TARGET_RUNTIME_DLLS = $(wildcard $(CRSDIR)/$(TRG)/bin/libwinpthread-1.dll)
+
+  # GCC/MinGW runtime DLLs that live outside $(DEVELDIR)/bin.
+  CRS_RUNTIME_DLLS = $(CRS_GCC_RUNTIME_DLLS) $(CRS_TARGET_RUNTIME_DLLS)
+
+  # libmicrohttpd is built locally under the judoshiai object tree.  It is
+  # copied by the release recipe with shell wildcard expansion, because it may
+  # not exist when make expands variables for the recipe.
+  CRS_LOCAL_RUNTIME_DLL_DIR = $(JS_BUILD_DIR)/judoshiai/$(OBJDIR)/microhttpd/src/microhttpd/.libs
+endif
+
 ifeq ($(BUILD_KIND),static)
   PC_STATIC = --static
   CURL_STATIC_DEFINE = -DCURL_STATICLIB

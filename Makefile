@@ -151,6 +151,14 @@ else
 	@echo "CRS shared build: copying DLLs"
 	cp $(DEVELDIR)/bin/*.dll $(RELDIR)/bin/
 	-cp $(DEVELDIR)/bin/gspawn-win*-helper*.exe $(RELDIR)/bin/
+	@# Copy GCC/MinGW and locally built runtime DLLs that live outside $(DEVELDIR)/bin.
+	@if [ -n "$(strip $(CRS_RUNTIME_DLLS))" ]; then \
+		cp -pv $(CRS_RUNTIME_DLLS) "$(RELDIR)/bin/"; \
+	fi
+	@# Copy the locally built shared microhttpd DLL, if this target built one.
+	@if [ -d "$(CRS_LOCAL_RUNTIME_DLL_DIR)" ]; then \
+		find "$(CRS_LOCAL_RUNTIME_DLL_DIR)" -maxdepth 1 -name 'libmicrohttpd-*.dll' -exec cp -pv {} "$(RELDIR)/bin/" \; ; \
+	fi
 endif
 else ifeq ($(TOOL),MXE)
 	#cp $(DLLS) $(RELDIR)/bin/
