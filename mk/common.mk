@@ -74,6 +74,13 @@ else
     -include mk/linux-armhf.mk
   endif
 endif
+# BUILD_KIND=static/shared is only meaningful for Windows/CRS builds.
+# Linux builds are normal dynamically linked builds.
+ifneq ($(BUILD_KIND),)
+ifeq ($(filter WIN32 WIN64,$(TARGETOS)),)
+$(error BUILD_KIND=$(BUILD_KIND) is only supported for WIN32/WIN64 builds)
+endif
+endif
 TGTEXT_S = "\"$(TGTEXT)\""
 RELDIR = $(RELEASEDIR)/judoshiai
 CFLAGS += -I../common -DSHIAI_VERSION=$(SHIAI_VERSION) -DTGTEXT_S=$(TGTEXT_S)
