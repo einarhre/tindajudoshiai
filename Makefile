@@ -257,68 +257,110 @@ endif # WIN32OS
 	echo $(SHIAI_VER_NUM) >$(RELDIR)/etc/version.txt
 	find $(RELDIR) | wc -l | tr -d "\r\n" >$(RELDIR)/filecount.txt
 	@echo
-	@echo "To make a setup executable run"
+ifeq ($(TGT),WIN32OS)
+	@echo "To make a Windows installer run"
+	@echo "  make setup"
+	@echo
+	@echo "To make a portable Windows ZIP package run"
+	@echo "  make windows-zip"
+	@echo
+	@echo "To make both Windows packages run"
+	@echo "  make windows-dist"
+else
+	@echo "To make a Linux setup executable run"
 	@echo "  make setup"
 	@echo
 	@echo "To make a Debian package run (Linux only)"
 	@echo "  make debian"
+endif
+	@echo
 
 #build_flutter:
 #	make -C flutter
 #	cp -r $(JS_BUILD_DIR)/web $(RELDIR)/etc/
 
-setup:
-ifeq ($(TGT),WIN32OS)
-	@echo "Creating portable Windows ZIP package"
+ZIP_TOOL ?= zip
 
-	@if [ -d "$(RELEASEDIR)/judoshiai/etc/fonts/conf.d" ]; then \
-		find "$(RELEASEDIR)/judoshiai/etc/fonts/conf.d" -xtype l -delete; \
+WINDOWS_PACKAGE_NAME = judoshiai-$(SHIAI_VER_NUM)-win$(TGTEXT)-$(BUILD_KIND)
+WINDOWS_ZIP = $(RELEASEDIR)/$(WINDOWS_PACKAGE_NAME).zip
+
+.PHONY: setup windows-package-prep windows-zip windows-installer windows-dist linux-setup
+
+ifeq ($(TGT),WIN32OS)
+setup: windows-installer
+else
+setup: linux-setup
+endif
+
+windows-dist: windows-zip windows-installer
+
+windows-package-prep:
+ifeq ($(TGT),WIN32OS)
+	@echo "Preparing portable Windows package"
+
+	@if [ ! -d "$(RELDIR)/bin" ]; then \
+		echo "Missing release tree: $(RELDIR)"; \
+		echo "Run make first, or use: make TARGETOS=$(TARGETOS) BUILD_KIND=$(BUILD_KIND) all"; \
+		exit 1; \
+	fi
+
+	@# Windows ZIP tools do not always handle Unix symlinks well.
+	@if [ -d "$(RELDIR)/etc/fonts/conf.d" ]; then \
+		find "$(RELDIR)/etc/fonts/conf.d" -xtype l -delete; \
 	fi
 
 	@echo "Creating Windows README"
-
-	@echo "Judoshiai portable Windows package" > $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "Installation:" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "  1. Extract this ZIP file." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "  2. Open the judoshiai/bin folder." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "  3. Start judoshiai.exe, judotimer.exe, judoinfo.exe," >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "     judoweight.exe, judojudogi.exe, or judoproxy.exe." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "Desktop shortcuts:" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "  Create shortcuts manually if desired." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "File association:" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "  Run bin/register-file-association.bat to associate" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "  .shi files with judoshiai.exe." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "Firewall/network:" >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "  Windows may ask whether to allow network access." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
-	@echo "  Choose 'Allow access' on trusted/private networks." >> $(RELEASEDIR)/judoshiai/README-WINDOWS.txt
+	@printf '%s\n' \
+		'Judoshiai portable Windows package' \
+		'' \
+		'Installation:' \
+		'  1. Extract this ZIP file.' \
+		'  2. Open the judoshiai\bin folder.' \
+		'  3. Start judoshiai.exe, judotimer.exe, judoinfo.exe,' \
+		'     judoweight.exe, judojudogi.exe, or judoproxy.exe.' \
+		'' \
+		'Desktop shortcuts:' \
+		'  Create shortcuts manually if desired.' \
+		'' \
+		'File association:' \
+		'  Run bin\register-file-association.bat to associate' \
+		'  .shi files with judoshiai.exe for the current user.' \
+		'' \
+		'Firewall/network:' \
+		'  Windows may ask whether to allow network access.' \
+		'  Choose Allow access on trusted/private networks.' \
+		> "$(RELDIR)/README-WINDOWS.txt"
 
 	@echo "Creating file association helper"
+	@printf '%s\n' \
+		'@echo off' \
+		'set "APPDIR=%~dp0"' \
+		'reg add HKCU\Software\Classes\.shi /ve /d JudoShiaiDatabaseFile /f' \
+		'reg add HKCU\Software\Classes\JudoShiaiDatabaseFile /ve /d "JudoShiai Database File" /f' \
+		'reg add HKCU\Software\Classes\JudoShiaiDatabaseFile\DefaultIcon /ve /d "%APPDIR%judoshiai.exe,0" /f' \
+		'reg add HKCU\Software\Classes\JudoShiaiDatabaseFile\shell\open\command /ve /d "\"%APPDIR%judoshiai.exe\" \"%1\"" /f' \
+		'echo .shi files are now associated with JudoShiai.' \
+		'pause' \
+		> "$(RELDIR)/bin/register-file-association.bat"
+else
+	@echo "windows-package-prep is only meaningful for Windows builds"
+endif
 
-	@echo "@echo off" > $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
-	@echo "set APPDIR=%%~dp0" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
-	@echo "reg add HKCU\Software\Classes\.shi /ve /d JudoShiaiDatabaseFile /f" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
-	@echo "reg add HKCU\Software\Classes\JudoShiaiDatabaseFile /ve /d \"JudoShiai Database File\" /f" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
-	@echo "reg add HKCU\Software\Classes\JudoShiaiDatabaseFile\DefaultIcon /ve /d \"%%APPDIR%%judoshiai.exe,0\" /f" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
-	@echo "reg add HKCU\Software\Classes\JudoShiaiDatabaseFile\shell\open\command /ve /d \"\\\"%%APPDIR%%judoshiai.exe\\\" \\\"%%1\\\"\" /f" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
-	@echo "echo .shi files are now associated with JudoShiai." >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
-	@echo "pause" >> $(RELEASEDIR)/judoshiai/bin/register-file-association.bat
-
-	@echo "Creating ZIP package"
-
-	cd $(RELEASEDIR) && \
-	zip -rq judoshiai-$(SHIAI_VER_NUM)-win$(TGTEXT).zip judoshiai
-
+windows-zip: all windows-package-prep
+ifeq ($(TGT),WIN32OS)
+	@echo "Creating $(WINDOWS_ZIP)"
+	cd "$(RELEASEDIR)" && \
+		rm -f "$(notdir $(WINDOWS_ZIP))" && \
+		$(ZIP_TOOL) -rq "$(notdir $(WINDOWS_ZIP))" judoshiai
 	@echo ""
 	@echo "Created:"
-	@echo "  $(RELEASEDIR)/judoshiai-$(SHIAI_VER_NUM)-win$(TGTEXT).zip"
+	@echo "  $(WINDOWS_ZIP)"
 	@echo ""
+else
+	@echo "windows-zip is only meaningful for Windows builds"
+endif
 
-else # LINUXOS
-
+linux-setup: all
 	tar -C $(RELEASEDIR) -cf judoshiai.tar judoshiai
 	tar -C etc -rf judoshiai.tar install.sh
 	gzip judoshiai.tar
@@ -326,10 +368,9 @@ else # LINUXOS
 	chmod a+x $(RELEASEDIR)/judoshiai-setup-$(SHIAI_VER_NUM).bin
 	rm -f judoshiai.tar.gz
 
-endif
 MAKENSIS ?= makensis
 
-WINDOWS_INSTALLER = $(RELEASEDIR)/judoshiai-$(SHIAI_VER_NUM)-win$(TGTEXT)-$(BUILD_KIND)-setup.exe
+WINDOWS_INSTALLER = $(RELEASEDIR)/$(WINDOWS_PACKAGE_NAME)-setup.exe
 
 .PHONY: windows-installer
 windows-installer: all
@@ -357,17 +398,6 @@ ifeq ($(TGT),WIN32OS)
 		etc/judoshiai.nsi
 else
 	@echo "windows-installer is only meaningful for Windows builds"
-endif
-
-
-
-$(RELEASEDIR)/judoshiai/etc/remote-install.exe:
-ifeq ($(TGT),WIN32OS)
-	sed "s/AppVerName=.*/AppVerName=Shiai $(SHIAI_VER_NUM)/" etc/remote-inst.iss >judoshiai1.iss
-	sed "s,RELDIR,$(RELEASEDIR)," judoshiai1.iss | tr '/' '\\' >judoshiai2.iss
-	$(INNOSETUP) judoshiai2.iss
-	rm -f judoshiai*.iss
-	mv $(RELEASEDIR)/remote-install.exe $(RELEASEDIR)/judoshiai/etc/
 endif
 
 install:
