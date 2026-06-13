@@ -1,0 +1,3 @@
+[submodule "tools/CRS_BLD"]
+	path = tools/CRS_BLD
+	url = https://github.com/einarhre/CRS_BLD.git
