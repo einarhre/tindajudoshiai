@@ -4,9 +4,7 @@ This is a customised version of the JudoShiai software with Icelandic translatio
 
 Upstream JudoShiai project: <https://sourceforge.net/projects/judoshiai/>
 
-This project is hosted at:
-
-<https://github.com/einarhre/tindajudoshiai>
+This project is hosted at: <https://github.com/einarhre/tindajudoshiai>
 
 This version contains Icelandic translations and local naming/customisation used by the club.
 
@@ -32,6 +30,45 @@ make TARGETOS=WIN32 BUILD_KIND=static
 make TARGETOS=WIN32 BUILD_KIND=shared
 make TARGETOS=WIN64 BUILD_KIND=static
 make TARGETOS=WIN64 BUILD_KIND=shared
+```
+
+## Repository submodules
+
+This repository uses a Git submodule for the CRS_BLD Windows cross-build environment:
+
+```text
+tools/CRS_BLD
+```
+
+CRS_BLD is a small MinGW-w64 cross-compiler and Windows dependency build environment based on ideas from MXE: <https://mxe.cc/>
+
+The submodule contains the CRS_BLD build scripts, package configuration files and patches. It does not contain the generated compiler or package output directories.
+
+Important generated CRS_BLD directories such as these are intentionally not tracked:
+
+```text
+tools/CRS_BLD/build/
+tools/CRS_BLD/install/
+tools/CRS_BLD/src/cpl/
+tools/CRS_BLD/src/pkg/tar/
+```
+
+Clone this repository with submodules using:
+
+```bash
+git clone --recurse-submodules https://github.com/einarhre/tindajudoshiai.git
+```
+
+For an already existing clone, initialise the submodule with:
+
+```bash
+git submodule update --init --recursive
+```
+
+Check the current submodule commit with:
+
+```bash
+git submodule status
 ```
 
 ## Linux build
@@ -72,7 +109,11 @@ Create the Linux self-extracting setup file with:
 make TARGETOS=LINUX setup
 ```
 
-The result is written under `../build/release-linux/`.
+The result is written under:
+
+```text
+../build/release-linux/
+```
 
 The setup file has a name like:
 
@@ -88,7 +129,11 @@ sudo make TARGETOS=LINUX install
 
 The generated `.bin` installer and `make install` use the same installer logic.
 
-The Linux install places the application under `/opt/judoshiai`.
+The Linux install places the application under:
+
+```text
+/opt/judoshiai
+```
 
 Desktop integration is installed under:
 
@@ -117,7 +162,22 @@ Do not use `BUILD_KIND` with Linux targets.
 
 Windows builds are cross-compiled from Linux.
 
-The current Windows build setup uses the CRS custom cross-compiler environment, not the old MXE instructions.
+The current Windows build setup uses the CRS_BLD custom cross-compiler environment, not the old MXE setup directly.
+
+The CRS_BLD source/build environment is included as a submodule under:
+
+```text
+tools/CRS_BLD
+```
+
+Before building Windows packages, the CRS_BLD toolchains and dependency packages must exist locally. These generated files are not committed to Git.
+
+The generated CRS_BLD cross-compilers are expected below the CRS_BLD `install/` tree, for example:
+
+```text
+tools/CRS_BLD/install/cross/i686-w64-mingw32/
+tools/CRS_BLD/install/cross/x86_64-w64-mingw32/
+```
 
 Supported Windows targets:
 
@@ -171,20 +231,13 @@ judoshiai-4.1-alpha3-win32-static-setup.exe
 judoshiai-4.1-alpha3-win32-shared-setup.exe
 ```
 
-## Windows../build/release-win32-static/`
-
-* `../build/release-win32-shared/`
-
-Installer names include the target and build kind, for example:
-
-````text
-judoshiai-4. package targets
+## Windows package targets
 
 For Windows builds:
 
-- `make TARGETOS=WIN64 BUILD_KIND=static windows-installer` creates an NSIS installer.
-- `make TARGETOS=WIN64 BUILD_KIND=static windows-zip` creates a portable ZIP package.
-- `make TARGETOS=WIN64 BUILD_KIND=static windows-dist` creates both the installer and the ZIP package.
+* `make TARGETOS=WIN64 BUILD_KIND=static windows-installer` creates an NSIS installer.
+* `make TARGETOS=WIN64 BUILD_KIND=static windows-zip` creates a portable ZIP package.
+* `make TARGETOS=WIN64 BUILD_KIND=static windows-dist` creates both the installer and the ZIP package.
 
 Use the same pattern with `TARGETOS=WIN32`, `BUILD_KIND=shared`, or both as needed.
 
@@ -194,7 +247,7 @@ Clean the current selected target with:
 
 ```bash
 make clean
-````
+```
 
 Or explicitly:
 
@@ -229,6 +282,29 @@ do
   done
 done
 ```
+
+## Updating the CRS_BLD submodule pointer
+
+When CRS_BLD itself has been changed, committed and pushed, update the submodule pointer in this repository:
+
+```bash
+cd tools/CRS_BLD
+git pull
+```
+
+Then return to the Tindajudoshiai repository and commit the updated submodule pointer:
+
+```bash
+cd ../..
+
+git status
+git submodule status
+git add tools/CRS_BLD
+git commit -m "build: update CRS build environment submodule"
+git push
+```
+
+This does not copy CRS_BLD files into Tindajudoshiai. It only updates the exact CRS_BLD commit that this repository points to.
 
 ## Notes
 
