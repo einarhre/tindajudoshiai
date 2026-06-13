@@ -1,10 +1,14 @@
 # Tindajudoshiai
 
-This is a customized version of the JudoShiai software for Júdódeild Tindastóls.
+This is a customised version of the JudoShiai software with Icelandic translations and local naming conventions for the Icelandic judo club Júdódeild Tindastóls.
 
-Upstream JudoShiai project: https://sourceforge.net/projects/judoshiai/
+Upstream JudoShiai project: <https://sourceforge.net/projects/judoshiai/>
 
-This version contains Icelandic translations and local naming/customization used by the club.
+This project is hosted at:
+
+<https://github.com/einarhre/tindajudoshiai>
+
+This version contains Icelandic translations and local naming/customisation used by the club.
 
 ## Supported targets
 
