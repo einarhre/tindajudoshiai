@@ -9,7 +9,7 @@ OBJDIR=obj-linux
 RELEASEDIR=$(JS_BUILD_DIR)/release-linux
 TGT=LINUXOS
 
-CFLAGS= -g $(WARNINGS) \
+CFLAGS= -std=gnu17 -g $(WARNINGS) \
         $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags gtk+-$(GTKVER).0) \
         $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags cairo) \
         $(shell $(PKGCONFIGPATH) $(PKGCONFIG) --cflags librsvg-2.0) \
