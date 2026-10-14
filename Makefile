@@ -322,7 +322,7 @@ ifeq ($(TGT),WIN32OS)
 
 	@# Windows ZIP tools do not always handle Unix symlinks well.
 	@if [ -d "$(RELDIR)/etc/fonts/conf.d" ]; then \
-		find "$(RELDIR)/etc/fonts/conf.d" -xtype l -delete; \
+		find "$(RELDIR)/etc/fonts/conf.d" -type l -delete; \
 	fi
 
 	@echo "Creating Windows README"
@@ -397,7 +397,7 @@ ifeq ($(TGT),WIN32OS)
 		exit 1; \
 	fi
 	@if [ -d "$(RELEASEDIR)/judoshiai/etc/fonts/conf.d" ]; then \
-		find "$(RELEASEDIR)/judoshiai/etc/fonts/conf.d" -xtype l -delete; \
+		find "$(RELEASEDIR)/judoshiai/etc/fonts/conf.d" -type l -delete; \
 	fi
 	@if find "$(RELEASEDIR)/judoshiai/bin" -maxdepth 1 -type f -name '*.dll' -size 0 -print | grep -q .; then \
 		echo "ERROR: zero-size DLLs found in $(RELEASEDIR)/judoshiai/bin:" >&2; \

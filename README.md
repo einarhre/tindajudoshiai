@@ -160,7 +160,7 @@ Do not use `BUILD_KIND` with Linux targets.
 
 ## Windows cross builds
 
-Windows builds are cross-compiled from Linux.
+Windows builds can be cross-compiled from Linux or macOS.
 
 The current Windows build setup uses the CRS_BLD custom cross-compiler environment, not the old MXE setup directly.
 
@@ -178,6 +178,53 @@ The generated CRS_BLD cross-compilers are expected below the CRS_BLD `install/` 
 tools/CRS_BLD/install/cross/i686-w64-mingw32/
 tools/CRS_BLD/install/cross/x86_64-w64-mingw32/
 ```
+
+### macOS and Apple Silicon
+
+A Windows 64-bit static build has been successfully produced on Apple
+Silicon using a native arm64 macOS CRS_BLD cross-compiler.
+
+The generated compiler must be executable on the build host. It can be
+checked with:
+
+```bash
+CRS_ROOT="$HOME/src/CRS_BLD/install"
+TRG="x86_64-w64-mingw32"
+
+file "$CRS_ROOT/cross/$TRG/bin/$TRG-gcc"
+test -x "$CRS_ROOT/cross/$TRG/bin/$TRG-gcc"
+```
+
+On Apple Silicon, `file` should identify the compiler as a Mach-O arm64
+executable. An ELF compiler is a Linux executable and cannot run directly
+on macOS.
+
+The following command builds the Windows binaries and creates both the
+portable ZIP package and the NSIS installer:
+
+```bash
+make \
+  TARGETOS=WIN64 \
+  BUILD_KIND=static \
+  CRS_ROOT="$HOME/src/CRS_BLD/install" \
+  WIN32_BASE="$HOME/src/PRG/tindajudoshiai/dev/win32" \
+  JS_BUILD_DIR="$HOME/src/PRG/tindajudoshiai/build" \
+  windows-dist
+```
+
+Adjust the three paths for the local checkout and CRS_BLD installation.
+The command requires `makensis` to be available in `PATH`.
+
+The generated files are written under:
+
+```text
+../build/release-win64-static/
+```
+
+The WIN64 static build and package creation have been verified on Apple
+Silicon. The resulting installer and portable package have not yet been
+runtime-tested on Windows. Other Windows target and build-kind combinations
+have not yet been verified on macOS.
 
 Supported Windows targets:
 

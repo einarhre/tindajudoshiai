@@ -21,7 +21,7 @@ csources+=$(sort $(wildcard ../judoproxy/*.c))
 #During normal build we do not want to update the POT Creation of po files and
 #we also do not want msgmerge to do fuzzy matching
 locale: MSGMERGE_EXTRAOPTIONS=--no-fuzzy-matching
-locale: RM_POT_CREATION_DATE=sed -i '/POT-Creation-Date/d' judoshiai.pot
+locale: RM_POT_CREATION_DATE=sed '/POT-Creation-Date/d' judoshiai.pot > judoshiai.pot.tmp && mv judoshiai.pot.tmp judoshiai.pot
 locale: $(mos)
 
 %.mo: %.po
